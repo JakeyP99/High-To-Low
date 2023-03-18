@@ -1,7 +1,5 @@
 package com.example.countingdowngame;
 
-import android.content.Intent;
-
 class Player {
 
 
@@ -19,16 +17,12 @@ class Player {
     }
 
     public String getName() {
-        return new Integer(playerId + 1).toString();
+        return Integer.toString(playerId + 1);
     }
 
     public void useSkip() {
         this.game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.SKIP));
         this.skips = this.skips - 1;
-    }
-
-    public void useChancecard() {
-        this.game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.CHANCE_CARD));
     }
 
     public int getSkipAmount() {

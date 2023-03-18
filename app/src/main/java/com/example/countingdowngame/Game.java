@@ -6,18 +6,18 @@ import java.util.Random;
 public class Game {
 
     int currentPlayerId = 0;
-    ArrayList<Player> players = new ArrayList<Player>();
+    ArrayList<Player> players = new ArrayList<>();
 
     int startingNumber = 0;
     int currentNumber = 0;
-    ArrayList<Integer> previousNumbers = new ArrayList<Integer>();
+    ArrayList<Integer> previousNumbers = new ArrayList<>();
 
     PlayerEventListener playerEventListener;
     GameEventListener gameEventListener;
 
     public void setPlayers(int playerAmount) {
 
-        this.players = new ArrayList<Player>();
+        this.players = new ArrayList<>();
 
         for (int playerId = 0; playerId < playerAmount; playerId++) {
             this.players.add(new Player(this, playerId));
@@ -34,7 +34,7 @@ public class Game {
         this.currentNumber = startingNumber;
         this.startingNumber = startingNumber;
         this.currentPlayerId = 0;
-        this.previousNumbers = new ArrayList<Integer>();
+        this.previousNumbers = new ArrayList<>();
 
         this.gameEventListener.onGameEvent(new GameEvent(this, GameEventType.GAME_START));
     }
@@ -76,16 +76,8 @@ public class Game {
         this.nextPlayer();
     }
 
-//    public void chanceCard() {
-//        this.gameEventListener.onGameEvent(new GameEvent (this, GameEventType.CHANCE_CARD));
-//    }
-
     public Player getCurrentPlayer() {
         return this.players.get(this.currentPlayerId);
-    }
-
-    public void endGame() {
-        this.gameEventListener.onGameEvent(new GameEvent(this, GameEventType.GAME_END));
     }
 
     public void playAgain() {
@@ -101,14 +93,12 @@ public class Game {
         this.playerEventListener.onPlayerEvent(e);
     }
 
-    ArrayList<String> getPreviousNumbersFormatted(Boolean includeStartingNumber) {
-        ArrayList<String> previousNumbersFormatted = new ArrayList<String>();
+    ArrayList<String> getPreviousNumbersFormatted() {
+        ArrayList<String> previousNumbersFormatted = new ArrayList<>();
 
-        int offset = 1;
+        int offset;
 
-        if (includeStartingNumber) {
-            offset = 2;
-        }
+        offset = 2;
 
         for (int i = 0; i < previousNumbers.size(); i++) {
             int j = previousNumbers.size() - 1;
@@ -116,9 +106,7 @@ public class Game {
             previousNumbersFormatted.add(j - i + offset + ". " + number);
         }
 
-        if (includeStartingNumber) {
-            previousNumbersFormatted.add(1 + ". " + startingNumber + " (starting number)");
-        }
+        previousNumbersFormatted.add(1 + ". " + startingNumber + " (starting number)");
 
         return previousNumbersFormatted;
     }
