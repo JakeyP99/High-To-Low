@@ -13,7 +13,10 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class EndActivity extends AppCompatActivity {
-
+    @Override
+    public void onBackPressed() {
+        // Do nothing
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

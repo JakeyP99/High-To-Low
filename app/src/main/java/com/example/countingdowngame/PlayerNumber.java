@@ -10,7 +10,10 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class PlayerNumber extends AppCompatActivity {
-
+    @Override
+    public void onBackPressed() {
+        // Do nothing
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

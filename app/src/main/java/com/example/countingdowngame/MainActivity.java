@@ -16,6 +16,11 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    @Override
+    public void onBackPressed() {
+        // Do nothing
+    }
+
     // This sets the new game.
     static Game gameInstance = new Game();
 

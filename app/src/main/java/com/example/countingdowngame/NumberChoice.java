@@ -12,7 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 public class NumberChoice extends AppCompatActivity {
-
+    @Override
+    public void onBackPressed() {
+        // Do nothing
+    }
     static int startingNumber;
 
     @Override
