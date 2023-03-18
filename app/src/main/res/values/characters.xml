@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="character_icons">
+        <item>@drawable/aidan</item>
+        <item>@drawable/andy</item>
+        <item>@drawable/caitlyn</item>
+        <item>@drawable/charlie</item>
+        <item>@drawable/chris</item>
+        <item>@drawable/dylan</item>
+        <item>@drawable/jake</item>
+        <item>@drawable/jarrod</item>
+        <item>@drawable/tom</item>
+        <item>@drawable/wyatt</item>
+    </array>
+
+
+</resources>
