@@ -17,9 +17,11 @@ public class HomeScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.start_menu);
 
-         Button btnQuickPlay = findViewById(R.id.quickplay);
+        final Button btnQuickPlay = findViewById(R.id.quickplay);
+        final Button btnInstructions = findViewById(R.id.instructions_button);
 
         btnQuickPlay.setOnClickListener(v -> startActivity(new Intent(HomeScreen.this, PlayerNumber.class)));
+        btnInstructions.setOnClickListener(v -> startActivity(new Intent(HomeScreen.this, Instructions.class)));
 
 
     }

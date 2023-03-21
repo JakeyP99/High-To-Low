@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/instructions_list_text"
+        android:layout_width="396dp"
+        android:layout_height="618dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="left"
+        android:text=" --Prepare yourself a beverage for the loser to drink (I like to prepare a nice tasty shot).
+\n\n --Choose how many players there will be.
+\n\n --Choose your starting number ~ the lower the number the quicker the game.
+\n\n --Decide who is player 1. It can be anyone, but probably not a dog. Try to play with humans if you can.. but i'm not your mum so I don't care.
+\n\n --Click generate or skip your turn, if you generated a new number, and if your number is not 0 then you're safe, lucky you xx. If you skipped your turn then well, I think you know what that means. Watch out though, you only have one skip per game (really spooky)!
+\n\n --Pass the phone to player 2, they then can either generate a number, or they can skip their turn.
+\n\n --Once a player gets the number 0 then they are out, and they lose! Take that shot you little silly goose.
+\n\n --Tada! You're done, if that game didn't bore you to death then play it again, and again, and again, literally do whatever you want, you're a free person so live your gorgeous life."
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+        android:textColor="@color/bluedark"
+        android:textSize="17dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.466"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.265"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/backbutton"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/gameMode"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/outline"
+        android:text="Return"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/instructions_list_text"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
