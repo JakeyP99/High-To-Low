@@ -12,7 +12,7 @@ public class Instructions extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.instructions_layout);
-        final Button btnBack = findViewById(R.id.backbutton);
+        final Button btnBack = findViewById(R.id.nextButton);
 
         btnBack.setOnClickListener(v -> startActivity(new Intent(Instructions.this, HomeScreen.class)));
     }

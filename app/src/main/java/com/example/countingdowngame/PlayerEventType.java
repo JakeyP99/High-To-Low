@@ -1,5 +1,5 @@
 package com.example.countingdowngame;
 
 public enum PlayerEventType {
-    SKIP
+    WILD_CARD, SKIP
 }

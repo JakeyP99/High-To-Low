@@ -10,13 +10,14 @@ public class Game {
 
     int startingNumber = 0;
     int currentNumber = 0;
+    boolean gameStarted = false;
     ArrayList<Integer> previousNumbers = new ArrayList<>();
 
     PlayerEventListener playerEventListener;
     GameEventListener gameEventListener;
 
     public void setPlayers(int playerAmount) {
-
+        if (gameStarted) return;
         this.players = new ArrayList<>();
 
         for (int playerId = 0; playerId < playerAmount; playerId++) {
@@ -26,10 +27,14 @@ public class Game {
     }
 
     public void startGame(int startingNumber) {
-
+        if (gameStarted) {
+            return;
+        }
+        gameStarted = true;
         if (this.players.size() <= 0) {
             return;
         }
+        ;
 
         this.currentNumber = startingNumber;
         this.startingNumber = startingNumber;
@@ -89,6 +94,10 @@ public class Game {
         }
     }
 
+    public void endGame() {
+        gameStarted = false;
+    }
+
     public void triggerPlayerEvent(PlayerEvent e) {
         this.playerEventListener.onPlayerEvent(e);
     }
@@ -110,5 +119,6 @@ public class Game {
 
         return previousNumbersFormatted;
     }
+
 
 }

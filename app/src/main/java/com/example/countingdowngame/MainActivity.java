@@ -1,7 +1,6 @@
 package com.example.countingdowngame;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 public class MainActivity extends AppCompatActivity {
-
+    // This means you can't go back
     @Override
     public void onBackPressed() {
         // Do nothing
@@ -27,18 +26,32 @@ public class MainActivity extends AppCompatActivity {
     // This sets the new game.
     static Game gameInstance = new Game();
 
-    @SuppressLint("SetTextI18n")
-    @Override
+    private MediaPlayer bop;
+    private TextView numberText;
+    private Button btnGenerate;
+    private TextView nextPlayerText;
+    private Button btnSkip;
+    private Button btnWild;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
 
-        final MediaPlayer bop = MediaPlayer.create(this, R.raw.bop);
-        final TextView numberText = findViewById(R.id.numberText);
-        final Button btnGenerate = findViewById(R.id.btnGenerate);
-        final TextView nextPlayerText = findViewById(R.id.TextView_nextplayer);
-        final Button btnSkip = findViewById(R.id.btnSkip);
+        bop = MediaPlayer.create(this, R.raw.bop);
+        numberText = findViewById(R.id.numberText);
+        btnGenerate = findViewById(R.id.btnGenerate);
+        nextPlayerText = findViewById(R.id.TextView_nextplayer);
+        btnSkip = findViewById(R.id.btnSkip);
+        btnWild = findViewById(R.id.btnWild);
+
+
+        btnWild.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gameInstance.getCurrentPlayer().useWildCard();
+                startActivity(new Intent(MainActivity.this, WildCard.class));
+            }
+        });
 
         // This sets a new playerEventListener, which is linked to the skip button. So the app knows when that button is clicked, it provides a functionality to go to the next player (we made the functionality below)
         gameInstance.setPlayerEventListener(e -> {
@@ -51,33 +64,32 @@ public class MainActivity extends AppCompatActivity {
         gameInstance.setGameEventListener(e -> {
             switch (e.type) {
                 case NEXT_PLAYER: {
-                    nextPlayerText.setText("Player " + (gameInstance.getCurrentPlayer().getName()) + "'s" + " Turn");
-
-                    if (gameInstance.getCurrentPlayer().getSkipAmount() > 0) {
-                        btnSkip.setVisibility(View.VISIBLE);
-                    } else {
-                        btnSkip.setVisibility(View.INVISIBLE);
-                    }
-
+                    renderPlayer();
                     break;
                 }
 
                 case GAME_END: {
+                    gameInstance.endGame();
                     startActivity(new Intent(MainActivity.this, EndActivity.class));
+                    break;
                 }
+//                case WILD_CARD: {
+//                    startActivity(new Intent(MainActivity.this, WildCard.class));
+//                }
                 case NEXT_NUMBER: {
                     numberText.setText(String.valueOf(gameInstance.currentNumber));
+                    break;
                 }
                 case GAME_START: {
-                    numberText.setText(Integer.toString(gameInstance.currentNumber));
-
-                    nextPlayerText.setText("Player " + (gameInstance.getCurrentPlayer().getName()) + "'s" + " Turn");
+                    break;
                 }
             }
         });
 
         gameInstance.startGame(NumberChoice.startingNumber);
-
+        numberText.setText(Integer.toString(gameInstance.currentNumber));
+        nextPlayerText.setText("Player " + (gameInstance.getCurrentPlayer().getName()) + "'s" + " Turn");
+        renderPlayer();
 
         btnGenerate.setOnClickListener(v -> {
             Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -98,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnSkip.setOnClickListener(view -> {
-            gameInstance.getCurrentPlayer().useSkip();//
+            gameInstance.getCurrentPlayer().useSkip();
             Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
             if (ActivityCompat.checkSelfPermission(view.getContext(), Manifest.permission.VIBRATE) == PackageManager.PERMISSION_GRANTED) {
@@ -111,5 +123,21 @@ public class MainActivity extends AppCompatActivity {
 
             bop.start();
         });
+    }
+
+    private void renderPlayer() {
+        nextPlayerText.setText("Player " + (gameInstance.getCurrentPlayer().getName()) + "'s" + " Turn");
+
+        if (gameInstance.getCurrentPlayer().getSkipAmount() > 0) {
+            btnSkip.setVisibility(View.VISIBLE);
+        } else {
+            btnSkip.setVisibility(View.INVISIBLE);
+        }
+
+        if (gameInstance.getCurrentPlayer().getWildCardAmount() > 0) {
+            btnWild.setVisibility(View.VISIBLE);
+        } else {
+            btnWild.setVisibility(View.INVISIBLE);
+        }
     }
 }
