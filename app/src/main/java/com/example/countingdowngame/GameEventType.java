@@ -5,5 +5,4 @@ public enum GameEventType {
     GAME_END,
     GAME_START,
     NEXT_NUMBER,
-    WILD_CARD
 }

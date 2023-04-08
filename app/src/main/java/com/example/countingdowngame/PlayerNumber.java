@@ -24,6 +24,7 @@ public class PlayerNumber extends AppCompatActivity {
 
         btnSubmitPlayers.setOnClickListener(v -> {
             String inputValue = originalPlayerField.getText().toString();
+            Vibrate.vibrateDevice(this);
 
             if (inputValue.length() <= 0) {
                 bop.start();

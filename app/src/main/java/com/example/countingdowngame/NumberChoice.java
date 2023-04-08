@@ -30,6 +30,7 @@ public class NumberChoice extends AppCompatActivity {
 
         btnSubmit.setOnClickListener(v -> {
             String inputValue = originalNumberField.getText().toString();
+            Vibrate.vibrateDevice(this);
 
             if (inputValue.length() <= 0 || inputValue.length() > 9) {
                 bop.start();

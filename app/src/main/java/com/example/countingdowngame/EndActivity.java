@@ -25,14 +25,17 @@ public class EndActivity extends AppCompatActivity {
         previousNumbersList.setAdapter(adapter);
 
         final Button btnPlayAgain = findViewById(R.id.btnplayAgain);
-        final Button btnNewPlayer = (Button) findViewById(R.id.btnNewPlayer);
+        final Button btnNewPlayer = findViewById(R.id.btnNewPlayer);
 
-        btnNewPlayer.setOnClickListener(v -> startActivity(new Intent(EndActivity.this, PlayerNumber.class)));
+        btnNewPlayer.setOnClickListener(v -> {
+            startActivity(new Intent(EndActivity.this, PlayerNumber.class));
+            Vibrate.vibrateDevice(this);
+        });
 
 
         btnPlayAgain.setOnClickListener(v -> {
             MainActivity.gameInstance.playAgain();
-
+            Vibrate.vibrateDevice(this);
             startActivity(new Intent(EndActivity.this, NumberChoice.class));
         });
 

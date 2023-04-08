@@ -6,15 +6,18 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
+
     <TextView
         android:id="@+id/wild_activity_text_view"
-        android:layout_width="396dp"
-        android:layout_height="618dp"
+        android:layout_width="370dp"
+        android:layout_height="406dp"
         android:layout_centerHorizontal="true"
-        android:gravity="left"
+        android:gravity="center"
+        android:text=""
+        android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:textColor="@color/bluedark"
-        android:textSize="17dp"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.466"
@@ -25,15 +28,14 @@
 
     <Button
         android:id="@+id/nextButton"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/gameMode"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/outline"
-        android:text="Next"
+        android:text="Done"
         android:textAllCaps="false"
+        android:layout_width="139dp"
+        android:layout_height="77dp"
         android:textColor="@color/bluedark"
-        android:textSize="20dp"
+        android:textSize="20sp"
+        android:background="@drawable/outlineforbutton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

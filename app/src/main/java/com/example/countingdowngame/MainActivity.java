@@ -1,20 +1,13 @@
 package com.example.countingdowngame;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 public class MainActivity extends AppCompatActivity {
     // This means you can't go back
@@ -28,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
 
     private MediaPlayer bop;
     private TextView numberText;
-    private Button btnGenerate;
     private TextView nextPlayerText;
     private Button btnSkip;
     private Button btnWild;
@@ -39,19 +31,10 @@ public class MainActivity extends AppCompatActivity {
 
         bop = MediaPlayer.create(this, R.raw.bop);
         numberText = findViewById(R.id.numberText);
-        btnGenerate = findViewById(R.id.btnGenerate);
+        Button btnGenerate = findViewById(R.id.btnGenerate);
         nextPlayerText = findViewById(R.id.TextView_nextplayer);
         btnSkip = findViewById(R.id.btnSkip);
         btnWild = findViewById(R.id.btnWild);
-
-
-        btnWild.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                gameInstance.getCurrentPlayer().useWildCard();
-                startActivity(new Intent(MainActivity.this, WildCard.class));
-            }
-        });
 
         // This sets a new playerEventListener, which is linked to the skip button. So the app knows when that button is clicked, it provides a functionality to go to the next player (we made the functionality below)
         gameInstance.setPlayerEventListener(e -> {
@@ -92,36 +75,24 @@ public class MainActivity extends AppCompatActivity {
         renderPlayer();
 
         btnGenerate.setOnClickListener(v -> {
-            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-
-            if (ActivityCompat.checkSelfPermission(v.getContext(), Manifest.permission.VIBRATE) == PackageManager.PERMISSION_GRANTED) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
-                } else {
-                    //deprecated in API 26
-                    vibrator.vibrate(500);
-                }
-            }
-
             bop.start();
-
             gameInstance.nextNumber();
-
+            Vibrate.vibrateDevice(this);
         });
+
+        // This is the wild card button.
+        btnWild.setOnClickListener(view ->  {
+                gameInstance.getCurrentPlayer().useWildCard();
+                startActivity(new Intent(MainActivity.this, WildCard.class));
+                Vibrate.vibrateDevice(this);
+                bop.start();
+            }
+        );
 
         btnSkip.setOnClickListener(view -> {
             gameInstance.getCurrentPlayer().useSkip();
-            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-
-            if (ActivityCompat.checkSelfPermission(view.getContext(), Manifest.permission.VIBRATE) == PackageManager.PERMISSION_GRANTED) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
-                } else {
-                    vibrator.vibrate(500);
-                }
-            }
-
             bop.start();
+            Vibrate.vibrateDevice(this);
         });
     }
 
