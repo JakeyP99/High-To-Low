@@ -1,6 +1,5 @@
 package com.example.countingdowngame;
 
-import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,10 +28,7 @@ public class Instructions extends AppCompatActivity {
 
         final Button btnBack = findViewById(R.id.nextButton);
 
-        btnBack.setOnClickListener(view -> {
-            startActivity(new Intent(Instructions.this, HomeScreen.class));
-            Vibrate.vibrateDevice(this);
-        });
+        ButtonUtils.setButtonTouchListener(btnBack, HomeScreen.class, this);
 
         ViewPager viewPager = findViewById(R.id.viewPager);
         List<String> instructions = Arrays.asList(

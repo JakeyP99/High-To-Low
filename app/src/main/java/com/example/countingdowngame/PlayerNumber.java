@@ -3,8 +3,10 @@ package com.example.countingdowngame;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,28 +24,35 @@ public class PlayerNumber extends AppCompatActivity {
         final EditText originalPlayerField = findViewById(R.id.EditTextViewplayernumber);
         final MediaPlayer bop = MediaPlayer.create(this, R.raw.bop);
 
-        btnSubmitPlayers.setOnClickListener(v -> {
-            String inputValue = originalPlayerField.getText().toString();
-            Vibrate.vibrateDevice(this);
+        ButtonUtils.setSubmitPlayerButton(btnSubmitPlayers, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String inputValue = originalPlayerField.getText().toString();
 
-            if (inputValue.length() <= 0) {
-                bop.start();
-                return;
+                if (inputValue.length() <= 0) {
+                    bop.start();
+                    return;
+                }
+
+                try {
+                    int inputNumber = Integer.parseInt(inputValue);
+
+                    if (inputNumber <= 0) {
+                        bop.start();
+                        return;
+                    }
+
+                    MainActivity.gameInstance.setPlayers(inputNumber);
+
+                    originalPlayerField.setFocusable(false);
+                    startActivity(new Intent(PlayerNumber.this, NumberChoice.class));
+
+                } catch (NumberFormatException e) {
+                    bop.start();
+                    Toast.makeText(PlayerNumber.this, "That's wayyyy too many players", Toast.LENGTH_SHORT).show();
+                }
             }
-
-            int inputNumber = Integer.parseInt(inputValue);
-
-            if (inputNumber <= 0) {
-                bop.start();
-                return;
-            }
-
-            MainActivity.gameInstance.setPlayers(inputNumber);
-
-            originalPlayerField.setFocusable(false);
-            startActivity(new Intent(PlayerNumber.this, NumberChoice.class));
-        });
+        }, PlayerNumber.this);
 
     }
-
 }

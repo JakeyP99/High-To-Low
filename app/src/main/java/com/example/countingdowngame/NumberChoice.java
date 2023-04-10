@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,29 +29,31 @@ public class NumberChoice extends AppCompatActivity {
         final TextView nextPlayerText = findViewById(R.id.TextView_whatsthenumber);
 
 
-        btnSubmit.setOnClickListener(v -> {
+        ButtonUtils.setButtonTouchListener(btnSubmit, v -> {
             String inputValue = originalNumberField.getText().toString();
-            Vibrate.vibrateDevice(this);
 
-            if (inputValue.length() <= 0 || inputValue.length() > 9) {
+            if (inputValue.length() < 0 || inputValue.length() > 9) {
                 bop.start();
+                Toast.makeText(NumberChoice.this, "That's a lot of numbers, unfortunately too many :(", Toast.LENGTH_SHORT).show();
                 return;
             }
+            try {
+                int inputNumber = Integer.parseInt(inputValue);
 
-            int inputNumber = Integer.parseInt(inputValue);
+                if (inputNumber <= 0) {
+                    bop.start();
+                    return;
+                }
 
-            if (inputNumber <= 0) {
+                startingNumber = inputNumber;
+
+                originalNumberField.setFocusable(false);
+                startActivity(new Intent(NumberChoice.this, MainActivity.class));
+
+            } catch (NumberFormatException e) {
                 bop.start();
-                return;
             }
-
-            startingNumber = inputNumber;
-
-            originalNumberField.setFocusable(false);
-            startActivity(new Intent(NumberChoice.this, MainActivity.class));
-        });
-
+        }, this);
 
     }
-
 }

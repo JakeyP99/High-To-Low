@@ -1,6 +1,5 @@
 package com.example.countingdowngame;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
@@ -12,6 +11,7 @@ public class HomeScreen extends AppCompatActivity {
     public void onBackPressed() {
         // Do nothing
     }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.start_menu);
@@ -19,17 +19,10 @@ public class HomeScreen extends AppCompatActivity {
         final Button btnQuickPlay = findViewById(R.id.quickplay);
         final Button btnInstructions = findViewById(R.id.instructions_button);
 
+        ButtonUtils.setButtonTouchListener(btnQuickPlay, PlayerNumber.class, this);
 
-        btnQuickPlay.setOnClickListener(view -> {
-            Vibrate.vibrateDevice(this);
-            startActivity(new Intent(HomeScreen.this, PlayerNumber.class));
-        });
+        ButtonUtils.setButtonTouchListener(btnInstructions, Instructions.class, this);
 
-
-        btnInstructions.setOnClickListener(view ->{
-            Vibrate.vibrateDevice(this);
-            startActivity(new Intent(HomeScreen.this, Instructions.class));
-                });
     }}
 
 

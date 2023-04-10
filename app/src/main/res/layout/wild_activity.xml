@@ -29,7 +29,7 @@
     <Button
         android:id="@+id/nextButton"
         android:layout_centerHorizontal="true"
-        android:text="Done"
+        android:text="Generate"
         android:textAllCaps="false"
         android:layout_width="139dp"
         android:layout_height="77dp"

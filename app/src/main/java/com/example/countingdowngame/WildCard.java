@@ -1,5 +1,7 @@
 package com.example.countingdowngame;
 
+import static com.example.countingdowngame.MainActivity.gameInstance;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -20,8 +22,8 @@ public class WildCard extends AppCompatActivity {
         final Button btnNext = findViewById(R.id.nextButton);
 
         String[] wildActivities = {
-                "Take 1 drinks.", "Take 2 drinks.", "Take 3 drinks.", "Finish your drink.",
-                "Give 1 drinks.", "Give 2 drinks.", "Give 3 drinks.", "Choose a player to finish their drink.",
+                "Take 1 drink.", "Take 2 drinks.", "Take 3 drinks.", "Finish your drink.",
+                "Give 1 drink.", "Give 2 drinks.", "Give 3 drinks.", "Choose a player to finish their drink.",
                 "The player to the left takes a drink.",
                 "The player to the right takes a drink.",
                 "Take everyone's turn, you are allowed to click anything you want for any of the players.",
@@ -32,16 +34,22 @@ public class WildCard extends AppCompatActivity {
                 "Give the phone to someone else, the game will resume with this new order.",
                 "Whoever last rode on a train takes 2 drinks.",
                 "Anyone who is standing takes 4 drinks, why are you standing? Sit down mate.",
-                "Double the ending drink"
+                "Anyone who is sitting takes 2 drinks.",
+                "Whoever has the longest hair takes 2 drinks.",
+                "Whoever is wearing a watch takes 2 drinks.",
+                "Whoever has a necklace on takes 2 drinks.",
+                "Double the ending drink, whoever loses must now do double the consequence."
         };
         Random random = new Random();
         int index = random.nextInt(wildActivities.length);
         String selectedActivity = wildActivities[index];
         wildActivityTextView.setText(selectedActivity);
 
-        btnNext.setOnClickListener(view -> {
-                    startActivity(new Intent(WildCard.this, MainActivity.class));
-                    Vibrate.vibrateDevice(this);
-                }
-        );}}
+        ButtonUtils.setWildCardGenerate(btnNext, v -> {
+            gameInstance.nextNumber();
+            startActivity(new Intent(this, MainActivity.class));
+            Vibrate.vibrateDevice(this);
+        }, WildCard.this);
+    }}
+
 

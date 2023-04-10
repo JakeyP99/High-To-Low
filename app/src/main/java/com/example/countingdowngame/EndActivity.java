@@ -1,4 +1,5 @@
 package com.example.countingdowngame;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -20,25 +21,18 @@ public class EndActivity extends AppCompatActivity {
 
         final ListView previousNumbersList = findViewById(R.id.previousNumbers);
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(EndActivity.this,
-                android.R.layout.simple_list_item_1, MainActivity.gameInstance.getPreviousNumbersFormatted());
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(EndActivity.this, android.R.layout.simple_list_item_1, MainActivity.gameInstance.getPreviousNumbersFormatted());
         previousNumbersList.setAdapter(adapter);
 
         final Button btnPlayAgain = findViewById(R.id.btnplayAgain);
         final Button btnNewPlayer = findViewById(R.id.btnNewPlayer);
 
-        btnNewPlayer.setOnClickListener(v -> {
-            startActivity(new Intent(EndActivity.this, PlayerNumber.class));
-            Vibrate.vibrateDevice(this);
-        });
+        ButtonUtils.setButtonTouchListener(btnNewPlayer, PlayerNumber.class, this);
 
-
-        btnPlayAgain.setOnClickListener(v -> {
+        ButtonUtils.setButtonTouchListener(btnPlayAgain, v -> {
             MainActivity.gameInstance.playAgain();
-            Vibrate.vibrateDevice(this);
             startActivity(new Intent(EndActivity.this, NumberChoice.class));
-        });
-
+        }, this);
 
     }
 }

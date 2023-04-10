@@ -36,6 +36,23 @@ public class MainActivity extends AppCompatActivity {
         btnSkip = findViewById(R.id.btnSkip);
         btnWild = findViewById(R.id.btnWild);
 
+        //These are the button controls
+        ButtonUtils.setButtonTouchListener(btnGenerate, v -> {
+            bop.start();
+            gameInstance.nextNumber();
+            Vibrate.vibrateDevice(MainActivity.this);
+        }, this);
+
+        ButtonUtils.setButtonTouchListener(btnSkip, v -> {
+            gameInstance.getCurrentPlayer().useSkip();
+            bop.start();
+            Vibrate.vibrateDevice(MainActivity.this);
+        }, this);
+
+
+        ButtonUtils.setButtonTouchListener(btnWild, WildCard.class, this);
+
+
         // This sets a new playerEventListener, which is linked to the skip button. So the app knows when that button is clicked, it provides a functionality to go to the next player (we made the functionality below)
         gameInstance.setPlayerEventListener(e -> {
             if (e.type == PlayerEventType.SKIP) {
@@ -56,9 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(MainActivity.this, EndActivity.class));
                     break;
                 }
-//                case WILD_CARD: {
-//                    startActivity(new Intent(MainActivity.this, WildCard.class));
-//                }
+
                 case NEXT_NUMBER: {
                     numberText.setText(String.valueOf(gameInstance.currentNumber));
                     break;
@@ -74,26 +89,9 @@ public class MainActivity extends AppCompatActivity {
         nextPlayerText.setText("Player " + (gameInstance.getCurrentPlayer().getName()) + "'s" + " Turn");
         renderPlayer();
 
-        btnGenerate.setOnClickListener(v -> {
-            bop.start();
-            gameInstance.nextNumber();
-            Vibrate.vibrateDevice(this);
-        });
 
-        // This is the wild card button.
-        btnWild.setOnClickListener(view ->  {
-                gameInstance.getCurrentPlayer().useWildCard();
-                startActivity(new Intent(MainActivity.this, WildCard.class));
-                Vibrate.vibrateDevice(this);
-                bop.start();
-            }
-        );
 
-        btnSkip.setOnClickListener(view -> {
-            gameInstance.getCurrentPlayer().useSkip();
-            bop.start();
-            Vibrate.vibrateDevice(this);
-        });
+
     }
 
     private void renderPlayer() {
