@@ -34,7 +34,6 @@ public class Game {
         if (this.players.size() <= 0) {
             return;
         }
-        ;
 
         this.currentNumber = startingNumber;
         this.startingNumber = startingNumber;

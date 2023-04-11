@@ -49,11 +49,13 @@ public class MainActivity extends AppCompatActivity {
             Vibrate.vibrateDevice(MainActivity.this);
         }, this);
 
+        ButtonUtils.setButtonTouchListener(btnWild, v -> {
+            bop.start();
+            startActivity(new Intent(MainActivity.this, WildCard.class));
+            Vibrate.vibrateDevice(MainActivity.this);
+        }, this);
 
-        ButtonUtils.setButtonTouchListener(btnWild, WildCard.class, this);
-
-
-        // This sets a new playerEventListener, which is linked to the skip button. So the app knows when that button is clicked, it provides a functionality to go to the next player (we made the functionality below)
+            // This sets a new playerEventListener, which is linked to the skip button. So the app knows when that button is clicked, it provides a functionality to go to the next player (we made the functionality below)
         gameInstance.setPlayerEventListener(e -> {
             if (e.type == PlayerEventType.SKIP) {
                 gameInstance.nextPlayer();

@@ -2,7 +2,7 @@ package com.example.countingdowngame;
 
 import static com.example.countingdowngame.MainActivity.gameInstance;
 
-import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,6 +20,7 @@ public class WildCard extends AppCompatActivity {
 
         final TextView wildActivityTextView = findViewById(R.id.wild_activity_text_view);
         final Button btnNext = findViewById(R.id.nextButton);
+        MediaPlayer bop = MediaPlayer.create(this, R.raw.bop);
 
         String[] wildActivities = {
                 "Take 1 drink.", "Take 2 drinks.", "Take 3 drinks.", "Finish your drink.",
@@ -46,8 +47,9 @@ public class WildCard extends AppCompatActivity {
         wildActivityTextView.setText(selectedActivity);
 
         ButtonUtils.setWildCardGenerate(btnNext, v -> {
+            finish();
+            bop.start();
             gameInstance.nextNumber();
-            startActivity(new Intent(this, MainActivity.class));
             Vibrate.vibrateDevice(this);
         }, WildCard.this);
     }}
