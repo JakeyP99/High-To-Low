@@ -23,6 +23,8 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="@color/bluedark"
+            android:background="@android:color/white"
+
             app:autoSizeMaxTextSize="23sp"
             app:autoSizeMinTextSize="12sp"
             app:autoSizeStepGranularity="2sp"

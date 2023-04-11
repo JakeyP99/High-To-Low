@@ -1,12 +1,10 @@
 package com.example.countingdowngame;
 
 class Player {
-
     int skips = 1;
     int wildcard = 1;
     int playerId;
     Game game;
-
 
     public Player(Game game, int playerId) {
 
@@ -29,7 +27,6 @@ class Player {
         this.wildcard = this.wildcard - 1;
     }
 
-
     public int getSkipAmount() {
         return this.skips;
     }
@@ -37,7 +34,6 @@ class Player {
     public int getWildCardAmount() {
         return this.wildcard;
     }
-
 
     public void resetAbilities() {
         this.skips = 1;

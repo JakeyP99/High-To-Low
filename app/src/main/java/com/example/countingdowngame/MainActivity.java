@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         ButtonUtils.setButtonTouchListener(btnWild, v -> {
             bop.start();
             startActivity(new Intent(MainActivity.this, WildCard.class));
+            gameInstance.getCurrentPlayer().useWildCard();
             Vibrate.vibrateDevice(MainActivity.this);
         }, this);
 
@@ -90,10 +91,6 @@ public class MainActivity extends AppCompatActivity {
         numberText.setText(Integer.toString(gameInstance.currentNumber));
         nextPlayerText.setText("Player " + (gameInstance.getCurrentPlayer().getName()) + "'s" + " Turn");
         renderPlayer();
-
-
-
-
     }
 
     private void renderPlayer() {

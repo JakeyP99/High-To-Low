@@ -12,5 +12,7 @@
     <color name="bluedarktransparent">#39021457</color>
     <color name="red">#D11111</color>
     <color name="black">#000000</color>
+    <color name="statusBarColor">#FFFFFF</color>
+
 
 </resources>

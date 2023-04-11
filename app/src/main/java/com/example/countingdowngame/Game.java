@@ -97,6 +97,7 @@ public class Game {
         gameStarted = false;
     }
 
+
     public void triggerPlayerEvent(PlayerEvent e) {
         this.playerEventListener.onPlayerEvent(e);
     }

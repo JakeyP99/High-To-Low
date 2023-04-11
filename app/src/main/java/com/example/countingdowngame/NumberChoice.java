@@ -5,7 +5,6 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class NumberChoice extends AppCompatActivity {
     @Override
     public void onBackPressed() {
-        // Do nothing
+        startActivity(new Intent(NumberChoice.this, PlayerNumber.class));
     }
     static int startingNumber;
 
@@ -26,7 +25,6 @@ public class NumberChoice extends AppCompatActivity {
         Button btnSubmit = findViewById(R.id.btnSubmitNumbers);
         final EditText originalNumberField = findViewById(R.id.EditTextView_numberchoice);
         final MediaPlayer bop = MediaPlayer.create(this, R.raw.bop);
-        final TextView nextPlayerText = findViewById(R.id.TextView_whatsthenumber);
 
 
         ButtonUtils.setButtonTouchListener(btnSubmit, v -> {
