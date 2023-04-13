@@ -15,6 +15,7 @@ public class NumberChoice extends AppCompatActivity {
     public void onBackPressed() {
         startActivity(new Intent(NumberChoice.this, PlayerNumber.class));
     }
+
     static int startingNumber;
 
     @Override
@@ -27,7 +28,7 @@ public class NumberChoice extends AppCompatActivity {
         final MediaPlayer bop = MediaPlayer.create(this, R.raw.bop);
 
 
-        ButtonUtils.setButtonTouchListener(btnSubmit, v -> {
+        ButtonUtils.setButtonNoClass(btnSubmit, null, this, () -> {
             String inputValue = originalNumberField.getText().toString();
 
             if (inputValue.length() < 0 || inputValue.length() > 9) {
@@ -51,7 +52,7 @@ public class NumberChoice extends AppCompatActivity {
             } catch (NumberFormatException e) {
                 bop.start();
             }
-        }, this);
 
+        });
     }
 }

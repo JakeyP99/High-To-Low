@@ -27,8 +27,8 @@ public class Instructions extends AppCompatActivity {
         setContentView(R.layout.instructions_layout);
 
         final Button btnBack = findViewById(R.id.nextButton);
+        ButtonUtils.setButtonNoClass(btnBack, HomeScreen.class, this, null);
 
-        ButtonUtils.setButtonTouchListener(btnBack, HomeScreen.class, this);
 
         ViewPager viewPager = findViewById(R.id.viewPager);
         List<String> instructions = Arrays.asList(
@@ -44,16 +44,17 @@ public class Instructions extends AppCompatActivity {
         InstructionPagerAdapter adapter = new InstructionPagerAdapter(instructions);
         viewPager.setAdapter(adapter);
 
-    progressBar = findViewById(R.id.progress_bar);
+        progressBar = findViewById(R.id.progress_bar);
         progressBar.setMax(instructions.size());
         progressBar.setProgress(1);
         viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-        @Override
-        public void onPageSelected(int position) {
-            progressBar.setProgress(position + 1);
-        }
-    });
-}
+            @Override
+            public void onPageSelected(int position) {
+                progressBar.setProgress(position + 1);
+            }
+        });
+    }
+
     public static class InstructionPagerAdapter extends PagerAdapter {
         private final List<String> instructions;
 

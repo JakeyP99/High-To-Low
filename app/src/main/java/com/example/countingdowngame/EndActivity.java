@@ -1,6 +1,5 @@
 package com.example.countingdowngame;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -13,26 +12,26 @@ public class EndActivity extends AppCompatActivity {
     public void onBackPressed() {
         // Do nothing
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lose_layout);
 
-
         final ListView previousNumbersList = findViewById(R.id.previousNumbers);
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(EndActivity.this, android.R.layout.simple_list_item_1, MainActivity.gameInstance.getPreviousNumbersFormatted());
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(EndActivity.this, R.layout.custom_list_item, R.id.previousNumbers, MainActivity.gameInstance.getPreviousNumbersFormatted());
         previousNumbersList.setAdapter(adapter);
 
         final Button btnPlayAgain = findViewById(R.id.btnplayAgain);
         final Button btnNewPlayer = findViewById(R.id.btnNewPlayer);
 
-        ButtonUtils.setButtonTouchListener(btnNewPlayer, PlayerNumber.class, this);
+        ButtonUtils.setButtonNoClass(btnNewPlayer, PlayerNumber.class, this, null);
 
-        ButtonUtils.setButtonTouchListener(btnPlayAgain, v -> {
+        ButtonUtils.setButtonNoClass(btnPlayAgain, NumberChoice.class, this, () -> {
             MainActivity.gameInstance.playAgain();
-            startActivity(new Intent(EndActivity.this, NumberChoice.class));
-        }, this);
+        });
+
 
     }
 }
