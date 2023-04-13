@@ -42,6 +42,7 @@ public class PlayerNumber extends AppCompatActivity {
 
                 originalPlayerField.setFocusable(false);
                 startActivity(new Intent(PlayerNumber.this, NumberChoice.class));
+                bop.start();
 
             } catch (NumberFormatException e) {
                 bop.start();

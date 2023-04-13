@@ -1,6 +1,7 @@
 package com.example.countingdowngame;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         View wildText = findViewById(R.id.wild_textview);
+        final MediaPlayer bop = MediaPlayer.create(this, R.raw.bop);
 
         numberText = findViewById(R.id.numberText);
         Button btnGenerate = findViewById(R.id.btnGenerate);
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         //These are the button controls
         ButtonUtils.setButtonNoClass(btnGenerate, null, this, () -> {
             gameInstance.nextNumber();
+            bop.start();
             wildText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.VISIBLE);
             nextPlayerText.setVisibility(View.VISIBLE);
@@ -47,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         ButtonUtils.setButtonNoClass(btnSkip, null, this, () -> {
             gameInstance.getCurrentPlayer().useSkip();
+            bop.start();
         });
 
         ButtonUtils.setButtonNoClass(btnWild, null, this, () -> {
@@ -55,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
             nextPlayerText.setVisibility(View.INVISIBLE);
             btnSkip.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.INVISIBLE);
+            bop.start();
 
             wildCardActivate();
         });

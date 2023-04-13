@@ -48,6 +48,7 @@ public class NumberChoice extends AppCompatActivity {
 
                 originalNumberField.setFocusable(false);
                 startActivity(new Intent(NumberChoice.this, MainActivity.class));
+                bop.start();
 
             } catch (NumberFormatException e) {
                 bop.start();

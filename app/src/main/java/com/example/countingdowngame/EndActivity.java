@@ -1,5 +1,6 @@
 package com.example.countingdowngame;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,6 +18,7 @@ public class EndActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lose_layout);
+        final MediaPlayer bop = MediaPlayer.create(this, R.raw.bop);
 
         final ListView previousNumbersList = findViewById(R.id.previousNumbers);
 
@@ -26,10 +28,12 @@ public class EndActivity extends AppCompatActivity {
         final Button btnPlayAgain = findViewById(R.id.btnplayAgain);
         final Button btnNewPlayer = findViewById(R.id.btnNewPlayer);
 
-        ButtonUtils.setButtonNoClass(btnNewPlayer, PlayerNumber.class, this, null);
-
+        ButtonUtils.setButtonNoClass(btnNewPlayer, PlayerNumber.class, this, () -> {
+            bop.start();
+        });
         ButtonUtils.setButtonNoClass(btnPlayAgain, NumberChoice.class, this, () -> {
             MainActivity.gameInstance.playAgain();
+            bop.start();
         });
 
 

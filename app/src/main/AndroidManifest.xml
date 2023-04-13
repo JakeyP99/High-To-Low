@@ -23,7 +23,6 @@
         <activity android:name=".EndActivity" />
         <activity android:name=".NumberChoice" />
         <activity android:name=".Instructions" />
-        <activity android:name=".WildCard" />
 
     </application>
 

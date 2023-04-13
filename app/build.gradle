@@ -7,8 +7,8 @@ android {
         applicationId "com.mydomain.countingdowngame"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 5
-        versionName "5"
+        versionCode 7
+        versionName "7"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
