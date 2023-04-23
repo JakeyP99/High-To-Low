@@ -19,8 +19,8 @@ public class HomeScreen extends AppCompatActivity {
         final Button btnQuickPlay = findViewById(R.id.quickplay);
         final Button btnInstructions = findViewById(R.id.instructions_button);
 
-        ButtonUtils.setButtonNoClass(btnQuickPlay, PlayerNumber.class, this, null);
-        ButtonUtils.setButtonNoClass(btnInstructions, Instructions.class, this, null);
+        ButtonUtils.setButton(btnQuickPlay, null, PlayerNumber.class, this, null);
+        ButtonUtils.setButton(btnInstructions,null, Instructions.class, this, null);
 
 
     }

@@ -24,7 +24,7 @@ public class PlayerNumber extends AppCompatActivity {
         final EditText originalPlayerField = findViewById(R.id.EditTextViewplayernumber);
         final MediaPlayer bop = MediaPlayer.create(this, R.raw.bop);
 
-        ButtonUtils.setButtonNoClass(btnSubmitPlayers, null, this, () -> {
+        ButtonUtils.setButton(btnSubmitPlayers,null, null, this, () -> {
             String inputValue = originalPlayerField.getText().toString();
             if (inputValue.length() <= 0) {
                 bop.start();

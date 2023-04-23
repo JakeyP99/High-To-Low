@@ -1,5 +1,7 @@
 package com.example.countingdowngame;
 
+import static com.example.countingdowngame.R.id.btnRandomNumber;
+
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -8,6 +10,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Random;
 
 
 public class NumberChoice extends AppCompatActivity {
@@ -22,13 +26,13 @@ public class NumberChoice extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.number_choice);
-
-        Button btnSubmit = findViewById(R.id.btnSubmitNumbers);
         final EditText originalNumberField = findViewById(R.id.EditTextView_numberchoice);
+        Button btnSubmit = findViewById(R.id.btnSubmitNumbers);
+        Button btnRandom = findViewById(btnRandomNumber);
         final MediaPlayer bop = MediaPlayer.create(this, R.raw.bop);
 
 
-        ButtonUtils.setButtonNoClass(btnSubmit, null, this, () -> {
+        ButtonUtils.setButton(btnSubmit,null, null, this, () -> {
             String inputValue = originalNumberField.getText().toString();
 
             if (inputValue.length() < 0 || inputValue.length() > 9) {
@@ -54,5 +58,22 @@ public class NumberChoice extends AppCompatActivity {
             }
 
         });
+
+        ButtonUtils.setButton(btnRandom, null,null, this, () -> {
+            randomNumberChoice();
+            bop.start();
+
+        });
     }
+
+    public void randomNumberChoice() {
+        Random random = new Random();
+        int randomNum = random.nextInt(999999998) + 1; // generates a random integer between 1 and 20000
+        startingNumber = randomNum;
+        final EditText originalNumberField = findViewById(R.id.EditTextView_numberchoice);
+
+
+        originalNumberField.setFocusable(false);
+        startActivity(new Intent(NumberChoice.this, MainActivity.class));
+    };
 }

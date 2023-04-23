@@ -4,11 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
     // This means you can't go back
@@ -24,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnSkip;
     private Button btnWild;
 
+    private Map<Player, Set<WildCardProbabilities>> usedWildCards = new HashMap<>();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,10 +43,13 @@ public class MainActivity extends AppCompatActivity {
         Button btnGenerate = findViewById(R.id.btnGenerate);
         nextPlayerText = findViewById(R.id.textView_Number_Turn);
         btnSkip = findViewById(R.id.btnSkip);
-        btnWild = findViewById(R.id.btnWild);
+        Button btnWild = findViewById(R.id.btnWild);
+        ImageButton imageButtonExit = findViewById(R.id.imageBtnExit);
+
+
 
         //These are the button controls
-        ButtonUtils.setButtonNoClass(btnGenerate, null, this, () -> {
+        ButtonUtils.setButton(btnGenerate,null, null, this, () -> {
             gameInstance.nextNumber();
             wildText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.VISIBLE);
@@ -45,18 +57,30 @@ public class MainActivity extends AppCompatActivity {
             numberText.setVisibility(View.VISIBLE);
         });
 
-        ButtonUtils.setButtonNoClass(btnSkip, null, this, () -> {
+        ButtonUtils.setButton(btnSkip, null,null, this, () -> {
             gameInstance.getCurrentPlayer().useSkip();
+            wildText.setVisibility(View.INVISIBLE);
+            numberText.setVisibility(View.VISIBLE);
+            nextPlayerText.setVisibility(View.VISIBLE);
+            numberText.setVisibility(View.VISIBLE);
+
         });
 
-        ButtonUtils.setButtonNoClass(btnWild, null, this, () -> {
+
+        ButtonUtils.setImageButton( imageButtonExit, HomeScreen.class,this, () -> {
+            gameInstance.endGame();
+        });
+
+        ButtonUtils.setButton(btnWild, null,null, this, () -> {
             btnWild.setVisibility(View.INVISIBLE);
             wildText.setVisibility(View.VISIBLE);
             nextPlayerText.setVisibility(View.INVISIBLE);
             btnSkip.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.INVISIBLE);
 
-            wildCardActivate();
+            gameInstance.getCurrentPlayer().useWildCard();
+            Player currentPlayer = gameInstance.getCurrentPlayer();
+            wildCardActivate(currentPlayer);
         });
 
 
@@ -97,47 +121,129 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void renderPlayer() {
-        TextView playerTurnTextView = findViewById(R.id.textView_Number_Turn);
         nextPlayerText.setText("Player " + (gameInstance.getCurrentPlayer().getName()) + "'s" + " Turn");
 
         if (gameInstance.getCurrentPlayer().getSkipAmount() > 0) {
-            btnSkip.setVisibility(View.VISIBLE);
+                btnSkip.setVisibility(View.VISIBLE);
         } else {
-            btnSkip.setVisibility(View.INVISIBLE);
-        }
+                btnSkip.setVisibility(View.INVISIBLE);
+            }
 
         if (gameInstance.getCurrentPlayer().getWildCardAmount() > 0) {
+            if (btnWild == null) {
+                btnWild = findViewById(R.id.btnWild);
+            }
+            btnWild.setVisibility(View.VISIBLE);
+        } else {
+            if (btnWild != null) {
+                btnWild.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+
+    public void wildCardActivate(Player player) {
+        final TextView wildActivityTextView = findViewById(R.id.wild_textview);
+        player.useWildCard();
+
+        // Define the wild card probabilities
+        WildCardProbabilities[] activityProbabilities = {
+                new WildCardProbabilities("Take 1 drink.", 10),
+                new WildCardProbabilities("Take 2 drinks.", 8),
+                new WildCardProbabilities("Take 3 drinks.", 5),
+                new WildCardProbabilities("Finish your drink.", 3),
+                new WildCardProbabilities("Give 1 drink.", 10),
+                new WildCardProbabilities("Give 2 drinks.", 8),
+                new WildCardProbabilities("Give 3 drinks.", 5),
+                new WildCardProbabilities("Choose a player to finish their drink.", 3),
+                new WildCardProbabilities("The player to the left takes a drink.", 10),
+                new WildCardProbabilities("The player to the right takes a drink.", 10),
+                new WildCardProbabilities("The oldest player takes 2 drinks.", 10),
+                new WildCardProbabilities("The youngest player takes 2 drinks.", 10),
+                new WildCardProbabilities("The player who last peed takes 3 drinks.", 10),
+                new WildCardProbabilities("The player with the oldest car takes 2 drinks.", 10),
+                new WildCardProbabilities("Whoever last rode on a train takes 2 drinks.", 10),
+                new WildCardProbabilities("Anyone who is standing takes 4 drinks, why are you standing? Sit down mate.", 10),
+                new WildCardProbabilities("Anyone who is sitting takes 2 drinks.", 10),
+                new WildCardProbabilities("Whoever has the longest hair takes 2 drinks.", 10),
+                new WildCardProbabilities("Whoever is wearing a watch takes 2 drinks.", 10),
+                new WildCardProbabilities("Whoever has a necklace on takes 2 drinks.", 10),
+                new WildCardProbabilities("Double the ending drink, whoever loses must now do double the consequence.", 5),
+                new WildCardProbabilities("Get a skip button to use on any one of your turns!", 3)
+        };
+
+
+        // Get the set of used wild cards for the current player
+
+        Set<WildCardProbabilities> usedCards = usedWildCards.getOrDefault(player, new HashSet<>());
+
+        // Filter out the used wild cards from the list of probabilities
+        List<WildCardProbabilities> unusedCards = Arrays.stream(activityProbabilities)
+                .filter(c -> !usedCards.contains(c))
+                .collect(Collectors.toList());
+
+        if (unusedCards.isEmpty()) {
+            // If all wild cards have been used, reset the usedCards set for the current player
+            usedCards.clear();
+        }
+
+        int totalWeight = unusedCards.stream()
+                .mapToInt(WildCardProbabilities::getProbability)
+                .sum();
+
+        if (totalWeight <= 0) {
+            wildActivityTextView.setText("No wild cards available");
+            return;
+        }
+
+        Random random = new Random();
+        String selectedActivity = "";
+        boolean foundUnusedCard = false;
+        while (!foundUnusedCard) {
+            int randomWeight = random.nextInt(totalWeight);
+            int weightSoFar = 0;
+            for (WildCardProbabilities activityProbability : unusedCards) {
+                weightSoFar += activityProbability.getProbability();
+                if (randomWeight < weightSoFar) {
+                    selectedActivity = activityProbability.getActivity();
+                    foundUnusedCard = true;
+                    usedCards.add(activityProbability); // Mark the card as used for the current player
+                    break;
+                }
+            }
+        }
+
+        if (selectedActivity.equals("Get a skip button to use on any one of your turns!")) {
+            // add skip to player's integer if they have zero skips left
+            if (player.getSkipAmount() == 0) {
+                player.skips++;
+                btnSkip.setVisibility(View.VISIBLE);
+            }
+
+            // check if the selected activity is associated with a specific card that has already been used
+            if (usedCards.contains(activityProbabilities[0])) {
+                // make skip button visible if player has at least one skip left
+                if (player.getSkipAmount() > 0) {
+                    btnSkip.setVisibility(View.VISIBLE);
+                } else {
+                    btnSkip.setVisibility(View.GONE);
+                }
+            } else {
+                // hide skip button if the selected activity is not associated with a specific card that has already been used
+                btnSkip.setVisibility(View.GONE);
+            }
+        } else {
+            // hide skip button for all other activities
+            btnSkip.setVisibility(View.GONE);
+        }
+
+        if (player.getWildCardAmount() > 0) {
             btnWild.setVisibility(View.VISIBLE);
         } else {
             btnWild.setVisibility(View.INVISIBLE);
         }
-    }
 
 
-    public void wildCardActivate() {
-        final TextView wildActivityTextView = findViewById(R.id.wild_textview);
-        gameInstance.getCurrentPlayer().useWildCard();
-
-        String[] wildActivities = {
-                "Take 1 drink.", "Take 2 drinks.", "Take 3 drinks.", "Finish your drink.",
-                "Give 1 drink.", "Give 2 drinks.", "Give 3 drinks.", "Choose a player to finish their drink.",
-                "The player to the left takes a drink.",
-                "The player to the right takes a drink.",
-                "The oldest player takes 2 drinks.",
-                "The youngest player takes 2 drinks.",
-                "The player who last peed takes 3 drinks.",
-                "The player with the oldest car takes 2 drinks.",
-                "Whoever last rode on a train takes 2 drinks.",
-                "Anyone who is standing takes 4 drinks, why are you standing? Sit down mate.",
-                "Anyone who is sitting takes 2 drinks.",
-                "Whoever has the longest hair takes 2 drinks.",
-                "Whoever is wearing a watch takes 2 drinks.",
-                "Whoever has a necklace on takes 2 drinks.",
-                "Double the ending drink, whoever loses must now do double the consequence."
-        };
-        Random random = new Random();
-        int index = random.nextInt(wildActivities.length);
-        String selectedActivity = wildActivities[index];
         wildActivityTextView.setText(selectedActivity);
-    }
-}
+
+    }}

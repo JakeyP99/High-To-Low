@@ -1,5 +1,6 @@
 package com.example.countingdowngame;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -10,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class EndActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
-        // Do nothing
+        startActivity(new Intent(EndActivity.this, HomeScreen.class));
     }
 
     @Override
@@ -26,9 +27,9 @@ public class EndActivity extends AppCompatActivity {
         final Button btnPlayAgain = findViewById(R.id.btnplayAgain);
         final Button btnNewPlayer = findViewById(R.id.btnNewPlayer);
 
-        ButtonUtils.setButtonNoClass(btnNewPlayer, PlayerNumber.class, this, null);
+        ButtonUtils.setButton(btnNewPlayer,null, PlayerNumber.class, this, null);
 
-        ButtonUtils.setButtonNoClass(btnPlayAgain, NumberChoice.class, this, () -> {
+        ButtonUtils.setButton(btnPlayAgain,null, NumberChoice.class, this, () -> {
             MainActivity.gameInstance.playAgain();
         });
 
