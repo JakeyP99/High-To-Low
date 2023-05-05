@@ -26,6 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
         android:gravity="center"
         android:text="Drinking Countdown"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
@@ -35,19 +36,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.100000024" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/quickplay"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/bluedark"
-        android:textSize="20sp"
-        android:background="@drawable/outlineforbutton"
         android:layout_width="139dp"
         android:layout_height="77dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/outlineforbutton"
         android:text="Play"
         android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -55,21 +55,38 @@
         app:layout_constraintVertical_bias="0.65999997" />
 
     <Button
-        android:id="@+id/instructions_button"
-        android:textColor="@color/bluedark"
-        android:textSize="20sp"
-        android:background="@drawable/outlineforbutton"
+        android:id="@+id/button_Settings"
         android:layout_width="139dp"
         android:layout_height="77dp"
         android:layout_centerHorizontal="true"
-        android:text="Instructions"
+        android:layout_marginTop="13dp"
+        android:background="@drawable/outlineforbutton"
+        android:text="Settings"
         android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.821" />
+        app:layout_constraintTop_toBottomOf="@+id/button_Instructions"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/button_Instructions"
+        android:layout_width="139dp"
+        android:layout_height="77dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="13dp"
+        android:background="@drawable/outlineforbutton"
+        android:text="Instructions"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/quickplay"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

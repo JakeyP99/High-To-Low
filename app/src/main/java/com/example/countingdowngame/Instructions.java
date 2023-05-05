@@ -32,7 +32,7 @@ public class Instructions extends AppCompatActivity {
 
         ViewPager viewPager = findViewById(R.id.viewPager);
         List<String> instructions = Arrays.asList(
-                "Welcome to drinking countdown! Overall, the aim of the game is not to get the number 0.",
+                "Welcome to drinking countdown! In summary, you choose a number, that number will go down, and the aim of the game is not to be the person who randomly hits the number 0.",
                 "Prepare yourself a beverage for the loser to drink \n\n I like to prepare a nice tasty shot.",
                 "Choose how many players there will be, and choose your starting number. \n\n Hint ~ the lower the number the quicker the game.",
                 "Decide who is player 1. It can be anyone, but probably not a dog.",

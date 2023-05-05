@@ -4,7 +4,9 @@ import static com.example.countingdowngame.R.id.btnRandomNumber;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -17,7 +19,7 @@ import java.util.Random;
 public class NumberChoice extends AppCompatActivity {
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(NumberChoice.this, PlayerNumber.class));
+        startActivity(new Intent(NumberChoice.this, PlayerNumberChoice.class));
     }
 
     static int startingNumber;
@@ -33,6 +35,10 @@ public class NumberChoice extends AppCompatActivity {
 
 
         ButtonUtils.setButton(btnSubmit,null, null, this, () -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                originalNumberField.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO); // Disable Google autofill
+            }
+
             String inputValue = originalNumberField.getText().toString();
 
             if (inputValue.length() < 0 || inputValue.length() > 9) {

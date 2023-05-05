@@ -1,5 +1,6 @@
 package com.example.countingdowngame;
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -26,6 +27,7 @@ public class ButtonUtils {
                 }
                 if (buttonAction != null) {
                     buttonAction.run();
+
                 }
                 vibrateDevice(context);
             }
