@@ -1,10 +1,9 @@
 package com.example.countingdowngame;
+
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.media.Image;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -15,7 +14,7 @@ import android.widget.ImageButton;
 import androidx.core.app.ActivityCompat;
 
 public class ButtonUtils {
-    public static void setButton(final Button button, final ImageButton imagebutton, final Class<?> activityClass, final Context context, final Runnable buttonAction) {
+    public static void setButton(final Button button, final Class<?> activityClass, final Context context, final Runnable buttonAction) {
         button.setOnTouchListener((view, motionEvent) -> {
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                 button.setBackground(context.getDrawable(R.drawable.buttonhighlight));
@@ -35,8 +34,7 @@ public class ButtonUtils {
         });
 
     }
-        public static void setImageButton ( final ImageButton imagebutton,
-        final Class<?> activityClass, final Context context, final Runnable buttonAction){
+        public static void setImageButton ( final ImageButton imagebutton, final Class<?> activityClass, final Context context, final Runnable buttonAction){
             imagebutton.setOnTouchListener((view, motionEvent) -> {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     imagebutton.setBackground(context.getDrawable(R.drawable.buttonhighlight));

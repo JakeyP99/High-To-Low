@@ -25,13 +25,12 @@ public class HomeScreen extends AppCompatActivity {
         final Button btnSettings = findViewById(R.id.button_Settings);
 
 
-
-        ButtonUtils.setButton(btnQuickPlay, null, PlayerNumberChoice.class, this, null);
-        ButtonUtils.setButton(btnInstructions,null, Instructions.class, this, null);
-//        ButtonUtils.setButton(btnSettings,null, WildCardChoice.class, this, null);
-
+        ButtonUtils.setButton(btnQuickPlay, PlayerNumberChoice.class, this, null);
+        ButtonUtils.setButton(btnInstructions, Instructions.class, this, null);
+//        ButtonUtils.setButton(btnSettings, WildCardChoice.class, this, null);
 
     }
+
 }
 
 

@@ -70,6 +70,7 @@ public class Game {
 
         currentNumber = nextNumber;
 
+
         if (currentNumber == 0) {
             this.gameEventListener.onGameEvent(new GameEvent(this, GameEventType.GAME_END));
             return;

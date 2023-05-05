@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/black_han_sans</item>
+        <item>@font/kosugi</item>
+        <item>@font/patrick_hand</item>
+        <item>@font/rum_raisin</item>
+        <item>@font/viga</item>
+    </array>
+</resources>

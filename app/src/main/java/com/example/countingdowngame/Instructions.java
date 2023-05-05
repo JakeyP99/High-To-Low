@@ -27,7 +27,7 @@ public class Instructions extends AppCompatActivity {
         setContentView(R.layout.instructions_layout);
 
         final Button btnBack = findViewById(R.id.nextButton);
-        ButtonUtils.setButton(btnBack,null, HomeScreen.class, this, null);
+        ButtonUtils.setButton(btnBack, HomeScreen.class, this, null);
 
 
         ViewPager viewPager = findViewById(R.id.viewPager);
@@ -36,7 +36,7 @@ public class Instructions extends AppCompatActivity {
                 "Prepare yourself a beverage for the loser to drink \n\n I like to prepare a nice tasty shot.",
                 "Choose how many players there will be, and choose your starting number. \n\n Hint ~ the lower the number the quicker the game.",
                 "Decide who is player 1. It can be anyone, but probably not a dog.",
-                "There are three buttons you can click: \n\n 1) Generate (this will choose a number between 0 and the number of your choosing). \n\n 2) Skip (I think you know what this is you silly goose). \n\n 3) Wildcard (Dude it's a wildcard, I am sure you know what that is). \n\n Watch out though, you only get one skip and one wild card per game (really spooky)!",
+                "There are two main buttons you can click: \n\n 1) Generate (this will choose a number between 0 and the number of your choosing).\n\n 2) Wildcard (There is a 50/50 chance it will be good for you, or bad for you, you don't need to click this button at all).",
                 "Pass the phone to player 2, they then can either generate a number, or they can skip their turn.",
                 "Once a player gets the number 0 then they are out, and they lose! \n\n They can then take that sexy yummy shot.",
                 "Tada, you're done! \n\n If that game didn't bore you to death then play it again, and again, and again, literally do whatever you want, you're a free person so live your gorgeous life.");

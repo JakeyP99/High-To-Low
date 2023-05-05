@@ -34,7 +34,7 @@ public class NumberChoice extends AppCompatActivity {
         final MediaPlayer bop = MediaPlayer.create(this, R.raw.bop);
 
 
-        ButtonUtils.setButton(btnSubmit,null, null, this, () -> {
+        ButtonUtils.setButton(btnSubmit,null, this, () -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 originalNumberField.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO); // Disable Google autofill
             }
@@ -66,7 +66,7 @@ public class NumberChoice extends AppCompatActivity {
 
         });
 
-        ButtonUtils.setButton(btnRandom, null,null, this, () -> {
+        ButtonUtils.setButton(btnRandom, null,this, () -> {
             randomNumberChoice();
             bop.start();
 

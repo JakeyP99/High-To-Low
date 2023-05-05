@@ -27,9 +27,9 @@ public class EndActivity extends AppCompatActivity {
         final Button btnPlayAgain = findViewById(R.id.btnplayAgain);
         final Button btnNewPlayer = findViewById(R.id.btnNewPlayer);
 
-        ButtonUtils.setButton(btnNewPlayer,null, PlayerNumber.class, this, null);
+        ButtonUtils.setButton(btnNewPlayer,PlayerNumberChoice.class, this, null);
 
-        ButtonUtils.setButton(btnPlayAgain,null, NumberChoice.class, this, () -> {
+        ButtonUtils.setButton(btnPlayAgain,NumberChoice.class, this, () -> {
             MainActivity.gameInstance.playAgain();
         });
 

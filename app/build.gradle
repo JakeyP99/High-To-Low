@@ -7,8 +7,8 @@ android {
         applicationId "com.mydomain.countingdowngame"
         minSdkVersion 24
         targetSdkVersion 33
-        versionCode 7
-        versionName "7"
+        versionCode 8
+        versionName "8"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -33,4 +33,6 @@ dependencies {
     implementation 'com.mobsandgeeks:adapter-kit:0.5.3'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
     implementation "androidx.cardview:cardview:1.0.0"
+
+
 }

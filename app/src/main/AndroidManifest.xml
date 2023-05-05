@@ -11,10 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
 
-        <activity android:name=".HomeScreen"
-            android:exported="true"
-            android:launchMode="singleInstancePerTask">
-
+        <activity
+            android:name=".HomeScreen"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -26,8 +25,11 @@
         <activity android:name=".NumberChoice" />
         <activity android:name=".Instructions" />
 
-    </application>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
+    </application>
 
 
 </manifest>

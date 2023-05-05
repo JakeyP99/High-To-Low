@@ -49,9 +49,8 @@ public class MainActivity extends AppCompatActivity {
         ImageButton imageButtonExit = findViewById(R.id.imageBtnExit);
 
 
-
         //These are the button controls
-        ButtonUtils.setButton(btnGenerate,null, null, this, () -> {
+        ButtonUtils.setButton(btnGenerate, null, this, () -> {
             gameInstance.nextNumber();
             bop.start();
             wildText.setVisibility(View.INVISIBLE);
@@ -60,9 +59,8 @@ public class MainActivity extends AppCompatActivity {
             numberText.setVisibility(View.VISIBLE);
         });
 
-        ButtonUtils.setButton(btnSkip, null,null, this, () -> {
+        ButtonUtils.setButton(btnSkip, null, this, () -> {
             gameInstance.getCurrentPlayer().useSkip();
-<<<<<<< HEAD
             wildText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.VISIBLE);
             nextPlayerText.setVisibility(View.VISIBLE);
@@ -71,14 +69,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        ButtonUtils.setImageButton( imageButtonExit, HomeScreen.class,this, () -> {
+        ButtonUtils.setImageButton(imageButtonExit, HomeScreen.class, this, () -> {
             gameInstance.endGame();
-=======
             bop.start();
->>>>>>> origin/master
         });
 
-        ButtonUtils.setButton(btnWild, null,null, this, () -> {
+        ButtonUtils.setButton(btnWild, null, this, () -> {
             btnWild.setVisibility(View.INVISIBLE);
             wildText.setVisibility(View.VISIBLE);
             nextPlayerText.setVisibility(View.INVISIBLE);
@@ -132,10 +128,10 @@ public class MainActivity extends AppCompatActivity {
         nextPlayerText.setText("Player " + (gameInstance.getCurrentPlayer().getName()) + "'s" + " Turn");
 
         if (gameInstance.getCurrentPlayer().getSkipAmount() > 0) {
-                btnSkip.setVisibility(View.VISIBLE);
+            btnSkip.setVisibility(View.VISIBLE);
         } else {
-                btnSkip.setVisibility(View.INVISIBLE);
-            }
+            btnSkip.setVisibility(View.INVISIBLE);
+        }
 
         if (gameInstance.getCurrentPlayer().getWildCardAmount() > 0) {
             if (btnWild == null) {
@@ -154,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
         final TextView wildActivityTextView = findViewById(R.id.wild_textview);
         player.useWildCard();
 
-        // Define the wild card probabilities
         WildCardProbabilities[] activityProbabilities = {
                 new WildCardProbabilities("Take 1 drink.", 10),
                 new WildCardProbabilities("Take 2 drinks.", 8),
@@ -176,22 +171,24 @@ public class MainActivity extends AppCompatActivity {
                 new WildCardProbabilities("Whoever has the longest hair takes 2 drinks.", 10),
                 new WildCardProbabilities("Whoever is wearing a watch takes 2 drinks.", 10),
                 new WildCardProbabilities("Whoever has a necklace on takes 2 drinks.", 10),
-                new WildCardProbabilities("Double the ending drink, whoever loses must now do double the consequence.", 5),
-                new WildCardProbabilities("Get a skip button to use on any one of your turns!", 3)
+                new WildCardProbabilities("Double the ending drink (whoever loses must now do double the consequence).", 5),
+                new WildCardProbabilities("Get a skip button to use on any one of your turns!", 3),
+                new WildCardProbabilities("Drink for courage then deliver a line from your favourite film making it as dramatic as possible!", 2),
+                new WildCardProbabilities("Give 1 drink for every cheese you can name in 10 seconds.", 2),
+                new WildCardProbabilities("The shortest person at the table must take 4 drinks then give 4 drinks.", 2),
+                new WildCardProbabilities("Bare your biceps and flex for everyone. The players next to you each drink 2 for the view.", 2),
+                new WildCardProbabilities("All females drink 3, and all males drink 3. Equality.", 2),
+
         };
 
 
-        // Get the set of used wild cards for the current player
-
         Set<WildCardProbabilities> usedCards = usedWildCards.getOrDefault(player, new HashSet<>());
 
-        // Filter out the used wild cards from the list of probabilities
         List<WildCardProbabilities> unusedCards = Arrays.stream(activityProbabilities)
                 .filter(c -> !usedCards.contains(c))
                 .collect(Collectors.toList());
 
         if (unusedCards.isEmpty()) {
-            // If all wild cards have been used, reset the usedCards set for the current player
             usedCards.clear();
         }
 
@@ -215,33 +212,28 @@ public class MainActivity extends AppCompatActivity {
                 if (randomWeight < weightSoFar) {
                     selectedActivity = activityProbability.getActivity();
                     foundUnusedCard = true;
-                    usedCards.add(activityProbability); // Mark the card as used for the current player
+                    usedCards.add(activityProbability);
                     break;
                 }
             }
         }
 
         if (selectedActivity.equals("Get a skip button to use on any one of your turns!")) {
-            // add skip to player's integer if they have zero skips left
             if (player.getSkipAmount() == 0) {
                 player.skips++;
                 btnSkip.setVisibility(View.VISIBLE);
             }
 
-            // check if the selected activity is associated with a specific card that has already been used
             if (usedCards.contains(activityProbabilities[0])) {
-                // make skip button visible if player has at least one skip left
                 if (player.getSkipAmount() > 0) {
                     btnSkip.setVisibility(View.VISIBLE);
                 } else {
                     btnSkip.setVisibility(View.GONE);
                 }
             } else {
-                // hide skip button if the selected activity is not associated with a specific card that has already been used
                 btnSkip.setVisibility(View.GONE);
             }
         } else {
-            // hide skip button for all other activities
             btnSkip.setVisibility(View.GONE);
         }
 
@@ -254,4 +246,5 @@ public class MainActivity extends AppCompatActivity {
 
         wildActivityTextView.setText(selectedActivity);
 
-    }}
+    }
+}
