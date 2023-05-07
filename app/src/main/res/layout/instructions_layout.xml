@@ -47,6 +47,7 @@
         android:layout_width="139dp"
         android:layout_height="77dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="100dp"
         android:background="@drawable/outlineforbutton"
         android:text="Return"
         android:textAllCaps="false"
@@ -54,10 +55,7 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_view"
-        app:layout_constraintVertical_bias="0.62" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ProgressBar
         android:id="@+id/progress_bar"

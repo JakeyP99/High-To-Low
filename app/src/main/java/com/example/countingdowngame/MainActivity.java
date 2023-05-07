@@ -10,14 +10,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
     // This means you can't go back
@@ -25,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         // Do nothing
     }
+
 
     // This sets the new game.
     static Game gameInstance = new Game();
@@ -147,104 +143,75 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void wildCardActivate(Player player) {
+
         final TextView wildActivityTextView = findViewById(R.id.wild_textview);
         player.useWildCard();
-
-        WildCardProbabilities[] activityProbabilities = {
-                new WildCardProbabilities("Take 1 drink.", 10),
-                new WildCardProbabilities("Take 2 drinks.", 8),
-                new WildCardProbabilities("Take 3 drinks.", 5),
-                new WildCardProbabilities("Finish your drink.", 3),
-                new WildCardProbabilities("Give 1 drink.", 10),
-                new WildCardProbabilities("Give 2 drinks.", 8),
-                new WildCardProbabilities("Give 3 drinks.", 5),
-                new WildCardProbabilities("Choose a player to finish their drink.", 3),
-                new WildCardProbabilities("The player to the left takes a drink.", 10),
-                new WildCardProbabilities("The player to the right takes a drink.", 10),
-                new WildCardProbabilities("The oldest player takes 2 drinks.", 10),
-                new WildCardProbabilities("The youngest player takes 2 drinks.", 10),
-                new WildCardProbabilities("The player who last peed takes 3 drinks.", 10),
-                new WildCardProbabilities("The player with the oldest car takes 2 drinks.", 10),
-                new WildCardProbabilities("Whoever last rode on a train takes 2 drinks.", 10),
-                new WildCardProbabilities("Anyone who is standing takes 4 drinks, why are you standing? Sit down mate.", 10),
-                new WildCardProbabilities("Anyone who is sitting takes 2 drinks.", 10),
-                new WildCardProbabilities("Whoever has the longest hair takes 2 drinks.", 10),
-                new WildCardProbabilities("Whoever is wearing a watch takes 2 drinks.", 10),
-                new WildCardProbabilities("Whoever has a necklace on takes 2 drinks.", 10),
-                new WildCardProbabilities("Double the ending drink (whoever loses must now do double the consequence).", 5),
-                new WildCardProbabilities("Get a skip button to use on any one of your turns!", 3),
-                new WildCardProbabilities("Drink for courage then deliver a line from your favourite film making it as dramatic as possible!", 2),
-                new WildCardProbabilities("Give 1 drink for every cheese you can name in 10 seconds.", 2),
-                new WildCardProbabilities("The shortest person at the table must take 4 drinks then give 4 drinks.", 2),
-                new WildCardProbabilities("Bare your biceps and flex for everyone. The players next to you each drink 2 for the view.", 2),
-                new WildCardProbabilities("All females drink 3, and all males drink 3. Equality.", 2),
-
-        };
-
-
-        Set<WildCardProbabilities> usedCards = usedWildCards.getOrDefault(player, new HashSet<>());
-
-        List<WildCardProbabilities> unusedCards = Arrays.stream(activityProbabilities)
-                .filter(c -> !usedCards.contains(c))
-                .collect(Collectors.toList());
-
-        if (unusedCards.isEmpty()) {
-            usedCards.clear();
-        }
-
-        int totalWeight = unusedCards.stream()
-                .mapToInt(WildCardProbabilities::getProbability)
-                .sum();
-
-        if (totalWeight <= 0) {
-            wildActivityTextView.setText("No wild cards available");
-            return;
-        }
-
-        Random random = new Random();
-        String selectedActivity = "";
-        boolean foundUnusedCard = false;
-        while (!foundUnusedCard) {
-            int randomWeight = random.nextInt(totalWeight);
-            int weightSoFar = 0;
-            for (WildCardProbabilities activityProbability : unusedCards) {
-                weightSoFar += activityProbability.getProbability();
-                if (randomWeight < weightSoFar) {
-                    selectedActivity = activityProbability.getActivity();
-                    foundUnusedCard = true;
-                    usedCards.add(activityProbability);
-                    break;
-                }
-            }
-        }
-
-        if (selectedActivity.equals("Get a skip button to use on any one of your turns!")) {
-            if (player.getSkipAmount() == 0) {
-                player.skips++;
-                btnSkip.setVisibility(View.VISIBLE);
-            }
-
-            if (usedCards.contains(activityProbabilities[0])) {
-                if (player.getSkipAmount() > 0) {
-                    btnSkip.setVisibility(View.VISIBLE);
-                } else {
-                    btnSkip.setVisibility(View.GONE);
-                }
-            } else {
-                btnSkip.setVisibility(View.GONE);
-            }
-        } else {
-            btnSkip.setVisibility(View.GONE);
-        }
-
-        if (player.getWildCardAmount() > 0) {
-            btnWild.setVisibility(View.VISIBLE);
-        } else {
-            btnWild.setVisibility(View.INVISIBLE);
-        }
-
-
-        wildActivityTextView.setText(selectedActivity);
+//        WildCardProbabilities[] activityProbabilities = loadWildCardProbabilitiesFromStorage();
+//
+//        Set<WildCardProbabilities> usedCards = usedWildCards.getOrDefault(player, new HashSet<>());
+//
+//        List<WildCardProbabilities> unusedCards = Arrays.stream(activityProbabilities)
+//                .filter(c -> !usedCards.contains(c))
+//                .collect(Collectors.toList());
+//
+//        if (unusedCards.isEmpty()) {
+//            usedCards.clear();
+//        }
+//
+//        int totalWeight = unusedCards.stream()
+//                .mapToInt(WildCardProbabilities::getProbability)
+//                .sum();
+//
+//        if (totalWeight <= 0) {
+//            wildActivityTextView.setText("No wild cards available");
+//            return;
+//        }
+//
+//
+//        Random random = new Random();
+//        String selectedActivity = "";
+//        boolean foundUnusedCard = false;
+//        while (!foundUnusedCard) {
+//            int randomWeight = random.nextInt(totalWeight);
+//            int weightSoFar = 0;
+//            for (WildCardProbabilities activityProbability : unusedCards) {
+//                weightSoFar += activityProbability.getProbability();
+//                if (randomWeight < weightSoFar) {
+//                    selectedActivity = activityProbability.getActivity();
+//                    foundUnusedCard = true;
+//                    usedCards.add(activityProbability);
+//                    break;
+//                }
+//            }
+//        }
+//
+//        if (selectedActivity.equals("Get a skip button to use on any one of your turns!")) {
+//            if (player.getSkipAmount() == 0) {
+//                player.skips++;
+//                btnSkip.setVisibility(View.VISIBLE);
+//            }
+//
+//            if (usedCards.contains(activityProbabilities[0])) {
+//                if (player.getSkipAmount() > 0) {
+//                    btnSkip.setVisibility(View.VISIBLE);
+//                } else {
+//                    btnSkip.setVisibility(View.GONE);
+//                }
+//            } else {
+//                btnSkip.setVisibility(View.GONE);
+//            }
+//        } else {
+//            btnSkip.setVisibility(View.GONE);
+//        }
+//
+//        if (player.getWildCardAmount() > 0) {
+//            btnWild.setVisibility(View.VISIBLE);
+//        } else {
+//            btnWild.setVisibility(View.INVISIBLE);
+//        }
+//
+//
+//        wildActivityTextView.setText(selectedActivity);
 
     }
 }

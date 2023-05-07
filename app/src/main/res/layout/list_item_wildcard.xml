@@ -2,20 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="16dp">
+    android:orientation="horizontal">
 
     <TextView
-        android:id="@+id/textView_WildCardItem"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textSize="16sp"/>
-
-    <TextView
-        android:id="@+id/textView_ProbabilityItem"
+        android:id="@+id/textview_wildcard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"/>
+        android:textSize="18sp"
+        android:padding="8dp"/>
+
+    <Switch
+        android:id="@+id/switch_wildcard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"/>
 
 </LinearLayout>
