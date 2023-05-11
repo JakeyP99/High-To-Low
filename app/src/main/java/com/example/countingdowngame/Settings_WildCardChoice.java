@@ -147,7 +147,23 @@ public class Settings_WildCardChoice extends AppCompatActivity {
                 new WildCardProbabilities("All females drink 3, and all males drink 3. Equality.", 5, true)
         };
 
-        for (int i = 0; i < allProbabilities.length; i++) {
+        int count = prefs.getInt("wild_card_count", allProbabilities.length);
+
+        if (count > allProbabilities.length) {
+            allProbabilities = new WildCardProbabilities[count];
+            for (int i = 0; i < count; i++) {
+
+                WildCardProbabilities p = allProbabilities[i];
+                if (p != null) {
+                    allProbabilities[i] = new WildCardProbabilities(p.getText(), p.getProbability(), p.isEnabled());
+                }
+                else {
+                    allProbabilities[i] = new WildCardProbabilities("", 0, false);
+                }
+            }
+        }
+
+        for (int i = 0; i < count; i++) {
             boolean enabled = prefs.getBoolean("wild_card_enabled_" + i, allProbabilities[i].isEnabled());
             String activity = prefs.getString("wild_card_activity_" + i, allProbabilities[i].getText());
             int probability = prefs.getInt("wild_card_probability_" + i, allProbabilities[i].getProbability());
@@ -171,6 +187,8 @@ public class Settings_WildCardChoice extends AppCompatActivity {
             editor.putString("wild_card_activity_" + i, probabilities[i].getText());
             editor.putInt("wild_card_probability_" + i, probabilities[i].getProbability());
         }
+        editor.putInt("wild_card_count", probabilities.length);
+
         editor.apply();
     }
 
