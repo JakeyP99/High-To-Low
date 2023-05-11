@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +31,12 @@ public class Settings_WildCardChoice extends AppCompatActivity {
 
     public Settings_WildCardChoice() {
         mContext = this;
+    }
+
+    @Override
+    public void onBackPressed(){
+        saveWildCardProbabilitiesToStorage(mProbabilities);
+        super.onBackPressed();
     }
 
     @Override
@@ -102,7 +107,6 @@ public class Settings_WildCardChoice extends AppCompatActivity {
     }
 
 
-
     WildCardProbabilities[] loadWildCardProbabilitiesFromStorage(Context context) {
 
         SharedPreferences prefs = context.getSharedPreferences("MyPrefs", MODE_PRIVATE);
@@ -141,9 +145,13 @@ public class Settings_WildCardChoice extends AppCompatActivity {
         };
 
         for (int i = 0; i < allProbabilities.length; i++) {
-            boolean enabled = prefs.getBoolean("wild_card_" + i, allProbabilities[i].isEnabled());
+            boolean enabled = prefs.getBoolean("wild_card_enabled_" + i, allProbabilities[i].isEnabled());
+            String activity = prefs.getString("wild_card_activity_" + i, allProbabilities[i].getText());
+            int probability = prefs.getInt("wild_card_probability_" + i, allProbabilities[i].getProbability());
+
             allProbabilities[i].setEnabled(enabled);
-            Log.d("TAG", "enabled: " + enabled); // Add this line to check the value of enabled
+            allProbabilities[i].setText(activity);
+            allProbabilities[i].setProbability(probability);
 
         }
 
@@ -156,15 +164,18 @@ public class Settings_WildCardChoice extends AppCompatActivity {
         SharedPreferences.Editor editor = preferences.edit();
 
         for (int i = 0; i < probabilities.length; i++) {
-            editor.putBoolean("wild_card_" + i, probabilities[i].isEnabled());
+            editor.putBoolean("wild_card_enabled_" + i, probabilities[i].isEnabled());
+            editor.putString("wild_card_activity_" + i, probabilities[i].getText());
+            editor.putInt("wild_card_probability_" + i, probabilities[i].getProbability());
+
         }
+
+
 
         editor.apply();
 
-        // Update the mProbabilities array with the latest changes
-        for (int i = 0; i < probabilities.length; i++) {
-            probabilities[i].setEnabled(preferences.getBoolean("wild_card_" + i, false));
-        }
+
+
     }
 
     private class WildCardAdapter extends ArrayAdapter<WildCardProbabilities> {
@@ -176,6 +187,7 @@ public class Settings_WildCardChoice extends AppCompatActivity {
             mContext = context;
             mProbabilities = probabilities;
         }
+
         private void setTextViewSizeBasedOnString(TextView textView, String text) {
             int textSize = 20; // set default text size
             if (text.length() > 20) {
@@ -185,7 +197,6 @@ public class Settings_WildCardChoice extends AppCompatActivity {
             }
             textView.setTextSize(textSize);
         }
-
 
 
         @NonNull
@@ -214,8 +225,6 @@ public class Settings_WildCardChoice extends AppCompatActivity {
             String probabilityText = String.valueOf(wildCard.getProbability());
             textViewProbability.setText(probabilityText);
             setTextViewSizeBasedOnString(textViewProbability, probabilityText);
-
-
 
 
             editButton.setOnClickListener(v -> {
