@@ -26,7 +26,7 @@ public class Instructions extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.instructions_layout);
 
-        final Button btnBack = findViewById(R.id.nextButton);
+        final Button btnBack = findViewById(R.id.buttonReturn);
         ButtonUtils.setButton(btnBack, HomeScreen.class, this, null);
 
 

@@ -1,8 +1,10 @@
 package com.example.countingdowngame;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -10,9 +12,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
     // This means you can't go back
@@ -20,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         // Do nothing
     }
-
 
     // This sets the new game.
     static Game gameInstance = new Game();
@@ -57,11 +63,11 @@ public class MainActivity extends AppCompatActivity {
 
         ButtonUtils.setButton(btnSkip, null, this, () -> {
             gameInstance.getCurrentPlayer().useSkip();
+
             wildText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.VISIBLE);
             nextPlayerText.setVisibility(View.VISIBLE);
             numberText.setVisibility(View.VISIBLE);
-
         });
 
 
@@ -74,24 +80,19 @@ public class MainActivity extends AppCompatActivity {
             btnWild.setVisibility(View.INVISIBLE);
             wildText.setVisibility(View.VISIBLE);
             nextPlayerText.setVisibility(View.INVISIBLE);
-            btnSkip.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.INVISIBLE);
             bop.start();
-
             gameInstance.getCurrentPlayer().useWildCard();
             Player currentPlayer = gameInstance.getCurrentPlayer();
             wildCardActivate(currentPlayer);
         });
 
-
-        // This sets a new playerEventListener, which is linked to the skip button. So the app knows when that button is clicked, it provides a functionality to go to the next player (we made the functionality below)
         gameInstance.setPlayerEventListener(e -> {
             if (e.type == PlayerEventType.SKIP) {
                 gameInstance.nextPlayer();
             }
         });
 
-        //This is the functionality mentioned above. Note getCurrentPlayer is found in Game class. Note gameInstance means that it is set for a brand new game.
         gameInstance.setGameEventListener(e -> {
             switch (e.type) {
                 case NEXT_PLAYER: {
@@ -121,7 +122,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void renderPlayer() {
-        nextPlayerText.setText("Player " + (gameInstance.getCurrentPlayer().getName()) + "'s" + " Turn");
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        Set<String> playerNamesSet = preferences.getStringSet("playerNames", null);
+        String[] playerNamesArray = playerNamesSet.toArray(new String[0]);
+        int currentPlayerIndex = gameInstance.currentPlayerId;
+
+        String currentPlayerName = playerNamesArray[currentPlayerIndex];
+        nextPlayerText.setText("Player " + currentPlayerName + "'s Turn");
 
         if (gameInstance.getCurrentPlayer().getSkipAmount() > 0) {
             btnSkip.setVisibility(View.VISIBLE);
@@ -141,77 +148,74 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     public void wildCardActivate(Player player) {
+        Settings_WildCardChoice settings = new Settings_WildCardChoice();
+        WildCardProbabilities[] activityProbabilities = settings.loadWildCardProbabilitiesFromStorage(getApplicationContext());
 
         final TextView wildActivityTextView = findViewById(R.id.wild_textview);
         player.useWildCard();
-//        WildCardProbabilities[] activityProbabilities = loadWildCardProbabilitiesFromStorage();
-//
-//        Set<WildCardProbabilities> usedCards = usedWildCards.getOrDefault(player, new HashSet<>());
-//
-//        List<WildCardProbabilities> unusedCards = Arrays.stream(activityProbabilities)
-//                .filter(c -> !usedCards.contains(c))
-//                .collect(Collectors.toList());
-//
-//        if (unusedCards.isEmpty()) {
-//            usedCards.clear();
-//        }
-//
-//        int totalWeight = unusedCards.stream()
-//                .mapToInt(WildCardProbabilities::getProbability)
-//                .sum();
-//
-//        if (totalWeight <= 0) {
-//            wildActivityTextView.setText("No wild cards available");
-//            return;
-//        }
-//
-//
-//        Random random = new Random();
-//        String selectedActivity = "";
-//        boolean foundUnusedCard = false;
-//        while (!foundUnusedCard) {
-//            int randomWeight = random.nextInt(totalWeight);
-//            int weightSoFar = 0;
-//            for (WildCardProbabilities activityProbability : unusedCards) {
-//                weightSoFar += activityProbability.getProbability();
-//                if (randomWeight < weightSoFar) {
-//                    selectedActivity = activityProbability.getActivity();
-//                    foundUnusedCard = true;
-//                    usedCards.add(activityProbability);
-//                    break;
-//                }
-//            }
-//        }
-//
-//        if (selectedActivity.equals("Get a skip button to use on any one of your turns!")) {
-//            if (player.getSkipAmount() == 0) {
-//                player.skips++;
-//                btnSkip.setVisibility(View.VISIBLE);
-//            }
-//
-//            if (usedCards.contains(activityProbabilities[0])) {
-//                if (player.getSkipAmount() > 0) {
-//                    btnSkip.setVisibility(View.VISIBLE);
-//                } else {
-//                    btnSkip.setVisibility(View.GONE);
-//                }
-//            } else {
-//                btnSkip.setVisibility(View.GONE);
-//            }
-//        } else {
-//            btnSkip.setVisibility(View.GONE);
-//        }
-//
-//        if (player.getWildCardAmount() > 0) {
-//            btnWild.setVisibility(View.VISIBLE);
-//        } else {
-//            btnWild.setVisibility(View.INVISIBLE);
-//        }
-//
-//
-//        wildActivityTextView.setText(selectedActivity);
 
-    }
-}
+        boolean wildCardsEnabled = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                .getBoolean("wild_cards_toggle", true);
+
+        String selectedActivity = null;
+        Set<WildCardProbabilities> usedCards = new HashSet<>();
+        if (wildCardsEnabled) {
+            usedCards = usedWildCards.getOrDefault(player, new HashSet<>());
+
+            Set<WildCardProbabilities> finalUsedCards = usedCards;
+            List<WildCardProbabilities> unusedCards = Arrays.stream(activityProbabilities)
+                    .filter(c -> !finalUsedCards.contains(c))
+                    .filter(c -> c.isEnabled())
+                    .collect(Collectors.toList());
+
+            if (unusedCards.isEmpty()) {
+                usedCards.clear();
+            }
+
+            int totalWeight = unusedCards.stream()
+                    .mapToInt(WildCardProbabilities::getProbability)
+                    .sum();
+
+            if (totalWeight <= 0) {
+                wildActivityTextView.setText("No wild cards available");
+                return;
+            }
+
+            Random random = new Random();
+            selectedActivity = "";
+            boolean foundUnusedCard = false;
+            while (!foundUnusedCard) {
+                int randomWeight = random.nextInt(totalWeight);
+                int weightSoFar = 0;
+                for (WildCardProbabilities activityProbability : unusedCards) {
+                    weightSoFar += activityProbability.getProbability();
+                    if (randomWeight < weightSoFar) {
+                        selectedActivity = activityProbability.getText();
+                        foundUnusedCard = true;
+                        usedCards.add(activityProbability);
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (selectedActivity != null) {
+            wildActivityTextView.setText(selectedActivity);
+        } else {
+            wildActivityTextView.setText("");
+        }
+
+        if (selectedActivity != null && selectedActivity.equals("Get a skip button to use on any one of your turns!")) {
+            if (player.getSkipAmount() == 0) {
+                player.skips++;
+                btnSkip.setVisibility(View.VISIBLE);
+            }
+
+
+        if (player.getWildCardAmount() > 0) {
+            btnWild.setVisibility(View.VISIBLE);
+        } else {
+            btnWild.setVisibility(View.INVISIBLE);
+        }
+    }}}

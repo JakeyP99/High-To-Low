@@ -19,7 +19,10 @@ import java.util.Random;
 public class NumberChoice extends AppCompatActivity {
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(NumberChoice.this, PlayerNumberChoice.class));
+        Intent intent = new Intent();
+        intent.putExtra("resetCounter", true);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     static int startingNumber;
@@ -75,7 +78,7 @@ public class NumberChoice extends AppCompatActivity {
 
     public void randomNumberChoice() {
         Random random = new Random();
-        int randomNum = random.nextInt(999999998) + 1; // generates a random integer between 1 and 20000
+        int randomNum = random.nextInt(5000) + 1;
         startingNumber = randomNum;
         final EditText originalNumberField = findViewById(R.id.EditTextView_numberchoice);
 

@@ -37,7 +37,6 @@ public class PlayerNumberChoice extends AppCompatActivity {
             }
             try {
                 int inputNumber = Integer.parseInt(inputValue);
-
                 if (inputNumber <= 0) {
                     bop.start();
                     return;
@@ -45,16 +44,16 @@ public class PlayerNumberChoice extends AppCompatActivity {
 
                 MainActivity.gameInstance.setPlayers(inputNumber);
 
-                originalPlayerField.setFocusable(false);
-                startActivity(new Intent(PlayerNumberChoice.this, NumberChoice.class));
+                Intent intent = new Intent(PlayerNumberChoice.this, PlayerNameChoice.class);
+                intent.putExtra("playerCount", inputNumber);
+                startActivity(intent);
+
                 bop.start();
 
             } catch (NumberFormatException e) {
                 bop.start();
                 Toast.makeText(PlayerNumberChoice.this, "That's wayyyy too many players", Toast.LENGTH_SHORT).show();
             }
-
-
         });
     }
 }

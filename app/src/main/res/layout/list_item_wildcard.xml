@@ -1,20 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:padding="30dp">
+
+
+    <Button
+        android:id="@+id/button_edit_probability"
+        android:layout_width="74dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerInParent="true"
+        android:background="@drawable/outlineforbutton"
+        android:text="Edit"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark" />
+
 
     <TextView
         android:id="@+id/textview_wildcard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:padding="8dp"/>
+        android:layout_centerInParent="true"
+        android:layout_marginEnd="40dp"
+        android:layout_toStartOf="@+id/switch_wildcard"
+        android:layout_toEndOf="@+id/button_edit_probability"
+        android:maxLines="4"
+        android:paddingStart="8dp"
+        android:text="This is a very long text that will wrap to the next line if it is too long to fit on one line."
+        android:textAlignment="center"
+        android:textColor="@color/bluedark"
+        />
+
+    <TextView
+        android:id="@+id/textview_probability"
+        android:layout_width="32dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginEnd="4dp"
+        android:layout_toStartOf="@+id/switch_wildcard"
+        android:gravity="center"
+        android:text="P"
+        android:textColor="@color/bluedark" />
 
     <Switch
         android:id="@+id/switch_wildcard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"/>
+        android:layout_alignParentEnd="true"
+        android:layout_centerInParent="true"
 
-</LinearLayout>
+        />
+
+</RelativeLayout>

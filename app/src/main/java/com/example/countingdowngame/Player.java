@@ -16,10 +16,6 @@ class Player {
 
     }
 
-    public String getName() {
-        return Integer.toString(playerId + 1);
-    }
-
 
     public void useSkip() {
         this.game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.SKIP));

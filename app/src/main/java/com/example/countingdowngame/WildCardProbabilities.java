@@ -12,6 +12,7 @@ public class WildCardProbabilities {
         this.used = false;
         this.enabled = enabled;
     }
+
     public boolean isEnabled() {
         return enabled;
     }
@@ -21,7 +22,19 @@ public class WildCardProbabilities {
     }
 
     public String getText() {
-        return activity + " (" + probability + "%)";
+        return activity;
+    }
+
+
+    public int getProbability() {
+        return probability;
+    }
+
+    public void setText(String text) {
+        this.activity = text;
+    }
+
+    public void setProbability(int probability) {
+        this.probability = probability;
     }
 }
-

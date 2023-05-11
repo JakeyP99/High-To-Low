@@ -22,11 +22,13 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".PlayerNumberChoice" />
         <activity android:name=".EndActivity" />
-        <activity android:name=".NumberChoice" />
+        <activity android:name=".NumberChoice"/>
         <activity android:name=".Instructions" />
         <activity android:name=".SettingClass"/>
-        <activity android:name=".SettingClass$WildCardChoice"/>
         <activity android:name=".Settings_WildCardChoice"/>
+        <activity android:name=".PlayerNameChoice"
+        />
+
 
 
 
