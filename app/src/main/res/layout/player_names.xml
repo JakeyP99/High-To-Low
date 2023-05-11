@@ -22,6 +22,20 @@
         app:layout_constraintBottom_toTopOf="@id/button_done"
         app:layout_constraintTop_toBottomOf="@id/player_input_layout" />
 
+    <TextView
+        android:id="@+id/text_view_counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:textColor="@color/bluedark"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.02 " />
+
+
     <Button
         android:id="@+id/button_done"
         android:layout_width="139dp"
@@ -42,6 +56,7 @@
         android:layout_height="85dp"
         android:orientation="horizontal"
         android:padding="16dp"
+        android:layout_marginTop="65dp"
         app:layout_constraintBottom_toTopOf="@id/list_view_player_names"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -57,6 +72,9 @@
         <Button
             android:id="@+id/button_add_name"
             android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="15dp"
+
             android:layout_height="wrap_content"
             android:background="@drawable/outlineforbutton"
             android:text="Add"

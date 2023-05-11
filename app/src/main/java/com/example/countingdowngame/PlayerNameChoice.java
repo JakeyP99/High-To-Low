@@ -31,6 +31,7 @@ public class PlayerNameChoice extends AppCompatActivity {
     private ListView playerListView;
     private EditText nameEditText;
     private static final int REQUEST_CODE_RESET_COUNTER = 1;
+    private TextView counterTextView;
 
     private ArrayList<String> playerNames;
     private int playerCounter;
@@ -81,18 +82,16 @@ public class PlayerNameChoice extends AppCompatActivity {
             if (playerNames.size() == playerCount) {
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putStringSet("playerNames", new HashSet<>(playerNames));
-
-
                 editor.apply();
-
-
                 startActivity(new Intent(PlayerNameChoice.this, NumberChoice.class));
-
+            } else if (playerNames.size() < playerCount) {
+                Toast.makeText(PlayerNameChoice.this, "Please add more player names.", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(PlayerNameChoice.this, "Please enter a name for each player", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PlayerNameChoice.this, "Please remove player names.", Toast.LENGTH_SHORT).show();
             }
         });
         updatePlayerList();
+
     }
 
     private void setTextViewSizeBasedOnString(TextView textView, String text) {
@@ -114,12 +113,11 @@ public class PlayerNameChoice extends AppCompatActivity {
                     convertView = LayoutInflater.from(getContext()).inflate(R.layout.player_item, parent, false);
                 }
                 TextView playerNameView = (TextView) convertView.findViewById(R.id.player_name);
-                String playerName =  playerNames.get(position);
+                String playerName = playerNames.get(position);
                 playerNameView.setText(playerName);
                 setTextViewSizeBasedOnString(playerNameView, playerName);
 
                 Button deleteButton = (Button) convertView.findViewById(R.id.delete_button);
-
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     playerNameView.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO);
@@ -137,5 +135,20 @@ public class PlayerNameChoice extends AppCompatActivity {
         playerListView.setAdapter(adapter);
 
         playerCounter = playerNames.size();
-    }
+
+        int playerCount = getIntent().getIntExtra("playerCount", 0);
+        int remainingPlayers = playerCount - playerCounter;
+        int extraPlayers = playerCounter - playerCount;
+
+        TextView remainingPlayersView = findViewById(R.id.text_view_counter);
+        if (remainingPlayers > 0) {
+            remainingPlayersView.setText("Enter " + playerCount + " Player Names!");
+        } else if (remainingPlayers == 0) {
+            remainingPlayersView.setText("You're good to play!");
+        } else if (remainingPlayers == -1) {
+            remainingPlayersView.setText("Remove " + extraPlayers + " Player Name!");
+        } else {
+            remainingPlayersView.setText("Remove " + extraPlayers + " Player Names!");
+        }
+}
 }

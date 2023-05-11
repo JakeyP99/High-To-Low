@@ -11,10 +11,11 @@ import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 public class ButtonUtils {
-    public static void setButton(final Button button, final Class<?> activityClass, final Context context, final Runnable buttonAction) {
+    public static void setButton(final Button button, final Class<?> activityClass, final AppCompatActivity context, final Runnable buttonAction) {
         button.setOnTouchListener((view, motionEvent) -> {
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                 button.setBackground(context.getDrawable(R.drawable.buttonhighlight));
@@ -23,6 +24,7 @@ public class ButtonUtils {
                 if (activityClass != null) {
                     Intent intent = new Intent(context, activityClass);
                     context.startActivity(intent);
+//                    context.finish(); THIS NEEDS TO BE CHECKED, WE THINK ITS FINISH BUT IT MESSES WITH THE APP, SO IT CAN'T BE.
                 }
                 if (buttonAction != null) {
                     buttonAction.run();
