@@ -34,7 +34,7 @@ public class Settings_WildCardChoice extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         saveWildCardProbabilitiesToStorage(mProbabilities);
         super.onBackPressed();
     }
@@ -96,9 +96,12 @@ public class Settings_WildCardChoice extends AppCompatActivity {
                 wildCardList.add(probabilityItem);
             }
             wildCardList.add(newWildCard);
-            mProbabilities = wildCardList.toArray(new WildCardProbabilities[0]);
 
-            mAdapter.notifyDataSetChanged();
+
+            mProbabilities = wildCardList.toArray(new WildCardProbabilities[wildCardList.size()]);
+
+            mAdapter = new WildCardAdapter(mContext, mProbabilities);
+            listViewWildCard.setAdapter(mAdapter);
 
             saveWildCardProbabilitiesToStorage(mProbabilities);
         });
@@ -167,15 +170,8 @@ public class Settings_WildCardChoice extends AppCompatActivity {
             editor.putBoolean("wild_card_enabled_" + i, probabilities[i].isEnabled());
             editor.putString("wild_card_activity_" + i, probabilities[i].getText());
             editor.putInt("wild_card_probability_" + i, probabilities[i].getProbability());
-
         }
-
-
-
         editor.apply();
-
-
-
     }
 
     private class WildCardAdapter extends ArrayAdapter<WildCardProbabilities> {
