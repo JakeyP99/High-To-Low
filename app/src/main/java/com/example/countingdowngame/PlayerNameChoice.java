@@ -106,6 +106,7 @@ public class PlayerNameChoice extends AppCompatActivity {
 
 
     private void updatePlayerList() {
+        AppCompatActivity activity = this; // Get a reference to the activity
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, playerNames) {
             @Override
             public View getView(final int position, View convertView, ViewGroup parent) {
@@ -117,17 +118,17 @@ public class PlayerNameChoice extends AppCompatActivity {
                 playerNameView.setText(playerName);
                 setTextViewSizeBasedOnString(playerNameView, playerName);
 
-                Button deleteButton = (Button) convertView.findViewById(R.id.delete_button);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     playerNameView.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO);
                 }
 
-                ButtonUtils.setButton(deleteButton, null, PlayerNameChoice.this, () -> {
+                ButtonUtils.setButton(convertView.findViewById(R.id.delete_button), null, activity, () -> {
                     playerNames.remove(position);
                     playerCounter--;
                     updatePlayerList();
                 });
+
 
                 return convertView;
             }

@@ -1,9 +1,12 @@
 package com.example.countingdowngame;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +40,11 @@ public class Settings_WildCardChoice extends AppCompatActivity {
     public void onBackPressed() {
         saveWildCardProbabilitiesToStorage(mProbabilities);
         super.onBackPressed();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: mProbabilities size = " + mProbabilities.length);
     }
 
     @Override
@@ -212,6 +220,11 @@ public class Settings_WildCardChoice extends AppCompatActivity {
             textView.setTextSize(textSize);
         }
 
+        @Override
+        public int getCount() {
+            return mProbabilities == null ? 0 : mProbabilities.length;
+        }
+
 
         @NonNull
         @Override
@@ -251,14 +264,17 @@ public class Settings_WildCardChoice extends AppCompatActivity {
 
                 // Create the EditText for the probability
                 final EditText probabilityInput = new EditText(mContext);
-                probabilityInput.setInputType(InputType.TYPE_CLASS_NUMBER);
-                probabilityInput.setText(String.valueOf(wildCard.getProbability()));
+                final EditText textInput = new EditText(mContext);
+
+                textInput.setInputType(InputType.TYPE_CLASS_TEXT);
+                textInput.setText(wildCard.getText()); // updated line
+
+
                 layout.addView(probabilityInput);
 
                 // Create the EditText for the text
-                final EditText textInput = new EditText(mContext);
-                textInput.setInputType(InputType.TYPE_CLASS_TEXT);
-                textInput.setText(wildCard.getText()); // updated line
+                probabilityInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+                probabilityInput.setText(String.valueOf(wildCard.getProbability()));
                 layout.addView(textInput);
 
                 builder.setView(layout);
@@ -271,7 +287,9 @@ public class Settings_WildCardChoice extends AppCompatActivity {
                     mProbabilities = wildCardList.toArray(new WildCardProbabilities[0]);
                     mAdapter.notifyDataSetChanged();
                     saveWildCardProbabilitiesToStorage(mProbabilities);
+                    Log.d("WildCardEditActivity", "Deleted wild card at position " + position + ". New array size: " + mProbabilities.length);
                 });
+
 
 
                 builder.setPositiveButton("OK", (dialog, which) -> {

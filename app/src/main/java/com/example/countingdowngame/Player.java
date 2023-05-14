@@ -24,6 +24,14 @@ class Player {
 
     private Set<WildCardProbabilities> usedWildCards = new HashSet<>();
 
+    public void addUsedWildCard(WildCardProbabilities usedWildCard) {
+        usedWildCards.add(usedWildCard);
+    }
+
+    public Set<WildCardProbabilities> getUsedWildCards() {
+        return usedWildCards;
+    }
+
 
     public void useWildCard() {
         this.game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.WILD_CARD));

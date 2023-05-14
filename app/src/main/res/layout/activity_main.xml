@@ -51,6 +51,21 @@
         app:layout_constraintVertical_bias="0.673" />
 
     <Button
+        android:id="@+id/btnBackWildCard"
+        android:layout_width="139dp"
+        android:layout_height="77dp"
+        android:background="@drawable/outlineforbutton"
+        android:text="Continue"
+        android:textColor="@color/bluedark"
+        android:textSize="21sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.673" />
+
+    <Button
         android:id="@+id/btnSkip"
         android:layout_width="110dp"
         android:layout_height="58dp"
