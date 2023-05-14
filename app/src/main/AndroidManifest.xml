@@ -26,8 +26,9 @@
         <activity android:name=".Instructions" />
         <activity android:name=".SettingClass"/>
         <activity android:name=".Settings_WildCardChoice"/>
-        <activity android:name=".PlayerNameChoice"
-        />
+        <activity android:name=".PlayerNameChoice" />
+        <activity android:name=".Settings_GameModeChoice" />
+        <activity android:name=".MainActivityG2" />
 
 
 

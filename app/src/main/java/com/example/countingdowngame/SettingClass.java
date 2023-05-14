@@ -20,9 +20,13 @@ public class SettingClass extends AppCompatActivity {
 
         Button btnReturn = findViewById(R.id.buttonReturn);
         Button btnWildCardSettings = findViewById(R.id.button_wildcardSettings);
+        Button btnGameModeSettings = findViewById(R.id.button_gameModeSettings);
 
 
         ButtonUtils.setButton(btnReturn, HomeScreen.class, this, null);
         ButtonUtils.setButton(btnWildCardSettings, Settings_WildCardChoice.class, this, null);
+        ButtonUtils.setButton(btnGameModeSettings, Settings_GameModeChoice.class, this, null);
+
+
     }
 }
