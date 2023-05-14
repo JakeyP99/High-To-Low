@@ -28,11 +28,6 @@ class Player {
         usedWildCards.add(usedWildCard);
     }
 
-    public Set<WildCardProbabilities> getUsedWildCards() {
-        return usedWildCards;
-    }
-
-
     public void useWildCard() {
         this.game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.WILD_CARD));
         this.wildcard = this.wildcard - 1;
