@@ -28,7 +28,7 @@
         <activity android:name=".Settings_WildCardChoice"/>
         <activity android:name=".PlayerNameChoice" />
         <activity android:name=".Settings_GameModeChoice" />
-        <activity android:name=".MainActivityG2" />
+        <activity android:name=".MainActivitySplitScreen" />
 
 
 

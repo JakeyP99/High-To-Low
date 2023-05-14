@@ -34,9 +34,8 @@ public class ButtonUtils {
             }
             return true;
         });
-
     }
-        public static void setImageButton ( final ImageButton imagebutton, final Class<?> activityClass, final Context context, final Runnable buttonAction){
+       public static void setImageButton ( final ImageButton imagebutton, final Class<?> activityClass, final Context context, final Runnable buttonAction){
             imagebutton.setOnTouchListener((view, motionEvent) -> {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     imagebutton.setBackground(context.getDrawable(R.drawable.buttonhighlight));

@@ -10,12 +10,11 @@
 
     <!-- Player 1 -->
 
-
     <TextView
-        android:id="@+id/g2_numberTextPlayer1"
+        android:id="@+id/numberText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="fdsa"
+        android:text=""
         android:textColor="@color/bluedark"
         android:textSize="70sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -26,12 +25,12 @@
         app:layout_constraintVertical_bias="0.60" />
 
     <TextView
-        android:id="@+id/g2_wild_textviewPlayer1"
+        android:id="@+id/wild_textview"
         android:layout_width="match_parent"
         android:layout_height="111dp"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:text="fdsa"
+        android:text=""
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:textColor="@color/bluedark"
         android:textSize="30sp"
@@ -43,7 +42,7 @@
         tools:ignore="HardcodedText" />
 
     <Button
-        android:id="@+id/g2_btnGeneratePlayer1"
+        android:id="@+id/btnGenerate"
         android:layout_width="139dp"
         android:layout_height="77dp"
         android:background="@drawable/outlineforbutton"
@@ -59,7 +58,7 @@
 
 
     <Button
-        android:id="@+id/g2_btnBackWildCardPlayer1"
+        android:id="@+id/btnBackWildCard"
         android:layout_width="139dp"
         android:layout_height="77dp"
         android:background="@drawable/outlineforbutton"
@@ -75,7 +74,7 @@
 
 
     <Button
-        android:id="@+id/g2_btnWildPlayer1"
+        android:id="@+id/btnWild"
         android:layout_width="110dp"
         android:layout_height="58dp"
         android:background="@drawable/outlineforbutton"
@@ -89,7 +88,7 @@
         app:layout_constraintVertical_bias="0.95" />
 
     <Button
-        android:id="@+id/g2_btnSkipPlayer1"
+        android:id="@+id/btnSkip"
         android:layout_width="110dp"
         android:layout_height="58dp"
         android:background="@drawable/outlineforbutton"
@@ -106,7 +105,7 @@
 
 
     <ImageButton
-        android:id="@+id/g2_imageBtnExitPlayer1"
+        android:id="@+id/imageBtnExit"
         android:layout_width="54dp"
         android:layout_height="54dp"
         android:layout_marginTop="660dp"
@@ -116,6 +115,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+    <TextView
+        android:id="@+id/textView_Number_Turn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="@color/bluedark"
+        android:textSize="35sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.13" />
+
 
     <!-- Player 1 -->
 
@@ -133,7 +146,7 @@
         android:rotation="180"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="fdsa"
+        android:text=""
         android:textColor="@color/bluedark"
         android:textSize="70sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -150,7 +163,7 @@
         android:layout_height="111dp"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:text="fdsa"
+        android:text=""
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:textColor="@color/bluedark"
         android:textSize="30sp"

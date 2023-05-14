@@ -60,7 +60,7 @@ public class NumberChoice extends AppCompatActivity {
                 startingNumber = inputNumber;
 
                 originalNumberField.setFocusable(false);
-                startActivity(new Intent(NumberChoice.this, MainActivity.class));
+                startActivity(new Intent(NumberChoice.this, MainActivitySplitScreen.class));
                 bop.start();
 
             } catch (NumberFormatException e) {
@@ -84,6 +84,6 @@ public class NumberChoice extends AppCompatActivity {
 
 
         originalNumberField.setFocusable(false);
-        startActivity(new Intent(NumberChoice.this, MainActivity.class));
+        startActivity(new Intent(NumberChoice.this, MainActivitySplitScreen.class));
     };
 }

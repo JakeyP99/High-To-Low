@@ -1,7 +1,6 @@
 package com.example.countingdowngame;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -43,23 +42,9 @@ public class PlayerNumberChoice extends AppCompatActivity {
                     return;
                 }
 
-                MainActivity.gameInstance.setPlayers(inputNumber);
+                MainActivitySplitScreen.gameInstance.setPlayers(inputNumber);
 
-
-                // Retrieve the saved state of the switches from shared preferences
-                SharedPreferences preferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
-                boolean switchOneChecked = preferences.getBoolean("switch_gameModeOne", false);
-                boolean switchTwoChecked = preferences.getBoolean("switch_gameModeTwo", false);
-
-
-                // Get the selected game mode
-                            // Launch the appropriate activity based on the selected game mode
-                Intent intent;
-                if (switchOneChecked) {
-                    intent = new Intent(PlayerNumberChoice.this, PlayerNameChoice.class);
-                } else {
-                    intent = new Intent(PlayerNumberChoice.this, MainActivityG2.class);
-                }
+                Intent intent = new Intent(PlayerNumberChoice.this, PlayerNameChoice.class);
                 intent.putExtra("playerCount", inputNumber);
                 startActivity(intent);
 
