@@ -1,72 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:background="@android:color/white"
-
     android:layout_height="match_parent">
 
-
     <TextView
-        android:id="@+id/text_view_gameOneDescription"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:maxLines="4"
-        android:text="Game Mode One"
-        android:textAlignment="center"
-        android:textColor="@color/bluedark"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1" />
-
-
-    <Switch
-        android:id="@+id/switch_gameModeOne"
+        android:id="@+id/textview_banner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="126dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/text_view_gameOneDescription"
-        app:layout_constraintStart_toStartOf="@+id/text_view_gameOneDescription"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1" />
-
-
-
-    <TextView
-        android:id="@+id/text_view_gameTwoDescription"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:maxLines="4"
-        android:text="Game Mode Two"
-        android:textAlignment="center"
+        android:fontFamily="@font/viga"
+        android:gravity="center"
+        android:paddingTop="10dp"
+        android:paddingBottom="5dp"
+        android:text="Game Modes &amp; Layouts"
         android:textColor="@color/bluedark"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="23sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-
-    <Switch
-        android:id="@+id/switch_gameModeTwo"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/button_gameModeOne"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:maxLines="4"
+        android:text="Single Screen"
+        android:textAlignment="center"
+        android:textColor="@color/bluedark"
+        android:textSize="23sp"
+        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+        android:background="@drawable/outlineforbutton"
 
-        android:layout_marginStart="126dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/text_view_gameOneDescription"
-        app:layout_constraintStart_toStartOf="@+id/text_view_gameOneDescription"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textview_banner" />
 
+    <Button
+        android:id="@+id/button_gameModeTwo"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:maxLines="4"
+        android:text="Split Screen"
+        android:textAlignment="center"
+        android:background="@drawable/outlineforbutton"
+
+        android:textColor="@color/bluedark"
+        android:textSize="23sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_gameModeOne" />
+
+
+<!--    <TextView-->
+<!--        android:id="@+id/textview_banner_Game_Modes"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="28dp"-->
+<!--        android:fontFamily="@font/viga"-->
+<!--        android:gravity="center"-->
+<!--        android:paddingTop="10dp"-->
+<!--        android:paddingBottom="5dp"-->
+<!--        android:text="Game Modes"-->
+<!--        android:textColor="@color/bluedark"-->
+<!--        android:textSize="23sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/button_gameModeTwo" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

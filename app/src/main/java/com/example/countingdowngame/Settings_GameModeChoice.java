@@ -1,61 +1,89 @@
 package com.example.countingdowngame;
 
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.widget.CompoundButton;
-import android.widget.Switch;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Settings_GameModeChoice extends AppCompatActivity {
 
+    private Button button_gameModeOne;
+    private Button button_gameModeTwo;
+    private Drawable buttonHighlightDrawable;
+
     @Override
     public void onBackPressed() {
-        // Save the state of the switches in shared preferences
         SharedPreferences preferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("switch_gameModeOne", switch_gameModeOne.isChecked());
-        editor.putBoolean("switch_gameModeTwo", switch_gameModeTwo.isChecked());
+        editor.putBoolean("button_gameModeOne", button_gameModeOne.isSelected());
+        editor.putBoolean("button_gameModeTwo", button_gameModeTwo.isSelected());
         editor.apply();
 
-        // Call super to close the activity
         super.onBackPressed();
     }
-
-    private Switch switch_gameModeOne;
-    private Switch switch_gameModeTwo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_mode_choice);
 
-        switch_gameModeOne = findViewById(R.id.switch_gameModeOne);
-        switch_gameModeTwo = findViewById(R.id.switch_gameModeTwo);
+        button_gameModeOne = findViewById(R.id.button_gameModeOne);
+        button_gameModeTwo = findViewById(R.id.button_gameModeTwo);
+        buttonHighlightDrawable = getResources().getDrawable(R.drawable.buttonhighlight);
 
-        // Retrieve the saved state of the switches from shared preferences
+        // Retrieve the saved state of the buttons from shared preferences
         SharedPreferences preferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
-        boolean switchOneChecked = preferences.getBoolean("switch_gameModeOne", false);
-        boolean switchTwoChecked = preferences.getBoolean("switch_gameModeTwo", false);
+        boolean buttonOneSelected = preferences.getBoolean("button_gameModeOne", true); // Set default value to true
 
-        // Set the switches accordingly
-        switch_gameModeOne.setChecked(switchOneChecked);
-        switch_gameModeTwo.setChecked(switchTwoChecked);
+        // Set the buttons accordingly
+        button_gameModeOne.setSelected(buttonOneSelected);
+        button_gameModeTwo.setSelected(!buttonOneSelected); // Invert the selection for button_gameModeTwo
 
-        // Add listeners to the switches to toggle the other switch off
-        switch_gameModeOne.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        // Apply button highlight drawable if buttons are selected
+        if (buttonOneSelected) {
+            button_gameModeOne.setBackground(buttonHighlightDrawable);
+            button_gameModeTwo.setBackground(null);
+        } else {
+            button_gameModeOne.setBackground(null);
+            button_gameModeTwo.setBackground(buttonHighlightDrawable);
+        }
+
+        // Add listeners to the buttons
+        button_gameModeOne.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                switch_gameModeTwo.setChecked(!isChecked);
+            public void onClick(View v) {
+                boolean isSelected = !button_gameModeOne.isSelected();
+                button_gameModeOne.setSelected(isSelected);
+                button_gameModeTwo.setSelected(!isSelected);
+
+                if (isSelected) {
+                    button_gameModeOne.setBackground(buttonHighlightDrawable);
+                    button_gameModeTwo.setBackground(null);
+                } else {
+                    button_gameModeOne.setBackground(null);
+                    button_gameModeTwo.setBackground(buttonHighlightDrawable);
+                }
             }
         });
 
-        switch_gameModeTwo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        button_gameModeTwo.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                switch_gameModeOne.setChecked(!isChecked);
+            public void onClick(View v) {
+                boolean isSelected = !button_gameModeTwo.isSelected();
+                button_gameModeTwo.setSelected(isSelected);
+                button_gameModeOne.setSelected(!isSelected);
+
+                if (isSelected) {
+                    button_gameModeTwo.setBackground(buttonHighlightDrawable);
+                    button_gameModeOne.setBackground(null);
+                } else {
+                    button_gameModeTwo.setBackground(null);
+                    button_gameModeOne.setBackground(buttonHighlightDrawable);
+                }
             }
         });
     }
-
 }

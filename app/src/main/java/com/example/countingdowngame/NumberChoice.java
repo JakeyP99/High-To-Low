@@ -63,7 +63,7 @@ public class NumberChoice extends AppCompatActivity {
                 originalNumberField.setFocusable(false);
 
                 SharedPreferences preferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
-                boolean switchOneChecked = preferences.getBoolean("switch_gameModeOne", false);
+                boolean switchOneChecked = preferences.getBoolean("button_gameModeOne", false);
                 if (switchOneChecked) {
                     startActivity(new Intent(NumberChoice.this, MainActivity.class));
                 } else {
@@ -92,7 +92,7 @@ public class NumberChoice extends AppCompatActivity {
         originalNumberField.setFocusable(false);
 
         SharedPreferences preferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
-        boolean switchOneChecked = preferences.getBoolean("switch_gameModeOne", false);
+        boolean switchOneChecked = preferences.getBoolean("button_gameModeOne", false);
         if (switchOneChecked) {
             startActivity(new Intent(NumberChoice.this, MainActivity.class));
         } else {

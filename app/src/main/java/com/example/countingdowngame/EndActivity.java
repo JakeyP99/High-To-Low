@@ -24,7 +24,7 @@ public class EndActivity extends AppCompatActivity {
 
         // Retrieve the saved state of the switches from shared preferences
         SharedPreferences preferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
-        boolean switchOneChecked = preferences.getBoolean("switch_gameModeOne", false);
+        boolean switchOneChecked = preferences.getBoolean("button_gameModeOne", false);
         final Button btnPlayAgain = findViewById(R.id.btnplayAgain);
         final Button btnNewPlayer = findViewById(R.id.btnNewPlayer);
 
