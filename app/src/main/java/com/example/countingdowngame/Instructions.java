@@ -1,6 +1,5 @@
 package com.example.countingdowngame;
 
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +17,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Instructions extends AppCompatActivity {
-    private MediaPlayer bop;
     private ProgressBar progressBar;
 
     @Override

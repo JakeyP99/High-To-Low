@@ -47,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
         Button btnWild = findViewById(R.id.btnWild);
         Button btnBackWild = findViewById(R.id.btnBackWildCard);
         btnBackWild.setVisibility(View.INVISIBLE);
-
         ImageButton imageButtonExit = findViewById(R.id.imageBtnExit);
+
 
 
         //These are the button controls

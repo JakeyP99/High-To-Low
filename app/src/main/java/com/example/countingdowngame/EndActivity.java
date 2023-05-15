@@ -1,11 +1,11 @@
 package com.example.countingdowngame;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,21 +20,32 @@ public class EndActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lose_layout);
 
-
-        final TextView loserName = findViewById(R.id.TextViewLoserName);
         final ListView previousNumbersList = findViewById(R.id.previousNumbers);
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(EndActivity.this, R.layout.custom_list_item, R.id.previousNumbers, MainActivity.gameInstance.getPreviousNumbersFormatted());
-        previousNumbersList.setAdapter(adapter);
-
+        // Retrieve the saved state of the switches from shared preferences
+        SharedPreferences preferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
+        boolean switchOneChecked = preferences.getBoolean("switch_gameModeOne", false);
         final Button btnPlayAgain = findViewById(R.id.btnplayAgain);
         final Button btnNewPlayer = findViewById(R.id.btnNewPlayer);
 
-        ButtonUtils.setButton(btnNewPlayer,PlayerNumberChoice.class, this, null);
+        if (switchOneChecked) {
+            final ArrayAdapter<String> adapter = new ArrayAdapter<>(EndActivity.this, R.layout.custom_list_item, R.id.previousNumbers, MainActivity.gameInstance.getPreviousNumbersFormatted());
+            previousNumbersList.setAdapter(adapter);
 
-        ButtonUtils.setButton(btnPlayAgain,NumberChoice.class, this, () -> {
-            MainActivity.gameInstance.playAgain();
-        });
+            ButtonUtils.setButton(btnPlayAgain, NumberChoice.class, this, () -> {
+                MainActivity.gameInstance.playAgain();
+            });
+        } else {
+            final ArrayAdapter<String> adapter = new ArrayAdapter<>(EndActivity.this, R.layout.custom_list_item, R.id.previousNumbers, MainActivitySplitScreen.gameInstance.getPreviousNumbersFormatted());
+            previousNumbersList.setAdapter(adapter);
+
+            ButtonUtils.setButton(btnPlayAgain, NumberChoice.class, this, () -> {
+                MainActivity.gameInstance.playAgain();
+            });
+
+        }
+
+        ButtonUtils.setButton(btnNewPlayer,PlayerNumberChoice.class, this, null);
 
 
     }

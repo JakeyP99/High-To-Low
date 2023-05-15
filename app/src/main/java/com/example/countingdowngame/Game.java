@@ -106,8 +106,6 @@ public class Game {
     ArrayList<String> getPreviousNumbersFormatted() {
         ArrayList<String> previousNumbersFormatted = new ArrayList<>();
 
-        int offset = 2 ;
-
         for (int i = 0; i < previousNumbers.size(); i++) {
             int j = previousNumbers.size() - 1;
             int number = previousNumbers.get(j - i);

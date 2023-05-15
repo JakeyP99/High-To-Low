@@ -3,6 +3,7 @@ package com.example.countingdowngame;
 import static com.example.countingdowngame.R.id.btnRandomNumber;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -60,8 +61,15 @@ public class NumberChoice extends AppCompatActivity {
                 startingNumber = inputNumber;
 
                 originalNumberField.setFocusable(false);
-                startActivity(new Intent(NumberChoice.this, MainActivitySplitScreen.class));
-                bop.start();
+
+                SharedPreferences preferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
+                boolean switchOneChecked = preferences.getBoolean("switch_gameModeOne", false);
+                if (switchOneChecked) {
+                    startActivity(new Intent(NumberChoice.this, MainActivity.class));
+                } else {
+                    startActivity(new Intent(NumberChoice.this, MainActivitySplitScreen.class));
+                }
+
 
             } catch (NumberFormatException e) {
                 bop.start();
@@ -81,9 +89,14 @@ public class NumberChoice extends AppCompatActivity {
         int randomNum = random.nextInt(5000) + 1;
         startingNumber = randomNum;
         final EditText originalNumberField = findViewById(R.id.EditTextView_numberchoice);
-
-
         originalNumberField.setFocusable(false);
-        startActivity(new Intent(NumberChoice.this, MainActivitySplitScreen.class));
+
+        SharedPreferences preferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
+        boolean switchOneChecked = preferences.getBoolean("switch_gameModeOne", false);
+        if (switchOneChecked) {
+            startActivity(new Intent(NumberChoice.this, MainActivity.class));
+        } else {
+            startActivity(new Intent(NumberChoice.this, MainActivitySplitScreen.class));
+        }
     };
 }

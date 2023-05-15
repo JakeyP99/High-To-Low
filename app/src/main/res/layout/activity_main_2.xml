@@ -4,11 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@android:color/white">
 
-    tools:context=".MainActivity">
+    <TextView
+        android:id="@+id/textView_Number_Turn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="@color/bluedark"
+        android:textSize="35sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.13" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Player 1 -->
+
 
     <TextView
         android:id="@+id/numberText"
@@ -28,7 +47,6 @@
         android:id="@+id/wild_textview"
         android:layout_width="match_parent"
         android:layout_height="111dp"
-        android:layout_centerHorizontal="true"
         android:gravity="center"
         android:text=""
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
@@ -116,33 +134,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
-    <TextView
-        android:id="@+id/textView_Number_Turn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textColor="@color/bluedark"
-        android:textSize="35sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.13" />
-
-
-    <!-- Player 1 -->
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- Player 2 -->
+        <!-- Player 2 -->
 
     <TextView
-        android:id="@+id/g2_numberTextPlayer2"
+        android:id="@+id/numberTextPlayer2"
         android:rotation="180"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -150,14 +145,13 @@
         android:textColor="@color/bluedark"
         android:textSize="70sp"
         app:layout_constraintBottom_toBottomOf="parent"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.4" />
 
     <TextView
-        android:id="@+id/g2_wild_textviewPlayer2"
+        android:id="@+id/wild_textviewPlayer2"
         android:rotation="180"
         android:layout_width="match_parent"
         android:layout_height="111dp"
@@ -177,7 +171,7 @@
 
 
     <Button
-        android:id="@+id/g2_btnGeneratePlayer2"
+        android:id="@+id/btnGeneratePlayer2"
         android:rotation="180"
         android:layout_width="139dp"
         android:layout_height="77dp"
@@ -193,7 +187,7 @@
         app:layout_constraintVertical_bias="0.2" />
 
     <Button
-        android:id="@+id/g2_btnBackWildCardPlayer2"
+        android:id="@+id/btnBackWildCardPlayer2"
         android:rotation="180"
         android:layout_width="139dp"
         android:layout_height="77dp"
@@ -210,7 +204,7 @@
 
 
     <Button
-        android:id="@+id/g2_btnWildPlayer2"
+        android:id="@+id/btnWildPlayer2"
         android:rotation="180"
         android:layout_width="110dp"
         android:layout_height="58dp"
@@ -226,7 +220,7 @@
 
 
     <Button
-        android:id="@+id/g2_btnSkipPlayer2"
+        android:id="@+id/btnSkipPlayer2"
         android:rotation="180"
         android:layout_width="110dp"
         android:layout_height="58dp"
@@ -243,7 +237,7 @@
         app:layout_constraintVertical_bias="0.05" />
 
     <ImageButton
-        android:id="@+id/g2_imageBtnExitPlayer2"
+        android:id="@+id/imageBtnExitPlayer2"
         android:rotation="180"
         android:layout_width="54dp"
         android:layout_height="54dp"
