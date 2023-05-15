@@ -2,7 +2,6 @@ package com.example.countingdowngame;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -38,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         View wildText = findViewById(R.id.wild_textview);
-        final MediaPlayer bop = MediaPlayer.create(this, R.raw.bop);
 
         numberText = findViewById(R.id.numberText);
         Button btnGenerate = findViewById(R.id.btnGenerate);
@@ -83,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
 
         ButtonUtils.setImageButton(imageButtonExit, HomeScreen.class, this, () -> {
             gameInstance.endGame();
-            bop.start();
         });
 
         ButtonUtils.setButton(btnWild, null, this, () -> {
@@ -93,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
             btnGenerate.setVisibility(View.INVISIBLE);
             nextPlayerText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.INVISIBLE);
-            bop.start();
             gameInstance.getCurrentPlayer().useWildCard();
             Player currentPlayer = gameInstance.getCurrentPlayer();
             wildCardActivate(currentPlayer);
@@ -140,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         int currentPlayerIndex = gameInstance.currentPlayerId;
 
         String currentPlayerName = playerNamesArray[currentPlayerIndex];
-        nextPlayerText.setText("Player " + currentPlayerName + "'s Turn");
+        nextPlayerText.setText(currentPlayerName + "'s Turn");
 
         if (gameInstance.getCurrentPlayer().getSkipAmount() > 0) {
             btnSkip.setVisibility(View.VISIBLE);

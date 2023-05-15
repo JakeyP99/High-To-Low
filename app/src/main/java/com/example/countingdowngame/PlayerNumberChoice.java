@@ -2,7 +2,6 @@ package com.example.countingdowngame;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -25,7 +24,6 @@ public class PlayerNumberChoice extends AppCompatActivity {
 
         Button btnSubmitPlayers = findViewById(R.id.btnSubmitPlayers);
         final EditText originalPlayerField = findViewById(R.id.EditTextViewplayernumber);
-        final MediaPlayer bop = MediaPlayer.create(this, R.raw.bop);
 
         ButtonUtils.setButton(btnSubmitPlayers, null, this, () -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -33,13 +31,11 @@ public class PlayerNumberChoice extends AppCompatActivity {
             }
             String inputValue = originalPlayerField.getText().toString();
             if (inputValue.length() <= 0) {
-                bop.start();
                 return;
             }
             try {
                 int inputNumber = Integer.parseInt(inputValue);
                 if (inputNumber <= 0) {
-                    bop.start();
                     return;
                 }
 
@@ -58,10 +54,7 @@ public class PlayerNumberChoice extends AppCompatActivity {
                 startActivity(intent);
 
 
-                bop.start();
-
             } catch (NumberFormatException e) {
-                bop.start();
                 Toast.makeText(PlayerNumberChoice.this, "That's wayyyy too many players", Toast.LENGTH_SHORT).show();
             }
         });

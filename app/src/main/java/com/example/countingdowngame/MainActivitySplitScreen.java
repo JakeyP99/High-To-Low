@@ -1,7 +1,6 @@
 package com.example.countingdowngame;
 
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -44,8 +43,6 @@ public class MainActivitySplitScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_2);
-        final MediaPlayer bop = MediaPlayer.create(this, R.raw.bop);
-
         //<Player1>
 
         numberText = findViewById(R.id.numberText);
@@ -116,7 +113,6 @@ public class MainActivitySplitScreen extends AppCompatActivity {
 
         ButtonUtils.setImageButton(imageButtonExit, HomeScreen.class, this, () -> {
             gameInstance.endGame();
-            bop.start();
         });
 
         ButtonUtils.setButton(btnWild, null, this, () -> {
@@ -135,8 +131,6 @@ public class MainActivitySplitScreen extends AppCompatActivity {
             gameInstance.getCurrentPlayer().useWildCard();
             Player currentPlayer = gameInstance.getCurrentPlayer();
             wildCardActivate(currentPlayer);
-            bop.start();
-
         });
 
 //        These are the button controls for Player 2
@@ -183,7 +177,6 @@ public class MainActivitySplitScreen extends AppCompatActivity {
 
         ButtonUtils.setImageButton(imageButtonExitPlayer2, HomeScreen.class, this, () -> {
             gameInstance.endGame();
-            bop.start();
         });
 
         ButtonUtils.setButton(btnWildPlayer2, null, this, () -> {

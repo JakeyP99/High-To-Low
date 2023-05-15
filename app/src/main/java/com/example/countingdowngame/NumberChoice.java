@@ -4,7 +4,6 @@ import static com.example.countingdowngame.R.id.btnRandomNumber;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -35,8 +34,6 @@ public class NumberChoice extends AppCompatActivity {
         final EditText originalNumberField = findViewById(R.id.EditTextView_numberchoice);
         Button btnSubmit = findViewById(R.id.btnSubmitNumbers);
         Button btnRandom = findViewById(btnRandomNumber);
-        final MediaPlayer bop = MediaPlayer.create(this, R.raw.bop);
-
 
         ButtonUtils.setButton(btnSubmit,null, this, () -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -46,7 +43,6 @@ public class NumberChoice extends AppCompatActivity {
             String inputValue = originalNumberField.getText().toString();
 
             if (inputValue.length() < 0 || inputValue.length() > 9) {
-                bop.start();
                 Toast.makeText(NumberChoice.this, "That's a lot of numbers, unfortunately too many :(", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -54,7 +50,6 @@ public class NumberChoice extends AppCompatActivity {
                 int inputNumber = Integer.parseInt(inputValue);
 
                 if (inputNumber <= 0) {
-                    bop.start();
                     return;
                 }
 
@@ -72,15 +67,12 @@ public class NumberChoice extends AppCompatActivity {
 
 
             } catch (NumberFormatException e) {
-                bop.start();
             }
 
         });
 
         ButtonUtils.setButton(btnRandom, null,this, () -> {
             randomNumberChoice();
-            bop.start();
-
         });
     }
 

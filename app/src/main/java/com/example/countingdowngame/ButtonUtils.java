@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -15,7 +16,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 public class ButtonUtils {
+
     public static void setButton(final Button button, final Class<?> activityClass, final AppCompatActivity context, final Runnable buttonAction) {
+        final MediaPlayer bop = MediaPlayer.create(context, R.raw.bop);
+
         button.setOnTouchListener((view, motionEvent) -> {
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                 button.setBackground(context.getDrawable(R.drawable.buttonhighlight));
@@ -24,13 +28,14 @@ public class ButtonUtils {
                 if (activityClass != null) {
                     Intent intent = new Intent(context, activityClass);
                     context.startActivity(intent);
-//                    context.finish(); THIS NEEDS TO BE CHECKED, WE THINK ITS FINISH BUT IT MESSES WITH THE APP, SO IT CAN'T BE.
+//                context.finish(); // Check if this line is needed
                 }
                 if (buttonAction != null) {
                     buttonAction.run();
-
                 }
                 vibrateDevice(context);
+                bop.start();
+
             }
             return true;
         });
