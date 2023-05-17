@@ -113,7 +113,7 @@ public class PlayerNameChoice extends AppCompatActivity {
                 if (convertView == null) {
                     convertView = LayoutInflater.from(getContext()).inflate(R.layout.player_item, parent, false);
                 }
-                TextView playerNameView = (TextView) convertView.findViewById(R.id.player_name);
+                TextView playerNameView = convertView.findViewById(R.id.player_name);
                 String playerName = playerNames.get(position);
                 playerNameView.setText(playerName);
                 setTextViewSizeBasedOnString(playerNameView, playerName);

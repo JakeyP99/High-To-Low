@@ -27,15 +27,16 @@
         android:id="@+id/btnWild"
         android:layout_width="wrap_content"
         android:layout_height="100dp"
-        android:layout_marginTop="50dp"
         android:background="@drawable/outlineforbutton"
         android:text=" WildCard "
         android:textColor="@color/bluedark"
         android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnBackWildCard"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
+        app:layout_constraintVertical_bias="0.60
+" />
 
     <Button
         android:id="@+id/btnSkip"
@@ -46,8 +47,9 @@
         android:textColor="@color/bluedark"
         android:textSize="30dp"
         android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/btnWild"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnWild" />
 
@@ -63,7 +65,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.45" />
 
     <Button
         android:id="@+id/btnBackWildCard"
@@ -88,17 +90,17 @@
         android:text=""
         android:textColor="@color/bluedark"
         android:textSize="35sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnGenerate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.13" />
+        app:layout_constraintVertical_bias="0.48000002" />
 
 
     <TextView
         android:id="@+id/wild_textview"
-        android:layout_width="370dp"
-        android:layout_height="406dp"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:text=""
@@ -106,12 +108,12 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:textColor="@color/bluedark"
         android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/numberText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.273"
+        app:layout_constraintTop_toBottomOf="@+id/textView_Number_Turn"
+        app:layout_constraintVertical_bias="1.0"
         tools:ignore="HardcodedText" />
 
     <ImageButton

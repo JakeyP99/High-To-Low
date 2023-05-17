@@ -1,6 +1,7 @@
 package com.example.countingdowngame;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -26,6 +27,7 @@ public class MainActivitySplitScreen extends AppCompatActivity {
 
     static Game gameInstance = new Game();
     private TextView nextPlayerText;
+    private TextView nextPlayerTextPlayer2;
 
     private TextView numberText;
     private TextView numberTextPlayer2;
@@ -46,6 +48,7 @@ public class MainActivitySplitScreen extends AppCompatActivity {
         //<Player1>
 
         numberText = findViewById(R.id.numberText);
+        nextPlayerText = findViewById(R.id.textView_Number_Turn);
         View wildText = findViewById(R.id.wild_textview);
         Button btnGenerate = findViewById(R.id.btnGenerate);
         Button btnBackWild = findViewById(R.id.btnBackWildCard);
@@ -57,6 +60,7 @@ public class MainActivitySplitScreen extends AppCompatActivity {
         //<Player2>
 
         numberTextPlayer2 = findViewById(R.id.numberTextPlayer2);
+        nextPlayerTextPlayer2 = findViewById(R.id.textView_Number_TurnPlayer2);
         View wildTextPlayer2 = findViewById(R.id.wild_textviewPlayer2);
         Button btnGeneratePlayer2 = findViewById(R.id.btnGeneratePlayer2);
         Button btnBackWildPlayer2 = findViewById(R.id.btnBackWildCardPlayer2);
@@ -67,7 +71,6 @@ public class MainActivitySplitScreen extends AppCompatActivity {
         btnBackWildPlayer2.setVisibility(View.INVISIBLE);
         btnBackWild.setVisibility(View.INVISIBLE);
 
-        nextPlayerText = findViewById(R.id.textView_Number_Turn);
 
 
         //These are the button controls for Player 1
@@ -75,12 +78,11 @@ public class MainActivitySplitScreen extends AppCompatActivity {
             gameInstance.nextNumber();
             wildText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.VISIBLE);
-
             nextPlayerText.setVisibility(View.VISIBLE);
 
             wildTextPlayer2.setVisibility(View.INVISIBLE);
             numberTextPlayer2.setVisibility(View.VISIBLE);
-
+            nextPlayerTextPlayer2.setVisibility(View.VISIBLE);
         });
 
         ButtonUtils.setButton(btnBackWild, null, this, () -> {
@@ -90,6 +92,7 @@ public class MainActivitySplitScreen extends AppCompatActivity {
             numberText.setVisibility(View.VISIBLE);
 
             nextPlayerText.setVisibility(View.VISIBLE);
+            nextPlayerTextPlayer2.setVisibility(View.VISIBLE);
 
             btnBackWildPlayer2.setVisibility(View.INVISIBLE);
             btnGeneratePlayer2.setVisibility(View.VISIBLE);
@@ -104,6 +107,7 @@ public class MainActivitySplitScreen extends AppCompatActivity {
             numberText.setVisibility(View.VISIBLE);
 
             nextPlayerText.setVisibility(View.VISIBLE);
+            nextPlayerTextPlayer2.setVisibility(View.VISIBLE);
 
             wildTextPlayer2.setVisibility(View.INVISIBLE);
             numberTextPlayer2.setVisibility(View.VISIBLE);
@@ -141,6 +145,7 @@ public class MainActivitySplitScreen extends AppCompatActivity {
             numberText.setVisibility(View.VISIBLE);
 
             nextPlayerText.setVisibility(View.VISIBLE);
+            nextPlayerTextPlayer2.setVisibility(View.VISIBLE);
 
             wildTextPlayer2.setVisibility(View.INVISIBLE);
             numberTextPlayer2.setVisibility(View.VISIBLE);
@@ -154,6 +159,7 @@ public class MainActivitySplitScreen extends AppCompatActivity {
             numberText.setVisibility(View.VISIBLE);
 
             nextPlayerText.setVisibility(View.VISIBLE);
+            nextPlayerTextPlayer2.setVisibility(View.VISIBLE);
 
             btnBackWildPlayer2.setVisibility(View.INVISIBLE);
             btnGeneratePlayer2.setVisibility(View.VISIBLE);
@@ -168,6 +174,7 @@ public class MainActivitySplitScreen extends AppCompatActivity {
             numberText.setVisibility(View.VISIBLE);
 
             nextPlayerText.setVisibility(View.VISIBLE);
+            nextPlayerTextPlayer2.setVisibility(View.VISIBLE);
 
             wildTextPlayer2.setVisibility(View.INVISIBLE);
             numberTextPlayer2.setVisibility(View.VISIBLE);
@@ -236,6 +243,14 @@ public class MainActivitySplitScreen extends AppCompatActivity {
     }
 
     private void renderPlayer() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        Set<String> playerNamesSet = preferences.getStringSet("playerNames", null);
+        String[] playerNamesArray = playerNamesSet.toArray(new String[0]);
+        int currentPlayerIndex = gameInstance.currentPlayerId;
+
+        String currentPlayerName = playerNamesArray[currentPlayerIndex];
+        nextPlayerText.setText(currentPlayerName + "'s Turn");
+        nextPlayerTextPlayer2.setText(currentPlayerName + "'s Turn");
 
         if (gameInstance.getCurrentPlayer().getSkipAmount() > 0) {
             btnSkip.setVisibility(View.VISIBLE);
