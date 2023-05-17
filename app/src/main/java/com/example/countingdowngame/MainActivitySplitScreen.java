@@ -125,7 +125,9 @@ public class MainActivitySplitScreen extends AppCompatActivity {
             btnBackWild.setVisibility(View.VISIBLE);
             btnGenerate.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.INVISIBLE);
+            nextPlayerText.setVisibility(View.INVISIBLE);
 
+            nextPlayerTextPlayer2.setVisibility(View.INVISIBLE);
             btnWildPlayer2.setVisibility(View.INVISIBLE);
             wildTextPlayer2.setVisibility(View.VISIBLE);
             btnBackWildPlayer2.setVisibility(View.VISIBLE);
@@ -249,8 +251,8 @@ public class MainActivitySplitScreen extends AppCompatActivity {
         int currentPlayerIndex = gameInstance.currentPlayerId;
 
         String currentPlayerName = playerNamesArray[currentPlayerIndex];
-        nextPlayerText.setText(currentPlayerName + "'s Turn");
-        nextPlayerTextPlayer2.setText(currentPlayerName + "'s Turn");
+        nextPlayerText.setText(currentPlayerName);
+        nextPlayerTextPlayer2.setText(currentPlayerName);
 
         if (gameInstance.getCurrentPlayer().getSkipAmount() > 0) {
             btnSkip.setVisibility(View.VISIBLE);

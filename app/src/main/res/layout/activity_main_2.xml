@@ -23,19 +23,19 @@
         android:layout_height="wrap_content"
         android:text=""
         android:textColor="@color/bluedark"
-        android:textSize="35sp"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/btnGenerate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/wild_textview"
-        app:layout_constraintVertical_bias="0.13" />
+        app:layout_constraintTop_toBottomOf="@+id/view"
+        app:layout_constraintVertical_bias="0.5" />
 
     <TextView
         android:id="@+id/numberText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/bluedark"
-        android:textSize="70sp"
+        android:textSize="60sp"
         app:layout_constraintBottom_toBottomOf="@+id/btnGenerate"
         app:layout_constraintEnd_toEndOf="@+id/btnGenerate"
         app:layout_constraintHorizontal_bias="0.5"
@@ -48,20 +48,20 @@
         android:id="@+id/btnGenerate"
         android:layout_width="268dp"
         android:layout_height="159dp"
-        android:layout_marginBottom="100dp"
         android:background="@drawable/outlineforbutton"
         android:text=""
         android:textColor="@color/bluedark"
-        android:textSize="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnWild"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_Number_Turn"
+        app:layout_constraintVertical_bias="0.5" />
+
 
     <TextView
         android:id="@+id/wild_textview"
-        android:layout_width="374dp"
-        android:layout_height="135dp"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
         android:gravity="center"
         android:text=""
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
@@ -71,19 +71,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="0.3"
         tools:ignore="HardcodedText" />
-
 
     <Button
         android:id="@+id/btnWild"
-        android:layout_width="139dp"
-        android:layout_height="77dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="115dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="30dp"
         android:background="@drawable/outlineforbutton"
         android:text="Wild"
         android:textColor="@color/bluedark"
-        android:textSize="21sp"
+        android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.20"
@@ -92,36 +91,34 @@
 
     <Button
         android:id="@+id/btnBackWildCard"
-        android:layout_width="139dp"
-        android:layout_height="77dp"
+        android:layout_width="115dp"
+        android:layout_height="70dp"
         android:background="@drawable/outlineforbutton"
         android:text="Continue"
         android:textColor="@color/bluedark"
-        android:textSize="21sp"
-        android:layout_marginBottom="10dp"
+        android:textSize="18dp"
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.20"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/btnWild"
+        app:layout_constraintEnd_toEndOf="@+id/btnWild"
+        app:layout_constraintStart_toStartOf="@+id/btnWild"
+        app:layout_constraintTop_toTopOf="@+id/btnWild"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/btnSkip"
-        android:layout_width="139dp"
-        android:layout_height="77dp"
+        android:layout_width="115dp"
+        android:layout_height="70dp"
         android:background="@drawable/outlineforbutton"
         android:text="Skip"
         android:textColor="@color/bluedark"
-        android:textSize="20sp"
+        android:layout_marginBottom="30sp"
         android:visibility="visible"
-        android:layout_marginBottom="10dp"
+        android:textSize="18dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <!-- Player 2 -->
 
     <ImageButton
         android:id="@+id/imageBtnExit"
@@ -129,10 +126,13 @@
         android:layout_height="54dp"
         android:background="@color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/wild_textviewPlayer2"
+        app:layout_constraintTop_toBottomOf="@+id/view"
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+    <!-- Player 2 -->
+
 
     <TextView
         android:id="@+id/textView_Number_TurnPlayer2"
@@ -142,13 +142,13 @@
         android:text=""
         android:textColor="@color/bluedark"
 
-        android:textSize="35sp"
-        app:layout_constraintBottom_toTopOf="@+id/wild_textview"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnGeneratePlayer2"
-        app:layout_constraintVertical_bias="0.87" />
+        app:layout_constraintVertical_bias="0.5" />
 
     <TextView
         android:id="@+id/numberTextPlayer2"
@@ -172,41 +172,44 @@
         android:layout_height="159dp"
         android:layout_marginTop="100dp"
         android:background="@drawable/outlineforbutton"
+        android:rotation="180"
         android:text=""
         android:textColor="@color/bluedark"
-        android:rotation="180"
         android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/wild_textviewPlayer2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
 
     <TextView
         android:id="@+id/wild_textviewPlayer2"
         android:layout_width="match_parent"
-        android:layout_height="195dp"
+        android:layout_height="200dp"
         android:gravity="center"
         android:rotation="180"
         android:text=""
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:textColor="@color/bluedark"
-        android:textSize="30sp"
 
-        app:layout_constraintBottom_toTopOf="@+id/wild_textview"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.7"
         tools:ignore="HardcodedText" />
-
 
     <Button
         android:id="@+id/btnWildPlayer2"
-        android:layout_width="139dp"
-        android:layout_height="77dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="115dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/outlineforbutton"
         android:layout_marginBottom="10dp"
         android:textColor="@color/bluedark"
-        android:textSize="21sp"
+        android:textSize="18dp"
         android:rotation="180"
 
         android:text="Wild"
@@ -218,30 +221,29 @@
 
     <Button
         android:id="@+id/btnBackWildCardPlayer2"
-        android:layout_width="139dp"
-        android:layout_height="77dp"
+        android:layout_width="115dp"
+        android:layout_height="70dp"
         android:background="@drawable/outlineforbutton"
+        android:rotation="180"
         android:text="Continue"
         android:textColor="@color/bluedark"
-        android:textSize="21sp"
-        android:layout_marginTop="10dp"
-        android:rotation="180"
+        android:textSize="18dp"
 
-        android:layout_marginBottom="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/btnWildPlayer2" />
+
 
     <Button
         android:id="@+id/btnSkipPlayer2"
-        android:layout_width="139dp"
-        android:layout_height="77dp"
+        android:layout_width="115dp"
+        android:layout_height="70dp"
         android:background="@drawable/outlineforbutton"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:text="Skip"
         android:textColor="@color/bluedark"
-        android:textSize="20sp"
+        android:textSize="18dp"
         android:visibility="visible"
         android:rotation="180"
         app:layout_constraintEnd_toEndOf="parent"
@@ -253,15 +255,14 @@
         android:id="@+id/imageBtnExitPlayer2"
         android:layout_width="54dp"
         android:layout_height="54dp"
-        android:layout_marginTop="296dp"
         android:background="@color/transparent"
         android:rotation="180"
-        app:layout_constraintBottom_toTopOf="@+id/wild_textview"
+        app:layout_constraintBottom_toTopOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="1"
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
