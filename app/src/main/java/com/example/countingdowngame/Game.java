@@ -5,6 +5,8 @@ import java.util.Random;
 
 public class Game {
 
+    public static Game gameInstance = new Game();
+
     int currentPlayerId = 0;
     ArrayList<Player> players = new ArrayList<>();
 

@@ -42,7 +42,7 @@ public class PlayerNumberChoice extends AppCompatActivity {
                 SharedPreferences preferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
                 boolean switchOneChecked = preferences.getBoolean("button_gameModeOne", false);
                 if (switchOneChecked) {
-                    MainActivity.gameInstance.setPlayers(inputNumber);
+                    Game.gameInstance.setPlayers(inputNumber);
                 } else {
                     MainActivitySplitScreen.gameInstance.setPlayers(inputNumber);
                 }

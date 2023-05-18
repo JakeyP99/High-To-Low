@@ -7,12 +7,14 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.Build;
+import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import java.io.IOException;
@@ -23,7 +25,7 @@ public class ButtonUtils {
     private static int currentSoundIndex = 0; // Current index of the sound being played
     private static MediaPlayer[] burp = new MediaPlayer[NUM_SOUNDS];
 
-    public static void setButton(final Button button, final Class<?> activityClass, final Context context, final Runnable buttonAction) {
+    public static void setButton(final Button button, final Class<?> activityClass, final AppCompatActivity context, final Runnable buttonAction) {
         burp[0] = MediaPlayer.create(context, R.raw.burp1);
         burp[1] = MediaPlayer.create(context, R.raw.burp2);
         burp[2] = MediaPlayer.create(context, R.raw.burp3);
@@ -42,6 +44,9 @@ public class ButtonUtils {
                 if (activityClass != null) {
                     Intent intent = new Intent(context, activityClass);
                     context.startActivity(intent);
+                    new Handler().postDelayed(() -> context.finish(), 1000);
+
+
                 }
                 if (buttonAction != null) {
                     buttonAction.run();
