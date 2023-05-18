@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
             numberText.setVisibility(View.VISIBLE);
             nextPlayerText.setVisibility(View.VISIBLE);
             numberText.setVisibility(View.VISIBLE);
+
         });
 
         ButtonUtils.setButton(btnBackWild, null, this, () -> {

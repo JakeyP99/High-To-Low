@@ -225,13 +225,13 @@ public class MainActivitySplitScreen extends AppCompatActivity {
                     break;
                 }
 
-                case NEXT_NUMBER: {
+                case NEXT_NUMBER:
+                case GAME_START: {
                     numberText.setText(String.valueOf(gameInstance.currentNumber));
                     numberTextPlayer2.setText(String.valueOf(gameInstance.currentNumber));
 
-                    break;
-                }
-                case GAME_START: {
+                    setTextViewSizeBasedOnInt(numberText, String.valueOf(gameInstance.currentNumber));
+                    setTextViewSizeBasedOnInt(numberTextPlayer2, String.valueOf(gameInstance.currentNumber));
                     break;
                 }
             }
@@ -243,6 +243,19 @@ public class MainActivitySplitScreen extends AppCompatActivity {
 
         renderPlayer();
     }
+
+    private void setTextViewSizeBasedOnInt(TextView textView, String text) {
+        int defaultTextSize = 60; // set default text size
+        int minSize = 40; // minimum text size
+
+        // Adjust text size based on the length of the text
+        if (text.length() > 6) {
+            textView.setTextSize(minSize); // set smaller text size for longer strings
+        } else {
+            textView.setTextSize(defaultTextSize); // set default text size for short strings
+        }
+    }
+
 
     private void renderPlayer() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);

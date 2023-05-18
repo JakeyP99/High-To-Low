@@ -26,6 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:maxLines="4"
+        android:textAllCaps="false"
         android:text="Single Screen"
         android:textAlignment="center"
         android:textColor="@color/bluedark"
@@ -48,6 +49,7 @@
         android:text="Split Screen"
         android:textAlignment="center"
         android:background="@drawable/outlineforbutton"
+        android:textAllCaps="false"
 
         android:textColor="@color/bluedark"
         android:textSize="23sp"
@@ -66,6 +68,8 @@
         android:gravity="center"
         android:paddingTop="10dp"
         android:paddingBottom="5dp"
+        android:textAllCaps="false"
+
         android:text="Sound Settings"
         android:textColor="@color/bluedark"
         android:textSize="23sp"
@@ -81,10 +85,11 @@
         android:background="@drawable/outlineforbutton"
         android:checkMark="?android:attr/listChoiceIndicatorMultiple"
         android:maxLines="4"
+        android:textAllCaps="false"
+
         android:text="Mute"
         android:textAlignment="center"
         android:textColor="@color/bluedark"
-
 
         android:textSize="23sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -100,8 +105,10 @@
         android:background="@drawable/outlineforbutton"
         android:checkMark="?android:attr/listChoiceIndicatorMultiple"
         android:maxLines="4"
-        android:text="Regular Effects"
+        android:text="Regular Sounds"
         android:textAlignment="center"
+        android:textAllCaps="false"
+
         android:textColor="@color/bluedark"
 
 
@@ -114,12 +121,14 @@
     <Button
         android:id="@+id/button_burp_sound"
         android:layout_width="300dp"
+        android:text="Burp Sounds"
+
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:background="@drawable/outlineforbutton"
         android:checkMark="?android:attr/listChoiceIndicatorMultiple"
         android:maxLines="4"
-        android:text="Burp"
+        android:textAllCaps="false"
         android:textAlignment="center"
         android:textColor="@color/bluedark"
 

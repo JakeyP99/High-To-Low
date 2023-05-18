@@ -98,6 +98,7 @@ public class Settings_GameModeChoice extends AppCompatActivity {
         });
     }
 
+
     private void toggleButton(Button selectedButton, Button unselectedButton) {
         boolean isSelected = !selectedButton.isSelected();
         selectedButton.setSelected(isSelected);

@@ -2,6 +2,7 @@ package com.example.countingdowngame;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +24,9 @@ public class SettingClass extends AppCompatActivity {
         Button btnGameModeSettings = findViewById(R.id.button_gameModeSettings);
 
 
-        ButtonUtils.setButton(btnReturn, HomeScreen.class, this, null);
+        ButtonUtils.setButton(btnReturn, HomeScreen.class, this, () -> {
+            new Handler().postDelayed(() -> finish(), 1000);
+        });
         ButtonUtils.setButton(btnWildCardSettings, Settings_WildCardChoice.class, this, null);
         ButtonUtils.setButton(btnGameModeSettings, Settings_GameModeChoice.class, this, null);
 

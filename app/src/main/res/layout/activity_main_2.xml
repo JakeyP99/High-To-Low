@@ -157,8 +157,6 @@
         android:layout_height="wrap_content"
         android:rotation="180"
         android:textColor="@color/bluedark"
-        android:textSize="70sp"
-
         app:layout_constraintBottom_toBottomOf="@+id/btnGeneratePlayer2"
         app:layout_constraintEnd_toEndOf="@+id/btnGeneratePlayer2"
         app:layout_constraintHorizontal_bias="0.5"

@@ -25,18 +25,19 @@
 
     <Button
         android:id="@+id/btnWild"
-        android:layout_width="wrap_content"
+        android:layout_width="165dp"
         android:layout_height="100dp"
         android:background="@drawable/outlineforbutton"
         android:text=" WildCard "
+        android:textAllCaps="false"
         android:textColor="@color/bluedark"
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
-        app:layout_constraintVertical_bias="0.60
-" />
+        app:layout_constraintVertical_bias="0.60"
+        tools:ignore="DuplicateClickableBoundsCheck" />
 
     <Button
         android:id="@+id/btnSkip"
@@ -46,6 +47,7 @@
         android:text="Skip"
         android:textColor="@color/bluedark"
         android:textSize="30dp"
+        android:textAllCaps="false"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/btnWild"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +67,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.45" />
+        app:layout_constraintVertical_bias="0.45"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <Button
         android:id="@+id/btnBackWildCard"
@@ -73,6 +76,7 @@
         android:layout_height="100dp"
         android:background="@drawable/outlineforbutton"
         android:text="Continue"
+        android:textAllCaps="false"
         android:textColor="@color/bluedark"
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -126,6 +130,7 @@
         app:layout_constraintHorizontal_bias="0.043"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
+        tools:ignore="SpeakableTextPresentCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

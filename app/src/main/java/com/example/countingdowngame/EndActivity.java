@@ -12,10 +12,12 @@ import androidx.appcompat.app.AppCompatActivity;
 public class EndActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(EndActivity.this, HomeScreen.class));
+        Intent intent = new Intent(EndActivity.this, HomeScreen.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
-
-    @Override
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lose_layout);
