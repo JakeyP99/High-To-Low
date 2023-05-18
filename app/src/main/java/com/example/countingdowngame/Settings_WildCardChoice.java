@@ -37,11 +37,6 @@ public class Settings_WildCardChoice extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        saveWildCardProbabilitiesToStorage(mProbabilities);
-        super.onBackPressed();
-    }
-    @Override
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume: mProbabilities size = " + mProbabilities.length);
@@ -120,6 +115,8 @@ public class Settings_WildCardChoice extends AppCompatActivity {
 
     WildCardProbabilities[] loadWildCardProbabilitiesFromStorage(Context context) {
 
+
+
         SharedPreferences prefs = context.getSharedPreferences("MyPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.apply();
@@ -157,8 +154,8 @@ public class Settings_WildCardChoice extends AppCompatActivity {
 
         int count = prefs.getInt("wild_card_count", allProbabilities.length);
 
-        if (count > allProbabilities.length) {
-            allProbabilities = new WildCardProbabilities[count];
+
+        allProbabilities = new WildCardProbabilities[count];
             for (int i = 0; i < count; i++) {
 
                 WildCardProbabilities p = allProbabilities[i];
@@ -168,8 +165,8 @@ public class Settings_WildCardChoice extends AppCompatActivity {
                 else {
                     allProbabilities[i] = new WildCardProbabilities("", 0, false);
                 }
+
             }
-        }
 
         for (int i = 0; i < count; i++) {
             boolean enabled = prefs.getBoolean("wild_card_enabled_" + i, allProbabilities[i].isEnabled());
@@ -181,6 +178,7 @@ public class Settings_WildCardChoice extends AppCompatActivity {
             allProbabilities[i].setProbability(probability);
 
         }
+        Log.d(TAG, "onLoad: " + count);
 
         return allProbabilities;
     }
@@ -196,7 +194,7 @@ public class Settings_WildCardChoice extends AppCompatActivity {
             editor.putInt("wild_card_probability_" + i, probabilities[i].getProbability());
         }
         editor.putInt("wild_card_count", probabilities.length);
-
+        Log.d(TAG, "onSave: Probabilities size = " + probabilities.length);
         editor.apply();
     }
 
@@ -284,8 +282,10 @@ public class Settings_WildCardChoice extends AppCompatActivity {
                 builder.setNeutralButton("Delete", (dialog, which) -> {
                     ArrayList<WildCardProbabilities> wildCardList = new ArrayList<>(Arrays.asList(mProbabilities));
                     wildCardList.remove(position);
-                    mProbabilities = wildCardList.toArray(new WildCardProbabilities[0]);
-                    mAdapter.notifyDataSetChanged();
+                    mProbabilities = wildCardList.toArray(new WildCardProbabilities[wildCardList.size()]);
+                    mAdapter = new WildCardAdapter(mContext, mProbabilities);
+                    listViewWildCard.setAdapter(mAdapter);
+
                     saveWildCardProbabilitiesToStorage(mProbabilities);
                     Log.d("WildCardEditActivity", "Deleted wild card at position " + position + ". New array size: " + mProbabilities.length);
                 });

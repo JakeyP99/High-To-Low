@@ -28,7 +28,7 @@
         android:layout_width="165dp"
         android:layout_height="100dp"
         android:background="@drawable/outlineforbutton"
-        android:text=" WildCard "
+        android:text=" Wild Card "
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
         android:textSize="30dp"
