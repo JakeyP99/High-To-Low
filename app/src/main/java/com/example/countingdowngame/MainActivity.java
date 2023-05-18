@@ -114,11 +114,10 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 }
 
-                case NEXT_NUMBER: {
-                    numberText.setText(String.valueOf(gameInstance.currentNumber));
-                    break;
-                }
+                case NEXT_NUMBER:
                 case GAME_START: {
+                    numberText.setText(String.valueOf(gameInstance.currentNumber));
+                    setTextViewSizeBasedOnInt(numberText, String.valueOf(gameInstance.currentNumber));
                     break;
                 }
             }
@@ -127,6 +126,19 @@ public class MainActivity extends AppCompatActivity {
         gameInstance.startGame(NumberChoice.startingNumber);
         numberText.setText(Integer.toString(gameInstance.currentNumber));
         renderPlayer();
+
+
+    }
+    private void setTextViewSizeBasedOnInt(TextView textView, String text) {
+        int defaultTextSize = 70; // set default text size
+        int minSize = 47; // minimum text size
+
+        // Adjust text size based on the length of the text
+        if (text.length() > 6) {
+            textView.setTextSize(minSize); // set smaller text size for longer strings
+        } else {
+            textView.setTextSize(defaultTextSize); // set default text size for short strings
+        }
     }
 
     private void renderPlayer() {

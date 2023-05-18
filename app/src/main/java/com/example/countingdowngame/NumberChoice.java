@@ -46,10 +46,16 @@ public class NumberChoice extends AppCompatActivity {
                 Toast.makeText(NumberChoice.this, "That's a lot of numbers, unfortunately too many :(", Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            if (inputValue.length() <= 0) {
+                Toast.makeText(NumberChoice.this, "Please choose a number!", Toast.LENGTH_SHORT).show();
+                return;
+            }
             try {
                 int inputNumber = Integer.parseInt(inputValue);
 
                 if (inputNumber <= 0) {
+                    Toast.makeText(NumberChoice.this, "Please choose a number greater than zero!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 

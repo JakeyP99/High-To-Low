@@ -18,6 +18,8 @@ public class Settings_GameModeChoice extends AppCompatActivity {
 
 
     private Drawable buttonHighlightDrawable;
+    private Drawable outlineforbutton;
+
 
     @Override
     public void onBackPressed() {
@@ -35,6 +37,8 @@ public class Settings_GameModeChoice extends AppCompatActivity {
         button_regularSound = findViewById(R.id.button_normal_sound);
         button_burpSound = findViewById(R.id.button_burp_sound);
         buttonHighlightDrawable = getResources().getDrawable(R.drawable.buttonhighlight);
+        outlineforbutton = getResources().getDrawable(R.drawable.outlineforbutton);
+
         btnReturn = findViewById(R.id.buttonReturn);
 
         SharedPreferences preferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
@@ -44,23 +48,26 @@ public class Settings_GameModeChoice extends AppCompatActivity {
         button_gameModeTwo.setSelected(!buttonOneSelected);
 
 
-        ButtonUtils.setButton(btnReturn, HomeScreen.class, this, () ->
-        {
-            savePreferences();
-            super.onBackPressed();
-        });
+        ButtonUtils.setButton(btnReturn, HomeScreen.class, this, null);
 
 
         if (buttonOneSelected) {
             button_gameModeOne.setBackground(buttonHighlightDrawable);
-            button_gameModeTwo.setBackground(null);
+            button_gameModeTwo.setBackground(outlineforbutton);
         } else {
-            button_gameModeOne.setBackground(null);
+            button_gameModeOne.setBackground(outlineforbutton);
             button_gameModeTwo.setBackground(buttonHighlightDrawable);
         }
 
-        button_gameModeOne.setOnClickListener(v -> toggleButton(button_gameModeOne, button_gameModeTwo));
-        button_gameModeTwo.setOnClickListener(v -> toggleButton(button_gameModeTwo, button_gameModeOne));
+        button_gameModeOne.setOnClickListener(view -> {
+            toggleButton(button_gameModeOne, button_gameModeTwo);
+            savePreferences();
+        });
+
+        button_gameModeTwo.setOnClickListener(view -> {
+            toggleButton(button_gameModeTwo, button_gameModeOne);
+            savePreferences();
+        });
 
         SharedPreferences soundPreferences = getSharedPreferences("sound_mode_choice", MODE_PRIVATE);
         boolean regularSoundSelected = soundPreferences.getBoolean("button_regularSound", true);
@@ -70,14 +77,25 @@ public class Settings_GameModeChoice extends AppCompatActivity {
 
         if (regularSoundSelected) {
             button_regularSound.setBackground(buttonHighlightDrawable);
-            button_burpSound.setBackground(null);
+            button_burpSound.setBackground(outlineforbutton);
+            savePreferences();
+
         } else {
-            button_regularSound.setBackground(null);
+            button_regularSound.setBackground(outlineforbutton);
             button_burpSound.setBackground(buttonHighlightDrawable);
+            savePreferences();
+
         }
 
-        button_regularSound.setOnClickListener(v -> toggleButton(button_regularSound, button_burpSound));
-        button_burpSound.setOnClickListener(v -> toggleButton(button_burpSound, button_regularSound));
+        button_regularSound.setOnClickListener(view -> {
+            toggleButton(button_regularSound, button_burpSound);
+            savePreferences();
+        });
+
+        button_burpSound.setOnClickListener(view -> {
+            toggleButton(button_burpSound, button_regularSound);
+            savePreferences();
+        });
     }
 
     private void toggleButton(Button selectedButton, Button unselectedButton) {
@@ -87,9 +105,9 @@ public class Settings_GameModeChoice extends AppCompatActivity {
 
         if (isSelected) {
             selectedButton.setBackground(buttonHighlightDrawable);
-            unselectedButton.setBackground(null);
+            unselectedButton.setBackground(outlineforbutton);
         } else {
-            selectedButton.setBackground(null);
+            selectedButton.setBackground(outlineforbutton);
             unselectedButton.setBackground(buttonHighlightDrawable);
         }
     }
