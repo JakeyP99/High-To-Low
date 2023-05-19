@@ -1,0 +1,69 @@
+WildCardProbabilities[] loadWildCardProbabilitiesFromStorage(Context context) {
+
+
+
+        SharedPreferences prefs = context.getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.apply();
+
+
+        WildCardProbabilities[] allProbabilities = new WildCardProbabilities[]{
+                new WildCardProbabilities("Take 1 drink.", 10, true),
+                new WildCardProbabilities("Take 2 drinks.", 8, true),
+                new WildCardProbabilities("Take 3 drinks.", 5, true),
+                new WildCardProbabilities("Finish your drink.", 3, true),
+                new WildCardProbabilities("Give 1 drink.", 10, true),
+                new WildCardProbabilities("Give 2 drinks.", 8, true),
+                new WildCardProbabilities("Give 3 drinks.", 5, true),
+                new WildCardProbabilities("Choose a player to finish their drink.", 3, true),
+                new WildCardProbabilities("The player to the left takes a drink.", 10, true),
+                new WildCardProbabilities("The player to the right takes a drink.", 10, true),
+                new WildCardProbabilities("The oldest player takes 2 drinks.", 10, true),
+                new WildCardProbabilities("The youngest player takes 2 drinks.", 10, true),
+                new WildCardProbabilities("The player who last peed takes 3 drinks.", 10, true),
+                new WildCardProbabilities("The player with the oldest car takes 2 drinks.", 10, true),
+                new WildCardProbabilities("Whoever last rode on a train takes 2 drinks.", 10, true),
+                new WildCardProbabilities("Anyone who is standing takes 4 drinks, why are you standing? Sit down mate.", 10, true),
+                new WildCardProbabilities("Anyone who is sitting takes 2 drinks.", 10, true),
+                new WildCardProbabilities("Whoever has the longest hair takes 2 drinks.", 10, true),
+                new WildCardProbabilities("Whoever is wearing a watch takes 2 drinks.", 10, true),
+                new WildCardProbabilities("Whoever has a necklace on takes 2 drinks.", 10, true),
+                new WildCardProbabilities("Double the ending drink (whoever loses must now do double the consequence).", 5, true),
+                new WildCardProbabilities("Get a skip button to use on any one of your turns!", 3, true),
+                new WildCardProbabilities("Drink for courage then deliver a line from your favourite film making it as dramatic as possible!", 2, true),
+                new WildCardProbabilities("Give 1 drink for every cheese you can name in 10 seconds.", 2, true),
+                new WildCardProbabilities("The shortest person at the table must take 4 drinks then give 4 drinks.", 2, true),
+                new WildCardProbabilities("Bare your biceps and flex for everyone. The players next to you each drink 2 for the view.", 2, true),
+                new WildCardProbabilities("All females drink 3, and all males drink 3. Equality.", 5, true)
+        };
+
+        int count = prefs.getInt("wild_card_count", allProbabilities.length);
+
+
+        allProbabilities = new WildCardProbabilities[count];
+            for (int i = 0; i < count; i++) {
+
+                WildCardProbabilities p = allProbabilities[i];
+                if (p != null) {
+                    allProbabilities[i] = new WildCardProbabilities(p.getText(), p.getProbability(), p.isEnabled());
+                }
+                else {
+                    allProbabilities[i] = new WildCardProbabilities("", 0, false);
+                }
+
+            }
+
+        for (int i = 0; i < count; i++) {
+            boolean enabled = prefs.getBoolean("wild_card_enabled_" + i, allProbabilities[i].isEnabled());
+            String activity = prefs.getString("wild_card_activity_" + i, allProbabilities[i].getText());
+            int probability = prefs.getInt("wild_card_probability_" + i, allProbabilities[i].getProbability());
+
+            allProbabilities[i].setEnabled(enabled);
+            allProbabilities[i].setText(activity);
+            allProbabilities[i].setProbability(probability);
+
+        }
+        Log.d(TAG, "onLoad: " + count);
+
+        return allProbabilities;
+    }

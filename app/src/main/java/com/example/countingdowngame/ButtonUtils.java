@@ -34,7 +34,7 @@ public class ButtonUtils {
         final MediaPlayer bop = MediaPlayer.create(context, R.raw.bop);
 
         SharedPreferences preferences = context.getSharedPreferences("sound_mode_choice", Context.MODE_PRIVATE);
-        boolean soundEffects = preferences.getBoolean("button_regularSound", false);
+        boolean soundEffects = preferences.getBoolean("button_regularSound", true);
 
         button.setOnTouchListener((view, motionEvent) -> {
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {

@@ -1,12 +1,10 @@
 package com.example.countingdowngame;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,16 +29,11 @@ public class Settings_WildCardChoice extends AppCompatActivity {
     private ListView listViewWildCard;
     private WildCardProbabilities[] mProbabilities;
     private WildCardAdapter mAdapter;
-    private Context mContext;
 
-    public Settings_WildCardChoice() {
-        mContext = this;
-    }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume: mProbabilities size = " + mProbabilities.length);
+    public void onBackPressed() {
+        startActivity(new Intent(this, SettingClass.class));
     }
 
     @Override
@@ -53,33 +47,24 @@ public class Settings_WildCardChoice extends AppCompatActivity {
 
         mAdapter = new WildCardAdapter(this, mProbabilities);
         listViewWildCard.setAdapter(mAdapter);
-        ArrayList<WildCardProbabilities> wildCardList = new ArrayList<>(Arrays.asList(mProbabilities));
-        mAdapter.notifyDataSetChanged();
 
         Button btnAddWildCard = findViewById(R.id.btnAddWildCard);
-        ButtonUtils.setButton(btnAddWildCard, null, this, () -> {
-            addNewWildCard();
-        });
-
+        btnAddWildCard.setOnClickListener(v -> addNewWildCard());
     }
 
-
     private void addNewWildCard() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add New Wildcard");
 
-        // Create a layout to hold the two EditText views
-        LinearLayout layout = new LinearLayout(mContext);
+        LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
 
-        // Create the EditText for the probability
-        final EditText probabilityInput = new EditText(mContext);
+        final EditText probabilityInput = new EditText(this);
         probabilityInput.setInputType(InputType.TYPE_CLASS_NUMBER);
         probabilityInput.setHint("Probability (1-100)");
         layout.addView(probabilityInput);
 
-        // Create the EditText for the text
-        final EditText textInput = new EditText(mContext);
+        final EditText textInput = new EditText(this);
         textInput.setInputType(InputType.TYPE_CLASS_TEXT);
         textInput.setHint("Text");
         layout.addView(textInput);
@@ -94,16 +79,12 @@ public class Settings_WildCardChoice extends AppCompatActivity {
 
             WildCardProbabilities newWildCard = new WildCardProbabilities(text, probability, true);
 
-            ArrayList<WildCardProbabilities> wildCardList = new ArrayList<>();
-            for (WildCardProbabilities probabilityItem : mProbabilities) {
-                wildCardList.add(probabilityItem);
-            }
+            ArrayList<WildCardProbabilities> wildCardList = new ArrayList<>(Arrays.asList(mProbabilities));
             wildCardList.add(newWildCard);
 
+            mProbabilities = wildCardList.toArray(new WildCardProbabilities[0]);
 
-            mProbabilities = wildCardList.toArray(new WildCardProbabilities[wildCardList.size()]);
-
-            mAdapter = new WildCardAdapter(mContext, mProbabilities);
+            mAdapter = new WildCardAdapter(this, mProbabilities);
             listViewWildCard.setAdapter(mAdapter);
 
             saveWildCardProbabilitiesToStorage(mProbabilities);
@@ -112,15 +93,11 @@ public class Settings_WildCardChoice extends AppCompatActivity {
         builder.show();
     }
 
-
     WildCardProbabilities[] loadWildCardProbabilitiesFromStorage(Context context) {
-
-
 
         SharedPreferences prefs = context.getSharedPreferences("MyPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.apply();
-
 
         WildCardProbabilities[] allProbabilities = new WildCardProbabilities[]{
                 new WildCardProbabilities("Take 1 drink.", 10, true),
@@ -151,78 +128,57 @@ public class Settings_WildCardChoice extends AppCompatActivity {
                 new WildCardProbabilities("Bare your biceps and flex for everyone. The players next to you each drink 2 for the view.", 2, true),
                 new WildCardProbabilities("All females drink 3, and all males drink 3. Equality.", 5, true)
         };
-
         int count = prefs.getInt("wild_card_count", allProbabilities.length);
-
-
-        allProbabilities = new WildCardProbabilities[count];
+        if (count > allProbabilities.length) {
+            allProbabilities = new WildCardProbabilities[count];
             for (int i = 0; i < count; i++) {
 
                 WildCardProbabilities p = allProbabilities[i];
                 if (p != null) {
                     allProbabilities[i] = new WildCardProbabilities(p.getText(), p.getProbability(), p.isEnabled());
-                }
-                else {
+                } else {
                     allProbabilities[i] = new WildCardProbabilities("", 0, false);
                 }
-
             }
-
-        for (int i = 0; i < count; i++) {
-            boolean enabled = prefs.getBoolean("wild_card_enabled_" + i, allProbabilities[i].isEnabled());
-            String activity = prefs.getString("wild_card_activity_" + i, allProbabilities[i].getText());
-            int probability = prefs.getInt("wild_card_probability_" + i, allProbabilities[i].getProbability());
-
-            allProbabilities[i].setEnabled(enabled);
-            allProbabilities[i].setText(activity);
-            allProbabilities[i].setProbability(probability);
-
         }
-        Log.d(TAG, "onLoad: " + count);
+        for (int i = 0; i < count; i++) {
+            boolean enabled = prefs.getBoolean("wild_card_enabled_" + i, false);
+            String activity = prefs.getString("wild_card_activity_" + i, "");
+            int probability = prefs.getInt("wild_card_probability_" + i, 0);
+
+            allProbabilities[i] = new WildCardProbabilities(activity, probability, enabled);
+        }
 
         return allProbabilities;
     }
-
 
     private void saveWildCardProbabilitiesToStorage(WildCardProbabilities[] probabilities) {
         SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
         for (int i = 0; i < probabilities.length; i++) {
-            editor.putBoolean("wild_card_enabled_" + i, probabilities[i].isEnabled());
-            editor.putString("wild_card_activity_" + i, probabilities[i].getText());
-            editor.putInt("wild_card_probability_" + i, probabilities[i].getProbability());
+            WildCardProbabilities probability = probabilities[i];
+            editor.putBoolean("wild_card_enabled_" + i, probability.isEnabled());
+            editor.putString("wild_card_activity_" + i, probability.getText());
+            editor.putInt("wild_card_probability_" + i, probability.getProbability());
         }
+
         editor.putInt("wild_card_count", probabilities.length);
-        Log.d(TAG, "onSave: Probabilities size = " + probabilities.length);
         editor.apply();
     }
 
     private class WildCardAdapter extends ArrayAdapter<WildCardProbabilities> {
         private Context mContext;
-        private WildCardProbabilities[] mProbabilities;
 
         public WildCardAdapter(Context context, WildCardProbabilities[] probabilities) {
             super(context, R.layout.list_item_wildcard, probabilities);
             mContext = context;
-            mProbabilities = probabilities;
-        }
-
-        private void setTextViewSizeBasedOnString(TextView textView, String text) {
-            int textSize = 20; // set default text size
-            if (text.length() > 20) {
-                textSize = 14; // set smaller text size for longer strings
-            } else if (text.length() > 10) {
-                textSize = 16; // set slightly smaller text size for medium length strings
-            }
-            textView.setTextSize(textSize);
         }
 
         @Override
         public int getCount() {
-            return mProbabilities == null ? 0 : mProbabilities.length;
+            return mProbabilities.length;
         }
-
 
         @NonNull
         @Override
@@ -233,46 +189,34 @@ public class Settings_WildCardChoice extends AppCompatActivity {
             Button editButton = view.findViewById(R.id.button_edit_probability);
             TextView textViewWildCard = view.findViewById(R.id.textview_wildcard);
             TextView textViewProbability = view.findViewById(R.id.textview_probability);
-
             Switch switchWildCard = view.findViewById(R.id.switch_wildcard);
 
             WildCardProbabilities wildCard = mProbabilities[position];
             textViewWildCard.setText(wildCard.getText());
-
             textViewProbability.setText(String.valueOf(wildCard.getProbability()));
-
             switchWildCard.setChecked(wildCard.isEnabled());
 
             String wildCardText = wildCard.getText();
-            textViewWildCard.setText(wildCardText);
             setTextViewSizeBasedOnString(textViewWildCard, wildCardText);
 
             String probabilityText = String.valueOf(wildCard.getProbability());
-            textViewProbability.setText(probabilityText);
-            setTextViewSizeBasedOnString(textViewProbability, probabilityText);
-
+            setProbabilitySizeBasedOnString(textViewProbability, probabilityText);
 
             editButton.setOnClickListener(v -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                 builder.setTitle("Edit Wildcard");
 
-                // Create a layout to hold the two EditText views
                 LinearLayout layout = new LinearLayout(mContext);
                 layout.setOrientation(LinearLayout.VERTICAL);
 
-                // Create the EditText for the probability
                 final EditText probabilityInput = new EditText(mContext);
-                final EditText textInput = new EditText(mContext);
-
-                textInput.setInputType(InputType.TYPE_CLASS_TEXT);
-                textInput.setText(wildCard.getText()); // updated line
-
-
-                layout.addView(probabilityInput);
-
-                // Create the EditText for the text
                 probabilityInput.setInputType(InputType.TYPE_CLASS_NUMBER);
                 probabilityInput.setText(String.valueOf(wildCard.getProbability()));
+                layout.addView(probabilityInput);
+
+                final EditText textInput = new EditText(mContext);
+                textInput.setInputType(InputType.TYPE_CLASS_TEXT);
+                textInput.setText(wildCard.getText());
                 layout.addView(textInput);
 
                 builder.setView(layout);
@@ -282,32 +226,34 @@ public class Settings_WildCardChoice extends AppCompatActivity {
                 builder.setNeutralButton("Delete", (dialog, which) -> {
                     ArrayList<WildCardProbabilities> wildCardList = new ArrayList<>(Arrays.asList(mProbabilities));
                     wildCardList.remove(position);
-                    mProbabilities = wildCardList.toArray(new WildCardProbabilities[wildCardList.size()]);
-                    mAdapter = new WildCardAdapter(mContext, mProbabilities);
-                    listViewWildCard.setAdapter(mAdapter);
-
+                    mProbabilities = wildCardList.toArray(new WildCardProbabilities[0]);
+                    notifyDataSetChanged();
                     saveWildCardProbabilitiesToStorage(mProbabilities);
-                    Log.d("WildCardEditActivity", "Deleted wild card at position " + position + ". New array size: " + mProbabilities.length);
                 });
-
 
 
                 builder.setPositiveButton("OK", (dialog, which) -> {
                     int probability = Integer.parseInt(probabilityInput.getText().toString());
                     String text = textInput.getText().toString();
+                    String probabilityInputText = probabilityInput.getText().toString();
+
+                    if (probabilityInputText.length() > 4) {
+                        Toast.makeText(Settings_WildCardChoice.this, "Mate, that probability number is a bit high don't you think?", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     if (!text.equals(wildCard.getText()) || probability != wildCard.getProbability()) {
-                        mProbabilities[position].setProbability(probability);
-                        mProbabilities[position].setText(text);
-                        textViewWildCard.setText(mProbabilities[position].getText());
-                        textViewProbability.setText(String.valueOf(mProbabilities[position].getProbability()));
+                        wildCard.setProbability(probability);
+                        wildCard.setText(text);
+                        textViewWildCard.setText(wildCard.getText());
+                        textViewProbability.setText(String.valueOf(wildCard.getProbability()));
+                        setProbabilitySizeBasedOnString(textViewProbability, String.valueOf(wildCard.getProbability())); // Updated this line
                         saveWildCardProbabilitiesToStorage(mProbabilities);
                     }
                 });
 
                 builder.show();
-
-            });
-
+            });;
 
             switchWildCard.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 wildCard.setEnabled(isChecked);
@@ -315,6 +261,26 @@ public class Settings_WildCardChoice extends AppCompatActivity {
             });
 
             return view;
+        }
+
+        private void setTextViewSizeBasedOnString(TextView textView, String text) {
+            int textSize = 20;
+            if (text.length() > 20) {
+                textSize = 14;
+            } else if (text.length() > 10) {
+                textSize = 16;
+            }
+            textView.setTextSize(textSize);
+        }
+
+        private void setProbabilitySizeBasedOnString(TextView textView, String text) {
+            int textSize = 18;
+            if (text.length() > 3) {
+                textSize = 12;
+            } else if (text.length() > 0) {
+                textSize = 18;
+            }
+            textView.setTextSize(textSize);
         }
     }
 }

@@ -1,30 +1,27 @@
 package com.example.countingdowngame;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class Settings_GameModeChoice extends AppCompatActivity {
+public class Settings_GameModeChoice extends AppCompatActivity implements View.OnClickListener {
 
     private Button button_gameModeOne;
     private Button button_gameModeTwo;
     private Button button_regularSound;
     private Button button_burpSound;
-
-    Button btnReturn;
-
-
     private Drawable buttonHighlightDrawable;
     private Drawable outlineforbutton;
-
+    private Button btnReturn;
 
     @Override
     public void onBackPressed() {
-        savePreferences();
-        super.onBackPressed();
+        startActivity(new Intent(Settings_GameModeChoice.this, HomeScreen.class));
     }
 
     @Override
@@ -32,24 +29,26 @@ public class Settings_GameModeChoice extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_mode_choice);
 
+        initializeViews();
+        loadPreferences();
+        setButtonListeners();
+    }
+
+    private void initializeViews() {
         button_gameModeOne = findViewById(R.id.button_gameModeOne);
         button_gameModeTwo = findViewById(R.id.button_gameModeTwo);
         button_regularSound = findViewById(R.id.button_normal_sound);
         button_burpSound = findViewById(R.id.button_burp_sound);
         buttonHighlightDrawable = getResources().getDrawable(R.drawable.buttonhighlight);
         outlineforbutton = getResources().getDrawable(R.drawable.outlineforbutton);
-
         btnReturn = findViewById(R.id.buttonReturn);
+    }
 
-        SharedPreferences preferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
-        boolean buttonOneSelected = preferences.getBoolean("button_gameModeOne", true);
-
+    private void loadPreferences() {
+        SharedPreferences gameModePreferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
+        boolean buttonOneSelected = gameModePreferences.getBoolean("button_gameModeOne", true);
         button_gameModeOne.setSelected(buttonOneSelected);
         button_gameModeTwo.setSelected(!buttonOneSelected);
-
-
-        ButtonUtils.setButton(btnReturn, HomeScreen.class, this, null);
-
 
         if (buttonOneSelected) {
             button_gameModeOne.setBackground(buttonHighlightDrawable);
@@ -59,45 +58,46 @@ public class Settings_GameModeChoice extends AppCompatActivity {
             button_gameModeTwo.setBackground(buttonHighlightDrawable);
         }
 
-        button_gameModeOne.setOnClickListener(view -> {
-            toggleButton(button_gameModeOne, button_gameModeTwo);
-            savePreferences();
-        });
-
-        button_gameModeTwo.setOnClickListener(view -> {
-            toggleButton(button_gameModeTwo, button_gameModeOne);
-            savePreferences();
-        });
-
         SharedPreferences soundPreferences = getSharedPreferences("sound_mode_choice", MODE_PRIVATE);
         boolean regularSoundSelected = soundPreferences.getBoolean("button_regularSound", true);
-
         button_regularSound.setSelected(regularSoundSelected);
         button_burpSound.setSelected(!regularSoundSelected);
 
         if (regularSoundSelected) {
             button_regularSound.setBackground(buttonHighlightDrawable);
             button_burpSound.setBackground(outlineforbutton);
-            savePreferences();
-
         } else {
             button_regularSound.setBackground(outlineforbutton);
             button_burpSound.setBackground(buttonHighlightDrawable);
-            savePreferences();
-
         }
-
-        button_regularSound.setOnClickListener(view -> {
-            toggleButton(button_regularSound, button_burpSound);
-            savePreferences();
-        });
-
-        button_burpSound.setOnClickListener(view -> {
-            toggleButton(button_burpSound, button_regularSound);
-            savePreferences();
-        });
     }
 
+    private void setButtonListeners() {
+        button_gameModeOne.setOnClickListener(this);
+        button_gameModeTwo.setOnClickListener(this);
+        button_regularSound.setOnClickListener(this);
+        button_burpSound.setOnClickListener(this);
+        ButtonUtils.setButton(btnReturn, HomeScreen.class, this, null);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.button_gameModeOne:
+                toggleButton(button_gameModeOne, button_gameModeTwo);
+                break;
+            case R.id.button_gameModeTwo:
+                toggleButton(button_gameModeTwo, button_gameModeOne);
+                break;
+            case R.id.button_normal_sound:
+                toggleButton(button_regularSound, button_burpSound);
+                break;
+            case R.id.button_burp_sound:
+                toggleButton(button_burpSound, button_regularSound);
+                break;
+        }
+        savePreferences();
+    }
 
     private void toggleButton(Button selectedButton, Button unselectedButton) {
         boolean isSelected = !selectedButton.isSelected();

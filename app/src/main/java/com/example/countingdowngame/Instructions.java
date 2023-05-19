@@ -1,5 +1,6 @@
 package com.example.countingdowngame;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,10 @@ import java.util.List;
 public class Instructions extends AppCompatActivity {
     private ProgressBar progressBar;
 
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, HomeScreen.class));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
