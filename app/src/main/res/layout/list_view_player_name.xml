@@ -8,8 +8,7 @@
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/wine"
-        android:background="@drawable/circle_shape" />
+        android:src="@drawable/wine" />
 
 
     <TextView

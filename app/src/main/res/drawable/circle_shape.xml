@@ -1,4 +1,0 @@
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#FF000000" /> <!-- Change the color to match your background color -->
-    <corners android:radius="50dp" /> <!-- Set the radius to half of the desired diameter -->
-</shape>

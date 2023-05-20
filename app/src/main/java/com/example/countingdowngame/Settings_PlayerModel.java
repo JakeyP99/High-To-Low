@@ -12,17 +12,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -35,20 +34,22 @@ public class Settings_PlayerModel extends AppCompatActivity {
     public void onBackPressed() {
         startActivity(new Intent(this, SettingClass.class));
     }
+
     private static final int REQUEST_IMAGE_PICK = 1;
     private List<Player> playerList;
     private PlayerListAdapter playerListAdapter;
-    private ListView playerListView;
+    private RecyclerView playerRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_player_list);
 
-        playerListView = findViewById(R.id.playerListView);
+        playerRecyclerView = findViewById(R.id.playerRecyclerView);
         playerList = new ArrayList<>();
         playerListAdapter = new PlayerListAdapter(this, playerList);
-        playerListView.setAdapter(playerListAdapter);
+        playerRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        playerRecyclerView.setAdapter(playerListAdapter);
 
         Button chooseImageButton = findViewById(R.id.chooseImageButton);
         chooseImageButton.setOnClickListener(view -> openImagePicker());
@@ -59,6 +60,123 @@ public class Settings_PlayerModel extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_IMAGE_PICK);
     }
 
+    private void addNewPlayer(Bitmap bitmap, String name) {
+        Player newPlayer = new Player(bitmap, name);
+        playerList.add(newPlayer);
+        playerListAdapter.notifyItemInserted(playerList.size() - 1);
+
+        int position = playerList.indexOf(newPlayer);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Animate the image view
+                animatePlayerImage(position);
+            }
+        }, 100);
+    }
+
+    private void animatePlayerImage(int position) {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) playerRecyclerView.getLayoutManager();
+        int firstVisiblePosition = layoutManager.findFirstVisibleItemPosition();
+        int lastVisiblePosition = layoutManager.findLastVisibleItemPosition();
+
+        if (position >= firstVisiblePosition && position <= lastVisiblePosition) {
+            View itemView = playerRecyclerView.getChildAt(position - firstVisiblePosition);
+            if (itemView != null) {
+                ImageView playerPhotoImageView = itemView.findViewById(R.id.playerPhotoImageView);
+
+                Glide.with(this)
+                        .load(playerList.get(position).getPhoto())
+                        .apply(RequestOptions.circleCropTransform()) // Apply circular transformation
+                        .into(playerPhotoImageView);
+
+                float startScale = 0.0f;
+                float endScale = 1.0f;
+                int duration = 500;
+
+                ScaleAnimation scaleAnimation = new ScaleAnimation(startScale, endScale, startScale, endScale,
+                        Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                scaleAnimation.setDuration(duration);
+
+                scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        playerPhotoImageView.clearAnimation();
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
+                });
+
+                playerPhotoImageView.startAnimation(scaleAnimation);
+            }
+        }
+    }
+
+    private class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.ViewHolder> {
+
+        private final Context context;
+        private final List<Player> players;
+
+        public PlayerListAdapter(Context context, List<Player> players) {
+            this.context = context;
+            this.players = players;
+        }
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(context).inflate(R.layout.list_view_player_name, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            Player player = players.get(position);
+            holder.bind(player);
+        }
+
+        @Override
+        public int getItemCount() {
+            return players.size();
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            ImageView playerPhotoImageView;
+            TextView playerNameTextView;
+
+            public ViewHolder(@NonNull View itemView) {
+                super(itemView);
+                playerPhotoImageView = itemView.findViewById(R.id.playerPhotoImageView);
+                playerNameTextView = itemView.findViewById(R.id.playerNameTextView);
+            }
+
+            public void bind(Player player) {
+                playerPhotoImageView.setImageBitmap(player.getPhoto());
+
+                // Add margin to the playerPhotoImageView
+                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) playerPhotoImageView.getLayoutParams();
+                int margin = convertDpToPx(10); // Adjust the margin value as per your preference
+                layoutParams.setMargins(margin, margin, margin, margin);
+                playerPhotoImageView.setLayoutParams(layoutParams);
+
+                playerNameTextView.setBackgroundResource(R.drawable.outlineforbutton);
+                playerNameTextView.setText(player.getName());
+                playerNameTextView.setPadding(20, 20, 20, 20);
+            }
+        }
+    }
+
+    private int convertDpToPx(int dp) {
+        float density = getResources().getDisplayMetrics().density;
+        return Math.round(dp * density);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -83,109 +201,6 @@ public class Settings_PlayerModel extends AppCompatActivity {
 
             AlertDialog dialog = builder.create();
             dialog.show();
-        }}
-
-
-
-    private static class PlayerListAdapter extends ArrayAdapter<Player> {
-
-        private final LayoutInflater inflater;
-
-        public PlayerListAdapter(Context context, List<Player> players) {
-            super(context, 0, players);
-            inflater = LayoutInflater.from(context);
-        }
-
-        @NonNull
-        @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            ViewHolder holder;
-
-            if (convertView == null) {
-                convertView = inflater.inflate(R.layout.list_view_player_name, parent, false);
-                holder = new ViewHolder();
-                holder.playerPhotoImageView = convertView.findViewById(R.id.playerPhotoImageView);
-                holder.playerNameTextView = convertView.findViewById(R.id.playerNameTextView);
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-
-            Player player = getItem(position);
-            holder.playerPhotoImageView.setImageBitmap(player.getPhoto());
-            holder.playerNameTextView.setBackgroundResource(R.drawable.outlineforbutton);
-
-            String name = player.getName();
-            holder.playerNameTextView.setText(name);
-
-
-            holder.playerNameTextView.setPadding(20, 20, 20, 20);
-
-            // Apply outline to the player name
-            holder.playerNameTextView.setBackgroundResource(R.drawable.outlineforbutton);
-
-
-            return convertView;
-        }
-
-        private static class ViewHolder {
-            ImageView playerPhotoImageView;
-            TextView playerNameTextView;
         }
     }
-
-    private void addNewPlayer(Bitmap bitmap, String name) {
-        Player newPlayer = new Player(bitmap, name);
-        playerList.add(newPlayer);
-        playerListAdapter.notifyDataSetChanged();
-
-        int position = playerList.indexOf(newPlayer);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // Animate the image view
-                animatePlayerImage(position);
-            }
-        }, 100);
-    }
-
-    private void animatePlayerImage(int position) {
-        View itemView = playerListView.getChildAt(position - playerListView.getFirstVisiblePosition());
-
-        if (itemView != null) {
-            ImageView playerPhotoImageView = itemView.findViewById(R.id.playerPhotoImageView);
-
-            Glide.with(this)
-                    .load(playerList.get(position).getPhoto())
-                    .apply(RequestOptions.circleCropTransform()) // Apply circular transformation
-                    .into(playerPhotoImageView);
-
-            float startScale = 0.0f;
-            float endScale = 1.0f;
-            int duration = 500;
-
-            ScaleAnimation scaleAnimation = new ScaleAnimation(startScale, endScale, startScale, endScale,
-                    Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-            scaleAnimation.setDuration(duration);
-
-            scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    playerPhotoImageView.clearAnimation();
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                }
-            });
-
-            playerPhotoImageView.startAnimation(scaleAnimation);
-        }
-    }
-
 }
