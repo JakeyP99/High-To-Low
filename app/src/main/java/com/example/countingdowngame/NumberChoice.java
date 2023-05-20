@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Random;
 
-
 public class NumberChoice extends AppCompatActivity {
     int startingNumber;
 
@@ -54,7 +53,8 @@ public class NumberChoice extends AppCompatActivity {
             int inputNumber = Integer.parseInt(inputValue);
 
             if (inputNumber <= 0) {
-                Toast.makeText(NumberChoice.this, "Please choose a number greater than zero!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(NumberChoice.this, "Please choose a number greater than zero!", Toast.LENGTH_SHORT)
+                        .show();
                 return;
             }
 
@@ -62,10 +62,7 @@ public class NumberChoice extends AppCompatActivity {
 
             originalNumberField.setFocusable(false);
 
-            SharedPreferences preferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
-            boolean switchOneChecked = preferences.getBoolean("button_gameModeOne", false);
-            Class<?> targetClass = switchOneChecked ? MainActivity.class : MainActivitySplitScreen.class;
-            startActivity(new Intent(NumberChoice.this, targetClass));
+            startMainActivity();
         } catch (NumberFormatException e) {
         }
     }
@@ -77,9 +74,15 @@ public class NumberChoice extends AppCompatActivity {
         final EditText originalNumberField = findViewById(R.id.EditTextView_numberchoice);
         originalNumberField.setFocusable(false);
 
+        startMainActivity();
+    }
+
+    private void startMainActivity() {
         SharedPreferences preferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
         boolean switchOneChecked = preferences.getBoolean("button_gameModeOne", false);
         Class<?> targetClass = switchOneChecked ? MainActivity.class : MainActivitySplitScreen.class;
-        startActivity(new Intent(NumberChoice.this, targetClass));
+        Intent i = new Intent(NumberChoice.this, targetClass);
+        t.putExtra("startingNumber", startingNumber);
+        startActivity(i);
     }
 }
