@@ -1,5 +1,7 @@
 package com.example.countingdowngame;
 
+import android.graphics.Bitmap;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,10 +11,20 @@ class Player {
     int playerId;
     Game game;
     private String name;
-
+    private Bitmap photo;
     public Player(Game game, int playerId) {
         this.game = game;
         this.playerId = playerId;
+    }
+
+
+    public Player(Bitmap photo, String name) {
+        this.photo = photo;
+        this.name = name;
+    }
+
+    public Bitmap getPhoto() {
+        return photo;
     }
 
     public void useSkip() {
