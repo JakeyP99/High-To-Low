@@ -18,19 +18,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,20 +47,15 @@ public class Settings_PlayerModel extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_player_list);
-
-        playerRecyclerView = findViewById(R.id.playerRecyclerView);
         playerList = new ArrayList<>();
-        playerListAdapter = new PlayerListAdapter(this, playerList);
         loadPlayerData();
 
-        // Set the GridLayoutManager with span count of 3
+        playerListAdapter = new PlayerListAdapter(this, playerList);
+        playerRecyclerView = findViewById(R.id.playerRecyclerView);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
         playerRecyclerView.setLayoutManager(layoutManager);
-
-        // Add spacing between the items
-        int spacing = getResources().getDimensionPixelSize(R.dimen.grid_spacing); // Adjust spacing as needed
+        int spacing = getResources().getDimensionPixelSize(R.dimen.grid_spacing);
         playerRecyclerView.addItemDecoration(new SpaceItemDecoration(spacing));
-
         playerRecyclerView.setAdapter(playerListAdapter);
 
         Button chooseImageButton = findViewById(R.id.chooseImageButton);
@@ -97,7 +89,7 @@ public class Settings_PlayerModel extends AppCompatActivity {
                 ImageView playerPhotoImageView = itemView.findViewById(R.id.playerPhotoImageView);
                 Glide.with(this)
                         .load(playerList.get(position).getPhoto())
-                        .apply(RequestOptions.circleCropTransform()) // Apply circular transformation
+                        .apply(RequestOptions.circleCropTransform())
                         .into(playerPhotoImageView);
                 float startScale = 0.0f;
                 float endScale = 1.0f;
@@ -146,7 +138,6 @@ public class Settings_PlayerModel extends AppCompatActivity {
             }
         }
     }
-
     private class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.ViewHolder> {
         private final Context context;
         private final List<Player> players;
@@ -185,11 +176,13 @@ public class Settings_PlayerModel extends AppCompatActivity {
             }
 
             public void bind(Player player) {
-                playerPhotoImageView.setImageBitmap(player.getPhoto());
+                Glide.with(context)
+                        .load(player.getPhoto())
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(playerPhotoImageView);
 
-                // Add margin to the playerPhotoImageView
                 ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) playerPhotoImageView.getLayoutParams();
-                int margin = convertDpToPx(); // Adjust the margin value as per your preference
+                int margin = convertDpToPx();
                 layoutParams.setMargins(margin, margin, margin, margin);
                 playerPhotoImageView.setLayoutParams(layoutParams);
 
@@ -234,12 +227,8 @@ public class Settings_PlayerModel extends AppCompatActivity {
     private void savePlayerData() {
         SharedPreferences sharedPreferences = getSharedPreferences("PlayerData", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        // Convert the playerList to a JSON string
         Gson gson = new Gson();
         String jsonPlayerList = gson.toJson(playerList);
-
-        // Save the JSON string in SharedPreferences
         editor.putString("playerList", jsonPlayerList);
         editor.apply();
     }
@@ -247,18 +236,14 @@ public class Settings_PlayerModel extends AppCompatActivity {
     private void loadPlayerData() {
         SharedPreferences sharedPreferences = getSharedPreferences("PlayerData", Context.MODE_PRIVATE);
         String jsonPlayerList = sharedPreferences.getString("playerList", "");
-
         Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<Player>>() {
-        }.getType();
+        Type type = new TypeToken<ArrayList<Player>>() {}.getType();
         playerList = gson.fromJson(jsonPlayerList, type);
-
         if (playerList == null) {
             playerList = new ArrayList<>();
         }
 
-        playerListAdapter = new PlayerListAdapter(this, playerList);
-
-        playerRecyclerView.setAdapter(playerListAdapter);
     }
+
+
 }
