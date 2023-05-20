@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -10,7 +11,9 @@
         android:label="Drinking Countdown"
         android:roundIcon="@drawable/wine"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/AppTheme.NoActionBar"
+        android:enableOnBackInvokedCallback="true"
+        tools:targetApi="tiramisu">
 
         <activity
             android:name=".HomeScreen"
@@ -30,8 +33,10 @@
         <activity android:name=".PlayerNameChoice" />
         <activity android:name=".Settings_GameModeChoice" />
         <activity android:name=".MainActivitySplitScreen" />
-        <activity android:name=".Settings_PlayerModel" />
-
+        <activity
+            android:name=".Settings_PlayerModel"
+            android:windowSoftInputMode="adjustNothing">
+        </activity>
 
 
 

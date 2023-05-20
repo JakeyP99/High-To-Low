@@ -101,7 +101,7 @@ public class PlayerNameChoice extends ButtonUtilsActivity {
             @Override
             public View getView(final int position, View convertView, ViewGroup parent) {
                 if (convertView == null) {
-                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.player_item, parent, false);
+                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_view_delete_player, parent, false);
                 }
 
                 TextView playerNameView = convertView.findViewById(R.id.player_name);

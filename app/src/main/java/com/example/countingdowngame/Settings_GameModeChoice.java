@@ -20,7 +20,7 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(Settings_GameModeChoice.this, HomeScreen.class));
+        startActivity(new Intent(this, SettingClass.class));
     }
 
 
