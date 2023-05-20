@@ -3,6 +3,7 @@ package com.example.countingdowngame;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,7 +50,15 @@ public class Settings_PlayerModel extends AppCompatActivity {
         playerRecyclerView = findViewById(R.id.playerRecyclerView);
         playerList = new ArrayList<>();
         playerListAdapter = new PlayerListAdapter(this, playerList);
-        playerRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+        // Set the GridLayoutManager with span count of 3
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
+        playerRecyclerView.setLayoutManager(layoutManager);
+
+        // Add spacing between the items
+        int spacing = getResources().getDimensionPixelSize(R.dimen.grid_spacing); // Adjust spacing as needed
+        playerRecyclerView.addItemDecoration(new SpaceItemDecoration(spacing));
+
         playerRecyclerView.setAdapter(playerListAdapter);
 
         Button chooseImageButton = findViewById(R.id.chooseImageButton);
@@ -115,6 +125,29 @@ public class Settings_PlayerModel extends AppCompatActivity {
                 });
 
                 playerPhotoImageView.startAnimation(scaleAnimation);
+            }
+        }
+    }
+
+    public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
+        private final int spacing;
+
+        public SpaceItemDecoration(int spacing) {
+            this.spacing = spacing;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            outRect.left = spacing;
+            outRect.right = spacing;
+            outRect.bottom = spacing;
+
+            // Add top margin only for the first row to avoid double spacing between rows
+            GridLayoutManager layoutManager = (GridLayoutManager) parent.getLayoutManager();
+            if (parent.getChildAdapterPosition(view) < layoutManager.getSpanCount()) {
+                outRect.top = spacing;
+            } else {
+                outRect.top = 0;
             }
         }
     }
