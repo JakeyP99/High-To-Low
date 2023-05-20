@@ -2,6 +2,7 @@ package com.example.countingdowngame;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -27,7 +28,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +54,7 @@ public class Settings_PlayerModel extends AppCompatActivity {
         playerRecyclerView = findViewById(R.id.playerRecyclerView);
         playerList = new ArrayList<>();
         playerListAdapter = new PlayerListAdapter(this, playerList);
+        loadPlayerData();
 
         // Set the GridLayoutManager with span count of 3
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
@@ -74,41 +79,32 @@ public class Settings_PlayerModel extends AppCompatActivity {
         Player newPlayer = new Player(bitmap, name);
         playerList.add(newPlayer);
         playerListAdapter.notifyItemInserted(playerList.size() - 1);
-
         int position = playerList.indexOf(newPlayer);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // Animate the image view
-                animatePlayerImage(position);
-            }
-        }, 100);
+        new Handler().postDelayed(() -> animatePlayerImage(position), 100);
+        savePlayerData();
     }
 
     private void animatePlayerImage(int position) {
         LinearLayoutManager layoutManager = (LinearLayoutManager) playerRecyclerView.getLayoutManager();
+        assert layoutManager != null;
         int firstVisiblePosition = layoutManager.findFirstVisibleItemPosition();
         int lastVisiblePosition = layoutManager.findLastVisibleItemPosition();
 
         if (position >= firstVisiblePosition && position <= lastVisiblePosition) {
             View itemView = playerRecyclerView.getChildAt(position - firstVisiblePosition);
+
             if (itemView != null) {
                 ImageView playerPhotoImageView = itemView.findViewById(R.id.playerPhotoImageView);
-
                 Glide.with(this)
                         .load(playerList.get(position).getPhoto())
                         .apply(RequestOptions.circleCropTransform()) // Apply circular transformation
                         .into(playerPhotoImageView);
-
                 float startScale = 0.0f;
                 float endScale = 1.0f;
                 int duration = 500;
-
                 ScaleAnimation scaleAnimation = new ScaleAnimation(startScale, endScale, startScale, endScale,
                         Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
                 scaleAnimation.setDuration(duration);
-
                 scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
@@ -123,7 +119,6 @@ public class Settings_PlayerModel extends AppCompatActivity {
                     public void onAnimationRepeat(Animation animation) {
                     }
                 });
-
                 playerPhotoImageView.startAnimation(scaleAnimation);
             }
         }
@@ -137,13 +132,13 @@ public class Settings_PlayerModel extends AppCompatActivity {
         }
 
         @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+        public void getItemOffsets(Rect outRect, @NonNull View view, RecyclerView parent, @NonNull RecyclerView.State state) {
             outRect.left = spacing;
             outRect.right = spacing;
             outRect.bottom = spacing;
 
-            // Add top margin only for the first row to avoid double spacing between rows
             GridLayoutManager layoutManager = (GridLayoutManager) parent.getLayoutManager();
+            assert layoutManager != null;
             if (parent.getChildAdapterPosition(view) < layoutManager.getSpanCount()) {
                 outRect.top = spacing;
             } else {
@@ -153,7 +148,6 @@ public class Settings_PlayerModel extends AppCompatActivity {
     }
 
     private class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.ViewHolder> {
-
         private final Context context;
         private final List<Player> players;
 
@@ -195,7 +189,7 @@ public class Settings_PlayerModel extends AppCompatActivity {
 
                 // Add margin to the playerPhotoImageView
                 ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) playerPhotoImageView.getLayoutParams();
-                int margin = convertDpToPx(10); // Adjust the margin value as per your preference
+                int margin = convertDpToPx(); // Adjust the margin value as per your preference
                 layoutParams.setMargins(margin, margin, margin, margin);
                 playerPhotoImageView.setLayoutParams(layoutParams);
 
@@ -206,9 +200,9 @@ public class Settings_PlayerModel extends AppCompatActivity {
         }
     }
 
-    private int convertDpToPx(int dp) {
+    private int convertDpToPx() {
         float density = getResources().getDisplayMetrics().density;
-        return Math.round(dp * density);
+        return Math.round(10 * density);
     }
 
     @Override
@@ -235,5 +229,36 @@ public class Settings_PlayerModel extends AppCompatActivity {
             AlertDialog dialog = builder.create();
             dialog.show();
         }
+    }
+
+    private void savePlayerData() {
+        SharedPreferences sharedPreferences = getSharedPreferences("PlayerData", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        // Convert the playerList to a JSON string
+        Gson gson = new Gson();
+        String jsonPlayerList = gson.toJson(playerList);
+
+        // Save the JSON string in SharedPreferences
+        editor.putString("playerList", jsonPlayerList);
+        editor.apply();
+    }
+
+    private void loadPlayerData() {
+        SharedPreferences sharedPreferences = getSharedPreferences("PlayerData", Context.MODE_PRIVATE);
+        String jsonPlayerList = sharedPreferences.getString("playerList", "");
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<Player>>() {
+        }.getType();
+        playerList = gson.fromJson(jsonPlayerList, type);
+
+        if (playerList == null) {
+            playerList = new ArrayList<>();
+        }
+
+        playerListAdapter = new PlayerListAdapter(this, playerList);
+
+        playerRecyclerView.setAdapter(playerListAdapter);
     }
 }
