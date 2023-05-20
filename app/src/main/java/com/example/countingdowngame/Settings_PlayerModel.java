@@ -18,30 +18,34 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Settings_PlayerModel extends AppCompatActivity {
+    private static final int REQUEST_IMAGE_PICK = 1;
+
+    private List<Player> playerList;
+    private PlayerListAdapter playerListAdapter;
+    private RecyclerView playerRecyclerView;
+
     @Override
     public void onBackPressed() {
         startActivity(new Intent(this, SettingClass.class));
     }
-
-    private static final int REQUEST_IMAGE_PICK = 1;
-    private List<Player> playerList;
-    private PlayerListAdapter playerListAdapter;
-    private RecyclerView playerRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +104,7 @@ public class Settings_PlayerModel extends AppCompatActivity {
                 scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
+                        // Do nothing
                     }
 
                     @Override
@@ -109,6 +114,7 @@ public class Settings_PlayerModel extends AppCompatActivity {
 
                     @Override
                     public void onAnimationRepeat(Animation animation) {
+                        // Do nothing
                     }
                 });
                 playerPhotoImageView.startAnimation(scaleAnimation);
@@ -138,6 +144,7 @@ public class Settings_PlayerModel extends AppCompatActivity {
             }
         }
     }
+
     private class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.ViewHolder> {
         private final Context context;
         private final List<Player> players;
@@ -237,13 +244,11 @@ public class Settings_PlayerModel extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("PlayerData", Context.MODE_PRIVATE);
         String jsonPlayerList = sharedPreferences.getString("playerList", "");
         Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<Player>>() {}.getType();
+        Type type = new TypeToken<ArrayList<Player>>() {
+        }.getType();
         playerList = gson.fromJson(jsonPlayerList, type);
         if (playerList == null) {
             playerList = new ArrayList<>();
         }
-
     }
-
-
 }
