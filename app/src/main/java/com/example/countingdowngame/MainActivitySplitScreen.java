@@ -127,21 +127,15 @@ public class MainActivitySplitScreen extends AppCompatActivity {
                     break;
                 }
 
-                case NEXT_NUMBER:
-                case GAME_START: {
-                    numberText.setText(String.valueOf(gameInstance.currentNumber));
-                    numberTextPlayer2.setText(String.valueOf(gameInstance.currentNumber));
-
-                    setTextViewSizeBasedOnInt(numberText, String.valueOf(gameInstance.currentNumber));
-                    setTextViewSizeBasedOnInt(numberTextPlayer2, String.valueOf(gameInstance.currentNumber));
-                    break;
-                }
             }
         });
 
         gameInstance.startGame(NumberChoice.startingNumber);
+
         numberText.setText(Integer.toString(gameInstance.currentNumber));
         numberTextPlayer2.setText(Integer.toString(gameInstance.currentNumber));
+        setTextViewSizeBasedOnInt(numberText, String.valueOf(gameInstance.currentNumber));
+        setTextViewSizeBasedOnInt(numberTextPlayer2, String.valueOf(gameInstance.currentNumber));
 
         renderPlayer();
     }

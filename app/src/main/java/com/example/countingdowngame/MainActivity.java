@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
     }
+
     private TextView numberText;
     private TextView nextPlayerText;
     private Button btnSkip;
@@ -46,9 +47,7 @@ public class MainActivity extends AppCompatActivity {
         btnBackWild.setVisibility(View.INVISIBLE);
         ImageButton imageButtonExit = findViewById(R.id.imageBtnExit);
 
-
-
-        //These are the button controls
+        // These are the button controls
         ButtonUtils.setButton(btnGenerate, null, this, () -> {
             Game.getInstance().nextNumber();
             wildText.setVisibility(View.INVISIBLE);
@@ -77,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
             btnGenerate.setVisibility(View.VISIBLE);
 
         });
-
 
         ButtonUtils.setImageButton(imageButtonExit, HomeScreen.class, this, () -> {
             Game.getInstance().endGame();
@@ -114,21 +112,18 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 }
 
-                case NEXT_NUMBER:
-                case GAME_START: {
-                    numberText.setText(String.valueOf(Game.getInstance().currentNumber));
-                    setTextViewSizeBasedOnInt(numberText, String.valueOf(Game.getInstance().currentNumber));
-                    break;
-                }
             }
         });
 
         Game.getInstance().startGame(NumberChoice.startingNumber);
-        numberText.setText(Integer.toString(Game.getInstance().currentNumber));
+
+        numberText.setText(String.valueOf(Game.getInstance().currentNumber));
+        setTextViewSizeBasedOnInt(numberText, String.valueOf(Game.getInstance().currentNumber));
+
         renderPlayer();
 
-
     }
+
     private void setTextViewSizeBasedOnInt(TextView textView, String text) {
         int defaultTextSize = 70; // set default text size
         int minSize = 47; // minimum text size
@@ -170,7 +165,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void wildCardActivate(Player player) {
         Settings_WildCardChoice settings = new Settings_WildCardChoice();
-        WildCardProbabilities[][] probabilitiesArray = settings.loadWildCardProbabilitiesFromStorage(getApplicationContext());
+        WildCardProbabilities[][] probabilitiesArray = settings
+                .loadWildCardProbabilitiesFromStorage(getApplicationContext());
 
         // Assuming you want to access the first set of probabilities in the array
         WildCardProbabilities[] activityProbabilities = probabilitiesArray[0];
@@ -230,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
             for (WildCardProbabilities wc : activityProbabilities) {
                 if (wc.getText().equals(selectedActivity)) {
                     player.addUsedWildCard(wc);
-                    usedCards.add(wc);  // add to usedCards set for this player
+                    usedCards.add(wc); // add to usedCards set for this player
                     break;
                 }
             }
