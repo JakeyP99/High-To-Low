@@ -4,89 +4,78 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Game {
+    private static Game gameInstance = new Game();
+    private int currentPlayerId = 0;
+    private ArrayList<Player> players = new ArrayList<>();
+    private int startingNumber = 0;
+    private int currentNumber = 0;
+    private boolean gameStarted = false;
+    private ArrayList<Integer> previousNumbers = new ArrayList<>();
+    private PlayerEventListener playerEventListener;
+    private GameEventListener gameEventListener;
 
-    public static Game gameInstance = new Game();
-    int currentPlayerId = 0;
-    ArrayList<Player> players = new ArrayList<>();
-    int startingNumber = 0;
-    int currentNumber = 0;
-    boolean gameStarted = false;
-    ArrayList<Integer> previousNumbers = new ArrayList<>();
-    PlayerEventListener playerEventListener;
-    GameEventListener gameEventListener;
+    public static Game getInstance() {
+        return gameInstance;
+    }
 
     public void setPlayers(int playerAmount) {
         if (gameStarted) return;
-        this.players = new ArrayList<>();
+
+        players = new ArrayList<>();
 
         for (int playerId = 0; playerId < playerAmount; playerId++) {
-            this.players.add(new Player(this, playerId));
+            players.add(new Player(this, playerId));
         }
-
     }
 
     public void startGame(int startingNumber) {
-        if (gameStarted) {
-            return;
-        }
+        if (gameStarted) return;
         gameStarted = true;
-        if (this.players.size() <= 0) {
-            return;
-        }
 
-        this.currentNumber = startingNumber;
+        if (players.isEmpty()) return;
+
+        currentNumber = startingNumber;
         this.startingNumber = startingNumber;
-        this.currentPlayerId = 0;
-        this.previousNumbers = new ArrayList<>();
+        currentPlayerId = 0;
+        previousNumbers = new ArrayList<>();
 
-        this.gameEventListener.onGameEvent(new GameEvent(this, GameEventType.GAME_START));
+        gameEventListener.onGameEvent(new GameEvent(this, GameEventType.GAME_START));
     }
 
     public void setPlayerEventListener(PlayerEventListener listener) {
-        this.playerEventListener = listener;
+        playerEventListener = listener;
     }
 
     public void setGameEventListener(GameEventListener listener) {
-        this.gameEventListener = listener;
+        gameEventListener = listener;
     }
 
     public void nextPlayer() {
-        this.currentPlayerId = this.currentPlayerId + 1;
-
-        if (currentPlayerId > players.size() - 1) {
-            currentPlayerId = 0;
-        }
-
-        this.gameEventListener.onGameEvent(new GameEvent(this, GameEventType.NEXT_PLAYER));
+        currentPlayerId = (currentPlayerId + 1) % players.size();
+        gameEventListener.onGameEvent(new GameEvent(this, GameEventType.NEXT_PLAYER));
     }
 
     public void nextNumber() {
-        Random myRandom = new Random();
-
-        int nextNumber = myRandom.nextInt(currentNumber + 1);
-
+        Random random = new Random();
+        int nextNumber = random.nextInt(currentNumber + 1);
         previousNumbers.add(nextNumber);
-
         currentNumber = nextNumber;
 
-
         if (currentNumber == 0) {
-            this.gameEventListener.onGameEvent(new GameEvent(this, GameEventType.GAME_END));
+            gameEventListener.onGameEvent(new GameEvent(this, GameEventType.GAME_END));
             return;
         }
 
-        this.gameEventListener.onGameEvent(new GameEvent(this, GameEventType.NEXT_NUMBER));
-
-        this.nextPlayer();
+        gameEventListener.onGameEvent(new GameEvent(this, GameEventType.NEXT_NUMBER));
+        nextPlayer();
     }
 
     public Player getCurrentPlayer() {
-        return this.players.get(this.currentPlayerId);
+        return players.get(currentPlayerId);
     }
 
     public void playAgain() {
-        for (int i = 0; i < players.size(); i++) {
-            Player player = players.get(i);
+        for (Player player : players) {
             if (player != null) {
                 player.resetAbilities();
             }
@@ -97,24 +86,20 @@ public class Game {
         gameStarted = false;
     }
 
-
-    public void triggerPlayerEvent(PlayerEvent e) {
-        this.playerEventListener.onPlayerEvent(e);
+    public void triggerPlayerEvent(PlayerEvent event) {
+        playerEventListener.onPlayerEvent(event);
     }
 
-    ArrayList<String> getPreviousNumbersFormatted() {
+    public ArrayList<String> getPreviousNumbersFormatted() {
         ArrayList<String> previousNumbersFormatted = new ArrayList<>();
 
-        for (int i = 0; i < previousNumbers.size(); i++) {
-            int j = previousNumbers.size() - 1;
-            int number = previousNumbers.get(j - i);
-            previousNumbersFormatted.add(number + "");
+        for (int i = previousNumbers.size() - 1; i >= 0; i--) {
+            int number = previousNumbers.get(i);
+            previousNumbersFormatted.add(String.valueOf(number));
         }
 
         previousNumbersFormatted.add(startingNumber + " (starting number)");
 
         return previousNumbersFormatted;
     }
-
-
 }

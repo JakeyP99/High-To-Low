@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         //These are the button controls
         ButtonUtils.setButton(btnGenerate, null, this, () -> {
-            Game.gameInstance.nextNumber();
+            Game.getInstance().nextNumber();
             wildText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.VISIBLE);
             nextPlayerText.setVisibility(View.VISIBLE);
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ButtonUtils.setButton(btnSkip, null, this, () -> {
-            Game.gameInstance.getCurrentPlayer().useSkip();
+            Game.getInstance().getCurrentPlayer().useSkip();
             wildText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.VISIBLE);
             nextPlayerText.setVisibility(View.VISIBLE);
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         ButtonUtils.setImageButton(imageButtonExit, HomeScreen.class, this, () -> {
-            Game.gameInstance.endGame();
+            Game.getInstance().endGame();
         });
 
         ButtonUtils.setButton(btnWild, null, this, () -> {
@@ -90,18 +90,18 @@ public class MainActivity extends AppCompatActivity {
             btnGenerate.setVisibility(View.INVISIBLE);
             nextPlayerText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.INVISIBLE);
-            Game.gameInstance.getCurrentPlayer().useWildCard();
-            Player currentPlayer = Game.gameInstance.getCurrentPlayer();
+            Game.getInstance().getCurrentPlayer().useWildCard();
+            Player currentPlayer = Game.getInstance().getCurrentPlayer();
             wildCardActivate(currentPlayer);
         });
 
-        Game.gameInstance.setPlayerEventListener(e -> {
+        Game.getInstance().setPlayerEventListener(e -> {
             if (e.type == PlayerEventType.SKIP) {
-                Game.gameInstance.nextPlayer();
+                Game.getInstance().nextPlayer();
             }
         });
 
-        Game.gameInstance.setGameEventListener(e -> {
+        Game.getInstance().setGameEventListener(e -> {
             switch (e.type) {
                 case NEXT_PLAYER: {
                     renderPlayer();
@@ -109,22 +109,22 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 case GAME_END: {
-                    Game.gameInstance.endGame();
+                    Game.getInstance().endGame();
                     startActivity(new Intent(MainActivity.this, EndActivity.class));
                     break;
                 }
 
                 case NEXT_NUMBER:
                 case GAME_START: {
-                    numberText.setText(String.valueOf(Game.gameInstance.currentNumber));
-                    setTextViewSizeBasedOnInt(numberText, String.valueOf(Game.gameInstance.currentNumber));
+                    numberText.setText(String.valueOf(Game.getInstance().currentNumber));
+                    setTextViewSizeBasedOnInt(numberText, String.valueOf(Game.getInstance().currentNumber));
                     break;
                 }
             }
         });
 
-        Game.gameInstance.startGame(NumberChoice.startingNumber);
-        numberText.setText(Integer.toString(Game.gameInstance.currentNumber));
+        Game.getInstance().startGame(NumberChoice.startingNumber);
+        numberText.setText(Integer.toString(Game.getInstance().currentNumber));
         renderPlayer();
 
 
@@ -145,18 +145,18 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         Set<String> playerNamesSet = preferences.getStringSet("playerNames", null);
         String[] playerNamesArray = playerNamesSet.toArray(new String[0]);
-        int currentPlayerIndex = Game.gameInstance.currentPlayerId;
+        int currentPlayerIndex = Game.getInstance().currentPlayerId;
 
         String currentPlayerName = playerNamesArray[currentPlayerIndex];
         nextPlayerText.setText(currentPlayerName + "'s Turn");
 
-        if (Game.gameInstance.getCurrentPlayer().getSkipAmount() > 0) {
+        if (Game.getInstance().getCurrentPlayer().getSkipAmount() > 0) {
             btnSkip.setVisibility(View.VISIBLE);
         } else {
             btnSkip.setVisibility(View.INVISIBLE);
         }
 
-        if (Game.gameInstance.getCurrentPlayer().getWildCardAmount() > 0) {
+        if (Game.getInstance().getCurrentPlayer().getWildCardAmount() > 0) {
             if (btnWild == null) {
                 btnWild = findViewById(R.id.btnWild);
             }
