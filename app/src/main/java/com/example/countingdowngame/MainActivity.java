@@ -49,7 +49,8 @@ public class MainActivity extends AppCompatActivity {
 
         // These are the button controls
         ButtonUtils.setButton(btnGenerate, null, this, () -> {
-            Game.getInstance().nextNumber();
+            Game.getInstance().nextNumber(endActivity);
+
             wildText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.VISIBLE);
             nextPlayerText.setVisibility(View.VISIBLE);
@@ -106,12 +107,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 }
 
-                case GAME_END: {
-                    Game.getInstance().endGame();
-                    startActivity(new Intent(MainActivity.this, EndActivity.class));
-                    break;
-                }
-
             }
         });
 
@@ -122,6 +117,10 @@ public class MainActivity extends AppCompatActivity {
 
         renderPlayer();
 
+    }
+
+    private void endActivity() {
+        startActivity(new Intent(MainActivity.this, EndActivity.class));
     }
 
     private void setTextViewSizeBasedOnInt(TextView textView, String text) {

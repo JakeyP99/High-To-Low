@@ -116,12 +116,6 @@ public class MainActivitySplitScreen extends AppCompatActivity {
                     break;
                 }
 
-                case GAME_END: {
-                    gameInstance.endGame();
-                    startActivity(new Intent(MainActivitySplitScreen.this, EndActivity.class));
-                    break;
-                }
-
             }
         });
 
@@ -277,10 +271,14 @@ public class MainActivitySplitScreen extends AppCompatActivity {
         }
     }
 
-    // These are my button functions.
+    private void endActivity() {
+        startActivity(new Intent(MainActivitySplitScreen.this, EndActivity.class));
+    }
 
+    // These are my button functions.
     public void ButtonGenerateFunction() {
-        gameInstance.nextNumber();
+        gameInstance.nextNumber(endActivity);
+
         wildText.setVisibility(View.INVISIBLE);
         numberText.setVisibility(View.VISIBLE);
         nextPlayerText.setVisibility(View.VISIBLE);

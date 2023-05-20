@@ -19,7 +19,8 @@ public class Game {
     }
 
     public void setPlayers(int playerAmount) {
-        if (gameStarted) return;
+        if (gameStarted)
+            return;
 
         players = new ArrayList<>();
 
@@ -29,10 +30,12 @@ public class Game {
     }
 
     public void startGame(int startingNumber) {
-        if (gameStarted) return;
+        if (gameStarted)
+            return;
         gameStarted = true;
 
-        if (players.isEmpty()) return;
+        if (players.isEmpty())
+            return;
 
         currentNumber = startingNumber;
         this.startingNumber = startingNumber;
@@ -55,16 +58,18 @@ public class Game {
         gameEventListener.onGameEvent(new GameEvent(this, GameEventType.NEXT_PLAYER));
     }
 
-    public void nextNumber() {
+    public void nextNumber(final Runnable onEnd) {
         Random random = new Random();
         int nextNumber = random.nextInt(currentNumber + 1);
         previousNumbers.add(nextNumber);
         currentNumber = nextNumber;
 
         if (currentNumber == 0) {
-            gameEventListener.onGameEvent(new GameEvent(this, GameEventType.GAME_END));
+            endGame();
+            onEnd();
             return;
         }
+
         nextPlayer();
     }
 
