@@ -20,7 +20,6 @@ public class SettingClass extends AppCompatActivity {
         btnUtils.onDestroy();
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

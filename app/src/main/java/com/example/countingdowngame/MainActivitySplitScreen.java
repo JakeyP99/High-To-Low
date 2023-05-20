@@ -21,40 +21,29 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MainActivitySplitScreen extends AppCompatActivity {
+    private final Map<Player, Set<WildCardProbabilities>> usedWildCard = new HashMap<>();
+    private final Set<WildCardProbabilities> usedWildCards = new HashSet<>();
+    private final ButtonUtils btnUtils = new ButtonUtils(this);
 
-
-    static Game gameInstance = new Game();
     private TextView nextPlayerText;
     private TextView nextPlayerTextPlayer2;
-
     private TextView numberText;
     private TextView numberTextPlayer2;
-
     private Button btnSkip;
     private Button btnSkipPlayer2;
-
     private Button btnWild;
     private Button btnWildPlayer2;
 
     // <Player1>
-
-    private final View wildText = findViewById(R.id.wild_textview);
-    private final Button btnGenerate = findViewById(R.id.btnGenerate);
-    private final Button btnBackWild = findViewById(R.id.btnBackWildCard);
-    private final ImageButton imageButtonExit = findViewById(R.id.imageBtnExit);
+    private View wildText;
+    private Button btnGenerate;
+    private Button btnBackWild;
 
     // <--------------------------------------------------------------------------------->
     // <Player2>
-
-    private final View wildTextPlayer2 = findViewById(R.id.wild_textviewPlayer2);
-    private final Button btnGeneratePlayer2 = findViewById(R.id.btnGeneratePlayer2);
-    private final Button btnBackWildPlayer2 = findViewById(R.id.btnBackWildCardPlayer2);
-    private final ImageButton imageButtonExitPlayer2 = findViewById(R.id.imageBtnExitPlayer2);
-
-    private final Map<Player, Set<WildCardProbabilities>> usedWildCard = new HashMap<>();
-    private final Set<WildCardProbabilities> usedWildCards = new HashSet<>();
-
-    private final ButtonUtils btnUtils = new ButtonUtils(this);
+    private View wildTextPlayer2;
+    private Button btnGeneratePlayer2;
+    private Button btnBackWildPlayer2;
 
     @Override
     public void onBackPressed() {
@@ -67,11 +56,20 @@ public class MainActivitySplitScreen extends AppCompatActivity {
         btnUtils.onDestroy();
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_2);
+
+        wildText = findViewById(R.id.wild_textview);
+        btnGenerate = findViewById(R.id.btnGenerate);
+        btnBackWild = findViewById(R.id.btnBackWildCard);
+        wildTextPlayer2 = findViewById(R.id.wild_textviewPlayer2);
+        btnGeneratePlayer2 = findViewById(R.id.btnGeneratePlayer2);
+        btnBackWildPlayer2 = findViewById(R.id.btnBackWildCardPlayer2);
+
+        ImageButton imageButtonExit = findViewById(R.id.imageBtnExit);
+        ImageButton imageButtonExitPlayer2 = findViewById(R.id.imageBtnExitPlayer2);
 
         // These are the button controls for Player 1
         btnUtils.setButton(btnWild, null, this::ButtonWildFunction);
@@ -82,7 +80,7 @@ public class MainActivitySplitScreen extends AppCompatActivity {
         btnUtils.setButton(btnSkip, null, this::ButtonSkipFunction);
 
         btnUtils.setImageButton(imageButtonExit, HomeScreen.class, () -> {
-            gameInstance.endGame();
+            Game.getInstance().endGame();
         });
 
         // These are the button controls for Player 2
@@ -96,13 +94,7 @@ public class MainActivitySplitScreen extends AppCompatActivity {
         btnUtils.setButton(btnSkipPlayer2, null, this::ButtonSkipFunction);
 
         btnUtils.setImageButton(imageButtonExitPlayer2, HomeScreen.class, () -> {
-            gameInstance.endGame();
-        });
-
-        gameInstance.setPlayerEventListener(e -> {
-            if (e.type == PlayerEventType.SKIP) {
-                gameInstance.nextPlayer();
-            }
+            Game.getInstance().endGame();
         });
 
 
@@ -113,13 +105,16 @@ public class MainActivitySplitScreen extends AppCompatActivity {
 
         int startingNumber = extras.getInt("startingNumber");
 
-        Game.getInstance().startGame(startingNumber);
+        Game.getInstance().startGame(startingNumber, (e) -> {
+            if (e.type == GameEventType.NEXT_PLAYER) {
+                renderPlayer();
+            }
+        });
 
-        numberText.setText(Integer.toString(gameInstance.getCurrentNumber()));
-        numberTextPlayer2.setText(Integer.toString(gameInstance.getCurrentNumber()));
-        setTextViewSizeBasedOnInt(numberText, String.valueOf(gameInstance.getCurrentNumber()));
-        setTextViewSizeBasedOnInt(numberTextPlayer2, String.valueOf(gameInstance.getCurrentNumber()));
-
+        numberText.setText(Integer.toString(Game.getInstance().getCurrentNumber()));
+        numberTextPlayer2.setText(Integer.toString(Game.getInstance().getCurrentNumber()));
+        setTextViewSizeBasedOnInt(numberText, String.valueOf(Game.getInstance().getCurrentNumber()));
+        setTextViewSizeBasedOnInt(numberTextPlayer2, String.valueOf(Game.getInstance().getCurrentNumber()));
         renderPlayer();
     }
 
@@ -127,13 +122,13 @@ public class MainActivitySplitScreen extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         Set<String> playerNamesSet = preferences.getStringSet("playerNames", null);
         String[] playerNamesArray = playerNamesSet.toArray(new String[0]);
-        int currentPlayerIndex = gameInstance.getCurrentPlayerId();
+        int currentPlayerIndex = Game.getInstance().getCurrentPlayerId();
 
         String currentPlayerName = playerNamesArray[currentPlayerIndex];
         nextPlayerText.setText(currentPlayerName);
         nextPlayerTextPlayer2.setText(currentPlayerName);
 
-        if (gameInstance.getCurrentPlayer().getSkipAmount() > 0) {
+        if (Game.getInstance().getCurrentPlayer().getSkipAmount() > 0) {
             btnSkip.setVisibility(View.VISIBLE);
             btnSkipPlayer2.setVisibility(View.VISIBLE);
 
@@ -143,7 +138,7 @@ public class MainActivitySplitScreen extends AppCompatActivity {
 
         }
 
-        if (gameInstance.getCurrentPlayer().getWildCardAmount() > 0) {
+        if (Game.getInstance().getCurrentPlayer().getWildCardAmount() > 0) {
             btnWild.setVisibility(View.VISIBLE);
             btnWildPlayer2.setVisibility(View.VISIBLE);
         } else {
@@ -245,7 +240,6 @@ public class MainActivitySplitScreen extends AppCompatActivity {
     }
 
     // This changes the size of the number.
-
     private void setTextViewSizeBasedOnInt(TextView textView, String text) {
         int defaultTextSize = 60; // set default text size
         int minSize = 40; // minimum text size
@@ -289,15 +283,13 @@ public class MainActivitySplitScreen extends AppCompatActivity {
         btnGeneratePlayer2.setVisibility(View.INVISIBLE);
         numberTextPlayer2.setVisibility(View.INVISIBLE);
 
-        gameInstance.getCurrentPlayer().useWildCard();
-        Player currentPlayer = gameInstance.getCurrentPlayer();
+        Game.getInstance().getCurrentPlayer().useWildCard();
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
         wildCardActivate(currentPlayer);
     }
 
-    ;
-
     private void ButtonSkipFunction() {
-        gameInstance.getCurrentPlayer().useSkip();
+        Game.getInstance().getCurrentPlayer().useSkip();
 
         wildText.setVisibility(View.INVISIBLE);
         numberText.setVisibility(View.VISIBLE);
@@ -323,5 +315,4 @@ public class MainActivitySplitScreen extends AppCompatActivity {
         wildTextPlayer2.setVisibility(View.INVISIBLE);
         numberTextPlayer2.setVisibility(View.VISIBLE);
     }
-
 }

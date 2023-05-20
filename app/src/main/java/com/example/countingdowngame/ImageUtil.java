@@ -8,7 +8,6 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 
 public class ImageUtil {
-
     public static Bitmap getCircularBitmap(Bitmap bitmap) {
         int diameter = Math.min(bitmap.getWidth(), bitmap.getHeight());
         Bitmap circularBitmap = Bitmap.createBitmap(diameter, diameter, Bitmap.Config.ARGB_8888);

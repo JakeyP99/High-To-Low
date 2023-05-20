@@ -5,7 +5,7 @@ public class WildCardProbabilities {
     private int probability;
     private boolean used;
     private boolean enabled;
-    private boolean deletable;
+    private final boolean deletable;
 
     public WildCardProbabilities(String activity, int probability, boolean enabled, boolean deletable) {
         this.activity = activity;
@@ -27,13 +27,13 @@ public class WildCardProbabilities {
         return activity;
     }
 
+    public void setText(String text) {
+        this.activity = text;
+    }
+
 
     public int getProbability() {
         return probability;
-    }
-
-    public void setText(String text) {
-        this.activity = text;
     }
 
     public void setProbability(int probability) {

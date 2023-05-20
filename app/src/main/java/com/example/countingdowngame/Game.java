@@ -4,18 +4,49 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Game {
-    private static Game gameInstance = new Game();
-    private int currentPlayerId = 0;
-    private ArrayList<Player> players = new ArrayList<>();
-    private int startingNumber = 0;
-    private int currentNumber = 0;
-    private boolean gameStarted = false;
-    private ArrayList<Integer> previousNumbers = new ArrayList<>();
-    private PlayerEventListener playerEventListener;
-    private GameEventListener gameEventListener;
+    private static final Game gameInstance = new Game();
 
     public static Game getInstance() {
         return gameInstance;
+    }
+
+    private final PlayerEventListener playerEventListener = e -> {
+        if (e.type == PlayerEventType.SKIP) {
+            nextPlayer();
+        }
+    };
+
+    private GameEventListener gameEventListener;
+    private ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<Integer> previousNumbers = new ArrayList<>();
+    private int currentPlayerId = 0;
+    private int startingNumber = 0;
+    private int currentNumber = 0;
+    private boolean gameStarted = false;
+
+    public int getCurrentNumber() {
+        return currentNumber;
+    }
+
+    public int getCurrentPlayerId() {
+        return currentPlayerId;
+    }
+
+    public Player getCurrentPlayer() {
+        return players.get(currentPlayerId);
+    }
+
+    public ArrayList<String> getPreviousNumbersFormatted() {
+        ArrayList<String> previousNumbersFormatted = new ArrayList<>();
+
+        for (int i = previousNumbers.size() - 1; i >= 0; i--) {
+            int number = previousNumbers.get(i);
+            previousNumbersFormatted.add(String.valueOf(number));
+        }
+
+        previousNumbersFormatted.add(startingNumber + " (starting number)");
+
+        return previousNumbersFormatted;
     }
 
     public void setPlayers(int playerAmount) {
@@ -29,44 +60,19 @@ public class Game {
         }
     }
 
-    public void startGame(int startingNumber) {
+    public void startGame(int startNum, GameEventListener listener) {
         if (gameStarted)
             return;
-        gameStarted = true;
 
         if (players.isEmpty())
             return;
 
-        currentNumber = startingNumber;
-        this.startingNumber = startingNumber;
+        gameStarted = true;
+        gameEventListener = listener;
+        currentNumber = startNum;
+        startingNumber = startNum;
         currentPlayerId = 0;
         previousNumbers = new ArrayList<>();
-    }
-
-
-    public int getCurrentNumber (){
-      return currentNumber;
-    };
-
-    public int getStartingNumber (){
-        return startingNumber;
-    };
-
-    public int getCurrentPlayerId (){
-        return currentPlayerId;
-    };
-
-    public void setPlayerEventListener(PlayerEventListener listener) {
-        playerEventListener = listener;
-    }
-
-    public void setGameEventListener(GameEventListener listener) {
-        gameEventListener = listener;
-    }
-
-    public void nextPlayer() {
-        currentPlayerId = (currentPlayerId + 1) % players.size();
-        gameEventListener.onGameEvent(new GameEvent(this, GameEventType.NEXT_PLAYER));
     }
 
     public void nextNumber(final Runnable onEnd) {
@@ -78,14 +84,9 @@ public class Game {
         if (currentNumber == 0) {
             endGame();
             onEnd.run();
-            return;
+        } else {
+            nextPlayer();
         }
-
-        nextPlayer();
-    }
-
-    public Player getCurrentPlayer() {
-        return players.get(currentPlayerId);
     }
 
     public void playAgain() {
@@ -104,16 +105,11 @@ public class Game {
         playerEventListener.onPlayerEvent(event);
     }
 
-    public ArrayList<String> getPreviousNumbersFormatted() {
-        ArrayList<String> previousNumbersFormatted = new ArrayList<>();
+    private void nextPlayer() {
+        currentPlayerId = (currentPlayerId + 1) % players.size();
 
-        for (int i = previousNumbers.size() - 1; i >= 0; i--) {
-            int number = previousNumbers.get(i);
-            previousNumbersFormatted.add(String.valueOf(number));
+        if (gameEventListener != null) {
+            gameEventListener.onGameEvent(new GameEvent(this, GameEventType.NEXT_PLAYER));
         }
-
-        previousNumbersFormatted.add(startingNumber + " (starting number)");
-
-        return previousNumbersFormatted;
     }
 }

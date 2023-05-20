@@ -1,7 +1,6 @@
 package com.example.countingdowngame;
 
 public class PlayerEvent {
-
     Player player;
     PlayerEventType type;
 
@@ -9,5 +8,4 @@ public class PlayerEvent {
         this.player = player;
         this.type = type;
     }
-
 }

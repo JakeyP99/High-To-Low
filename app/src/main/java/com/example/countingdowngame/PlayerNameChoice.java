@@ -31,7 +31,6 @@ public class PlayerNameChoice extends AppCompatActivity {
     private ArrayList<String> playerNames;
     private int playerCounter;
 
-
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(PlayerNameChoice.this, PlayerNumberChoice.class);

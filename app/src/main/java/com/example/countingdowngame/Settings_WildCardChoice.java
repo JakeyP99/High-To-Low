@@ -21,11 +21,7 @@ import java.util.Arrays;
 
 public class Settings_WildCardChoice extends AppCompatActivity {
     private ListView listViewWildCard;
-    private ListView listViewWildCardGameMode;
-    private WildCardProbabilities[] deletableWildCards;
-    private WildCardProbabilities[] nonDeletableWildCards;
     private WildCardAdapter deletableAdapter;
-    private WildCardAdapter nonDeletableAdapter;
 
     @Override
     public void onBackPressed() {
@@ -38,21 +34,20 @@ public class Settings_WildCardChoice extends AppCompatActivity {
         setContentView(R.layout.wildcard_edit);
 
         listViewWildCard = findViewById(R.id.listView_WildCard);
-        listViewWildCardGameMode = findViewById(R.id.listView_GameModeWildCards);
+        ListView listViewWildCardGameMode = findViewById(R.id.listView_GameModeWildCards);
 
         WildCardProbabilities[][] wildCardArrays = loadWildCardProbabilitiesFromStorage(getApplicationContext());
-        deletableWildCards = wildCardArrays[0];
-        nonDeletableWildCards = wildCardArrays[1];
+        WildCardProbabilities[] deletableWildCards = wildCardArrays[0];
+        WildCardProbabilities[] nonDeletableWildCards = wildCardArrays[1];
 
         deletableAdapter = new WildCardAdapter(DELETABLE, this, deletableWildCards);
-        nonDeletableAdapter = new WildCardAdapter(NON_DELETABLE, this, nonDeletableWildCards);
+        WildCardAdapter nonDeletableAdapter = new WildCardAdapter(NON_DELETABLE, this, nonDeletableWildCards);
 
         listViewWildCard.setAdapter(deletableAdapter);
         listViewWildCardGameMode.setAdapter(nonDeletableAdapter);
 
         Button btnAddWildCard = findViewById(R.id.btnAddWildCard);
         btnAddWildCard.setOnClickListener(v -> addNewWildCard());
-
     }
 
     private void addNewWildCard() {
@@ -182,12 +177,9 @@ public class Settings_WildCardChoice extends AppCompatActivity {
         return new WildCardProbabilities[][]{deletableProbabilities, nonDeletableProbabilities};
     }
 
-
     public void saveWildCardProbabilitiesToStorage(WildCardMode mode, WildCardProbabilities[] probabilities) {
         switch (mode) {
-
             case DELETABLE: {
-
                 SharedPreferences deletablePrefs = getSharedPreferences("DeletablePrefs", MODE_PRIVATE);
                 SharedPreferences.Editor deletableEditor = deletablePrefs.edit();
 
@@ -202,9 +194,10 @@ public class Settings_WildCardChoice extends AppCompatActivity {
 
                 deletableEditor.putInt("wild_card_count", probabilities.length);
                 deletableEditor.apply();
+
+                break;
             }
             case NON_DELETABLE: {
-
                 SharedPreferences nonDeletablePrefs = getSharedPreferences("NonDeletablePrefs", MODE_PRIVATE);
                 SharedPreferences.Editor nonDeletableEditor = nonDeletablePrefs.edit();
 
@@ -216,9 +209,10 @@ public class Settings_WildCardChoice extends AppCompatActivity {
                     nonDeletableEditor.putInt("wild_card_probability_" + i, probability.getProbability());
                 }
                 nonDeletableEditor.apply();
-            }
-            }
 
+                break;
+            }
         }
     }
+}
 

@@ -10,6 +10,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Settings_GameModeChoice extends AppCompatActivity implements View.OnClickListener {
+    private final ButtonUtils btnUtils = new ButtonUtils(this);
 
     private Button button_gameModeOne;
     private Button button_gameModeTwo;
@@ -18,8 +19,6 @@ public class Settings_GameModeChoice extends AppCompatActivity implements View.O
     private Drawable buttonHighlightDrawable;
     private Drawable outlineForButton;
     private Button btnReturn;
-
-    private final ButtonUtils btnUtils = new ButtonUtils(this);
 
     @Override
     public void onBackPressed() {
@@ -107,7 +106,6 @@ public class Settings_GameModeChoice extends AppCompatActivity implements View.O
         button_burpSound.setOnClickListener(this);
         btnUtils.setButton(btnReturn, HomeScreen.class, null);
     }
-
 
     private void toggleButton(Button selectedButton, Button unselectedButton) {
         boolean isSelected = !selectedButton.isSelected();

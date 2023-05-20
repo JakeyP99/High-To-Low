@@ -16,9 +16,9 @@ import java.util.Random;
 
 
 public class NumberChoice extends AppCompatActivity {
-    private int startingNumber;
-
     private final ButtonUtils btnUtils = new ButtonUtils(this);
+
+    private int startingNumber;
 
     @Override
     public void onBackPressed() {
@@ -45,7 +45,6 @@ public class NumberChoice extends AppCompatActivity {
         super.onDestroy();
         btnUtils.onDestroy();
     }
-
 
     private void onSubmitClicked() {
         final EditText originalNumberField = findViewById(R.id.EditTextView_numberchoice);

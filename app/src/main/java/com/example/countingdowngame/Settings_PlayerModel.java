@@ -11,8 +11,8 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Settings_PlayerModel extends AppCompatActivity {
-
     private static final int REQUEST_IMAGE_PICK = 1;
+
     private ImageView avatarImageView;
 
     @Override
@@ -30,6 +30,7 @@ public class Settings_PlayerModel extends AppCompatActivity {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, REQUEST_IMAGE_PICK);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

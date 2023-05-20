@@ -12,9 +12,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class PlayerNumberChoice extends AppCompatActivity {
-    private EditText originalPlayerField;
-
     private final ButtonUtils btnUtils = new ButtonUtils(this);
+
+    private EditText originalPlayerField;
 
     @Override
     public void onBackPressed() {
@@ -54,13 +54,7 @@ public class PlayerNumberChoice extends AppCompatActivity {
                 return;
             }
 
-            SharedPreferences preferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
-            boolean switchOneChecked = preferences.getBoolean("button_gameModeOne", false);
-            if (switchOneChecked) {
-                Game.getInstance().setPlayers(inputNumber);
-            } else {
-                MainActivitySplitScreen.gameInstance.setPlayers(inputNumber);
-            }
+            Game.getInstance().setPlayers(inputNumber);
 
             Intent intent = new Intent(PlayerNumberChoice.this, PlayerNameChoice.class);
             intent.putExtra("playerCount", inputNumber);

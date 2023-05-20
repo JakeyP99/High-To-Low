@@ -21,13 +21,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
+    private final Map<Player, Set<WildCardProbabilities>> usedWildCard = new HashMap<>();
+    private final Set<WildCardProbabilities> usedWildCards = new HashSet<>();
+
     private TextView numberText;
     private TextView nextPlayerText;
     private Button btnSkip;
     private Button btnWild;
-
-    private Map<Player, Set<WildCardProbabilities>> usedWildCard = new HashMap<>();
-    private Set<WildCardProbabilities> usedWildCards = new HashSet<>();
 
     @Override
     public void onBackPressed() {
@@ -40,17 +40,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         numberText = findViewById(R.id.numberText);
-        Button btnGenerate = findViewById(R.id.btnGenerate);
         nextPlayerText = findViewById(R.id.textView_Number_Turn);
         btnSkip = findViewById(R.id.btnSkip);
-        Button btnWild = findViewById(R.id.btnWild);
+        btnWild = findViewById(R.id.btnWild);
+
+        Button btnGenerate = findViewById(R.id.btnGenerate);
         Button btnBackWild = findViewById(R.id.btnBackWildCard);
-        btnBackWild.setVisibility(View.INVISIBLE);
         ImageButton imageButtonExit = findViewById(R.id.imageBtnExit);
         View wildText = findViewById(R.id.wild_textview);
 
+        btnBackWild.setVisibility(View.INVISIBLE);
+
         btnGenerate.setOnClickListener(view -> {
-            Game.getInstance().nextNumber(this::endActivity);
+            Game.getInstance().nextNumber(this::startEndActivity);
             wildText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.VISIBLE);
             nextPlayerText.setVisibility(View.VISIBLE);
@@ -90,12 +92,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, HomeScreen.class));
         });
 
-        Game.getInstance().setPlayerEventListener(event -> {
-            if (event.type == PlayerEventType.SKIP) {
-                Game.getInstance().nextPlayer();
-            }
-        });
-
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
             throw new RuntimeException("Missing extras");
@@ -103,16 +99,19 @@ public class MainActivity extends AppCompatActivity {
 
         int startingNumber = extras.getInt("startingNumber");
 
-        Game.getInstance().startGame(startingNumber);
+        Game.getInstance().startGame(startingNumber, (e) -> {
+            if (e.type == GameEventType.NEXT_PLAYER) {
+                renderPlayer();
+            }
+        });
 
         int currentNumber = Game.getInstance().getCurrentNumber();
         numberText.setText(String.valueOf(currentNumber));
         setTextViewSizeBasedOnInt(numberText, String.valueOf(currentNumber));
-
         renderPlayer();
     }
 
-    private void endActivity() {
+    private void startEndActivity() {
         startActivity(new Intent(MainActivity.this, EndActivity.class));
     }
 
@@ -152,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void wildCardActivate(Player player) {
+    private void wildCardActivate(Player player) {
         Settings_WildCardChoice settings = new Settings_WildCardChoice();
         WildCardProbabilities[][] probabilitiesArray = settings.loadWildCardProbabilitiesFromStorage(getApplicationContext());
 
@@ -168,11 +167,11 @@ public class MainActivity extends AppCompatActivity {
         Set<WildCardProbabilities> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
         if (wildCardsEnabled) {
             List<WildCardProbabilities> unusedCards = Arrays.stream(activityProbabilities)
-                    .filter(c -> c.isEnabled())
+                    .filter(WildCardProbabilities::isEnabled)
                     .filter(c -> !usedWildCards.contains(c))
                     .collect(Collectors.toList());
 
-            if (unusedCards.isEmpty()) {
+            if (unusedCards.isEmpty() && usedCards != null) {
                 usedCards.clear();
             }
 
@@ -191,11 +190,13 @@ public class MainActivity extends AppCompatActivity {
             while (!foundUnusedCard) {
                 int randomWeight = random.nextInt(totalWeight);
                 int weightSoFar = 0;
+
                 for (WildCardProbabilities activityProbability : unusedCards) {
                     weightSoFar += activityProbability.getProbability();
+
                     if (randomWeight < weightSoFar) {
                         // Check if the selected wildcard has already been used by the current player
-                        if (!usedCards.contains(activityProbability)) {
+                        if (usedCards != null && !usedCards.contains(activityProbability)) {
                             selectedActivity = activityProbability.getText();
                             foundUnusedCard = true;
                             usedCards.add(activityProbability);
