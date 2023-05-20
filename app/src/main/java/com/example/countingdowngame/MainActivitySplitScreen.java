@@ -54,6 +54,12 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_2);
 
+        numberText = findViewById(R.id.numberText);
+        numberTextPlayer2 = findViewById(R.id.numberTextPlayer2);
+        btnSkip = findViewById(R.id.btnSkip);
+        btnSkipPlayer2 = findViewById(R.id.btnSkipPlayer2);
+        btnWildPlayer2 = findViewById(R.id.btnWildPlayer2);
+        btnWild = findViewById(R.id.btnWild);
         wildText = findViewById(R.id.wild_textview);
         btnGenerate = findViewById(R.id.btnGenerate);
         btnBackWild = findViewById(R.id.btnBackWildCard);
