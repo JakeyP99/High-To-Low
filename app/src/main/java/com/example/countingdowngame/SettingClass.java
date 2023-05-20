@@ -7,9 +7,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SettingClass extends AppCompatActivity {
-    Button btnReturn;
-    Button btnWildCardSettings;
-    Button btnGameModeSettings;
+
 
     @Override
     public void onBackPressed() {
@@ -21,9 +19,9 @@ public class SettingClass extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_choice);
 
-        btnReturn = findViewById(R.id.buttonReturn);
-        btnWildCardSettings = findViewById(R.id.button_wildcardSettings);
-        btnGameModeSettings = findViewById(R.id.button_gameModeSettings);
+        final Button btnReturn = findViewById(R.id.buttonReturn);
+        final Button btnWildCardSettings = findViewById(R.id.button_wildcardSettings);
+        final Button btnGameModeSettings = findViewById(R.id.button_gameModeSettings);
 
         ButtonUtils.setButton(btnReturn, HomeScreen.class, this, null);
         ButtonUtils.setButton(btnWildCardSettings, Settings_WildCardChoice.class, this, null);
