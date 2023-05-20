@@ -52,6 +52,9 @@ public class ButtonUtils {
 
     @SuppressLint("ClickableViewAccessibility")
     public void setButton(final Button button, final Class<?> activityClass, final Runnable buttonAction) {
+        if (button == null) {
+            return;
+        }
         button.setOnTouchListener((view, motionEvent) -> {
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN: {

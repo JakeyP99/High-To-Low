@@ -66,6 +66,8 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         wildTextPlayer2 = findViewById(R.id.wild_textviewPlayer2);
         btnGeneratePlayer2 = findViewById(R.id.btnGeneratePlayer2);
         btnBackWildPlayer2 = findViewById(R.id.btnBackWildCardPlayer2);
+        nextPlayerText = findViewById(R.id.textView_Number_Turn);
+        nextPlayerTextPlayer2 = findViewById(R.id.textView_Number_TurnPlayer2);
 
         ImageButton imageButtonExit = findViewById(R.id.imageBtnExit);
         ImageButton imageButtonExitPlayer2 = findViewById(R.id.imageBtnExitPlayer2);
