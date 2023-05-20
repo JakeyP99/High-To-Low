@@ -24,12 +24,10 @@ import java.util.HashSet;
 public class PlayerNameChoice extends AppCompatActivity {
     private ListView playerListView;
     private EditText nameEditText;
-    private TextView counterTextView;
-
     private ArrayList<String> playerNames;
     private int playerCounter;
 
-    private static final int REQUEST_CODE_RESET_COUNTER = 1;
+    private final int REQUEST_CODE_RESET_COUNTER = 1;
 
     @Override
     public void onBackPressed() {
@@ -55,8 +53,6 @@ public class PlayerNameChoice extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.player_names);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
-
-        int playerCount = getIntent().getIntExtra("playerCount", 0);
 
         playerListView = findViewById(R.id.list_view_player_names);
         nameEditText = findViewById(R.id.edit_text_name);
@@ -87,8 +83,6 @@ public class PlayerNameChoice extends AppCompatActivity {
 
     private void checkPlayerNames() {
         int playerCount = getIntent().getIntExtra("playerCount", 0);
-        int remainingPlayers = playerCount - playerCounter;
-        int extraPlayers = playerCounter - playerCount;
 
         if (playerNames.size() == playerCount) {
             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(PlayerNameChoice.this).edit();
