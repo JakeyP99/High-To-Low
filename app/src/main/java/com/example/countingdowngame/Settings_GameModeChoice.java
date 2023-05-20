@@ -21,7 +21,7 @@ public class Settings_GameModeChoice extends AppCompatActivity implements View.O
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(Settings_GameModeChoice.this, HomeScreen.class));
+        startActivity(new Intent(this, SettingClass.class));
     }
 
     @Override

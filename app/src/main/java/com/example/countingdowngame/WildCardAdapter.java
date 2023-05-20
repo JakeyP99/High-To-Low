@@ -24,7 +24,7 @@ public class WildCardAdapter extends ArrayAdapter<WildCardProbabilities> {
   private WildCardMode mMode;
 
   public WildCardAdapter(WildCardMode mode, Settings_WildCardChoice context, WildCardProbabilities[] probabilities) {
-    super(context, R.layout.list_item_wildcard, probabilities);
+    super(context, R.layout.list_view_wild_cards, probabilities);
     mContext = context;
     mProbabilities = probabilities;
     mMode = mode;
@@ -38,7 +38,7 @@ public class WildCardAdapter extends ArrayAdapter<WildCardProbabilities> {
   @Override
   public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
     LayoutInflater inflater = LayoutInflater.from(mContext);
-    View view = inflater.inflate(R.layout.list_item_wildcard, null);
+    View view = inflater.inflate(R.layout.list_view_wild_cards, null);
 
     Button editButton = view.findViewById(R.id.button_edit_probability);
     TextView textViewWildCard = view.findViewById(R.id.textview_wildcard);

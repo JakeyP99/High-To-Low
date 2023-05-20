@@ -29,14 +29,14 @@ public class EndActivity extends AppCompatActivity {
         final Button btnNewPlayer = findViewById(R.id.btnNewPlayer);
 
         if (switchOneChecked) {
-            final ArrayAdapter<String> adapter = new ArrayAdapter<>(EndActivity.this, R.layout.custom_list_item, R.id.previousNumbers, Game.getInstance().getPreviousNumbersFormatted());
+            final ArrayAdapter<String> adapter = new ArrayAdapter<>(EndActivity.this, R.layout.list_view_end_game, R.id.previousNumbers, Game.getInstance().getPreviousNumbersFormatted());
             previousNumbersList.setAdapter(adapter);
 
             ButtonUtils.setButton(btnPlayAgain, NumberChoice.class, this, () -> {
                 Game.getInstance().playAgain();
             });
         } else {
-            final ArrayAdapter<String> adapter = new ArrayAdapter<>(EndActivity.this, R.layout.custom_list_item, R.id.previousNumbers, MainActivitySplitScreen.gameInstance.getPreviousNumbersFormatted());
+            final ArrayAdapter<String> adapter = new ArrayAdapter<>(EndActivity.this, R.layout.list_view_end_game, R.id.previousNumbers, MainActivitySplitScreen.gameInstance.getPreviousNumbersFormatted());
             previousNumbersList.setAdapter(adapter);
 
             ButtonUtils.setButton(btnPlayAgain, NumberChoice.class, this, () -> {

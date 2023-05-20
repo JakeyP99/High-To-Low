@@ -21,11 +21,7 @@ import java.util.Arrays;
 
 public class Settings_WildCardChoice extends AppCompatActivity {
     private ListView listViewWildCard;
-    private ListView listViewWildCardGameMode;
-    private WildCardProbabilities[] deletableWildCards;
-    private WildCardProbabilities[] nonDeletableWildCards;
     private WildCardAdapter deletableAdapter;
-    private WildCardAdapter nonDeletableAdapter;
 
     @Override
     public void onBackPressed() {
@@ -38,14 +34,14 @@ public class Settings_WildCardChoice extends AppCompatActivity {
         setContentView(R.layout.wildcard_edit);
 
         listViewWildCard = findViewById(R.id.listView_WildCard);
-        listViewWildCardGameMode = findViewById(R.id.listView_GameModeWildCards);
+        ListView listViewWildCardGameMode = findViewById(R.id.listView_GameModeWildCards);
 
         WildCardProbabilities[][] wildCardArrays = loadWildCardProbabilitiesFromStorage(getApplicationContext());
-        deletableWildCards = wildCardArrays[0];
-        nonDeletableWildCards = wildCardArrays[1];
+        WildCardProbabilities[] deletableWildCards = wildCardArrays[0];
+        WildCardProbabilities[] nonDeletableWildCards = wildCardArrays[1];
 
         deletableAdapter = new WildCardAdapter(DELETABLE, this, deletableWildCards);
-        nonDeletableAdapter = new WildCardAdapter(NON_DELETABLE, this, nonDeletableWildCards);
+        WildCardAdapter nonDeletableAdapter = new WildCardAdapter(NON_DELETABLE, this, nonDeletableWildCards);
 
         listViewWildCard.setAdapter(deletableAdapter);
         listViewWildCardGameMode.setAdapter(nonDeletableAdapter);
