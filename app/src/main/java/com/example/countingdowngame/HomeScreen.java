@@ -1,7 +1,6 @@
 package com.example.countingdowngame;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +11,7 @@ public class HomeScreen extends AppCompatActivity {
         // Do nothing
     }
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.start_menu);
@@ -20,13 +20,14 @@ public class HomeScreen extends AppCompatActivity {
         final Button btnInstructions = findViewById(R.id.button_Instructions);
         final Button btnSettings = findViewById(R.id.button_Settings);
 
-
-        ButtonUtils.setButton(btnQuickPlay, PlayerNumberChoice.class, this, () -> {
-            new Handler().postDelayed(() -> finish(), 1000);
-        });
+        ButtonUtils.setButton(btnQuickPlay, PlayerNumberChoice.class, this, null);
         ButtonUtils.setButton(btnInstructions, Instructions.class, this, null);
         ButtonUtils.setButton(btnSettings, SettingClass.class, this, null);
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
 

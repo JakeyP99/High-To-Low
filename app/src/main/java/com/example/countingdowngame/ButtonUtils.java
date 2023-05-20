@@ -26,6 +26,7 @@ public class ButtonUtils {
     private static MediaPlayer[] burp = new MediaPlayer[NUM_SOUNDS];
 
     public static void setButton(final Button button, final Class<?> activityClass, final AppCompatActivity context, final Runnable buttonAction) {
+
         burp[0] = MediaPlayer.create(context, R.raw.burp1);
         burp[1] = MediaPlayer.create(context, R.raw.burp2);
         burp[2] = MediaPlayer.create(context, R.raw.burp3);

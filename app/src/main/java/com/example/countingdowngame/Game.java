@@ -6,15 +6,12 @@ import java.util.Random;
 public class Game {
 
     public static Game gameInstance = new Game();
-
     int currentPlayerId = 0;
     ArrayList<Player> players = new ArrayList<>();
-
     int startingNumber = 0;
     int currentNumber = 0;
     boolean gameStarted = false;
     ArrayList<Integer> previousNumbers = new ArrayList<>();
-
     PlayerEventListener playerEventListener;
     GameEventListener gameEventListener;
 
