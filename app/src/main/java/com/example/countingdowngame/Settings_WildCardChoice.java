@@ -1,7 +1,7 @@
 package com.example.countingdowngame;
 
-import static com.example.countingdowngame.WildcardMode.DELETABLE;
-import static com.example.countingdowngame.WildcardMode.NON_DELETABLE;
+import static com.example.countingdowngame.WildCardMode.DELETABLE;
+import static com.example.countingdowngame.WildCardMode.NON_DELETABLE;
 
 import android.content.Context;
 import android.content.Intent;
@@ -183,7 +183,7 @@ public class Settings_WildCardChoice extends AppCompatActivity {
     }
 
 
-    public void saveWildCardProbabilitiesToStorage(WildcardMode mode, WildCardProbabilities[] probabilities) {
+    public void saveWildCardProbabilitiesToStorage(WildCardMode mode, WildCardProbabilities[] probabilities) {
         switch (mode) {
 
             case DELETABLE: {

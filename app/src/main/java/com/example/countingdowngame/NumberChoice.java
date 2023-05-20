@@ -62,10 +62,17 @@ public class NumberChoice extends AppCompatActivity {
 
             originalNumberField.setFocusable(false);
 
+            Intent intent;
             SharedPreferences preferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
             boolean switchOneChecked = preferences.getBoolean("button_gameModeOne", false);
             Class<?> targetClass = switchOneChecked ? MainActivity.class : MainActivitySplitScreen.class;
-            startActivity(new Intent(NumberChoice.this, targetClass));
+            intent = new Intent(NumberChoice.this, targetClass);
+
+// Add the startingNumber as an extra to the intent
+            intent.putExtra("startingNumber", startingNumber);
+
+// Start the MainActivity or MainActivitySplitScreen
+            startActivity(intent);
         } catch (NumberFormatException e) {
         }
     }
@@ -77,9 +84,16 @@ public class NumberChoice extends AppCompatActivity {
         final EditText originalNumberField = findViewById(R.id.EditTextView_numberchoice);
         originalNumberField.setFocusable(false);
 
+        Intent intent;
         SharedPreferences preferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
         boolean switchOneChecked = preferences.getBoolean("button_gameModeOne", false);
         Class<?> targetClass = switchOneChecked ? MainActivity.class : MainActivitySplitScreen.class;
-        startActivity(new Intent(NumberChoice.this, targetClass));
+        intent = new Intent(NumberChoice.this, targetClass);
+
+// Add the startingNumber as an extra to the intent
+        intent.putExtra("startingNumber", startingNumber);
+
+// Start the MainActivity or MainActivitySplitScreen
+        startActivity(intent);
     }
 }

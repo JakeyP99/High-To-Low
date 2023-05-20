@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -29,6 +30,7 @@
         <activity android:name=".PlayerNameChoice" />
         <activity android:name=".Settings_GameModeChoice" />
         <activity android:name=".MainActivitySplitScreen" />
+        <activity android:name=".Settings_PlayerModel" />
 
 
 
