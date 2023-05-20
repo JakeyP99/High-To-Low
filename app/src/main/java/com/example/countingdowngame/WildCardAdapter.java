@@ -21,11 +21,13 @@ import java.util.Arrays;
 public class WildCardAdapter extends ArrayAdapter<WildCardProbabilities> {
   private Settings_WildCardChoice mContext;
   private WildCardProbabilities[] mProbabilities;
+  private WildcardMode mMode;
 
-  public WildCardAdapter(Settings_WildCardChoice context, WildCardProbabilities[] probabilities) {
+  public WildCardAdapter(WildcardMode mode, Settings_WildCardChoice context, WildCardProbabilities[] probabilities) {
     super(context, R.layout.list_item_wildcard, probabilities);
     mContext = context;
     mProbabilities = probabilities;
+    mMode = mode;
   }
 
   @Override
@@ -88,7 +90,7 @@ public class WildCardAdapter extends ArrayAdapter<WildCardProbabilities> {
         builder.setNeutralButton("Delete", (dialog, which) -> {
           wildCardList.remove(position);
           notifyDataSetChanged();
-          mContext.saveWildCardProbabilitiesToStorage(mProbabilities);
+          mContext.saveWildCardProbabilitiesToStorage(mMode, mProbabilities);
         });
       }
 
@@ -105,7 +107,7 @@ public class WildCardAdapter extends ArrayAdapter<WildCardProbabilities> {
         textViewProbability.setText(String.valueOf(wildCard.getProbability()));
         setProbabilitySizeBasedOnString(textViewProbability, String.valueOf(wildCard.getProbability()));
 
-        mContext.saveWildCardProbabilitiesToStorage(mProbabilities);
+        mContext.saveWildCardProbabilitiesToStorage(mMode, mProbabilities);
       });
 
       builder.show();
@@ -113,7 +115,7 @@ public class WildCardAdapter extends ArrayAdapter<WildCardProbabilities> {
 
     switchWildCard.setOnCheckedChangeListener((buttonView, isChecked) -> {
       wildCard.setEnabled(isChecked);
-      mContext.saveWildCardProbabilitiesToStorage(mProbabilities);
+      mContext.saveWildCardProbabilitiesToStorage(mMode, mProbabilities);
     });
 
     return view;

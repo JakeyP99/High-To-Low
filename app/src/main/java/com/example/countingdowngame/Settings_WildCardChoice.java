@@ -16,6 +16,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+public enum WildcardMode {
+    DELETABLE,
+    NON_DELETABLE
+}
+
 public class Settings_WildCardChoice extends AppCompatActivity {
     private ListView listViewWildCard;
     private ListView listViewWildCardGameMode;
@@ -162,21 +167,34 @@ public class Settings_WildCardChoice extends AppCompatActivity {
         return new WildCardProbabilities[][] { deletableProbabilities, nonDeletableProbabilities };
     }
 
-    public void saveWildCardProbabilitiesToStorage(WildCardProbabilities[] probabilities) {
-        SharedPreferences deletablePrefs = getSharedPreferences("DeletablePrefs", MODE_PRIVATE);
-        SharedPreferences.Editor deletableEditor = deletablePrefs.edit();
+    public void saveWildCardProbabilitiesToStorage(WildcardMode mode, WildCardProbabilities[] probabilities) {
+        switch (mode) {
 
-        deletableEditor.clear(); // Clear previous data
+            case DELETABLE: {
 
-        for (int i = 0; i < probabilities.length; i++) {
-            WildCardProbabilities probability = probabilities[i];
-            deletableEditor.putBoolean("wild_card_enabled_" + i, probability.isEnabled());
-            deletableEditor.putString("wild_card_activity_" + i, probability.getText());
-            deletableEditor.putInt("wild_card_probability_" + i, probability.getProbability());
+                SharedPreferences deletablePrefs = getSharedPreferences("DeletablePrefs", MODE_PRIVATE);
+                SharedPreferences.Editor deletableEditor = deletablePrefs.edit();
+
+                deletableEditor.clear(); // Clear previous data
+
+                for (int i = 0; i < probabilities.length; i++) {
+                    WildCardProbabilities probability = probabilities[i];
+                    deletableEditor.putBoolean("wild_card_enabled_" + i, probability.isEnabled());
+                    deletableEditor.putString("wild_card_activity_" + i, probability.getText());
+                    deletableEditor.putInt("wild_card_probability_" + i, probability.getProbability());
+                }
+
+                deletableEditor.putInt("wild_card_count", probabilities.length);
+                deletableEditor.apply();
+            }
+            case NON_DELETABLE: {
+
+
+                
+
+            }
+
         }
-
-        deletableEditor.putInt("wild_card_count", probabilities.length);
-        deletableEditor.apply();
     }
 
 }
