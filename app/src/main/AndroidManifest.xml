@@ -30,8 +30,10 @@
         <activity android:name=".PlayerNameChoice" />
         <activity android:name=".Settings_GameModeChoice" />
         <activity android:name=".MainActivitySplitScreen" />
-        <activity android:name=".Settings_PlayerModel" />
-
+        <activity
+            android:name=".Settings_PlayerModel"
+            android:windowSoftInputMode="adjustNothing">
+        </activity>
 
 
 

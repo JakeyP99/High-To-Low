@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,7 @@ public class Settings_PlayerModel extends AppCompatActivity {
         setContentView(R.layout.settings_player_list);
 
         playerListView = findViewById(R.id.playerListView);
-        playerList = new ArrayList<>(); // Replace with your list of Player objects
+        playerList = new ArrayList<>();
         playerListAdapter = new PlayerListAdapter(this, playerList);
         playerListView.setAdapter(playerListAdapter);
 
@@ -49,6 +50,7 @@ public class Settings_PlayerModel extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_IMAGE_PICK);
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -56,33 +58,29 @@ public class Settings_PlayerModel extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK && data != null) {
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
 
-            // Create a dialog to prompt for player name
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Enter Player Name");
 
-            // Inflate a custom layout for the dialog
             View dialogView = getLayoutInflater().inflate(R.layout.dialog_enter_name, null);
-            builder.setView(dialogView);
-
-            // Get reference to the name EditText
             EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
+            nameEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS); // Restrict input to only string values
 
-            builder.setPositiveButton("OK", (dialogInterface, i) -> {
-                // Get the entered name and create a new Player object
-                String name = nameEditText.getText().toString();
-                Player newPlayer = new Player(bitmap, name);
-                playerList.add(newPlayer);
-                playerListAdapter.notifyDataSetChanged();
-            });
-
-            builder.setNegativeButton("Cancel", null);
+            builder.setView(dialogView)
+                    .setPositiveButton("OK", (dialogInterface, i) -> {
+                        String name = nameEditText.getText().toString();
+                        Player newPlayer = new Player(bitmap, name);
+                        playerList.add(newPlayer);
+                        playerListAdapter.notifyDataSetChanged();
+                    })
+                    .setNegativeButton("Cancel", null);
 
             AlertDialog dialog = builder.create();
             dialog.show();
         }
     }
 
-    private class PlayerListAdapter extends ArrayAdapter<Player> {
+
+    private static class PlayerListAdapter extends ArrayAdapter<Player> {
 
         private LayoutInflater inflater;
 
@@ -113,7 +111,7 @@ public class Settings_PlayerModel extends AppCompatActivity {
             return convertView;
         }
 
-        private class ViewHolder {
+        private static class ViewHolder {
             ImageView playerPhotoImageView;
             TextView playerNameTextView;
         }
