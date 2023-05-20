@@ -1,8 +1,28 @@
+package com.example.countingdowngame;
+
+import android.text.InputType;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Switch;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class WildCardAdapter extends ArrayAdapter<WildCardProbabilities> {
-  private Context mContext;
+  private Settings_WildCardChoice mContext;
   private WildCardProbabilities[] mProbabilities;
 
-  public WildCardAdapter(Context context, WildCardProbabilities[] probabilities) {
+  public WildCardAdapter(Settings_WildCardChoice context, WildCardProbabilities[] probabilities) {
     super(context, R.layout.list_item_wildcard, probabilities);
     mContext = context;
     mProbabilities = probabilities;
@@ -68,7 +88,7 @@ public class WildCardAdapter extends ArrayAdapter<WildCardProbabilities> {
         builder.setNeutralButton("Delete", (dialog, which) -> {
           wildCardList.remove(position);
           notifyDataSetChanged();
-          saveWildCardProbabilitiesToStorage(mProbabilities);
+          mContext.saveWildCardProbabilitiesToStorage(mProbabilities);
         });
       }
 
@@ -85,7 +105,7 @@ public class WildCardAdapter extends ArrayAdapter<WildCardProbabilities> {
         textViewProbability.setText(String.valueOf(wildCard.getProbability()));
         setProbabilitySizeBasedOnString(textViewProbability, String.valueOf(wildCard.getProbability()));
 
-        saveWildCardProbabilitiesToStorage(mProbabilities);
+        mContext.saveWildCardProbabilitiesToStorage(mProbabilities);
       });
 
       builder.show();
@@ -93,7 +113,7 @@ public class WildCardAdapter extends ArrayAdapter<WildCardProbabilities> {
 
     switchWildCard.setOnCheckedChangeListener((buttonView, isChecked) -> {
       wildCard.setEnabled(isChecked);
-      saveWildCardProbabilitiesToStorage(mProbabilities);
+      mContext.saveWildCardProbabilitiesToStorage(mProbabilities);
     });
 
     return view;

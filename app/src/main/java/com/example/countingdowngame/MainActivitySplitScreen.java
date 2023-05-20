@@ -188,9 +188,6 @@ public class MainActivitySplitScreen extends AppCompatActivity {
         // Assuming you want to access the first set of probabilities in the array
         WildCardProbabilities[] activityProbabilities = probabilitiesArray[0];
 
-
-
-
         final TextView wildActivityTextView = findViewById(R.id.wild_textview);
         final TextView wildActivityTextViewPlayer2 = findViewById(R.id.wild_textviewPlayer2);
 

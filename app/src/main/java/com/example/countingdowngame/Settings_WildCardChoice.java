@@ -5,19 +5,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Switch;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -170,7 +162,7 @@ public class Settings_WildCardChoice extends AppCompatActivity {
         return new WildCardProbabilities[][] { deletableProbabilities, nonDeletableProbabilities };
     }
 
-    private void saveWildCardProbabilitiesToStorage(WildCardProbabilities[] probabilities) {
+    public void saveWildCardProbabilitiesToStorage(WildCardProbabilities[] probabilities) {
         SharedPreferences deletablePrefs = getSharedPreferences("DeletablePrefs", MODE_PRIVATE);
         SharedPreferences.Editor deletableEditor = deletablePrefs.edit();
 
