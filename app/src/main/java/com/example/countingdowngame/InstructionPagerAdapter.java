@@ -1,3 +1,15 @@
+package com.example.countingdowngame;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.PagerAdapter;
+
+import java.util.List;
+
 public class InstructionPagerAdapter extends PagerAdapter {
   private final List<String> instructions;
 
