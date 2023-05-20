@@ -41,8 +41,6 @@ public class Game {
         this.startingNumber = startingNumber;
         currentPlayerId = 0;
         previousNumbers = new ArrayList<>();
-
-        gameEventListener.onGameEvent(new GameEvent(this, GameEventType.GAME_START));
     }
 
     public void setPlayerEventListener(PlayerEventListener listener) {
@@ -66,7 +64,7 @@ public class Game {
 
         if (currentNumber == 0) {
             endGame();
-            onEnd();
+            onEnd.run();
             return;
         }
 

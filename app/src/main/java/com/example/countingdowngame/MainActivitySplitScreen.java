@@ -277,8 +277,7 @@ public class MainActivitySplitScreen extends AppCompatActivity {
 
     // These are my button functions.
     public void ButtonGenerateFunction() {
-        gameInstance.nextNumber(endActivity);
-
+        Game.getInstance().nextNumber(this::endActivity);
         wildText.setVisibility(View.INVISIBLE);
         numberText.setVisibility(View.VISIBLE);
         nextPlayerText.setVisibility(View.VISIBLE);

@@ -21,10 +21,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
-    @Override
-    public void onBackPressed() {
-    }
-
     private TextView numberText;
     private TextView nextPlayerText;
     private Button btnSkip;
@@ -33,10 +29,15 @@ public class MainActivity extends AppCompatActivity {
     private Map<Player, Set<WildCardProbabilities>> usedWildCard = new HashMap<>();
     private Set<WildCardProbabilities> usedWildCards = new HashSet<>();
 
+    @Override
+    public void onBackPressed() {
+        // Disable back button functionality
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        View wildText = findViewById(R.id.wild_textview);
 
         numberText = findViewById(R.id.numberText);
         Button btnGenerate = findViewById(R.id.btnGenerate);
@@ -46,43 +47,33 @@ public class MainActivity extends AppCompatActivity {
         Button btnBackWild = findViewById(R.id.btnBackWildCard);
         btnBackWild.setVisibility(View.INVISIBLE);
         ImageButton imageButtonExit = findViewById(R.id.imageBtnExit);
+        View wildText = findViewById(R.id.wild_textview);
 
-        // These are the button controls
-        ButtonUtils.setButton(btnGenerate, null, this, () -> {
-            Game.getInstance().nextNumber(endActivity);
-
+        btnGenerate.setOnClickListener(view -> {
+            Game.getInstance().nextNumber(this::endActivity);
             wildText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.VISIBLE);
             nextPlayerText.setVisibility(View.VISIBLE);
-            numberText.setVisibility(View.VISIBLE);
-
         });
 
-        ButtonUtils.setButton(btnBackWild, null, this, () -> {
+        btnBackWild.setOnClickListener(view -> {
             btnBackWild.setVisibility(View.INVISIBLE);
             btnGenerate.setVisibility(View.VISIBLE);
             wildText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.VISIBLE);
             nextPlayerText.setVisibility(View.VISIBLE);
-            numberText.setVisibility(View.VISIBLE);
         });
 
-        ButtonUtils.setButton(btnSkip, null, this, () -> {
+        btnSkip.setOnClickListener(view -> {
             Game.getInstance().getCurrentPlayer().useSkip();
             wildText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.VISIBLE);
             nextPlayerText.setVisibility(View.VISIBLE);
-            numberText.setVisibility(View.VISIBLE);
             btnBackWild.setVisibility(View.INVISIBLE);
             btnGenerate.setVisibility(View.VISIBLE);
-
         });
 
-        ButtonUtils.setImageButton(imageButtonExit, HomeScreen.class, this, () -> {
-            Game.getInstance().endGame();
-        });
-
-        ButtonUtils.setButton(btnWild, null, this, () -> {
+        btnWild.setOnClickListener(view -> {
             btnWild.setVisibility(View.INVISIBLE);
             wildText.setVisibility(View.VISIBLE);
             btnBackWild.setVisibility(View.VISIBLE);
@@ -90,23 +81,24 @@ public class MainActivity extends AppCompatActivity {
             nextPlayerText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.INVISIBLE);
             Game.getInstance().getCurrentPlayer().useWildCard();
-            Player currentPlayer = Game.getInstance().getCurrentPlayer();
-            wildCardActivate(currentPlayer);
+            wildCardActivate(Game.getInstance().getCurrentPlayer());
         });
 
-        Game.getInstance().setPlayerEventListener(e -> {
-            if (e.type == PlayerEventType.SKIP) {
+        imageButtonExit.setOnClickListener(view -> {
+            Game.getInstance().endGame();
+            // Start HomeScreen activity
+            startActivity(new Intent(MainActivity.this, HomeScreen.class));
+        });
+
+        Game.getInstance().setPlayerEventListener(event -> {
+            if (event.type == PlayerEventType.SKIP) {
                 Game.getInstance().nextPlayer();
             }
         });
 
-        Game.getInstance().setGameEventListener(e -> {
-            switch (e.type) {
-                case NEXT_PLAYER: {
-                    renderPlayer();
-                    break;
-                }
-
+        Game.getInstance().setGameEventListener(event -> {
+            if (event.type == GameEventType.NEXT_PLAYER) {
+                renderPlayer();
             }
         });
 
@@ -116,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
         setTextViewSizeBasedOnInt(numberText, String.valueOf(Game.getInstance().currentNumber));
 
         renderPlayer();
-
     }
 
     private void endActivity() {
@@ -124,39 +115,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setTextViewSizeBasedOnInt(TextView textView, String text) {
-        int defaultTextSize = 70; // set default text size
-        int minSize = 47; // minimum text size
+        int defaultTextSize = 70; // Set default text size
+        int minSize = 47; // Minimum text size
 
         // Adjust text size based on the length of the text
         if (text.length() > 6) {
-            textView.setTextSize(minSize); // set smaller text size for longer strings
+            textView.setTextSize(minSize); // Set smaller text size for longer strings
         } else {
-            textView.setTextSize(defaultTextSize); // set default text size for short strings
+            textView.setTextSize(defaultTextSize); // Set default text size for short strings
         }
     }
 
     private void renderPlayer() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         Set<String> playerNamesSet = preferences.getStringSet("playerNames", null);
-        String[] playerNamesArray = playerNamesSet.toArray(new String[0]);
-        int currentPlayerIndex = Game.getInstance().currentPlayerId;
+        if (playerNamesSet != null) {
+            String[] playerNamesArray = playerNamesSet.toArray(new String[0]);
+            int currentPlayerIndex = Game.getInstance().currentPlayerId;
 
-        String currentPlayerName = playerNamesArray[currentPlayerIndex];
-        nextPlayerText.setText(currentPlayerName + "'s Turn");
+            String currentPlayerName = playerNamesArray[currentPlayerIndex];
+            nextPlayerText.setText(currentPlayerName + "'s Turn");
 
-        if (Game.getInstance().getCurrentPlayer().getSkipAmount() > 0) {
-            btnSkip.setVisibility(View.VISIBLE);
-        } else {
-            btnSkip.setVisibility(View.INVISIBLE);
-        }
-
-        if (Game.getInstance().getCurrentPlayer().getWildCardAmount() > 0) {
-            if (btnWild == null) {
-                btnWild = findViewById(R.id.btnWild);
+            Player currentPlayer = Game.getInstance().getCurrentPlayer();
+            if (currentPlayer.getSkipAmount() > 0) {
+                btnSkip.setVisibility(View.VISIBLE);
+            } else {
+                btnSkip.setVisibility(View.INVISIBLE);
             }
-            btnWild.setVisibility(View.VISIBLE);
-        } else {
-            if (btnWild != null) {
+
+            if (currentPlayer.getWildCardAmount() > 0) {
+                btnWild.setVisibility(View.VISIBLE);
+            } else {
                 btnWild.setVisibility(View.INVISIBLE);
             }
         }
@@ -164,8 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void wildCardActivate(Player player) {
         Settings_WildCardChoice settings = new Settings_WildCardChoice();
-        WildCardProbabilities[][] probabilitiesArray = settings
-                .loadWildCardProbabilitiesFromStorage(getApplicationContext());
+        WildCardProbabilities[][] probabilitiesArray = settings.loadWildCardProbabilitiesFromStorage(getApplicationContext());
 
         // Assuming you want to access the first set of probabilities in the array
         WildCardProbabilities[] activityProbabilities = probabilitiesArray[0];
@@ -225,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
             for (WildCardProbabilities wc : activityProbabilities) {
                 if (wc.getText().equals(selectedActivity)) {
                     player.addUsedWildCard(wc);
-                    usedCards.add(wc); // add to usedCards set for this player
+                    usedCards.add(wc); // Add to usedCards set for this player
                     break;
                 }
             }
@@ -244,5 +232,4 @@ public class MainActivity extends AppCompatActivity {
             btnWild.setVisibility(View.INVISIBLE);
         }
     }
-
 }
