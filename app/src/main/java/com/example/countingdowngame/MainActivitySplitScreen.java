@@ -183,7 +183,13 @@ public class MainActivitySplitScreen extends AppCompatActivity {
     //This is the wildcard function.
     public void wildCardActivate(Player player) {
         Settings_WildCardChoice settings = new Settings_WildCardChoice();
-        WildCardProbabilities[] activityProbabilities = settings.loadWildCardProbabilitiesFromStorage(getApplicationContext());
+        WildCardProbabilities[][] probabilitiesArray = settings.loadWildCardProbabilitiesFromStorage(getApplicationContext());
+
+        // Assuming you want to access the first set of probabilities in the array
+        WildCardProbabilities[] activityProbabilities = probabilitiesArray[0];
+
+
+
 
         final TextView wildActivityTextView = findViewById(R.id.wild_textview);
         final TextView wildActivityTextViewPlayer2 = findViewById(R.id.wild_textviewPlayer2);

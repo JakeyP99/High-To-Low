@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,9 +26,11 @@ import java.util.Arrays;
 
 public class Settings_WildCardChoice extends AppCompatActivity {
     private ListView listViewWildCard;
-    private WildCardProbabilities[] mProbabilities;
-    private WildCardAdapter mAdapter;
-
+    private ListView listViewWildCardGameMode;
+    private WildCardProbabilities[] deletableWildCards;
+    private WildCardProbabilities[] nonDeletableWildCards;
+    private WildCardAdapter deletableAdapter;
+    private WildCardAdapter nonDeletableAdapter;
 
     @Override
     public void onBackPressed() {
@@ -42,14 +43,21 @@ public class Settings_WildCardChoice extends AppCompatActivity {
         setContentView(R.layout.wildcard_edit);
 
         listViewWildCard = findViewById(R.id.listView_WildCard);
+        listViewWildCardGameMode = findViewById(R.id.listView_GameModeWildCards);
 
-        mProbabilities = loadWildCardProbabilitiesFromStorage(getApplicationContext());
+        WildCardProbabilities[][] wildCardArrays = loadWildCardProbabilitiesFromStorage(getApplicationContext());
+        deletableWildCards = wildCardArrays[0];
+        nonDeletableWildCards = wildCardArrays[1];
 
-        mAdapter = new WildCardAdapter(this, mProbabilities);
-        listViewWildCard.setAdapter(mAdapter);
+        deletableAdapter = new WildCardAdapter(this, deletableWildCards);
+        nonDeletableAdapter = new WildCardAdapter(this, nonDeletableWildCards);
+
+        listViewWildCard.setAdapter(deletableAdapter);
+        listViewWildCardGameMode.setAdapter(nonDeletableAdapter);
 
         Button btnAddWildCard = findViewById(R.id.btnAddWildCard);
         btnAddWildCard.setOnClickListener(v -> addNewWildCard());
+
     }
 
     private void addNewWildCard() {
@@ -77,110 +85,115 @@ public class Settings_WildCardChoice extends AppCompatActivity {
             int probability = Integer.parseInt(probabilityInput.getText().toString());
             String text = textInput.getText().toString();
 
-            WildCardProbabilities newWildCard = new WildCardProbabilities(text, probability, true);
+            WildCardProbabilities newWildCard = new WildCardProbabilities(text, probability, true, true);
 
-            ArrayList<WildCardProbabilities> wildCardList = new ArrayList<>(Arrays.asList(mProbabilities));
+            WildCardProbabilities[][] probabilitiesArray = loadWildCardProbabilitiesFromStorage(getApplicationContext());
+            WildCardProbabilities[] deletableProbabilities = probabilitiesArray[0];
+
+            ArrayList<WildCardProbabilities> wildCardList = new ArrayList<>(Arrays.asList(deletableProbabilities));
             wildCardList.add(newWildCard);
 
-            mProbabilities = wildCardList.toArray(new WildCardProbabilities[0]);
+            deletableProbabilities = wildCardList.toArray(new WildCardProbabilities[0]);
 
-            mAdapter = new WildCardAdapter(this, mProbabilities);
-            listViewWildCard.setAdapter(mAdapter);
+            deletableAdapter = new WildCardAdapter(this, deletableProbabilities);
+            listViewWildCard.setAdapter(deletableAdapter);
 
-            saveWildCardProbabilitiesToStorage(mProbabilities);
+            saveWildCardProbabilitiesToStorage(deletableProbabilities);
+
+            // Update the probabilities array in settings
+            probabilitiesArray[0] = deletableProbabilities;
+
+            // Refresh the adapter if needed
+            deletableAdapter.notifyDataSetChanged();
         });
 
         builder.show();
     }
+    WildCardProbabilities[][] loadWildCardProbabilitiesFromStorage(Context context) {
+        SharedPreferences deletablePrefs = context.getSharedPreferences("DeletablePrefs", MODE_PRIVATE);
 
-    WildCardProbabilities[] loadWildCardProbabilitiesFromStorage(Context context) {
-
-        SharedPreferences prefs = context.getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.apply();
-
-        WildCardProbabilities[] allProbabilities = new WildCardProbabilities[]{
-                new WildCardProbabilities("Take 1 drink.", 10, true),
-                new WildCardProbabilities("Take 2 drinks.", 8, true),
-                new WildCardProbabilities("Take 3 drinks.", 5, true),
-                new WildCardProbabilities("Finish your drink.", 3, true),
-                new WildCardProbabilities("Give 1 drink.", 10, true),
-                new WildCardProbabilities("Give 2 drinks.", 8, true),
-                new WildCardProbabilities("Give 3 drinks.", 5, true),
-                new WildCardProbabilities("Choose a player to finish their drink.", 3, true),
-                new WildCardProbabilities("The player to the left takes a drink.", 10, true),
-                new WildCardProbabilities("The player to the right takes a drink.", 10, true),
-                new WildCardProbabilities("The oldest player takes 2 drinks.", 10, true),
-                new WildCardProbabilities("The youngest player takes 2 drinks.", 10, true),
-                new WildCardProbabilities("The player who last peed takes 3 drinks.", 10, true),
-                new WildCardProbabilities("The player with the oldest car takes 2 drinks.", 10, true),
-                new WildCardProbabilities("Whoever last rode on a train takes 2 drinks.", 10, true),
-                new WildCardProbabilities("Anyone who is standing takes 4 drinks, why are you standing? Sit down mate.", 10, true),
-                new WildCardProbabilities("Anyone who is sitting takes 2 drinks.", 10, true),
-                new WildCardProbabilities("Whoever has the longest hair takes 2 drinks.", 10, true),
-                new WildCardProbabilities("Whoever is wearing a watch takes 2 drinks.", 10, true),
-                new WildCardProbabilities("Whoever has a necklace on takes 2 drinks.", 10, true),
-                new WildCardProbabilities("Double the ending drink (whoever loses must now do double the consequence).", 5, true),
-                new WildCardProbabilities("Get a skip button to use on any one of your turns!", 3, true),
-                new WildCardProbabilities("Drink for courage then deliver a line from your favourite film making it as dramatic as possible!", 2, true),
-                new WildCardProbabilities("Give 1 drink for every cheese you can name in 10 seconds.", 2, true),
-                new WildCardProbabilities("The shortest person at the table must take 4 drinks then give 4 drinks.", 2, true),
-                new WildCardProbabilities("Bare your biceps and flex for everyone. The players next to you each drink 2 for the view.", 2, true),
-                new WildCardProbabilities("All females drink 3, and all males drink 3. Equality.", 5, true)
+        WildCardProbabilities[] deletableProbabilities = new WildCardProbabilities[]{
+                new WildCardProbabilities("Take 1 drink.", 10, true, true),
+                new WildCardProbabilities("Take 2 drinks.", 8, true, true),
+                new WildCardProbabilities("Take 3 drinks.", 5, true, true),
+                new WildCardProbabilities("Finish your drink.", 3, true, true),
+                new WildCardProbabilities("Give 1 drink.", 10, true, true),
+                new WildCardProbabilities("Give 2 drinks.", 8, true, true),
+                new WildCardProbabilities("Give 3 drinks.", 5, true, true),
+                new WildCardProbabilities("Choose a player to finish their drink.", 3, true, true),
+                new WildCardProbabilities("The player to the left takes a drink.", 10, true, true),
+                new WildCardProbabilities("The player to the right takes a drink.", 10, true, true),
+                new WildCardProbabilities("The oldest player takes 2 drinks.", 10, true, true),
+                new WildCardProbabilities("The youngest player takes 2 drinks.", 10, true, true),
+                new WildCardProbabilities("The player who last peed takes 3 drinks.", 10, true, true),
+                new WildCardProbabilities("The player with the oldest car takes 2 drinks.", 10, true, true),
+                new WildCardProbabilities("Whoever last rode on a train takes 2 drinks.", 10, true, true),
+                new WildCardProbabilities("Anyone who is standing takes 4 drinks, why are you standing? Sit down mate.", 10,true, true),
+                new WildCardProbabilities("Anyone who is sitting takes 2 drinks.", 10, true, true),
+                new WildCardProbabilities("Whoever has the longest hair takes 2 drinks.", 10, true, true),
+                new WildCardProbabilities("Whoever is wearing a watch takes 2 drinks.", 10, true, true),
+                new WildCardProbabilities("Whoever has a necklace on takes 2 drinks.", 10, true, true),
+                new WildCardProbabilities("Double the ending drink (whoever loses must now do double the consequence).", 5, true, true),
+                new WildCardProbabilities("Drink for courage then deliver a line from your favourite film making it as dramatic as possible!", 2, true, true),
+                new WildCardProbabilities("Give 1 drink for every cheese you can name in 10 seconds.", 2, true, true),
+                new WildCardProbabilities("The shortest person at the table must take 4 drinks then give 4 drinks.", 2, true, true),
+                new WildCardProbabilities("Bare your biceps and flex for everyone. The players next to you each drink 2 for the view.", 2, true, true),
+                new WildCardProbabilities("All females drink 3, and all males drink 3. Equality.", 5, true, true)
         };
-        int count = prefs.getInt("wild_card_count", allProbabilities.length);
-        if (count > allProbabilities.length) {
-            allProbabilities = new WildCardProbabilities[count];
-            for (int i = 0; i < count; i++) {
 
-                WildCardProbabilities p = allProbabilities[i];
-                if (p != null) {
-                    allProbabilities[i] = new WildCardProbabilities(p.getText(), p.getProbability(), p.isEnabled());
-                } else {
-                    allProbabilities[i] = new WildCardProbabilities("", 0, false);
-                }
-            }
-        }
-        for (int i = 0; i < count; i++) {
-            boolean enabled = prefs.getBoolean("wild_card_enabled_" + i, false);
-            String activity = prefs.getString("wild_card_activity_" + i, "");
-            int probability = prefs.getInt("wild_card_probability_" + i, 0);
 
-            allProbabilities[i] = new WildCardProbabilities(activity, probability, enabled);
+        int deletableCount = deletablePrefs.getInt("wild_card_count", deletableProbabilities.length);
+        if (deletableCount > deletableProbabilities.length) {
+            deletableProbabilities = Arrays.copyOf(deletableProbabilities, deletableCount);
         }
 
-        return allProbabilities;
+        for (int i = 0; i < deletableCount; i++) {
+            boolean enabled = deletablePrefs.getBoolean("wild_card_enabled_" + i, false);
+            String activity = deletablePrefs.getString("wild_card_activity_" + i, "");
+            int probability = deletablePrefs.getInt("wild_card_probability_" + i, 0);
+
+            deletableProbabilities[i] = new WildCardProbabilities(activity, probability, enabled, enabled);
+        }
+
+        WildCardProbabilities[] nonDeletableProbabilities = new WildCardProbabilities[]{
+                new WildCardProbabilities("Get a skip button to use on any one of your turns!", 3, true, false)
+        };
+
+        return new WildCardProbabilities[][] { deletableProbabilities, nonDeletableProbabilities };
     }
 
     private void saveWildCardProbabilitiesToStorage(WildCardProbabilities[] probabilities) {
-        SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
+        SharedPreferences deletablePrefs = getSharedPreferences("DeletablePrefs", MODE_PRIVATE);
+        SharedPreferences.Editor deletableEditor = deletablePrefs.edit();
+
+        deletableEditor.clear(); // Clear previous data
 
         for (int i = 0; i < probabilities.length; i++) {
             WildCardProbabilities probability = probabilities[i];
-            editor.putBoolean("wild_card_enabled_" + i, probability.isEnabled());
-            editor.putString("wild_card_activity_" + i, probability.getText());
-            editor.putInt("wild_card_probability_" + i, probability.getProbability());
+            deletableEditor.putBoolean("wild_card_enabled_" + i, probability.isEnabled());
+            deletableEditor.putString("wild_card_activity_" + i, probability.getText());
+            deletableEditor.putInt("wild_card_probability_" + i, probability.getProbability());
         }
 
-        editor.putInt("wild_card_count", probabilities.length);
-        editor.apply();
+        deletableEditor.putInt("wild_card_count", probabilities.length);
+        deletableEditor.apply();
     }
+
 
     private class WildCardAdapter extends ArrayAdapter<WildCardProbabilities> {
         private Context mContext;
+        private WildCardProbabilities[] mProbabilities;
 
         public WildCardAdapter(Context context, WildCardProbabilities[] probabilities) {
             super(context, R.layout.list_item_wildcard, probabilities);
             mContext = context;
+            mProbabilities = probabilities;
         }
-
         @Override
         public int getCount() {
             return mProbabilities.length;
         }
 
-        @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -192,6 +205,7 @@ public class Settings_WildCardChoice extends AppCompatActivity {
             Switch switchWildCard = view.findViewById(R.id.switch_wildcard);
 
             WildCardProbabilities wildCard = mProbabilities[position];
+
             textViewWildCard.setText(wildCard.getText());
             textViewProbability.setText(String.valueOf(wildCard.getProbability()));
             switchWildCard.setChecked(wildCard.isEnabled());
@@ -209,51 +223,54 @@ public class Settings_WildCardChoice extends AppCompatActivity {
                 LinearLayout layout = new LinearLayout(mContext);
                 layout.setOrientation(LinearLayout.VERTICAL);
 
+                final EditText textInput = new EditText(mContext);
                 final EditText probabilityInput = new EditText(mContext);
                 probabilityInput.setInputType(InputType.TYPE_CLASS_NUMBER);
                 probabilityInput.setText(String.valueOf(wildCard.getProbability()));
                 layout.addView(probabilityInput);
 
-                final EditText textInput = new EditText(mContext);
-                textInput.setInputType(InputType.TYPE_CLASS_TEXT);
-                textInput.setText(wildCard.getText());
-                layout.addView(textInput);
+                if (wildCard.isDeletable()) {
+                    textInput.setInputType(InputType.TYPE_CLASS_TEXT);
+                    textInput.setText(wildCard.getText());
+                    layout.addView(textInput);
+                } else {
+                    textInput.setEnabled(false);
+                }
 
                 builder.setView(layout);
 
                 builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
-                builder.setNeutralButton("Delete", (dialog, which) -> {
-                    ArrayList<WildCardProbabilities> wildCardList = new ArrayList<>(Arrays.asList(mProbabilities));
-                    wildCardList.remove(position);
-                    mProbabilities = wildCardList.toArray(new WildCardProbabilities[0]);
-                    notifyDataSetChanged();
-                    saveWildCardProbabilitiesToStorage(mProbabilities);
-                });
+                ArrayList<WildCardProbabilities> wildCardList = new ArrayList<>(Arrays.asList(mProbabilities));
+                mProbabilities = wildCardList.toArray(new WildCardProbabilities[0]);
+                mProbabilities = wildCardList.toArray(new WildCardProbabilities[1]);
 
+                if (wildCard.isDeletable()) {
+                    builder.setNeutralButton("Delete", (dialog, which) -> {
+                        wildCardList.remove(position);
+                        notifyDataSetChanged();
+                        saveWildCardProbabilitiesToStorage(mProbabilities);
+                    });
+                }
 
                 builder.setPositiveButton("OK", (dialog, which) -> {
                     int probability = Integer.parseInt(probabilityInput.getText().toString());
-                    String text = textInput.getText().toString();
-                    String probabilityInputText = probabilityInput.getText().toString();
+                    wildCard.setProbability(probability);
 
-                    if (probabilityInputText.length() > 4) {
-                        Toast.makeText(Settings_WildCardChoice.this, "Mate, that probability number is a bit high don't you think?", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    if (!text.equals(wildCard.getText()) || probability != wildCard.getProbability()) {
-                        wildCard.setProbability(probability);
+                    if (wildCard.isDeletable()) {
+                        String text = textInput.getText().toString();
                         wildCard.setText(text);
                         textViewWildCard.setText(wildCard.getText());
-                        textViewProbability.setText(String.valueOf(wildCard.getProbability()));
-                        setProbabilitySizeBasedOnString(textViewProbability, String.valueOf(wildCard.getProbability())); // Updated this line
-                        saveWildCardProbabilitiesToStorage(mProbabilities);
                     }
+
+                    textViewProbability.setText(String.valueOf(wildCard.getProbability()));
+                    setProbabilitySizeBasedOnString(textViewProbability, String.valueOf(wildCard.getProbability()));
+
+                    saveWildCardProbabilitiesToStorage(mProbabilities);
                 });
 
                 builder.show();
-            });;
+            });
 
             switchWildCard.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 wildCard.setEnabled(isChecked);
@@ -262,6 +279,7 @@ public class Settings_WildCardChoice extends AppCompatActivity {
 
             return view;
         }
+
 
         private void setTextViewSizeBasedOnString(TextView textView, String text) {
             int textSize = 20;
