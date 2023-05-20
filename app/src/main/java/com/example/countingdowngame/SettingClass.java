@@ -34,6 +34,5 @@ public class SettingClass extends AppCompatActivity {
         btnUtils.setButton(btnWildCardSettings, Settings_WildCardChoice.class, null);
         btnUtils.setButton(btnGameModeSettings, Settings_GameModeChoice.class, null);
         btnUtils.setButton(btnPlayerModelSettings, Settings_PlayerModel.class, null);
-
     }
 }

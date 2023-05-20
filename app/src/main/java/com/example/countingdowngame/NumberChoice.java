@@ -59,23 +59,19 @@ public class NumberChoice extends AppCompatActivity {
             return;
         }
 
-        try {
-            int inputNumber = Integer.parseInt(inputValue);
+        int inputNumber = Integer.parseInt(inputValue);
 
-            if (inputNumber <= 0) {
-                Toast.makeText(NumberChoice.this, "Please choose a number greater than zero!", Toast.LENGTH_SHORT)
-                        .show();
-                return;
-            }
-
-            startingNumber = inputNumber;
-
-            originalNumberField.setFocusable(false);
-
-            startMainActivity();
-        } catch (NumberFormatException e) {
-            Log.e(e.getClass().getName(), e.getMessage());
+        if (inputNumber <= 0) {
+            Toast.makeText(NumberChoice.this, "Please choose a number greater than zero!", Toast.LENGTH_SHORT)
+                    .show();
+            return;
         }
+
+        startingNumber = inputNumber;
+
+        originalNumberField.setFocusable(false);
+
+        startMainActivity();
     }
 
     private void onRandomClicked() {

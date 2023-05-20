@@ -43,6 +43,5 @@ public class Settings_PlayerModel extends AppCompatActivity {
             Bitmap circularBitmap = ImageUtil.getCircularBitmap(flippedBitmap);
             avatarImageView.setImageBitmap(circularBitmap);
         }
-
     }
 }
