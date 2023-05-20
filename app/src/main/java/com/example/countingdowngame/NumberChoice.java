@@ -15,6 +15,8 @@ import java.util.Random;
 
 
 public class NumberChoice extends AppCompatActivity {
+    int startingNumber;
+
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();

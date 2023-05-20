@@ -119,12 +119,19 @@ public class MainActivitySplitScreen extends AppCompatActivity {
             }
         });
 
-        gameInstance.startGame(NumberChoice.startingNumber);
+        Bundle extras = getIntent().getExtras();
+        if (extras == null) {
+            throw new RuntimeException("Missing extras");
+        }
 
-        numberText.setText(Integer.toString(gameInstance.currentNumber));
-        numberTextPlayer2.setText(Integer.toString(gameInstance.currentNumber));
-        setTextViewSizeBasedOnInt(numberText, String.valueOf(gameInstance.currentNumber));
-        setTextViewSizeBasedOnInt(numberTextPlayer2, String.valueOf(gameInstance.currentNumber));
+        int startingNumber = extras.getInt("startingNumber");
+
+        Game.getInstance().startGame(startingNumber);
+
+        numberText.setText(Integer.toString(gameInstance.getCurrentNumber()));
+        numberTextPlayer2.setText(Integer.toString(gameInstance.getCurrentNumber()));
+        setTextViewSizeBasedOnInt(numberText, String.valueOf(gameInstance.getCurrentNumber()));
+        setTextViewSizeBasedOnInt(numberTextPlayer2, String.valueOf(gameInstance.getCurrentNumber()));
 
         renderPlayer();
     }
@@ -133,7 +140,7 @@ public class MainActivitySplitScreen extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         Set<String> playerNamesSet = preferences.getStringSet("playerNames", null);
         String[] playerNamesArray = playerNamesSet.toArray(new String[0]);
-        int currentPlayerIndex = gameInstance.currentPlayerId;
+        int currentPlayerIndex = gameInstance.getCurrentPlayerId();
 
         String currentPlayerName = playerNamesArray[currentPlayerIndex];
         nextPlayerText.setText(currentPlayerName);

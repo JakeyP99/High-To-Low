@@ -96,16 +96,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Game.getInstance().setGameEventListener(event -> {
-            if (event.type == GameEventType.NEXT_PLAYER) {
-                renderPlayer();
-            }
-        });
+        Bundle extras = getIntent().getExtras();
+        if (extras == null) {
+            throw new RuntimeException("Missing extras");
+        }
 
-        Game.getInstance().startGame(NumberChoice.startingNumber);
+        int startingNumber = extras.getInt("startingNumber");
 
-        numberText.setText(String.valueOf(Game.getInstance().currentNumber));
-        setTextViewSizeBasedOnInt(numberText, String.valueOf(Game.getInstance().currentNumber));
+        Game.getInstance().startGame(startingNumber);
+
+        int currentNumber = Game.getInstance().getCurrentNumber();
+        numberText.setText(String.valueOf(currentNumber));
+        setTextViewSizeBasedOnInt(numberText, String.valueOf(currentNumber));
 
         renderPlayer();
     }
@@ -131,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         Set<String> playerNamesSet = preferences.getStringSet("playerNames", null);
         if (playerNamesSet != null) {
             String[] playerNamesArray = playerNamesSet.toArray(new String[0]);
-            int currentPlayerIndex = Game.getInstance().currentPlayerId;
+            int currentPlayerIndex = Game.getInstance().getCurrentPlayerId();
 
             String currentPlayerName = playerNamesArray[currentPlayerIndex];
             nextPlayerText.setText(currentPlayerName + "'s Turn");

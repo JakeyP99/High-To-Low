@@ -43,6 +43,19 @@ public class Game {
         previousNumbers = new ArrayList<>();
     }
 
+
+    public int getCurrentNumber (){
+      return currentNumber;
+    };
+
+    public int getStartingNumber (){
+        return startingNumber;
+    };
+
+    public int getCurrentPlayerId (){
+        return currentPlayerId;
+    };
+
     public void setPlayerEventListener(PlayerEventListener listener) {
         playerEventListener = listener;
     }
