@@ -1,7 +1,6 @@
 package com.example.countingdowngame;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -24,6 +23,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,15 +72,12 @@ public class Settings_PlayerModel extends AppCompatActivity {
 
             View dialogView = getLayoutInflater().inflate(R.layout.dialog_enter_name, null);
             EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
-            nameEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS); // Restrict input to only string values
+            nameEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 
             builder.setView(dialogView)
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            String name = nameEditText.getText().toString();
-                            addNewPlayer(bitmap, name);
-                        }
+                    .setPositiveButton("OK", (dialogInterface, i) -> {
+                        String name = nameEditText.getText().toString();
+                        addNewPlayer(bitmap, name);
                     })
                     .setNegativeButton("Cancel", null);
 
@@ -114,7 +113,17 @@ public class Settings_PlayerModel extends AppCompatActivity {
 
             Player player = getItem(position);
             holder.playerPhotoImageView.setImageBitmap(player.getPhoto());
-            holder.playerNameTextView.setText(player.getName());
+            holder.playerNameTextView.setBackgroundResource(R.drawable.outlineforbutton);
+
+            String name = player.getName();
+            holder.playerNameTextView.setText(name);
+
+
+            holder.playerNameTextView.setPadding(20, 20, 20, 20);
+
+            // Apply outline to the player name
+            holder.playerNameTextView.setBackgroundResource(R.drawable.outlineforbutton);
+
 
             return convertView;
         }
@@ -124,11 +133,33 @@ public class Settings_PlayerModel extends AppCompatActivity {
             TextView playerNameTextView;
         }
     }
+
+    private void addNewPlayer(Bitmap bitmap, String name) {
+        Player newPlayer = new Player(bitmap, name);
+        playerList.add(newPlayer);
+        playerListAdapter.notifyDataSetChanged();
+
+        int position = playerList.indexOf(newPlayer);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Animate the image view
+                animatePlayerImage(position);
+            }
+        }, 100);
+    }
+
     private void animatePlayerImage(int position) {
         View itemView = playerListView.getChildAt(position - playerListView.getFirstVisiblePosition());
 
         if (itemView != null) {
             ImageView playerPhotoImageView = itemView.findViewById(R.id.playerPhotoImageView);
+
+            Glide.with(this)
+                    .load(playerList.get(position).getPhoto())
+                    .apply(RequestOptions.circleCropTransform()) // Apply circular transformation
+                    .into(playerPhotoImageView);
 
             float startScale = 0.0f;
             float endScale = 1.0f;
@@ -157,19 +188,4 @@ public class Settings_PlayerModel extends AppCompatActivity {
         }
     }
 
-    private void addNewPlayer(Bitmap bitmap, String name) {
-        Player newPlayer = new Player(bitmap, name);
-        playerList.add(newPlayer);
-        playerListAdapter.notifyDataSetChanged();
-
-        int position = playerList.indexOf(newPlayer);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // Animate the image view
-                animatePlayerImage(position);
-            }
-        }, 100);
-    }
 }

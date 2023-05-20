@@ -1,24 +1,26 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:orientation="horizontal"
-    android:padding="8dp">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/playerPhotoImageView"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/wine" />
+        android:src="@drawable/wine"
+        android:background="@drawable/circle_shape" />
+
 
     <TextView
         android:id="@+id/playerNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:textSize="16sp"
-        android:textColor="@color/bluedark" />
+        android:layout_below="@id/playerPhotoImageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Player Name"
+        android:textColor="#000000"
+        android:textSize="16sp" />
 
-</LinearLayout>
+</RelativeLayout>
