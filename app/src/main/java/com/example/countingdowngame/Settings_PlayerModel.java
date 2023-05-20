@@ -2,7 +2,6 @@ package com.example.countingdowngame;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.widget.Button;
@@ -36,12 +35,8 @@ public class Settings_PlayerModel extends AppCompatActivity {
 
         if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK && data != null) {
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            Matrix matrix = new Matrix();
-            matrix.postScale(-1, 1); // Flip the image horizontally
-            Bitmap flippedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-            Bitmap circularBitmap = ImageUtil.getCircularBitmap(flippedBitmap);
+            Bitmap circularBitmap = ImageUtil.getCircularBitmap(bitmap);
             avatarImageView.setImageBitmap(circularBitmap);
         }
-
     }
 }
