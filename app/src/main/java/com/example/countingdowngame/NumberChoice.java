@@ -15,9 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Random;
 
 
-public class NumberChoice extends AppCompatActivity {
-    private final ButtonUtils btnUtils = new ButtonUtils(this);
-
+public class NumberChoice extends ButtonUtilsActivity {
     private int startingNumber;
 
     @Override
@@ -38,12 +36,6 @@ public class NumberChoice extends AppCompatActivity {
 
         btnUtils.setButton(btnSubmit, null, this::onSubmitClicked);
         btnUtils.setButton(btnRandom, null, this::onRandomClicked);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        btnUtils.onDestroy();
     }
 
     private void onSubmitClicked() {

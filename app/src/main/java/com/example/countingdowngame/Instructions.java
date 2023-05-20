@@ -5,15 +5,12 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class Instructions extends AppCompatActivity {
-    private final ButtonUtils btnUtils = new ButtonUtils(this);
-
+public class Instructions extends ButtonUtilsActivity {
     private final List<String> instructions = Arrays.asList(
             "Welcome to drinking countdown! In summary, you choose a number, that number will go down, and the aim of the game is not to be the person who randomly hits the number 0.",
             "Prepare yourself a beverage for the loser to drink \n\n I like to prepare a nice tasty shot.",
@@ -53,11 +50,4 @@ public class Instructions extends AppCompatActivity {
         progressBar.setMax(instructions.size());
         progressBar.setProgress(1);
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        btnUtils.onDestroy();
-    }
-
 }

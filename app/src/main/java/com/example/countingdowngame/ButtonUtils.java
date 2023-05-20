@@ -22,6 +22,10 @@ import androidx.core.app.ActivityCompat;
 import java.io.IOException;
 
 public class ButtonUtils {
+    public static ButtonUtils create(final AppCompatActivity context) {
+        return new ButtonUtils(context);
+    }
+
     private static final int NUM_SOUNDS = 4; // Number of sounds in the rotation
     private static int currentSoundIndex = 0; // Current index of the sound being played
 
@@ -29,7 +33,8 @@ public class ButtonUtils {
     private final MediaPlayer bop;
     private final AppCompatActivity mContext;
 
-    public ButtonUtils(final AppCompatActivity context) {
+
+    private ButtonUtils(final AppCompatActivity context) {
         mContext = context;
         burp[0] = MediaPlayer.create(context, R.raw.burp1);
         burp[1] = MediaPlayer.create(context, R.raw.burp2);

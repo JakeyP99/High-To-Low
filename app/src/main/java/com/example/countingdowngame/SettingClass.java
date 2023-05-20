@@ -6,18 +6,11 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class SettingClass extends AppCompatActivity {
-    private final ButtonUtils btnUtils = new ButtonUtils(this);
+public class SettingClass extends ButtonUtilsActivity {
 
     @Override
     public void onBackPressed() {
         startActivity(new Intent(SettingClass.this, HomeScreen.class));
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        btnUtils.onDestroy();
     }
 
     @Override

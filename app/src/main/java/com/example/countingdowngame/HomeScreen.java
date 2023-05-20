@@ -3,10 +3,7 @@ package com.example.countingdowngame;
 import android.os.Bundle;
 import android.widget.Button;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-public class HomeScreen extends AppCompatActivity {
-    private final ButtonUtils btnUtils = new ButtonUtils(this);
+public class HomeScreen extends ButtonUtilsActivity {
 
     @Override
     public void onBackPressed() {
@@ -27,11 +24,6 @@ public class HomeScreen extends AppCompatActivity {
         btnUtils.setButton(btnSettings, SettingClass.class, null);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        btnUtils.onDestroy();
-    }
 }
 
 

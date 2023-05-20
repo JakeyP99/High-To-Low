@@ -20,10 +20,9 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class MainActivitySplitScreen extends AppCompatActivity {
+public class MainActivitySplitScreen extends ButtonUtilsActivity {
     private final Map<Player, Set<WildCardProbabilities>> usedWildCard = new HashMap<>();
     private final Set<WildCardProbabilities> usedWildCards = new HashSet<>();
-    private final ButtonUtils btnUtils = new ButtonUtils(this);
 
     private TextView nextPlayerText;
     private TextView nextPlayerTextPlayer2;
@@ -48,12 +47,6 @@ public class MainActivitySplitScreen extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // Do nothing
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        btnUtils.onDestroy();
     }
 
     @Override

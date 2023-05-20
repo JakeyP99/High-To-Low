@@ -9,9 +9,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class Settings_GameModeChoice extends AppCompatActivity implements View.OnClickListener {
-    private final ButtonUtils btnUtils = new ButtonUtils(this);
-
+public class Settings_GameModeChoice extends ButtonUtilsActivity implements View.OnClickListener {
     private Button button_gameModeOne;
     private Button button_gameModeTwo;
     private Button button_regularSound;
@@ -23,12 +21,6 @@ public class Settings_GameModeChoice extends AppCompatActivity implements View.O
     @Override
     public void onBackPressed() {
         startActivity(new Intent(Settings_GameModeChoice.this, HomeScreen.class));
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        btnUtils.onDestroy();
     }
 
 

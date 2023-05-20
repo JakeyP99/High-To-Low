@@ -11,20 +11,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class PlayerNumberChoice extends AppCompatActivity {
-    private final ButtonUtils btnUtils = new ButtonUtils(this);
-
+public class PlayerNumberChoice extends ButtonUtilsActivity {
     private EditText originalPlayerField;
 
     @Override
     public void onBackPressed() {
         startActivity(new Intent(PlayerNumberChoice.this, HomeScreen.class));
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        btnUtils.onDestroy();
     }
 
     @Override

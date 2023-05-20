@@ -1,17 +1,12 @@
 package com.example.countingdowngame;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-public class EndActivity extends AppCompatActivity {
-    private final ButtonUtils btnUtils = new ButtonUtils(this);
-
+public class EndActivity extends ButtonUtilsActivity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(EndActivity.this, HomeScreen.class);
@@ -37,11 +32,5 @@ public class EndActivity extends AppCompatActivity {
         });
 
         btnUtils.setButton(btnNewPlayer, PlayerNumberChoice.class, null);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        btnUtils.onDestroy();
     }
 }

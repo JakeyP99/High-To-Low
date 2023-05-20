@@ -21,10 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class PlayerNameChoice extends AppCompatActivity {
+public class PlayerNameChoice extends ButtonUtilsActivity {
     private static final int REQUEST_CODE_RESET_COUNTER = 1;
-
-    private final ButtonUtils btnUtils = new ButtonUtils(this);
 
     private ListView playerListView;
     private EditText nameEditText;
@@ -48,12 +46,6 @@ public class PlayerNameChoice extends AppCompatActivity {
                 updatePlayerList();
             }
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        btnUtils.onDestroy();
     }
 
     @Override
