@@ -24,7 +24,7 @@ public class EndActivity extends ButtonUtilsActivity {
         final Button btnPlayAgain = findViewById(R.id.btnplayAgain);
         final Button btnNewPlayer = findViewById(R.id.btnNewPlayer);
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(EndActivity.this, R.layout.custom_list_item, R.id.previousNumbers, Game.getInstance().getPreviousNumbersFormatted());
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(EndActivity.this, R.layout.list_view_end_game, R.id.previousNumbers, Game.getInstance().getPreviousNumbersFormatted());
         previousNumbersList.setAdapter(adapter);
 
         btnUtils.setButton(btnPlayAgain, NumberChoice.class, () -> {
