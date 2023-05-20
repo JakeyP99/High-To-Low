@@ -8,7 +8,6 @@ import java.util.Set;
 class Player {
     private Game game;
     private final Set<WildCardProbabilities> usedWildCards = new HashSet<>();
-
     int skips = 0;
     int wildcard = 1;
     int playerId;
