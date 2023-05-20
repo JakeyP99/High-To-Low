@@ -22,19 +22,20 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class PlayerNameChoice extends AppCompatActivity {
-
-    public void onBackPressed() {
-        Intent intent = new Intent(PlayerNameChoice.this, PlayerNumberChoice.class);
-        startActivityForResult(intent, REQUEST_CODE_RESET_COUNTER);
-    }
-
     private ListView playerListView;
     private EditText nameEditText;
-    private static final int REQUEST_CODE_RESET_COUNTER = 1;
     private TextView counterTextView;
 
     private ArrayList<String> playerNames;
     private int playerCounter;
+
+    private static final int REQUEST_CODE_RESET_COUNTER = 1;
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(PlayerNameChoice.this, PlayerNumberChoice.class);
+        startActivityForResult(intent, REQUEST_CODE_RESET_COUNTER);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -65,70 +66,64 @@ public class PlayerNameChoice extends AppCompatActivity {
         playerNames = new ArrayList<>(preferences.getStringSet("playerNames", new HashSet<>()));
         playerCounter = playerNames.size();
 
-
         Button addButton = findViewById(R.id.button_add_name);
-        ButtonUtils.setButton(addButton, null, this, () -> {
-            String name = nameEditText.getText().toString().trim();
-            if (!name.isEmpty()) {
-                playerNames.add(name);
-                nameEditText.setText("");
-                updatePlayerList();
-                playerCounter++;
-            }
-        });
+        ButtonUtils.setButton(addButton, null, this, this::addPlayerName);
 
         Button doneButton = findViewById(R.id.button_done);
-        ButtonUtils.setButton(doneButton, null, this, () -> {
-            if (playerNames.size() == playerCount) {
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putStringSet("playerNames", new HashSet<>(playerNames));
-                editor.apply();
-                startActivity(new Intent(PlayerNameChoice.this, NumberChoice.class));
-            } else if (playerNames.size() < playerCount) {
-                Toast.makeText(PlayerNameChoice.this, "Please add more player names.", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(PlayerNameChoice.this, "Please remove player names.", Toast.LENGTH_SHORT).show();
-            }
-        });
+        ButtonUtils.setButton(doneButton, null, this, this::checkPlayerNames);
+
         updatePlayerList();
-
     }
 
-    private void setTextViewSizeBasedOnString(TextView textView, String text) {
-        int textSize = 23; // set default text size
-        if (text.length() > 23) {
-            textSize = 16; // set smaller text size for longer strings
-        } else if (text.length() > 20) {
-            textSize = 18; // set slightly smaller text size for medium length strings
+    private void addPlayerName() {
+        String name = nameEditText.getText().toString().trim();
+        if (!name.isEmpty()) {
+            playerNames.add(name);
+            nameEditText.setText("");
+            updatePlayerList();
+            playerCounter++;
         }
-        textView.setTextSize(textSize);
     }
 
+    private void checkPlayerNames() {
+        int playerCount = getIntent().getIntExtra("playerCount", 0);
+        int remainingPlayers = playerCount - playerCounter;
+        int extraPlayers = playerCounter - playerCount;
+
+        if (playerNames.size() == playerCount) {
+            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(PlayerNameChoice.this).edit();
+            editor.putStringSet("playerNames", new HashSet<>(playerNames));
+            editor.apply();
+            startActivity(new Intent(PlayerNameChoice.this, NumberChoice.class));
+        } else if (playerNames.size() < playerCount) {
+            Toast.makeText(PlayerNameChoice.this, "Please add more player names.", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(PlayerNameChoice.this, "Please remove player names.", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private void updatePlayerList() {
-        AppCompatActivity activity = this; // Get a reference to the activity
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, playerNames) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, playerNames) {
             @Override
             public View getView(final int position, View convertView, ViewGroup parent) {
                 if (convertView == null) {
                     convertView = LayoutInflater.from(getContext()).inflate(R.layout.player_item, parent, false);
                 }
+
                 TextView playerNameView = convertView.findViewById(R.id.player_name);
                 String playerName = playerNames.get(position);
                 playerNameView.setText(playerName);
                 setTextViewSizeBasedOnString(playerNameView, playerName);
 
-
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     playerNameView.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO);
                 }
 
-                ButtonUtils.setButton(convertView.findViewById(R.id.delete_button), null, activity, () -> {
+                ButtonUtils.setButton(convertView.findViewById(R.id.delete_button), null, PlayerNameChoice.this, () -> {
                     playerNames.remove(position);
                     playerCounter--;
                     updatePlayerList();
                 });
-
 
                 return convertView;
             }
@@ -151,5 +146,15 @@ public class PlayerNameChoice extends AppCompatActivity {
         } else {
             remainingPlayersView.setText("Remove " + extraPlayers + " Player Names!");
         }
-}
+    }
+
+    private void setTextViewSizeBasedOnString(TextView textView, String text) {
+        int textSize = 23; // Set default text size
+        if (text.length() > 23) {
+            textSize = 16; // Set smaller text size for longer strings
+        } else if (text.length() > 20) {
+            textSize = 18; // Set slightly smaller text size for medium length strings
+        }
+        textView.setTextSize(textSize);
+    }
 }

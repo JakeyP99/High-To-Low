@@ -12,7 +12,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class PlayerNumberChoice extends AppCompatActivity {
-    private Button btnSubmitPlayers;
     private EditText originalPlayerField;
 
     @Override
@@ -25,7 +24,7 @@ public class PlayerNumberChoice extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.playernumber_activity);
 
-        btnSubmitPlayers = findViewById(R.id.btnSubmitPlayers);
+        Button btnSubmitPlayers = findViewById(R.id.btnSubmitPlayers);
         originalPlayerField = findViewById(R.id.EditTextViewplayernumber);
 
         ButtonUtils.setButton(btnSubmitPlayers, null, this, this::submitPlayerNumber);
