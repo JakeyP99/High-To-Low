@@ -38,16 +38,15 @@ public class MainActivitySplitScreen extends AppCompatActivity {
     private Button btnWild;
     private Button btnWildPlayer2;
 
-
-    //<Player1>
+    // <Player1>
 
     View wildText = findViewById(R.id.wild_textview);
     Button btnGenerate = findViewById(R.id.btnGenerate);
     Button btnBackWild = findViewById(R.id.btnBackWildCard);
     ImageButton imageButtonExit = findViewById(R.id.imageBtnExit);
 
-    //<--------------------------------------------------------------------------------->
-    //<Player2>
+    // <--------------------------------------------------------------------------------->
+    // <Player2>
 
     View wildTextPlayer2 = findViewById(R.id.wild_textviewPlayer2);
     Button btnGeneratePlayer2 = findViewById(R.id.btnGeneratePlayer2);
@@ -61,7 +60,7 @@ public class MainActivitySplitScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_2);
 
-        //These are the button controls for Player 1
+        // These are the button controls for Player 1
         ButtonUtils.setButton(btnWild, null, this, () -> {
             ButtonWildFunction();
         });
@@ -78,12 +77,11 @@ public class MainActivitySplitScreen extends AppCompatActivity {
             ButtonSkipFunction();
         });
 
-
         ButtonUtils.setImageButton(imageButtonExit, HomeScreen.class, this, () -> {
             gameInstance.endGame();
         });
 
-        //These are the button controls for Player 2
+        // These are the button controls for Player 2
 
         ButtonUtils.setButton(btnWildPlayer2, null, this, () -> {
             ButtonWildFunction();
@@ -101,12 +99,9 @@ public class MainActivitySplitScreen extends AppCompatActivity {
             ButtonSkipFunction();
         });
 
-
         ButtonUtils.setImageButton(imageButtonExitPlayer2, HomeScreen.class, this, () -> {
             gameInstance.endGame();
         });
-
-
 
         gameInstance.setPlayerEventListener(e -> {
             if (e.type == PlayerEventType.SKIP) {
@@ -139,7 +134,6 @@ public class MainActivitySplitScreen extends AppCompatActivity {
 
         renderPlayer();
     }
-
 
     private void renderPlayer() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -174,10 +168,11 @@ public class MainActivitySplitScreen extends AppCompatActivity {
         }
     }
 
-    //This is the wildcard function.
+    // This is the wildcard function.
     public void wildCardActivate(Player player) {
         Settings_WildCardChoice settings = new Settings_WildCardChoice();
-        WildCardProbabilities[][] probabilitiesArray = settings.loadWildCardProbabilitiesFromStorage(getApplicationContext());
+        WildCardProbabilities[][] probabilitiesArray = settings
+                .loadWildCardProbabilitiesFromStorage(getApplicationContext());
 
         // Assuming you want to access the first set of probabilities in the array
         WildCardProbabilities[] activityProbabilities = probabilitiesArray[0];
@@ -268,7 +263,7 @@ public class MainActivitySplitScreen extends AppCompatActivity {
         }
     }
 
-    //This changes the size of the number.
+    // This changes the size of the number.
 
     private void setTextViewSizeBasedOnInt(TextView textView, String text) {
         int defaultTextSize = 60; // set default text size
@@ -282,8 +277,7 @@ public class MainActivitySplitScreen extends AppCompatActivity {
         }
     }
 
-
-    //These are my button functions.
+    // These are my button functions.
 
     public void ButtonGenerateFunction() {
         gameInstance.nextNumber();
@@ -317,7 +311,6 @@ public class MainActivitySplitScreen extends AppCompatActivity {
     }
 
     ;
-
 
     public void ButtonSkipFunction() {
         gameInstance.getCurrentPlayer().useSkip();

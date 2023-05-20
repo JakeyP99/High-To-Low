@@ -65,8 +65,6 @@ public class Game {
             gameEventListener.onGameEvent(new GameEvent(this, GameEventType.GAME_END));
             return;
         }
-
-        gameEventListener.onGameEvent(new GameEvent(this, GameEventType.NEXT_NUMBER));
         nextPlayer();
     }
 
