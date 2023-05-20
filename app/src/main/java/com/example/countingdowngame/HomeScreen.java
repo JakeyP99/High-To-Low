@@ -6,6 +6,8 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class HomeScreen extends AppCompatActivity {
+    private final ButtonUtils btnUtils = new ButtonUtils(this);
+
     @Override
     public void onBackPressed() {
         // Do nothing
@@ -20,14 +22,15 @@ public class HomeScreen extends AppCompatActivity {
         final Button btnInstructions = findViewById(R.id.button_Instructions);
         final Button btnSettings = findViewById(R.id.button_Settings);
 
-        ButtonUtils.setButton(btnQuickPlay, PlayerNumberChoice.class, this, null);
-        ButtonUtils.setButton(btnInstructions, Instructions.class, this, null);
-        ButtonUtils.setButton(btnSettings, SettingClass.class, this, null);
+        btnUtils.setButton(btnQuickPlay, PlayerNumberChoice.class, null);
+        btnUtils.setButton(btnInstructions, Instructions.class, null);
+        btnUtils.setButton(btnSettings, SettingClass.class, null);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        btnUtils.onDestroy();
     }
 }
 

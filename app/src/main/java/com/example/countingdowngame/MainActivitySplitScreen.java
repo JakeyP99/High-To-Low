@@ -21,9 +21,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MainActivitySplitScreen extends AppCompatActivity {
-    @Override
-    public void onBackPressed() {
-    }
+
 
     static Game gameInstance = new Game();
     private TextView nextPlayerText;
@@ -40,66 +38,64 @@ public class MainActivitySplitScreen extends AppCompatActivity {
 
     // <Player1>
 
-    View wildText = findViewById(R.id.wild_textview);
-    Button btnGenerate = findViewById(R.id.btnGenerate);
-    Button btnBackWild = findViewById(R.id.btnBackWildCard);
-    ImageButton imageButtonExit = findViewById(R.id.imageBtnExit);
+    private final View wildText = findViewById(R.id.wild_textview);
+    private final Button btnGenerate = findViewById(R.id.btnGenerate);
+    private final Button btnBackWild = findViewById(R.id.btnBackWildCard);
+    private final ImageButton imageButtonExit = findViewById(R.id.imageBtnExit);
 
     // <--------------------------------------------------------------------------------->
     // <Player2>
 
-    View wildTextPlayer2 = findViewById(R.id.wild_textviewPlayer2);
-    Button btnGeneratePlayer2 = findViewById(R.id.btnGeneratePlayer2);
-    Button btnBackWildPlayer2 = findViewById(R.id.btnBackWildCardPlayer2);
-    ImageButton imageButtonExitPlayer2 = findViewById(R.id.imageBtnExitPlayer2);
+    private final View wildTextPlayer2 = findViewById(R.id.wild_textviewPlayer2);
+    private final Button btnGeneratePlayer2 = findViewById(R.id.btnGeneratePlayer2);
+    private final Button btnBackWildPlayer2 = findViewById(R.id.btnBackWildCardPlayer2);
+    private final ImageButton imageButtonExitPlayer2 = findViewById(R.id.imageBtnExitPlayer2);
 
-    private Map<Player, Set<WildCardProbabilities>> usedWildCard = new HashMap<>();
-    private Set<WildCardProbabilities> usedWildCards = new HashSet<>();
+    private final Map<Player, Set<WildCardProbabilities>> usedWildCard = new HashMap<>();
+    private final Set<WildCardProbabilities> usedWildCards = new HashSet<>();
 
+    private final ButtonUtils btnUtils = new ButtonUtils(this);
+
+    @Override
+    public void onBackPressed() {
+        // Do nothing
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        btnUtils.onDestroy();
+    }
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_2);
 
         // These are the button controls for Player 1
-        ButtonUtils.setButton(btnWild, null, this, () -> {
-            ButtonWildFunction();
-        });
-        ButtonUtils.setButton(btnGenerate, null, this, () -> {
-            ButtonGenerateFunction();
-        });
+        btnUtils.setButton(btnWild, null, this::ButtonWildFunction);
+        btnUtils.setButton(btnGenerate, null, this::ButtonGenerateFunction);
 
-        ButtonUtils.setButton(btnBackWild, null, this, () -> {
-            ButtonContinueFunction();
-        });
+        btnUtils.setButton(btnBackWild, null, this::ButtonContinueFunction);
 
-        ButtonUtils.setButton(btnSkip, null, this, () -> {
+        btnUtils.setButton(btnSkip, null, this::ButtonSkipFunction);
 
-            ButtonSkipFunction();
-        });
-
-        ButtonUtils.setImageButton(imageButtonExit, HomeScreen.class, this, () -> {
+        btnUtils.setImageButton(imageButtonExit, HomeScreen.class, () -> {
             gameInstance.endGame();
         });
 
         // These are the button controls for Player 2
 
-        ButtonUtils.setButton(btnWildPlayer2, null, this, () -> {
-            ButtonWildFunction();
-        });
+        btnUtils.setButton(btnWildPlayer2, null, this::ButtonWildFunction);
 
-        ButtonUtils.setButton(btnGeneratePlayer2, null, this, () -> {
-            ButtonGenerateFunction();
-        });
+        btnUtils.setButton(btnGeneratePlayer2, null, this::ButtonGenerateFunction);
 
-        ButtonUtils.setButton(btnBackWildPlayer2, null, this, () -> {
-            ButtonContinueFunction();
-        });
+        btnUtils.setButton(btnBackWildPlayer2, null, this::ButtonContinueFunction);
 
-        ButtonUtils.setButton(btnSkipPlayer2, null, this, () -> {
-            ButtonSkipFunction();
-        });
+        btnUtils.setButton(btnSkipPlayer2, null, this::ButtonSkipFunction);
 
-        ButtonUtils.setImageButton(imageButtonExitPlayer2, HomeScreen.class, this, () -> {
+        btnUtils.setImageButton(imageButtonExitPlayer2, HomeScreen.class, () -> {
             gameInstance.endGame();
         });
 
@@ -161,10 +157,9 @@ public class MainActivitySplitScreen extends AppCompatActivity {
     }
 
     // This is the wildcard function.
-    public void wildCardActivate(Player player) {
+    private void wildCardActivate(Player player) {
         Settings_WildCardChoice settings = new Settings_WildCardChoice();
-        WildCardProbabilities[][] probabilitiesArray = settings
-                .loadWildCardProbabilitiesFromStorage(getApplicationContext());
+        WildCardProbabilities[][] probabilitiesArray = settings.loadWildCardProbabilitiesFromStorage(getApplicationContext());
 
         // Assuming you want to access the first set of probabilities in the array
         WildCardProbabilities[] activityProbabilities = probabilitiesArray[0];
@@ -174,16 +169,12 @@ public class MainActivitySplitScreen extends AppCompatActivity {
 
         player.useWildCard();
 
-        boolean wildCardsEnabled = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-                .getBoolean("wild_cards_toggle", true);
+        boolean wildCardsEnabled = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("wild_cards_toggle", true);
 
         String selectedActivity = null;
         Set<WildCardProbabilities> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
         if (wildCardsEnabled) {
-            List<WildCardProbabilities> unusedCards = Arrays.stream(activityProbabilities)
-                    .filter(WildCardProbabilities::isEnabled)
-                    .filter(c -> !usedWildCards.contains(c))
-                    .collect(Collectors.toList());
+            List<WildCardProbabilities> unusedCards = Arrays.stream(activityProbabilities).filter(WildCardProbabilities::isEnabled).filter(c -> !usedWildCards.contains(c)).collect(Collectors.toList());
 
             if (unusedCards.isEmpty()) {
                 assert usedCards != null;
@@ -191,9 +182,7 @@ public class MainActivitySplitScreen extends AppCompatActivity {
             }
 
             // Calculate total weight of unused wildcards
-            int totalWeight = unusedCards.stream()
-                    .mapToInt(WildCardProbabilities::getProbability)
-                    .sum();
+            int totalWeight = unusedCards.stream().mapToInt(WildCardProbabilities::getProbability).sum();
 
             if (totalWeight <= 0) {
                 wildActivityTextView.setText("No wild cards available");
@@ -269,13 +258,13 @@ public class MainActivitySplitScreen extends AppCompatActivity {
         }
     }
 
-    private void endActivity() {
+    private void startEndActivity() {
         startActivity(new Intent(MainActivitySplitScreen.this, EndActivity.class));
     }
 
     // These are my button functions.
-    public void ButtonGenerateFunction() {
-        Game.getInstance().nextNumber(this::endActivity);
+    private void ButtonGenerateFunction() {
+        Game.getInstance().nextNumber(this::startEndActivity);
         wildText.setVisibility(View.INVISIBLE);
         numberText.setVisibility(View.VISIBLE);
         nextPlayerText.setVisibility(View.VISIBLE);
@@ -285,7 +274,7 @@ public class MainActivitySplitScreen extends AppCompatActivity {
         nextPlayerTextPlayer2.setVisibility(View.VISIBLE);
     }
 
-    public void ButtonWildFunction() {
+    private void ButtonWildFunction() {
         btnWild.setVisibility(View.INVISIBLE);
         wildText.setVisibility(View.VISIBLE);
         btnBackWild.setVisibility(View.VISIBLE);
@@ -307,7 +296,7 @@ public class MainActivitySplitScreen extends AppCompatActivity {
 
     ;
 
-    public void ButtonSkipFunction() {
+    private void ButtonSkipFunction() {
         gameInstance.getCurrentPlayer().useSkip();
 
         wildText.setVisibility(View.INVISIBLE);
@@ -320,7 +309,7 @@ public class MainActivitySplitScreen extends AppCompatActivity {
         numberTextPlayer2.setVisibility(View.VISIBLE);
     }
 
-    public void ButtonContinueFunction() {
+    private void ButtonContinueFunction() {
         btnBackWild.setVisibility(View.INVISIBLE);
         btnGenerate.setVisibility(View.VISIBLE);
         wildText.setVisibility(View.INVISIBLE);

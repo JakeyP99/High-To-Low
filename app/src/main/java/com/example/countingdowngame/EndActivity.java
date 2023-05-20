@@ -10,12 +10,15 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class EndActivity extends AppCompatActivity {
+    private final ButtonUtils btnUtils = new ButtonUtils(this);
+
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(EndActivity.this, HomeScreen.class);
         startActivity(intent);
     }
-        @Override
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lose_layout);
@@ -28,25 +31,25 @@ public class EndActivity extends AppCompatActivity {
         final Button btnPlayAgain = findViewById(R.id.btnplayAgain);
         final Button btnNewPlayer = findViewById(R.id.btnNewPlayer);
 
+        final ArrayAdapter<String> adapter;
         if (switchOneChecked) {
-            final ArrayAdapter<String> adapter = new ArrayAdapter<>(EndActivity.this, R.layout.custom_list_item, R.id.previousNumbers, Game.getInstance().getPreviousNumbersFormatted());
-            previousNumbersList.setAdapter(adapter);
+            adapter = new ArrayAdapter<>(EndActivity.this, R.layout.custom_list_item, R.id.previousNumbers, Game.getInstance().getPreviousNumbersFormatted());
 
-            ButtonUtils.setButton(btnPlayAgain, NumberChoice.class, this, () -> {
-                Game.getInstance().playAgain();
-            });
         } else {
-            final ArrayAdapter<String> adapter = new ArrayAdapter<>(EndActivity.this, R.layout.custom_list_item, R.id.previousNumbers, MainActivitySplitScreen.gameInstance.getPreviousNumbersFormatted());
-            previousNumbersList.setAdapter(adapter);
-
-            ButtonUtils.setButton(btnPlayAgain, NumberChoice.class, this, () -> {
-                Game.getInstance().playAgain();
-            });
+            adapter = new ArrayAdapter<>(EndActivity.this, R.layout.custom_list_item, R.id.previousNumbers, MainActivitySplitScreen.gameInstance.getPreviousNumbersFormatted());
 
         }
+        previousNumbersList.setAdapter(adapter);
+        btnUtils.setButton(btnPlayAgain, NumberChoice.class, () -> {
+            Game.getInstance().playAgain();
+        });
 
-        ButtonUtils.setButton(btnNewPlayer,PlayerNumberChoice.class, this, null);
+        btnUtils.setButton(btnNewPlayer, PlayerNumberChoice.class, null);
+    }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        btnUtils.onDestroy();
     }
 }

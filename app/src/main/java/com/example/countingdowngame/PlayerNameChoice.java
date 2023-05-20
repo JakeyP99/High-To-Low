@@ -22,12 +22,15 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class PlayerNameChoice extends AppCompatActivity {
+    private static final int REQUEST_CODE_RESET_COUNTER = 1;
+
+    private final ButtonUtils btnUtils = new ButtonUtils(this);
+
     private ListView playerListView;
     private EditText nameEditText;
     private ArrayList<String> playerNames;
     private int playerCounter;
 
-    private final int REQUEST_CODE_RESET_COUNTER = 1;
 
     @Override
     public void onBackPressed() {
@@ -49,6 +52,12 @@ public class PlayerNameChoice extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        btnUtils.onDestroy();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.player_names);
@@ -63,10 +72,10 @@ public class PlayerNameChoice extends AppCompatActivity {
         playerCounter = playerNames.size();
 
         Button addButton = findViewById(R.id.button_add_name);
-        ButtonUtils.setButton(addButton, null, this, this::addPlayerName);
+        btnUtils.setButton(addButton, null, this::addPlayerName);
 
         Button doneButton = findViewById(R.id.button_done);
-        ButtonUtils.setButton(doneButton, null, this, this::checkPlayerNames);
+        btnUtils.setButton(doneButton, null, this::checkPlayerNames);
 
         updatePlayerList();
     }
@@ -113,7 +122,7 @@ public class PlayerNameChoice extends AppCompatActivity {
                     playerNameView.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO);
                 }
 
-                ButtonUtils.setButton(convertView.findViewById(R.id.delete_button), null, PlayerNameChoice.this, () -> {
+                btnUtils.setButton(convertView.findViewById(R.id.delete_button), null, () -> {
                     playerNames.remove(position);
                     playerCounter--;
                     updatePlayerList();

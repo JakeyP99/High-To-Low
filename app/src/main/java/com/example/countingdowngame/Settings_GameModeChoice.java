@@ -16,13 +16,22 @@ public class Settings_GameModeChoice extends AppCompatActivity implements View.O
     private Button button_regularSound;
     private Button button_burpSound;
     private Drawable buttonHighlightDrawable;
-    private Drawable outlineforbutton;
+    private Drawable outlineForButton;
     private Button btnReturn;
+
+    private final ButtonUtils btnUtils = new ButtonUtils(this);
 
     @Override
     public void onBackPressed() {
         startActivity(new Intent(Settings_GameModeChoice.this, HomeScreen.class));
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        btnUtils.onDestroy();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,52 +41,6 @@ public class Settings_GameModeChoice extends AppCompatActivity implements View.O
         initializeViews();
         loadPreferences();
         setButtonListeners();
-    }
-
-    private void initializeViews() {
-        button_gameModeOne = findViewById(R.id.button_gameModeOne);
-        button_gameModeTwo = findViewById(R.id.button_gameModeTwo);
-        button_regularSound = findViewById(R.id.button_normal_sound);
-        button_burpSound = findViewById(R.id.button_burp_sound);
-        buttonHighlightDrawable = getResources().getDrawable(R.drawable.buttonhighlight);
-        outlineforbutton = getResources().getDrawable(R.drawable.outlineforbutton);
-        btnReturn = findViewById(R.id.buttonReturn);
-    }
-
-    private void loadPreferences() {
-        SharedPreferences gameModePreferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
-        boolean buttonOneSelected = gameModePreferences.getBoolean("button_gameModeOne", true);
-        button_gameModeOne.setSelected(buttonOneSelected);
-        button_gameModeTwo.setSelected(!buttonOneSelected);
-
-        if (buttonOneSelected) {
-            button_gameModeOne.setBackground(buttonHighlightDrawable);
-            button_gameModeTwo.setBackground(outlineforbutton);
-        } else {
-            button_gameModeOne.setBackground(outlineforbutton);
-            button_gameModeTwo.setBackground(buttonHighlightDrawable);
-        }
-
-        SharedPreferences soundPreferences = getSharedPreferences("sound_mode_choice", MODE_PRIVATE);
-        boolean regularSoundSelected = soundPreferences.getBoolean("button_regularSound", true);
-        button_regularSound.setSelected(regularSoundSelected);
-        button_burpSound.setSelected(!regularSoundSelected);
-
-        if (regularSoundSelected) {
-            button_regularSound.setBackground(buttonHighlightDrawable);
-            button_burpSound.setBackground(outlineforbutton);
-        } else {
-            button_regularSound.setBackground(outlineforbutton);
-            button_burpSound.setBackground(buttonHighlightDrawable);
-        }
-    }
-
-    private void setButtonListeners() {
-        button_gameModeOne.setOnClickListener(this);
-        button_gameModeTwo.setOnClickListener(this);
-        button_regularSound.setOnClickListener(this);
-        button_burpSound.setOnClickListener(this);
-        ButtonUtils.setButton(btnReturn, HomeScreen.class, this, null);
     }
 
     @Override
@@ -99,6 +62,53 @@ public class Settings_GameModeChoice extends AppCompatActivity implements View.O
         savePreferences();
     }
 
+    private void initializeViews() {
+        button_gameModeOne = findViewById(R.id.button_gameModeOne);
+        button_gameModeTwo = findViewById(R.id.button_gameModeTwo);
+        button_regularSound = findViewById(R.id.button_normal_sound);
+        button_burpSound = findViewById(R.id.button_burp_sound);
+        buttonHighlightDrawable = getResources().getDrawable(R.drawable.buttonhighlight);
+        outlineForButton = getResources().getDrawable(R.drawable.outlineforbutton);
+        btnReturn = findViewById(R.id.buttonReturn);
+    }
+
+    private void loadPreferences() {
+        SharedPreferences gameModePreferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
+        boolean buttonOneSelected = gameModePreferences.getBoolean("button_gameModeOne", true);
+        button_gameModeOne.setSelected(buttonOneSelected);
+        button_gameModeTwo.setSelected(!buttonOneSelected);
+
+        if (buttonOneSelected) {
+            button_gameModeOne.setBackground(buttonHighlightDrawable);
+            button_gameModeTwo.setBackground(outlineForButton);
+        } else {
+            button_gameModeOne.setBackground(outlineForButton);
+            button_gameModeTwo.setBackground(buttonHighlightDrawable);
+        }
+
+        SharedPreferences soundPreferences = getSharedPreferences("sound_mode_choice", MODE_PRIVATE);
+        boolean regularSoundSelected = soundPreferences.getBoolean("button_regularSound", true);
+        button_regularSound.setSelected(regularSoundSelected);
+        button_burpSound.setSelected(!regularSoundSelected);
+
+        if (regularSoundSelected) {
+            button_regularSound.setBackground(buttonHighlightDrawable);
+            button_burpSound.setBackground(outlineForButton);
+        } else {
+            button_regularSound.setBackground(outlineForButton);
+            button_burpSound.setBackground(buttonHighlightDrawable);
+        }
+    }
+
+    private void setButtonListeners() {
+        button_gameModeOne.setOnClickListener(this);
+        button_gameModeTwo.setOnClickListener(this);
+        button_regularSound.setOnClickListener(this);
+        button_burpSound.setOnClickListener(this);
+        btnUtils.setButton(btnReturn, HomeScreen.class, null);
+    }
+
+
     private void toggleButton(Button selectedButton, Button unselectedButton) {
         boolean isSelected = !selectedButton.isSelected();
         selectedButton.setSelected(isSelected);
@@ -106,9 +116,9 @@ public class Settings_GameModeChoice extends AppCompatActivity implements View.O
 
         if (isSelected) {
             selectedButton.setBackground(buttonHighlightDrawable);
-            unselectedButton.setBackground(outlineforbutton);
+            unselectedButton.setBackground(outlineForButton);
         } else {
-            selectedButton.setBackground(outlineforbutton);
+            selectedButton.setBackground(outlineForButton);
             unselectedButton.setBackground(buttonHighlightDrawable);
         }
     }

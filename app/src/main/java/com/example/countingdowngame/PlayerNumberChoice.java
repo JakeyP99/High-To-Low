@@ -14,9 +14,17 @@ import androidx.appcompat.app.AppCompatActivity;
 public class PlayerNumberChoice extends AppCompatActivity {
     private EditText originalPlayerField;
 
+    private final ButtonUtils btnUtils = new ButtonUtils(this);
+
     @Override
     public void onBackPressed() {
         startActivity(new Intent(PlayerNumberChoice.this, HomeScreen.class));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        btnUtils.onDestroy();
     }
 
     @Override
@@ -27,7 +35,7 @@ public class PlayerNumberChoice extends AppCompatActivity {
         Button btnSubmitPlayers = findViewById(R.id.btnSubmitPlayers);
         originalPlayerField = findViewById(R.id.EditTextViewplayernumber);
 
-        ButtonUtils.setButton(btnSubmitPlayers, null, this, this::submitPlayerNumber);
+        btnUtils.setButton(btnSubmitPlayers, null, this::submitPlayerNumber);
     }
 
     private void submitPlayerNumber() {

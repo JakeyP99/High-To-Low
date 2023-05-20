@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Instructions extends AppCompatActivity {
+    private final ButtonUtils btnUtils = new ButtonUtils(this);
+
     private final List<String> instructions = Arrays.asList(
             "Welcome to drinking countdown! In summary, you choose a number, that number will go down, and the aim of the game is not to be the person who randomly hits the number 0.",
             "Prepare yourself a beverage for the loser to drink \n\n I like to prepare a nice tasty shot.",
@@ -36,7 +38,7 @@ public class Instructions extends AppCompatActivity {
         final ViewPager viewPager = findViewById(R.id.viewPager);
         final ProgressBar progressBar = findViewById(R.id.progress_bar);
 
-        ButtonUtils.setButton(btnBack, HomeScreen.class, this, null);
+        btnUtils.setButton(btnBack, HomeScreen.class, null);
 
         InstructionPagerAdapter adapter = new InstructionPagerAdapter(instructions);
 
@@ -55,6 +57,7 @@ public class Instructions extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        btnUtils.onDestroy();
     }
 
 }
