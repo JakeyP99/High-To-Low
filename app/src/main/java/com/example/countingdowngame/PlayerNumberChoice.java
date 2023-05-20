@@ -12,6 +12,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class PlayerNumberChoice extends AppCompatActivity {
+    private Button btnSubmitPlayers;
+    private EditText originalPlayerField;
+
     @Override
     public void onBackPressed() {
         startActivity(new Intent(PlayerNumberChoice.this, HomeScreen.class));
@@ -22,41 +25,43 @@ public class PlayerNumberChoice extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.playernumber_activity);
 
-        Button btnSubmitPlayers = findViewById(R.id.btnSubmitPlayers);
-        final EditText originalPlayerField = findViewById(R.id.EditTextViewplayernumber);
+        btnSubmitPlayers = findViewById(R.id.btnSubmitPlayers);
+        originalPlayerField = findViewById(R.id.EditTextViewplayernumber);
 
-        ButtonUtils.setButton(btnSubmitPlayers, null, this, () -> {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                originalPlayerField.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO); // Disable Google autofill
-            }
-            String inputValue = originalPlayerField.getText().toString();
-            if (inputValue.length() <= 0) {
+        ButtonUtils.setButton(btnSubmitPlayers, null, this, this::submitPlayerNumber);
+    }
+
+    private void submitPlayerNumber() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            originalPlayerField.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO); // Disable Google autofill
+        }
+
+        String inputValue = originalPlayerField.getText().toString();
+        if (inputValue.isEmpty()) {
+            return;
+        }
+
+        try {
+            int inputNumber = Integer.parseInt(inputValue);
+            if (inputNumber <= 0) {
                 return;
             }
-            try {
-                int inputNumber = Integer.parseInt(inputValue);
-                if (inputNumber <= 0) {
-                    return;
-                }
 
-                SharedPreferences preferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
-                boolean switchOneChecked = preferences.getBoolean("button_gameModeOne", false);
-                if (switchOneChecked) {
-                    Game.gameInstance.setPlayers(inputNumber);
-                } else {
-                    MainActivitySplitScreen.gameInstance.setPlayers(inputNumber);
-                }
-
-                Intent intent;
-
-                intent = new Intent(PlayerNumberChoice.this, PlayerNameChoice.class);
-                intent.putExtra("playerCount", inputNumber);
-                startActivity(intent);
-
-
-            } catch (NumberFormatException e) {
-                Toast.makeText(PlayerNumberChoice.this, "That's wayyyy too many players", Toast.LENGTH_SHORT).show();
+            SharedPreferences preferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
+            boolean switchOneChecked = preferences.getBoolean("button_gameModeOne", false);
+            if (switchOneChecked) {
+                Game.gameInstance.setPlayers(inputNumber);
+            } else {
+                MainActivitySplitScreen.gameInstance.setPlayers(inputNumber);
             }
-        });
+
+            Intent intent = new Intent(PlayerNumberChoice.this, PlayerNameChoice.class);
+            intent.putExtra("playerCount", inputNumber);
+            startActivity(intent);
+
+        } catch (NumberFormatException e) {
+            Toast.makeText(PlayerNumberChoice.this, "That's wayyyy too many players", Toast.LENGTH_SHORT).show();
+        }
     }
 }
+
