@@ -114,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 }
 
-                case NEXT_NUMBER:
                 case GAME_START: {
                     numberText.setText(String.valueOf(Game.getInstance().currentNumber));
                     setTextViewSizeBasedOnInt(numberText, String.valueOf(Game.getInstance().currentNumber));

@@ -4,5 +4,4 @@ public enum GameEventType {
     NEXT_PLAYER,
     GAME_END,
     GAME_START,
-    NEXT_NUMBER,
 }

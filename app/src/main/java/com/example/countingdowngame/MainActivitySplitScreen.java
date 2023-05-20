@@ -127,7 +127,6 @@ public class MainActivitySplitScreen extends AppCompatActivity {
                     break;
                 }
 
-                case NEXT_NUMBER:
                 case GAME_START: {
                     numberText.setText(String.valueOf(gameInstance.currentNumber));
                     numberTextPlayer2.setText(String.valueOf(gameInstance.currentNumber));
