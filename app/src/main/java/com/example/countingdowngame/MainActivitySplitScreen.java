@@ -112,44 +112,41 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
             }
         });
 
-        numberText.setText(Integer.toString(Game.getInstance().getCurrentNumber()));
-        numberTextPlayer2.setText(Integer.toString(Game.getInstance().getCurrentNumber()));
-        setTextViewSizeBasedOnInt(numberText, String.valueOf(Game.getInstance().getCurrentNumber()));
-        setTextViewSizeBasedOnInt(numberTextPlayer2, String.valueOf(Game.getInstance().getCurrentNumber()));
         renderPlayer();
     }
 
     private void renderPlayer() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         Set<String> playerNamesSet = preferences.getStringSet("playerNames", null);
-        String[] playerNamesArray = playerNamesSet.toArray(new String[0]);
-        int currentPlayerIndex = Game.getInstance().getCurrentPlayerId();
 
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        int currentPlayerIndex = Game.getInstance().getCurrentPlayerId();
+        String[] playerNamesArray = playerNamesSet.toArray(new String[0]);
         String currentPlayerName = playerNamesArray[currentPlayerIndex];
+
         nextPlayerText.setText(currentPlayerName);
         nextPlayerTextPlayer2.setText(currentPlayerName);
 
-        if (Game.getInstance().getCurrentPlayer().getSkipAmount() > 0) {
+        if (currentPlayer.getSkipAmount() > 0) {
             btnSkip.setVisibility(View.VISIBLE);
             btnSkipPlayer2.setVisibility(View.VISIBLE);
-
         } else {
             btnSkip.setVisibility(View.INVISIBLE);
             btnSkipPlayer2.setVisibility(View.INVISIBLE);
-
         }
 
-        if (Game.getInstance().getCurrentPlayer().getWildCardAmount() > 0) {
+        if (currentPlayer.getWildCardAmount() > 0) {
             btnWild.setVisibility(View.VISIBLE);
             btnWildPlayer2.setVisibility(View.VISIBLE);
         } else {
-            if (btnWild != null) {
-                btnWild.setVisibility(View.INVISIBLE);
-            }
-            if (btnWildPlayer2 != null) {
-                btnWildPlayer2.setVisibility(View.INVISIBLE);
-            }
+            btnWild.setVisibility(View.INVISIBLE);
+            btnWildPlayer2.setVisibility(View.INVISIBLE);
         }
+
+        numberText.setText(Integer.toString(Game.getInstance().getCurrentNumber()));
+        numberTextPlayer2.setText(Integer.toString(Game.getInstance().getCurrentNumber()));
+        setTextViewSizeBasedOnInt(numberText, String.valueOf(Game.getInstance().getCurrentNumber()));
+        setTextViewSizeBasedOnInt(numberTextPlayer2, String.valueOf(Game.getInstance().getCurrentNumber()));
     }
 
     // This is the wildcard function.

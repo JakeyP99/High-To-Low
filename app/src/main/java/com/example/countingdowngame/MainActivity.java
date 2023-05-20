@@ -105,9 +105,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        int currentNumber = Game.getInstance().getCurrentNumber();
-        numberText.setText(String.valueOf(currentNumber));
-        setTextViewSizeBasedOnInt(numberText, String.valueOf(currentNumber));
         renderPlayer();
     }
 
@@ -129,26 +126,32 @@ public class MainActivity extends AppCompatActivity {
     private void renderPlayer() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         Set<String> playerNamesSet = preferences.getStringSet("playerNames", null);
+
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        int currentPlayerIndex = Game.getInstance().getCurrentPlayerId();
+
         if (playerNamesSet != null) {
             String[] playerNamesArray = playerNamesSet.toArray(new String[0]);
-            int currentPlayerIndex = Game.getInstance().getCurrentPlayerId();
-
             String currentPlayerName = playerNamesArray[currentPlayerIndex];
+
             nextPlayerText.setText(currentPlayerName + "'s Turn");
-
-            Player currentPlayer = Game.getInstance().getCurrentPlayer();
-            if (currentPlayer.getSkipAmount() > 0) {
-                btnSkip.setVisibility(View.VISIBLE);
-            } else {
-                btnSkip.setVisibility(View.INVISIBLE);
-            }
-
-            if (currentPlayer.getWildCardAmount() > 0) {
-                btnWild.setVisibility(View.VISIBLE);
-            } else {
-                btnWild.setVisibility(View.INVISIBLE);
-            }
         }
+
+        if (currentPlayer.getSkipAmount() > 0) {
+            btnSkip.setVisibility(View.VISIBLE);
+        } else {
+            btnSkip.setVisibility(View.INVISIBLE);
+        }
+
+        if (currentPlayer.getWildCardAmount() > 0) {
+            btnWild.setVisibility(View.VISIBLE);
+        } else {
+            btnWild.setVisibility(View.INVISIBLE);
+        }
+
+        int currentNumber = Game.getInstance().getCurrentNumber();
+        numberText.setText(String.valueOf(currentNumber));
+        setTextViewSizeBasedOnInt(numberText, String.valueOf(currentNumber));
     }
 
     private void wildCardActivate(Player player) {
