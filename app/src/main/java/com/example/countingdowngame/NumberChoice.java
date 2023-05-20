@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Random;
 
+
 public class NumberChoice extends AppCompatActivity {
     int startingNumber;
 
@@ -82,7 +83,7 @@ public class NumberChoice extends AppCompatActivity {
         boolean switchOneChecked = preferences.getBoolean("button_gameModeOne", false);
         Class<?> targetClass = switchOneChecked ? MainActivity.class : MainActivitySplitScreen.class;
         Intent i = new Intent(NumberChoice.this, targetClass);
-        t.putExtra("startingNumber", startingNumber);
+        i.putExtra("startingNumber", startingNumber);
         startActivity(i);
     }
 }

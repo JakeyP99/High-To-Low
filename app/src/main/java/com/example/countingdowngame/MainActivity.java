@@ -117,14 +117,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setTextViewSizeBasedOnInt(TextView textView, String text) {
-        int defaultTextSize = 70; // Set default text size
-        int minSize = 47; // Minimum text size
+        int defaultTextSize = 70;
+        int minSize = 47;
 
-        // Adjust text size based on the length of the text
         if (text.length() > 6) {
-            textView.setTextSize(minSize); // Set smaller text size for longer strings
+            textView.setTextSize(minSize);
         } else {
-            textView.setTextSize(defaultTextSize); // Set default text size for short strings
+            textView.setTextSize(defaultTextSize);
         }
     }
 

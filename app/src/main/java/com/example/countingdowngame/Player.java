@@ -8,14 +8,12 @@ class Player {
     int wildcard = 1;
     int playerId;
     Game game;
+    private String name;
 
     public Player(Game game, int playerId) {
-
         this.game = game;
         this.playerId = playerId;
-
     }
-
 
     public void useSkip() {
         this.game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.SKIP));
@@ -28,6 +26,14 @@ class Player {
         usedWildCards.add(usedWildCard);
     }
 
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
     public void useWildCard() {
         this.game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.WILD_CARD));
         this.wildcard = this.wildcard - 1;
@@ -45,5 +51,4 @@ class Player {
         this.skips = 0;
         this.wildcard = 1;
     }
-
 }

@@ -109,15 +109,6 @@ public class MainActivitySplitScreen extends AppCompatActivity {
             }
         });
 
-        gameInstance.setGameEventListener(e -> {
-            switch (e.type) {
-                case NEXT_PLAYER: {
-                    renderPlayer();
-                    break;
-                }
-
-            }
-        });
 
         Bundle extras = getIntent().getExtras();
         if (extras == null) {

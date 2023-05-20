@@ -21,9 +21,9 @@ import java.util.Arrays;
 public class WildCardAdapter extends ArrayAdapter<WildCardProbabilities> {
   private Settings_WildCardChoice mContext;
   private WildCardProbabilities[] mProbabilities;
-  private WildcardMode mMode;
+  private WildCardMode mMode;
 
-  public WildCardAdapter(WildcardMode mode, Settings_WildCardChoice context, WildCardProbabilities[] probabilities) {
+  public WildCardAdapter(WildCardMode mode, Settings_WildCardChoice context, WildCardProbabilities[] probabilities) {
     super(context, R.layout.list_item_wildcard, probabilities);
     mContext = context;
     mProbabilities = probabilities;
