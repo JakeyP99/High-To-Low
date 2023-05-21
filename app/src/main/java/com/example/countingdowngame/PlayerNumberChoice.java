@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 public class PlayerNumberChoice extends ButtonUtilsActivity {
     private EditText originalPlayerField;
+    private int totalPlayerCount;
 
     @Override
     public void onBackPressed() {
@@ -43,14 +44,12 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
                 return;
             }
 
-            Game.getInstance().setPlayers(inputNumber);
-
-            Intent intent = getSafeIntent(PlayerNameChoice.class);
+            Intent intent = getSafeIntent(Settings_PlayerModel.class);
             intent.putExtra("playerCount", inputNumber);
             startActivity(intent);
 
         } catch (NumberFormatException e) {
-            Toast.makeText(PlayerNumberChoice.this, "That's wayyyy too many players", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PlayerNumberChoice.this, "Invalid player count", Toast.LENGTH_SHORT).show();
         }
     }
 }

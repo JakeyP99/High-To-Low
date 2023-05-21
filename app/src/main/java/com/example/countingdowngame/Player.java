@@ -14,18 +14,16 @@ class Player implements Serializable {
 
     private String photoFilePath; // Store the file path instead of Bitmap
     private String photoUrl; // Store the photo URL as a string
+    private boolean selected;
 
 
     public Player(String photo, String name) {
         this.photo = photo;
         this.name = name;
+        this.selected = false;
     }
 
     // Getter and setter methods
-
-    public String getPhotoUrl() {
-        return photoUrl;
-    }
 
     public String getName() {
         return name;
@@ -62,5 +60,13 @@ class Player implements Serializable {
     public void resetAbilities() {
         this.skips = 0;
         this.wildcard = 1;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }
