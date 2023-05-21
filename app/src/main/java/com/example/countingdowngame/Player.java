@@ -1,32 +1,30 @@
 package com.example.countingdowngame;
 
-import android.graphics.Bitmap;
-
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-class Player {
+class Player implements Serializable {
+    private String photo;
+    private String name;
     private Game game;
     private final Set<WildCardProbabilities> usedWildCards = new HashSet<>();
     int skips = 0;
     int wildcard = 1;
-    int playerId;
 
-    private String name;
-    private Bitmap photo;
+    private String photoFilePath; // Store the file path instead of Bitmap
+    private String photoUrl; // Store the photo URL as a string
 
-    public Player(Game game, int playerId) {
-        this.game = game;
-        this.playerId = playerId;
-    }
 
-    public Player(Bitmap photo, String name) {
+    public Player(String photo, String name) {
         this.photo = photo;
         this.name = name;
     }
 
-    public Bitmap getPhoto() {
-        return photo;
+    // Getter and setter methods
+
+    public String getPhotoUrl() {
+        return photoUrl;
     }
 
     public String getName() {
@@ -36,7 +34,9 @@ class Player {
     public void setName(String name) {
         this.name = name;
     }
-
+    public String getPhoto() {
+        return photo;
+    }
     public int getSkipAmount() {
         return this.skips;
     }

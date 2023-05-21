@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.InputType;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,25 +19,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+
+import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Settings_PlayerModel extends AppCompatActivity {
-    @Override
-    public void onBackPressed() {
-        startActivity(new Intent(this, SettingClass.class));
-    }
 
     private static final int REQUEST_IMAGE_PICK = 1;
     private List<Player> playerList;
@@ -44,18 +45,26 @@ public class Settings_PlayerModel extends AppCompatActivity {
     private RecyclerView playerRecyclerView;
 
     @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, SettingClass.class));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_player_list);
+
+        playerRecyclerView = findViewById(R.id.playerRecyclerView);
         playerList = new ArrayList<>();
+        playerListAdapter = new PlayerListAdapter(this, playerList);
         loadPlayerData();
 
-        playerListAdapter = new PlayerListAdapter(this, playerList);
-        playerRecyclerView = findViewById(R.id.playerRecyclerView);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
         playerRecyclerView.setLayoutManager(layoutManager);
+
         int spacing = getResources().getDimensionPixelSize(R.dimen.grid_spacing);
         playerRecyclerView.addItemDecoration(new SpaceItemDecoration(spacing));
+
         playerRecyclerView.setAdapter(playerListAdapter);
 
         Button chooseImageButton = findViewById(R.id.chooseImageButton);
@@ -68,11 +77,22 @@ public class Settings_PlayerModel extends AppCompatActivity {
     }
 
     private void addNewPlayer(Bitmap bitmap, String name) {
-        Player newPlayer = new Player(bitmap, name);
+        String photoString = convertBitmapToString(bitmap);
+
+        Player newPlayer = new Player(photoString, name);
+
         playerList.add(newPlayer);
         playerListAdapter.notifyItemInserted(playerList.size() - 1);
+
         int position = playerList.indexOf(newPlayer);
         new Handler().postDelayed(() -> animatePlayerImage(position), 100);
+
+        savePlayerData();
+    }
+
+    private void deletePlayer(int position) {
+        playerList.remove(position);
+        playerListAdapter.notifyItemRemoved(position);
         savePlayerData();
     }
 
@@ -89,7 +109,7 @@ public class Settings_PlayerModel extends AppCompatActivity {
                 ImageView playerPhotoImageView = itemView.findViewById(R.id.playerPhotoImageView);
                 Glide.with(this)
                         .load(playerList.get(position).getPhoto())
-                        .apply(RequestOptions.circleCropTransform())
+                        .apply(RequestOptions.circleCropTransform()) // Apply circular transformation
                         .into(playerPhotoImageView);
                 float startScale = 0.0f;
                 float endScale = 1.0f;
@@ -116,7 +136,7 @@ public class Settings_PlayerModel extends AppCompatActivity {
         }
     }
 
-    public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
+    public static class SpaceItemDecoration extends RecyclerView.ItemDecoration {
         private final int spacing;
 
         public SpaceItemDecoration(int spacing) {
@@ -138,6 +158,7 @@ public class Settings_PlayerModel extends AppCompatActivity {
             }
         }
     }
+
     private class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.ViewHolder> {
         private final Context context;
         private final List<Player> players;
@@ -168,34 +189,35 @@ public class Settings_PlayerModel extends AppCompatActivity {
         public class ViewHolder extends RecyclerView.ViewHolder {
             ImageView playerPhotoImageView;
             TextView playerNameTextView;
+            ImageView deletePlayerImageView;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
                 playerPhotoImageView = itemView.findViewById(R.id.playerPhotoImageView);
                 playerNameTextView = itemView.findViewById(R.id.playerNameTextView);
+                deletePlayerImageView = itemView.findViewById(R.id.deletePlayerImageView);
+
+                deletePlayerImageView.setOnClickListener(v -> {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        deletePlayer(position);
+                    }
+                });
             }
 
             public void bind(Player player) {
+                String photoString = player.getPhoto();
                 Glide.with(context)
-                        .load(player.getPhoto())
+                        .load(Base64.decode(photoString, Base64.DEFAULT))
                         .apply(RequestOptions.circleCropTransform())
                         .into(playerPhotoImageView);
-
-                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) playerPhotoImageView.getLayoutParams();
-                int margin = convertDpToPx();
-                layoutParams.setMargins(margin, margin, margin, margin);
-                playerPhotoImageView.setLayoutParams(layoutParams);
 
                 playerNameTextView.setBackgroundResource(R.drawable.outlineforbutton);
                 playerNameTextView.setText(player.getName());
                 playerNameTextView.setPadding(20, 20, 20, 20);
             }
-        }
-    }
 
-    private int convertDpToPx() {
-        float density = getResources().getDisplayMetrics().density;
-        return Math.round(10 * density);
+        }
     }
 
     @Override
@@ -217,7 +239,7 @@ public class Settings_PlayerModel extends AppCompatActivity {
                         String name = nameEditText.getText().toString();
                         addNewPlayer(bitmap, name);
                     })
-                    .setNegativeButton("Cancel", null);
+                    .setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss());
 
             AlertDialog dialog = builder.create();
             dialog.show();
@@ -225,25 +247,32 @@ public class Settings_PlayerModel extends AppCompatActivity {
     }
 
     private void savePlayerData() {
-        SharedPreferences sharedPreferences = getSharedPreferences("PlayerData", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("player_data", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
-        String jsonPlayerList = gson.toJson(playerList);
-        editor.putString("playerList", jsonPlayerList);
+        String json = gson.toJson(playerList);
+        editor.putString("player_list", json);
         editor.apply();
     }
 
     private void loadPlayerData() {
-        SharedPreferences sharedPreferences = getSharedPreferences("PlayerData", Context.MODE_PRIVATE);
-        String jsonPlayerList = sharedPreferences.getString("playerList", "");
+        SharedPreferences sharedPreferences = getSharedPreferences("player_data", MODE_PRIVATE);
         Gson gson = new Gson();
+        String json = sharedPreferences.getString("player_list", null);
         Type type = new TypeToken<ArrayList<Player>>() {}.getType();
-        playerList = gson.fromJson(jsonPlayerList, type);
-        if (playerList == null) {
-            playerList = new ArrayList<>();
+        List<Player> loadedPlayerList = gson.fromJson(json, type);
+
+        if (loadedPlayerList != null) {
+            playerList.clear();
+            playerList.addAll(loadedPlayerList);
+            playerListAdapter.notifyDataSetChanged();
         }
-
     }
-
+    private String convertBitmapToString(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
 
 }

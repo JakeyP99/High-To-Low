@@ -88,10 +88,8 @@ public class Settings_WildCardChoice extends ButtonUtilsActivity {
 
             saveWildCardProbabilitiesToStorage(DELETABLE, deletableProbabilities);
 
-            // Update the probabilities array in settings
             probabilitiesArray[0] = deletableProbabilities;
 
-            // Refresh the adapter if needed
             deletableAdapter.notifyDataSetChanged();
         });
 
