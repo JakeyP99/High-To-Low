@@ -19,7 +19,7 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.playernumber_activity);
+        setContentView(R.layout.a2_player_number_choice);
 
         Button btnSubmitPlayers = findViewById(R.id.btnSubmitPlayers);
         originalPlayerField = findViewById(R.id.EditTextViewplayernumber);

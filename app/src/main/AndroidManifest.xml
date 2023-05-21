@@ -49,10 +49,10 @@
             android:launchMode="singleInstance"/>
 
 
-        <activity android:name=".SettingClass"
+        <activity android:name=".Settings"
             android:launchMode="singleInstance"/>
 
-        <activity android:name=".Settings_WildCardChoice"
+        <activity android:name=".Settings_WildCard_Choice"
             android:launchMode="singleInstance"/>
 
         <activity android:name=".PlayerNameChoice"

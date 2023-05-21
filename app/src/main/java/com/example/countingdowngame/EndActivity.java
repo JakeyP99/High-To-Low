@@ -14,7 +14,7 @@ public class EndActivity extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lose_layout);
+        setContentView(R.layout.a6_end_game);
 
         final ListView previousNumbersList = findViewById(R.id.previousNumbers);
 

@@ -18,12 +18,12 @@ import androidx.appcompat.app.AlertDialog;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class WildCardAdapter extends ArrayAdapter<WildCardProbabilities> {
-    private final Settings_WildCardChoice mContext;
-    private final WildCardMode mMode;
-    private WildCardProbabilities[] mProbabilities;
+public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Probabilities> {
+    private final Settings_WildCard_Choice mContext;
+    private final Settings_WildCard_Mode mMode;
+    private Settings_WildCard_Probabilities[] mProbabilities;
 
-    public WildCardAdapter(WildCardMode mode, Settings_WildCardChoice context, WildCardProbabilities[] probabilities) {
+    public Settings_WildCard_Adapter(Settings_WildCard_Mode mode, Settings_WildCard_Choice context, Settings_WildCard_Probabilities[] probabilities) {
         super(context, R.layout.list_view_wild_cards, probabilities);
         mContext = context;
         mProbabilities = probabilities;
@@ -45,7 +45,7 @@ public class WildCardAdapter extends ArrayAdapter<WildCardProbabilities> {
         TextView textViewProbability = view.findViewById(R.id.textview_probability);
         Switch switchWildCard = view.findViewById(R.id.switch_wildcard);
 
-        WildCardProbabilities wildCard = mProbabilities[position];
+        Settings_WildCard_Probabilities wildCard = mProbabilities[position];
 
         textViewWildCard.setText(wildCard.getText());
         textViewProbability.setText(String.valueOf(wildCard.getProbability()));
@@ -82,9 +82,9 @@ public class WildCardAdapter extends ArrayAdapter<WildCardProbabilities> {
 
             builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
-            ArrayList<WildCardProbabilities> wildCardList = new ArrayList<>(Arrays.asList(mProbabilities));
-            mProbabilities = wildCardList.toArray(new WildCardProbabilities[0]);
-            mProbabilities = wildCardList.toArray(new WildCardProbabilities[1]);
+            ArrayList<Settings_WildCard_Probabilities> wildCardList = new ArrayList<>(Arrays.asList(mProbabilities));
+            mProbabilities = wildCardList.toArray(new Settings_WildCard_Probabilities[0]);
+            mProbabilities = wildCardList.toArray(new Settings_WildCard_Probabilities[1]);
 
             if (wildCard.isDeletable()) {
                 builder.setNeutralButton("Delete", (dialog, which) -> {

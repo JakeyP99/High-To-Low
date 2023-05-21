@@ -48,7 +48,7 @@ public class PlayerNameChoice extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.player_names);
+        setContentView(R.layout.a3_player_name_choice);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
 
         playerListView = findViewById(R.id.list_view_player_names);

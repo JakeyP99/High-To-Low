@@ -13,7 +13,7 @@ public class HomeScreen extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.start_menu);
+        setContentView(R.layout.a1_home_screen);
 
         final Button btnQuickPlay = findViewById(R.id.quickplay);
         final Button btnInstructions = findViewById(R.id.button_Instructions);
@@ -21,7 +21,7 @@ public class HomeScreen extends ButtonUtilsActivity {
 
         btnUtils.setButton(btnQuickPlay, PlayerSelection.class, null);
         btnUtils.setButton(btnInstructions, Instructions.class, null);
-        btnUtils.setButton(btnSettings, SettingClass.class, null);
+        btnUtils.setButton(btnSettings, Settings.class, null);
     }
 
 }

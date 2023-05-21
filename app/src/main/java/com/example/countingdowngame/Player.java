@@ -8,7 +8,7 @@ class Player implements Serializable {
     private String photo;
     private String name;
     private Game game;
-    private final Set<WildCardProbabilities> usedWildCards = new HashSet<>();
+    private final Set<Settings_WildCard_Probabilities> usedWildCards = new HashSet<>();
     int skips = 0;
     int wildcard = 1;
 
@@ -55,7 +55,7 @@ class Player implements Serializable {
         this.skips = this.skips - 1;
     }
 
-    public void addUsedWildCard(WildCardProbabilities usedWildCard) {
+    public void addUsedWildCard(Settings_WildCard_Probabilities usedWildCard) {
         usedWildCards.add(usedWildCard);
     }
 

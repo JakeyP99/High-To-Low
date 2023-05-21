@@ -46,13 +46,13 @@ public class Settings_PlayerModel extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, SettingClass.class));
+        startActivity(new Intent(this, Settings.class));
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_player_list);
+        setContentView(R.layout.b2_settings_player_list);
 
         playerRecyclerView = findViewById(R.id.playerRecyclerView);
         playerList = new ArrayList<>();
@@ -230,7 +230,7 @@ public class Settings_PlayerModel extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Enter Player Name");
 
-            View dialogView = getLayoutInflater().inflate(R.layout.dialog_enter_name, null);
+            View dialogView = getLayoutInflater().inflate(R.layout.player_enter_name, null);
             EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
             nameEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 

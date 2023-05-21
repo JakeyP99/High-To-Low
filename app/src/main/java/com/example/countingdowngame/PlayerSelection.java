@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,28 +26,21 @@ public class PlayerSelection extends AppCompatActivity {
         setContentView(R.layout.list_item_player);
 
         playerListView = findViewById(R.id.playerListView);
-        playerList = getPlayerList(); // Assuming you have a method to retrieve the player list
-
+        playerList = getPlayerList();
         playerListAdapter = new PlayerListAdapter(this, playerList);
         playerListView.setAdapter(playerListAdapter);
 
-        playerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Player selectedPlayer = playerList.get(position);
-                // Handle the selected player
-                // For example, you can pass the selected player to the next activity
-                Intent intent = new Intent(PlayerSelection.this, NumberChoice.class);
-                intent.putExtra("selectedPlayer", (CharSequence) selectedPlayer);
-                startActivity(intent);
-            }
+        playerListView.setOnItemClickListener((parent, view, position, id) -> {
+            Player selectedPlayer = playerList.get(position);
+            Intent intent = new Intent(PlayerSelection.this, NumberChoice.class);
+            intent.putExtra("selectedPlayer", (CharSequence) selectedPlayer);
+            startActivity(intent);
         });
     }
 
     private List<Player> getPlayerList() {
         SharedPreferences sharedPreferences = getSharedPreferences("PlayerData", Context.MODE_PRIVATE);
         String jsonPlayerList = sharedPreferences.getString("playerList", "");
-
         Gson gson = new Gson();
         Type type = new TypeToken<List<Player>>() {}.getType();
         return gson.fromJson(jsonPlayerList, type);

@@ -1,16 +1,14 @@
 package com.example.countingdowngame;
 
-public class WildCardProbabilities {
+public class Settings_WildCard_Probabilities {
     private String activity;
     private int probability;
-    private boolean used;
     private boolean enabled;
     private final boolean deletable;
 
-    public WildCardProbabilities(String activity, int probability, boolean enabled, boolean deletable) {
+    public Settings_WildCard_Probabilities(String activity, int probability, boolean enabled, boolean deletable) {
         this.activity = activity;
         this.probability = probability;
-        this.used = false;
         this.enabled = enabled;
         this.deletable = deletable;
     }
