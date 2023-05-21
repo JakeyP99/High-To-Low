@@ -1,7 +1,6 @@
 package com.example.countingdowngame;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -9,14 +8,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 public class PlayerNumberChoice extends ButtonUtilsActivity {
     private EditText originalPlayerField;
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(PlayerNumberChoice.this, HomeScreen.class));
+        startActivity(new Intent(this, HomeScreen.class));
     }
 
     @Override
@@ -48,7 +45,7 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
 
             Game.getInstance().setPlayers(inputNumber);
 
-            Intent intent = new Intent(PlayerNumberChoice.this, PlayerNameChoice.class);
+            Intent intent = new Intent(this, PlayerNameChoice.class);
             intent.putExtra("playerCount", inputNumber);
             startActivity(intent);
 

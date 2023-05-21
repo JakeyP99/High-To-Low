@@ -16,8 +16,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -31,7 +29,7 @@ public class PlayerNameChoice extends ButtonUtilsActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(PlayerNameChoice.this, PlayerNumberChoice.class);
+        Intent intent = new Intent(this, PlayerNumberChoice.class);
         startActivityForResult(intent, REQUEST_CODE_RESET_COUNTER);
     }
 
@@ -88,7 +86,7 @@ public class PlayerNameChoice extends ButtonUtilsActivity {
             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(PlayerNameChoice.this).edit();
             editor.putStringSet("playerNames", new HashSet<>(playerNames));
             editor.apply();
-            startActivity(new Intent(PlayerNameChoice.this, NumberChoice.class));
+            startActivity(new Intent(this, NumberChoice.class));
         } else if (playerNames.size() < playerCount) {
             Toast.makeText(PlayerNameChoice.this, "Please add more player names.", Toast.LENGTH_SHORT).show();
         } else {

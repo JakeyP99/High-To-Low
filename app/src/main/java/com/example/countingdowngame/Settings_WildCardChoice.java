@@ -76,7 +76,6 @@ public class Settings_WildCardChoice extends AppCompatActivity {
             String text = textInput.getText().toString();
 
             WildCardProbabilities newWildCard = new WildCardProbabilities(text, probability, true, true);
-
             WildCardProbabilities[][] probabilitiesArray = loadWildCardProbabilitiesFromStorage(
                     getApplicationContext());
             WildCardProbabilities[] deletableProbabilities = probabilitiesArray[0];

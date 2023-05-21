@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Build;
+import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.MotionEvent;
@@ -28,7 +29,6 @@ public class ButtonUtils {
 
     private static final int NUM_SOUNDS = 4; // Number of sounds in the rotation
     private static int currentSoundIndex = 0; // Current index of the sound being played
-
     private final MediaPlayer[] burp = new MediaPlayer[NUM_SOUNDS];
     private final MediaPlayer bop;
     private final AppCompatActivity mContext;
@@ -123,7 +123,7 @@ public class ButtonUtils {
     private void startActivity(final Class<?> activityClass) {
         Intent intent = new Intent(mContext, activityClass);
         mContext.startActivity(intent);
-//        new Handler().postDelayed(mContext::finish, 1000);
+        new Handler().postDelayed(mContext::finish, 1000);
     }
 
     private void playSoundEffects() {
