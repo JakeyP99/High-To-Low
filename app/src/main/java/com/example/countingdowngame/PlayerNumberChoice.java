@@ -1,6 +1,5 @@
 package com.example.countingdowngame;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -39,9 +38,9 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
                 return;
             }
 
-            Intent i = getIntentForClass(Settings_PlayerModel.class, true);
-            i.putExtra("playerCount", inputNumber);
-            startActivity(i);
+
+            Game.getInstance().setPlayers(inputNumber);
+            startActivity(getIntentForClass(Settings_PlayerModel.class, true));
 
         } catch (NumberFormatException e) {
             Toast.makeText(PlayerNumberChoice.this, "Invalid player count", Toast.LENGTH_SHORT).show();

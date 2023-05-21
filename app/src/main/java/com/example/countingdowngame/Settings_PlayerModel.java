@@ -48,7 +48,7 @@ public class Settings_PlayerModel extends ButtonUtilsActivity {
         playerListAdapter = new PlayerListAdapter(this, playerList, 3);
         loadPlayerData();
 
-        int selectedPlayerCount = getIntent().getIntExtra("playerCount", 0);
+        int selectedPlayerCount = Game.getInstance().getPlayerAmount();
         playerList = new ArrayList<>();
         playerListAdapter = new PlayerListAdapter(this, playerList, selectedPlayerCount);
 
@@ -65,7 +65,9 @@ public class Settings_PlayerModel extends ButtonUtilsActivity {
         chooseImageButton.setOnClickListener(view -> captureImage());
 
         playerCountTextView = findViewById(R.id.text_view_counter);
-        totalPlayerCount = getIntent().getIntExtra("playerCount", 0);
+        totalPlayerCount = Game.getInstance().getPlayerAmount();
+
+
         // Call updatePlayerCounter() to display the counter text initially
         updatePlayerCounter();
 
@@ -76,11 +78,11 @@ public class Settings_PlayerModel extends ButtonUtilsActivity {
                 counterText = "All Players Selected: " + totalPlayerCount;
                 playerCountTextView.setText(counterText);
                 startActivity(getIntentForClass(MainActivity.class, true));
-            } else if (remainingPlayers > 0) {
+            }
+            {
                 Toast.makeText(this, "Select more players", Toast.LENGTH_SHORT);
             }
         });
-
     }
 
     // Open image picker to capture an image
@@ -142,19 +144,16 @@ public class Settings_PlayerModel extends ButtonUtilsActivity {
             }
         }
 
-    }
-
-    private void proceedToMainActivity(List<Player> selectedPlayers) {
-        Intent intent = getIntentForClass(MainActivity.class, true);
-
-        // Pass the selected player names to the MainActivity
-        ArrayList<String> playerNames = new ArrayList<>();
-        for (Player player : selectedPlayers) {
-            playerNames.add(player.getName());
+        int remainingPlayers = totalPlayerCount - selectedPlayerCount;
+        if (remainingPlayers == 0) {
+            String counterText = "All Players Selected: " + totalPlayerCount;
+            playerCountTextView.setText(counterText);
+        } else {
+            String counterText = "Please select " + remainingPlayers + " more player(s)";
+            playerCountTextView.setText(counterText);
         }
-        intent.putStringArrayListExtra("playerNames", playerNames);
-        startActivity(intent);
     }
+
 
     // Handle the result of the image picker activity
     @Override

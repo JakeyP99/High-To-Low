@@ -116,4 +116,9 @@ public class Game {
             gameEventListener.onGameEvent(new GameEvent(this, GameEventType.NEXT_PLAYER));
         }
     }
+
+    public int getPlayerAmount(){
+        return players.size();
+    }
+
 }
