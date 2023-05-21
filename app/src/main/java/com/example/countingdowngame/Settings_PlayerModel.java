@@ -39,7 +39,7 @@ public class Settings_PlayerModel extends AppCompatActivity {
     private List<Player> playerList;
     private PlayerListAdapter playerListAdapter;
     private TextView playerCountTextView;
-    private int totalPlayerCount = 0;
+    private int totalPlayerCount;
 
     @Override
     public void onBackPressed() {
@@ -75,7 +75,8 @@ public class Settings_PlayerModel extends AppCompatActivity {
 
         playerCountTextView = findViewById(R.id.text_view_counter);
         totalPlayerCount = getIntent().getIntExtra("playerCount", 0);
-
+        // Call updatePlayerCounter() to display the counter text initially
+        updatePlayerCounter();
     }
 
     // Open image picker to capture an image
@@ -91,7 +92,7 @@ public class Settings_PlayerModel extends AppCompatActivity {
         playerList.add(newPlayer);
         playerListAdapter.notifyItemInserted(playerList.size() - 1);
         savePlayerData();
-
+updatePlayerCounter();
     }
 
     // Delete a player at a given position
@@ -99,6 +100,7 @@ public class Settings_PlayerModel extends AppCompatActivity {
         playerList.remove(position);
         playerListAdapter.notifyItemRemoved(position);
         savePlayerData();
+        updatePlayerCounter();
     }
 
     // RecyclerView item decoration for spacing
@@ -212,18 +214,27 @@ public class Settings_PlayerModel extends AppCompatActivity {
                 updatePlayerCounter();
             }
         }
-        private int getSelectedPlayersCount() {
-            int count = 0;
-            for (Player player : players) {
-                if (player.isSelected()) {
-                    count++;
-                }
-            }
-            return count;
-        }
 
     }
+    private void updatePlayerCounter() {
+        int selectedPlayerCount = 0;
+        for (Player player : playerList) {
+            if (player.isSelected()) {
+                selectedPlayerCount++;
+            }
+        }
+        int remainingPlayers = totalPlayerCount - selectedPlayerCount;
 
+        String counterText = "Remaining Players Needed: " + remainingPlayers;
+        if (remainingPlayers == totalPlayerCount) {
+            counterText = "Remaining Players: " + totalPlayerCount;
+        }
+        playerCountTextView.setText(counterText);
+
+        // Enable or disable game proceed button based on player selection
+        Button proceedButton = findViewById(R.id.button_done);
+        proceedButton.setEnabled(selectedPlayerCount == totalPlayerCount);
+    }
 
     // Handle the result of the image picker activity
     @Override
@@ -285,25 +296,7 @@ public class Settings_PlayerModel extends AppCompatActivity {
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
-    private void updatePlayerCounter() {
-        int selectedPlayerCount = 0;
-        for (Player player : playerList) {
-            if (player.isSelected()) {
-                selectedPlayerCount++;
-            }
-        }
-        int remainingPlayers = totalPlayerCount - selectedPlayerCount;
 
-        String counterText = "Remaining Players: " + remainingPlayers;
-        if (remainingPlayers == totalPlayerCount) {
-            counterText = "Remaining Players: " + totalPlayerCount;
-        }
-        playerCountTextView.setText(counterText);
-
-        // Enable or disable game proceed button based on player selection
-        Button proceedButton = findViewById(R.id.button_done);
-        proceedButton.setEnabled(selectedPlayerCount == totalPlayerCount);
-    }
 
 
 }
