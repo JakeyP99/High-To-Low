@@ -4,7 +4,6 @@ import static com.example.countingdowngame.WildCardMode.DELETABLE;
 import static com.example.countingdowngame.WildCardMode.NON_DELETABLE;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
@@ -14,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -182,7 +180,7 @@ public class Settings_WildCardChoice extends ButtonUtilsActivity {
                 SharedPreferences deletablePrefs = getSharedPreferences("DeletablePrefs", MODE_PRIVATE);
                 SharedPreferences.Editor deletableEditor = deletablePrefs.edit();
 
-                deletableEditor.clear(); // Clear previous data
+                deletableEditor.clear();
 
                 for (int i = 0; i < probabilities.length; i++) {
                     WildCardProbabilities probability = probabilities[i];

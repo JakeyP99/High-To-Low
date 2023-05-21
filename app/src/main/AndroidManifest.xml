@@ -21,22 +21,42 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".PlayerNumberChoice" />
-        <activity android:name=".EndActivity" />
-        <activity android:name=".NumberChoice"/>
-        <activity android:name=".Instructions" />
-        <activity android:name=".SettingClass"/>
-        <activity android:name=".Settings_WildCardChoice"/>
-        <activity android:name=".PlayerNameChoice" />
-        <activity android:name=".Settings_GameModeChoice" />
-        <activity android:name=".MainActivitySplitScreen" />
+        <activity android:name=".MainActivity"
+            android:launchMode="singleInstance"/>
+
+        <activity android:name=".PlayerNumberChoice"
+            android:launchMode="singleInstance"/>
+
+        <activity android:name=".EndActivity"
+            android:launchMode="singleInstance"/>
+
+        <activity android:name=".NumberChoice"
+            android:launchMode="singleInstance"/>
+
+        <activity android:name=".Instructions"
+            android:launchMode="singleInstance"/>
+
+
+        <activity android:name=".SettingClass"
+            android:launchMode="singleInstance"/>
+
+        <activity android:name=".Settings_WildCardChoice"
+            android:launchMode="singleInstance"/>
+
+        <activity android:name=".PlayerNameChoice"
+            android:launchMode="singleInstance"/>
+
+
+        <activity android:name=".Settings_GameModeChoice"
+            android:launchMode="singleInstance"/>
+
+        <activity android:name=".MainActivitySplitScreen"
+            android:launchMode="singleInstance"/>
+
         <activity
             android:name=".Settings_PlayerModel"
             android:windowSoftInputMode="adjustNothing">
         </activity>
-
-
 
         <meta-data
             android:name="preloaded_fonts"

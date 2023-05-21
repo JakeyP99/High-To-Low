@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Build;
-import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.MotionEvent;
@@ -123,7 +122,7 @@ public class ButtonUtils {
     private void startActivity(final Class<?> activityClass) {
         Intent intent = new Intent(mContext, activityClass);
         mContext.startActivity(intent);
-        new Handler().postDelayed(mContext::finish, 1000);
+        mContext.finish();
     }
 
     private void playSoundEffects() {

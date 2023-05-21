@@ -15,7 +15,6 @@ public class Game {
             nextPlayer();
         }
     };
-
     private GameEventListener gameEventListener;
     private ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Integer> previousNumbers = new ArrayList<>();
