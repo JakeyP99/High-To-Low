@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 public class Settings_GameModeChoice extends ButtonUtilsActivity implements View.OnClickListener {
     private Button button_gameModeOne;
     private Button button_gameModeTwo;
@@ -28,7 +26,6 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_mode_choice);
-
         initializeViews();
         loadPreferences();
         setButtonListeners();

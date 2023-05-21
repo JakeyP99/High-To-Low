@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.Build;
-import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.MotionEvent;
@@ -119,7 +118,7 @@ public class ButtonUtils {
     private void startActivity(final Class<?> activityClass) {
         Intent intent = new Intent(mContext, activityClass);
         mContext.startActivity(intent);
-        new Handler().postDelayed(mContext::finish, 1000);
+//        new Handler().postDelayed(mContext::finish, 1000);
     }
 
     private void playSoundEffects() {
@@ -127,20 +126,14 @@ public class ButtonUtils {
         boolean soundEffects = preferences.getBoolean("button_regularSound", true);
 
         if (soundEffects) {
-            // Play the bop sound effect
             bop.start();
         } else {
-            // Update the current sound index and handle overflow
             currentSoundIndex = (currentSoundIndex + 1) % NUM_SOUNDS;
-
-            // Stop any previously playing sound
             try {
                 stopCurrentSound();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
-            // Play the current sound
             burp[currentSoundIndex].start();
         }
     }

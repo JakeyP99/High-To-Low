@@ -11,9 +11,7 @@
         android:label="Drinking Countdown"
         android:roundIcon="@drawable/wine"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar"
-        android:enableOnBackInvokedCallback="true"
-        tools:targetApi="tiramisu">
+        android:theme="@style/AppTheme.NoActionBar">
 
         <activity
             android:name=".HomeScreen"
