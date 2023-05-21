@@ -19,12 +19,10 @@ public class Instructions extends ButtonUtilsActivity {
             "Pass the phone to player 2, they then can either generate a number, or they can skip their turn.",
             "Once a player gets the number 0 then they are out, and they lose! \n\n They can then take that sexy yummy shot.",
             "Tada, you're done! \n\n If that game didn't bore you to death then play it again, and again, and again, literally do whatever you want, you're a free person so live your gorgeous life.");
-
     @Override
     public void onBackPressed() {
         startActivity(getSafeIntent(HomeScreen.class));
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

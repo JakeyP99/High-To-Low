@@ -25,7 +25,6 @@ public class ButtonUtils {
     public static ButtonUtils create(final AppCompatActivity context) {
         return new ButtonUtils(context);
     }
-
     private static final int NUM_SOUNDS = 4; // Number of sounds in the rotation
     private static int currentSoundIndex = 0; // Current index of the sound being played
     private final MediaPlayer[] burp = new MediaPlayer[NUM_SOUNDS];
@@ -33,7 +32,6 @@ public class ButtonUtils {
     private final AppCompatActivity mContext;
     private final Drawable buttonHighlight;
     private final Drawable outlineForButton;
-
 
     private ButtonUtils(final AppCompatActivity context) {
         mContext = context;
@@ -52,7 +50,6 @@ public class ButtonUtils {
         }
         bop.release();
     }
-
     @SuppressLint("ClickableViewAccessibility")
     public void setButton(final Button button, final Class<?> activityClass, final Runnable buttonAction) {
         if (button == null) {
@@ -88,7 +85,6 @@ public class ButtonUtils {
         });
     }
 
-
     @SuppressLint("ClickableViewAccessibility")
     public void setImageButton(final ImageButton imagebutton, final Class<?> activityClass, final Runnable buttonAction) {
         imagebutton.setOnTouchListener((view, motionEvent) -> {
@@ -118,13 +114,11 @@ public class ButtonUtils {
             return true;
         });
     }
-
     private void startActivity(final Class<?> activityClass) {
         Intent intent = new Intent(mContext, activityClass);
         mContext.startActivity(intent);
         mContext.finish();
     }
-
     private void playSoundEffects() {
         SharedPreferences preferences = mContext.getSharedPreferences("sound_mode_choice", Context.MODE_PRIVATE);
         boolean soundEffects = preferences.getBoolean("button_regularSound", true);
@@ -141,15 +135,12 @@ public class ButtonUtils {
             burp[currentSoundIndex].start();
         }
     }
-
     private void stopCurrentSound() throws IOException {
         if (burp[currentSoundIndex] != null) {
             burp[currentSoundIndex].stop();
             burp[currentSoundIndex].prepare();
         }
     }
-
-
     private void vibrateDevice() {
         Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
 

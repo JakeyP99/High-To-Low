@@ -7,13 +7,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class ButtonUtilsActivity extends AppCompatActivity {
     protected ButtonUtils btnUtils;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         btnUtils = ButtonUtils.create(this);
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -21,10 +19,7 @@ public class ButtonUtilsActivity extends AppCompatActivity {
             btnUtils.onDestroy();
         }
     }
-
-
     protected Intent getSafeIntent(Class<?> target) {
-        Intent i = new Intent(this, target);
-        return i;
+        return new Intent(this, target);
     }
 }
