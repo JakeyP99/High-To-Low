@@ -1,6 +1,5 @@
 package com.example.countingdowngame;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -9,21 +8,17 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Base64;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
@@ -75,7 +70,15 @@ public class Settings_PlayerModel extends ButtonUtilsActivity {
         updatePlayerCounter();
 
         btnUtils.setButton(proceedButton, () -> {
-            startActivity(getIntentForClass(MainActivity.class, true));
+            int remainingPlayers = totalPlayerCount - selectedPlayerCount;
+            if (remainingPlayers == 0) {
+                String counterText;
+                counterText = "All Players Selected: " + totalPlayerCount;
+                playerCountTextView.setText(counterText);
+                startActivity(getIntentForClass(MainActivity.class, true));
+            } else if (remainingPlayers > 0) {
+                Toast.makeText(this, "Select more players", Toast.LENGTH_SHORT);
+            }
         });
 
     }
@@ -139,17 +142,6 @@ public class Settings_PlayerModel extends ButtonUtilsActivity {
             }
         }
 
-        int remainingPlayers = totalPlayerCount - selectedPlayerCount;
-        String counterText;
-
-        if (remainingPlayers == 0) {
-            counterText = "All Players Selected: " + totalPlayerCount;
-            proceedToMainActivity(selectedPlayers);
-        } else {
-            counterText = "Remaining Players Needed: " + remainingPlayers;
-        }
-
-        playerCountTextView.setText(counterText);
     }
 
     private void proceedToMainActivity(List<Player> selectedPlayers) {
