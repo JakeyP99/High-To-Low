@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.VibrationEffect;
@@ -31,6 +32,8 @@ public class ButtonUtils {
     private final MediaPlayer[] burp = new MediaPlayer[NUM_SOUNDS];
     private final MediaPlayer bop;
     private final AppCompatActivity mContext;
+    private final Drawable buttonHighlight;
+    private final Drawable outlineForButton;
 
 
     private ButtonUtils(final AppCompatActivity context) {
@@ -40,6 +43,8 @@ public class ButtonUtils {
         burp[2] = MediaPlayer.create(context, R.raw.burp3);
         burp[3] = MediaPlayer.create(context, R.raw.burp4);
         bop = MediaPlayer.create(context, R.raw.bop);
+        buttonHighlight = AppCompatResources.getDrawable(mContext, R.drawable.buttonhighlight);
+        outlineForButton = AppCompatResources.getDrawable(mContext, R.drawable.outlineforbutton);
     }
 
     public void onDestroy() {
@@ -57,12 +62,12 @@ public class ButtonUtils {
         button.setOnTouchListener((view, motionEvent) -> {
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN: {
-                    button.setBackground(AppCompatResources.getDrawable(mContext, R.drawable.buttonhighlight));
+                    button.setBackground(buttonHighlight);
 
                     break;
                 }
                 case MotionEvent.ACTION_UP: {
-                    button.setBackground(AppCompatResources.getDrawable(mContext, R.drawable.outlineforbutton));
+                    button.setBackground(outlineForButton);
 
                     if (activityClass != null) {
                         startActivity(activityClass);
@@ -90,12 +95,12 @@ public class ButtonUtils {
         imagebutton.setOnTouchListener((view, motionEvent) -> {
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN: {
-                    imagebutton.setBackground(AppCompatResources.getDrawable(mContext, R.drawable.buttonhighlight));
+                    imagebutton.setBackground(buttonHighlight);
 
                     break;
                 }
                 case MotionEvent.ACTION_UP: {
-                    imagebutton.setBackground(AppCompatResources.getDrawable(mContext, R.drawable.outlineforbutton));
+                    imagebutton.setBackground(outlineForButton);
 
                     if (activityClass != null) {
                         startActivity(activityClass);
