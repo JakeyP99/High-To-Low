@@ -74,8 +74,8 @@ public class Settings_PlayerModel extends ButtonUtilsActivity {
         // Call updatePlayerCounter() to display the counter text initially
         updatePlayerCounter();
 
-        btnUtils.setButton(proceedButton,  () -> {
-          startActivity(getIntentForClass(MainActivity.class, true));
+        btnUtils.setButton(proceedButton, () -> {
+            startActivity(getIntentForClass(MainActivity.class, true));
         });
 
     }
@@ -93,11 +93,11 @@ public class Settings_PlayerModel extends ButtonUtilsActivity {
         playerList.add(newPlayer);
         playerListAdapter.notifyItemInserted(playerList.size() - 1);
         savePlayerData();
-updatePlayerCounter();
+        updatePlayerCounter();
     }
 
     // Delete a player at a given position
-    private void deletePlayer(int position) {
+    public void deletePlayer(int position) {
         playerList.remove(position);
         playerListAdapter.notifyItemRemoved(position);
         savePlayerData();
@@ -128,96 +128,7 @@ updatePlayerCounter();
         }
     }
 
-    // RecyclerView adapter for player list
-    private class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.ViewHolder> {
-        private final Context context;
-        private final List<Player> players;
-        private int selectedPosition = RecyclerView.NO_POSITION;
-        private final int maxSelectedPlayers;
-
-        public PlayerListAdapter(Context context, List<Player> players, int maxSelectedPlayers) {
-            this.context = context;
-            this.players = players;
-            this.maxSelectedPlayers = maxSelectedPlayers;
-        }
-
-
-        @NonNull
-        @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(context).inflate(R.layout.list_view_player_name, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            Player player = players.get(position);
-            holder.bind(player, position);
-        }
-
-        @Override
-        public int getItemCount() {
-            return players.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            ImageView playerPhotoImageView;
-            TextView playerNameTextView;
-            ImageView deletePlayerImageView;
-            View playerItemView;
-
-            public ViewHolder(@NonNull View itemView) {
-                super(itemView);
-                playerItemView = itemView;
-                playerPhotoImageView = itemView.findViewById(R.id.playerPhotoImageView);
-                playerNameTextView = itemView.findViewById(R.id.playerNameTextView);
-                deletePlayerImageView = itemView.findViewById(R.id.deletePlayerImageView);
-
-                deletePlayerImageView.setOnClickListener(v -> {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        deletePlayer(position);
-                    }
-                });
-
-                // Set click listener for player selection
-                playerItemView.setOnClickListener(v -> {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        togglePlayerSelection(position);
-                    }
-                });
-            }
-
-            public void bind(Player player, int position) {
-                String photoString = player.getPhoto();
-                Glide.with(context)
-                        .load(Base64.decode(photoString, Base64.DEFAULT))
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(playerPhotoImageView);
-
-                playerNameTextView.setBackgroundResource(R.drawable.outlineforbutton);
-                playerNameTextView.setText(player.getName());
-                playerNameTextView.setPadding(20, 20, 20, 20);
-
-                // Highlight the selected player
-                if (player.isSelected()) {
-                    playerItemView.setBackgroundResource(R.drawable.outlineforbutton);
-                } else {
-                    playerItemView.setBackgroundResource(0);
-                }
-            }
-
-            private void togglePlayerSelection(int position) {
-                Player player = players.get(position);
-                player.setSelected(!player.isSelected());
-                notifyItemChanged(position);
-                updatePlayerCounter();
-            }
-        }
-
-    }
-    private void updatePlayerCounter() {
+    public void updatePlayerCounter() {
         int selectedPlayerCount = 0;
         List<Player> selectedPlayers = new ArrayList<>();
 
@@ -242,7 +153,7 @@ updatePlayerCounter();
     }
 
     private void proceedToMainActivity(List<Player> selectedPlayers) {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = getIntentForClass(MainActivity.class, true);
 
         // Pass the selected player names to the MainActivity
         ArrayList<String> playerNames = new ArrayList<>();
@@ -313,7 +224,6 @@ updatePlayerCounter();
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
-
 
 
 }

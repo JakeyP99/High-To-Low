@@ -1,48 +1,107 @@
 package com.example.countingdowngame;
 
 import android.content.Context;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
-public class PlayerListAdapter extends ArrayAdapter<Player> {
+// RecyclerView adapter for player list
+public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.ViewHolder> {
+    private final Settings_PlayerModel context;
+    private final List<Player> players;
+    private int selectedPosition = RecyclerView.NO_POSITION;
+    private final int maxSelectedPlayers;
 
-    private List<Player> players;
-    private LayoutInflater inflater;
-
-    public PlayerListAdapter(Context context, List<Player> players) {
-        super(context, 0, players);
+    public PlayerListAdapter(Settings_PlayerModel context, List<Player> players, int maxSelectedPlayers) {
+        this.context = context;
         this.players = players;
-        inflater = LayoutInflater.from(context);
+        this.maxSelectedPlayers = maxSelectedPlayers;
     }
+
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        ViewHolder holder;
-        if (convertView == null) {
-            convertView = inflater.inflate(R.layout.list_item_player, parent, false);
-            holder = new ViewHolder();
-            holder.playerNameTextView = convertView.findViewById(R.id.playerNameTextView);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.list_view_player_name, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Player player = players.get(position);
+        holder.bind(player, position);
+    }
+
+    @Override
+    public int getItemCount() {
+        return players.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView playerPhotoImageView;
+        TextView playerNameTextView;
+        ImageView deletePlayerImageView;
+        View playerItemView;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            playerItemView = itemView;
+            playerPhotoImageView = itemView.findViewById(R.id.playerPhotoImageView);
+            playerNameTextView = itemView.findViewById(R.id.playerNameTextView);
+            deletePlayerImageView = itemView.findViewById(R.id.deletePlayerImageView);
+
+            deletePlayerImageView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    context.deletePlayer(position);
+                }
+            });
+
+            // Set click listener for player selection
+            playerItemView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    togglePlayerSelection(position);
+                }
+            });
         }
 
-        Player player = players.get(position);
-        holder.playerNameTextView.setText(player.getName());
+        public void bind(Player player, int position) {
+            String photoString = player.getPhoto();
+            Glide.with(context)
+                    .load(Base64.decode(photoString, Base64.DEFAULT))
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(playerPhotoImageView);
 
-        return convertView;
+            playerNameTextView.setBackgroundResource(R.drawable.outlineforbutton);
+            playerNameTextView.setText(player.getName());
+            playerNameTextView.setPadding(20, 20, 20, 20);
+
+            // Highlight the selected player
+            if (player.isSelected()) {
+                playerItemView.setBackgroundResource(R.drawable.outlineforbutton);
+            } else {
+                playerItemView.setBackgroundResource(0);
+            }
+        }
+
+        private void togglePlayerSelection(int position) {
+            Player player = players.get(position);
+            player.setSelected(!player.isSelected());
+            notifyItemChanged(position);
+            context.updatePlayerCounter();
+        }
     }
 
-    private static class ViewHolder {
-        TextView playerNameTextView;
-    }
 }

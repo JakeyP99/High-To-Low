@@ -71,12 +71,6 @@
             android:launchMode="singleInstance">
         </activity>
 
-        <activity
-            android:name=".PlayerSelection"
-            android:windowSoftInputMode="adjustNothing"
-            android:launchMode="singleInstance">
-        </activity>
-
 
         <meta-data
             android:name="preloaded_fonts"
