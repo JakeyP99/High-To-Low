@@ -16,7 +16,7 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(PlayerNumberChoice.this, HomeScreen.class));
+        startActivity(getSafeIntent(HomeScreen.class));
     }
 
     @Override
@@ -48,7 +48,7 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
 
             Game.getInstance().setPlayers(inputNumber);
 
-            Intent intent = new Intent(PlayerNumberChoice.this, PlayerNameChoice.class);
+            Intent intent = getSafeIntent(PlayerNameChoice.class);
             intent.putExtra("playerCount", inputNumber);
             startActivity(intent);
 

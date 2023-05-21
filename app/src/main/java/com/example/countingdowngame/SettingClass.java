@@ -10,7 +10,7 @@ public class SettingClass extends ButtonUtilsActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(SettingClass.this, HomeScreen.class));
+        startActivity(getSafeIntent(HomeScreen.class));
     }
 
     @Override

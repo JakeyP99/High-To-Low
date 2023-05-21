@@ -251,7 +251,7 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
     }
 
     private void startEndActivity() {
-        startActivity(new Intent(MainActivitySplitScreen.this, EndActivity.class));
+        startActivity(getSafeIntent(EndActivity.class));
     }
 
     // These are my button functions.

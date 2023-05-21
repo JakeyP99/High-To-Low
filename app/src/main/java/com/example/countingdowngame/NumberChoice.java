@@ -19,14 +19,6 @@ public class NumberChoice extends ButtonUtilsActivity {
     private int startingNumber;
 
     @Override
-    public void onBackPressed() {
-        Intent intent = new Intent();
-        intent.putExtra("resetCounter", true);
-        setResult(RESULT_OK, intent);
-        finish();
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.number_choice);
@@ -78,7 +70,7 @@ public class NumberChoice extends ButtonUtilsActivity {
         SharedPreferences preferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
         boolean switchOneChecked = preferences.getBoolean("button_gameModeOne", false);
         Class<?> targetClass = switchOneChecked ? MainActivity.class : MainActivitySplitScreen.class;
-        Intent i = new Intent(NumberChoice.this, targetClass);
+        Intent i = getSafeIntent(targetClass);
         i.putExtra("startingNumber", startingNumber);
         startActivity(i);
     }

@@ -35,7 +35,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Settings_PlayerModel extends AppCompatActivity {
+public class Settings_PlayerModel extends ButtonUtilsActivity {
     private static final int REQUEST_IMAGE_PICK = 1;
 
     private List<Player> playerList;
@@ -44,7 +44,7 @@ public class Settings_PlayerModel extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, SettingClass.class));
+        startActivity(getSafeIntent(SettingClass.class));
     }
 
     @Override

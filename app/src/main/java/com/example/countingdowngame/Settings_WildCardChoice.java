@@ -19,13 +19,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Settings_WildCardChoice extends AppCompatActivity {
+public class Settings_WildCardChoice extends ButtonUtilsActivity {
     private ListView listViewWildCard;
     private WildCardAdapter deletableAdapter;
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, SettingClass.class));
+        startActivity(getSafeIntent(SettingClass.class));
     }
 
     @Override

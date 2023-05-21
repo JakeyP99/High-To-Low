@@ -1,6 +1,5 @@
 package com.example.countingdowngame;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -18,7 +17,7 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, SettingClass.class));
+        startActivity(getSafeIntent(SettingClass.class));
     }
 
 

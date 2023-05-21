@@ -20,7 +20,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ButtonUtilsActivity {
     private final Map<Player, Set<WildCardProbabilities>> usedWildCard = new HashMap<>();
     private final Set<WildCardProbabilities> usedWildCards = new HashSet<>();
 
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         imageButtonExit.setOnClickListener(view -> {
             Game.getInstance().endGame();
             // Start HomeScreen activity
-            startActivity(new Intent(MainActivity.this, HomeScreen.class));
+            startActivity(getSafeIntent(HomeScreen.class));
         });
 
         Bundle extras = getIntent().getExtras();
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startEndActivity() {
-        startActivity(new Intent(MainActivity.this, EndActivity.class));
+        startActivity(getSafeIntent(EndActivity.class));
     }
 
     private void setTextViewSizeBasedOnInt(TextView textView, String text) {

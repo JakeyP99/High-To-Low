@@ -1,6 +1,5 @@
 package com.example.countingdowngame;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -23,7 +22,7 @@ public class Instructions extends ButtonUtilsActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, HomeScreen.class));
+        startActivity(getSafeIntent(HomeScreen.class));
     }
 
     @Override

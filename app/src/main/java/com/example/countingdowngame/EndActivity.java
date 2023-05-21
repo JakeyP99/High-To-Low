@@ -1,6 +1,5 @@
 package com.example.countingdowngame;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -9,8 +8,7 @@ import android.widget.ListView;
 public class EndActivity extends ButtonUtilsActivity {
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(EndActivity.this, HomeScreen.class);
-        startActivity(intent);
+        startActivity(getSafeIntent(HomeScreen.class));
     }
 
     @Override

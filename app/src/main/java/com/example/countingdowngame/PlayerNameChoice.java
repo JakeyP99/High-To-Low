@@ -31,8 +31,7 @@ public class PlayerNameChoice extends ButtonUtilsActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(PlayerNameChoice.this, PlayerNumberChoice.class);
-        startActivityForResult(intent, REQUEST_CODE_RESET_COUNTER);
+        startActivityForResult(getSafeIntent(PlayerNumberChoice.class), REQUEST_CODE_RESET_COUNTER);
     }
 
     @Override
@@ -88,7 +87,7 @@ public class PlayerNameChoice extends ButtonUtilsActivity {
             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(PlayerNameChoice.this).edit();
             editor.putStringSet("playerNames", new HashSet<>(playerNames));
             editor.apply();
-            startActivity(new Intent(PlayerNameChoice.this, NumberChoice.class));
+            startActivity(getSafeIntent(NumberChoice.class));
         } else if (playerNames.size() < playerCount) {
             Toast.makeText(PlayerNameChoice.this, "Please add more player names.", Toast.LENGTH_SHORT).show();
         } else {
