@@ -74,7 +74,9 @@ public class Settings_PlayerModel extends ButtonUtilsActivity {
         // Call updatePlayerCounter() to display the counter text initially
         updatePlayerCounter();
 
-        btnUtils.setButton(proceedButton, MainActivity.class, null);
+        btnUtils.setButton(proceedButton,  () -> {
+          startActivity(getIntentForClass(MainActivity.class, true));
+        });
 
     }
 

@@ -20,12 +20,7 @@ import java.util.Arrays;
 public class Settings_WildCard_Choice extends ButtonUtilsActivity {
     private ListView listViewWildCard;
     private Settings_WildCard_Adapter deletableAdapter;
-
-    @Override
-    public void onBackPressed() {
-        startActivity(getSafeIntent(Settings.class));
-    }
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

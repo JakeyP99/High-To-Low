@@ -17,7 +17,7 @@ public class Settings extends ButtonUtilsActivity {
         btnUtils.setButton(btnReturn, this::onBackPressed);
 
         btnUtils.setButton(btnWildCardSettings, () -> {
-            startActivity(getIntentForClass(Settings_WildCardChoice.class));
+            startActivity(getIntentForClass(Settings_WildCard_Choice.class));
         });
 
         btnUtils.setButton(btnGameModeSettings, () -> {

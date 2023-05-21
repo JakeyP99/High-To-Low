@@ -55,6 +55,6 @@ public class ButtonUtilsActivity extends AppCompatActivity {
     }
 
     protected void gotoSettings() {
-        startActivity(getIntentForClass(SettingClass.class, true));
+        startActivity(getIntentForClass(Settings.class, true));
     }
 }
