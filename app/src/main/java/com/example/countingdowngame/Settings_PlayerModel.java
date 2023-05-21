@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,7 +32,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Settings_PlayerModel extends AppCompatActivity {
+public class Settings_PlayerModel extends ButtonUtilsActivity {
 
     private static final int REQUEST_IMAGE_PICK = 1;
     private List<Player> playerList;
@@ -52,6 +51,8 @@ public class Settings_PlayerModel extends AppCompatActivity {
         setContentView(R.layout.a3_player_choice);
 
         // Initialize views and adapters
+        Button proceedButton = findViewById(R.id.button_done);
+
         RecyclerView playerRecyclerView = findViewById(R.id.playerRecyclerView);
         playerList = new ArrayList<>();
         playerListAdapter = new PlayerListAdapter(this, playerList, 3);
@@ -77,6 +78,9 @@ public class Settings_PlayerModel extends AppCompatActivity {
         totalPlayerCount = getIntent().getIntExtra("playerCount", 0);
         // Call updatePlayerCounter() to display the counter text initially
         updatePlayerCounter();
+
+        btnUtils.setButton(proceedButton, MainActivity.class, null);
+
     }
 
     // Open image picker to capture an image
@@ -218,22 +222,38 @@ updatePlayerCounter();
     }
     private void updatePlayerCounter() {
         int selectedPlayerCount = 0;
+        List<Player> selectedPlayers = new ArrayList<>();
+
         for (Player player : playerList) {
             if (player.isSelected()) {
                 selectedPlayerCount++;
+                selectedPlayers.add(player);
             }
         }
+
         int remainingPlayers = totalPlayerCount - selectedPlayerCount;
+        String counterText;
 
-        String counterText = "Remaining Players Needed: " + remainingPlayers;
-        if (remainingPlayers == totalPlayerCount) {
-            counterText = "Remaining Players: " + totalPlayerCount;
+        if (remainingPlayers == 0) {
+            counterText = "All Players Selected: " + totalPlayerCount;
+            proceedToMainActivity(selectedPlayers);
+        } else {
+            counterText = "Remaining Players Needed: " + remainingPlayers;
         }
-        playerCountTextView.setText(counterText);
 
-        // Enable or disable game proceed button based on player selection
-        Button proceedButton = findViewById(R.id.button_done);
-        proceedButton.setEnabled(selectedPlayerCount == totalPlayerCount);
+        playerCountTextView.setText(counterText);
+    }
+
+    private void proceedToMainActivity(List<Player> selectedPlayers) {
+        Intent intent = new Intent(this, MainActivity.class);
+
+        // Pass the selected player names to the MainActivity
+        ArrayList<String> playerNames = new ArrayList<>();
+        for (Player player : selectedPlayers) {
+            playerNames.add(player.getName());
+        }
+        intent.putStringArrayListExtra("playerNames", playerNames);
+        startActivity(intent);
     }
 
     // Handle the result of the image picker activity

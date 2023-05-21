@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,7 +36,17 @@ public class MainActivity extends ButtonUtilsActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a5_game_start);
+        ArrayList<String> playerNames = getIntent().getStringArrayListExtra("playerNames");
 
+        if (playerNames != null) {
+            // Display the player names
+            TextView playerNamesTextView = findViewById(R.id.textView_Number_Turn);
+            String namesText = "Selected Players:\n";
+            for (String playerName : playerNames) {
+                namesText += playerName + "\n";
+            }
+            playerNamesTextView.setText(namesText);
+        }
         numberText = findViewById(R.id.numberText);
         nextPlayerText = findViewById(R.id.textView_Number_Turn);
         btnSkip = findViewById(R.id.btnSkip);
@@ -121,11 +132,14 @@ public class MainActivity extends ButtonUtilsActivity {
     }
 
     private void renderPlayer() {
+
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         Set<String> playerNamesSet = preferences.getStringSet("playerNames", null);
 
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         int currentPlayerIndex = Game.getInstance().getCurrentPlayerId();
+
+
 
         if (playerNamesSet != null) {
             String[] playerNamesArray = playerNamesSet.toArray(new String[0]);

@@ -62,6 +62,8 @@ class Player implements Serializable {
         this.wildcard = 1;
     }
 
+
+
     public boolean isSelected() {
         return selected;
     }
