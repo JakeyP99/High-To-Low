@@ -12,11 +12,6 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
     private EditText originalPlayerField;
 
     @Override
-    public void onBackPressed() {
-        startActivity(getSafeIntent(HomeScreen.class));
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.playernumber_activity);
@@ -24,7 +19,7 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
         Button btnSubmitPlayers = findViewById(R.id.btnSubmitPlayers);
         originalPlayerField = findViewById(R.id.EditTextViewplayernumber);
 
-        btnUtils.setButton(btnSubmitPlayers, null, this::submitPlayerNumber);
+        btnUtils.setButton(btnSubmitPlayers, this::submitPlayerNumber);
     }
 
     private void submitPlayerNumber() {
@@ -45,9 +40,9 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
 
             Game.getInstance().setPlayers(inputNumber);
 
-            Intent intent = getSafeIntent(PlayerNameChoice.class);
-            intent.putExtra("playerCount", inputNumber);
-            startActivity(intent);
+            Intent i = getIntentForClass(PlayerNameChoice.class, true);
+            i.putExtra("playerCount", inputNumber);
+            startActivity(i);
 
         } catch (NumberFormatException e) {
             Toast.makeText(PlayerNumberChoice.this, "That's wayyyy too many players", Toast.LENGTH_SHORT).show();

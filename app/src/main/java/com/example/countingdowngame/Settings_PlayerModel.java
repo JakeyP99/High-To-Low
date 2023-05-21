@@ -42,11 +42,6 @@ public class Settings_PlayerModel extends ButtonUtilsActivity {
     private RecyclerView playerRecyclerView;
 
     @Override
-    public void onBackPressed() {
-        startActivity(getSafeIntent(SettingClass.class));
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_player_list);

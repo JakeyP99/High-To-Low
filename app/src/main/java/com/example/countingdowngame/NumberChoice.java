@@ -23,8 +23,8 @@ public class NumberChoice extends ButtonUtilsActivity {
         Button btnSubmit = findViewById(R.id.btnSubmitNumbers);
         Button btnRandom = findViewById(R.id.btnRandomNumber);
 
-        btnUtils.setButton(btnSubmit, null, this::onSubmitClicked);
-        btnUtils.setButton(btnRandom, null, this::onRandomClicked);
+        btnUtils.setButton(btnSubmit, this::onSubmitClicked);
+        btnUtils.setButton(btnRandom, this::onRandomClicked);
     }
 
     private void onSubmitClicked() {
@@ -67,7 +67,7 @@ public class NumberChoice extends ButtonUtilsActivity {
         SharedPreferences preferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
         boolean switchOneChecked = preferences.getBoolean("button_gameModeOne", false);
         Class<?> targetClass = switchOneChecked ? MainActivity.class : MainActivitySplitScreen.class;
-        Intent i = getSafeIntent(targetClass);
+        Intent i = getIntentForClass(targetClass, true);
         i.putExtra("startingNumber", startingNumber);
         startActivity(i);
     }

@@ -46,7 +46,7 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
     @Override
     public void onBackPressed() {
-        // Do nothing
+        // Disable back button functionality
     }
 
     @Override
@@ -73,29 +73,31 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         ImageButton imageButtonExitPlayer2 = findViewById(R.id.imageBtnExitPlayer2);
 
         // These are the button controls for Player 1
-        btnUtils.setButton(btnWild, null, this::ButtonWildFunction);
-        btnUtils.setButton(btnGenerate, null, this::ButtonGenerateFunction);
+        btnUtils.setButton(btnWild, this::ButtonWildFunction);
+        btnUtils.setButton(btnGenerate, this::ButtonGenerateFunction);
 
-        btnUtils.setButton(btnBackWild, null, this::ButtonContinueFunction);
+        btnUtils.setButton(btnBackWild, this::ButtonContinueFunction);
 
-        btnUtils.setButton(btnSkip, null, this::ButtonSkipFunction);
+        btnUtils.setButton(btnSkip, this::ButtonSkipFunction);
 
-        btnUtils.setImageButton(imageButtonExit, HomeScreen.class, () -> {
+        btnUtils.setImageButton(imageButtonExit, () -> {
             Game.getInstance().endGame();
+            gotoHomeScreen();
         });
 
         // These are the button controls for Player 2
 
-        btnUtils.setButton(btnWildPlayer2, null, this::ButtonWildFunction);
+        btnUtils.setButton(btnWildPlayer2, this::ButtonWildFunction);
 
-        btnUtils.setButton(btnGeneratePlayer2, null, this::ButtonGenerateFunction);
+        btnUtils.setButton(btnGeneratePlayer2, this::ButtonGenerateFunction);
 
-        btnUtils.setButton(btnBackWildPlayer2, null, this::ButtonContinueFunction);
+        btnUtils.setButton(btnBackWildPlayer2, this::ButtonContinueFunction);
 
-        btnUtils.setButton(btnSkipPlayer2, null, this::ButtonSkipFunction);
+        btnUtils.setButton(btnSkipPlayer2, this::ButtonSkipFunction);
 
-        btnUtils.setImageButton(imageButtonExitPlayer2, HomeScreen.class, () -> {
+        btnUtils.setImageButton(imageButtonExitPlayer2, () -> {
             Game.getInstance().endGame();
+            gotoHomeScreen();
         });
 
 
@@ -250,13 +252,9 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         }
     }
 
-    private void startEndActivity() {
-        startActivity(getSafeIntent(EndActivity.class));
-    }
-
     // These are my button functions.
     private void ButtonGenerateFunction() {
-        Game.getInstance().nextNumber(this::startEndActivity);
+        Game.getInstance().nextNumber(this::gotoGameEnd);
         wildText.setVisibility(View.INVISIBLE);
         numberText.setVisibility(View.VISIBLE);
         nextPlayerText.setVisibility(View.VISIBLE);

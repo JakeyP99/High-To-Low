@@ -23,10 +23,6 @@ import androidx.core.app.ActivityCompat;
 import java.io.IOException;
 
 public class ButtonUtils {
-    public static ButtonUtils create(final AppCompatActivity context) {
-        return new ButtonUtils(context);
-    }
-
     private static final int NUM_SOUNDS = 4; // Number of sounds in the rotation
     private static int currentSoundIndex = 0; // Current index of the sound being played
     private final MediaPlayer[] burp = new MediaPlayer[NUM_SOUNDS];
@@ -36,7 +32,7 @@ public class ButtonUtils {
     private final Drawable outlineForButton;
 
 
-    private ButtonUtils(final AppCompatActivity context) {
+    public ButtonUtils(final AppCompatActivity context) {
         mContext = context;
         burp[0] = MediaPlayer.create(context, R.raw.burp1);
         burp[1] = MediaPlayer.create(context, R.raw.burp2);
@@ -55,7 +51,7 @@ public class ButtonUtils {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    public void setButton(final Button button, final Class<?> activityClass, final Runnable buttonAction) {
+    public void setButton(final Button button, final Runnable buttonAction) {
         if (button == null) {
             return;
         }
@@ -68,10 +64,6 @@ public class ButtonUtils {
                 }
                 case MotionEvent.ACTION_UP: {
                     button.setBackground(outlineForButton);
-
-                    if (activityClass != null) {
-                        startActivity(activityClass);
-                    }
 
                     if (buttonAction != null) {
                         buttonAction.run();
@@ -91,7 +83,7 @@ public class ButtonUtils {
 
 
     @SuppressLint("ClickableViewAccessibility")
-    public void setImageButton(final ImageButton imagebutton, final Class<?> activityClass, final Runnable buttonAction) {
+    public void setImageButton(final ImageButton imagebutton, final Runnable buttonAction) {
         imagebutton.setOnTouchListener((view, motionEvent) -> {
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN: {
@@ -101,10 +93,6 @@ public class ButtonUtils {
                 }
                 case MotionEvent.ACTION_UP: {
                     imagebutton.setBackground(outlineForButton);
-
-                    if (activityClass != null) {
-                        startActivity(activityClass);
-                    }
 
                     if (buttonAction != null) {
                         buttonAction.run();
@@ -118,12 +106,6 @@ public class ButtonUtils {
 
             return true;
         });
-    }
-
-    private void startActivity(final Class<?> activityClass) {
-        Intent intent = new Intent(mContext, activityClass);
-        mContext.startActivity(intent);
-        new Handler().postDelayed(mContext::finish, 1000);
     }
 
     private void playSoundEffects() {

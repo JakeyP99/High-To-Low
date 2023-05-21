@@ -16,12 +16,6 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
     private Button btnReturn;
 
     @Override
-    public void onBackPressed() {
-        startActivity(getSafeIntent(SettingClass.class));
-    }
-
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_mode_choice);
@@ -92,7 +86,7 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
         button_gameModeTwo.setOnClickListener(this);
         button_regularSound.setOnClickListener(this);
         button_burpSound.setOnClickListener(this);
-        btnUtils.setButton(btnReturn, HomeScreen.class, null);
+        btnUtils.setButton(btnReturn, this::onBackPressed);
     }
 
     private void toggleButton(Button selectedButton, Button unselectedButton) {

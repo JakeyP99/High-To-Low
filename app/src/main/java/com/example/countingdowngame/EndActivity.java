@@ -8,7 +8,7 @@ import android.widget.ListView;
 public class EndActivity extends ButtonUtilsActivity {
     @Override
     public void onBackPressed() {
-        startActivity(getSafeIntent(HomeScreen.class));
+        gotoHomeScreen();
     }
 
     @Override
@@ -25,10 +25,11 @@ public class EndActivity extends ButtonUtilsActivity {
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(EndActivity.this, R.layout.list_view_end_game, R.id.previousNumbers, Game.getInstance().getPreviousNumbersFormatted());
         previousNumbersList.setAdapter(adapter);
 
-        btnUtils.setButton(btnPlayAgain, NumberChoice.class, () -> {
+        btnUtils.setButton(btnPlayAgain, () -> {
             Game.getInstance().playAgain();
+            gotoGameStart();
         });
 
-        btnUtils.setButton(btnNewPlayer, PlayerNumberChoice.class, null);
+        btnUtils.setButton(btnNewPlayer, this::gotoGameSetup);
     }
 }

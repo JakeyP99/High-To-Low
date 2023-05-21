@@ -4,12 +4,6 @@ import android.os.Bundle;
 import android.widget.Button;
 
 public class HomeScreen extends ButtonUtilsActivity {
-
-    @Override
-    public void onBackPressed() {
-        // Do nothing
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,11 +13,12 @@ public class HomeScreen extends ButtonUtilsActivity {
         final Button btnInstructions = findViewById(R.id.button_Instructions);
         final Button btnSettings = findViewById(R.id.button_Settings);
 
-        btnUtils.setButton(btnQuickPlay, PlayerNumberChoice.class, null);
-        btnUtils.setButton(btnInstructions, Instructions.class, null);
-        btnUtils.setButton(btnSettings, SettingClass.class, null);
-    }
+        btnUtils.setButton(btnQuickPlay, this::gotoGameSetup);
 
+        btnUtils.setButton(btnInstructions, this::gotoInstructions);
+
+        btnUtils.setButton(btnSettings, this::gotoSettings);
+    }
 }
 
 

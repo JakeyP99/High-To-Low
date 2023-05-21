@@ -52,7 +52,7 @@ public class MainActivity extends ButtonUtilsActivity {
         btnBackWild.setVisibility(View.INVISIBLE);
 
         btnGenerate.setOnClickListener(view -> {
-            Game.getInstance().nextNumber(this::startEndActivity);
+            Game.getInstance().nextNumber(this::gotoGameEnd);
             wildText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.VISIBLE);
             nextPlayerText.setVisibility(View.VISIBLE);
@@ -89,7 +89,7 @@ public class MainActivity extends ButtonUtilsActivity {
         imageButtonExit.setOnClickListener(view -> {
             Game.getInstance().endGame();
             // Start HomeScreen activity
-            startActivity(getSafeIntent(HomeScreen.class));
+            gotoHomeScreen();
         });
 
         Bundle extras = getIntent().getExtras();
@@ -106,10 +106,6 @@ public class MainActivity extends ButtonUtilsActivity {
         });
 
         renderPlayer();
-    }
-
-    private void startEndActivity() {
-        startActivity(getSafeIntent(EndActivity.class));
     }
 
     private void setTextViewSizeBasedOnInt(TextView textView, String text) {
@@ -163,25 +159,19 @@ public class MainActivity extends ButtonUtilsActivity {
         final TextView wildActivityTextView = findViewById(R.id.wild_textview);
         player.useWildCard();
 
-        boolean wildCardsEnabled = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-                .getBoolean("wild_cards_toggle", true);
+        boolean wildCardsEnabled = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("wild_cards_toggle", true);
 
         String selectedActivity = null;
         Set<WildCardProbabilities> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
         if (wildCardsEnabled) {
-            List<WildCardProbabilities> unusedCards = Arrays.stream(activityProbabilities)
-                    .filter(WildCardProbabilities::isEnabled)
-                    .filter(c -> !usedWildCards.contains(c))
-                    .collect(Collectors.toList());
+            List<WildCardProbabilities> unusedCards = Arrays.stream(activityProbabilities).filter(WildCardProbabilities::isEnabled).filter(c -> !usedWildCards.contains(c)).collect(Collectors.toList());
 
             if (unusedCards.isEmpty() && usedCards != null) {
                 usedCards.clear();
             }
 
             // Calculate total weight of unused wildcards
-            int totalWeight = unusedCards.stream()
-                    .mapToInt(WildCardProbabilities::getProbability)
-                    .sum();
+            int totalWeight = unusedCards.stream().mapToInt(WildCardProbabilities::getProbability).sum();
 
             if (totalWeight <= 0) {
                 wildActivityTextView.setText("No wild cards available");

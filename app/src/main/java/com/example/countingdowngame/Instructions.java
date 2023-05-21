@@ -21,11 +21,6 @@ public class Instructions extends ButtonUtilsActivity {
             "Tada, you're done! \n\n If that game didn't bore you to death then play it again, and again, and again, literally do whatever you want, you're a free person so live your gorgeous life.");
 
     @Override
-    public void onBackPressed() {
-        startActivity(getSafeIntent(HomeScreen.class));
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.instructions_layout);
@@ -34,7 +29,7 @@ public class Instructions extends ButtonUtilsActivity {
         final ViewPager viewPager = findViewById(R.id.viewPager);
         final ProgressBar progressBar = findViewById(R.id.progress_bar);
 
-        btnUtils.setButton(btnBack, HomeScreen.class, null);
+        btnUtils.setButton(btnBack, this::onBackPressed);
 
         InstructionPagerAdapter adapter = new InstructionPagerAdapter(instructions);
 

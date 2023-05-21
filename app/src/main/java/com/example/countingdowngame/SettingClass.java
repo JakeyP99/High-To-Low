@@ -1,18 +1,9 @@
 package com.example.countingdowngame;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 public class SettingClass extends ButtonUtilsActivity {
-
-    @Override
-    public void onBackPressed() {
-        startActivity(getSafeIntent(HomeScreen.class));
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,9 +14,18 @@ public class SettingClass extends ButtonUtilsActivity {
         final Button btnGameModeSettings = findViewById(R.id.button_gameModeSettings);
         final Button btnPlayerModelSettings = findViewById(R.id.button_playerSettings);
 
-        btnUtils.setButton(btnReturn, HomeScreen.class, null);
-        btnUtils.setButton(btnWildCardSettings, Settings_WildCardChoice.class, null);
-        btnUtils.setButton(btnGameModeSettings, Settings_GameModeChoice.class, null);
-        btnUtils.setButton(btnPlayerModelSettings, Settings_PlayerModel.class, null);
+        btnUtils.setButton(btnReturn, this::onBackPressed);
+
+        btnUtils.setButton(btnWildCardSettings, () -> {
+            startActivity(getIntentForClass(Settings_WildCardChoice.class));
+        });
+
+        btnUtils.setButton(btnGameModeSettings, () -> {
+            startActivity(getIntentForClass(Settings_GameModeChoice.class));
+        });
+
+        btnUtils.setButton(btnPlayerModelSettings, () -> {
+            startActivity(getIntentForClass(Settings_PlayerModel.class));
+        });
     }
 }

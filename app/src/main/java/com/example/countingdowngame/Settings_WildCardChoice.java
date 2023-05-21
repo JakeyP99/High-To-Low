@@ -23,10 +23,6 @@ public class Settings_WildCardChoice extends ButtonUtilsActivity {
     private ListView listViewWildCard;
     private WildCardAdapter deletableAdapter;
 
-    @Override
-    public void onBackPressed() {
-        startActivity(getSafeIntent(SettingClass.class));
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

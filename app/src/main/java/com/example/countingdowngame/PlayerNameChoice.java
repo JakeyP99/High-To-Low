@@ -20,30 +20,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class PlayerNameChoice extends ButtonUtilsActivity {
-    private static final int REQUEST_CODE_RESET_COUNTER = 1;
-
     private ListView playerListView;
     private EditText nameEditText;
     private ArrayList<String> playerNames;
     private int playerCounter;
-
-    @Override
-    public void onBackPressed() {
-        startActivityForResult(getSafeIntent(PlayerNumberChoice.class), REQUEST_CODE_RESET_COUNTER);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_RESET_COUNTER && resultCode == RESULT_OK) {
-            boolean shouldResetCounter = data.getBooleanExtra("resetCounter", false);
-            if (shouldResetCounter) {
-                playerCounter = 0;
-                playerNames.clear();
-                updatePlayerList();
-            }
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +40,10 @@ public class PlayerNameChoice extends ButtonUtilsActivity {
         playerCounter = playerNames.size();
 
         Button addButton = findViewById(R.id.button_add_name);
-        btnUtils.setButton(addButton, null, this::addPlayerName);
+        btnUtils.setButton(addButton, this::addPlayerName);
 
         Button doneButton = findViewById(R.id.button_done);
-        btnUtils.setButton(doneButton, null, this::checkPlayerNames);
+        btnUtils.setButton(doneButton, this::checkPlayerNames);
 
         updatePlayerList();
     }
@@ -85,7 +65,7 @@ public class PlayerNameChoice extends ButtonUtilsActivity {
             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(PlayerNameChoice.this).edit();
             editor.putStringSet("playerNames", new HashSet<>(playerNames));
             editor.apply();
-            startActivity(getSafeIntent(NumberChoice.class));
+            gotoGameStart();
         } else if (playerNames.size() < playerCount) {
             Toast.makeText(PlayerNameChoice.this, "Please add more player names.", Toast.LENGTH_SHORT).show();
         } else {
@@ -110,7 +90,7 @@ public class PlayerNameChoice extends ButtonUtilsActivity {
                     playerNameView.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO);
                 }
 
-                btnUtils.setButton(convertView.findViewById(R.id.delete_button), null, () -> {
+                btnUtils.setButton(convertView.findViewById(R.id.delete_button), () -> {
                     playerNames.remove(position);
                     playerCounter--;
                     updatePlayerList();
