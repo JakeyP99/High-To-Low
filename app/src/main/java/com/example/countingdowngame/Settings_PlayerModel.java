@@ -37,7 +37,6 @@ import java.util.List;
 
 public class Settings_PlayerModel extends ButtonUtilsActivity {
     private static final int REQUEST_IMAGE_PICK = 1;
-
     private List<Player> playerList;
     private PlayerListAdapter playerListAdapter;
     private RecyclerView playerRecyclerView;
@@ -52,7 +51,7 @@ public class Settings_PlayerModel extends ButtonUtilsActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_player_list);
         playerList = new ArrayList<>();
-        loadPlayerData();
+//        loadPlayerData();
 
         playerListAdapter = new PlayerListAdapter(this, playerList);
         playerRecyclerView = findViewById(R.id.playerRecyclerView);
@@ -104,7 +103,6 @@ public class Settings_PlayerModel extends ButtonUtilsActivity {
                 scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
-                        // Do nothing
                     }
 
                     @Override
@@ -114,7 +112,6 @@ public class Settings_PlayerModel extends ButtonUtilsActivity {
 
                     @Override
                     public void onAnimationRepeat(Animation animation) {
-                        // Do nothing
                     }
                 });
                 playerPhotoImageView.startAnimation(scaleAnimation);
