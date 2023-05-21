@@ -10,11 +10,12 @@ import android.widget.Toast;
 
 public class PlayerNumberChoice extends ButtonUtilsActivity {
     private EditText originalPlayerField;
+    private int totalPlayerCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.playernumber_activity);
+        setContentView(R.layout.a2_player_number_choice);
 
         Button btnSubmitPlayers = findViewById(R.id.btnSubmitPlayers);
         originalPlayerField = findViewById(R.id.EditTextViewplayernumber);
@@ -38,14 +39,12 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
                 return;
             }
 
-            Game.getInstance().setPlayers(inputNumber);
-
-            Intent i = getIntentForClass(PlayerNameChoice.class, true);
+            Intent i = getIntentForClass(Settings_PlayerModel.class, true);
             i.putExtra("playerCount", inputNumber);
             startActivity(i);
 
         } catch (NumberFormatException e) {
-            Toast.makeText(PlayerNumberChoice.this, "That's wayyyy too many players", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PlayerNumberChoice.this, "Invalid player count", Toast.LENGTH_SHORT).show();
         }
     }
 }

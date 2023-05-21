@@ -1,34 +1,29 @@
 package com.example.countingdowngame;
 
-import android.graphics.Bitmap;
-
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-class Player {
+class Player implements Serializable {
+    private String photo;
+    private String name;
     private Game game;
-    private final Set<WildCardProbabilities> usedWildCards = new HashSet<>();
-
+    private final Set<Settings_WildCard_Probabilities> usedWildCards = new HashSet<>();
     int skips = 0;
     int wildcard = 1;
-    int playerId;
 
-    private String name;
-    private Bitmap photo;
+    private String photoFilePath; // Store the file path instead of Bitmap
+    private String photoUrl; // Store the photo URL as a string
+    private boolean selected;
 
-    public Player(Game game, int playerId) {
-        this.game = game;
-        this.playerId = playerId;
-    }
 
-    public Player(Bitmap photo, String name) {
+    public Player(String photo, String name) {
         this.photo = photo;
         this.name = name;
+        this.selected = false;
     }
 
-    public Bitmap getPhoto() {
-        return photo;
-    }
+    // Getter and setter methods
 
     public String getName() {
         return name;
@@ -37,7 +32,9 @@ class Player {
     public void setName(String name) {
         this.name = name;
     }
-
+    public String getPhoto() {
+        return photo;
+    }
     public int getSkipAmount() {
         return this.skips;
     }
@@ -56,12 +53,22 @@ class Player {
         this.skips = this.skips - 1;
     }
 
-    public void addUsedWildCard(WildCardProbabilities usedWildCard) {
+    public void addUsedWildCard(Settings_WildCard_Probabilities usedWildCard) {
         usedWildCards.add(usedWildCard);
     }
 
     public void resetAbilities() {
         this.skips = 0;
         this.wildcard = 1;
+    }
+
+
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }

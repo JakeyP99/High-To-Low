@@ -1,6 +1,5 @@
 package com.example.countingdowngame;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -9,8 +8,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,8 +19,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MainActivity extends ButtonUtilsActivity {
-    private final Map<Player, Set<WildCardProbabilities>> usedWildCard = new HashMap<>();
-    private final Set<WildCardProbabilities> usedWildCards = new HashSet<>();
+    private final Map<Player, Set<Settings_WildCard_Probabilities>> usedWildCard = new HashMap<>();
+    private final Set<Settings_WildCard_Probabilities> usedWildCards = new HashSet<>();
 
     private TextView numberText;
     private TextView nextPlayerText;
@@ -37,8 +35,18 @@ public class MainActivity extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.a5_game_start);
+        ArrayList<String> playerNames = getIntent().getStringArrayListExtra("playerNames");
 
+        if (playerNames != null) {
+            // Display the player names
+            TextView playerNamesTextView = findViewById(R.id.textView_Number_Turn);
+            String namesText = "Selected Players:\n";
+            for (String playerName : playerNames) {
+                namesText += playerName + "\n";
+            }
+            playerNamesTextView.setText(namesText);
+        }
         numberText = findViewById(R.id.numberText);
         nextPlayerText = findViewById(R.id.textView_Number_Turn);
         btnSkip = findViewById(R.id.btnSkip);
@@ -151,27 +159,32 @@ public class MainActivity extends ButtonUtilsActivity {
     }
 
     private void wildCardActivate(Player player) {
-        Settings_WildCardChoice settings = new Settings_WildCardChoice();
-        WildCardProbabilities[][] probabilitiesArray = settings.loadWildCardProbabilitiesFromStorage(getApplicationContext());
+        Settings_WildCard_Choice settings = new Settings_WildCard_Choice();
+        Settings_WildCard_Probabilities[][] probabilitiesArray = settings.loadWildCardProbabilitiesFromStorage(getApplicationContext());
 
         // Assuming you want to access the first set of probabilities in the array
-        WildCardProbabilities[] activityProbabilities = probabilitiesArray[0];
+        Settings_WildCard_Probabilities[] activityProbabilities = probabilitiesArray[0];
         final TextView wildActivityTextView = findViewById(R.id.wild_textview);
         player.useWildCard();
 
         boolean wildCardsEnabled = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("wild_cards_toggle", true);
 
         String selectedActivity = null;
-        Set<WildCardProbabilities> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
+        Set<Settings_WildCard_Probabilities> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
         if (wildCardsEnabled) {
-            List<WildCardProbabilities> unusedCards = Arrays.stream(activityProbabilities).filter(WildCardProbabilities::isEnabled).filter(c -> !usedWildCards.contains(c)).collect(Collectors.toList());
+            List<Settings_WildCard_Probabilities> unusedCards = Arrays.stream(activityProbabilities)
+                    .filter(Settings_WildCard_Probabilities::isEnabled)
+                    .filter(c -> !usedWildCards.contains(c))
+                    .collect(Collectors.toList());
 
             if (unusedCards.isEmpty() && usedCards != null) {
                 usedCards.clear();
             }
 
             // Calculate total weight of unused wildcards
-            int totalWeight = unusedCards.stream().mapToInt(WildCardProbabilities::getProbability).sum();
+            int totalWeight = unusedCards.stream()
+                    .mapToInt(Settings_WildCard_Probabilities::getProbability)
+                    .sum();
 
             if (totalWeight <= 0) {
                 wildActivityTextView.setText("No wild cards available");
@@ -184,7 +197,7 @@ public class MainActivity extends ButtonUtilsActivity {
                 int randomWeight = random.nextInt(totalWeight);
                 int weightSoFar = 0;
 
-                for (WildCardProbabilities activityProbability : unusedCards) {
+                for (Settings_WildCard_Probabilities activityProbability : unusedCards) {
                     weightSoFar += activityProbability.getProbability();
 
                     if (randomWeight < weightSoFar) {
@@ -205,7 +218,7 @@ public class MainActivity extends ButtonUtilsActivity {
 
         if (selectedActivity != null) {
             wildActivityTextView.setText(selectedActivity);
-            for (WildCardProbabilities wc : activityProbabilities) {
+            for (Settings_WildCard_Probabilities wc : activityProbabilities) {
                 if (wc.getText().equals(selectedActivity)) {
                     player.addUsedWildCard(wc);
                     usedCards.add(wc); // Add to usedCards set for this player

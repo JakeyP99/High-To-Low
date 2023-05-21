@@ -18,7 +18,7 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.game_mode_choice);
+        setContentView(R.layout.b2_settings_game_mode_choice);
         initializeViews();
         loadPreferences();
         setButtonListeners();

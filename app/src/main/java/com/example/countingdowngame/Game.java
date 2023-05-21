@@ -15,7 +15,6 @@ public class Game {
             nextPlayer();
         }
     };
-
     private GameEventListener gameEventListener;
     private ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Integer> previousNumbers = new ArrayList<>();
@@ -33,8 +32,13 @@ public class Game {
     }
 
     public Player getCurrentPlayer() {
-        return players.get(currentPlayerId);
+        if (!players.isEmpty() && currentPlayerId >= 0 && currentPlayerId < players.size()) {
+            return players.get(currentPlayerId);
+        } else {
+            return null; // or handle the case when there are no players or currentPlayerId is invalid
+        }
     }
+
 
     public ArrayList<String> getPreviousNumbersFormatted() {
         ArrayList<String> previousNumbersFormatted = new ArrayList<>();
@@ -56,7 +60,7 @@ public class Game {
         players = new ArrayList<>();
 
         for (int playerId = 0; playerId < playerAmount; playerId++) {
-            players.add(new Player(this, playerId));
+            players.add(new Player(null, null));
         }
     }
 

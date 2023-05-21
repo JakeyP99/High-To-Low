@@ -1,6 +1,5 @@
 package com.example.countingdowngame;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -8,8 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -21,8 +18,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MainActivitySplitScreen extends ButtonUtilsActivity {
-    private final Map<Player, Set<WildCardProbabilities>> usedWildCard = new HashMap<>();
-    private final Set<WildCardProbabilities> usedWildCards = new HashSet<>();
+    private final Map<Player, Set<Settings_WildCard_Probabilities>> usedWildCard = new HashMap<>();
+    private final Set<Settings_WildCard_Probabilities> usedWildCards = new HashSet<>();
 
     private TextView nextPlayerText;
     private TextView nextPlayerTextPlayer2;
@@ -52,7 +49,7 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_2);
+        setContentView(R.layout.a5_game_start_splitscreen);
 
         numberText = findViewById(R.id.numberText);
         numberTextPlayer2 = findViewById(R.id.numberTextPlayer2);
@@ -153,11 +150,11 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
     // This is the wildcard function.
     private void wildCardActivate(Player player) {
-        Settings_WildCardChoice settings = new Settings_WildCardChoice();
-        WildCardProbabilities[][] probabilitiesArray = settings.loadWildCardProbabilitiesFromStorage(getApplicationContext());
+        Settings_WildCard_Choice settings = new Settings_WildCard_Choice();
+        Settings_WildCard_Probabilities[][] probabilitiesArray = settings.loadWildCardProbabilitiesFromStorage(getApplicationContext());
 
         // Assuming you want to access the first set of probabilities in the array
-        WildCardProbabilities[] activityProbabilities = probabilitiesArray[0];
+        Settings_WildCard_Probabilities[] activityProbabilities = probabilitiesArray[0];
 
         final TextView wildActivityTextView = findViewById(R.id.wild_textview);
         final TextView wildActivityTextViewPlayer2 = findViewById(R.id.wild_textviewPlayer2);
@@ -167,9 +164,9 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         boolean wildCardsEnabled = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("wild_cards_toggle", true);
 
         String selectedActivity = null;
-        Set<WildCardProbabilities> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
+        Set<Settings_WildCard_Probabilities> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
         if (wildCardsEnabled) {
-            List<WildCardProbabilities> unusedCards = Arrays.stream(activityProbabilities).filter(WildCardProbabilities::isEnabled).filter(c -> !usedWildCards.contains(c)).collect(Collectors.toList());
+            List<Settings_WildCard_Probabilities> unusedCards = Arrays.stream(activityProbabilities).filter(Settings_WildCard_Probabilities::isEnabled).filter(c -> !usedWildCards.contains(c)).collect(Collectors.toList());
 
             if (unusedCards.isEmpty()) {
                 assert usedCards != null;
@@ -177,7 +174,7 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
             }
 
             // Calculate total weight of unused wildcards
-            int totalWeight = unusedCards.stream().mapToInt(WildCardProbabilities::getProbability).sum();
+            int totalWeight = unusedCards.stream().mapToInt(Settings_WildCard_Probabilities::getProbability).sum();
 
             if (totalWeight <= 0) {
                 wildActivityTextView.setText("No wild cards available");
@@ -191,7 +188,7 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
             while (!foundUnusedCard) {
                 int randomWeight = random.nextInt(totalWeight);
                 int weightSoFar = 0;
-                for (WildCardProbabilities activityProbability : unusedCards) {
+                for (Settings_WildCard_Probabilities activityProbability : unusedCards) {
                     weightSoFar += activityProbability.getProbability();
                     if (randomWeight < weightSoFar) {
                         // Check if the selected wildcard has already been used by the current player
@@ -212,7 +209,7 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
             wildActivityTextView.setText(selectedActivity);
             wildActivityTextViewPlayer2.setText(selectedActivity);
 
-            for (WildCardProbabilities wc : activityProbabilities) {
+            for (Settings_WildCard_Probabilities wc : activityProbabilities) {
                 if (wc.getText().equals(selectedActivity)) {
                     player.addUsedWildCard(wc);
                     usedCards.add(wc);

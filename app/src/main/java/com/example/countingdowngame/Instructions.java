@@ -23,7 +23,7 @@ public class Instructions extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.instructions_layout);
+        setContentView(R.layout.c1_instructions_layout);
 
         final Button btnBack = findViewById(R.id.buttonReturn);
         final ViewPager viewPager = findViewById(R.id.viewPager);

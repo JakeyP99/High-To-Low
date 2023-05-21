@@ -7,7 +7,7 @@ public class HomeScreen extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.start_menu);
+        setContentView(R.layout.a1_home_screen);
 
         final Button btnQuickPlay = findViewById(R.id.quickplay);
         final Button btnInstructions = findViewById(R.id.button_Instructions);

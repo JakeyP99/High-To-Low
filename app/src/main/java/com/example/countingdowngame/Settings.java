@@ -3,11 +3,11 @@ package com.example.countingdowngame;
 import android.os.Bundle;
 import android.widget.Button;
 
-public class SettingClass extends ButtonUtilsActivity {
+public class Settings extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_choice);
+        setContentView(R.layout.b1_settings_choice);
 
         final Button btnReturn = findViewById(R.id.buttonReturn);
         final Button btnWildCardSettings = findViewById(R.id.button_wildcardSettings);

@@ -6,14 +6,12 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.InputType;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,9 +19,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -31,90 +27,83 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
+import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Settings_PlayerModel extends ButtonUtilsActivity {
+
     private static final int REQUEST_IMAGE_PICK = 1;
     private List<Player> playerList;
     private PlayerListAdapter playerListAdapter;
-    private RecyclerView playerRecyclerView;
+    private TextView playerCountTextView;
+    private int totalPlayerCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_player_list);
-        playerList = new ArrayList<>();
-//        loadPlayerData();
+        setContentView(R.layout.a3_player_choice);
 
-        playerListAdapter = new PlayerListAdapter(this, playerList);
-        playerRecyclerView = findViewById(R.id.playerRecyclerView);
+        // Initialize views and adapters
+        Button proceedButton = findViewById(R.id.button_done);
+
+        RecyclerView playerRecyclerView = findViewById(R.id.playerRecyclerView);
+        playerList = new ArrayList<>();
+        playerListAdapter = new PlayerListAdapter(this, playerList, 3);
+        loadPlayerData();
+
+        int selectedPlayerCount = getIntent().getIntExtra("playerCount", 0);
+        playerList = new ArrayList<>();
+        playerListAdapter = new PlayerListAdapter(this, playerList, selectedPlayerCount);
+
+        // Set up grid layout
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
         playerRecyclerView.setLayoutManager(layoutManager);
+
         int spacing = getResources().getDimensionPixelSize(R.dimen.grid_spacing);
         playerRecyclerView.addItemDecoration(new SpaceItemDecoration(spacing));
         playerRecyclerView.setAdapter(playerListAdapter);
 
+        // Choose image button click listener
         Button chooseImageButton = findViewById(R.id.chooseImageButton);
-        chooseImageButton.setOnClickListener(view -> openImagePicker());
+        chooseImageButton.setOnClickListener(view -> captureImage());
+
+        playerCountTextView = findViewById(R.id.text_view_counter);
+        totalPlayerCount = getIntent().getIntExtra("playerCount", 0);
+        // Call updatePlayerCounter() to display the counter text initially
+        updatePlayerCounter();
+
+        btnUtils.setButton(proceedButton, MainActivity.class, null);
+
     }
 
-    private void openImagePicker() {
+    // Open image picker to capture an image
+    private void captureImage() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, REQUEST_IMAGE_PICK);
     }
 
+    // Add a new player with the selected image and name
     private void addNewPlayer(Bitmap bitmap, String name) {
-        Player newPlayer = new Player(bitmap, name);
+        String photoString = convertBitmapToString(bitmap);
+        Player newPlayer = new Player(photoString, name);
         playerList.add(newPlayer);
         playerListAdapter.notifyItemInserted(playerList.size() - 1);
-        int position = playerList.indexOf(newPlayer);
-        new Handler().postDelayed(() -> animatePlayerImage(position), 100);
         savePlayerData();
+updatePlayerCounter();
     }
 
-    private void animatePlayerImage(int position) {
-        LinearLayoutManager layoutManager = (LinearLayoutManager) playerRecyclerView.getLayoutManager();
-        assert layoutManager != null;
-        int firstVisiblePosition = layoutManager.findFirstVisibleItemPosition();
-        int lastVisiblePosition = layoutManager.findLastVisibleItemPosition();
-
-        if (position >= firstVisiblePosition && position <= lastVisiblePosition) {
-            View itemView = playerRecyclerView.getChildAt(position - firstVisiblePosition);
-
-            if (itemView != null) {
-                ImageView playerPhotoImageView = itemView.findViewById(R.id.playerPhotoImageView);
-                Glide.with(this)
-                        .load(playerList.get(position).getPhoto())
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(playerPhotoImageView);
-                float startScale = 0.0f;
-                float endScale = 1.0f;
-                int duration = 500;
-                ScaleAnimation scaleAnimation = new ScaleAnimation(startScale, endScale, startScale, endScale,
-                        Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                scaleAnimation.setDuration(duration);
-                scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        playerPhotoImageView.clearAnimation();
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-                    }
-                });
-                playerPhotoImageView.startAnimation(scaleAnimation);
-            }
-        }
+    // Delete a player at a given position
+    private void deletePlayer(int position) {
+        playerList.remove(position);
+        playerListAdapter.notifyItemRemoved(position);
+        savePlayerData();
+        updatePlayerCounter();
     }
 
-    public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
+    // RecyclerView item decoration for spacing
+    public static class SpaceItemDecoration extends RecyclerView.ItemDecoration {
         private final int spacing;
 
         public SpaceItemDecoration(int spacing) {
@@ -137,14 +126,19 @@ public class Settings_PlayerModel extends ButtonUtilsActivity {
         }
     }
 
+    // RecyclerView adapter for player list
     private class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.ViewHolder> {
         private final Context context;
         private final List<Player> players;
+        private int selectedPosition = RecyclerView.NO_POSITION;
+        private final int maxSelectedPlayers;
 
-        public PlayerListAdapter(Context context, List<Player> players) {
+        public PlayerListAdapter(Context context, List<Player> players, int maxSelectedPlayers) {
             this.context = context;
             this.players = players;
+            this.maxSelectedPlayers = maxSelectedPlayers;
         }
+
 
         @NonNull
         @Override
@@ -156,7 +150,7 @@ public class Settings_PlayerModel extends ButtonUtilsActivity {
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             Player player = players.get(position);
-            holder.bind(player);
+            holder.bind(player, position);
         }
 
         @Override
@@ -167,36 +161,97 @@ public class Settings_PlayerModel extends ButtonUtilsActivity {
         public class ViewHolder extends RecyclerView.ViewHolder {
             ImageView playerPhotoImageView;
             TextView playerNameTextView;
+            ImageView deletePlayerImageView;
+            View playerItemView;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
+                playerItemView = itemView;
                 playerPhotoImageView = itemView.findViewById(R.id.playerPhotoImageView);
                 playerNameTextView = itemView.findViewById(R.id.playerNameTextView);
+                deletePlayerImageView = itemView.findViewById(R.id.deletePlayerImageView);
+
+                deletePlayerImageView.setOnClickListener(v -> {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        deletePlayer(position);
+                    }
+                });
+
+                // Set click listener for player selection
+                playerItemView.setOnClickListener(v -> {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        togglePlayerSelection(position);
+                    }
+                });
             }
 
-            public void bind(Player player) {
+            public void bind(Player player, int position) {
+                String photoString = player.getPhoto();
                 Glide.with(context)
-                        .load(player.getPhoto())
+                        .load(Base64.decode(photoString, Base64.DEFAULT))
                         .apply(RequestOptions.circleCropTransform())
                         .into(playerPhotoImageView);
-
-                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) playerPhotoImageView.getLayoutParams();
-                int margin = convertDpToPx();
-                layoutParams.setMargins(margin, margin, margin, margin);
-                playerPhotoImageView.setLayoutParams(layoutParams);
 
                 playerNameTextView.setBackgroundResource(R.drawable.outlineforbutton);
                 playerNameTextView.setText(player.getName());
                 playerNameTextView.setPadding(20, 20, 20, 20);
+
+                // Highlight the selected player
+                if (player.isSelected()) {
+                    playerItemView.setBackgroundResource(R.drawable.outlineforbutton);
+                } else {
+                    playerItemView.setBackgroundResource(0);
+                }
+            }
+
+            private void togglePlayerSelection(int position) {
+                Player player = players.get(position);
+                player.setSelected(!player.isSelected());
+                notifyItemChanged(position);
+                updatePlayerCounter();
             }
         }
+
+    }
+    private void updatePlayerCounter() {
+        int selectedPlayerCount = 0;
+        List<Player> selectedPlayers = new ArrayList<>();
+
+        for (Player player : playerList) {
+            if (player.isSelected()) {
+                selectedPlayerCount++;
+                selectedPlayers.add(player);
+            }
+        }
+
+        int remainingPlayers = totalPlayerCount - selectedPlayerCount;
+        String counterText;
+
+        if (remainingPlayers == 0) {
+            counterText = "All Players Selected: " + totalPlayerCount;
+            proceedToMainActivity(selectedPlayers);
+        } else {
+            counterText = "Remaining Players Needed: " + remainingPlayers;
+        }
+
+        playerCountTextView.setText(counterText);
     }
 
-    private int convertDpToPx() {
-        float density = getResources().getDisplayMetrics().density;
-        return Math.round(10 * density);
+    private void proceedToMainActivity(List<Player> selectedPlayers) {
+        Intent intent = new Intent(this, MainActivity.class);
+
+        // Pass the selected player names to the MainActivity
+        ArrayList<String> playerNames = new ArrayList<>();
+        for (Player player : selectedPlayers) {
+            playerNames.add(player.getName());
+        }
+        intent.putStringArrayListExtra("playerNames", playerNames);
+        startActivity(intent);
     }
 
+    // Handle the result of the image picker activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -207,7 +262,7 @@ public class Settings_PlayerModel extends ButtonUtilsActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Enter Player Name");
 
-            View dialogView = getLayoutInflater().inflate(R.layout.dialog_enter_name, null);
+            View dialogView = getLayoutInflater().inflate(R.layout.player_enter_name, null);
             EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
             nameEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 
@@ -216,31 +271,47 @@ public class Settings_PlayerModel extends ButtonUtilsActivity {
                         String name = nameEditText.getText().toString();
                         addNewPlayer(bitmap, name);
                     })
-                    .setNegativeButton("Cancel", null);
+                    .setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss());
 
             AlertDialog dialog = builder.create();
             dialog.show();
         }
     }
 
+    // Save player data to SharedPreferences
     private void savePlayerData() {
-        SharedPreferences sharedPreferences = getSharedPreferences("PlayerData", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("player_data", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
-        String jsonPlayerList = gson.toJson(playerList);
-        editor.putString("playerList", jsonPlayerList);
+        String json = gson.toJson(playerList);
+        editor.putString("player_list", json);
         editor.apply();
     }
 
+    // Load player data from SharedPreferences
     private void loadPlayerData() {
-        SharedPreferences sharedPreferences = getSharedPreferences("PlayerData", Context.MODE_PRIVATE);
-        String jsonPlayerList = sharedPreferences.getString("playerList", "");
+        SharedPreferences sharedPreferences = getSharedPreferences("player_data", MODE_PRIVATE);
         Gson gson = new Gson();
+        String json = sharedPreferences.getString("player_list", null);
         Type type = new TypeToken<ArrayList<Player>>() {
         }.getType();
-        playerList = gson.fromJson(jsonPlayerList, type);
-        if (playerList == null) {
-            playerList = new ArrayList<>();
+        List<Player> loadedPlayerList = gson.fromJson(json, type);
+
+        if (loadedPlayerList != null) {
+            playerList.clear();
+            playerList.addAll(loadedPlayerList);
+            playerListAdapter.notifyDataSetChanged();
         }
     }
+
+    // Convert a Bitmap to a Base64-encoded string
+    private String convertBitmapToString(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
+
+
+
 }
