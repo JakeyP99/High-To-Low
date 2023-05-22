@@ -62,8 +62,6 @@ public class MainActivity extends ButtonUtilsActivity {
 
 
         int startingNumber = extras.getInt("startingNumber");
-        ArrayList<String> playerNames = extras.getStringArrayList("playerNames");
-        ArrayList<String> playerImages = extras.getStringArrayList("playerImages");
 
         // Load player data from PlayerModel
         List<Player> playerList = PlayerModel.loadPlayerData(this);
@@ -133,8 +131,6 @@ public class MainActivity extends ButtonUtilsActivity {
     }
 
 
-
-
     //-----------------------------------------------------Render Player---------------------------------------------------//
 
     private void renderPlayer() {
@@ -154,9 +150,6 @@ public class MainActivity extends ButtonUtilsActivity {
             }
         }
 
-
-
-
         if (currentPlayer.getSkipAmount() > 0) {
             btnSkip.setVisibility(View.VISIBLE);
         } else {
@@ -173,7 +166,6 @@ public class MainActivity extends ButtonUtilsActivity {
         numberText.setText(String.valueOf(currentNumber));
         setTextViewSizeBasedOnInt(numberText, String.valueOf(currentNumber));
     }
-
 
     private String getPlayerImage(String playerName, ArrayList<String> playerImages) {
         if (playerImages != null && !playerImages.isEmpty()) {

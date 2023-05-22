@@ -5,23 +5,19 @@ import java.util.HashSet;
 import java.util.Set;
 
 class Player implements Serializable {
-    private String photo;
+    private final String photo;
     private String name;
     private Game game;
     private final Set<Settings_WildCard_Probabilities> usedWildCards = new HashSet<>();
     int skips = 0;
     int wildcard = 1;
-    private String imageString;
     private boolean selected;
-
 
     public Player(String photo, String name) {
         this.photo = photo;
         this.name = name;
         this.selected = false;
     }
-
-    // Getter and setter methods
 
     public String getName() {
         return name;
@@ -30,25 +26,30 @@ class Player implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
     public String getPhoto() {
         return photo;
     }
+
     public int getSkipAmount() {
-        return this.skips;
+        return skips;
     }
 
     public int getWildCardAmount() {
-        return this.wildcard;
+        return wildcard;
     }
 
     public void useWildCard() {
-        this.game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.WILD_CARD));
-        this.wildcard = this.wildcard - 1;
+        if (game != null) {
+            game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.WILD_CARD));
+        }
+        wildcard--;
     }
+
 
     public void useSkip() {
         this.game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.SKIP));
-        this.skips = this.skips - 1;
+        this.skips--;
     }
 
     public void addUsedWildCard(Settings_WildCard_Probabilities usedWildCard) {

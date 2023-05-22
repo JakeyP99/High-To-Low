@@ -223,7 +223,7 @@ public class PlayerModel extends ButtonUtilsActivity {
     //-----------------------------------------------------UI Decoration---------------------------------------------------//
     private void setupPlayerRecyclerView() {
         playerList = new ArrayList<>();
-        playerListAdapter = new PlayerListAdapter(this, playerList, selectedPlayerCount);
+        playerListAdapter = new PlayerListAdapter(this, playerList);
         loadPlayerData(this);
 
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);

@@ -19,13 +19,10 @@ import java.util.List;
 public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.ViewHolder> {
     private final PlayerModel context;
     private final List<Player> players;
-    private int selectedPosition = RecyclerView.NO_POSITION;
-    private final int maxSelectedPlayers;
 
-    public PlayerListAdapter(PlayerModel context, List<Player> players, int maxSelectedPlayers) {
+    public PlayerListAdapter(PlayerModel context, List<Player> players) {
         this.context = context;
         this.players = players;
-        this.maxSelectedPlayers = maxSelectedPlayers;
     }
 
     @NonNull
