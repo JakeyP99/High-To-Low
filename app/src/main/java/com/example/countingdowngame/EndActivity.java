@@ -19,7 +19,6 @@ public class EndActivity extends ButtonUtilsActivity {
 
         final ListView previousNumbersList = findViewById(R.id.previousNumbers);
 
-        // Retrieve the saved state of the switches from shared preferences
         final Button btnPlayAgain = findViewById(R.id.btnplayAgain);
         final Button btnNewPlayer = findViewById(R.id.btnNewPlayer);
 
@@ -27,6 +26,7 @@ public class EndActivity extends ButtonUtilsActivity {
         previousNumbersList.setAdapter(adapter);
 
         btnUtils.setButton(btnPlayAgain, () -> {
+
             Game.getInstance().playAgain();
             gotoGameStart();
         });

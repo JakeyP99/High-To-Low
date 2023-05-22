@@ -31,8 +31,8 @@ import java.util.List;
 
 public class PlayerModel extends ButtonUtilsActivity {
     private static final int REQUEST_IMAGE_PICK = 1;
-    private List<Player> playerList;
-    private PlayerListAdapter playerListAdapter;
+    private static List<Player> playerList;
+    private static PlayerListAdapter playerListAdapter;
     private TextView playerCountTextView;
     private int totalPlayerCount;
     private RecyclerView playerRecyclerView; // Declare playerRecyclerView
@@ -90,24 +90,29 @@ public class PlayerModel extends ButtonUtilsActivity {
             if (selectedPlayerNames.isEmpty()) {
                 Toast.makeText(this, "Please select players", Toast.LENGTH_SHORT).show();
             } else {
-                Player selectedPlayer = null;
-                for (Player player : playerList) {
-                    if (player.isSelected()) {
-                        selectedPlayer = player;
-                        break;
+                int remainingPlayers = totalPlayerCount - selectedPlayerNames.size();
+                if (remainingPlayers == 0) {
+                    Player selectedPlayer = null;
+                    for (Player player : playerList) {
+                        if (player.isSelected()) {
+                            selectedPlayer = player;
+                            break;
+                        }
                     }
-                }
 
-                if (selectedPlayer != null) {
-                    saveSelectedPlayer(this, selectedPlayer.getName(), selectedPlayer.getPhoto());
-                    Intent intent = new Intent(this, NumberChoice.class);
-                    intent.putStringArrayListExtra("playerNames", (ArrayList<String>) selectedPlayerNames);
-                    startActivity(intent);
-
+                    if (selectedPlayer != null) {
+                        saveSelectedPlayer(this, selectedPlayer.getName(), selectedPlayer.getPhoto());
+                        Intent intent = new Intent(this, NumberChoice.class);
+                        intent.putStringArrayListExtra("playerNames", (ArrayList<String>) selectedPlayerNames);
+                        startActivity(intent);
+                    }
+                } else {
+                    Toast.makeText(this, "Please select " + remainingPlayers + " more player(s)", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
+
 
     //-----------------------------------------------------Image and player creation functionality---------------------------------------------------//
     // Open image picker to capture an image
@@ -224,10 +229,27 @@ public class PlayerModel extends ButtonUtilsActivity {
         String counterText;
         if (remainingPlayers == 0) {
             counterText = "All Players Selected: " + totalPlayerCount;
+            // Proceed with the game since all players are selected
+            // Trigger the startGame() method in your activity here
         } else {
             counterText = "Please select " + remainingPlayers + " more player(s)";
         }
         playerCountTextView.setText(counterText);
+    }
+
+    public static void resetPlayerData(Context context) {
+        // Clear the selected state of players
+        for (Player player : playerList) {
+            player.setSelected(false);
+        }
+        playerListAdapter.notifyDataSetChanged();
+
+        // Clear the stored selected player data from shared preferences
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove("selectedPlayerName");
+        editor.remove("selectedPlayerImage");
+        editor.apply();
     }
 
 

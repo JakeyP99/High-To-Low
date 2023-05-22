@@ -60,14 +60,13 @@ public class MainActivity extends ButtonUtilsActivity {
             throw new RuntimeException("Missing extras");
         }
 
-
-
         int startingNumber = extras.getInt("startingNumber");
 
         // Load player data from PlayerModel
         List<Player> playerList = PlayerModel.loadPlayerData(this);
         if (playerList != null && !playerList.isEmpty()) {
             // Set the player list in Game class
+            Game.getInstance().setPlayers(playerList.size());
             Game.getInstance().setPlayerList(playerList);
         }
 
