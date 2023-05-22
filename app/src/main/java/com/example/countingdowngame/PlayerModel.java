@@ -51,7 +51,7 @@ public class PlayerModel extends ButtonUtilsActivity {
         setupProceedButton();
 
         // Load player data and add it to the existing playerList
-        List<Player> loadedPlayerList = loadSelectedPlayers(this);
+        List<Player> loadedPlayerList = loadPlayerData(this);
         playerList.addAll(loadedPlayerList);
         playerListAdapter.notifyDataSetChanged();
     }
@@ -196,6 +196,22 @@ public class PlayerModel extends ButtonUtilsActivity {
         editor.putString("selected_players_list", json);
         editor.apply();
     }
+
+    public static List<Player> loadPlayerData(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("player_data", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("player_list", null);
+        Type type = new TypeToken<ArrayList<Player>>() {}.getType();
+        List<Player> loadedPlayerList = gson.fromJson(json, type);
+
+        // Return an empty list if no data is loaded
+        if (loadedPlayerList == null) {
+            loadedPlayerList = new ArrayList<>();
+        }
+
+        return loadedPlayerList;
+    }
+
 
     // Load player data from SharedPreferences
     public static List<Player> loadSelectedPlayers(Context context) {
