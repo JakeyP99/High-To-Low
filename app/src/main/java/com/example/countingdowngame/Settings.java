@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.Button;
 
 public class Settings extends ButtonUtilsActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,8 +25,8 @@ public class Settings extends ButtonUtilsActivity {
             startActivity(getIntentForClass(Settings_GameModeChoice.class));
         });
 
-        btnUtils.setButton(btnPlayerModelSettings, () -> {
-            startActivity(getIntentForClass(PlayerModel.class));
-        });
+//        btnUtils.setButton(btnPlayerModelSettings, () -> {
+//            startActivity(getIntentForClass(PlayerModel.class));
+//        });
     }
 }

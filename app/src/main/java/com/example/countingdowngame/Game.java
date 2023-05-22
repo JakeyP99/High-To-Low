@@ -40,7 +40,6 @@ public class Game {
         }
     }
 
-
     public ArrayList<String> getPreviousNumbersFormatted() {
         ArrayList<String> previousNumbersFormatted = new ArrayList<>();
 
@@ -126,7 +125,6 @@ public class Game {
         if (gameStarted) {
             return;
         }
-
         players.clear();
         players.addAll(playerList);
     }

@@ -30,13 +30,15 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
     private Button btnWild;
     private Button btnWildPlayer2;
 
-    // <Player1>
+    // <--------------------------------<Player1>------------------------------------------------->
+
+
     private View wildText;
     private Button btnGenerate;
     private Button btnBackWild;
 
-    // <--------------------------------------------------------------------------------->
-    // <Player2>
+    // <---------------------------------<Player2>------------------------------------------------>
+
     private View wildTextPlayer2;
     private Button btnGeneratePlayer2;
     private Button btnBackWildPlayer2;
@@ -72,11 +74,8 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         // These are the button controls for Player 1
         btnUtils.setButton(btnWild, this::ButtonWildFunction);
         btnUtils.setButton(btnGenerate, this::ButtonGenerateFunction);
-
         btnUtils.setButton(btnBackWild, this::ButtonContinueFunction);
-
         btnUtils.setButton(btnSkip, this::ButtonSkipFunction);
-
         btnUtils.setImageButton(imageButtonExit, () -> {
             Game.getInstance().endGame();
             gotoHomeScreen();
@@ -85,18 +84,13 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         // These are the button controls for Player 2
 
         btnUtils.setButton(btnWildPlayer2, this::ButtonWildFunction);
-
         btnUtils.setButton(btnGeneratePlayer2, this::ButtonGenerateFunction);
-
         btnUtils.setButton(btnBackWildPlayer2, this::ButtonContinueFunction);
-
         btnUtils.setButton(btnSkipPlayer2, this::ButtonSkipFunction);
-
         btnUtils.setImageButton(imageButtonExitPlayer2, () -> {
             Game.getInstance().endGame();
             gotoHomeScreen();
         });
-
 
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
@@ -153,7 +147,6 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         Settings_WildCard_Choice settings = new Settings_WildCard_Choice();
         Settings_WildCard_Probabilities[][] probabilitiesArray = settings.loadWildCardProbabilitiesFromStorage(getApplicationContext());
 
-        // Assuming you want to access the first set of probabilities in the array
         Settings_WildCard_Probabilities[] activityProbabilities = probabilitiesArray[0];
 
         final TextView wildActivityTextView = findViewById(R.id.wild_textview);
@@ -173,7 +166,6 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
                 usedCards.clear();
             }
 
-            // Calculate total weight of unused wildcards
             int totalWeight = unusedCards.stream().mapToInt(Settings_WildCard_Probabilities::getProbability).sum();
 
             if (totalWeight <= 0) {
@@ -238,14 +230,13 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
     // This changes the size of the number.
     private void setTextViewSizeBasedOnInt(TextView textView, String text) {
-        int defaultTextSize = 60; // set default text size
-        int minSize = 40; // minimum text size
+        int defaultTextSize = 60;
+        int minSize = 40;
 
-        // Adjust text size based on the length of the text
         if (text.length() > 6) {
-            textView.setTextSize(minSize); // set smaller text size for longer strings
+            textView.setTextSize(minSize);
         } else {
-            textView.setTextSize(defaultTextSize); // set default text size for short strings
+            textView.setTextSize(defaultTextSize);
         }
     }
 

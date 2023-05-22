@@ -19,7 +19,6 @@ public class NumberChoice extends ButtonUtilsActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a4_number_choice);
-        final EditText originalNumberField = findViewById(R.id.EditTextView_numberchoice);
         Button btnSubmit = findViewById(R.id.btnSubmitNumbers);
         Button btnRandom = findViewById(R.id.btnRandomNumber);
 

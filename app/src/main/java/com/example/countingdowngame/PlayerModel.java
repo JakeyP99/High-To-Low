@@ -104,7 +104,6 @@ public class PlayerModel extends ButtonUtilsActivity {
         });
     }
 
-
     //-----------------------------------------------------Image and player creation functionality---------------------------------------------------//
     // Open image picker to capture an image
     private void captureImage() {

@@ -46,7 +46,6 @@ class Player implements Serializable {
         wildcard--;
     }
 
-
     public void useSkip() {
         this.game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.SKIP));
         this.skips--;
