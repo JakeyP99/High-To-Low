@@ -40,7 +40,7 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
 
 
             Game.getInstance().setPlayers(inputNumber);
-            startActivity(getIntentForClass(Settings_PlayerModel.class, true));
+            startActivity(getIntentForClass(PlayerModel.class, true));
 
         } catch (NumberFormatException e) {
             Toast.makeText(PlayerNumberChoice.this, "Invalid player count", Toast.LENGTH_SHORT).show();

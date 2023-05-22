@@ -25,7 +25,7 @@ public class Settings extends ButtonUtilsActivity {
         });
 
         btnUtils.setButton(btnPlayerModelSettings, () -> {
-            startActivity(getIntentForClass(Settings_PlayerModel.class));
+            startActivity(getIntentForClass(PlayerModel.class));
         });
     }
 }

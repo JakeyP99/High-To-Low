@@ -1,11 +1,14 @@
 package com.example.countingdowngame;
 
-import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -26,6 +29,7 @@ public class MainActivity extends ButtonUtilsActivity {
     private TextView nextPlayerText;
     private Button btnSkip;
     private Button btnWild;
+    private ImageView playerImage;
 
     @Override
     public void onBackPressed() {
@@ -36,17 +40,8 @@ public class MainActivity extends ButtonUtilsActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a5_game_start);
-        ArrayList<String> playerNames = getIntent().getStringArrayListExtra("playerNames");
+        playerImage = findViewById(R.id.playerImage); // Assign the ImageView from the layout file to the playerImage variable
 
-        if (playerNames != null) {
-            // Display the player names
-            TextView playerNamesTextView = findViewById(R.id.textView_Number_Turn);
-            String namesText = "Selected Players:\n";
-            for (String playerName : playerNames) {
-                namesText += playerName + "\n";
-            }
-            playerNamesTextView.setText(namesText);
-        }
         numberText = findViewById(R.id.numberText);
         nextPlayerText = findViewById(R.id.textView_Number_Turn);
         btnSkip = findViewById(R.id.btnSkip);
@@ -127,19 +122,29 @@ public class MainActivity extends ButtonUtilsActivity {
         }
     }
 
+
     private void renderPlayer() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Set<String> playerNamesSet = preferences.getStringSet("playerNames", null);
-
+        ArrayList<String> playerNames = getIntent().getStringArrayListExtra("playerNames");
+        ArrayList<String> playerImages = getIntent().getStringArrayListExtra("playerImages");
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        int currentPlayerIndex = Game.getInstance().getCurrentPlayerId();
 
-        if (playerNamesSet != null) {
-            String[] playerNamesArray = playerNamesSet.toArray(new String[0]);
-            String currentPlayerName = playerNamesArray[currentPlayerIndex];
+        if (playerNames != null && !playerNames.isEmpty()) {
+            // Display the name and image of the first selected player
+            String playerName = playerNames.get(0);
+            String playerImageString = getPlayerImage(playerName, playerImages);
 
-            nextPlayerText.setText(currentPlayerName + "'s Turn");
+            nextPlayerText.setText(playerName + "'s Turn");
+
+            if (playerImageString != null) {
+                byte[] decodedString = Base64.decode(playerImageString, Base64.DEFAULT);
+                Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                playerImage.setImageBitmap(decodedBitmap);
+            } else {
+                // Set a default image if the player image is not available
+                playerImage.setImageResource(R.drawable.wine);
+            }
         }
+
 
         if (currentPlayer.getSkipAmount() > 0) {
             btnSkip.setVisibility(View.VISIBLE);
@@ -157,6 +162,18 @@ public class MainActivity extends ButtonUtilsActivity {
         numberText.setText(String.valueOf(currentNumber));
         setTextViewSizeBasedOnInt(numberText, String.valueOf(currentNumber));
     }
+
+
+    private String getPlayerImage(String playerName, ArrayList<String> playerImages) {
+        if (playerImages != null && !playerImages.isEmpty()) {
+            int index = getIntent().getStringArrayListExtra("playerNames").indexOf(playerName);
+            if (index != -1 && index < playerImages.size()) {
+                return playerImages.get(index);
+            }
+        }
+        return null;
+    }
+
 
     private void wildCardActivate(Player player) {
         Settings_WildCard_Choice settings = new Settings_WildCard_Choice();

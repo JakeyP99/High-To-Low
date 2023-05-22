@@ -1,6 +1,5 @@
 package com.example.countingdowngame;
 
-import android.content.Context;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,17 +17,16 @@ import java.util.List;
 
 // RecyclerView adapter for player list
 public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.ViewHolder> {
-    private final Settings_PlayerModel context;
+    private final PlayerModel context;
     private final List<Player> players;
     private int selectedPosition = RecyclerView.NO_POSITION;
     private final int maxSelectedPlayers;
 
-    public PlayerListAdapter(Settings_PlayerModel context, List<Player> players, int maxSelectedPlayers) {
+    public PlayerListAdapter(PlayerModel context, List<Player> players, int maxSelectedPlayers) {
         this.context = context;
         this.players = players;
         this.maxSelectedPlayers = maxSelectedPlayers;
     }
-
 
     @NonNull
     @Override
@@ -75,6 +73,16 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
                     togglePlayerSelection(position);
                 }
             });
+
+            // Set long-click listener for player deletion
+            playerItemView.setOnLongClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    context.deletePlayer(position);
+                    return true;
+                }
+                return false;
+            });
         }
 
         public void bind(Player player, int position) {
@@ -103,5 +111,4 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
             context.updatePlayerCounter();
         }
     }
-
 }

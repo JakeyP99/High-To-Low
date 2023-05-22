@@ -11,9 +11,7 @@ class Player implements Serializable {
     private final Set<Settings_WildCard_Probabilities> usedWildCards = new HashSet<>();
     int skips = 0;
     int wildcard = 1;
-
-    private String photoFilePath; // Store the file path instead of Bitmap
-    private String photoUrl; // Store the photo URL as a string
+    private String imageString;
     private boolean selected;
 
 
@@ -61,8 +59,6 @@ class Player implements Serializable {
         this.skips = 0;
         this.wildcard = 1;
     }
-
-
 
     public boolean isSelected() {
         return selected;
