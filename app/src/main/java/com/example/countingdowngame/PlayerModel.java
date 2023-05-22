@@ -30,172 +30,97 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerModel extends ButtonUtilsActivity {
-    private static List<Player> selectedPlayers = new ArrayList<>();
     private static final int REQUEST_IMAGE_PICK = 1;
     private List<Player> playerList;
     private PlayerListAdapter playerListAdapter;
     private TextView playerCountTextView;
     private int totalPlayerCount;
+    private RecyclerView playerRecyclerView; // Declare playerRecyclerView
 
+    private Button chooseImageButton;
+    private int selectedPlayerCount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a3_player_choice);
 
-        // Initialize views and adapters
-        Button proceedButton = findViewById(R.id.button_done);
-        RecyclerView playerRecyclerView = findViewById(R.id.playerRecyclerView);
+        initializeViews();
+        setupPlayerRecyclerView();
+        setupChooseImageButton();
+        updatePlayerCounter();
+        setupProceedButton();
+    }
 
-        playerList = new ArrayList<>();
-        playerListAdapter = new PlayerListAdapter(this, playerList, 0);
-        loadPlayerData();
-
-        int selectedPlayerCount = Game.getInstance().getPlayerAmount();
-        playerList = new ArrayList<>();
-        playerListAdapter = new PlayerListAdapter(this, playerList, selectedPlayerCount);
-
-        // Set up grid layout
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
-        playerRecyclerView.setLayoutManager(layoutManager);
-
-        int spacing = getResources().getDimensionPixelSize(R.dimen.grid_spacing);
-        playerRecyclerView.addItemDecoration(new SpaceItemDecoration(spacing));
-        playerRecyclerView.setAdapter(playerListAdapter);
-
-        // Choose image button click listener
-        Button chooseImageButton = findViewById(R.id.chooseImageButton);
-        chooseImageButton.setOnClickListener(view -> captureImage());
-
+    private void initializeViews() {
+        playerRecyclerView = findViewById(R.id.playerRecyclerView);
+        chooseImageButton = findViewById(R.id.chooseImageButton);
         playerCountTextView = findViewById(R.id.text_view_counter);
+
         totalPlayerCount = Game.getInstance().getPlayerAmount();
 
-        // Call updatePlayerCounter() to display the counter text initially
-        updatePlayerCounter();
+        playerList = new ArrayList<>(); // Initialize playerList
+
+        // Calculate selectedPlayerCount after initializing playerList
+        selectedPlayerCount = totalPlayerCount - playerList.size();
+    }
+
+
+    //-----------------------------------------------------Buttons---------------------------------------------------//
+
+    private void setupChooseImageButton() {
+        chooseImageButton.setOnClickListener(view -> captureImage());
+    }
+
+    private void setupProceedButton() {
+        Button proceedButton = findViewById(R.id.button_done);
 
         btnUtils.setButton(proceedButton, () -> {
-            int remainingPlayers = totalPlayerCount - selectedPlayerCount;
-            if (remainingPlayers == 0) {
-                List<String> selectedPlayerNames = new ArrayList<>();
+            List<String> selectedPlayerNames = new ArrayList<>();
+            for (Player player : playerList) {
+                if (player.isSelected()) {
+                    selectedPlayerNames.add(player.getName());
+                }
+            }
+
+            if (selectedPlayerNames.isEmpty()) {
+                Toast.makeText(this, "Please select players", Toast.LENGTH_SHORT).show();
+            } else {
+                Player selectedPlayer = null;
                 for (Player player : playerList) {
                     if (player.isSelected()) {
-                        selectedPlayerNames.add(player.getName());
+                        selectedPlayer = player;
+                        break;
                     }
                 }
-                if (selectedPlayerNames.isEmpty()) {
-                    Toast.makeText(this, "Please select players", Toast.LENGTH_SHORT).show();
-                } else {
-                    Player selectedPlayer = null;
-                    for (Player player : playerList) {
-                        if (player.isSelected()) {
-                            selectedPlayer = player;
-                            break;
-                        }
-                    }
-                    if (selectedPlayer != null) {
-                        saveSelectedPlayer(this, selectedPlayer.getName(), selectedPlayer.getPhoto());
-                        Intent intent = new Intent(this, NumberChoice.class);
-                        intent.putStringArrayListExtra("playerNames", (ArrayList<String>) selectedPlayerNames);
-                        startActivity(intent);
-                    }
+
+                if (selectedPlayer != null) {
+                    saveSelectedPlayer(this, selectedPlayer.getName(), selectedPlayer.getPhoto());
+                    Intent intent = new Intent(this, NumberChoice.class);
+                    intent.putStringArrayListExtra("playerNames", (ArrayList<String>) selectedPlayerNames);
+                    startActivity(intent);
+
                 }
-            } else {
-                Toast.makeText(this, "Select more players", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-        public static List<Player> getSelectedPlayers() {
-        return selectedPlayers;
-    }
-    // Add a new player with the selected image and name
-    private void createNewCharacter(Bitmap bitmap, String name) {
-        String photoString = convertBitmapToString(bitmap);
-        Player newPlayer = new Player(photoString, name);
-        newPlayer.setSelected(false); // Set isSelected to false initially
-        playerList.add(newPlayer);
-        playerListAdapter.notifyItemInserted(playerList.size() - 1);
-        savePlayerData();
-        updatePlayerCounter();
-    }
 
-    // Delete a player at a given position
-    public void deletePlayer(int position) {
-        playerList.remove(position);
-        playerListAdapter.notifyItemRemoved(position);
-        savePlayerData();
-        updatePlayerCounter();
-    }
-
-    public void updatePlayerCounter() {
-        int selectedPlayerCount = 0;
-        List<Player> selectedPlayers = new ArrayList<>();
-
-        for (Player player : playerList) {
-            if (player.isSelected()) {
-                selectedPlayerCount++;
-                selectedPlayers.add(player);
-            }
-        }
-
-        int remainingPlayers = totalPlayerCount - selectedPlayerCount;
-        String counterText;
-        if (remainingPlayers == 0) {
-            counterText = "All Players Selected: " + totalPlayerCount;
-        } else {
-            counterText = "Please select " + remainingPlayers + " more player(s)";
-        }
-        playerCountTextView.setText(counterText);
-    }
-
-    // Save player data to SharedPreferences
-    private void savePlayerData() {
-        SharedPreferences sharedPreferences = getSharedPreferences("player_data", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(playerList);
-        editor.putString("player_list", json);
-        editor.apply();
-    }
-
-    public static void saveSelectedPlayer(Context context, String playerName, String playerImage) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("selectedPlayerName", playerName);
-        editor.putString("selectedPlayerImage", playerImage);
-        editor.apply();
-    }
-
-    public static String getSelectedPlayerName(Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences.getString("selectedPlayerName", null);
-    }
-
-    public static String getSelectedPlayerImage(Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences.getString("selectedPlayerImage", null);
-    }
-
-    // Load player data from SharedPreferences
-    private void loadPlayerData() {
-        SharedPreferences sharedPreferences = getSharedPreferences("player_data", MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = sharedPreferences.getString("player_list", null);
-        Type type = new TypeToken<ArrayList<Player>>() {}.getType();
-        List<Player> loadedPlayerList = gson.fromJson(json, type);
-
-        if (loadedPlayerList != null) {
-            playerList.clear();
-            playerList.addAll(loadedPlayerList);
-            playerListAdapter.notifyDataSetChanged();
-        }
-    }
-
+    //-----------------------------------------------------Image and player creation functionality---------------------------------------------------//
     // Open image picker to capture an image
     private void captureImage() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, REQUEST_IMAGE_PICK);
     }
+
+    // Convert a Bitmap to a Base64-encoded string
+    private String convertBitmapToString(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
+
+
 
     // Handle the result of the image picker activity
     @Override
@@ -224,12 +149,89 @@ public class PlayerModel extends ButtonUtilsActivity {
         }
     }
 
-    // Convert a Bitmap to a Base64-encoded string
-    private String convertBitmapToString(Bitmap bitmap) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    // Add a new player with the selected image and name
+    private void createNewCharacter(Bitmap bitmap, String name) {
+        String photoString = convertBitmapToString(bitmap);
+        Player newPlayer = new Player(photoString, name);
+        newPlayer.setSelected(false); // Set isSelected to false initially
+        playerList.add(newPlayer);
+        playerListAdapter.notifyItemInserted(playerList.size() - 1);
+        savePlayerData();
+        updatePlayerCounter();
+    }
+
+    // Delete a player at a given position
+    public void deletePlayer(int position) {
+        playerList.remove(position);
+        playerListAdapter.notifyItemRemoved(position);
+        savePlayerData();
+        updatePlayerCounter();
+    }
+
+
+    //-----------------------------------------------------Save and load functionality---------------------------------------------------//
+
+    // Save player data to SharedPreferences
+    private void savePlayerData() {
+        SharedPreferences sharedPreferences = getSharedPreferences("player_data", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(playerList);
+        editor.putString("player_list", json);
+        editor.apply();
+    }
+
+    public static void saveSelectedPlayer(Context context, String playerName, String playerImage) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("selectedPlayerName", playerName);
+        editor.putString("selectedPlayerImage", playerImage);
+        editor.apply();
+    }
+    // Load player data from SharedPreferences
+    public static List<Player> loadPlayerData(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("player_data", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("player_list", null);
+        Type type = new TypeToken<ArrayList<Player>>() {}.getType();
+        List<Player> loadedPlayerList = gson.fromJson(json, type);
+        return loadedPlayerList;
+    }
+    //-----------------------------------------------------Player Counter Functionality---------------------------------------------------//
+    public void updatePlayerCounter() {
+        int selectedPlayerCount = 0;
+        List<Player> selectedPlayers = new ArrayList<>();
+
+        for (Player player : playerList) {
+            if (player.isSelected()) {
+                selectedPlayerCount++;
+                selectedPlayers.add(player);
+            }
+        }
+
+        int remainingPlayers = totalPlayerCount - selectedPlayerCount;
+        String counterText;
+        if (remainingPlayers == 0) {
+            counterText = "All Players Selected: " + totalPlayerCount;
+        } else {
+            counterText = "Please select " + remainingPlayers + " more player(s)";
+        }
+        playerCountTextView.setText(counterText);
+    }
+
+
+    //-----------------------------------------------------UI Decoration---------------------------------------------------//
+    private void setupPlayerRecyclerView() {
+        playerList = new ArrayList<>();
+        playerListAdapter = new PlayerListAdapter(this, playerList, selectedPlayerCount);
+        loadPlayerData(this);
+
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
+        int spacing = getResources().getDimensionPixelSize(R.dimen.grid_spacing);
+
+        playerRecyclerView.setLayoutManager(layoutManager);
+        playerRecyclerView.addItemDecoration(new SpaceItemDecoration(spacing));
+        playerRecyclerView.setAdapter(playerListAdapter);
     }
 
     // RecyclerView item decoration for spacing

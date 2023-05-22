@@ -1,6 +1,7 @@
 package com.example.countingdowngame;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Game {
@@ -121,4 +122,12 @@ public class Game {
         return players.size();
     }
 
+    public void setPlayerList(List<Player> playerList) {
+        if (gameStarted) {
+            return;
+        }
+
+        players.clear();
+        players.addAll(playerList);
+    }
 }

@@ -35,18 +35,55 @@ public class MainActivity extends ButtonUtilsActivity {
     public void onBackPressed() {
         // Disable back button functionality
     }
+    //-----------------------------------------------------Create game---------------------------------------------------//
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a5_game_start);
-        playerImage = findViewById(R.id.playerImage); // Assign the ImageView from the layout file to the playerImage variable
+        initializeViews();
+        setupButtons();
+        startGame();
+    }
 
+    private void initializeViews() {
+        playerImage = findViewById(R.id.playerImage);
         numberText = findViewById(R.id.numberText);
         nextPlayerText = findViewById(R.id.textView_Number_Turn);
         btnSkip = findViewById(R.id.btnSkip);
         btnWild = findViewById(R.id.btnWild);
+    }
+    private void startGame() {
+        Bundle extras = getIntent().getExtras();
+        if (extras == null) {
+            throw new RuntimeException("Missing extras");
+        }
 
+
+
+        int startingNumber = extras.getInt("startingNumber");
+        ArrayList<String> playerNames = extras.getStringArrayList("playerNames");
+        ArrayList<String> playerImages = extras.getStringArrayList("playerImages");
+
+        // Load player data from PlayerModel
+        List<Player> playerList = PlayerModel.loadPlayerData(this);
+        if (playerList != null && !playerList.isEmpty()) {
+            // Set the player list in Game class
+            Game.getInstance().setPlayerList(playerList);
+        }
+
+        Game.getInstance().startGame(startingNumber, (e) -> {
+            if (e.type == GameEventType.NEXT_PLAYER) {
+                renderPlayer();
+            }
+        });
+
+        renderPlayer();
+    }
+
+    //-----------------------------------------------------Buttons---------------------------------------------------//
+
+    private void setupButtons() {
         Button btnGenerate = findViewById(R.id.btnGenerate);
         Button btnBackWild = findViewById(R.id.btnBackWildCard);
         ImageButton imageButtonExit = findViewById(R.id.imageBtnExit);
@@ -91,47 +128,22 @@ public class MainActivity extends ButtonUtilsActivity {
 
         imageButtonExit.setOnClickListener(view -> {
             Game.getInstance().endGame();
-            // Start HomeScreen activity
             gotoHomeScreen();
         });
-
-        Bundle extras = getIntent().getExtras();
-        if (extras == null) {
-            throw new RuntimeException("Missing extras");
-        }
-
-        int startingNumber = extras.getInt("startingNumber");
-
-        Game.getInstance().startGame(startingNumber, (e) -> {
-            if (e.type == GameEventType.NEXT_PLAYER) {
-                renderPlayer();
-            }
-        });
-
-        renderPlayer();
     }
 
-    private void setTextViewSizeBasedOnInt(TextView textView, String text) {
-        int defaultTextSize = 70;
-        int minSize = 47;
 
-        if (text.length() > 6) {
-            textView.setTextSize(minSize);
-        } else {
-            textView.setTextSize(defaultTextSize);
-        }
-    }
 
+
+    //-----------------------------------------------------Render Player---------------------------------------------------//
 
     private void renderPlayer() {
-        ArrayList<String> playerNames = getIntent().getStringArrayListExtra("playerNames");
-        ArrayList<String> playerImages = getIntent().getStringArrayListExtra("playerImages");
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        List<Player> playerList = PlayerModel.loadPlayerData(this);
 
-        if (playerNames != null && !playerNames.isEmpty()) {
-            // Display the name and image of the first selected player
-            String playerName = playerNames.get(0);
-            String playerImageString = getPlayerImage(playerName, playerImages);
+        if (playerList != null && !playerList.isEmpty()) {
+            String playerName = currentPlayer.getName();
+            String playerImageString = currentPlayer.getPhoto();
 
             nextPlayerText.setText(playerName + "'s Turn");
 
@@ -139,11 +151,10 @@ public class MainActivity extends ButtonUtilsActivity {
                 byte[] decodedString = Base64.decode(playerImageString, Base64.DEFAULT);
                 Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                 playerImage.setImageBitmap(decodedBitmap);
-            } else {
-                // Set a default image if the player image is not available
-                playerImage.setImageResource(R.drawable.wine);
             }
         }
+
+
 
 
         if (currentPlayer.getSkipAmount() > 0) {
@@ -173,7 +184,7 @@ public class MainActivity extends ButtonUtilsActivity {
         }
         return null;
     }
-
+    //-----------------------------------------------------Wild Card, and Skip Functionality---------------------------------------------------//
 
     private void wildCardActivate(Player player) {
         Settings_WildCard_Choice settings = new Settings_WildCard_Choice();
@@ -255,6 +266,18 @@ public class MainActivity extends ButtonUtilsActivity {
             btnWild.setVisibility(View.VISIBLE);
         } else {
             btnWild.setVisibility(View.INVISIBLE);
+        }
+    }
+
+
+    private void setTextViewSizeBasedOnInt(TextView textView, String text) {
+        int defaultTextSize = 70;
+        int minSize = 47;
+
+        if (text.length() > 6) {
+            textView.setTextSize(minSize);
+        } else {
+            textView.setTextSize(defaultTextSize);
         }
     }
 }
