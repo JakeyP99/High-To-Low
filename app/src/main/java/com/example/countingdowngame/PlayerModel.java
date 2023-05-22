@@ -49,6 +49,11 @@ public class PlayerModel extends ButtonUtilsActivity {
         setupChooseImageButton();
         updatePlayerCounter();
         setupProceedButton();
+
+        // Load player data and add it to the existing playerList
+        List<Player> loadedPlayerList = loadPlayerData(this);
+        playerList.addAll(loadedPlayerList);
+        playerListAdapter.notifyDataSetChanged();
     }
 
     private void initializeViews() {
@@ -194,8 +199,15 @@ public class PlayerModel extends ButtonUtilsActivity {
         String json = sharedPreferences.getString("player_list", null);
         Type type = new TypeToken<ArrayList<Player>>() {}.getType();
         List<Player> loadedPlayerList = gson.fromJson(json, type);
+
+        // Return an empty list if no data is loaded
+        if (loadedPlayerList == null) {
+            loadedPlayerList = new ArrayList<>();
+        }
+
         return loadedPlayerList;
     }
+
     //-----------------------------------------------------Player Counter Functionality---------------------------------------------------//
     public void updatePlayerCounter() {
         int selectedPlayerCount = 0;

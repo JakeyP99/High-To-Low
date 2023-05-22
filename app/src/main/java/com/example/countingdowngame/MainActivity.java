@@ -31,6 +31,7 @@ public class MainActivity extends ButtonUtilsActivity {
     private Button btnWild;
     private ImageView playerImage;
 
+
     @Override
     public void onBackPressed() {
         // Disable back button functionality
@@ -260,8 +261,6 @@ public class MainActivity extends ButtonUtilsActivity {
             btnWild.setVisibility(View.INVISIBLE);
         }
     }
-
-
     private void setTextViewSizeBasedOnInt(TextView textView, String text) {
         int defaultTextSize = 70;
         int minSize = 47;
