@@ -63,7 +63,7 @@ public class MainActivity extends ButtonUtilsActivity {
         int startingNumber = extras.getInt("startingNumber");
 
         // Load player data from PlayerModel
-        List<Player> playerList = PlayerModel.loadPlayerData(this);
+        List<Player> playerList = PlayerModel.loadSelectedPlayers(this);
         if (playerList != null && !playerList.isEmpty()) {
             // Set the player list in Game class
             Game.getInstance().setPlayers(playerList.size());
@@ -135,7 +135,7 @@ public class MainActivity extends ButtonUtilsActivity {
 
     private void renderPlayer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        List<Player> playerList = PlayerModel.loadPlayerData(this);
+        List<Player> playerList = PlayerModel.loadSelectedPlayers(this);
 
         if (playerList != null && !playerList.isEmpty()) {
             String playerName = currentPlayer.getName();

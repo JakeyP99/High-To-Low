@@ -51,7 +51,7 @@ public class PlayerModel extends ButtonUtilsActivity {
         setupProceedButton();
 
         // Load player data and add it to the existing playerList
-        List<Player> loadedPlayerList = loadPlayerData(this);
+        List<Player> loadedPlayerList = loadSelectedPlayers(this);
         playerList.addAll(loadedPlayerList);
         playerListAdapter.notifyDataSetChanged();
     }
@@ -92,26 +92,24 @@ public class PlayerModel extends ButtonUtilsActivity {
             } else {
                 int remainingPlayers = totalPlayerCount - selectedPlayerNames.size();
                 if (remainingPlayers == 0) {
-                    Player selectedPlayer = null;
+                    List<Player> selectedPlayers = new ArrayList<>();
                     for (Player player : playerList) {
                         if (player.isSelected()) {
-                            selectedPlayer = player;
-                            break;
+                            selectedPlayers.add(player);
                         }
                     }
 
-                    if (selectedPlayer != null) {
-                        saveSelectedPlayer(this, selectedPlayer.getName(), selectedPlayer.getPhoto());
-                        Intent intent = new Intent(this, NumberChoice.class);
-                        intent.putStringArrayListExtra("playerNames", (ArrayList<String>) selectedPlayerNames);
-                        startActivity(intent);
-                    }
+                    saveSelectedPlayers(this, selectedPlayers);
+                    Intent intent = new Intent(this, NumberChoice.class);
+                    intent.putStringArrayListExtra("playerNames", (ArrayList<String>) selectedPlayerNames);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(this, "Please select " + remainingPlayers + " more player(s)", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
+
 
 
     //-----------------------------------------------------Image and player creation functionality---------------------------------------------------//
@@ -190,28 +188,31 @@ public class PlayerModel extends ButtonUtilsActivity {
         editor.apply();
     }
 
-    public static void saveSelectedPlayer(Context context, String playerName, String playerImage) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("selectedPlayerName", playerName);
-        editor.putString("selectedPlayerImage", playerImage);
+    public static void saveSelectedPlayers(Context context, List<Player> selectedPlayers) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("selected_players", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(selectedPlayers);
+        editor.putString("selected_players_list", json);
         editor.apply();
     }
+
     // Load player data from SharedPreferences
-    public static List<Player> loadPlayerData(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("player_data", MODE_PRIVATE);
+    public static List<Player> loadSelectedPlayers(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("selected_players", MODE_PRIVATE);
         Gson gson = new Gson();
-        String json = sharedPreferences.getString("player_list", null);
+        String json = sharedPreferences.getString("selected_players_list", null);
         Type type = new TypeToken<ArrayList<Player>>() {}.getType();
-        List<Player> loadedPlayerList = gson.fromJson(json, type);
+        List<Player> selectedPlayers = gson.fromJson(json, type);
 
         // Return an empty list if no data is loaded
-        if (loadedPlayerList == null) {
-            loadedPlayerList = new ArrayList<>();
+        if (selectedPlayers == null) {
+            selectedPlayers = new ArrayList<>();
         }
 
-        return loadedPlayerList;
+        return selectedPlayers;
     }
+
 
     //-----------------------------------------------------Player Counter Functionality---------------------------------------------------//
     public void updatePlayerCounter() {
@@ -257,7 +258,7 @@ public class PlayerModel extends ButtonUtilsActivity {
     private void setupPlayerRecyclerView() {
         playerList = new ArrayList<>();
         playerListAdapter = new PlayerListAdapter(this, playerList);
-        loadPlayerData(this);
+        loadSelectedPlayers(this);
 
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
         int spacing = getResources().getDimensionPixelSize(R.dimen.grid_spacing);
