@@ -204,8 +204,12 @@ public class PlayerModel extends ButtonUtilsActivity {
         Type type = new TypeToken<ArrayList<Player>>() {}.getType();
         List<Player> loadedPlayerList = gson.fromJson(json, type);
 
-        // Return an empty list if no data is loaded
-        if (loadedPlayerList == null) {
+        // Set isSelected to false for all loaded players
+        if (loadedPlayerList != null) {
+            for (Player player : loadedPlayerList) {
+                player.setSelected(false);
+            }
+        } else {
             loadedPlayerList = new ArrayList<>();
         }
 
