@@ -29,12 +29,10 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
         mProbabilities = probabilities;
         mMode = mode;
     }
-
     @Override
     public int getCount() {
         return mProbabilities.length;
     }
-
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -44,19 +42,14 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
         TextView textViewWildCard = view.findViewById(R.id.textview_wildcard);
         TextView textViewProbability = view.findViewById(R.id.textview_probability);
         Switch switchWildCard = view.findViewById(R.id.switch_wildcard);
-
         Settings_WildCard_Probabilities wildCard = mProbabilities[position];
-
         textViewWildCard.setText(wildCard.getText());
         textViewProbability.setText(String.valueOf(wildCard.getProbability()));
         switchWildCard.setChecked(wildCard.isEnabled());
-
         String wildCardText = wildCard.getText();
         setTextViewSizeBasedOnString(textViewWildCard, wildCardText);
-
         String probabilityText = String.valueOf(wildCard.getProbability());
         setProbabilitySizeBasedOnString(textViewProbability, probabilityText);
-
         editButton.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             builder.setTitle("Edit Wildcard");

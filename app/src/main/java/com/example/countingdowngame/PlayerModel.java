@@ -38,7 +38,7 @@ public class PlayerModel extends ButtonUtilsActivity {
     private RecyclerView playerRecyclerView; // Declare playerRecyclerView
 
     private Button chooseImageButton;
-    private int selectedPlayerCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +61,7 @@ public class PlayerModel extends ButtonUtilsActivity {
         playerList = new ArrayList<>(); // Initialize playerList
 
         // Calculate selectedPlayerCount after initializing playerList
-        selectedPlayerCount = totalPlayerCount - playerList.size();
+        int selectedPlayerCount = totalPlayerCount - playerList.size();
     }
 
 

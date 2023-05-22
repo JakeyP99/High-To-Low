@@ -14,6 +14,7 @@ import java.util.Random;
 
 public class NumberChoice extends ButtonUtilsActivity {
     private int startingNumber;
+    private static NumberChoice instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +22,7 @@ public class NumberChoice extends ButtonUtilsActivity {
         setContentView(R.layout.a4_number_choice);
         Button btnSubmit = findViewById(R.id.btnSubmitNumbers);
         Button btnRandom = findViewById(R.id.btnRandomNumber);
-
+        resetStartingNumber();
         btnUtils.setButton(btnSubmit, this::onSubmitClicked);
         btnUtils.setButton(btnRandom, this::onRandomClicked);
     }
@@ -70,4 +71,12 @@ public class NumberChoice extends ButtonUtilsActivity {
         i.putExtra("startingNumber", startingNumber);
         startActivity(i);
     }
+
+   public void resetStartingNumber() {
+        final EditText originalNumberField = findViewById(R.id.EditTextView_numberchoice);
+        originalNumberField.setText(""); // Clear the input field
+        originalNumberField.setFocusableInTouchMode(true); // Enable editing of the field
+    }
+
+
 }

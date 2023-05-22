@@ -5,17 +5,10 @@ import java.util.List;
 import java.util.Random;
 
 public class Game {
+
+    //-----------------------------------------------------Start Game Functions---------------------------------------------------//
+
     private static final Game gameInstance = new Game();
-
-    public static Game getInstance() {
-        return gameInstance;
-    }
-
-    private final PlayerEventListener playerEventListener = e -> {
-        if (e.type == PlayerEventType.SKIP) {
-            nextPlayer();
-        }
-    };
     private GameEventListener gameEventListener;
     private ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Integer> previousNumbers = new ArrayList<>();
@@ -24,35 +17,9 @@ public class Game {
     private int currentNumber = 0;
     private boolean gameStarted = false;
 
-    public int getCurrentNumber() {
-        return currentNumber;
+    public static Game getInstance() {
+        return gameInstance;
     }
-
-    public int getCurrentPlayerId() {
-        return currentPlayerId;
-    }
-
-    public Player getCurrentPlayer() {
-        if (!players.isEmpty() && currentPlayerId >= 0 && currentPlayerId < players.size()) {
-            return players.get(currentPlayerId);
-        } else {
-            return null; // or handle the case when there are no players or currentPlayerId is invalid
-        }
-    }
-
-    public ArrayList<String> getPreviousNumbersFormatted() {
-        ArrayList<String> previousNumbersFormatted = new ArrayList<>();
-
-        for (int i = previousNumbers.size() - 1; i >= 0; i--) {
-            int number = previousNumbers.get(i);
-            previousNumbersFormatted.add(String.valueOf(number));
-        }
-
-        previousNumbersFormatted.add(startingNumber + " (starting number)");
-
-        return previousNumbersFormatted;
-    }
-
     public void setPlayers(int playerAmount) {
         if (gameStarted)
             return;
@@ -79,6 +46,24 @@ public class Game {
         previousNumbers = new ArrayList<>();
     }
 
+    //-----------------------------------------------------In Game---------------------------------------------------//
+
+    public int getCurrentNumber() {
+        return currentNumber;
+    }
+
+    public int getCurrentPlayerId() {
+        return currentPlayerId;
+    }
+
+    public Player getCurrentPlayer() {
+        if (!players.isEmpty() && currentPlayerId >= 0 && currentPlayerId < players.size()) {
+            return players.get(currentPlayerId);
+        } else {
+            return null;
+        }
+    }
+
     public void nextNumber(final Runnable onEnd) {
         Random random = new Random();
         int nextNumber = random.nextInt(currentNumber + 1);
@@ -93,22 +78,6 @@ public class Game {
         }
     }
 
-    public void playAgain() {
-        for (Player player : players) {
-            if (player != null) {
-                player.resetAbilities();
-            }
-        }
-    }
-
-    public void endGame() {
-        gameStarted = false;
-    }
-
-    public void triggerPlayerEvent(PlayerEvent event) {
-        playerEventListener.onPlayerEvent(event);
-    }
-
     private void nextPlayer() {
         currentPlayerId = (currentPlayerId + 1) % players.size();
 
@@ -117,6 +86,16 @@ public class Game {
         }
     }
 
+    //-----------------------------------------------------Player Functions---------------------------------------------------//
+    private final PlayerEventListener playerEventListener = e -> {
+        if (e.type == PlayerEventType.SKIP) {
+            nextPlayer();
+        }
+    };
+
+    public void triggerPlayerEvent(PlayerEvent event) {
+        playerEventListener.onPlayerEvent(event);
+    }
     public int getPlayerAmount(){
         return players.size();
     }
@@ -128,4 +107,35 @@ public class Game {
         players.clear();
         players.addAll(playerList);
     }
+
+    //-----------------------------------------------------End Game ---------------------------------------------------//
+
+    public void endGame() {
+        gameStarted = false;
+    }
+    public ArrayList<String> getPreviousNumbersFormatted() {
+        ArrayList<String> previousNumbersFormatted = new ArrayList<>();
+
+        for (int i = previousNumbers.size() - 1; i >= 0; i--) {
+            int number = previousNumbers.get(i);
+            previousNumbersFormatted.add(String.valueOf(number));
+        }
+
+        previousNumbersFormatted.add(startingNumber + " (starting number)");
+
+        return previousNumbersFormatted;
+    }
+
+    public void playAgain() {
+        for (Player player : players) {
+            if (player != null) {
+                player.resetAbilities();
+            }
+        }
+    }
+
+
 }
+
+
+

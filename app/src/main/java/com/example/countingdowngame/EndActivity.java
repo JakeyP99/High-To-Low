@@ -10,6 +10,7 @@ public class EndActivity extends ButtonUtilsActivity {
     public void onBackPressed() {
         gotoHomeScreen();
     }
+    private ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
