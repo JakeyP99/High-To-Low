@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Base64;
@@ -276,22 +275,6 @@ public class PlayerModel extends ButtonUtilsActivity {
             counterText = "Please Select " + remainingPlayers + " More Players xx";
         }
         playerCountTextView.setText(counterText);
-    }
-
-
-    public static void resetPlayerData(Context context) {
-        // Clear the selected state of players
-        for (Player player : playerList) {
-            player.setSelected(false);
-        }
-        playerListAdapter.notifyDataSetChanged();
-
-        // Clear the stored selected player data from shared preferences
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.remove("selectedPlayerName");
-        editor.remove("selectedPlayerImage");
-        editor.apply();
     }
 
 

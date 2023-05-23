@@ -56,10 +56,15 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         btnSkip = findViewById(R.id.btnSkip);
         btnWild = findViewById(R.id.btnWild);
         playerImagePlayer2 = findViewById(R.id.playerImagePlayer2);
+
+
         numberTextPlayer2 = findViewById(R.id.numberTextPlayer2);
         nextPlayerTextPlayer2 = findViewById(R.id.textView_Number_TurnPlayer2);
         btnSkipPlayer2 = findViewById(R.id.btnSkipPlayer2);
         btnWildPlayer2 = findViewById(R.id.btnWildPlayer2);
+
+        playerImage.setBackgroundResource(R.drawable.circle_background);
+        playerImagePlayer2.setBackgroundResource(R.drawable.circle_background);
     }
 
     private void startGame() {
