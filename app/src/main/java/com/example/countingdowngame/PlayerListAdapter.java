@@ -95,7 +95,10 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
 
             // Highlight the selected player
             if (player.isSelected()) {
-                playerItemView.setBackgroundResource(R.drawable.outlineforbutton);
+                playerItemView.setBackgroundResource(R.drawable.selectedplayer);
+                playerItemView.setPadding(10, 10, 10, 10);
+                deletePlayerImageView.setVisibility(View.INVISIBLE);
+
             } else {
                 playerItemView.setBackgroundResource(0);
             }

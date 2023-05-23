@@ -1,8 +1,10 @@
 package com.example.countingdowngame;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -18,6 +20,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,6 +42,8 @@ public class PlayerModel extends ButtonUtilsActivity {
     private RecyclerView playerRecyclerView; // Declare playerRecyclerView
 
     private Button chooseImageButton;
+
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +79,14 @@ public class PlayerModel extends ButtonUtilsActivity {
     //-----------------------------------------------------Buttons---------------------------------------------------//
 
     private void setupChooseImageButton() {
-        chooseImageButton.setOnClickListener(view -> captureImage());
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            // Request the permission
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
+        } else {
+            chooseImageButton.setOnClickListener(view -> captureImage());
+        }
+
     }
 
     private void setupProceedButton() {
@@ -249,14 +262,22 @@ public class PlayerModel extends ButtonUtilsActivity {
         int remainingPlayers = totalPlayerCount - selectedPlayerCount;
         String counterText;
         if (remainingPlayers == 0) {
-            counterText = "All Players Selected: " + totalPlayerCount;
-            // Proceed with the game since all players are selected
-            // Trigger the startGame() method in your activity here
+            counterText = "All Players Selected Baby!";
+        } else if (remainingPlayers == 1) {
+            counterText = "Please Select 1 More Player xx";
+        } else if (remainingPlayers < 0) {
+            int excessPlayers = Math.abs(remainingPlayers);
+            if (excessPlayers == 1) {
+                counterText = "Please Remove 1 Player xx";
+            } else {
+                counterText = "Please Remove " + excessPlayers + " Players xx";
+            }
         } else {
-            counterText = "Please select " + remainingPlayers + " more player(s)";
+            counterText = "Please Select " + remainingPlayers + " More Players xx";
         }
         playerCountTextView.setText(counterText);
     }
+
 
     public static void resetPlayerData(Context context) {
         // Clear the selected state of players

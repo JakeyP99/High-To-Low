@@ -1,5 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageView
@@ -26,5 +26,7 @@
         android:id="@+id/deletePlayerImageView"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:src="@drawable/buttonhighlight" />
+        android:layout_marginEnd="-12dp"
+        android:layout_toStartOf="@+id/playerPhotoImageView"
+        android:src="@drawable/deletebutton" />
 </RelativeLayout>
