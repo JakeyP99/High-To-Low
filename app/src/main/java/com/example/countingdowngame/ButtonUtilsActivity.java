@@ -48,9 +48,7 @@ public class ButtonUtilsActivity extends AppCompatActivity {
 
     protected void gotoGameSetup() {
         startActivity(getIntentForClass(PlayerNumberChoice.class, true));
-        PlayerModel.resetPlayerData(this);
     }
-
     protected void gotoInstructions() {
         startActivity(getIntentForClass(Instructions.class, true));
     }

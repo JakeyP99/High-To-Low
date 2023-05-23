@@ -82,6 +82,7 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
             if (wildCard.isDeletable()) {
                 builder.setNeutralButton("Delete", (dialog, which) -> {
                     wildCardList.remove(position);
+                    mProbabilities = wildCardList.toArray(new Settings_WildCard_Probabilities[0]);
                     notifyDataSetChanged();
                     mContext.saveWildCardProbabilitiesToStorage(mMode, mProbabilities);
                 });

@@ -89,14 +89,14 @@ public class MainActivity extends ButtonUtilsActivity {
 
         btnBackWild.setVisibility(View.INVISIBLE);
 
-        btnGenerate.setOnClickListener(view -> {
+        btnUtils.setButton(btnGenerate, () -> {
             Game.getInstance().nextNumber(this::gotoGameEnd);
             wildText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.VISIBLE);
             nextPlayerText.setVisibility(View.VISIBLE);
         });
 
-        btnBackWild.setOnClickListener(view -> {
+        btnUtils.setButton(btnBackWild, () -> {
             btnBackWild.setVisibility(View.INVISIBLE);
             btnGenerate.setVisibility(View.VISIBLE);
             wildText.setVisibility(View.INVISIBLE);
@@ -104,7 +104,7 @@ public class MainActivity extends ButtonUtilsActivity {
             nextPlayerText.setVisibility(View.VISIBLE);
         });
 
-        btnSkip.setOnClickListener(view -> {
+        btnUtils.setButton(btnSkip, () -> {
             Game.getInstance().getCurrentPlayer().useSkip();
             wildText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.VISIBLE);
@@ -113,7 +113,7 @@ public class MainActivity extends ButtonUtilsActivity {
             btnGenerate.setVisibility(View.VISIBLE);
         });
 
-        btnWild.setOnClickListener(view -> {
+        btnUtils.setButton(btnWild, () -> {
             btnWild.setVisibility(View.INVISIBLE);
             wildText.setVisibility(View.VISIBLE);
             btnBackWild.setVisibility(View.VISIBLE);
@@ -156,7 +156,7 @@ public class MainActivity extends ButtonUtilsActivity {
             btnSkip.setVisibility(View.INVISIBLE);
         }
 
-        if (currentPlayer.getWildCardAmount() > 0) {
+        if (currentPlayer.getWildCardAmount() > 0 && isWildCardAvailable()) {
             btnWild.setVisibility(View.VISIBLE);
         } else {
             btnWild.setVisibility(View.INVISIBLE);
@@ -165,6 +165,24 @@ public class MainActivity extends ButtonUtilsActivity {
         int currentNumber = Game.getInstance().getCurrentNumber();
         numberText.setText(String.valueOf(currentNumber));
         setTextViewSizeBasedOnInt(numberText, String.valueOf(currentNumber));
+    }
+
+    private boolean isWildCardAvailable() {
+        Settings_WildCard_Choice settings = new Settings_WildCard_Choice();
+        Settings_WildCard_Probabilities[][] probabilitiesArray = settings.loadWildCardProbabilitiesFromStorage(getApplicationContext());
+
+        if (probabilitiesArray.length > 0) {
+            Settings_WildCard_Probabilities[] activityProbabilities = probabilitiesArray[0];
+
+            List<Settings_WildCard_Probabilities> unusedCards = Arrays.stream(activityProbabilities)
+                    .filter(Settings_WildCard_Probabilities::isEnabled)
+                    .filter(c -> !usedWildCards.contains(c))
+                    .collect(Collectors.toList());
+
+            return !unusedCards.isEmpty();
+        }
+
+        return false;
     }
 
     private String getPlayerImage(String playerName, ArrayList<String> playerImages) {

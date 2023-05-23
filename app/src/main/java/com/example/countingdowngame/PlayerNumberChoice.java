@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 public class PlayerNumberChoice extends ButtonUtilsActivity {
     private EditText originalPlayerField;
-    private int totalPlayerCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
