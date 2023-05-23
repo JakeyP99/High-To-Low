@@ -134,10 +134,9 @@
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
 
-    <!-- Player 2 -->
 
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/playerImage"
         android:layout_width="60dp"
         android:layout_height="60dp"
@@ -149,9 +148,15 @@
         app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toEndOf="@+id/textView_Number_Turn"
         app:layout_constraintTop_toTopOf="@+id/view"
- />
 
-    <ImageView
+        app:civ_border_width="3dp"
+        app:civ_border_color="@color/bluedarktransparent"
+        app:civ_border_overlay="false"
+        app:civ_circle_background_color="@color/bluedark"
+ />
+    <!-- Player 2 -->
+
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/playerImagePlayer2"
         android:layout_width="60dp"
         android:layout_height="60dp"
@@ -164,6 +169,11 @@
         app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnGeneratePlayer2"
+
+        app:civ_border_width="3dp"
+        app:civ_border_color="@color/bluedarktransparent"
+        app:civ_border_overlay="false"
+        app:civ_circle_background_color="@color/bluedark"
  />
 
     <TextView
@@ -171,7 +181,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:rotation="180"
-        android:text="xxxx"
+        android:text="XXXX"
         android:textColor="@color/bluedark"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/view"
