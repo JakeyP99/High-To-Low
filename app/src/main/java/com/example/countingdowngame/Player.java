@@ -67,4 +67,8 @@ class Player implements Serializable {
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
 }

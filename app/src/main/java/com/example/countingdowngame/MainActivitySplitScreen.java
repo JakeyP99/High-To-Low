@@ -76,6 +76,11 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
             // Set the player list in Game class
             Game.getInstance().setPlayers(playerList.size());
             Game.getInstance().setPlayerList(playerList);
+
+            // Set the game object for each player
+            for (Player player : playerList) {
+                player.setGame(Game.getInstance());
+            }
         }
 
         Game.getInstance().startGame(startingNumber, (e) -> {
