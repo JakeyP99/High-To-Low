@@ -34,6 +34,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_counter" />
 
+
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/camera"
         android:layout_width="100dp"
@@ -41,26 +42,10 @@
         android:scaleType="centerCrop"
         android:src="@drawable/camera"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/chooseImageButton"
-        app:layout_constraintStart_toStartOf="@+id/chooseImageButton"
-        app:layout_constraintTop_toBottomOf="@+id/chooseImageButton"
-        app:layout_constraintVertical_bias="0.4" />
-
-    <Button
-        android:id="@+id/chooseImageButton"
-        android:layout_width="139dp"
-        android:layout_height="77dp"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/outlineforbutton"
-        android:text="Capture a Player"
-        android:textAllCaps="false"
-        android:textColor="@color/bluedark"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playerRecyclerView" />
+        app:layout_constraintTop_toBottomOf="@+id/drawButton"
+/>
 
     <Button
         android:id="@+id/drawButton"
@@ -68,15 +53,15 @@
         android:layout_height="77dp"
         android:layout_centerHorizontal="true"
         android:background="@drawable/outlineforbutton"
-        android:text="Draw a Player"
+        android:text="Create Player"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.8"
-        app:layout_constraintTop_toBottomOf="@+id/playerRecyclerView"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_done"
+        app:layout_constraintVertical_bias="0.233" />
 
     <Button
         android:id="@+id/button_done"

@@ -3,34 +3,49 @@ package com.example.countingdowngame;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.view.MenuItem;
+import android.util.Base64;
+import android.widget.Button;
+
+import java.io.ByteArrayOutputStream;
 
 public class DrawingActivity extends ButtonUtilsActivity {
 
     private DrawingView drawingView;
+    private Bitmap drawnBitmap;
+
+    private Button btnCancel;
+    private Button btnSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawing);
 
-        drawingView = findViewById(R.id.drawingView);
-    }
+        btnCancel = findViewById(R.id.cancelButton);
+        btnSave = findViewById(R.id.saveButton);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.saveButton) {
-            Bitmap drawnBitmap = drawingView.getDrawingBitmap();
-            Intent resultIntent = new Intent();
-            resultIntent.putExtra("drawnBitmap", drawnBitmap);
-            setResult(RESULT_OK, resultIntent);
+        drawingView = findViewById(R.id.drawingView);
+
+        btnSave.setOnClickListener(view -> {
+            drawnBitmap = drawingView.getDrawingBitmap();
+            String drawnBitmapString = convertBitmapToString(drawnBitmap);
+
+            Intent intent = new Intent();
+            intent.putExtra("drawnBitmap", drawnBitmapString);
+            setResult(RESULT_OK, intent);
             finish();
-            return true;
-        } else if (item.getItemId() == R.id.cancelButton) {
+        });
+
+        btnCancel.setOnClickListener(view -> {
             setResult(RESULT_CANCELED);
             finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        });
+    }
+
+    private String convertBitmapToString(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 }

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -42,8 +43,6 @@ public class PlayerModel extends ButtonUtilsActivity {
     private Button chooseImageButton;
     private static final int REQUEST_DRAW = 2;
 
-    private Bitmap drawnBitmap;
-
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;
 
     @Override
@@ -53,7 +52,6 @@ public class PlayerModel extends ButtonUtilsActivity {
 
         initializeViews();
         setupPlayerRecyclerView();
-        setupChooseImageButton();
         setupDrawButton(); // Add this line
         updatePlayerCounter();
         setupProceedButton();
@@ -73,36 +71,77 @@ public class PlayerModel extends ButtonUtilsActivity {
 
         playerList = new ArrayList<>(); // Initialize playerList
 
-        // Calculate selectedPlayerCount after initializing playerList
         int selectedPlayerCount = totalPlayerCount - playerList.size();
     }
+
+
+
 
 
     //-----------------------------------------------------Buttons---------------------------------------------------//
 
     private void setupDrawButton() {
-        chooseImageButton.setOnClickListener(view -> captureImage());
-
         Button drawButton = findViewById(R.id.drawButton);
         drawButton.setOnClickListener(view -> startDrawing());
     }
 
     private void startDrawing() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose Option")
+                .setItems(new CharSequence[]{"Capture Image", "Draw"}, (dialog, which) -> {
+                    if (which == 0) {
+                        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                            // Request the permission
+                            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
+                        } else {
+                            captureImage();
+                        }
+                    } else if (which == 1) {
+                        startDrawingActivity();
+                    }
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                captureImage();
+            }
+        }
+    }
+
+    // Helper method to start the DrawingActivity
+    private void startDrawingActivity() {
         Intent intent = new Intent(this, DrawingActivity.class);
         startActivityForResult(intent, REQUEST_DRAW);
     }
 
+    private void showNameInputDialog(String bitmapString) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Enter Player Name");
 
-    private void setupChooseImageButton() {
+        View dialogView = getLayoutInflater().inflate(R.layout.player_enter_name, null);
+        EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
+        nameEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            // Request the permission
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
-        } else {
-            chooseImageButton.setOnClickListener(view -> captureImage());
-        }
+        builder.setView(dialogView)
+                .setPositiveButton("OK", (dialogInterface, i) -> {
+                    String name = nameEditText.getText().toString();
+                    Bitmap drawnBitmap = convertStringToBitmap(bitmapString);
+                    createNewCharacter(drawnBitmap, name);
+                })
+                .setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss());
 
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
+
+
 
     private void setupProceedButton() {
         Button proceedButton = findViewById(R.id.button_done);
@@ -142,6 +181,7 @@ public class PlayerModel extends ButtonUtilsActivity {
         startActivityForResult(intent, REQUEST_IMAGE_PICK);
     }
 
+
     // Convert a Bitmap to a Base64-encoded string
     private String convertBitmapToString(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -150,6 +190,10 @@ public class PlayerModel extends ButtonUtilsActivity {
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 
+    private Bitmap convertStringToBitmap(String bitmapString) {
+        byte[] decodedString = Base64.decode(bitmapString, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+    }
 
 
     // Handle the result of the image picker activity
@@ -161,10 +205,14 @@ public class PlayerModel extends ButtonUtilsActivity {
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
             showNameInputDialog(bitmap);
         } else if (requestCode == REQUEST_DRAW && resultCode == RESULT_OK && data != null) {
-            Bitmap drawnBitmap = data.getParcelableExtra("drawnBitmap");
+            String drawnBitmapString = data.getStringExtra("drawnBitmap");
+            Bitmap drawnBitmap = convertStringToBitmap(drawnBitmapString);
             showNameInputDialog(drawnBitmap);
+        } else if (requestCode == REQUEST_DRAW && resultCode == RESULT_CANCELED) {
+            // Handle cancelation
         }
     }
+
 
     private void showNameInputDialog(Bitmap bitmap) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
