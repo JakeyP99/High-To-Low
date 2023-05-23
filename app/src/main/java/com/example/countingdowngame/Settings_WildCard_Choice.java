@@ -153,6 +153,10 @@ public class Settings_WildCard_Choice extends ButtonUtilsActivity {
                 new Settings_WildCard_Probabilities("Get a skip button to use on any one of your turns!", 3, true, false)
         };
 
+        int nonDeletableCount = nonDeletablePrefs.getInt("wild_card_count", nonDeletableProbabilities.length);
+        if (nonDeletableCount > nonDeletableProbabilities.length) {
+            nonDeletableProbabilities = Arrays.copyOf(nonDeletableProbabilities, nonDeletableCount);
+        }
 
         for (int i = 0; i < nonDeletableProbabilities.length; i++) {
 
@@ -166,7 +170,6 @@ public class Settings_WildCard_Choice extends ButtonUtilsActivity {
 
         return new Settings_WildCard_Probabilities[][]{deletableProbabilities, nonDeletableProbabilities};
     }
-
     public void saveWildCardProbabilitiesToStorage(Settings_WildCard_Mode mode, Settings_WildCard_Probabilities[] probabilities) {
         switch (mode) {
             case DELETABLE: {

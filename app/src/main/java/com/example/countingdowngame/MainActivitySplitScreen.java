@@ -287,6 +287,7 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         if (selectedActivity != null) {
             wildActivityTextView.setText(selectedActivity);
             wildActivityTextViewPlayer2.setText(selectedActivity);
+
             for (Settings_WildCard_Probabilities wc : activityProbabilities) {
                 if (wc.getText().equals(selectedActivity)) {
                     player.addUsedWildCard(wc);
