@@ -11,7 +11,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -156,7 +155,7 @@ public class MainActivity extends ButtonUtilsActivity {
             btnSkip.setVisibility(View.INVISIBLE);
         }
 
-        if (currentPlayer.getWildCardAmount() > 0 && isWildCardAvailable()) {
+        if (currentPlayer.getWildCardAmount() > 0) {
             btnWild.setVisibility(View.VISIBLE);
         } else {
             btnWild.setVisibility(View.INVISIBLE);
@@ -167,33 +166,6 @@ public class MainActivity extends ButtonUtilsActivity {
         setTextViewSizeBasedOnInt(numberText, String.valueOf(currentNumber));
     }
 
-    private boolean isWildCardAvailable() {
-        Settings_WildCard_Choice settings = new Settings_WildCard_Choice();
-        Settings_WildCard_Probabilities[][] probabilitiesArray = settings.loadWildCardProbabilitiesFromStorage(getApplicationContext());
-
-        if (probabilitiesArray.length > 0) {
-            Settings_WildCard_Probabilities[] activityProbabilities = probabilitiesArray[0];
-
-            List<Settings_WildCard_Probabilities> unusedCards = Arrays.stream(activityProbabilities)
-                    .filter(Settings_WildCard_Probabilities::isEnabled)
-                    .filter(c -> !usedWildCards.contains(c))
-                    .collect(Collectors.toList());
-
-            return !unusedCards.isEmpty();
-        }
-
-        return false;
-    }
-
-    private String getPlayerImage(String playerName, ArrayList<String> playerImages) {
-        if (playerImages != null && !playerImages.isEmpty()) {
-            int index = getIntent().getStringArrayListExtra("playerNames").indexOf(playerName);
-            if (index != -1 && index < playerImages.size()) {
-                return playerImages.get(index);
-            }
-        }
-        return null;
-    }
     //-----------------------------------------------------Wild Card, and Skip Functionality---------------------------------------------------//
 
     private void wildCardActivate(Player player) {

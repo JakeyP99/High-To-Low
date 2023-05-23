@@ -21,42 +21,14 @@
         android:id="@+id/textView_Number_Turn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text="XXXX"
         android:textColor="@color/bluedark"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/btnGenerate"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view"
-        app:layout_constraintVertical_bias="0.5" />
-
-    <TextView
-        android:id="@+id/numberText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/bluedark"
-        app:layout_constraintBottom_toBottomOf="@+id/btnGenerate"
-        app:layout_constraintEnd_toEndOf="@+id/btnGenerate"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/btnGenerate"
-        app:layout_constraintTop_toTopOf="@+id/btnGenerate" />
-
-    <Button
-        android:id="@+id/btnGenerate"
-        android:layout_width="268dp"
-        android:layout_height="159dp"
-        android:background="@drawable/outlineforbutton"
-        android:text=""
-        android:textColor="@color/bluedark"
-        app:layout_constraintBottom_toTopOf="@+id/btnWild"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_Number_Turn"
-        app:layout_constraintVertical_bias="0.5" />
-
-
+        app:layout_constraintTop_toBottomOf="@+id/view" />
     <TextView
         android:id="@+id/wild_textview"
         android:layout_width="match_parent"
@@ -72,6 +44,35 @@
         app:layout_constraintTop_toBottomOf="@+id/view"
         app:layout_constraintVertical_bias="0.3"
         tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/btnGenerate"
+        android:layout_width="268dp"
+        android:layout_height="159dp"
+        android:background="@drawable/outlineforbutton"
+        android:text=""
+        android:textColor="@color/bluedark"
+        app:layout_constraintBottom_toTopOf="@+id/btnWild"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/wild_textview"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/numberText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/bluedark"
+        app:layout_constraintBottom_toBottomOf="@+id/btnGenerate"
+        app:layout_constraintEnd_toEndOf="@+id/btnGenerate"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/btnGenerate"
+        app:layout_constraintTop_toTopOf="@+id/btnGenerate" />
+
+
+
 
     <Button
         android:id="@+id/btnWild"
@@ -132,24 +133,53 @@
         app:layout_constraintTop_toBottomOf="@+id/view"
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
+
     <!-- Player 2 -->
 
+
+    <ImageView
+        android:id="@+id/playerImage"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/wine"
+        app:layout_constraintBottom_toTopOf="@+id/btnGenerate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toEndOf="@+id/textView_Number_Turn"
+        app:layout_constraintTop_toTopOf="@+id/view"
+ />
+
+    <ImageView
+        android:id="@+id/playerImagePlayer2"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"
+        android:rotation="180"
+        android:scaleType="centerCrop"
+        android:src="@drawable/wine"
+        app:layout_constraintBottom_toTopOf="@+id/view"
+        app:layout_constraintEnd_toStartOf="@+id/textView_Number_TurnPlayer2"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnGeneratePlayer2"
+ />
 
     <TextView
         android:id="@+id/textView_Number_TurnPlayer2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:rotation="180"
-        android:text=""
+        android:text="xxxx"
         android:textColor="@color/bluedark"
-
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnGeneratePlayer2"
-        app:layout_constraintVertical_bias="0.5" />
+ />
 
     <TextView
         android:id="@+id/numberTextPlayer2"
