@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -99,9 +98,6 @@ public class PlayerModel extends ButtonUtilsActivity {
                 }
             }
 
-            if (selectedPlayerNames.isEmpty()) {
-                Toast.makeText(this, "Please select players", Toast.LENGTH_SHORT).show();
-            } else {
                 int remainingPlayers = totalPlayerCount - selectedPlayerNames.size();
                 if (remainingPlayers == 0) {
                     List<Player> selectedPlayers = new ArrayList<>();
@@ -115,10 +111,8 @@ public class PlayerModel extends ButtonUtilsActivity {
                     Intent intent = new Intent(this, NumberChoice.class);
                     intent.putStringArrayListExtra("playerNames", (ArrayList<String>) selectedPlayerNames);
                     startActivity(intent);
-                } else {
-                    Toast.makeText(this, "Please select " + remainingPlayers + " more player(s)", Toast.LENGTH_SHORT).show();
                 }
-            }
+
         });
     }
 
@@ -263,16 +257,16 @@ public class PlayerModel extends ButtonUtilsActivity {
         if (remainingPlayers == 0) {
             counterText = "All Players Selected Baby!";
         } else if (remainingPlayers == 1) {
-            counterText = "Please Select 1 More Player xx";
+            counterText = "Please Select 1 More Player ❤️";
         } else if (remainingPlayers < 0) {
             int excessPlayers = Math.abs(remainingPlayers);
             if (excessPlayers == 1) {
-                counterText = "Please Remove 1 Player xx";
+                counterText = "Please Remove 1 Player \uD83E\uDD13";
             } else {
-                counterText = "Please Remove " + excessPlayers + " Players xx";
+                counterText = "Please Remove " + excessPlayers + " Players \uD83E\uDD13";
             }
         } else {
-            counterText = "Please Select " + remainingPlayers + " More Players xx";
+            counterText = "Please Select " + remainingPlayers + " More Players ❤️";
         }
         playerCountTextView.setText(counterText);
     }

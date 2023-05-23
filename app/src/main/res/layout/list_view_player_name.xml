@@ -1,6 +1,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/deletePlayerImageView"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/deletebutton"
+      />
 
     <ImageView
         android:id="@+id/playerPhotoImageView"
@@ -8,8 +14,9 @@
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/wine" />
-
+        android:layout_below="@id/deletePlayerImageView"
+        android:src="@drawable/wine"
+        android:layout_marginTop="-10dp"/>
 
     <TextView
         android:id="@+id/playerNameTextView"
@@ -17,16 +24,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/playerPhotoImageView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:text="Player Name"
+        android:layout_marginTop="15dp"
+        android:maxWidth="90dp"
+        android:ellipsize="end"
+        android:text="Player Namedfsajksdfkldfslfdsjkaljksd"
         android:textColor="#000000"
         android:textSize="16sp" />
 
-    <ImageView
-        android:id="@+id/deletePlayerImageView"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="-12dp"
-        android:layout_toStartOf="@+id/playerPhotoImageView"
-        android:src="@drawable/deletebutton" />
+
 </RelativeLayout>

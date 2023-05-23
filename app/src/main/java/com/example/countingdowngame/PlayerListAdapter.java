@@ -91,16 +91,18 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
 
             playerNameTextView.setBackgroundResource(R.drawable.outlineforbutton);
             playerNameTextView.setText(player.getName());
-            playerNameTextView.setPadding(20, 20, 20, 20);
+            playerNameTextView.setPadding(20, 20, 20, 30);
 
             // Highlight the selected player
             if (player.isSelected()) {
                 playerItemView.setBackgroundResource(R.drawable.selectedplayer);
-                playerItemView.setPadding(10, 10, 10, 10);
+                playerItemView.setPadding(20, 20, 20, 30);
                 deletePlayerImageView.setVisibility(View.INVISIBLE);
 
             } else {
                 playerItemView.setBackgroundResource(0);
+                deletePlayerImageView.setVisibility(View.VISIBLE);
+
             }
         }
 
