@@ -40,6 +40,9 @@ public class PlayerModel extends ButtonUtilsActivity {
     private RecyclerView playerRecyclerView; // Declare playerRecyclerView
 
     private Button chooseImageButton;
+    private static final int REQUEST_DRAW = 2;
+
+    private Bitmap drawnBitmap;
 
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;
 
@@ -51,6 +54,7 @@ public class PlayerModel extends ButtonUtilsActivity {
         initializeViews();
         setupPlayerRecyclerView();
         setupChooseImageButton();
+        setupDrawButton(); // Add this line
         updatePlayerCounter();
         setupProceedButton();
 
@@ -75,6 +79,19 @@ public class PlayerModel extends ButtonUtilsActivity {
 
 
     //-----------------------------------------------------Buttons---------------------------------------------------//
+
+    private void setupDrawButton() {
+        chooseImageButton.setOnClickListener(view -> captureImage());
+
+        Button drawButton = findViewById(R.id.drawButton);
+        drawButton.setOnClickListener(view -> startDrawing());
+    }
+
+    private void startDrawing() {
+        Intent intent = new Intent(this, DrawingActivity.class);
+        startActivityForResult(intent, REQUEST_DRAW);
+    }
+
 
     private void setupChooseImageButton() {
 
@@ -142,24 +159,30 @@ public class PlayerModel extends ButtonUtilsActivity {
 
         if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK && data != null) {
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Enter Player Name");
-
-            View dialogView = getLayoutInflater().inflate(R.layout.player_enter_name, null);
-            EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
-            nameEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-
-            builder.setView(dialogView)
-                    .setPositiveButton("OK", (dialogInterface, i) -> {
-                        String name = nameEditText.getText().toString();
-                        createNewCharacter(bitmap, name);
-                    })
-                    .setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss());
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
+            showNameInputDialog(bitmap);
+        } else if (requestCode == REQUEST_DRAW && resultCode == RESULT_OK && data != null) {
+            Bitmap drawnBitmap = data.getParcelableExtra("drawnBitmap");
+            showNameInputDialog(drawnBitmap);
         }
+    }
+
+    private void showNameInputDialog(Bitmap bitmap) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Enter Player Name");
+
+        View dialogView = getLayoutInflater().inflate(R.layout.player_enter_name, null);
+        EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
+        nameEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+
+        builder.setView(dialogView)
+                .setPositiveButton("OK", (dialogInterface, i) -> {
+                    String name = nameEditText.getText().toString();
+                    createNewCharacter(bitmap, name);
+                })
+                .setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss());
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     // Add a new player with the selected image and name

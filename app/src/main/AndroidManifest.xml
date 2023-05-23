@@ -59,6 +59,11 @@
             android:name=".MainActivitySplitScreen" />
 
         <activity
+            android:name=".DrawingActivity" />
+
+
+
+        <activity
             android:name=".PlayerModel"
             android:windowSoftInputMode="adjustNothing" />
 
