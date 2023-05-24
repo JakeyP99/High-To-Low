@@ -10,16 +10,17 @@ import android.widget.SeekBar;
 
 import java.io.ByteArrayOutputStream;
 
-public class DrawingActivity extends ButtonUtilsActivity {
+import yuku.ambilwarna.AmbilWarnaDialog;
 
+public class DrawingActivity extends ButtonUtilsActivity {
     private DrawingView drawingView;
     private Bitmap drawnBitmap;
-
     private Button btnCancel;
     private Button btnSave;
     private Button colorButton;
     private Button eraserButton;
     private SeekBar penSizeSeekBar;
+    private int currentColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,22 @@ public class DrawingActivity extends ButtonUtilsActivity {
         colorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Create the color picker dialog
+                AmbilWarnaDialog colorPickerDialog = new AmbilWarnaDialog(DrawingActivity.this, currentColor,
+                        new AmbilWarnaDialog.OnAmbilWarnaListener() {
+                            @Override
+                            public void onOk(AmbilWarnaDialog dialog, int color) {
+                                // Handle color selection
+                                currentColor = color;
+                                drawingView.setCurrentColor(currentColor);
+                            }
 
+                            @Override
+                            public void onCancel(AmbilWarnaDialog dialog) {
+                                // Cancelled
+                            }
+                        });
+                colorPickerDialog.show();
             }
         });
 
