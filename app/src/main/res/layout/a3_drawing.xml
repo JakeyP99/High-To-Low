@@ -32,24 +32,30 @@
             android:textColor="@color/bluedark"
             android:textSize="20sp"
             android:text="Eraser"
-            android:layout_margin="16dp" />
-
-        <SeekBar
-            android:id="@+id/penSizeSeekBar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:max="50"
-            android:progress="5" />
+            android:layout_margin="16dp"
+            android:layout_toRightOf="@+id/colorButton" />
 
     </LinearLayout>
+
+    <SeekBar
+        android:id="@+id/penSizeSeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/topLinearLayout"
+        android:layout_marginTop="16dp"
+        android:max="50"
+        android:progress="5"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:thumb="@drawable/seekbar_thumb"
+        android:progressDrawable="@drawable/seekbar_custom" />
 
     <com.example.countingdowngame.DrawingView
         android:id="@+id/drawingView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/linearLayout"
-        android:layout_below="@+id/topLinearLayout" />
+        android:layout_below="@+id/penSizeSeekBar" />
 
     <LinearLayout
         android:id="@+id/linearLayout"

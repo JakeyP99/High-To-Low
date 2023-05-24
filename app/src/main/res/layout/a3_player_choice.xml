@@ -53,7 +53,7 @@
         android:layout_height="77dp"
         android:layout_centerHorizontal="true"
         android:background="@drawable/outlineforbutton"
-        android:text="Create Player"
+        android:text="Create\nPlayer"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
         android:textSize="20sp"
