@@ -170,6 +170,8 @@ public class MainActivity extends ButtonUtilsActivity {
         int currentNumber = Game.getInstance().getCurrentNumber();
         numberText.setText(String.valueOf(currentNumber));
         setTextViewSizeBasedOnInt(numberText, String.valueOf(currentNumber));
+        setNameSizeBasedOnInt(nextPlayerText, nextPlayerText.getText().toString());
+
     }
 
     //-----------------------------------------------------Wild Card, and Skip Functionality---------------------------------------------------//
@@ -257,6 +259,7 @@ public class MainActivity extends ButtonUtilsActivity {
             btnWild.setVisibility(View.INVISIBLE);
         }
     }
+
     private void setTextViewSizeBasedOnInt(TextView textView, String text) {
         int defaultTextSize = 70;
         int minSize = 47;
@@ -266,6 +269,21 @@ public class MainActivity extends ButtonUtilsActivity {
         } else {
             textView.setTextSize(defaultTextSize);
         }
+    }
+
+    private void setNameSizeBasedOnInt(TextView textView, String text) {
+        int textSize;
+
+        if (text.length() > 19) {
+            textSize = 22;
+        } else if (text.length() > 14) {
+            textSize = 30;
+        } else if (text.length() > 8) {
+            textSize = 35;
+        } else {
+            textSize = 45;
+        }
+        textView.setTextSize(textSize);
     }
 
 
