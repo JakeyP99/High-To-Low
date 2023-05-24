@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -216,20 +217,25 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         Settings_WildCard_Choice settings = new Settings_WildCard_Choice();
         Settings_WildCard_Probabilities[][] probabilitiesArray = settings.loadWildCardProbabilitiesFromStorage(getApplicationContext());
 
-        // Assuming you want to access the first set of probabilities in the array
-        Settings_WildCard_Probabilities[] activityProbabilities = probabilitiesArray[0];
-        final TextView wildActivityTextView = findViewById(R.id.wild_textview);
-        final TextView wildActivityTextViewPlayer2 = findViewById(R.id.wild_textviewPlayer2);
+        Settings_WildCard_Probabilities[] deletableProbabilities = probabilitiesArray[0];
+        Settings_WildCard_Probabilities[] nonDeletableProbabilities = probabilitiesArray[1];
 
+        List<Settings_WildCard_Probabilities> allProbabilities = new ArrayList<>();
+        allProbabilities.addAll(Arrays.asList(deletableProbabilities));
+        allProbabilities.addAll(Arrays.asList(nonDeletableProbabilities));
+
+        final TextView wildActivityTextView = findViewById(R.id.wild_textview);
+        final TextView wildActivityTextViewPlayer2 = findViewById(R.id.wild_textview);
 
         player.useWildCard();
+
 
         boolean wildCardsEnabled = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("wild_cards_toggle", true);
 
         String selectedActivity = null;
         Set<Settings_WildCard_Probabilities> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
         if (wildCardsEnabled) {
-            List<Settings_WildCard_Probabilities> unusedCards = Arrays.stream(activityProbabilities)
+            List<Settings_WildCard_Probabilities> unusedCards = allProbabilities.stream()
                     .filter(Settings_WildCard_Probabilities::isEnabled)
                     .filter(c -> !usedWildCards.contains(c))
                     .collect(Collectors.toList());
@@ -278,7 +284,7 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
             wildActivityTextView.setText(selectedActivity);
             wildActivityTextViewPlayer2.setText(selectedActivity);
 
-            for (Settings_WildCard_Probabilities wc : activityProbabilities) {
+            for (Settings_WildCard_Probabilities wc : allProbabilities) {
                 if (wc.getText().equals(selectedActivity)) {
                     player.addUsedWildCard(wc);
                     usedCards.add(wc); // Add to usedCards set for this player
