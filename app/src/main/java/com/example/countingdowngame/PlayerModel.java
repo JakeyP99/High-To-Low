@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -234,14 +235,18 @@ public class PlayerModel extends ButtonUtilsActivity {
         builder.setView(dialogView)
                 .setPositiveButton("OK", (dialogInterface, i) -> {
                     String name = nameEditText.getText().toString();
-                    createNewCharacter(bitmap, name);
+                    if (name.length() < 20) {
+                        createNewCharacter(bitmap, name);
+                    } else {
+                        Toast.makeText(this, "Name must be less than 20 characters. Rough aye.", Toast.LENGTH_SHORT).show();
+                        showNameInputDialog(bitmap);
+                    }
                 })
                 .setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss());
 
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     private void createNewCharacter(Bitmap bitmap, String name) {
         int size = Math.min(bitmap.getWidth(), bitmap.getHeight());
         int desiredSize = size; // Desired zoomed-in size

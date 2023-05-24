@@ -193,6 +193,9 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         setTextViewSizeBasedOnInt(numberText, String.valueOf(currentNumber));
         setTextViewSizeBasedOnInt(numberTextPlayer2, String.valueOf(currentNumber));
 
+        setNameSizeBasedOnInt(nextPlayerText, nextPlayerText.getText().toString());
+        setNameSizeBasedOnInt(nextPlayerTextPlayer2, nextPlayerTextPlayer2.getText().toString());
+
     }
 
     //-----------------------------------------------------Wild Card, and Skip Functionality---------------------------------------------------//
@@ -382,5 +385,19 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         numberTextPlayer2.setVisibility(View.VISIBLE);
     }
 
+    private void setNameSizeBasedOnInt(TextView textView, String text) {
+        int textSize;
+
+        if (text.length() > 18) {
+            textSize = 20;
+        } else if (text.length() > 14) {
+            textSize = 23;
+        } else if (text.length() > 8) {
+            textSize = 28;
+        } else {
+            textSize = 38;
+        }
+        textView.setTextSize(textSize);
+    }
 
 }
