@@ -16,9 +16,12 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Base64;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -91,24 +94,41 @@ public class PlayerModel extends ButtonUtilsActivity {
 
     private void startDrawing() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Choose Option")
-                .setItems(new CharSequence[]{"Capture Image", "Draw"}, (dialog, which) -> {
-                    if (which == 0) {
-                        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                            // Request the permission
-                            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
-                        } else {
-                            captureImage();
-                        }
-                    } else if (which == 1) {
-                        startDrawingActivity();
-                    }
-                })
+        LayoutInflater inflater = getLayoutInflater();
+
+        // Inflate the custom layout for the dialog
+        View dialogView = inflater.inflate(R.layout.dialog_choose_option, null);
+        TextView titleTextView = dialogView.findViewById(R.id.titleTextView);
+        ListView optionsListView = dialogView.findViewById(R.id.optionsListView);
+
+        // Customize the dialog's appearance
+        titleTextView.setTextColor(getResources().getColor(R.color.bluedark));
+
+        // Define the options for the ListView
+        CharSequence[] options = {"Capture Image", "Draw"};
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(this, R.layout.list_item_option_choose_character, options);
+
+        optionsListView.setAdapter(adapter);
+        optionsListView.setOnItemClickListener((parent, view, position, id) -> {
+            if (position == 0) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    // Request the permission
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
+                } else {
+                    captureImage();
+                }
+            } else if (position == 1) {
+                startDrawingActivity();
+            }
+        });
+
+        builder.setView(dialogView)
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
