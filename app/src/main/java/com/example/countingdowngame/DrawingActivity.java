@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Base64;
-import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 
@@ -26,16 +25,58 @@ public class DrawingActivity extends ButtonUtilsActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a3_drawing);
+        initializeViews();
+        setupButtonListeners();
+        setupSeekBarListener();
+    }
 
+    private void initializeViews() {
         btnCancel = findViewById(R.id.cancelButton);
         btnSave = findViewById(R.id.saveButton);
         colorButton = findViewById(R.id.colorButton);
         eraserButton = findViewById(R.id.eraserButton);
         penSizeSeekBar = findViewById(R.id.penSizeSeekBar);
-
         drawingView = findViewById(R.id.drawingView);
+    }
 
-        btnSave.setOnClickListener(view -> {
+    private void setupButtonListeners() {
+        btnUtils.setButton(btnSave, () -> {
+            saveDrawing();
+        });
+        btnUtils.setButton(btnCancel, () -> {
+            cancelDrawing();
+        });
+        btnUtils.setButton(colorButton, () -> {
+            showColorPickerDialog();
+            setDefaultPenSize();
+        });
+        btnUtils.setButton(eraserButton, () -> {
+            toggleEraserMode();
+        });
+    }
+    //-----------------------------------------------------Seekbar Functionality---------------------------------------------------//
+    private void setupSeekBarListener () {
+            penSizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    float penSize = (float) progress;
+                    drawingView.setPenSize(penSize);
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                    // Not used in this case
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    // Not used in this case
+                }
+            });
+        }
+    //-----------------------------------------------------Button Functionality---------------------------------------------------//
+
+        private void saveDrawing () {
             drawnBitmap = drawingView.getDrawingBitmap();
             String drawnBitmapString = convertBitmapToString(drawnBitmap);
 
@@ -43,67 +84,46 @@ public class DrawingActivity extends ButtonUtilsActivity {
             intent.putExtra("drawnBitmap", drawnBitmapString);
             setResult(RESULT_OK, intent);
             finish();
-        });
+        }
 
-        btnCancel.setOnClickListener(view -> {
+        private void cancelDrawing () {
             setResult(RESULT_CANCELED);
             finish();
-        });
+        }
 
-        colorButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Create the color picker dialog
-                AmbilWarnaDialog colorPickerDialog = new AmbilWarnaDialog(DrawingActivity.this, currentColor,
-                        new AmbilWarnaDialog.OnAmbilWarnaListener() {
-                            @Override
-                            public void onOk(AmbilWarnaDialog dialog, int color) {
-                                // Handle color selection
-                                currentColor = color;
-                                drawingView.setCurrentColor(currentColor);
-                            }
+        private void showColorPickerDialog () {
+            AmbilWarnaDialog colorPickerDialog = new AmbilWarnaDialog(DrawingActivity.this, currentColor,
+                    new AmbilWarnaDialog.OnAmbilWarnaListener() {
+                        @Override
+                        public void onOk(AmbilWarnaDialog dialog, int color) {
+                            currentColor = color;
+                            drawingView.setCurrentColor(currentColor);
+                        }
 
-                            @Override
-                            public void onCancel(AmbilWarnaDialog dialog) {
-                                // Cancelled
-                            }
-                        });
-                colorPickerDialog.show();
-            }
-        });
+                        @Override
+                        public void onCancel(AmbilWarnaDialog dialog) {
+                            // Cancelled
+                        }
+                    });
+            colorPickerDialog.show();
+        }
 
-        eraserButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean isEraserMode = !drawingView.isEraserMode();
-                drawingView.setEraserMode(isEraserMode);
-                eraserButton.setText(isEraserMode ? "Draw" : "Eraser");
-            }
-        });
+        private void toggleEraserMode () {
+            boolean isEraserMode = !drawingView.isEraserMode();
+            drawingView.setEraserMode(isEraserMode);
+            eraserButton.setText(isEraserMode ? "Draw" : "Eraser");
+        }
 
-        penSizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                float penSize = (float) progress;
-                drawingView.setPenSize(penSize);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // Not used in this case
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                // Not used in this case
-            }
-        });
+    private void setDefaultPenSize() {
+        int maxProgress = penSizeSeekBar.getMax();
+        int defaultProgress = maxProgress / 2;
+        penSizeSeekBar.setProgress(defaultProgress);
     }
-
-    private String convertBitmapToString(Bitmap bitmap) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    //-----------------------------------------------------Convert to bitmap Functionality---------------------------------------------------//
+        private String convertBitmapToString (Bitmap bitmap){
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            return Base64.encodeToString(byteArray, Base64.DEFAULT);
+        }
     }
-}
