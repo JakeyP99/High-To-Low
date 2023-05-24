@@ -50,6 +50,7 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
         setTextViewSizeBasedOnString(textViewWildCard, wildCardText);
         String probabilityText = String.valueOf(wildCard.getProbability());
         setProbabilitySizeBasedOnString(textViewProbability, probabilityText);
+
         editButton.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             builder.setTitle("Edit Wildcard");
@@ -58,10 +59,6 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
             layout.setOrientation(LinearLayout.VERTICAL);
 
             final EditText textInput = new EditText(mContext);
-            final EditText probabilityInput = new EditText(mContext);
-            probabilityInput.setInputType(InputType.TYPE_CLASS_NUMBER);
-            probabilityInput.setText(String.valueOf(wildCard.getProbability()));
-            layout.addView(probabilityInput);
 
             if (wildCard.isDeletable()) {
                 textInput.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -70,6 +67,13 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
             } else {
                 textInput.setEnabled(false);
             }
+
+            final EditText probabilityInput = new EditText(mContext);
+            probabilityInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+            probabilityInput.setText(String.valueOf(wildCard.getProbability()));
+            layout.addView(probabilityInput);
+
+
 
             builder.setView(layout);
 

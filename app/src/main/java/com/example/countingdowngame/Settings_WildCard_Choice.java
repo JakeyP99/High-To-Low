@@ -50,15 +50,15 @@ public class Settings_WildCard_Choice extends ButtonUtilsActivity {
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
 
-        final EditText probabilityInput = new EditText(this);
-        probabilityInput.setInputType(InputType.TYPE_CLASS_NUMBER);
-        probabilityInput.setHint("Probability (1-100)");
-        layout.addView(probabilityInput);
-
         final EditText textInput = new EditText(this);
         textInput.setInputType(InputType.TYPE_CLASS_TEXT);
         textInput.setHint("Text");
         layout.addView(textInput);
+
+        final EditText probabilityInput = new EditText(this);
+        probabilityInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+        probabilityInput.setHint("Probability (1-100)");
+        layout.addView(probabilityInput);
 
         builder.setView(layout);
 
