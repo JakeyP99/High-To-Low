@@ -1,5 +1,11 @@
 package com.example.countingdowngame;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Shader;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,6 +90,19 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
 
         public void bind(Player player, int position) {
             String photoString = player.getPhoto();
+            byte[] decodedBytes = Base64.decode(photoString, Base64.DEFAULT);
+            Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+
+            // Create a circular bitmap
+            Bitmap circleBitmap = Bitmap.createBitmap(decodedBitmap.getWidth(), decodedBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+            BitmapShader shader = new BitmapShader(decodedBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+            Paint paint = new Paint();
+            paint.setShader(shader);
+            paint.setAntiAlias(true);
+            Canvas canvas = new Canvas(circleBitmap);
+            float radius = decodedBitmap.getWidth() / 2f;
+            canvas.drawCircle(radius, radius, radius, paint);
+
             Glide.with(context)
                     .load(Base64.decode(photoString, Base64.DEFAULT))
                     .apply(RequestOptions.circleCropTransform())

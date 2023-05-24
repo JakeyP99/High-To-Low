@@ -37,6 +37,7 @@ public class DrawingActivity extends ButtonUtilsActivity {
         eraserButton = findViewById(R.id.eraserButton);
         penSizeSeekBar = findViewById(R.id.penSizeSeekBar);
         drawingView = findViewById(R.id.drawingView);
+        setDefaultPenSize();
     }
 
     private void setupButtonListeners() {
@@ -111,14 +112,24 @@ public class DrawingActivity extends ButtonUtilsActivity {
         private void toggleEraserMode () {
             boolean isEraserMode = !drawingView.isEraserMode();
             drawingView.setEraserMode(isEraserMode);
-            eraserButton.setText(isEraserMode ? "Draw" : "Eraser");
+            eraserButton.setText(isEraserMode ? "Draw\nMode" : "Eraser\nMode");
         }
 
     private void setDefaultPenSize() {
         int maxProgress = penSizeSeekBar.getMax();
-        int defaultProgress = maxProgress / 2;
+        int defaultProgress = (int) (maxProgress * 0.8); // Calculate 80% of the maxProgress
         penSizeSeekBar.setProgress(defaultProgress);
+        float penSize = calculatePenSizeFromProgress(defaultProgress);
+        drawingView.setPenSize(penSize);
     }
+
+    private float calculatePenSizeFromProgress(int progress) {
+        float maxPenSize = 20.0f; // Maximum pen size
+        float progressRatio = (float) progress / penSizeSeekBar.getMax();
+        return maxPenSize * progressRatio;
+    }
+
+
     //-----------------------------------------------------Convert to bitmap Functionality---------------------------------------------------//
         private String convertBitmapToString (Bitmap bitmap){
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

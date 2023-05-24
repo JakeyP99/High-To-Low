@@ -31,7 +31,7 @@
             android:textAllCaps="false"
             android:textColor="@color/bluedark"
             android:textSize="20sp"
-            android:text="Eraser"
+            android:text="Eraser\nmode"
             android:layout_margin="16dp"
             android:layout_toRightOf="@+id/colorButton" />
 

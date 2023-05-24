@@ -66,9 +66,13 @@ public class DrawingView extends View {
         canvas.drawPath(drawingPath, drawingPaint);
     }
 
-    public int getCurrentColor() {
-        return currentColor;
+    public void clearCanvas() {
+        canvasBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+        drawingCanvas.setBitmap(canvasBitmap);
+        drawingPath.reset();
+        invalidate();
     }
+
     public void setCurrentColor(int color) {
         currentColor = color;
         if (!isEraserMode) {

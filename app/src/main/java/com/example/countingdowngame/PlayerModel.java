@@ -8,7 +8,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -214,19 +216,22 @@ public class PlayerModel extends ButtonUtilsActivity {
     }
 
     private void createNewCharacter(Bitmap bitmap, String name) {
-        // Resize the bitmap to a square shape
         int size = Math.min(bitmap.getWidth(), bitmap.getHeight());
-        Bitmap squareBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(squareBitmap);
-        Matrix matrix = new Matrix();
-        float scale = (float) size / Math.max(bitmap.getWidth(), bitmap.getHeight());
-        matrix.setScale(scale, scale);
-        float dx = (size - bitmap.getWidth() * scale) / 2f;
-        float dy = (size - bitmap.getHeight() * scale) / 2f;
-        matrix.postTranslate(dx, dy);
-        canvas.drawBitmap(bitmap, matrix, null);
+        Bitmap circleBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(circleBitmap);
 
-        String photoString = convertBitmapToString(squareBitmap);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setFilterBitmap(true);
+        paint.setDither(true);
+        Rect rect = new Rect(0, 0, size, size);
+
+        canvas.drawARGB(0, 0, 0, 0);
+        canvas.drawCircle(size / 2f, size / 2f, size / 2f, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, null, rect, paint);
+
+        String photoString = convertBitmapToString(circleBitmap);
         Player newPlayer = new Player(photoString, name);
         newPlayer.setSelected(false); // Set isSelected to false initially
         playerList.add(newPlayer);
@@ -234,6 +239,7 @@ public class PlayerModel extends ButtonUtilsActivity {
         savePlayerData();
         updatePlayerCounter();
     }
+
 
 
     // Delete a player at a given position
