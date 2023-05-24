@@ -3,6 +3,7 @@ package com.example.countingdowngame;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,9 +45,21 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
     View wildTextPlayer2;
     ImageButton imageButtonExit;
     ImageButton imageButtonExitPlayer2;
+    private boolean doubleBackToExitPressedOnce = false;
+    private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
     @Override
     public void onBackPressed() {
-        // Disable back button functionality
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            Game.getInstance().endGame();
+            gotoHomeScreen();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Press back again to go to the home screen", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(() -> doubleBackToExitPressedOnce=false, BACK_PRESS_DELAY);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {

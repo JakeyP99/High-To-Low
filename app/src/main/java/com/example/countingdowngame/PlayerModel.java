@@ -69,7 +69,6 @@ public class PlayerModel extends ButtonUtilsActivity {
 
     private void initializeViews() {
         playerRecyclerView = findViewById(R.id.playerRecyclerView);
-        chooseImageButton = findViewById(R.id.chooseImageButton);
         playerCountTextView = findViewById(R.id.text_view_counter);
 
         totalPlayerCount = Game.getInstance().getPlayerAmount();
@@ -79,15 +78,11 @@ public class PlayerModel extends ButtonUtilsActivity {
         int selectedPlayerCount = totalPlayerCount - playerList.size();
     }
 
-
-
-
-
     //-----------------------------------------------------Buttons---------------------------------------------------//
 
     private void setupDrawButton() {
         Button drawButton = findViewById(R.id.createPlayerBtn);
-        drawButton.setOnClickListener(view -> startDrawing());
+        btnUtils.setButton(drawButton, this::startDrawing);
     }
 
     private void startDrawing() {

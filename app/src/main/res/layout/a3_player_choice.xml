@@ -36,7 +36,6 @@
 
 
     <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/camera"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:scaleType="centerCrop"

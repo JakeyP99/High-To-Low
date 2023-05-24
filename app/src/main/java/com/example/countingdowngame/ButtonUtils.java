@@ -12,7 +12,6 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.MotionEvent;
 import android.widget.Button;
-import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
@@ -40,16 +39,55 @@ public class ButtonUtils {
         buttonHighlight = AppCompatResources.getDrawable(mContext, R.drawable.buttonhighlight);
         outlineForButton = AppCompatResources.getDrawable(mContext, R.drawable.outlineforbutton);
     }
+    //-----------------------------------------------------Sound Functionality---------------------------------------------------//
+    public void toggleMute() {
+        isMuted = !isMuted;
+    }
 
+    private void stopAllSounds() throws IOException {
+        bop.pause();  // Pause the regular sound effect
+
+        for (MediaPlayer mediaPlayer : burp) {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.pause();
+                mediaPlayer.seekTo(0);  // Reset the sound to the beginning
+            }
+        }
+    }
+
+
+    private boolean isMuted() {
+        SharedPreferences mutePreferences = mContext.getSharedPreferences("mute_state", Context.MODE_PRIVATE);
+        return mutePreferences.getBoolean("isMuted", false);
+    }
+
+    private void playSoundEffects() {
+        if (isMuted()) {
+            return;
+        }
+
+        SharedPreferences preferences = mContext.getSharedPreferences("sound_mode_choice", Context.MODE_PRIVATE);
+        boolean soundEffects = preferences.getBoolean("button_regularSound", true);
+
+        if (soundEffects) {
+            bop.start();
+        } else {
+            currentSoundIndex = (currentSoundIndex + 1) % NUM_SOUNDS;
+            try {
+                stopAllSounds();
+                burp[currentSoundIndex].start();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
     public void onDestroy() {
         for (MediaPlayer b : burp) {
             b.release();
         }
         bop.release();
     }
-    public void toggleMute() {
-        isMuted = !isMuted;
-    }
+    //-----------------------------------------------------Onclick Functionality---------------------------------------------------//
 
     @SuppressLint("ClickableViewAccessibility")
     public void setButton(final Button button, final Runnable buttonAction) {
@@ -83,70 +121,7 @@ public class ButtonUtils {
     }
 
 
-    @SuppressLint("ClickableViewAccessibility")
-    public void setImageButton(final ImageButton imagebutton, final Runnable buttonAction) {
-        imagebutton.setOnTouchListener((view, motionEvent) -> {
-            switch (motionEvent.getAction()) {
-                case MotionEvent.ACTION_DOWN: {
-                    imagebutton.setBackground(buttonHighlight);
-
-                    break;
-                }
-                case MotionEvent.ACTION_UP: {
-                    imagebutton.setBackground(outlineForButton);
-
-                    if (buttonAction != null) {
-                        buttonAction.run();
-                    }
-
-                    vibrateDevice();
-
-                    break;
-                }
-            }
-
-            return true;
-        });
-    }
-
-    private boolean isMuted() {
-        SharedPreferences mutePreferences = mContext.getSharedPreferences("mute_state", Context.MODE_PRIVATE);
-        return mutePreferences.getBoolean("isMuted", false);
-    }
-
-    private void playSoundEffects() {
-        if (isMuted()) {
-            return; // Exit the method if muted
-        }
-
-        SharedPreferences preferences = mContext.getSharedPreferences("sound_mode_choice", Context.MODE_PRIVATE);
-        boolean soundEffects = preferences.getBoolean("button_regularSound", true);
-
-        if (soundEffects) {
-            bop.start();
-        } else {
-            currentSoundIndex = (currentSoundIndex + 1) % NUM_SOUNDS;
-            try {
-                stopAllSounds();
-                burp[currentSoundIndex].start();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    private void stopAllSounds() throws IOException {
-        bop.pause();  // Pause the regular sound effect
-
-        for (MediaPlayer mediaPlayer : burp) {
-            if (mediaPlayer.isPlaying()) {
-                mediaPlayer.pause();
-                mediaPlayer.seekTo(0);  // Reset the sound to the beginning
-            }
-        }
-    }
-
-
+    //-----------------------------------------------------Vibrate Functionality---------------------------------------------------//
 
     private void vibrateDevice() {
         Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);

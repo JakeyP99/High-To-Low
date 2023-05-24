@@ -23,7 +23,6 @@
         android:textColorHint="#DDDDDD"/>
 
     <TextView
-        android:id="@+id/TextViewhowmanyplayers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="How many players are there?"

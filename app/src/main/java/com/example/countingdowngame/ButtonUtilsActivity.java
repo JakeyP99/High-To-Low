@@ -12,6 +12,7 @@ public class ButtonUtilsActivity extends AppCompatActivity {
     protected ButtonUtils btnUtils;
     protected Drawable buttonHighlightDrawable;
     protected Drawable outlineForButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,10 +27,13 @@ public class ButtonUtilsActivity extends AppCompatActivity {
         }
     }
 
+
+
+    //-----------------------------------------------------Activity Functionality---------------------------------------------------//
+
     protected Intent getIntentForClass(Class<?> targetClass) {
         return getIntentForClass(targetClass, false);
     }
-
     protected Intent getIntentForClass(Class<?> targetClass, boolean clearTop) {
         Intent i = new Intent(this, targetClass);
         if (clearTop) {
@@ -37,8 +41,6 @@ public class ButtonUtilsActivity extends AppCompatActivity {
         }
         return i;
     }
-
-
     protected void gotoHomeScreen() {
         startActivity(getIntentForClass(HomeScreen.class, true));
     }
@@ -54,9 +56,17 @@ public class ButtonUtilsActivity extends AppCompatActivity {
     protected void gotoGameSetup() {
         startActivity(getIntentForClass(PlayerNumberChoice.class, true));
     }
+
     protected void gotoInstructions() {
         startActivity(getIntentForClass(Instructions.class, true));
     }
+
+    protected void gotoSettings() {
+        startActivity(getIntentForClass(Settings.class, true));
+    }
+
+    //-----------------------------------------------------Sound Functionality---------------------------------------------------//
+
     public void onMuteClicked(View view) {
         Button btnMute = (Button) view;
         boolean isMuted = !btnMute.isSelected();
@@ -67,7 +77,4 @@ public class ButtonUtilsActivity extends AppCompatActivity {
     }
 
 
-    protected void gotoSettings() {
-        startActivity(getIntentForClass(Settings.class, true));
-    }
 }

@@ -27,7 +27,7 @@
         android:layout_width="165dp"
         android:layout_height="100dp"
         android:background="@drawable/outlineforbutton"
-        android:text=" Wild Card "
+        android:text="Wild Card"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
         android:textSize="30sp"
@@ -35,8 +35,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
-        app:layout_constraintVertical_bias="0.60"
-        tools:ignore="DuplicateClickableBoundsCheck" />
+        app:layout_constraintVertical_bias="0.60" />
 
     <Button
         android:id="@+id/btnSkip"
@@ -66,8 +65,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.45"
-        tools:ignore="SpeakableTextPresentCheck" />
+        app:layout_constraintVertical_bias="0.45" />
 
     <Button
         android:id="@+id/btnBackWildCard"
@@ -90,15 +88,14 @@
         android:id="@+id/textView_Number_Turn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text="test"
         android:textColor="@color/bluedark"
         android:textSize="35sp"
         app:layout_constraintBottom_toTopOf="@+id/btnGenerate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.703" />
+        app:layout_constraintTop_toBottomOf="@+id/playerImage" />
 
     <TextView
         android:id="@+id/wild_textview"
@@ -111,40 +108,36 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:textColor="@color/bluedark"
         android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/numberText"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_Number_Turn"
-        app:layout_constraintVertical_bias="1.0"
-        tools:ignore="HardcodedText" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.32" />
 
     <ImageButton
         android:id="@+id/imageBtnExit"
         android:layout_width="54dp"
         android:layout_height="54dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="16dp"
         android:background="@color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.043"
+        app:layout_constraintHorizontal_bias="0.044"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
-        tools:ignore="SpeakableTextPresentCheck" />
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/playerImage"
         android:layout_width="110dp"
         android:layout_height="110dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView_Number_Turn"
+        android:src="@drawable/wine"
+        app:civ_border_color="@color/bluedarktransparent"
+        app:civ_border_width="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/wine"
-        app:civ_border_width="3dp"
-    app:civ_border_color="@color/bluedarktransparent"
-    app:civ_border_overlay="false"
-    />
+        app:layout_constraintVertical_bias="0.025" />
 </androidx.constraintlayout.widget.ConstraintLayout>
