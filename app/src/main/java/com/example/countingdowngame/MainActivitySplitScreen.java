@@ -24,24 +24,23 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
     private final Map<Player, Set<Settings_WildCard_Probabilities>> usedWildCard = new HashMap<>();
     private final Set<Settings_WildCard_Probabilities> usedWildCards = new HashSet<>();
-
     private TextView numberText;
-    private TextView nextPlayerText;
-    private Button btnSkip;
-    private Button btnWild;
-    private ImageView playerImage;
     private TextView numberTextPlayer2;
+    private TextView nextPlayerText;
     private TextView nextPlayerTextPlayer2;
+    private Button btnSkip;
     private Button btnSkipPlayer2;
+    private Button btnWild;
     private Button btnWildPlayer2;
+    private ImageView playerImage;
     private ImageView playerImagePlayer2;
     Button btnGenerate;
-    Button btnBackWild;
     Button btnGeneratePlayer2;
+    Button btnBackWild;
     Button btnBackWildPlayer2;
-    ImageButton imageButtonExit;
-    private View wildText;
+    View wildText;
     View wildTextPlayer2;
+    ImageButton imageButtonExit;
     ImageButton imageButtonExitPlayer2;
     @Override
     public void onBackPressed() {
