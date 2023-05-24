@@ -9,6 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter Name"
+        android:textColor="@color/bluedark"
+        android:textSize="20sp"
         android:inputType="text" />
 
 </LinearLayout>

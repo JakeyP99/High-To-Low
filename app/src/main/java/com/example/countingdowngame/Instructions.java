@@ -11,14 +11,15 @@ import java.util.List;
 
 public class Instructions extends ButtonUtilsActivity {
     private final List<String> instructions = Arrays.asList(
-            "Welcome to drinking countdown! In summary, you choose a number, that number will go down, and the aim of the game is not to be the person who randomly hits the number 0.",
-            "Prepare yourself a beverage for the loser to drink \n\n I like to prepare a nice tasty shot.",
-            "Choose how many players there will be, and choose your starting number. \n\n Hint ~ the lower the number the quicker the game.",
-            "Decide who is player 1. It can be anyone, but probably not a dog.",
-            "There are two main buttons you can click: \n\n 1) Generate (this will choose a number between 0 and the number of your choosing).\n\n 2) Wildcard (There is a 50/50 chance it will be good for you, or bad for you, you don't need to click this button at all).",
-            "Pass the phone to player 2, they then can either generate a number, or they can skip their turn.",
-            "Once a player gets the number 0 then they are out, and they lose! \n\n They can then take that sexy yummy shot.",
-            "Tada, you're done! \n\n If that game didn't bore you to death then play it again, and again, and again, literally do whatever you want, you're a free person so live your gorgeous life.");
+
+            "Welcome to the exhilarating game of Drinking Countdown!\n\nGet ready to embark on a thrilling journey filled with excitement, and suspense.",
+            "Firstly, prepare yourself a tantalizing drink because, in this game, the loser takes a delicious shot!",
+            "Gather your friends and decide how many players will be joining in on the fun.",
+            "Next choose a starting number that sets the pace for the game. \n\nRemember, the lower the number, the faster the game!",
+            "Decide who is player 1. It can be anyone, but probably not a dog. \n\nAlthough, who am I to judge!",
+            "Let me introduce you to the two main buttons. \n\nFirst, there's the 'Generate' button, which will randomly choose a number between 0 and the one you've selected. \n\nSecond, we have the 'Wildcard' button. Here's where things get wild! With a 50/50 chance, it can either work in your favor or throw you off balance. Feel free to use it, or not, this button does not need to be clicked ever.\n\n Hint - You can change the wildcards, and the probabilities in the settings!",
+            "As the game progresses, players strive to avoid reaching the dreaded number zero. \n\nOnce a player hits that mark, they're out of the game and must face the consequence of taking that deliciously sexy shot!",
+            "Tada! You've completed a round of Drinking Countdown! If the thrill of the game hasn't quenched your thirst for excitement, why not play it again, and again, and again. \n\n Literally do whatever you want, you're a free person so live your gorgeous life.");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

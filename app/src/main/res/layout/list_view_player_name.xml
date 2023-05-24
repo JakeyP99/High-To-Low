@@ -27,7 +27,7 @@
         android:layout_marginTop="15dp"
         android:maxWidth="90dp"
         android:ellipsize="end"
-        android:text="Player Namedfsajksdfkldfslfdsjkaljksd"
+        android:text="Player"
         android:textColor="#000000"
         android:textSize="16sp" />
 

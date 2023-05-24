@@ -7,11 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -97,19 +93,21 @@ public class PlayerModel extends ButtonUtilsActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
 
-        // Inflate the custom layout for the dialog
         View dialogView = inflater.inflate(R.layout.dialog_choose_option, null);
         TextView titleTextView = dialogView.findViewById(R.id.titleTextView);
         ListView optionsListView = dialogView.findViewById(R.id.optionsListView);
 
-        // Customize the dialog's appearance
         titleTextView.setTextColor(getResources().getColor(R.color.bluedark));
 
-        // Define the options for the ListView
         CharSequence[] options = {"Capture a Photo", "Draw a Photo"};
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(this, R.layout.list_item_option_choose_character, options);
 
         optionsListView.setAdapter(adapter);
+
+        AlertDialog dialog = builder.setView(dialogView)
+                .setNegativeButton("Cancel", (dialogInterface, which) -> dialogInterface.dismiss())
+                .create();
+
         optionsListView.setOnItemClickListener((parent, view, position, id) -> {
             if (position == 0) {
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -121,14 +119,13 @@ public class PlayerModel extends ButtonUtilsActivity {
             } else if (position == 1) {
                 startDrawingActivity();
             }
+
+            dialog.dismiss();
         });
 
-        builder.setView(dialogView)
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
-
-        AlertDialog dialog = builder.create();
         dialog.show();
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -247,27 +244,24 @@ public class PlayerModel extends ButtonUtilsActivity {
 
     private void createNewCharacter(Bitmap bitmap, String name) {
         int size = Math.min(bitmap.getWidth(), bitmap.getHeight());
-        Bitmap circleBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(circleBitmap);
+        int desiredSize = size; // Desired zoomed-in size
 
-        Paint paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setFilterBitmap(true);
-        paint.setDither(true);
-        Rect rect = new Rect(0, 0, size, size);
+        float scale = (float) desiredSize / size;
 
-        canvas.drawARGB(0, 0, 0, 0);
-        canvas.drawCircle(size / 2f, size / 2f, size / 2f, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, null, rect, paint);
+        Matrix matrix = new Matrix();
+        matrix.postScale(scale, scale);
 
-        String photoString = convertBitmapToString(circleBitmap);
+        Bitmap zoomedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+        String photoString = convertBitmapToString(zoomedBitmap);
         Player newPlayer = new Player(photoString, name);
         newPlayer.setSelected(false); // Set isSelected to false initially
         playerList.add(newPlayer);
         playerListAdapter.notifyItemInserted(playerList.size() - 1);
         savePlayerData();
         updatePlayerCounter();
+
+
     }
 
 

@@ -11,8 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:text="Choose Option"
-        android:textSize="28sp" />
+        android:text="Choose an Option"
+        android:textSize="28sp"
+        android:textAlignment="center"/>
 
     <ListView
         android:id="@+id/optionsListView"
@@ -20,6 +21,9 @@
         android:layout_height="wrap_content"
         android:divider="@null"
         android:dividerHeight="40dp"
-        android:paddingLeft="10dp" />
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:gravity="center"
+        />
 
 </LinearLayout>
