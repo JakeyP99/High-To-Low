@@ -115,42 +115,26 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         btnBackWild.setVisibility(View.INVISIBLE);
         btnBackWildPlayer2.setVisibility(View.INVISIBLE);
 
-        btnUtils.setButton(btnGenerate, () -> {
-            ButtonGenerateFunction();
-        });
+        btnUtils.setButton(btnGenerate, this::ButtonGenerateFunction);
 
-        btnUtils.setButton(btnWild, () -> {
-            ButtonWildFunction();
-        });
+        btnUtils.setButton(btnWild, this::ButtonWildFunction);
 
-        btnUtils.setButton(btnSkip, () -> {
-            ButtonSkipFunction();
-        });
+        btnUtils.setButton(btnSkip, this::ButtonSkipFunction);
 
-        btnUtils.setButton(btnBackWild, () -> {
-            ButtonContinueFunction();
-        });
+        btnUtils.setButton(btnBackWild, this::ButtonContinueFunction);
 
         imageButtonExit.setOnClickListener(view -> {
             Game.getInstance().endGame();
             gotoHomeScreen();
         });
 
-        btnUtils.setButton(btnGeneratePlayer2, () -> {
-            ButtonGenerateFunction();
-        });
+        btnUtils.setButton(btnGeneratePlayer2, this::ButtonGenerateFunction);
 
-        btnUtils.setButton(btnWildPlayer2, () -> {
-            ButtonWildFunction();
-        });
+        btnUtils.setButton(btnWildPlayer2, this::ButtonWildFunction);
 
-        btnUtils.setButton(btnSkipPlayer2, () -> {
-            ButtonSkipFunction();
-        });
+        btnUtils.setButton(btnSkipPlayer2, this::ButtonSkipFunction);
 
-        btnUtils.setButton(btnBackWildPlayer2, () -> {
-            ButtonContinueFunction();
-        });
+        btnUtils.setButton(btnBackWildPlayer2, this::ButtonContinueFunction);
 
         imageButtonExit.setOnClickListener(view -> {
             Game.getInstance().endGame();
@@ -169,7 +153,7 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         List<Player> playerList = PlayerModel.loadSelectedPlayers(this);
 
-        if (playerList != null && !playerList.isEmpty()) {
+        if (!playerList.isEmpty()) {
             String playerName = currentPlayer.getName();
             String playerImageString = currentPlayer.getPhoto();
 
@@ -343,6 +327,10 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         numberText.setVisibility(View.INVISIBLE);
         nextPlayerText.setVisibility(View.INVISIBLE);
 
+        playerImage.setVisibility(View.INVISIBLE);
+        playerImagePlayer2.setVisibility(View.INVISIBLE);
+
+
         nextPlayerTextPlayer2.setVisibility(View.INVISIBLE);
         btnWildPlayer2.setVisibility(View.INVISIBLE);
         wildTextPlayer2.setVisibility(View.VISIBLE);
@@ -357,15 +345,23 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
     private void ButtonSkipFunction() {
         Game.getInstance().getCurrentPlayer().useSkip();
+        btnGenerate.setVisibility(View.VISIBLE);
+        btnGeneratePlayer2.setVisibility(View.VISIBLE);
+
+        playerImage.setVisibility(View.VISIBLE);
+        playerImagePlayer2.setVisibility(View.VISIBLE);
 
         wildText.setVisibility(View.INVISIBLE);
+        wildTextPlayer2.setVisibility(View.INVISIBLE);
+
         numberText.setVisibility(View.VISIBLE);
+        numberTextPlayer2.setVisibility(View.VISIBLE);
 
         nextPlayerText.setVisibility(View.VISIBLE);
         nextPlayerTextPlayer2.setVisibility(View.VISIBLE);
 
-        wildTextPlayer2.setVisibility(View.INVISIBLE);
-        numberTextPlayer2.setVisibility(View.VISIBLE);
+        btnBackWild.setVisibility(View.INVISIBLE);
+        btnBackWildPlayer2.setVisibility(View.INVISIBLE);
     }
 
     private void ButtonContinueFunction() {
@@ -373,6 +369,9 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         btnGenerate.setVisibility(View.VISIBLE);
         wildText.setVisibility(View.INVISIBLE);
         numberText.setVisibility(View.VISIBLE);
+
+        playerImage.setVisibility(View.VISIBLE);
+        playerImagePlayer2.setVisibility(View.VISIBLE);
 
         nextPlayerText.setVisibility(View.VISIBLE);
         nextPlayerTextPlayer2.setVisibility(View.VISIBLE);
