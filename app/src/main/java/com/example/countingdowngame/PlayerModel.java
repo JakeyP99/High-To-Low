@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -81,7 +83,7 @@ public class PlayerModel extends ButtonUtilsActivity {
     //-----------------------------------------------------Buttons---------------------------------------------------//
 
     private void setupDrawButton() {
-        Button drawButton = findViewById(R.id.drawButton);
+        Button drawButton = findViewById(R.id.createPlayerBtn);
         drawButton.setOnClickListener(view -> startDrawing());
     }
 
@@ -120,28 +122,6 @@ public class PlayerModel extends ButtonUtilsActivity {
         Intent intent = new Intent(this, DrawingActivity.class);
         startActivityForResult(intent, REQUEST_DRAW);
     }
-
-    private void showNameInputDialog(String bitmapString) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Enter Player Name");
-
-        View dialogView = getLayoutInflater().inflate(R.layout.player_enter_name, null);
-        EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
-        nameEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-
-        builder.setView(dialogView)
-                .setPositiveButton("OK", (dialogInterface, i) -> {
-                    String name = nameEditText.getText().toString();
-                    Bitmap drawnBitmap = convertStringToBitmap(bitmapString);
-                    createNewCharacter(drawnBitmap, name);
-                })
-                .setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss());
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-
 
     private void setupProceedButton() {
         Button proceedButton = findViewById(R.id.button_done);
@@ -233,9 +213,20 @@ public class PlayerModel extends ButtonUtilsActivity {
         dialog.show();
     }
 
-    // Add a new player with the selected image and name
     private void createNewCharacter(Bitmap bitmap, String name) {
-        String photoString = convertBitmapToString(bitmap);
+        // Resize the bitmap to a square shape
+        int size = Math.min(bitmap.getWidth(), bitmap.getHeight());
+        Bitmap squareBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(squareBitmap);
+        Matrix matrix = new Matrix();
+        float scale = (float) size / Math.max(bitmap.getWidth(), bitmap.getHeight());
+        matrix.setScale(scale, scale);
+        float dx = (size - bitmap.getWidth() * scale) / 2f;
+        float dy = (size - bitmap.getHeight() * scale) / 2f;
+        matrix.postTranslate(dx, dy);
+        canvas.drawBitmap(bitmap, matrix, null);
+
+        String photoString = convertBitmapToString(squareBitmap);
         Player newPlayer = new Player(photoString, name);
         newPlayer.setSelected(false); // Set isSelected to false initially
         playerList.add(newPlayer);
@@ -243,6 +234,7 @@ public class PlayerModel extends ButtonUtilsActivity {
         savePlayerData();
         updatePlayerCounter();
     }
+
 
     // Delete a player at a given position
     public void deletePlayer(int position) {

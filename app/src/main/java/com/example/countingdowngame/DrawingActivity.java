@@ -19,7 +19,7 @@ public class DrawingActivity extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_drawing);
+        setContentView(R.layout.a3_drawing);
 
         btnCancel = findViewById(R.id.cancelButton);
         btnSave = findViewById(R.id.saveButton);

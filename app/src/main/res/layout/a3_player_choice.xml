@@ -44,11 +44,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/drawButton"
+        app:layout_constraintTop_toBottomOf="@+id/createPlayerBtn"
 />
 
     <Button
-        android:id="@+id/drawButton"
+        android:id="@+id/createPlayerBtn"
         android:layout_width="139dp"
         android:layout_height="77dp"
         android:layout_centerHorizontal="true"

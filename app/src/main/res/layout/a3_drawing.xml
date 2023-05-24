@@ -1,0 +1,50 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".DrawingActivity">
+
+    <com.example.countingdowngame.DrawingView
+        android:id="@+id/drawingView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/linearLayout" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="139dp"
+            android:layout_height="77dp"
+            android:background="@drawable/outlineforbutton"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:textSize="20sp"
+            android:text="Cancel"
+            android:layout_margin="16dp" />
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="139dp"
+            android:layout_height="77dp"
+            android:background="@drawable/outlineforbutton"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:textSize="20sp"
+            android:text="Save"
+            android:layout_margin="16dp" />
+
+
+
+
+
+    </LinearLayout>
+
+</RelativeLayout>
