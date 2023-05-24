@@ -105,7 +105,7 @@ public class PlayerModel extends ButtonUtilsActivity {
         titleTextView.setTextColor(getResources().getColor(R.color.bluedark));
 
         // Define the options for the ListView
-        CharSequence[] options = {"Capture Image", "Draw"};
+        CharSequence[] options = {"Capture a Photo", "Draw a Photo"};
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(this, R.layout.list_item_option_choose_character, options);
 
         optionsListView.setAdapter(adapter);

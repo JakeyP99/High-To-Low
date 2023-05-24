@@ -1,13 +1,17 @@
 package com.example.countingdowngame;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ButtonUtilsActivity extends AppCompatActivity {
     protected ButtonUtils btnUtils;
-
+    protected Drawable buttonHighlightDrawable;
+    protected Drawable outlineForButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +38,7 @@ public class ButtonUtilsActivity extends AppCompatActivity {
         return i;
     }
 
+
     protected void gotoHomeScreen() {
         startActivity(getIntentForClass(HomeScreen.class, true));
     }
@@ -52,6 +57,15 @@ public class ButtonUtilsActivity extends AppCompatActivity {
     protected void gotoInstructions() {
         startActivity(getIntentForClass(Instructions.class, true));
     }
+    public void onMuteClicked(View view) {
+        Button btnMute = (Button) view;
+        boolean isMuted = !btnMute.isSelected();
+        btnMute.setSelected(isMuted);
+        Drawable selectedDrawable = isMuted ? buttonHighlightDrawable : outlineForButton;
+        btnMute.setBackground(selectedDrawable);
+        btnUtils.toggleMute(); // Toggle the mute state in ButtonUtils
+    }
+
 
     protected void gotoSettings() {
         startActivity(getIntentForClass(Settings.class, true));

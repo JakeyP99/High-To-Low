@@ -28,7 +28,7 @@ public class ButtonUtils {
     private final AppCompatActivity mContext;
     private final Drawable buttonHighlight;
     private final Drawable outlineForButton;
-
+    private boolean isMuted = false;
 
     public ButtonUtils(final AppCompatActivity context) {
         mContext = context;
@@ -46,6 +46,9 @@ public class ButtonUtils {
             b.release();
         }
         bop.release();
+    }
+    public void toggleMute() {
+        isMuted = !isMuted;
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -106,7 +109,16 @@ public class ButtonUtils {
         });
     }
 
+    private boolean isMuted() {
+        SharedPreferences mutePreferences = mContext.getSharedPreferences("mute_state", Context.MODE_PRIVATE);
+        return mutePreferences.getBoolean("isMuted", false);
+    }
+
     private void playSoundEffects() {
+        if (isMuted()) {
+            return; // Exit the method if muted
+        }
+
         SharedPreferences preferences = mContext.getSharedPreferences("sound_mode_choice", Context.MODE_PRIVATE);
         boolean soundEffects = preferences.getBoolean("button_regularSound", true);
 
@@ -122,6 +134,8 @@ public class ButtonUtils {
             burp[currentSoundIndex].start();
         }
     }
+
+
 
     private void stopCurrentSound() throws IOException {
         if (burp[currentSoundIndex] != null) {

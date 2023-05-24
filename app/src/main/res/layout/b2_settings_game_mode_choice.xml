@@ -83,18 +83,16 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:background="@drawable/outlineforbutton"
-        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-        android:maxLines="4"
         android:textAllCaps="false"
-
         android:text="Mute"
         android:textAlignment="center"
         android:textColor="@color/bluedark"
-
         android:textSize="23sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
+        android:onClick="onMuteClicked"
+        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
         app:layout_constraintTop_toBottomOf="@+id/textview_banner_sound_settings" />
 
     <Button
@@ -108,10 +106,7 @@
         android:text="Regular Sounds"
         android:textAlignment="center"
         android:textAllCaps="false"
-
         android:textColor="@color/bluedark"
-
-
         android:textSize="23sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

@@ -14,6 +14,7 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
     private Drawable buttonHighlightDrawable;
     private Drawable outlineForButton;
     private Button btnReturn;
+    private Button btnMute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,16 +29,19 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_gameModeOne:
-                toggleButton(button_gameModeOne, button_gameModeTwo);
+                toggleButton(button_gameModeOne);
                 break;
             case R.id.button_gameModeTwo:
-                toggleButton(button_gameModeTwo, button_gameModeOne);
+                toggleButton(button_gameModeTwo);
                 break;
             case R.id.button_normal_sound:
-                toggleButton(button_regularSound, button_burpSound);
+                toggleButton(button_regularSound);
                 break;
             case R.id.button_burp_sound:
-                toggleButton(button_burpSound, button_regularSound);
+                toggleButton(button_burpSound);
+                break;
+            case R.id.button_mute:
+                toggleButton(btnMute);
                 break;
         }
         savePreferences();
@@ -51,6 +55,7 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
         buttonHighlightDrawable = getResources().getDrawable(R.drawable.buttonhighlight);
         outlineForButton = getResources().getDrawable(R.drawable.outlineforbutton);
         btnReturn = findViewById(R.id.buttonReturn);
+        btnMute = findViewById(R.id.button_mute);
     }
 
     private void loadPreferences() {
@@ -72,12 +77,22 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
         button_regularSound.setSelected(regularSoundSelected);
         button_burpSound.setSelected(!regularSoundSelected);
 
+        SharedPreferences mutePreferences = getSharedPreferences("mute_state", MODE_PRIVATE);
+        boolean isMuted = mutePreferences.getBoolean("isMuted", false);
+        btnMute.setSelected(isMuted);
+
         if (regularSoundSelected) {
             button_regularSound.setBackground(buttonHighlightDrawable);
             button_burpSound.setBackground(outlineForButton);
         } else {
             button_regularSound.setBackground(outlineForButton);
             button_burpSound.setBackground(buttonHighlightDrawable);
+        }
+
+        if (isMuted) {
+            btnMute.setBackground(buttonHighlightDrawable);
+        } else {
+            btnMute.setBackground(outlineForButton);
         }
     }
 
@@ -87,20 +102,15 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
         button_regularSound.setOnClickListener(this);
         button_burpSound.setOnClickListener(this);
         btnUtils.setButton(btnReturn, this::onBackPressed);
+        btnMute.setOnClickListener(this);
     }
 
-    private void toggleButton(Button selectedButton, Button unselectedButton) {
+    private void toggleButton(Button selectedButton) {
         boolean isSelected = !selectedButton.isSelected();
         selectedButton.setSelected(isSelected);
-        unselectedButton.setSelected(!isSelected);
 
-        if (isSelected) {
-            selectedButton.setBackground(buttonHighlightDrawable);
-            unselectedButton.setBackground(outlineForButton);
-        } else {
-            selectedButton.setBackground(outlineForButton);
-            unselectedButton.setBackground(buttonHighlightDrawable);
-        }
+        Drawable selectedDrawable = isSelected ? buttonHighlightDrawable : outlineForButton;
+        selectedButton.setBackground(selectedDrawable);
     }
 
     private void savePreferences() {
@@ -116,5 +126,13 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
 
         soundEditor.putBoolean("button_regularSound", button_regularSound.isSelected());
         soundEditor.apply();
+
+        SharedPreferences mutePreferences = getSharedPreferences("mute_state", MODE_PRIVATE);
+        SharedPreferences.Editor muteEditor = mutePreferences.edit();
+
+        boolean isMuted = btnMute.isSelected();
+        muteEditor.putBoolean("isMuted", isMuted);
+        muteEditor.apply();
     }
+
 }
