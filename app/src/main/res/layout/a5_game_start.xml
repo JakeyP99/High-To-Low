@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-
     tools:context=".MainActivity">
 
 
@@ -31,7 +30,7 @@
         android:text=" Wild Card "
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
-        android:textSize="30dp"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,7 +45,7 @@
         android:background="@drawable/outlineforbutton"
         android:text="Skip"
         android:textColor="@color/bluedark"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:textAllCaps="false"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/btnWild"
@@ -78,7 +77,7 @@
         android:text="Continue"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
-        android:textSize="30dp"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -139,10 +138,8 @@
         android:layout_height="110dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="4dp"
-        android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@+id/textView_Number_Turn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:src="@drawable/wine"

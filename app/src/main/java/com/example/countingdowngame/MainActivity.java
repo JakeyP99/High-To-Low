@@ -201,8 +201,6 @@ public class MainActivity extends ButtonUtilsActivity {
             if (unusedCards.isEmpty() && usedCards != null) {
                 usedCards.clear();
             }
-
-            // Calculate total weight of unused wildcards
             int totalWeight = unusedCards.stream()
                     .mapToInt(Settings_WildCard_Probabilities::getProbability)
                     .sum();
@@ -222,7 +220,6 @@ public class MainActivity extends ButtonUtilsActivity {
                     weightSoFar += activityProbability.getProbability();
 
                     if (randomWeight < weightSoFar) {
-                        // Check if the selected wildcard has already been used by the current player
                         if (usedCards != null && !usedCards.contains(activityProbability)) {
                             selectedActivity = activityProbability.getText();
                             foundUnusedCard = true;
@@ -232,8 +229,6 @@ public class MainActivity extends ButtonUtilsActivity {
                     }
                 }
             }
-
-            // Update the used wildcards for the current player
             usedWildCard.put(player, usedCards);
         }
 
@@ -243,7 +238,7 @@ public class MainActivity extends ButtonUtilsActivity {
             for (Settings_WildCard_Probabilities wc : allProbabilities) {
                 if (wc.getText().equals(selectedActivity)) {
                     player.addUsedWildCard(wc);
-                    usedCards.add(wc); // Add to usedCards set for this player
+                    usedCards.add(wc);
                     break;
                 }
             }

@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
@@ -182,6 +183,13 @@ public class PlayerModel extends ButtonUtilsActivity {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, REQUEST_IMAGE_PICK);
     }
+    private Bitmap flipBitmap(Bitmap bitmap) {
+        Matrix matrix = new Matrix();
+        matrix.setScale(-1, 1); // Flip the bitmap horizontally
+
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+    }
+
 
 
     // Convert a Bitmap to a Base64-encoded string
@@ -205,7 +213,9 @@ public class PlayerModel extends ButtonUtilsActivity {
 
         if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK && data != null) {
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            showNameInputDialog(bitmap);
+            Bitmap rotatedBitmap = flipBitmap(bitmap); // Rotate the bitmap
+
+            showNameInputDialog(rotatedBitmap);
         } else if (requestCode == REQUEST_DRAW && resultCode == RESULT_OK && data != null) {
             String drawnBitmapString = data.getStringExtra("drawnBitmap");
             Bitmap drawnBitmap = convertStringToBitmap(drawnBitmapString);
