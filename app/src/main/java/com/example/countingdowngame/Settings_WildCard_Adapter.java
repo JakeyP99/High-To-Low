@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -91,12 +92,28 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
                     mContext.saveWildCardProbabilitiesToStorage(mMode, mProbabilities);
                 });
             }
-
             builder.setPositiveButton("OK", (dialog, which) -> {
-                int probability = Integer.parseInt(probabilityInput.getText().toString());
+                String inputText = probabilityInput.getText().toString().trim();
+
+                if (inputText.length() > 4) {
+                    Toast.makeText(Settings_WildCard_Adapter.this.getContext(), "Please enter a probability with 4 or fewer digits.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
+
+                int probability;
+
+                try {
+                    probability = Integer.parseInt(probabilityInput.getText().toString());
+                } catch (NumberFormatException e) {
+                    probability = 0; // Invalid input, set to a negative value
+                }
+
                 wildCard.setProbability(probability);
 
-                if (wildCard.isDeletable()) {
+
+                  if (wildCard.isDeletable()) {
                     String text = textInput.getText().toString();
                     wildCard.setText(text);
                     textViewWildCard.setText(wildCard.getText());

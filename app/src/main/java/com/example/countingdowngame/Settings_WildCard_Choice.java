@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -62,33 +63,45 @@ public class Settings_WildCard_Choice extends ButtonUtilsActivity {
 
         builder.setView(layout);
 
+
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
         builder.setPositiveButton("OK", (dialog, which) -> {
-            int probability = Integer.parseInt(probabilityInput.getText().toString());
-            String text = textInput.getText().toString();
+            int probability;
+            try {
+                probability = Integer.parseInt(probabilityInput.getText().toString());
+            } catch (NumberFormatException e) {
+                probability = -1; // Invalid input, set to a negative value
+            }
 
-            Settings_WildCard_Probabilities newWildCard = new Settings_WildCard_Probabilities(text, probability, true, true);
-            Settings_WildCard_Probabilities[][] probabilitiesArray = loadWildCardProbabilitiesFromStorage(
-                    getApplicationContext());
-            Settings_WildCard_Probabilities[] deletableProbabilities = probabilitiesArray[0];
+            if (probability > 4) {
+                Toast.makeText(Settings_WildCard_Choice.this, "That probability is too high, jeez louise!", Toast.LENGTH_SHORT).show();
+            } else {
+                String text = textInput.getText().toString();
 
-            ArrayList<Settings_WildCard_Probabilities> wildCardList = new ArrayList<>(Arrays.asList(deletableProbabilities));
-            wildCardList.add(newWildCard);
+                Settings_WildCard_Probabilities newWildCard = new Settings_WildCard_Probabilities(text, probability, true, true);
+                Settings_WildCard_Probabilities[][] probabilitiesArray = loadWildCardProbabilitiesFromStorage(
+                        getApplicationContext());
+                Settings_WildCard_Probabilities[] deletableProbabilities = probabilitiesArray[0];
 
-            deletableProbabilities = wildCardList.toArray(new Settings_WildCard_Probabilities[0]);
+                ArrayList<Settings_WildCard_Probabilities> wildCardList = new ArrayList<>(Arrays.asList(deletableProbabilities));
+                wildCardList.add(newWildCard);
 
-            deletableAdapter = new Settings_WildCard_Adapter(DELETABLE, this, deletableProbabilities);
-            listViewWildCard.setAdapter(deletableAdapter);
+                deletableProbabilities = wildCardList.toArray(new Settings_WildCard_Probabilities[0]);
 
-            saveWildCardProbabilitiesToStorage(DELETABLE, deletableProbabilities);
+                deletableAdapter = new Settings_WildCard_Adapter(DELETABLE, Settings_WildCard_Choice.this, deletableProbabilities);
+                listViewWildCard.setAdapter(deletableAdapter);
 
-            probabilitiesArray[0] = deletableProbabilities;
+                saveWildCardProbabilitiesToStorage(DELETABLE, deletableProbabilities);
 
-            deletableAdapter.notifyDataSetChanged();
+                probabilitiesArray[0] = deletableProbabilities;
+
+                deletableAdapter.notifyDataSetChanged();
+            }
         });
 
         builder.show();
+
     }
 
     Settings_WildCard_Probabilities[][] loadWildCardProbabilitiesFromStorage(Context context) {
