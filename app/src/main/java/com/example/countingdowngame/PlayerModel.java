@@ -359,7 +359,7 @@ public class PlayerModel extends ButtonUtilsActivity {
                 counterText = "Please Remove " + excessPlayers + " Players \uD83E\uDD13";
             }
         } else {
-            counterText = "Please Select " + remainingPlayers + " More Players ❤️";
+            counterText = "Select " + remainingPlayers + " More Players ❤️";
         }
         playerCountTextView.setText(counterText);
     }

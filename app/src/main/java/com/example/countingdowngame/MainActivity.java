@@ -30,6 +30,8 @@ public class MainActivity extends ButtonUtilsActivity {
     private TextView nextPlayerText;
     private Button btnSkip;
     private Button btnWild;
+    private Button btnGenerate;
+    private Button btnBackWild;
     private ImageView playerImage;
     private boolean doubleBackToExitPressedOnce = false;
     private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
@@ -65,6 +67,8 @@ public class MainActivity extends ButtonUtilsActivity {
         nextPlayerText = findViewById(R.id.textView_Number_Turn);
         btnSkip = findViewById(R.id.btnSkip);
         btnWild = findViewById(R.id.btnWild);
+        btnGenerate = findViewById(R.id.btnGenerate);
+        btnBackWild = findViewById(R.id.btnBackWildCard);
     }
     private void startGame() {
         Bundle extras = getIntent().getExtras();
@@ -76,7 +80,7 @@ public class MainActivity extends ButtonUtilsActivity {
 
         // Load player data from PlayerModel
         List<Player> playerList = PlayerModel.loadSelectedPlayers(this);
-        if (playerList != null && !playerList.isEmpty()) {
+        if (!playerList.isEmpty()) {
             // Set the player list in Game class
             Game.getInstance().setPlayers(playerList.size());
             Game.getInstance().setPlayerList(playerList);
@@ -99,8 +103,7 @@ public class MainActivity extends ButtonUtilsActivity {
     //-----------------------------------------------------Buttons---------------------------------------------------//
 
     private void setupButtons() {
-        Button btnGenerate = findViewById(R.id.btnGenerate);
-        Button btnBackWild = findViewById(R.id.btnBackWildCard);
+
         ImageButton imageButtonExit = findViewById(R.id.imageBtnExit);
         View wildText = findViewById(R.id.wild_textview);
 
@@ -108,17 +111,22 @@ public class MainActivity extends ButtonUtilsActivity {
 
         btnUtils.setButton(btnGenerate, () -> {
             Game.getInstance().nextNumber(this::gotoGameEnd);
-            wildText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.VISIBLE);
             nextPlayerText.setVisibility(View.VISIBLE);
+
+            wildText.setVisibility(View.INVISIBLE);
+
         });
 
         btnUtils.setButton(btnBackWild, () -> {
-            btnBackWild.setVisibility(View.INVISIBLE);
             btnGenerate.setVisibility(View.VISIBLE);
-            wildText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.VISIBLE);
             nextPlayerText.setVisibility(View.VISIBLE);
+
+            wildText.setVisibility(View.INVISIBLE);
+            btnBackWild.setVisibility(View.INVISIBLE);
+
+
         });
 
         btnUtils.setButton(btnSkip, () -> {
@@ -131,14 +139,17 @@ public class MainActivity extends ButtonUtilsActivity {
         });
 
         btnUtils.setButton(btnWild, () -> {
-            btnWild.setVisibility(View.INVISIBLE);
+            Game.getInstance().getCurrentPlayer().useWildCard();
+            wildCardActivate(Game.getInstance().getCurrentPlayer());
             wildText.setVisibility(View.VISIBLE);
+
+            btnWild.setVisibility(View.INVISIBLE);
+
+
             btnBackWild.setVisibility(View.VISIBLE);
             btnGenerate.setVisibility(View.INVISIBLE);
             nextPlayerText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.INVISIBLE);
-            Game.getInstance().getCurrentPlayer().useWildCard();
-            wildCardActivate(Game.getInstance().getCurrentPlayer());
         });
 
         imageButtonExit.setOnClickListener(view -> {
@@ -154,7 +165,7 @@ public class MainActivity extends ButtonUtilsActivity {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         List<Player> playerList = PlayerModel.loadSelectedPlayers(this);
 
-        if (playerList != null && !playerList.isEmpty()) {
+        if (!playerList.isEmpty()) {
             String playerName = currentPlayer.getName();
             String playerImageString = currentPlayer.getPhoto();
 
@@ -212,9 +223,12 @@ public class MainActivity extends ButtonUtilsActivity {
                     .filter(c -> !usedWildCards.contains(c))
                     .collect(Collectors.toList());
 
-            if (unusedCards.isEmpty() && usedCards != null) {
-                usedCards.clear();
+            if (unusedCards.isEmpty()) {
+                wildActivityTextView.setText("No wild cards available");
+                btnWild.setVisibility(View.INVISIBLE);
+                return;
             }
+
             int totalWeight = unusedCards.stream()
                     .mapToInt(Settings_WildCard_Probabilities::getProbability)
                     .sum();

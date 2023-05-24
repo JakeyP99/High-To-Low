@@ -94,29 +94,28 @@ public class ButtonUtils {
         if (button == null) {
             return;
         }
+
         button.setOnTouchListener((view, motionEvent) -> {
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN: {
                     button.setBackground(buttonHighlight);
-
                     break;
                 }
                 case MotionEvent.ACTION_UP: {
                     button.setBackground(outlineForButton);
-
-                    if (buttonAction != null) {
-                        buttonAction.run();
-                    }
-
-                    vibrateDevice();
-
-                    playSoundEffects();
-
                     break;
                 }
             }
+            return false;
+        });
 
-            return true;
+        button.setOnClickListener(view -> {
+            if (buttonAction != null) {
+                buttonAction.run();
+            }
+
+            vibrateDevice();
+            playSoundEffects();
         });
     }
 

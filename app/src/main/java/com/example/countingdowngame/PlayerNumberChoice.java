@@ -37,6 +37,10 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
                 return;
             }
 
+            if (inputValue.length() > 3) {
+                Toast.makeText(PlayerNumberChoice.this, "That's way too many players.... Unless you're that popular?", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             Game.getInstance().setPlayers(inputNumber);
             startActivity(getIntentForClass(PlayerModel.class, true));

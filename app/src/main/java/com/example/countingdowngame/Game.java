@@ -52,10 +52,6 @@ public class Game {
         return currentNumber;
     }
 
-    public int getCurrentPlayerId() {
-        return currentPlayerId;
-    }
-
     public Player getCurrentPlayer() {
         if (!players.isEmpty() && currentPlayerId >= 0 && currentPlayerId < players.size()) {
             return players.get(currentPlayerId);
