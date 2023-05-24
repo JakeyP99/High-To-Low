@@ -127,22 +127,25 @@ public class ButtonUtils {
         } else {
             currentSoundIndex = (currentSoundIndex + 1) % NUM_SOUNDS;
             try {
-                stopCurrentSound();
+                stopAllSounds();
+                burp[currentSoundIndex].start();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            burp[currentSoundIndex].start();
         }
     }
 
+    private void stopAllSounds() throws IOException {
+        bop.pause();  // Pause the regular sound effect
 
-
-    private void stopCurrentSound() throws IOException {
-        if (burp[currentSoundIndex] != null) {
-            burp[currentSoundIndex].stop();
-            burp[currentSoundIndex].prepare();
+        for (MediaPlayer mediaPlayer : burp) {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.pause();
+                mediaPlayer.seekTo(0);  // Reset the sound to the beginning
+            }
         }
     }
+
 
 
     private void vibrateDevice() {

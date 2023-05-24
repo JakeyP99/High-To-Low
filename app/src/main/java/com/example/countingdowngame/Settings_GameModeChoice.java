@@ -29,23 +29,24 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_gameModeOne:
-                toggleButton(button_gameModeOne);
+                toggleButton(button_gameModeOne, button_gameModeTwo);
                 break;
             case R.id.button_gameModeTwo:
-                toggleButton(button_gameModeTwo);
+                toggleButton(button_gameModeTwo, button_gameModeOne);
                 break;
             case R.id.button_normal_sound:
-                toggleButton(button_regularSound);
+                toggleButton(button_regularSound, button_burpSound);
                 break;
             case R.id.button_burp_sound:
-                toggleButton(button_burpSound);
+                toggleButton(button_burpSound, button_regularSound);
                 break;
             case R.id.button_mute:
-                toggleButton(btnMute);
+                toggleMuteButton();
                 break;
         }
         savePreferences();
     }
+
 
     private void initializeViews() {
         button_gameModeOne = findViewById(R.id.button_gameModeOne);
@@ -105,13 +106,32 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
         btnMute.setOnClickListener(this);
     }
 
-    private void toggleButton(Button selectedButton) {
+
+    private void toggleButton(Button selectedButton, Button unselectedButton) {
         boolean isSelected = !selectedButton.isSelected();
         selectedButton.setSelected(isSelected);
+        unselectedButton.setSelected(!isSelected);
+
+        if (isSelected) {
+            selectedButton.setBackground(buttonHighlightDrawable);
+            unselectedButton.setBackground(outlineForButton);
+        } else {
+            selectedButton.setBackground(outlineForButton);
+            unselectedButton.setBackground(buttonHighlightDrawable);
+        }
+    }
+    private void toggleMuteButton() {
+        boolean isSelected = !btnMute.isSelected();
+        btnMute.setSelected(isSelected);
 
         Drawable selectedDrawable = isSelected ? buttonHighlightDrawable : outlineForButton;
-        selectedButton.setBackground(selectedDrawable);
+        btnMute.setBackground(selectedDrawable);
+
+        btnUtils.toggleMute(); // Toggle the mute state
     }
+
+
+
 
     private void savePreferences() {
         SharedPreferences gameModePreferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
