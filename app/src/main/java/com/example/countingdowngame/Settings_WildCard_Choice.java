@@ -53,12 +53,12 @@ public class Settings_WildCard_Choice extends ButtonUtilsActivity {
 
         final EditText textInput = new EditText(this);
         textInput.setInputType(InputType.TYPE_CLASS_TEXT);
-        textInput.setHint("Text");
+        textInput.setHint("Wildcard Title");
         layout.addView(textInput);
 
         final EditText probabilityInput = new EditText(this);
         probabilityInput.setInputType(InputType.TYPE_CLASS_NUMBER);
-        probabilityInput.setHint("Probability (1-100)");
+        probabilityInput.setHint("Probability (0-9999)");
         layout.addView(probabilityInput);
 
         builder.setView(layout);

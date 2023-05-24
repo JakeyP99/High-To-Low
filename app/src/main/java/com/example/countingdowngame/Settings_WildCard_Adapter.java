@@ -1,5 +1,6 @@
 package com.example.countingdowngame;
 
+import android.text.Html;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,7 +55,8 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
 
         editButton.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-            builder.setTitle("Edit Wildcard");
+            builder.setTitle("Edit Wildcard Properties");
+            int blueDarkColor = mContext.getResources().getColor(R.color.bluedark);
 
             LinearLayout layout = new LinearLayout(mContext);
             layout.setOrientation(LinearLayout.VERTICAL);
@@ -78,21 +80,21 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
 
             builder.setView(layout);
 
-            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+            builder.setNegativeButton(Html.fromHtml("<font color='" + blueDarkColor + "'>Cancel</font>"), (dialog, which) -> dialog.cancel());
 
             ArrayList<Settings_WildCard_Probabilities> wildCardList = new ArrayList<>(Arrays.asList(mProbabilities));
             mProbabilities = wildCardList.toArray(new Settings_WildCard_Probabilities[0]);
             mProbabilities = wildCardList.toArray(new Settings_WildCard_Probabilities[1]);
 
             if (wildCard.isDeletable()) {
-                builder.setNeutralButton("Delete", (dialog, which) -> {
+                builder.setNeutralButton(Html.fromHtml("<font color='" + blueDarkColor + "'>Delete</font>"), (dialog, which) -> {
                     wildCardList.remove(position);
                     mProbabilities = wildCardList.toArray(new Settings_WildCard_Probabilities[0]);
                     notifyDataSetChanged();
                     mContext.saveWildCardProbabilitiesToStorage(mMode, mProbabilities);
                 });
             }
-            builder.setPositiveButton("OK", (dialog, which) -> {
+            builder.setPositiveButton(Html.fromHtml("<font color='" + blueDarkColor + "'>OK</font>"), (dialog, which) -> {
                 String inputText = probabilityInput.getText().toString().trim();
 
                 if (inputText.length() > 4) {
@@ -123,6 +125,7 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
                 setProbabilitySizeBasedOnString(textViewProbability, String.valueOf(wildCard.getProbability()));
 
                 mContext.saveWildCardProbabilitiesToStorage(mMode, mProbabilities);
+
             });
 
             builder.show();
@@ -148,7 +151,7 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
 
     private void setProbabilitySizeBasedOnString(TextView textView, String text) {
         int textSize = 18;
-        if (text.length() > 3) {
+        if (text.length() > 2) {
             textSize = 12;
         } else if (text.length() > 0) {
             textSize = 18;
