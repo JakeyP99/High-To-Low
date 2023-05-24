@@ -5,11 +5,51 @@
     android:background="@color/white"
     tools:context=".DrawingActivity">
 
+    <LinearLayout
+        android:id="@+id/topLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/colorButton"
+            android:layout_width="139dp"
+            android:layout_height="77dp"
+            android:background="@drawable/outlineforbutton"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:textSize="20sp"
+            android:text="Color"
+            android:layout_margin="16dp" />
+
+        <Button
+            android:id="@+id/eraserButton"
+            android:layout_width="139dp"
+            android:layout_height="77dp"
+            android:background="@drawable/outlineforbutton"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:textSize="20sp"
+            android:text="Eraser"
+            android:layout_margin="16dp" />
+
+        <SeekBar
+            android:id="@+id/penSizeSeekBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:max="50"
+            android:progress="5" />
+
+    </LinearLayout>
+
     <com.example.countingdowngame.DrawingView
         android:id="@+id/drawingView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/linearLayout" />
+        android:layout_above="@+id/linearLayout"
+        android:layout_below="@+id/topLinearLayout" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -40,10 +80,6 @@
             android:textSize="20sp"
             android:text="Save"
             android:layout_margin="16dp" />
-
-
-
-
 
     </LinearLayout>
 

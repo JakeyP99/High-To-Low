@@ -16,6 +16,9 @@ public class DrawingView extends View {
     private Paint drawingPaint;
     private Canvas drawingCanvas;
     private Bitmap canvasBitmap;
+    private int currentColor;
+    private boolean isEraserMode;
+    private float penSize;
 
     public DrawingView(Context context) {
         super(context);
@@ -36,9 +39,13 @@ public class DrawingView extends View {
         drawingPath = new Path();
         drawingPaint = new Paint();
 
-        drawingPaint.setColor(Color.BLACK);
+        currentColor = Color.BLACK;
+        isEraserMode = false;
+        penSize = 5;
+
+        drawingPaint.setColor(currentColor);
         drawingPaint.setAntiAlias(true);
-        drawingPaint.setStrokeWidth(5);
+        drawingPaint.setStrokeWidth(penSize);
         drawingPaint.setStyle(Paint.Style.STROKE);
 
         drawingCanvas = new Canvas();
@@ -51,13 +58,44 @@ public class DrawingView extends View {
         canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         drawingCanvas.setBitmap(canvasBitmap);
     }
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
         canvas.drawBitmap(canvasBitmap, 0, 0, drawingPaint);
         canvas.drawPath(drawingPath, drawingPaint);
+    }
+
+    public void clearDrawing() {
+        drawingCanvas.drawColor(Color.WHITE);
+        invalidate();
+    }
+
+    public void setCurrentColor(int color) {
+        currentColor = color;
+        if (!isEraserMode) {
+            drawingPaint.setColor(currentColor);
+        }
+    }
+    public boolean isEraserMode() {
+        return isEraserMode;
+    }
+    public void setEraserMode(boolean enabled) {
+        isEraserMode = enabled;
+        if (isEraserMode) {
+            drawingPaint.setColor(Color.WHITE);  // Set the color to white for eraser
+        } else {
+            drawingPaint.setColor(currentColor); // Restore the previous color
+        }
+    }
+
+    public void setPenSize(float size) {
+        penSize = size;
+        drawingPaint.setStrokeWidth(penSize);
+    }
+
+    public Bitmap getDrawingBitmap() {
+        return canvasBitmap;
     }
 
     @Override
@@ -82,14 +120,5 @@ public class DrawingView extends View {
 
         invalidate();
         return true;
-    }
-
-    public void clearDrawing() {
-        drawingCanvas.drawColor(Color.WHITE);
-        invalidate();
-    }
-
-    public Bitmap getDrawingBitmap() {
-        return canvasBitmap;
     }
 }

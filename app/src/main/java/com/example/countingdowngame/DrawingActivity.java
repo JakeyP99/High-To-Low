@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Base64;
+import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
 
 import java.io.ByteArrayOutputStream;
 
@@ -15,6 +17,9 @@ public class DrawingActivity extends ButtonUtilsActivity {
 
     private Button btnCancel;
     private Button btnSave;
+    private Button colorButton;
+    private Button eraserButton;
+    private SeekBar penSizeSeekBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +28,9 @@ public class DrawingActivity extends ButtonUtilsActivity {
 
         btnCancel = findViewById(R.id.cancelButton);
         btnSave = findViewById(R.id.saveButton);
+        colorButton = findViewById(R.id.colorButton);
+        eraserButton = findViewById(R.id.eraserButton);
+        penSizeSeekBar = findViewById(R.id.penSizeSeekBar);
 
         drawingView = findViewById(R.id.drawingView);
 
@@ -39,6 +47,40 @@ public class DrawingActivity extends ButtonUtilsActivity {
         btnCancel.setOnClickListener(view -> {
             setResult(RESULT_CANCELED);
             finish();
+        });
+
+        colorButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        eraserButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isEraserMode = !drawingView.isEraserMode();
+                drawingView.setEraserMode(isEraserMode);
+                eraserButton.setText(isEraserMode ? "Draw" : "Eraser");
+            }
+        });
+
+        penSizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                float penSize = (float) progress;
+                drawingView.setPenSize(penSize);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // Not used in this case
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // Not used in this case
+            }
         });
     }
 
