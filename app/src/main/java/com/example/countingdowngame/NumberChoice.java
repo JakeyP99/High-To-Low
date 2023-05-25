@@ -35,6 +35,13 @@ public class NumberChoice extends ButtonUtilsActivity {
 
         String inputValue = originalNumberField.getText().toString();
 
+        inputValue.length();
+        if (inputValue.length() > 9) {
+            Toast.makeText(NumberChoice.this, "That's a lot of numbers, unfortunately too many :(", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
         if (inputValue.isEmpty()) {
             Toast.makeText(NumberChoice.this, "Please choose a number!", Toast.LENGTH_SHORT).show();
             return;
