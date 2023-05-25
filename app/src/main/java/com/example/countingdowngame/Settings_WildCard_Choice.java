@@ -74,13 +74,17 @@ public class Settings_WildCard_Choice extends ButtonUtilsActivity {
                 probability = 10; // Invalid input, set to a negative value
             }
             String inputText = probabilityInput.getText().toString().trim();
+            String text = textInput.getText().toString();
 
             if (inputText.length() > 4) {
                 Toast.makeText(Settings_WildCard_Choice.this, "Please enter a probability with 4 or fewer digits.", Toast.LENGTH_SHORT).show();
                 return;
             }
+            if (textInput.length() <=0 ) {
+                Toast.makeText(Settings_WildCard_Choice.this, "The wildcard needs some text, please and thanks!", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                String text = textInput.getText().toString();
 
                 Settings_WildCard_Probabilities newWildCard = new Settings_WildCard_Probabilities(text, probability, true, true);
                 Settings_WildCard_Probabilities[][] probabilitiesArray = loadWildCardProbabilitiesFromStorage(

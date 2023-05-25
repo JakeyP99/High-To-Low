@@ -96,25 +96,28 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
             }
             builder.setPositiveButton(Html.fromHtml("<font color='" + blueDarkColor + "'>OK</font>"), (dialog, which) -> {
 
-                int probability;
+                String inputText = textInput.getText().toString().trim();
+                if (wildCard.isDeletable() && inputText.isEmpty()) {
+                    Toast.makeText(Settings_WildCard_Adapter.this.getContext(), "The wildcard needs some text, please and thanks!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
+                int probability;
                 try {
                     probability = Integer.parseInt(probabilityInput.getText().toString());
                 } catch (NumberFormatException e) {
-                    probability = 0; // Invalid input, set to a negative value
+                    probability = 0; // Invalid input, set to 0
+                }
+
+                if (probabilityInput.getText().length() > 4) {
+                    Toast.makeText(Settings_WildCard_Adapter.this.getContext(), "Please enter a probability with 4 or fewer digits.", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
                 wildCard.setProbability(probability);
 
-                String inputText = probabilityInput.getText().toString().trim();
-
-                if (inputText.length() > 4) {
-                    Toast.makeText(Settings_WildCard_Adapter.this.getContext(), "Please enter a probability with 4 or fewer digits.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                  if (wildCard.isDeletable()) {
-                    String text = textInput.getText().toString();
-                    wildCard.setText(text);
+                if (wildCard.isDeletable()) {
+                    wildCard.setText(inputText);
                     textViewWildCard.setText(wildCard.getText());
                 }
 
@@ -122,7 +125,6 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
                 setProbabilitySizeBasedOnString(textViewProbability, String.valueOf(wildCard.getProbability()));
 
                 mContext.saveWildCardProbabilitiesToStorage(mMode, mProbabilities);
-
             });
 
             builder.show();
