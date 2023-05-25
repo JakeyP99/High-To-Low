@@ -114,6 +114,10 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
                     return;
                 }
 
+                if (textInput.length() > 100 ) {
+                    Toast.makeText(Settings_WildCard_Adapter.this.getContext(), "Sorry, way too big of a wildcard boss man, limited to 100 characters.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 wildCard.setProbability(probability);
 
                 if (wildCard.isDeletable()) {

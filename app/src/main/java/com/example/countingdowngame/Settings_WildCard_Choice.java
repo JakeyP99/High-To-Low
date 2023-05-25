@@ -84,11 +84,13 @@ public class Settings_WildCard_Choice extends ButtonUtilsActivity {
                 Toast.makeText(Settings_WildCard_Choice.this, "The wildcard needs some text, please and thanks!", Toast.LENGTH_SHORT).show();
                 return;
             }
-
+            if (textInput.length() > 100 ) {
+                Toast.makeText(Settings_WildCard_Choice.this, "Sorry, way too big of a wildcard boss man, limited to 100 characters.", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
                 Settings_WildCard_Probabilities newWildCard = new Settings_WildCard_Probabilities(text, probability, true, true);
-                Settings_WildCard_Probabilities[][] probabilitiesArray = loadWildCardProbabilitiesFromStorage(
-                        getApplicationContext());
+                Settings_WildCard_Probabilities[][] probabilitiesArray = loadWildCardProbabilitiesFromStorage(getApplicationContext());
                 Settings_WildCard_Probabilities[] deletableProbabilities = probabilitiesArray[0];
 
                 ArrayList<Settings_WildCard_Probabilities> wildCardList = new ArrayList<>(Arrays.asList(deletableProbabilities));
