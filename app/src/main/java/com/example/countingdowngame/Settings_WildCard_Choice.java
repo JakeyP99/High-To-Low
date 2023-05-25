@@ -71,12 +71,15 @@ public class Settings_WildCard_Choice extends ButtonUtilsActivity {
             try {
                 probability = Integer.parseInt(probabilityInput.getText().toString());
             } catch (NumberFormatException e) {
-                probability = -1; // Invalid input, set to a negative value
+                probability = 10; // Invalid input, set to a negative value
+            }
+            String inputText = probabilityInput.getText().toString().trim();
+
+            if (inputText.length() > 4) {
+                Toast.makeText(Settings_WildCard_Choice.this, "Please enter a probability with 4 or fewer digits.", Toast.LENGTH_SHORT).show();
+                return;
             }
 
-            if (probability > 4) {
-                Toast.makeText(Settings_WildCard_Choice.this, "That probability is too high, jeez louise!", Toast.LENGTH_SHORT).show();
-            } else {
                 String text = textInput.getText().toString();
 
                 Settings_WildCard_Probabilities newWildCard = new Settings_WildCard_Probabilities(text, probability, true, true);
@@ -97,7 +100,7 @@ public class Settings_WildCard_Choice extends ButtonUtilsActivity {
                 probabilitiesArray[0] = deletableProbabilities;
 
                 deletableAdapter.notifyDataSetChanged();
-            }
+
         });
 
         builder.show();

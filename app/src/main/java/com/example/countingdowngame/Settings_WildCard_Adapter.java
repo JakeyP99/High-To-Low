@@ -95,14 +95,6 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
                 });
             }
             builder.setPositiveButton(Html.fromHtml("<font color='" + blueDarkColor + "'>OK</font>"), (dialog, which) -> {
-                String inputText = probabilityInput.getText().toString().trim();
-
-                if (inputText.length() > 4) {
-                    Toast.makeText(Settings_WildCard_Adapter.this.getContext(), "Please enter a probability with 4 or fewer digits.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-
 
                 int probability;
 
@@ -114,7 +106,12 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
 
                 wildCard.setProbability(probability);
 
+                String inputText = probabilityInput.getText().toString().trim();
 
+                if (inputText.length() > 4) {
+                    Toast.makeText(Settings_WildCard_Adapter.this.getContext(), "Please enter a probability with 4 or fewer digits.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                   if (wildCard.isDeletable()) {
                     String text = textInput.getText().toString();
                     wildCard.setText(text);
