@@ -6,8 +6,8 @@ android {
         applicationId "com.mydomain.countingdowngame"
         minSdkVersion 24
         targetSdkVersion 33
-        versionCode 12
-        versionName "12"
+        versionCode 13
+        versionName "13"
 //Dont forget to version out the burp sounds
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -16,6 +16,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
     }
     namespace 'com.example.countingdowngame'
