@@ -116,6 +116,9 @@ public class MainActivity extends ButtonUtilsActivity {
 
             wildText.setVisibility(View.INVISIBLE);
 
+            btnSkip.setBackgroundResource(R.drawable.outlineforbutton);
+
+
         });
 
         btnUtils.setButton(btnBackWild, () -> {
@@ -126,6 +129,7 @@ public class MainActivity extends ButtonUtilsActivity {
             wildText.setVisibility(View.INVISIBLE);
             btnBackWild.setVisibility(View.INVISIBLE);
 
+            btnSkip.setBackgroundResource(R.drawable.outlineforbutton);
 
         });
 
@@ -136,6 +140,9 @@ public class MainActivity extends ButtonUtilsActivity {
             nextPlayerText.setVisibility(View.VISIBLE);
             btnBackWild.setVisibility(View.INVISIBLE);
             btnGenerate.setVisibility(View.VISIBLE);
+
+            btnSkip.setBackgroundResource(R.drawable.outlineforbutton);
+
         });
 
         btnUtils.setButton(btnWild, () -> {
@@ -150,6 +157,9 @@ public class MainActivity extends ButtonUtilsActivity {
             btnGenerate.setVisibility(View.INVISIBLE);
             nextPlayerText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.INVISIBLE);
+
+            btnSkip.setBackgroundResource(R.drawable.outlineforbutton);
+
         });
 
         imageButtonExit.setOnClickListener(view -> {
