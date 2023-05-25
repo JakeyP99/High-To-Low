@@ -65,7 +65,7 @@ public class NumberChoice extends ButtonUtilsActivity {
 
     private void startMainActivity() {
         SharedPreferences preferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
-        boolean switchOneChecked = preferences.getBoolean("button_gameModeOne", false);
+        boolean switchOneChecked = preferences.getBoolean("button_gameModeOne", true);
         Class<?> targetClass = switchOneChecked ? MainActivity.class : MainActivitySplitScreen.class;
         Intent i = getIntentForClass(targetClass, true);
         i.putExtra("startingNumber", startingNumber);

@@ -55,7 +55,6 @@ public class ButtonUtils {
         }
     }
 
-
     private boolean isMuted() {
         SharedPreferences mutePreferences = mContext.getSharedPreferences("mute_state", Context.MODE_PRIVATE);
         return mutePreferences.getBoolean("isMuted", false);
@@ -113,18 +112,15 @@ public class ButtonUtils {
             if (buttonAction != null) {
                 buttonAction.run();
             }
-
             vibrateDevice();
             playSoundEffects();
         });
     }
 
-
     //-----------------------------------------------------Vibrate Functionality---------------------------------------------------//
 
     private void vibrateDevice() {
         Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
-
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.VIBRATE) == PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));

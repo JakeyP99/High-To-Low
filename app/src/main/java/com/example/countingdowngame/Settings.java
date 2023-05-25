@@ -13,7 +13,6 @@ public class Settings extends ButtonUtilsActivity {
         final Button btnReturn = findViewById(R.id.buttonReturn);
         final Button btnWildCardSettings = findViewById(R.id.button_wildcardSettings);
         final Button btnGameModeSettings = findViewById(R.id.button_gameModeSettings);
-//        final Button btnPlayerModelSettings = findViewById(R.id.button_playerSettings);
 
         btnUtils.setButton(btnReturn, this::onBackPressed);
 
@@ -24,9 +23,5 @@ public class Settings extends ButtonUtilsActivity {
         btnUtils.setButton(btnGameModeSettings, () -> {
             startActivity(getIntentForClass(Settings_GameModeChoice.class));
         });
-
-//        btnUtils.setButton(btnPlayerModelSettings, () -> {
-//            startActivity(getIntentForClass(PlayerModel.class));
-//        });
     }
 }

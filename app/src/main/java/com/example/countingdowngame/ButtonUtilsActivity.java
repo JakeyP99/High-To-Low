@@ -26,11 +26,7 @@ public class ButtonUtilsActivity extends AppCompatActivity {
             btnUtils.onDestroy();
         }
     }
-
-
-
     //-----------------------------------------------------Activity Functionality---------------------------------------------------//
-
     protected Intent getIntentForClass(Class<?> targetClass) {
         return getIntentForClass(targetClass, false);
     }
@@ -73,8 +69,6 @@ public class ButtonUtilsActivity extends AppCompatActivity {
         btnMute.setSelected(isMuted);
         Drawable selectedDrawable = isMuted ? buttonHighlightDrawable : outlineForButton;
         btnMute.setBackground(selectedDrawable);
-        btnUtils.toggleMute(); // Toggle the mute state in ButtonUtils
+        btnUtils.toggleMute();
     }
-
-
 }
