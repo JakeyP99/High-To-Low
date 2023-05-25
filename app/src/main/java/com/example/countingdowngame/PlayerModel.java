@@ -354,7 +354,7 @@ public class PlayerModel extends ButtonUtilsActivity {
         int remainingPlayers = totalPlayerCount - selectedPlayerCount;
         String counterText;
         if (remainingPlayers == 0) {
-            counterText = "All Players Selected Baby!";
+            counterText = "❤️ All Players Selected ❤️";
         } else if (remainingPlayers == 1) {
             counterText = "Please Select 1 More Player ❤️";
         } else if (remainingPlayers < 0) {
