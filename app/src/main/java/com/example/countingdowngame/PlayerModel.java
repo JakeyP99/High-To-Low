@@ -231,12 +231,18 @@ public class PlayerModel extends ButtonUtilsActivity {
                 .setPositiveButton("OK", (dialogInterface, i) -> {
                     String name = nameEditText.getText().toString();
                     if (name.length() < 20) {
-                        createNewCharacter(bitmap, name);
+                        if (name.length() == 0) {
+                            Toast.makeText(this, "Sorry, you need to enter a name.", Toast.LENGTH_SHORT).show();
+                            showNameInputDialog(bitmap);
+                        } else {
+                            createNewCharacter(bitmap, name);
+                        }
                     } else {
-                        Toast.makeText(this, "Name must be less than 20 characters. Rough aye.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Name must be less than 20 characters.", Toast.LENGTH_SHORT).show();
                         showNameInputDialog(bitmap);
                     }
                 })
+
                 .setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss());
 
         AlertDialog dialog = builder.create();
