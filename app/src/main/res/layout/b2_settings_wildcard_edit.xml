@@ -70,7 +70,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/outlineforbutton"
-                android:text="Activate All"
+                android:text="Toggle\nOn/Off"
                 android:textAllCaps="false"
                 android:textColor="@color/bluedark"
                 android:textSize="20sp" />

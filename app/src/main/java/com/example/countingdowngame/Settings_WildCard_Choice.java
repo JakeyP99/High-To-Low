@@ -22,6 +22,7 @@ public class Settings_WildCard_Choice extends ButtonUtilsActivity {
         private ListView listViewWildCard;
         private Settings_WildCard_Adapter deletableAdapter;
         private Settings_WildCard_Adapter nonDeletableAdapter;
+    private Button btnToggleAll; // Declare the button at the class level
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +42,18 @@ public class Settings_WildCard_Choice extends ButtonUtilsActivity {
             listViewWildCard.setAdapter(deletableAdapter);
             listViewWildCardGameMode.setAdapter(nonDeletableAdapter);
 
-        Button btnAddWildCard = findViewById(R.id.btnAddWildCard);
-        btnAddWildCard.setOnClickListener(v -> addNewWildCard());
+            Button btnAddWildCard = findViewById(R.id.btnAddWildCard);
 
-        Button btnToggleAll = findViewById(R.id.btnToggleAll);
-        btnToggleAll.setOnClickListener(v -> toggleAllWildCards());
+            btnUtils.setButton(btnAddWildCard, () -> {
 
-    }
+                addNewWildCard();
+            });
+            btnToggleAll = findViewById(R.id.btnToggleAll); // Initialize the button here
+
+            btnUtils.setButton(btnToggleAll, () -> {
+                toggleAllWildCards();
+            });
+        }
 
 
 
@@ -124,19 +130,15 @@ public class Settings_WildCard_Choice extends ButtonUtilsActivity {
     }
 
 
+
     private void toggleAllWildCards() {
-
-        Settings_WildCard_Probabilities[] deletableWildCards = deletableAdapter.getWildCardProbabilities();
-        Settings_WildCard_Probabilities[] nonDeletableWildCards = nonDeletableAdapter.getWildCardProbabilities();
-
-        boolean isEnabled = !deletableAdapter.areAllEnabled(); // Get the current state of deletable wild cards (if all enabled or not)
-
-        deletableAdapter.setAllEnabled(isEnabled); // Set the enabled state for deletable wild cards
+        boolean isEnabled = !deletableAdapter.areAllEnabled();
+        deletableAdapter.setAllEnabled(isEnabled);
 
         Settings_WildCard_Probabilities[] deletableProbabilities = deletableAdapter.getWildCardProbabilities();
-        saveWildCardProbabilitiesToStorage(DELETABLE, deletableProbabilities); // Save the updated deletable wild card probabilities to storage
+        saveWildCardProbabilitiesToStorage(DELETABLE, deletableProbabilities);
 
-        deletableAdapter.notifyDataSetChanged(); // Notify the deletable adapter that the data has changed
+        deletableAdapter.notifyDataSetChanged();
 
         // Toggle the enabled state for non-deletable wild cards
         Settings_WildCard_Probabilities[] nonDeletableProbabilities = nonDeletableAdapter.getWildCardProbabilities();
@@ -144,10 +146,11 @@ public class Settings_WildCard_Choice extends ButtonUtilsActivity {
             probability.setEnabled(isEnabled);
         }
 
-        saveWildCardProbabilitiesToStorage(NON_DELETABLE, nonDeletableProbabilities); // Save the updated non-deletable wild card probabilities to storage
+        saveWildCardProbabilitiesToStorage(NON_DELETABLE, nonDeletableProbabilities);
 
         nonDeletableAdapter.notifyDataSetChanged(); // Notify the non-deletable adapter that the data has changed
     }
+
 
 
     Settings_WildCard_Probabilities[][] loadWildCardProbabilitiesFromStorage(Context context) {
