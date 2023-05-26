@@ -226,7 +226,7 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         allProbabilities.addAll(Arrays.asList(nonDeletableProbabilities));
 
         final TextView wildActivityTextView = findViewById(R.id.wild_textview);
-        final TextView wildActivityTextViewPlayer2 = findViewById(R.id.wild_textview);
+        final TextView wildActivityTextViewPlayer2 = findViewById(R.id.wild_textviewPlayer2);
 
         player.useWildCard();
 
