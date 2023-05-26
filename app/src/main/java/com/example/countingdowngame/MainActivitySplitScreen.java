@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -294,12 +295,11 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
             }
         }
 
+
         if (selectedActivity != null && selectedActivity.equals("Get a skip button to use on any one of your turns!")) {
             if (player.getSkipAmount() == 0) {
                 player.skips++;
                 btnSkip.setVisibility(View.VISIBLE);
-                btnSkipPlayer2.setVisibility(View.VISIBLE);
-
             }
         }
 
@@ -330,14 +330,39 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
             setTextViewSizeBasedOnInt(numberText, String.valueOf(startingNumber));
         }
 
+        if (selectedActivity != null && selectedActivity.equals("Reverse the turn order!")) {
+            reverseTurnOrder(player);
+        }
 
         if (player.getWildCardAmount() > 0) {
             btnWild.setVisibility(View.VISIBLE);
-            btnWildPlayer2.setVisibility(View.VISIBLE);
         } else {
             btnWild.setVisibility(View.INVISIBLE);
-            btnWildPlayer2.setVisibility(View.INVISIBLE);
         }
+    }
+
+    private void reverseTurnOrder(Player player) {
+        Game game = Game.getInstance();
+        List<Player> players = game.getPlayers();
+        Collections.reverse(players);
+
+        int currentPlayerIndex = players.indexOf(player);
+
+        if (currentPlayerIndex != -1) {
+            int lastIndex = players.size() - 1;
+            int newIndex = lastIndex - currentPlayerIndex;
+
+            // Move the player to the new index
+            players.remove(currentPlayerIndex);
+            players.add(newIndex, player);
+
+            // Update the current player ID if necessary
+            if (game.getCurrentPlayer() == player) {
+                game.setCurrentPlayerId(newIndex);
+            }
+        }
+
+        game.setPlayerList(players);
     }
 
     private void setTextViewSizeBasedOnInt(TextView textView, String text) {
@@ -374,8 +399,6 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
         playerImage.setVisibility(View.INVISIBLE);
         playerImagePlayer2.setVisibility(View.INVISIBLE);
-
-
         nextPlayerTextPlayer2.setVisibility(View.INVISIBLE);
         btnWildPlayer2.setVisibility(View.INVISIBLE);
         wildTextPlayer2.setVisibility(View.VISIBLE);
@@ -429,7 +452,6 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
     private void setNameSizeBasedOnInt(TextView textView, String text) {
         int textSize;
-
         if (text.length() > 18) {
             textSize = 20;
         } else if (text.length() > 14) {
