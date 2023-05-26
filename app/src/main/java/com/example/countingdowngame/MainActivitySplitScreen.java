@@ -303,6 +303,34 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
             }
         }
 
+        if (selectedActivity != null && selectedActivity.equals("Add 100 to the number!")) {
+            int currentNumber = Game.getInstance().getCurrentNumber();
+            int updatedNumber = currentNumber + 100;
+            Game.getInstance().setCurrentNumber(updatedNumber);
+            numberText.setText(String.valueOf(updatedNumber));
+            setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
+        }
+
+        if (selectedActivity != null && selectedActivity.equals("Remove 100 from the number!")) {
+            int currentNumber = Game.getInstance().getCurrentNumber();
+            int updatedNumber = currentNumber - 100;
+            Game.getInstance().setCurrentNumber(updatedNumber);
+            numberText.setText(String.valueOf(updatedNumber));
+            setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
+        }
+
+        if (selectedActivity != null && selectedActivity.equals("Reset the number!")) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                throw new RuntimeException("Missing extras");
+            }
+            int startingNumber = extras.getInt("startingNumber");
+            Game.getInstance().setCurrentNumber(startingNumber);
+            numberText.setText(String.valueOf(startingNumber));
+            setTextViewSizeBasedOnInt(numberText, String.valueOf(startingNumber));
+        }
+
+
         if (player.getWildCardAmount() > 0) {
             btnWild.setVisibility(View.VISIBLE);
             btnWildPlayer2.setVisibility(View.VISIBLE);

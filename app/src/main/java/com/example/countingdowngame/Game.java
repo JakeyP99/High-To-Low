@@ -14,7 +14,7 @@ public class Game {
     private ArrayList<Integer> previousNumbers = new ArrayList<>();
     private int currentPlayerId = 0;
     private int startingNumber = 0;
-    private int currentNumber = 0;
+    int currentNumber = 0;
     private boolean gameStarted = false;
 
     public static Game getInstance() {
@@ -121,7 +121,9 @@ public class Game {
 
         return previousNumbersFormatted;
     }
-
+    public void setCurrentNumber(int number) {
+        currentNumber = number;
+    }
     public void playAgain() {
         for (Player player : players) {
             if (player != null) {
