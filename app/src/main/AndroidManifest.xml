@@ -50,7 +50,8 @@
             android:name=".Settings" />
 
         <activity
-            android:name=".Settings_WildCard_Choice" />
+            android:name=".Settings_WildCard_Choice"
+            android:windowSoftInputMode="adjustNothing" />
 
         <activity
             android:name=".Settings_GameModeChoice" />
