@@ -142,6 +142,28 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
         return view;
     }
 
+    public Settings_WildCard_Probabilities[] getWildCardProbabilities() {
+        return mProbabilities;
+    }
+
+    public boolean areAllEnabled() {
+        for (Settings_WildCard_Probabilities probability : mProbabilities) {
+            if (!probability.isEnabled()) {
+                return false; // Return false if any wild card is not enabled
+            }
+        }
+        return true;
+    }
+
+    public void setAllEnabled(boolean enabled) {
+        for (Settings_WildCard_Probabilities probability : mProbabilities) {
+            probability.setEnabled(enabled);
+        }
+        notifyDataSetChanged(); // Notify the adapter that the data has changed
+    }
+
+
+
     private void setTextViewSizeBasedOnString(TextView textView, String text) {
         int textSize = 20;
         if (text.length() > 20) {

@@ -32,7 +32,7 @@
             <ListView
                 android:id="@+id/listView_WildCard"
                 android:layout_width="match_parent"
-                android:layout_height="350dp"
+                android:layout_height="250dp"
                 android:layout_weight="1" />
 
             <TextView
@@ -62,6 +62,19 @@
                 android:textAllCaps="false"
                 android:textColor="@color/bluedark"
                 android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/btnToggleAll"
+                android:layout_width="139dp"
+                android:layout_height="77dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/outlineforbutton"
+                android:text="Activate All"
+                android:textAllCaps="false"
+                android:textColor="@color/bluedark"
+                android:textSize="20sp" />
+
 
         </LinearLayout>
     </ScrollView>
