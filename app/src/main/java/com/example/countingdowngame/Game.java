@@ -30,6 +30,13 @@ public class Game {
             players.add(new Player(null, null));
         }
     }
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void setCurrentPlayerId(int playerId) {
+        currentPlayerId = playerId;
+    }
 
     public void startGame(int startNum, GameEventListener listener) {
         if (gameStarted)

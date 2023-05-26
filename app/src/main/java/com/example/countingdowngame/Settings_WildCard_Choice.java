@@ -22,7 +22,7 @@ public class Settings_WildCard_Choice extends ButtonUtilsActivity {
         private ListView listViewWildCard;
         private Settings_WildCard_Adapter deletableAdapter;
         private Settings_WildCard_Adapter nonDeletableAdapter;
-    private Button btnToggleAll; // Declare the button at the class level
+        private Button btnToggleAll; // Declare the button at the class level
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -216,6 +216,8 @@ public class Settings_WildCard_Choice extends ButtonUtilsActivity {
                 new Settings_WildCard_Probabilities("Add 100 to the number!", 3, true, false),
                 new Settings_WildCard_Probabilities("Remove 100 from the number!", 3, true, false),
                 new Settings_WildCard_Probabilities("Reset the number!", 3, true, false),
+                new Settings_WildCard_Probabilities("Reverse the turn order!", 3, true, false),
+
         };
 
         int nonDeletableCount = nonDeletablePrefs.getInt("wild_card_count", nonDeletableProbabilities.length);

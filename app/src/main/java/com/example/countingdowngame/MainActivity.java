@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -316,12 +317,42 @@ public class MainActivity extends ButtonUtilsActivity {
             setTextViewSizeBasedOnInt(numberText, String.valueOf(startingNumber));
         }
 
+        if (selectedActivity != null && selectedActivity.equals("Reverse the turn order!")) {
+            reverseTurnOrder(player);
+        }
+
         if (player.getWildCardAmount() > 0) {
             btnWild.setVisibility(View.VISIBLE);
         } else {
             btnWild.setVisibility(View.INVISIBLE);
         }
     }
+
+    private void reverseTurnOrder(Player player) {
+        Game game = Game.getInstance();
+        List<Player> players = game.getPlayers();
+        Collections.reverse(players);
+
+        int currentPlayerIndex = players.indexOf(player);
+
+        if (currentPlayerIndex != -1) {
+            int lastIndex = players.size() - 1;
+            int newIndex = lastIndex - currentPlayerIndex;
+
+            // Move the player to the new index
+            players.remove(currentPlayerIndex);
+            players.add(newIndex, player);
+
+            // Update the current player ID if necessary
+            if (game.getCurrentPlayer() == player) {
+                game.setCurrentPlayerId(newIndex);
+            }
+        }
+
+        game.setPlayerList(players);
+    }
+
+
 
     private void setTextViewSizeBasedOnInt(TextView textView, String text) {
         int defaultTextSize = 70;
