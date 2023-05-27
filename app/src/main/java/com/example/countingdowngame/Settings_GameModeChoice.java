@@ -14,10 +14,14 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
     private Drawable outlineForButton;
     private Button btnReturn;
     private Button btnMute;
+    private Button btnPayForWildCard;
+
 
     //copyout
 //    private Button button_regularSound;
 //    private Button button_burpSound;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +51,10 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
             case R.id.button_mute:
                 toggleMuteButton();
                 break;
+
+            case R.id.button_payForWildcards:
+                togglePayForWildCard();
+                break;
         }
         savePreferences();
     }
@@ -59,6 +67,7 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
         outlineForButton = getResources().getDrawable(R.drawable.outlineforbutton);
         btnReturn = findViewById(R.id.buttonReturn);
         btnMute = findViewById(R.id.button_mute);
+        btnPayForWildCard = findViewById(R.id.button_payForWildcards);
 
         //copyout
 //        button_regularSound = findViewById(R.id.button_normal_sound);
@@ -107,13 +116,25 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
         } else {
             btnMute.setBackground(outlineForButton);
         }
+
+        boolean isPayForWildCardSelected = gameModePreferences.getBoolean("isPayForWildCardSelected", false);
+        btnPayForWildCard.setSelected(isPayForWildCardSelected);
+
+        if (isPayForWildCardSelected) {
+            btnPayForWildCard.setBackground(buttonHighlightDrawable);
+        } else {
+            btnPayForWildCard.setBackground(outlineForButton);
+        }
     }
+
 
     private void setButtonListeners() {
         button_gameModeOne.setOnClickListener(this);
         button_gameModeTwo.setOnClickListener(this);
         btnUtils.setButton(btnReturn, this::onBackPressed);
         btnMute.setOnClickListener(this);
+        btnPayForWildCard.setOnClickListener(this);
+
         //copyout
 //        button_regularSound.setOnClickListener(this);
 //        button_burpSound.setOnClickListener(this);
@@ -133,6 +154,7 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
             unselectedButton.setBackground(buttonHighlightDrawable);
         }
     }
+
     private void toggleMuteButton() {
         boolean isSelected = !btnMute.isSelected();
         btnMute.setSelected(isSelected);
@@ -143,7 +165,15 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
         btnUtils.toggleMute(); // Toggle the mute state
     }
 
+    private void togglePayForWildCard() {
+        boolean isSelected = !btnPayForWildCard.isSelected();
+        btnPayForWildCard.setSelected(isSelected);
 
+        Drawable selectedDrawable = isSelected ? buttonHighlightDrawable : outlineForButton;
+        btnPayForWildCard.setBackground(selectedDrawable);
+
+        btnUtils.togglePayForWildCard();
+    }
 
 
     private void savePreferences() {
@@ -154,6 +184,8 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
         gameModeEditor.putBoolean("button_gameModeTwo", button_gameModeTwo.isSelected());
         gameModeEditor.apply();
 
+        gameModeEditor.putBoolean("isPayForWildCardSelected", btnPayForWildCard.isSelected());
+        gameModeEditor.apply();
 
 
         SharedPreferences mutePreferences = getSharedPreferences("mute_state", MODE_PRIVATE);

@@ -1,13 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@android:color/white"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white">
 
     <TextView
         android:id="@+id/textview_banner"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/viga"
         android:gravity="center"
@@ -15,10 +14,7 @@
         android:paddingBottom="5dp"
         android:text="Game Modes &amp; Layouts"
         android:textColor="@color/bluedark"
-        android:textSize="23sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="23sp" />
 
     <Button
         android:id="@+id/button_gameModeOne"
@@ -29,16 +25,10 @@
         android:textAllCaps="false"
         android:text="Single Screen"
         android:textAlignment="center"
-        android:textColor="@color/bluedark"
-        android:textSize="23sp"
-        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
         android:background="@drawable/outlineforbutton"
-
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textview_banner" />
+        android:layout_gravity="center"
+        android:textColor="@color/bluedark"
+        android:textSize="23sp" />
 
     <Button
         android:id="@+id/button_gameModeTwo"
@@ -47,21 +37,30 @@
         android:layout_marginTop="30dp"
         android:maxLines="4"
         android:text="Split Screen"
-        android:textAlignment="center"
-        android:background="@drawable/outlineforbutton"
         android:textAllCaps="false"
-
+        android:background="@drawable/outlineforbutton"
+        android:layout_gravity="center"
+        android:textAlignment="center"
         android:textColor="@color/bluedark"
-        android:textSize="23sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_gameModeOne" />
+        android:textSize="23sp" />
 
+    <Button
+        android:id="@+id/button_payForWildcards"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:maxLines="4"
+        android:text="Pay For Wild Cards"
+        android:textAllCaps="false"
+        android:background="@drawable/outlineforbutton"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:textColor="@color/bluedark"
+        android:textSize="23sp" />
 
     <TextView
         android:id="@+id/textview_banner_sound_settings"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:fontFamily="@font/viga"
@@ -69,84 +68,61 @@
         android:paddingTop="10dp"
         android:paddingBottom="5dp"
         android:textAllCaps="false"
-
         android:text="Sound Settings"
         android:textColor="@color/bluedark"
-        android:textSize="23sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_gameModeTwo" />
+        android:textSize="23sp" />
 
     <Button
         android:id="@+id/button_mute"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:background="@drawable/outlineforbutton"
         android:textAllCaps="false"
+        android:background="@drawable/outlineforbutton"
+        android:layout_gravity="center"
         android:text="Mute"
         android:textAlignment="center"
         android:textColor="@color/bluedark"
-        android:textSize="23sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        android:onClick="onMuteClicked"
-        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-        app:layout_constraintTop_toBottomOf="@+id/textview_banner_sound_settings" />
+        android:textSize="23sp" />
 
-<!--    <Button-->
-<!--        android:id="@+id/button_normal_sound"-->
-<!--        android:layout_width="300dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="30dp"-->
-<!--        android:background="@drawable/outlineforbutton"-->
-<!--        android:checkMark="?android:attr/listChoiceIndicatorMultiple"-->
-<!--        android:maxLines="4"-->
-<!--        android:text="Regular Sounds"-->
-<!--        android:textAlignment="center"-->
-<!--        android:textAllCaps="false"-->
-<!--        android:textColor="@color/bluedark"-->
-<!--        android:textSize="23sp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.5"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/button_mute" />-->
+    <!--    <Button-->
+    <!--        android:id="@+id/button_normal_sound"-->
+    <!--        android:layout_width="300dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="30dp"-->
+    <!--        android:maxLines="4"-->
+    <!--        android:text="Regular Sounds"-->
+<!--    android:background="@drawable/outlineforbutton"-->
+<!--    android:layout_gravity="center"-->
+    <!--        android:textAlignment="center"-->
+    <!--        android:textAllCaps="false"-->
+    <!--        android:textColor="@color/bluedark"-->
+    <!--        android:textSize="23sp" />-->
 
-<!--    <Button-->
-<!--        android:id="@+id/button_burp_sound"-->
-<!--        android:layout_width="300dp"-->
-<!--        android:text="Burp Sounds"-->
-
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="30dp"-->
-<!--        android:background="@drawable/outlineforbutton"-->
-<!--        android:checkMark="?android:attr/listChoiceIndicatorMultiple"-->
-<!--        android:maxLines="4"-->
-<!--        android:textAllCaps="false"-->
-<!--        android:textAlignment="center"-->
-<!--        android:textColor="@color/bluedark"-->
-
-
-<!--        android:textSize="23sp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.5"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/button_normal_sound" />-->
+    <!--    <Button-->
+    <!--        android:id="@+id/button_burp_sound"-->
+    <!--        android:layout_width="300dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="30dp"-->
+    <!--        android:maxLines="4"-->
+    <!--        android:text="Burp Sounds"-->
+    <!--        android:textAlignment="center"-->
+<!--    android:background="@drawable/outlineforbutton"-->
+<!--    android:layout_gravity="center"-->
+    <!--        android:textAllCaps="false"-->
+    <!--        android:textColor="@color/bluedark"-->
+    <!--        android:textSize="23sp" />-->
 
     <Button
         android:id="@+id/buttonReturn"
         android:layout_width="139dp"
         android:layout_height="77dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="100dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="100dp"
         android:background="@drawable/outlineforbutton"
         android:text="Return"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:textSize="20sp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
