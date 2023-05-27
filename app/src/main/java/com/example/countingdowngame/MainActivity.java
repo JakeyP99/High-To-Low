@@ -290,21 +290,23 @@ public class MainActivity extends ButtonUtilsActivity {
             }
         }
 
-        if (selectedActivity != null && selectedActivity.equals("Add 100 to the number!")) {
+        if (selectedActivity != null && selectedActivity.equals("Double the current number and go again!")) {
             int currentNumber = Game.getInstance().getCurrentNumber();
-            int updatedNumber = currentNumber + 100;
+            int updatedNumber = currentNumber * 2;
+            Game.getInstance().setCurrentNumber(updatedNumber);
+            Game.getInstance().addUpdatedNumber(updatedNumber);
+            numberText.setText(String.valueOf(updatedNumber));
+            setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
+        }
+
+        if (selectedActivity != null && selectedActivity.equals("Half the current number and go again!")) {
+            int currentNumber = Game.getInstance().getCurrentNumber();
+            int updatedNumber = Math.max(currentNumber / 2, 1);
             Game.getInstance().setCurrentNumber(updatedNumber);
             numberText.setText(String.valueOf(updatedNumber));
             setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
         }
 
-        if (selectedActivity != null && selectedActivity.equals("Remove 100 from the number!")) {
-            int currentNumber = Game.getInstance().getCurrentNumber();
-            int updatedNumber = currentNumber - 100;
-            Game.getInstance().setCurrentNumber(updatedNumber);
-            numberText.setText(String.valueOf(updatedNumber));
-            setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
-        }
 
         if (selectedActivity != null && selectedActivity.equals("Reset the number!")) {
             Bundle extras = getIntent().getExtras();
@@ -313,6 +315,7 @@ public class MainActivity extends ButtonUtilsActivity {
             }
             int startingNumber = extras.getInt("startingNumber");
             Game.getInstance().setCurrentNumber(startingNumber);
+            Game.getInstance().addUpdatedNumber(startingNumber);
             numberText.setText(String.valueOf(startingNumber));
             setTextViewSizeBasedOnInt(numberText, String.valueOf(startingNumber));
         }

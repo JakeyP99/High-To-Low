@@ -213,8 +213,8 @@ public class Settings_WildCard_Choice extends ButtonUtilsActivity {
 
         Settings_WildCard_Probabilities[] nonDeletableProbabilities = new Settings_WildCard_Probabilities[]{
                 new Settings_WildCard_Probabilities("Get a skip button to use on any one of your turns!", 3, true, false),
-                new Settings_WildCard_Probabilities("Add 100 to the number!", 3, true, false),
-                new Settings_WildCard_Probabilities("Remove 100 from the number!", 3, true, false),
+                new Settings_WildCard_Probabilities("Double the current number and go again!", 3, true, false),
+                new Settings_WildCard_Probabilities("Half the current number and go again!", 3, true, false),
                 new Settings_WildCard_Probabilities("Reset the number!", 3, true, false),
                 new Settings_WildCard_Probabilities("Reverse the turn order!", 3, true, false),
 

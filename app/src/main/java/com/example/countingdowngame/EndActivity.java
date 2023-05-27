@@ -5,6 +5,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+
 public class EndActivity extends ButtonUtilsActivity {
     @Override
     public void onBackPressed() {
@@ -22,11 +24,12 @@ public class EndActivity extends ButtonUtilsActivity {
         final Button btnPlayAgain = findViewById(R.id.btnplayAgain);
         final Button btnNewPlayer = findViewById(R.id.btnNewPlayer);
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(EndActivity.this, R.layout.list_view_end_game, R.id.previousNumbers, Game.getInstance().getPreviousNumbersFormatted());
+        ArrayList<String> previousNumbersFormatted = Game.getInstance().getPreviousNumbersFormatted();
+
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(EndActivity.this, R.layout.list_view_end_game, R.id.previousNumbers, previousNumbersFormatted);
         previousNumbersList.setAdapter(adapter);
 
         btnUtils.setButton(btnPlayAgain, () -> {
-
             Game.getInstance().playAgain();
             gotoGameStart();
         });
