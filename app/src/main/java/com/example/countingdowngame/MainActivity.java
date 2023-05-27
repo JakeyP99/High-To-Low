@@ -303,6 +303,7 @@ public class MainActivity extends ButtonUtilsActivity {
             int currentNumber = Game.getInstance().getCurrentNumber();
             int updatedNumber = Math.max(currentNumber / 2, 1);
             Game.getInstance().setCurrentNumber(updatedNumber);
+            Game.getInstance().addUpdatedNumber(updatedNumber);
             numberText.setText(String.valueOf(updatedNumber));
             setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
         }
