@@ -17,14 +17,13 @@ public class Game {
     int currentNumber = 0;
     private boolean gameStarted = false;
 
-    private ArrayList<Integer> updatedNumbers = new ArrayList<>();
-    private ArrayList<String> actionsPerformed = new ArrayList<>();
+    private final ArrayList<Integer> updatedNumbers = new ArrayList<>();
+    private final ArrayList<String> actionsPerformed = new ArrayList<>();
 
 
     public static Game getInstance() {
         return gameInstance;
     }
-
     public void setPlayers(int playerAmount) {
         if (gameStarted)
             return;
@@ -91,6 +90,7 @@ public class Game {
     }
 
 
+
     private void nextPlayer() {
         currentPlayerId = (currentPlayerId + 1) % players.size();
 
@@ -137,36 +137,15 @@ public class Game {
 
         for (int i = updatedNumbers.size() - 1; i >= 0; i--) {
             int number = updatedNumbers.get(i);
-            String actionLabel = getActionLabel(number);
-            if (actionLabel != null) {
-                previousNumbersFormatted.add(number + " (" + actionLabel + ")");
-            } else {
                 previousNumbersFormatted.add(String.valueOf(number));
-            }
         }
-
         previousNumbersFormatted.add(startingNumber + " (Starting Number)");
-
-        // Add the actions or wildcards used
-        previousNumbersFormatted.addAll(actionsPerformed);
-
         return previousNumbersFormatted;
     }
 
-    private String getActionLabel(int number) {
-        String label = null;
-        if (number == startingNumber) {
-            label = "Number Reeeeset";
-        }
-        return label;
-    }
-
-
-    // Other methods in the Game class
     public void setCurrentNumber(int number) {
         currentNumber = number;
     }
-
     public void playAgain() {
         for (Player player : players) {
             if (player != null) {
