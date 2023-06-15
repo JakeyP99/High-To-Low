@@ -34,7 +34,10 @@ public class MainActivity extends ButtonUtilsActivity {
     private Button btnBackWild;
     private ImageView playerImage;
     private boolean doubleBackToExitPressedOnce = false;
+    private Button btnPayForWildcard;
+
     private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
+    private TextView wildTextView;
 
     @Override
     public void onBackPressed() {
@@ -68,6 +71,9 @@ public class MainActivity extends ButtonUtilsActivity {
         btnWild = findViewById(R.id.btnWild);
         btnGenerate = findViewById(R.id.btnGenerate);
         btnBackWild = findViewById(R.id.btnBackWildCard);
+        btnPayForWildcard = findViewById(R.id.button_payForWildcards);
+        wildTextView = findViewById(R.id.wild_textview);
+
     }
     private void startGame() {
         Bundle extras = getIntent().getExtras();
@@ -106,7 +112,29 @@ public class MainActivity extends ButtonUtilsActivity {
         ImageButton imageButtonExit = findViewById(R.id.imageBtnExit);
         View wildText = findViewById(R.id.wild_textview);
 
+
         btnBackWild.setVisibility(View.INVISIBLE);
+
+
+
+
+
+        btnUtils.setButton(btnPayForWildcard, () -> {
+            Game.getInstance().getCurrentPlayer().useWildCard();
+            wildCardActivate(Game.getInstance().getCurrentPlayer());
+            wildText.setVisibility(View.VISIBLE);
+
+            btnWild.setVisibility(View.INVISIBLE);
+
+            togglePayForWildCard();
+            btnBackWild.setVisibility(View.VISIBLE);
+            btnGenerate.setVisibility(View.INVISIBLE);
+            nextPlayerText.setVisibility(View.INVISIBLE);
+            numberText.setVisibility(View.INVISIBLE);
+
+            btnSkip.setBackgroundResource(R.drawable.outlineforbutton);
+
+        });
 
         btnUtils.setButton(btnGenerate, () -> {
             Game.getInstance().nextNumber(this::gotoGameEnd);
@@ -187,6 +215,25 @@ public class MainActivity extends ButtonUtilsActivity {
     }
 
     //-----------------------------------------------------Wild Card, and Skip Functionality---------------------------------------------------//
+
+    private void togglePayForWildCard() {
+        boolean isSelected = !btnPayForWildcard.isSelected();
+        btnPayForWildcard.setSelected(isSelected);
+        if (isSelected) {
+            String[] drinkOptions = {"Take 1 drink", "Take 2 drinks", "Take 3 drinks", "Take a shot"};
+            Random random = new Random();
+            int randomIndex = random.nextInt(drinkOptions.length);
+            String selectedDrink = drinkOptions[randomIndex];
+
+            wildTextView.setText(selectedDrink);
+            wildTextView.setVisibility(View.VISIBLE);
+        } else {
+            wildTextView.setVisibility(View.GONE);
+        }
+    }
+
+
+
 
     private void wildCardActivate(Player player) {
 
@@ -329,8 +376,6 @@ public class MainActivity extends ButtonUtilsActivity {
         game.setPlayerList(players);
     }
 
-
-
     private void setTextViewSizeBasedOnInt(TextView textView, String text) {
         int defaultTextSize = 70;
         int minSize = 47;
@@ -356,6 +401,4 @@ public class MainActivity extends ButtonUtilsActivity {
         }
         textView.setTextSize(textSize);
     }
-
-
 }

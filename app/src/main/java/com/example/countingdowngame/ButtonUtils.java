@@ -43,6 +43,9 @@ public class ButtonUtils {
     public void toggleMute() {
         isMuted = !isMuted;
     }
+    public void togglePayForWildCard() {
+        isMuted = !isMuted;
+    }
 
     private void stopAllSounds() throws IOException {
         bop.pause();  // Pause the regular sound effect
