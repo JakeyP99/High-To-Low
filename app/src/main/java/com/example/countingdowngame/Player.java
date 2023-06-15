@@ -48,7 +48,7 @@ class Player implements Serializable {
 
     public void useSkip() {
         this.game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.SKIP));
-        this.skips--;
+        this.skips=wildcard;
     }
 
     public void addUsedWildCard(Settings_WildCard_Probabilities usedWildCard) {

@@ -183,7 +183,26 @@ public class Settings_WildCard_Choice extends ButtonUtilsActivity {
                 new Settings_WildCard_Probabilities("Give 1 drink for every cheese you can name in 10 seconds.", 2, true, true),
                 new Settings_WildCard_Probabilities("The shortest person at the table must take 4 drinks then give 4 drinks.", 2, true, true),
                 new Settings_WildCard_Probabilities("Bare your biceps and flex for everyone. The players next to you each drink 2 for the view.", 2, true, true),
-                new Settings_WildCard_Probabilities("All females drink 3, and all males drink 3. Equality.", 5, true, true)
+                new Settings_WildCard_Probabilities("All females drink 3, and all males drink 3. Equality.", 5, true, true),
+                new Settings_WildCard_Probabilities("Do a handstand and give out 3 drinks.", 3, true, true),
+                new Settings_WildCard_Probabilities("Choose someone to drink with their non-dominant hand for the next round.", 2, true, true),
+                new Settings_WildCard_Probabilities("The next person to laugh must take an extra drink.", 3, true, true),
+                new Settings_WildCard_Probabilities("Everyone must stand on one leg while drinking.", 5, true, true),
+                new Settings_WildCard_Probabilities("Recite a tongue twister correctly three times before taking 3 drinks.", 5, true, true),
+                new Settings_WildCard_Probabilities("The person wearing the most colors takes a drink.", 5, true, true),
+                new Settings_WildCard_Probabilities("Recite a tongue twister three times without making a mistake before taking a sip.", 5, true, true),
+                new Settings_WildCard_Probabilities("Drink your whole drink while making eye contact with someone for the entire duration.", 5, true, true),
+                new Settings_WildCard_Probabilities("The person with the longest fingernails takes 2 drinks.", 5, true, true),
+                new Settings_WildCard_Probabilities("The person with the most expensive item on them takes a 3 drinks.", 5, true, true),
+                new Settings_WildCard_Probabilities("The person with the most keys takes 3 drinks.", 5, true, true),
+                new Settings_WildCard_Probabilities("The person with the longest beard takes 2 drinks.", 5, true, true),
+                new Settings_WildCard_Probabilities("Choose someone to take 2 drinks and perform a breakdance move.", 5, true, true),
+                new Settings_WildCard_Probabilities("Choose someone to take 2 drinks and recite a poem.", 5, true, true),
+                new Settings_WildCard_Probabilities("Drink while doing a backbend.", 5, true, true),
+                new Settings_WildCard_Probabilities("Take a sip while doing a split.", 5, true, true),
+                new Settings_WildCard_Probabilities("Give a toast to the person who shares your zodiac sign and take a drink.", 5, true, true),
+                new Settings_WildCard_Probabilities("The person wearing the most buttons on their shirt takes 3 drinks. Mr Fancy aye.", 5, true, true),
+                new Settings_WildCard_Probabilities("The person with the most watches takes 2 drinks.", 5, true, true),
         };
 
         int deletableCount = deletablePrefs.getInt("wild_card_count", deletableProbabilities.length);

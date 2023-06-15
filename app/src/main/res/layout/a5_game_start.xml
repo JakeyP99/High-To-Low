@@ -37,22 +37,6 @@
         app:layout_constraintVertical_bias="0.85" />
 
     <Button
-        android:id="@+id/btnSkip"
-        android:layout_width="165dp"
-        android:layout_height="100dp"
-        android:background="@drawable/outlineforbutton"
-        android:text="Skip"
-        android:textColor="@color/bluedark"
-        android:textSize="30sp"
-        android:textAllCaps="false"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/btnWild"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btnWild" />
-
-    <Button
         android:id="@+id/btnGenerate"
         android:layout_width="290dp"
         android:layout_height="282dp"

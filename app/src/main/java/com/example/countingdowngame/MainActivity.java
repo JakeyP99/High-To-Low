@@ -29,7 +29,6 @@ public class MainActivity extends ButtonUtilsActivity {
     private final Set<Settings_WildCard_Probabilities> usedWildCards = new HashSet<>();
     private TextView numberText;
     private TextView nextPlayerText;
-    private Button btnSkip;
     private Button btnWild;
     private Button btnGenerate;
     private Button btnBackWild;
@@ -66,7 +65,6 @@ public class MainActivity extends ButtonUtilsActivity {
         playerImage = findViewById(R.id.playerImage);
         numberText = findViewById(R.id.numberText);
         nextPlayerText = findViewById(R.id.textView_Number_Turn);
-        btnSkip = findViewById(R.id.btnSkip);
         btnWild = findViewById(R.id.btnWild);
         btnGenerate = findViewById(R.id.btnGenerate);
         btnBackWild = findViewById(R.id.btnBackWildCard);
@@ -117,32 +115,19 @@ public class MainActivity extends ButtonUtilsActivity {
 
             wildText.setVisibility(View.INVISIBLE);
 
-            btnSkip.setBackgroundResource(R.drawable.outlineforbutton);
 
 
         });
 
         btnUtils.setButton(btnBackWild, () -> {
             btnGenerate.setVisibility(View.VISIBLE);
-            numberText.setVisibility(View.VISIBLE);
-            nextPlayerText.setVisibility(View.VISIBLE);
-
-            wildText.setVisibility(View.INVISIBLE);
-            btnBackWild.setVisibility(View.INVISIBLE);
-
-            btnSkip.setBackgroundResource(R.drawable.outlineforbutton);
-
-        });
-
-        btnUtils.setButton(btnSkip, () -> {
             Game.getInstance().getCurrentPlayer().useSkip();
-            wildText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.VISIBLE);
             nextPlayerText.setVisibility(View.VISIBLE);
-            btnBackWild.setVisibility(View.INVISIBLE);
-            btnGenerate.setVisibility(View.VISIBLE);
 
-            btnSkip.setBackgroundResource(R.drawable.outlineforbutton);
+            wildText.setVisibility(View.INVISIBLE);
+            btnBackWild.setVisibility(View.INVISIBLE);
+
 
         });
 
@@ -159,7 +144,6 @@ public class MainActivity extends ButtonUtilsActivity {
             nextPlayerText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.INVISIBLE);
 
-            btnSkip.setBackgroundResource(R.drawable.outlineforbutton);
 
         });
 
@@ -189,12 +173,6 @@ public class MainActivity extends ButtonUtilsActivity {
             }
         }
 
-        if (currentPlayer.getSkipAmount() > 0) {
-            btnSkip.setVisibility(View.VISIBLE);
-        } else {
-            btnSkip.setVisibility(View.INVISIBLE);
-        }
-
         if (currentPlayer.getWildCardAmount() > 0) {
             btnWild.setVisibility(View.VISIBLE);
         } else {
@@ -211,6 +189,7 @@ public class MainActivity extends ButtonUtilsActivity {
     //-----------------------------------------------------Wild Card, and Skip Functionality---------------------------------------------------//
 
     private void wildCardActivate(Player player) {
+
         Settings_WildCard_Choice settings = new Settings_WildCard_Choice();
         Settings_WildCard_Probabilities[][] probabilitiesArray = settings.loadWildCardProbabilitiesFromStorage(getApplicationContext());
 
@@ -283,12 +262,6 @@ public class MainActivity extends ButtonUtilsActivity {
             }
         }
 
-        if (selectedActivity != null && selectedActivity.equals("Get a skip button to use on any one of your turns!")) {
-            if (player.getSkipAmount() == 0) {
-                player.skips++;
-                btnSkip.setVisibility(View.VISIBLE);
-            }
-        }
 
         if (selectedActivity != null && selectedActivity.equals("Double the current number and go again!")) {
             int currentNumber = Game.getInstance().getCurrentNumber();
