@@ -184,16 +184,8 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
             }
         }
 
-        if (currentPlayer.getSkipAmount() > 0) {
-            btnSkip.setVisibility(View.VISIBLE);
-            btnSkipPlayer2.setVisibility(View.VISIBLE);
 
-        } else {
-            btnSkip.setVisibility(View.INVISIBLE);
-            btnSkipPlayer2.setVisibility(View.INVISIBLE);
-        }
-
-        if (currentPlayer.getWildCardAmount() > 0) {
+        if (currentPlayer.getWildCardAmount() > -2) {
             btnWild.setVisibility(View.VISIBLE);
             btnWildPlayer2.setVisibility(View.VISIBLE);
         } else {
@@ -296,13 +288,6 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         }
 
 
-        if (selectedActivity != null && selectedActivity.equals("Get a skip button to use on any one of your turns!")) {
-            if (player.getSkipAmount() == 0) {
-                player.skips++;
-                btnSkip.setVisibility(View.VISIBLE);
-            }
-        }
-
 
         if (selectedActivity != null && selectedActivity.equals("Double the current number and go again!")) {
             int currentNumber = Game.getInstance().getCurrentNumber();
@@ -339,11 +324,6 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
             reverseTurnOrder(player);
         }
 
-        if (player.getWildCardAmount() > 0) {
-            btnWild.setVisibility(View.VISIBLE);
-        } else {
-            btnWild.setVisibility(View.INVISIBLE);
-        }
     }
 
     private void reverseTurnOrder(Player player) {
