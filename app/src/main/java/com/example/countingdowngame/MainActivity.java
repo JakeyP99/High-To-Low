@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -136,7 +137,6 @@ public class MainActivity extends ButtonUtilsActivity {
         });
 
         btnUtils.setButton(btnWild, () -> {
-            Game.getInstance().getCurrentPlayer().useWildCard();
             wildCardActivate(Game.getInstance().getCurrentPlayer());
             wildText.setVisibility(View.VISIBLE);
 
@@ -163,7 +163,7 @@ public class MainActivity extends ButtonUtilsActivity {
     private void renderPlayer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         List<Player> playerList = PlayerModel.loadSelectedPlayers(this);
-
+        Log.d("TAG", "Wildcard Count: " + currentPlayer.getWildCardAmount());
         if (!playerList.isEmpty()) {
             String playerName = currentPlayer.getName();
             String playerImageString = currentPlayer.getPhoto();

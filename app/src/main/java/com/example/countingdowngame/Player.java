@@ -9,7 +9,7 @@ class Player implements Serializable {
     private String name;
     private Game game;
     private final Set<Settings_WildCard_Probabilities> usedWildCards = new HashSet<>();
-    int wildcard = 1;
+    int wildcard = 0;
     private boolean selected;
 
     public Player(String photo, String name) {
@@ -51,7 +51,7 @@ class Player implements Serializable {
     }
 
     public void resetAbilities() {
-        this.wildcard = 1;
+        this.wildcard = 0;
     }
 
     public boolean isSelected() {
