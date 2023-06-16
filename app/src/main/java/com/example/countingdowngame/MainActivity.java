@@ -210,7 +210,7 @@ public class MainActivity extends ButtonUtilsActivity {
             String playerImageString = currentPlayer.getPhoto();
 
             nextPlayerText.setText(playerName + "'s Turn");
-            btnWild.setText((currentPlayer.getWildcardPerPlayer()+3) + "\n" + "Wild Cards");
+            btnWild.setText((currentPlayer.getWildCardAmountSpecificToEachPlayer()) + "\n" + "Wild Cards");
 
             if (playerImageString != null) {
                 byte[] decodedString = Base64.decode(playerImageString, Base64.DEFAULT);
@@ -219,7 +219,7 @@ public class MainActivity extends ButtonUtilsActivity {
             }
         }
 
-        if (currentPlayer.getWildcardPerPlayer() > -3) {
+        if (currentPlayer.getWildCardAmountSpecificToEachPlayer() > -3) {
             btnWild.setVisibility(View.VISIBLE);
         } else {
             btnWild.setVisibility(View.INVISIBLE);

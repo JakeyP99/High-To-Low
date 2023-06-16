@@ -14,16 +14,16 @@ public class Game {
     private ArrayList<Integer> previousNumbers = new ArrayList<>();
     private int currentPlayerId = 0;
     private int startingNumber = 0;
-    int currentNumber = 0;
+    private int currentNumber = 0;
     private boolean gameStarted = false;
 
     private final ArrayList<Integer> updatedNumbers = new ArrayList<>();
     private final ArrayList<String> actionsPerformed = new ArrayList<>();
 
-
     public static Game getInstance() {
         return gameInstance;
     }
+
     public void setPlayers(int playerAmount) {
         if (gameStarted)
             return;
@@ -34,6 +34,7 @@ public class Game {
             players.add(new Player(null, null));
         }
     }
+
     public List<Player> getPlayers() {
         return players;
     }
@@ -89,8 +90,6 @@ public class Game {
         }
     }
 
-
-
     private void nextPlayer() {
         currentPlayerId = (currentPlayerId + 1) % players.size();
 
@@ -100,6 +99,7 @@ public class Game {
     }
 
     //-----------------------------------------------------Player Functions---------------------------------------------------//
+
     private final PlayerEventListener playerEventListener = e -> {
         if (e.type == PlayerEventType.SKIP) {
             nextPlayer();
@@ -109,7 +109,8 @@ public class Game {
     public void triggerPlayerEvent(PlayerEvent event) {
         playerEventListener.onPlayerEvent(event);
     }
-    public int getPlayerAmount(){
+
+    public int getPlayerAmount() {
         return players.size();
     }
 
@@ -117,16 +118,20 @@ public class Game {
         if (gameStarted) {
             return;
         }
+
         players.clear();
         players.addAll(playerList);
-    }
 
+        // Set the game instance for each player
+        for (Player player : players) {
+            player.setGame(this);
+        }
+    }
     //-----------------------------------------------------End Game ---------------------------------------------------//
 
     public void endGame() {
         gameStarted = false;
     }
-
 
     public void addUpdatedNumber(int number) {
         updatedNumbers.add(number);
@@ -137,7 +142,7 @@ public class Game {
 
         for (int i = updatedNumbers.size() - 1; i >= 0; i--) {
             int number = updatedNumbers.get(i);
-                previousNumbersFormatted.add(String.valueOf(number));
+            previousNumbersFormatted.add(String.valueOf(number));
         }
         previousNumbersFormatted.add(startingNumber + " (Starting Number)");
         return previousNumbersFormatted;
@@ -146,15 +151,20 @@ public class Game {
     public void setCurrentNumber(int number) {
         currentNumber = number;
     }
+
     public void playAgain() {
         int wildcardAmount = Settings_GameModeChoice.getWildcardAmount();
         for (Player player : players) {
             if (player != null) {
-                player.resetAbilities(wildcardAmount);
+                player.setWildcardAmount(wildcardAmount);
             }
         }
     }
+
+    public void setWildCardAmountForAllPlayers(int wildCardAmount) {
+        for (Player player : players) {
+            player.setWildcardAmount(wildCardAmount);
+        }
+    }
 }
-
-
 

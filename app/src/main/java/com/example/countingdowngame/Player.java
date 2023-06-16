@@ -9,12 +9,12 @@ class Player implements Serializable {
     private String name;
     private Game game;
     private final Set<Settings_WildCard_Probabilities> usedWildCards = new HashSet<>();
-    private int wildCardAmount = 8;
+    private int wildCardAmount = 0;
     private boolean selected;
 
 
-    public void setWildCardAmount(int wildCardAmount) {
-        this.wildCardAmount = wildCardAmount; // Access the static variable using the class name
+    public void setWildcardAmount(int wildCardAmount) {
+        this.wildCardAmount = wildCardAmount;
     }
 
     public Player(String photo, String name) {
@@ -36,7 +36,7 @@ class Player implements Serializable {
     }
 
 
-    public int getWildcardPerPlayer() {
+    public int getWildCardAmountSpecificToEachPlayer() {
         return wildCardAmount;
     }
 
@@ -55,8 +55,8 @@ class Player implements Serializable {
         usedWildCards.add(usedWildCard);
     }
 
-    public void resetAbilities(int wildcardAmount) {
-        this.wildCardAmount = wildcardAmount;
+    public void resetAbilities(int wildCardAmountSetInSettings) {
+        this.wildCardAmount = wildCardAmountSetInSettings;
     }
 
 

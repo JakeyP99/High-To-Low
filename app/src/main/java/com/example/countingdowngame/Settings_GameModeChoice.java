@@ -17,14 +17,17 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
     private Button btnMute;
 
     private static int wildcardAmount; // Change to static variable
+
     @Override
     protected void onPause() {
         super.onPause();
         savePreferences();
     }
+
     public static int getWildcardAmount() {
         return wildcardAmount;
     }
+
     //copyout
     private Button button_regularSound;
     private Button button_burpSound;
@@ -172,17 +175,16 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
 
         // Save wildcard amount
         EditText wildcardPerPlayerEditText = findViewById(R.id.edittext_wildcard_amount);
-        int wildcardAmount = Integer.parseInt(wildcardPerPlayerEditText.getText().toString());
+        int wildCardAmountSetInSettings = Integer.parseInt(wildcardPerPlayerEditText.getText().toString());
 
         SharedPreferences wildcardPreferences = getSharedPreferences("wildcard_amount", MODE_PRIVATE);
         SharedPreferences.Editor wildcardEditor = wildcardPreferences.edit();
-        wildcardEditor.putInt("wildcardAmount", wildcardAmount);
+        wildcardEditor.putInt("wildcardAmount", wildCardAmountSetInSettings);
         wildcardEditor.apply();
 
         // Update the wildcard amount for all players in the game
-        Player player = new Player(null, null); // Create a player instance
-        player.setWildCardAmount(wildcardAmount); // Call the method on the player instance
+        Game game = Game.getInstance();
+        game.setWildCardAmountForAllPlayers(wildCardAmountSetInSettings);
 
     }
-
 }
