@@ -151,8 +151,15 @@ public class MainActivity extends ButtonUtilsActivity {
         for (int i = 0; i <= currentNumber; i++) {
             digits[i] = i;
         }
-        final int shuffleDuration = 2000;  // 1 second
-        final int shuffleInterval = 100;    // Interval between digit changes (adjust for desired speed)
+        final int shuffleDuration = 1500;  // 1 second
+
+        int shuffleInterval; // Declare the variable outside the if-else block
+
+        if (currentNumber >= 1000) {
+            shuffleInterval = 50;
+        } else {
+            shuffleInterval = 100;
+        }
 
         final Random random = new Random();
         shuffleHandler.postDelayed(new Runnable() {
@@ -173,7 +180,6 @@ public class MainActivity extends ButtonUtilsActivity {
 
                     btnGenerate.setEnabled(false);
                     btnWild.setEnabled(false);
-
                 } else {
                     // Animation finished, generate the final number and display it
                     int finalNumber = randomDigit;  // Change this as needed based on your game logic
@@ -204,7 +210,7 @@ public class MainActivity extends ButtonUtilsActivity {
             String playerImageString = currentPlayer.getPhoto();
 
             nextPlayerText.setText(playerName + "'s Turn");
-            btnWild.setText(currentPlayer.getWildcardPerPlayer() + "\n" + "Wild Cards");
+            btnWild.setText((currentPlayer.getWildcardPerPlayer()+3) + "\n" + "Wild Cards");
 
             if (playerImageString != null) {
                 byte[] decodedString = Base64.decode(playerImageString, Base64.DEFAULT);

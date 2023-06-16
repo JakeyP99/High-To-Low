@@ -4,20 +4,28 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class EndActivity extends ButtonUtilsActivity {
+
     @Override
     public void onBackPressed() {
         gotoHomeScreen();
     }
     private ArrayAdapter<String> adapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a6_end_game);
+        setContentView(R.layout.a6_end_game); // Set the layout for the activity
+
+        TextView endGameName = findViewById(R.id.TextViewlose); // Initialize the TextView
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        String playerName = currentPlayer.getName();
+        String endGameText = "Drink Up " + playerName + " Ya Lil Baby!!"; // Create the custom string
+
+        endGameName.setText(endGameText); // Set the text of the TextView
 
         final ListView previousNumbersList = findViewById(R.id.previousNumbers);
 
