@@ -46,7 +46,7 @@
         android:layout_height="58dp"
         android:layout_centerHorizontal="true"
         android:background="@drawable/outlineforbutton"
-        android:text="Game Mode Choice"
+        android:text="General Settings"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
         android:textSize="20sp"
