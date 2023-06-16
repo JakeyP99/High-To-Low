@@ -150,7 +150,7 @@ public class MainActivity extends ButtonUtilsActivity {
     private void renderPlayer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         List<Player> playerList = PlayerModel.loadSelectedPlayers(this);
-        Log.d("TAG", "Wildcard Count: " + currentPlayer.getWildCardAmount());
+        Log.d("TAG", "Wildcard Count: " + currentPlayer.getWildcardPerPlayer());
         if (!playerList.isEmpty()) {
             String playerName = currentPlayer.getName();
             String playerImageString = currentPlayer.getPhoto();
@@ -164,7 +164,7 @@ public class MainActivity extends ButtonUtilsActivity {
             }
         }
 
-        if (currentPlayer.getWildCardAmount() > -3) {
+        if (currentPlayer.getWildcardPerPlayer() > -3) {
             btnWild.setVisibility(View.VISIBLE);
         } else {
             btnWild.setVisibility(View.INVISIBLE);

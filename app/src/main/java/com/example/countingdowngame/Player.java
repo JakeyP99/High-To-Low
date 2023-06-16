@@ -9,9 +9,13 @@ class Player implements Serializable {
     private String name;
     private Game game;
     private final Set<Settings_WildCard_Probabilities> usedWildCards = new HashSet<>();
-    int skips = 0;
-    int wildcard = 1;
+    private static int wildCardAmount = 1; // Declare wildCardAmount as a static variable
     private boolean selected;
+
+
+    public static void setWildCardAmount(int wildCardAmount) {
+        Player.wildCardAmount = wildCardAmount; // Access the static variable using the class name
+    }
 
     public Player(String photo, String name) {
         this.photo = photo;
@@ -32,15 +36,15 @@ class Player implements Serializable {
     }
 
 
-    public int getWildCardAmount() {
-        return wildcard;
+    public int getWildcardPerPlayer() {
+        return wildCardAmount;
     }
 
     public void useWildCard() {
         if (game != null) {
             game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.WILD_CARD));
         }
-        wildcard--;
+        wildCardAmount--;
     }
 
     public void useSkip() {
@@ -52,7 +56,7 @@ class Player implements Serializable {
     }
 
     public void resetAbilities() {
-        this.wildcard = 0;
+        this.wildCardAmount = 0;
     }
 
     public boolean isSelected() {
