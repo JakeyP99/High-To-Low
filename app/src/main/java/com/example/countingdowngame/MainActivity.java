@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -30,7 +29,6 @@ public class MainActivity extends ButtonUtilsActivity {
     private final Set<Settings_WildCard_Probabilities> usedWildCards = new HashSet<>();
     private TextView numberText;
     private TextView nextPlayerText;
-    private TextView wildCardAmountText;
 
     private Button btnWild;
     private Button btnGenerate;
@@ -71,8 +69,6 @@ public class MainActivity extends ButtonUtilsActivity {
         btnWild = findViewById(R.id.btnWild);
         btnGenerate = findViewById(R.id.btnGenerate);
         btnBackWild = findViewById(R.id.btnBackWildCard);
-        wildCardAmountText = findViewById(R.id.textView_WildCard_Amount);
-
     }
     private void startGame() {
         Bundle extras = getIntent().getExtras();
@@ -151,13 +147,12 @@ public class MainActivity extends ButtonUtilsActivity {
     private void renderPlayer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         List<Player> playerList = PlayerModel.loadSelectedPlayers(this);
-        Log.d("TAG", "Wildcard Count: " + currentPlayer.getWildcardPerPlayer());
         if (!playerList.isEmpty()) {
             String playerName = currentPlayer.getName();
             String playerImageString = currentPlayer.getPhoto();
 
             nextPlayerText.setText(playerName + "'s Turn");
-            wildCardAmountText.setText(String.valueOf(currentPlayer.getWildcardPerPlayer()));
+            btnWild.setText(currentPlayer.getWildcardPerPlayer() + "\n" + "Wild Cards");
 
             if (playerImageString != null) {
                 byte[] decodedString = Base64.decode(playerImageString, Base64.DEFAULT);

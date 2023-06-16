@@ -147,9 +147,10 @@ public class Game {
         currentNumber = number;
     }
     public void playAgain() {
+        int wildcardAmount = Settings_GameModeChoice.getWildcardAmount();
         for (Player player : players) {
             if (player != null) {
-                player.resetAbilities();
+                player.resetAbilities(wildcardAmount);
             }
         }
     }

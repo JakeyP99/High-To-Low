@@ -84,8 +84,6 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         playerImage.setBackgroundResource(R.drawable.circle_background);
         playerImagePlayer2 = findViewById(R.id.playerImagePlayer2);
         playerImagePlayer2.setBackgroundResource(R.drawable.circle_background);
-        btnSkip = findViewById(R.id.btnSkip);
-        btnSkipPlayer2 = findViewById(R.id.btnSkipPlayer2);
         btnWild = findViewById(R.id.btnWild);
         btnWildPlayer2 = findViewById(R.id.btnWildPlayer2);
         numberText = findViewById(R.id.numberText);
@@ -174,6 +172,8 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
             nextPlayerText.setText(playerName);
             nextPlayerTextPlayer2.setText(playerName);
+            btnWild.setText(currentPlayer.getWildcardPerPlayer() + "\n" + "Wild Cards");
+            btnWildPlayer2.setText(currentPlayer.getWildcardPerPlayer() + "\n" + "Wild Cards");
 
             if (playerImageString != null) {
                 byte[] decodedString = Base64.decode(playerImageString, Base64.DEFAULT);
