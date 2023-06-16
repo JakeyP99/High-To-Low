@@ -81,6 +81,19 @@
         app:layout_constraintTop_toBottomOf="@+id/playerImage" />
 
     <TextView
+        android:id="@+id/textView_WildCard_Amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="test"
+        android:textColor="@color/bluedark"
+        android:textSize="35sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/playerImage"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.022" />
+
+    <TextView
         android:id="@+id/wild_textview"
         android:layout_width="match_parent"
         android:layout_height="250dp"

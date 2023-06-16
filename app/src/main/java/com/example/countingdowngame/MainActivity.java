@@ -30,13 +30,14 @@ public class MainActivity extends ButtonUtilsActivity {
     private final Set<Settings_WildCard_Probabilities> usedWildCards = new HashSet<>();
     private TextView numberText;
     private TextView nextPlayerText;
+    private TextView wildCardAmountText;
+
     private Button btnWild;
     private Button btnGenerate;
     private Button btnBackWild;
     private ImageView playerImage;
     private boolean doubleBackToExitPressedOnce = false;
     private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
-    private TextView wildTextView;
 
     @Override
     public void onBackPressed() {
@@ -70,7 +71,7 @@ public class MainActivity extends ButtonUtilsActivity {
         btnWild = findViewById(R.id.btnWild);
         btnGenerate = findViewById(R.id.btnGenerate);
         btnBackWild = findViewById(R.id.btnBackWildCard);
-        wildTextView = findViewById(R.id.wild_textview);
+        wildCardAmountText = findViewById(R.id.textView_WildCard_Amount);
 
     }
     private void startGame() {
@@ -156,6 +157,7 @@ public class MainActivity extends ButtonUtilsActivity {
             String playerImageString = currentPlayer.getPhoto();
 
             nextPlayerText.setText(playerName + "'s Turn");
+            wildCardAmountText.setText(String.valueOf(currentPlayer.getWildcardPerPlayer()));
 
             if (playerImageString != null) {
                 byte[] decodedString = Base64.decode(playerImageString, Base64.DEFAULT);
