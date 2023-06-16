@@ -110,18 +110,13 @@ public class MainActivity extends ButtonUtilsActivity {
         ImageButton imageButtonExit = findViewById(R.id.imageBtnExit);
         View wildText = findViewById(R.id.wild_textview);
 
-
         btnBackWild.setVisibility(View.INVISIBLE);
 
         btnUtils.setButton(btnGenerate, () -> {
             Game.getInstance().nextNumber(this::gotoGameEnd);
             numberText.setVisibility(View.VISIBLE);
             nextPlayerText.setVisibility(View.VISIBLE);
-
             wildText.setVisibility(View.INVISIBLE);
-
-
-
         });
 
         btnUtils.setButton(btnBackWild, () -> {
@@ -129,26 +124,18 @@ public class MainActivity extends ButtonUtilsActivity {
             Game.getInstance().getCurrentPlayer().useSkip();
             numberText.setVisibility(View.VISIBLE);
             nextPlayerText.setVisibility(View.VISIBLE);
-
             wildText.setVisibility(View.INVISIBLE);
             btnBackWild.setVisibility(View.INVISIBLE);
-
-
         });
 
         btnUtils.setButton(btnWild, () -> {
             wildCardActivate(Game.getInstance().getCurrentPlayer());
             wildText.setVisibility(View.VISIBLE);
-
             btnWild.setVisibility(View.INVISIBLE);
-
-
             btnBackWild.setVisibility(View.VISIBLE);
             btnGenerate.setVisibility(View.INVISIBLE);
             nextPlayerText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.INVISIBLE);
-
-
         });
 
         imageButtonExit.setOnClickListener(view -> {
