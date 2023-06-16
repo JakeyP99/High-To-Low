@@ -11,13 +11,18 @@ public class Settings extends ButtonUtilsActivity {
         setContentView(R.layout.b1_settings_choice);
 
         final Button btnReturn = findViewById(R.id.buttonReturn);
-        final Button btnWildCardSettings = findViewById(R.id.button_wildcardSettings);
-        final Button btnGameModeSettings = findViewById(R.id.button_gameModeSettings);
+        final Button btnWildCardChoice = findViewById(R.id.button_wildcardChoice);
+        final Button btnWildCardSettings = findViewById(R.id.button_wildCardSettings);
+        final Button btnGameModeSettings = findViewById(R.id.button_GameModeChoice);
 
         btnUtils.setButton(btnReturn, this::onBackPressed);
 
-        btnUtils.setButton(btnWildCardSettings, () -> {
+        btnUtils.setButton(btnWildCardChoice, () -> {
             startActivity(getIntentForClass(Settings_WildCard_Choice.class));
+        });
+
+        btnUtils.setButton(btnWildCardSettings, () -> {
+            startActivity(getIntentForClass(Settings_WildCard_Settings.class));
         });
 
         btnUtils.setButton(btnGameModeSettings, () -> {

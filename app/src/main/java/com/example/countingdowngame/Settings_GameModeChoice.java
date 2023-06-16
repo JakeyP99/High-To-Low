@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
 public class Settings_GameModeChoice extends ButtonUtilsActivity implements View.OnClickListener {
 
@@ -22,7 +21,6 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
     private Button button_regularSound;
     private Button button_burpSound;
     //
-    private static int loadWildCardAmount;
 
     //-----------------------------------------------------On Pause---------------------------------------------------//
 
@@ -119,12 +117,6 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
         btnUtils.toggleMute(); // Toggle the mute state
     }
 
-    //-----------------------------------------------------Get WildCard---------------------------------------------------//
-
-    public static int getLoadWildCardAmount() {
-        return loadWildCardAmount;
-    }
-
 
     //-----------------------------------------------------Load and Save Preferences---------------------------------------------------//
 
@@ -166,11 +158,6 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
             btnMute.setBackground(outlineForButton);
         }
 
-        // Load wildcard amount
-        SharedPreferences wildcardPreferences = getSharedPreferences("wildcard_amount", MODE_PRIVATE);
-        loadWildCardAmount = wildcardPreferences.getInt("wildcardAmount", 1);
-        EditText wildcardPerPlayerEditText = findViewById(R.id.edittext_wildcard_amount);
-        wildcardPerPlayerEditText.setText(String.valueOf(loadWildCardAmount));
 
     }
 
@@ -190,14 +177,11 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
         muteEditor.putBoolean("isMuted", isMuted);
         muteEditor.apply();
 
-        // Save wildcard amount
-        EditText wildcardPerPlayerEditText = findViewById(R.id.edittext_wildcard_amount);
-        int wildCardAmountSetInSettings = Integer.parseInt(wildcardPerPlayerEditText.getText().toString());
-
-        SharedPreferences wildcardPreferences = getSharedPreferences("wildcard_amount", MODE_PRIVATE);
-        SharedPreferences.Editor wildcardEditor = wildcardPreferences.edit();
-        wildcardEditor.putInt("wildcardAmount", wildCardAmountSetInSettings);
-        wildcardEditor.apply();
+        //copyout
+        SharedPreferences soundPreferences = getSharedPreferences("sound_mode_choice", MODE_PRIVATE);
+        SharedPreferences.Editor soundEditor = soundPreferences.edit();
+        soundEditor.putBoolean("button_regularSound", button_regularSound.isSelected());
+        soundEditor.apply();
 
     }
 }

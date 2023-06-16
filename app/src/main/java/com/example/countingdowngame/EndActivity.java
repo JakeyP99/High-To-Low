@@ -41,7 +41,7 @@ public class EndActivity extends ButtonUtilsActivity {
         previousNumbersList.setAdapter(adapter);
         //-----------------------------------------------------Button actions---------------------------------------------------//
 
-        int wildCardAmountSetInSettings = Settings_GameModeChoice.getLoadWildCardAmount();
+        int wildCardAmountSetInSettings = Settings_WildCard_Settings.getLoadWildCardAmount();
         btnUtils.setButton(btnPlayAgain, () -> {
             Game.getInstance().playAgain(wildCardAmountSetInSettings);
             gotoGameStart();

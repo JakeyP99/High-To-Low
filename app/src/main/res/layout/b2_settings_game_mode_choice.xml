@@ -95,28 +95,7 @@
         android:textColor="@color/bluedark"
         android:textSize="23sp" />
 
-    <TextView
-        android:id="@+id/wildCard_Textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/viga"
-        android:gravity="center"
-        android:layout_marginTop="30dp"
-        android:text="Wild Card Settings"
-        android:textColor="@color/bluedark"
-        android:textSize="23sp" />
 
-    <EditText
-        android:id="@+id/edittext_wildcard_amount"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:hint="Enter wildcard amount"
-        android:textAlignment="center"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/outlineforbutton"
-        android:textColorHint="@color/bluedark"
-        android:inputType="number"
-        android:layout_marginHorizontal="32dp" />
 
     <Button
         android:id="@+id/buttonReturn"
