@@ -178,6 +178,11 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
         SharedPreferences.Editor wildcardEditor = wildcardPreferences.edit();
         wildcardEditor.putInt("wildcardAmount", wildcardAmount);
         wildcardEditor.apply();
+
+        // Update the wildcard amount for all players in the game
+        Player player = new Player(null, null); // Create a player instance
+        player.setWildCardAmount(wildcardAmount); // Call the method on the player instance
+
     }
 
 }

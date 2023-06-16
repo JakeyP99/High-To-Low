@@ -36,6 +36,7 @@ public class MainActivity extends ButtonUtilsActivity {
     private ImageView playerImage;
     private boolean doubleBackToExitPressedOnce = false;
     private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
+    private Handler shuffleHandler;
 
     @Override
     public void onBackPressed() {
@@ -69,6 +70,9 @@ public class MainActivity extends ButtonUtilsActivity {
         btnWild = findViewById(R.id.btnWild);
         btnGenerate = findViewById(R.id.btnGenerate);
         btnBackWild = findViewById(R.id.btnBackWildCard);
+
+        shuffleHandler = new Handler();
+
     }
     private void startGame() {
         Bundle extras = getIntent().getExtras();
@@ -110,10 +114,7 @@ public class MainActivity extends ButtonUtilsActivity {
         btnBackWild.setVisibility(View.INVISIBLE);
 
         btnUtils.setButton(btnGenerate, () -> {
-            Game.getInstance().nextNumber(this::gotoGameEnd);
-            numberText.setVisibility(View.VISIBLE);
-            nextPlayerText.setVisibility(View.VISIBLE);
-            wildText.setVisibility(View.INVISIBLE);
+            startNumberShuffleAnimation();
         });
 
         btnUtils.setButton(btnBackWild, () -> {
@@ -140,6 +141,57 @@ public class MainActivity extends ButtonUtilsActivity {
             gotoHomeScreen();
         });
     }
+
+    //-----------------------------------------------------Button Shuffling---------------------------------------------------//
+
+    private void startNumberShuffleAnimation() {
+        // Calculate the range of digits to shuffle based on the current number
+        int currentNumber = Game.getInstance().getCurrentNumber();
+        int[] digits = new int[currentNumber + 1];
+        for (int i = 0; i <= currentNumber; i++) {
+            digits[i] = i;
+        }
+        final int shuffleDuration = 2000;  // 1 second
+        final int shuffleInterval = 100;    // Interval between digit changes (adjust for desired speed)
+
+        final Random random = new Random();
+        shuffleHandler.postDelayed(new Runnable() {
+            int shuffleTime = 0;
+
+            @Override
+            public void run() {
+                // Generate a random digit and display it
+                int randomDigit = digits[random.nextInt(digits.length)];
+                numberText.setText(String.valueOf(randomDigit));
+
+                // Increase the shuffle time
+                shuffleTime += shuffleInterval;
+
+                if (shuffleTime < shuffleDuration) {
+                    // Continue shuffling until the desired duration is reached
+                    shuffleHandler.postDelayed(this, shuffleInterval);
+
+                    btnGenerate.setEnabled(false);
+                    btnWild.setEnabled(false);
+
+                } else {
+                    // Animation finished, generate the final number and display it
+                    int finalNumber = randomDigit;  // Change this as needed based on your game logic
+                    numberText.setText(String.valueOf(finalNumber));
+
+                    // Call the game logic method with the finalNumber
+                    Game.getInstance().nextNumber(() -> gotoGameEnd());
+
+                    // Show other relevant UI elements after number generation
+                    numberText.setVisibility(View.VISIBLE);
+                    nextPlayerText.setVisibility(View.VISIBLE);
+                    btnGenerate.setEnabled(true);
+                    btnWild.setEnabled(true);
+                }
+            }
+        }, shuffleInterval);
+    }
+
 
 
     //-----------------------------------------------------Render Player---------------------------------------------------//
