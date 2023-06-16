@@ -152,18 +152,13 @@ public class Game {
         currentNumber = number;
     }
 
-    public void playAgain() {
-        int wildcardAmount = Settings_GameModeChoice.getWildcardAmount();
+
+    public void playAgain(int wildCardAmountSetInSettings) {
+        gameStarted = false;
         for (Player player : players) {
             if (player != null) {
-                player.setWildcardAmount(wildcardAmount);
+                player.resetAbilities(wildCardAmountSetInSettings);
             }
-        }
-    }
-
-    public void setWildCardAmountForAllPlayers(int wildCardAmount) {
-        for (Player player : players) {
-            player.setWildcardAmount(wildCardAmount);
         }
     }
 }

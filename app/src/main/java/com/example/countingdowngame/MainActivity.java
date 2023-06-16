@@ -92,6 +92,7 @@ public class MainActivity extends ButtonUtilsActivity {
             // Set the game object for each player
             for (Player player : playerList) {
                 player.setGame(Game.getInstance());
+                player.getWildCardAmountFromSettings(this); // Set the wildcard amount
             }
         }
 
@@ -100,7 +101,6 @@ public class MainActivity extends ButtonUtilsActivity {
                 renderPlayer();
             }
         });
-
         renderPlayer();
     }
 
@@ -210,7 +210,7 @@ public class MainActivity extends ButtonUtilsActivity {
             String playerImageString = currentPlayer.getPhoto();
 
             nextPlayerText.setText(playerName + "'s Turn");
-            btnWild.setText((currentPlayer.getWildCardAmountSpecificToEachPlayer()) + "\n" + "Wild Cards");
+            btnWild.setText((currentPlayer.getWildCardAmountFromSettings(this)) + "\n" + "Wild Cards");
 
             if (playerImageString != null) {
                 byte[] decodedString = Base64.decode(playerImageString, Base64.DEFAULT);
@@ -219,7 +219,7 @@ public class MainActivity extends ButtonUtilsActivity {
             }
         }
 
-        if (currentPlayer.getWildCardAmountSpecificToEachPlayer() > -3) {
+        if (currentPlayer.getWildCardAmountFromSettings(this) > -3) {
             btnWild.setVisibility(View.VISIBLE);
         } else {
             btnWild.setVisibility(View.INVISIBLE);
@@ -235,7 +235,7 @@ public class MainActivity extends ButtonUtilsActivity {
     //-----------------------------------------------------Wild Card, and Skip Functionality---------------------------------------------------//
 
     private void wildCardActivate(Player player) {
-
+        Game.getInstance().getCurrentPlayer().useWildCard();
         Settings_WildCard_Choice settings = new Settings_WildCard_Choice();
         Settings_WildCard_Probabilities[][] probabilitiesArray = settings.loadWildCardProbabilitiesFromStorage(getApplicationContext());
 
@@ -247,7 +247,7 @@ public class MainActivity extends ButtonUtilsActivity {
         allProbabilities.addAll(Arrays.asList(nonDeletableProbabilities));
 
         final TextView wildActivityTextView = findViewById(R.id.wild_textview);
-        player.useWildCard();
+
 
         boolean wildCardsEnabled = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("wild_cards_toggle", true);
 

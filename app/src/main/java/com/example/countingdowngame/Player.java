@@ -1,10 +1,16 @@
 package com.example.countingdowngame;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 class Player implements Serializable {
+
+    //-----------------------------------------------------Initialize---------------------------------------------------//
+
     private final String photo;
     private String name;
     private Game game;
@@ -12,11 +18,13 @@ class Player implements Serializable {
     private int wildCardAmount = 0;
     private boolean selected;
 
+    //-----------------------------------------------------Set Game---------------------------------------------------//
 
-    public void setWildcardAmount(int wildCardAmount) {
-        this.wildCardAmount = wildCardAmount;
+    public void setGame(Game game) {
+        this.game = game;
     }
 
+    //-----------------------------------------------------Player---------------------------------------------------//
     public Player(String photo, String name) {
         this.photo = photo;
         this.name = name;
@@ -35,8 +43,19 @@ class Player implements Serializable {
         return photo;
     }
 
+    public boolean isSelected() {
+        return selected;
+    }
 
-    public int getWildCardAmountSpecificToEachPlayer() {
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    //-----------------------------------------------------Wild Card/Skip---------------------------------------------------//
+
+    public int getWildCardAmountFromSettings(Context context) {
+        SharedPreferences wildcardPreferences = context.getSharedPreferences("wildcard_amount", Context.MODE_PRIVATE);
+        wildCardAmount = wildcardPreferences.getInt("wildcardAmount", 0);
         return wildCardAmount;
     }
 
@@ -44,7 +63,7 @@ class Player implements Serializable {
         if (game != null) {
             game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.WILD_CARD));
         }
-        wildCardAmount--;
+        wildCardAmount--; // Decrease the wildcard amount
     }
 
     public void useSkip() {
@@ -54,21 +73,9 @@ class Player implements Serializable {
     public void addUsedWildCard(Settings_WildCard_Probabilities usedWildCard) {
         usedWildCards.add(usedWildCard);
     }
+    //-----------------------------------------------------Reset Abilities---------------------------------------------------//
 
-    public void resetAbilities(int wildCardAmountSetInSettings) {
-        this.wildCardAmount = wildCardAmountSetInSettings;
-    }
-
-
-    public boolean isSelected() {
-        return selected;
-    }
-
-    public void setSelected(boolean selected) {
-        this.selected = selected;
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
+    public void resetAbilities(int wildCardAmount) {
+        this.wildCardAmount = wildCardAmount;
     }
 }

@@ -8,15 +8,23 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class Settings_GameModeChoice extends ButtonUtilsActivity implements View.OnClickListener {
+
+    //-----------------------------------------------------Initialize---------------------------------------------------//
+
     private Button button_gameModeOne;
     private Button button_gameModeTwo;
-
     private Drawable buttonHighlightDrawable;
     private Drawable outlineForButton;
     private Button btnReturn;
     private Button btnMute;
 
-    private static int wildcardAmount; // Change to static variable
+    //copyout
+    private Button button_regularSound;
+    private Button button_burpSound;
+    //
+    private static int loadWildCardAmount;
+
+    //-----------------------------------------------------On Pause---------------------------------------------------//
 
     @Override
     protected void onPause() {
@@ -24,13 +32,9 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
         savePreferences();
     }
 
-    public static int getWildcardAmount() {
-        return wildcardAmount;
-    }
 
-    //copyout
-    private Button button_regularSound;
-    private Button button_burpSound;
+    //-----------------------------------------------------On Create---------------------------------------------------//
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,22 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
         setButtonListeners();
     }
 
+    //-----------------------------------------------------Initialize Views---------------------------------------------------//
+
+    private void initializeViews() {
+        button_gameModeOne = findViewById(R.id.button_gameModeOne);
+        button_gameModeTwo = findViewById(R.id.button_gameModeTwo);
+        buttonHighlightDrawable = getResources().getDrawable(R.drawable.buttonhighlight);
+        outlineForButton = getResources().getDrawable(R.drawable.outlineforbutton);
+        btnReturn = findViewById(R.id.buttonReturn);
+        btnMute = findViewById(R.id.button_mute);
+        //copyout
+        button_regularSound = findViewById(R.id.button_normal_sound);
+        button_burpSound = findViewById(R.id.button_burp_sound);
+    }
+
+    //-----------------------------------------------------Button Clicks---------------------------------------------------//
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -50,7 +70,9 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
             case R.id.button_gameModeTwo:
                 toggleButton(button_gameModeTwo, button_gameModeOne);
                 break;
-
+            case R.id.button_mute:
+                toggleMuteButton();
+                break;
             //copyout
             case R.id.button_normal_sound:
                 toggleButton(button_regularSound, button_burpSound);
@@ -58,70 +80,9 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
             case R.id.button_burp_sound:
                 toggleButton(button_burpSound, button_regularSound);
                 break;
-            case R.id.button_mute:
-                toggleMuteButton();
-                break;
+            //
         }
         savePreferences();
-    }
-
-    private void initializeViews() {
-        button_gameModeOne = findViewById(R.id.button_gameModeOne);
-        button_gameModeTwo = findViewById(R.id.button_gameModeTwo);
-        buttonHighlightDrawable = getResources().getDrawable(R.drawable.buttonhighlight);
-        outlineForButton = getResources().getDrawable(R.drawable.outlineforbutton);
-        btnReturn = findViewById(R.id.buttonReturn);
-        btnMute = findViewById(R.id.button_mute);
-
-        //copyout
-        button_regularSound = findViewById(R.id.button_normal_sound);
-        button_burpSound = findViewById(R.id.button_burp_sound);
-    }
-
-    private void loadPreferences() {
-        //copyout
-        SharedPreferences soundPreferences = getSharedPreferences("sound_mode_choice", MODE_PRIVATE);
-        boolean regularSoundSelected = soundPreferences.getBoolean("button_regularSound", true);
-        button_regularSound.setSelected(regularSoundSelected);
-        button_burpSound.setSelected(!regularSoundSelected);
-
-        if (regularSoundSelected) {
-            button_regularSound.setBackground(buttonHighlightDrawable);
-            button_burpSound.setBackground(outlineForButton);
-        } else {
-            button_regularSound.setBackground(outlineForButton);
-            button_burpSound.setBackground(buttonHighlightDrawable);
-        }
-
-        SharedPreferences gameModePreferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
-        boolean buttonOneSelected = gameModePreferences.getBoolean("button_gameModeOne", true);
-        button_gameModeOne.setSelected(buttonOneSelected);
-        button_gameModeTwo.setSelected(!buttonOneSelected);
-
-        if (buttonOneSelected) {
-            button_gameModeOne.setBackground(buttonHighlightDrawable);
-            button_gameModeTwo.setBackground(outlineForButton);
-        } else {
-            button_gameModeOne.setBackground(outlineForButton);
-            button_gameModeTwo.setBackground(buttonHighlightDrawable);
-        }
-
-        SharedPreferences mutePreferences = getSharedPreferences("mute_state", MODE_PRIVATE);
-        boolean isMuted = mutePreferences.getBoolean("isMuted", false);
-        btnMute.setSelected(isMuted);
-
-        if (isMuted) {
-            btnMute.setBackground(buttonHighlightDrawable);
-        } else {
-            btnMute.setBackground(outlineForButton);
-        }
-
-        // Load wildcard amount
-        SharedPreferences wildcardPreferences = getSharedPreferences("wildcard_amount", MODE_PRIVATE);
-        wildcardAmount = wildcardPreferences.getInt("wildcardAmount", 1);
-        EditText wildcardPerPlayerEditText = findViewById(R.id.edittext_wildcard_amount);
-        wildcardPerPlayerEditText.setText(String.valueOf(wildcardAmount));
-
     }
 
     private void setButtonListeners() {
@@ -158,6 +119,62 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
         btnUtils.toggleMute(); // Toggle the mute state
     }
 
+    //-----------------------------------------------------Get WildCard---------------------------------------------------//
+
+    public static int getLoadWildCardAmount() {
+        return loadWildCardAmount;
+    }
+
+
+    //-----------------------------------------------------Load and Save Preferences---------------------------------------------------//
+
+    private void loadPreferences() {
+        //copyout
+        SharedPreferences soundPreferences = getSharedPreferences("sound_mode_choice", MODE_PRIVATE);
+        boolean regularSoundSelected = soundPreferences.getBoolean("button_regularSound", true);
+        button_regularSound.setSelected(regularSoundSelected);
+        button_burpSound.setSelected(!regularSoundSelected);
+//
+        if (regularSoundSelected) {
+            button_regularSound.setBackground(buttonHighlightDrawable);
+            button_burpSound.setBackground(outlineForButton);
+        } else {
+            button_regularSound.setBackground(outlineForButton);
+            button_burpSound.setBackground(buttonHighlightDrawable);
+        }
+
+        SharedPreferences gameModePreferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
+        boolean buttonOneSelected = gameModePreferences.getBoolean("button_gameModeOne", true);
+        button_gameModeOne.setSelected(buttonOneSelected);
+        button_gameModeTwo.setSelected(!buttonOneSelected);
+
+        if (buttonOneSelected) {
+            button_gameModeOne.setBackground(buttonHighlightDrawable);
+            button_gameModeTwo.setBackground(outlineForButton);
+        } else {
+            button_gameModeOne.setBackground(outlineForButton);
+            button_gameModeTwo.setBackground(buttonHighlightDrawable);
+        }
+
+        SharedPreferences mutePreferences = getSharedPreferences("mute_state", MODE_PRIVATE);
+        boolean isMuted = mutePreferences.getBoolean("isMuted", false);
+        btnMute.setSelected(isMuted);
+
+        if (isMuted) {
+            btnMute.setBackground(buttonHighlightDrawable);
+        } else {
+            btnMute.setBackground(outlineForButton);
+        }
+
+        // Load wildcard amount
+        SharedPreferences wildcardPreferences = getSharedPreferences("wildcard_amount", MODE_PRIVATE);
+        loadWildCardAmount = wildcardPreferences.getInt("wildcardAmount", 1);
+        EditText wildcardPerPlayerEditText = findViewById(R.id.edittext_wildcard_amount);
+        wildcardPerPlayerEditText.setText(String.valueOf(loadWildCardAmount));
+
+    }
+
+
     private void savePreferences() {
         SharedPreferences gameModePreferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
         SharedPreferences.Editor gameModeEditor = gameModePreferences.edit();
@@ -181,10 +198,6 @@ public class Settings_GameModeChoice extends ButtonUtilsActivity implements View
         SharedPreferences.Editor wildcardEditor = wildcardPreferences.edit();
         wildcardEditor.putInt("wildcardAmount", wildCardAmountSetInSettings);
         wildcardEditor.apply();
-
-        // Update the wildcard amount for all players in the game
-        Game game = Game.getInstance();
-        game.setWildCardAmountForAllPlayers(wildCardAmountSetInSettings);
 
     }
 }
