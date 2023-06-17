@@ -107,7 +107,6 @@ public class MainActivity extends ButtonUtilsActivity {
             // Set the game object for each player
             for (Player player : playerList) {
                 player.setGame(Game.getInstance());
-                player.getWildCardAmountFromSettings(this); // Set the wildcard amount
             }
         }
 
@@ -225,7 +224,7 @@ public class MainActivity extends ButtonUtilsActivity {
             String playerImageString = currentPlayer.getPhoto();
 
             nextPlayerText.setText(playerName + "'s Turn");
-            btnWild.setText((currentPlayer.getWildCardAmountFromSettings(this)) + "\n" + "Wild Cards");
+            btnWild.setText((currentPlayer.getWildCardAmount()) + "\n" + "Wild Cards");
 
             if (playerImageString != null) {
                 byte[] decodedString = Base64.decode(playerImageString, Base64.DEFAULT);
@@ -234,7 +233,7 @@ public class MainActivity extends ButtonUtilsActivity {
             }
         }
 
-        if (currentPlayer.getWildCardAmountFromSettings(this) > 0) {
+        if (currentPlayer.getWildCardAmount() > -2) {
             btnWild.setVisibility(View.VISIBLE);
         } else {
             btnWild.setVisibility(View.INVISIBLE);

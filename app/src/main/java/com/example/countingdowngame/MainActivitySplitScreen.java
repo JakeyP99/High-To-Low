@@ -172,8 +172,8 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
             nextPlayerText.setText(playerName);
             nextPlayerTextPlayer2.setText(playerName);
-            btnWild.setText(currentPlayer.getWildCardAmountFromSettings(this) + "\n" + "Wild Cards");
-            btnWildPlayer2.setText(currentPlayer.getWildCardAmountFromSettings(this) + "\n" + "Wild Cards");
+            btnWild.setText(currentPlayer.getWildCardAmount() + "\n" + "Wild Cards");
+            btnWildPlayer2.setText(currentPlayer.getWildCardAmount() + "\n" + "Wild Cards");
 
             if (playerImageString != null) {
                 byte[] decodedString = Base64.decode(playerImageString, Base64.DEFAULT);
@@ -185,7 +185,7 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         }
 
 
-        if (currentPlayer.getWildCardAmountFromSettings(this) > -2) {
+        if (currentPlayer.getWildCardAmount() > -2) {
             btnWild.setVisibility(View.VISIBLE);
             btnWildPlayer2.setVisibility(View.VISIBLE);
         } else {

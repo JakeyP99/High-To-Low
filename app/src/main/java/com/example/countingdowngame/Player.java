@@ -1,8 +1,5 @@
 package com.example.countingdowngame;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +12,7 @@ class Player implements Serializable {
     private String name;
     private Game game;
     private final Set<Settings_WildCard_Probabilities> usedWildCards = new HashSet<>();
-    private int wildCardAmount = 0;
+    private int wildCardAmount = 3;
     private boolean selected;
 
     //-----------------------------------------------------Set Game---------------------------------------------------//
@@ -53,9 +50,13 @@ class Player implements Serializable {
 
     //-----------------------------------------------------Wild Card/Skip---------------------------------------------------//
 
-    public int getWildCardAmountFromSettings(Context context) {
-        SharedPreferences wildcardPreferences = context.getSharedPreferences("wildcard_amount", Context.MODE_PRIVATE);
-        wildCardAmount = wildcardPreferences.getInt("wildcardAmount", 0);
+//    public int getWildCardAmountFromSettings(Context context) {
+//        SharedPreferences wildcardPreferences = context.getSharedPreferences("wildcard_amount", Context.MODE_PRIVATE);
+//        wildCardAmount = wildcardPreferences.getInt("wildcardAmount", 0);
+//        return wildCardAmount;
+//    }
+
+    public int getWildCardAmount() {
         return wildCardAmount;
     }
 
@@ -75,7 +76,12 @@ class Player implements Serializable {
     }
     //-----------------------------------------------------Reset Abilities---------------------------------------------------//
 
+//    public void resetAbilities() {
+//        this.wildCardAmount = wildCardAmount;
+//    }
+
     public void resetAbilities() {
-        this.wildCardAmount = wildCardAmount;
+        this.wildCardAmount = 3;
     }
+
 }
