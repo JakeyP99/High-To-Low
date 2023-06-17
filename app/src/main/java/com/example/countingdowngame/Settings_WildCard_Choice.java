@@ -55,11 +55,6 @@ public class Settings_WildCard_Choice extends ButtonUtilsActivity {
             });
         }
 
-
-
-
-
-
     private void addNewWildCard() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add New Wildcard");

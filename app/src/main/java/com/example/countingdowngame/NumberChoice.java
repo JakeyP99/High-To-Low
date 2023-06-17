@@ -60,7 +60,7 @@ public class NumberChoice extends ButtonUtilsActivity {
         startingNumber = inputNumber;
 
         YoYo.with(Techniques.RubberBand)
-                .duration(1000)
+                .duration(300)
                 .onEnd(animator -> {
                     // Animation has ended, start the MainActivity here
                     startMainActivity();

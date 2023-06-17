@@ -75,7 +75,7 @@ class Player implements Serializable {
     }
     //-----------------------------------------------------Reset Abilities---------------------------------------------------//
 
-    public void resetAbilities(int wildCardAmount) {
+    public void resetAbilities() {
         this.wildCardAmount = wildCardAmount;
     }
 }

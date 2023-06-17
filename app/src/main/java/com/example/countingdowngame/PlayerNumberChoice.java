@@ -46,7 +46,7 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
 
 
             YoYo.with(Techniques.RubberBand)
-                    .duration(500)
+                    .duration(300)
                     .onEnd(animator -> {
                         // Animation has ended, start the MainActivity here
                         startActivity(getIntentForClass(PlayerModel.class, true));

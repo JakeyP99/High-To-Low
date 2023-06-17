@@ -28,5 +28,6 @@ public class Settings extends ButtonUtilsActivity {
         btnUtils.setButton(btnGameModeSettings, () -> {
             startActivity(getIntentForClass(Settings_GameModeChoice.class));
         });
+
     }
 }

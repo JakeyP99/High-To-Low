@@ -219,7 +219,7 @@ public class MainActivity extends ButtonUtilsActivity {
             }
         }
 
-        if (currentPlayer.getWildCardAmountFromSettings(this) > -3) {
+        if (currentPlayer.getWildCardAmountFromSettings(this) > 0) {
             btnWild.setVisibility(View.VISIBLE);
         } else {
             btnWild.setVisibility(View.INVISIBLE);

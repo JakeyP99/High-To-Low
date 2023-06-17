@@ -4,8 +4,23 @@ import android.os.Bundle;
 import android.widget.Button;
 
 public class HomeScreen extends ButtonUtilsActivity {
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AudioManager.getInstance().playSound(); // Start playing the sound
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AudioManager.getInstance().stopSound(); // Stop the sound
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        AudioManager.getInstance().initialize(this, "cartoonloop");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a1_home_screen);
 
@@ -18,6 +33,7 @@ public class HomeScreen extends ButtonUtilsActivity {
         btnUtils.setButton(btnInstructions, this::gotoInstructions);
 
         btnUtils.setButton(btnSettings, this::gotoSettings);
+
     }
 }
 
