@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+
 import java.util.Random;
 
 
@@ -54,12 +57,18 @@ public class NumberChoice extends ButtonUtilsActivity {
                     .show();
             return;
         }
-
         startingNumber = inputNumber;
+
+        YoYo.with(Techniques.RubberBand)
+                .duration(1000)
+                .onEnd(animator -> {
+                    // Animation has ended, start the MainActivity here
+                    startMainActivity();
+                })
+                .playOn(originalNumberField);
 
         originalNumberField.setFocusable(false);
 
-        startMainActivity();
     }
 
     private void onRandomClicked() {

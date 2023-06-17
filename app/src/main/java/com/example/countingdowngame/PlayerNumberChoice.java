@@ -7,6 +7,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+
 public class PlayerNumberChoice extends ButtonUtilsActivity {
     private EditText originalPlayerField;
 
@@ -41,8 +44,17 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
                 return;
             }
 
+
+            YoYo.with(Techniques.RubberBand)
+                    .duration(500)
+                    .onEnd(animator -> {
+                        // Animation has ended, start the MainActivity here
+                        startActivity(getIntentForClass(PlayerModel.class, true));
+                    })
+                    .playOn(originalPlayerField);
+
+            originalPlayerField.setFocusable(false);
             Game.getInstance().setPlayers(inputNumber);
-            startActivity(getIntentForClass(PlayerModel.class, true));
 
         } catch (NumberFormatException e) {
             Toast.makeText(PlayerNumberChoice.this, "Invalid player count", Toast.LENGTH_SHORT).show();
