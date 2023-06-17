@@ -12,7 +12,7 @@ class Player implements Serializable {
     private String name;
     private Game game;
     private final Set<Settings_WildCard_Probabilities> usedWildCards = new HashSet<>();
-    private int wildCardAmount = 3;
+    private int wildCardAmount = 5;
     private boolean selected;
 
     //-----------------------------------------------------Set Game---------------------------------------------------//
@@ -81,7 +81,7 @@ class Player implements Serializable {
 //    }
 
     public void resetAbilities() {
-        this.wildCardAmount = 3;
+        this.wildCardAmount = 5 ;
     }
 
 }
