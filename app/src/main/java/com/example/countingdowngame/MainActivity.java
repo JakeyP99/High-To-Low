@@ -25,6 +25,19 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MainActivity extends ButtonUtilsActivity {
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AudioManager.getInstance().playSound(); // Start playing the sound
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AudioManager.getInstance().stopSound(); // Stop the sound
+    }
+
     private final Map<Player, Set<Settings_WildCard_Probabilities>> usedWildCard = new HashMap<>();
     private final Set<Settings_WildCard_Probabilities> usedWildCards = new HashSet<>();
     private TextView numberText;
@@ -75,6 +88,8 @@ public class MainActivity extends ButtonUtilsActivity {
 
     }
     private void startGame() {
+        AudioManager.getInstance().initialize(this, "cartoonloop");
+
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
             throw new RuntimeException("Missing extras");
@@ -151,7 +166,7 @@ public class MainActivity extends ButtonUtilsActivity {
         for (int i = 0; i <= currentNumber; i++) {
             digits[i] = i;
         }
-        final int shuffleDuration = 1500;  // 1 second
+        final int shuffleDuration = 1500;
 
         int shuffleInterval; // Declare the variable outside the if-else block
 
