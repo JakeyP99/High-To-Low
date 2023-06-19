@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -36,7 +35,6 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View view = inflater.inflate(R.layout.list_view_wild_cards, null);
 
-        Button editButton = view.findViewById(R.id.button_edit_probability);
         TextView textViewWildCard = view.findViewById(R.id.textview_wildcard);
         TextView textViewProbability = view.findViewById(R.id.textview_probability);
         Switch switchWildCard = view.findViewById(R.id.switch_wildcard);

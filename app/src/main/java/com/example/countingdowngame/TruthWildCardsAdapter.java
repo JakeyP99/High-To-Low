@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,17 +59,29 @@ public class TruthWildCardsAdapter extends RecyclerView.Adapter<TruthWildCardsAd
         private TextView textViewTitle;
         private TextView textViewProbabilities;
         private Button editButton;
+        private Switch switchEnabled;
 
         public TruthWildCardViewHolder(View itemView) {
             super(itemView);
             textViewTitle = itemView.findViewById(R.id.textview_wildcard);
             editButton = itemView.findViewById(R.id.button_edit_probability);
             textViewProbabilities = itemView.findViewById(R.id.textview_probability);
+            switchEnabled = itemView.findViewById(R.id.switch_wildcard);
+
         }
 
         public void bind(Settings_WildCard_Probabilities wildcard) {
             textViewTitle.setText(wildcard.getText());
             textViewProbabilities.setText(String.valueOf(wildcard.getProbability()));
+
+            switchEnabled.setChecked(wildcard.isEnabled());
+
+
+            switchEnabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                wildcard.setEnabled(isChecked);
+                saveWildCardProbabilitiesToStorage(mMode, truthWildCards);
+            });
+
 
             editButton.setOnClickListener(v -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
@@ -214,6 +227,7 @@ public class TruthWildCardsAdapter extends RecyclerView.Adapter<TruthWildCardsAd
 
         editor.apply();
     }
+
 
 
     private void setProbabilitySizeBasedOnString(TextView textView, String text) {
