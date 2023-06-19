@@ -23,16 +23,19 @@
         android:layout_below="@id/textview_banner"
         android:layout_alignParentEnd="true"
         android:background="@color/white"
-        android:textColor="@color/bluedark"
+        android:textColor="@color/white"
         android:textSize="16sp"
         android:contentDescription="tablayout" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="657dp"
+        android:layout_above="@+id/btnAddWildCard"
         android:layout_below="@id/tablayout"
+        android:layout_marginBottom="20dp"
         android:contentDescription="viewpager" />
+
 
     <Button
         android:id="@+id/btnAddWildCard"
@@ -64,5 +67,4 @@
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
         android:textSize="20sp" />
-
 </RelativeLayout>

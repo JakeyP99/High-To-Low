@@ -1,6 +1,13 @@
 package com.example.countingdowngame;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class TruthWildCardsFragment extends Fragment {
     Settings_WildCard_Probabilities[] truthWildCards = {
@@ -17,4 +24,19 @@ public class TruthWildCardsFragment extends Fragment {
             new Settings_WildCard_Probabilities("Truth! Have you ever caused someone to lose their job?", 10, true, true),
             new Settings_WildCard_Probabilities("Truth! Have you ever destroyed evidence to cover up your wrongdoing?", 10, true, true),
     };
+
+    private RecyclerView recyclerView;
+    private TruthWildCardsAdapter adapter;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_truth_wildcards, container, false);
+
+        recyclerView = view.findViewById(R.id.recyclerView_WildCard);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        adapter = new TruthWildCardsAdapter(truthWildCards);
+        recyclerView.setAdapter(adapter);
+
+        return view;
+    }
 }
