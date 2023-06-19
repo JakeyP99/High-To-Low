@@ -30,7 +30,7 @@ public class Instructions extends ButtonUtilsActivity {
         setContentView(R.layout.c1_instructions_layout);
 
         final Button btnBack = findViewById(R.id.buttonReturn);
-        final ViewPager viewPager = findViewById(R.id.viewPager);
+        final ViewPager viewPager = findViewById(R.id.viewpager);
         final ProgressBar progressBar = findViewById(R.id.progress_bar);
 
         btnUtils.setButton(btnBack, this::onBackPressed);

@@ -17,20 +17,22 @@
         android:textSize="23sp" />
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
+        android:id="@+id/tablayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/textview_banner"
         android:layout_alignParentEnd="true"
-        android:background="@color/bluedark"
-        android:textColor="@color/white"
-        android:textSize="16sp" />
+        android:background="@color/white"
+        android:textColor="@color/bluedark"
+        android:textSize="16sp"
+        android:contentDescription="tablayout" />
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewPager"
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tabLayout" />
+        android:layout_below="@id/tablayout"
+        android:contentDescription="viewpager" />
 
     <Button
         android:id="@+id/btnAddWildCard"

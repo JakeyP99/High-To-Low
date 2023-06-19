@@ -34,10 +34,12 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
         mProbabilities = probabilities;
         mMode = mode;
     }
+
     @Override
     public int getCount() {
         return mProbabilities.length;
     }
+
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -80,7 +82,6 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
             layout.addView(probabilityInput);
 
 
-
             builder.setView(layout);
 
             builder.setNegativeButton(Html.fromHtml("<font color='" + blueDarkColor + "'>Cancel</font>"), (dialog, which) -> dialog.cancel());
@@ -117,7 +118,7 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
                     return;
                 }
 
-                if (textInput.length() > 100 ) {
+                if (textInput.length() > 100) {
                     Toast.makeText(Settings_WildCard_Adapter.this.getContext(), "Sorry, way too big of a wildcard boss man, limited to 100 characters.", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -166,7 +167,6 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
     }
 
 
-
     private void setTextViewSizeBasedOnString(TextView textView, String text) {
         int textSize = 20;
         if (text.length() > 20) {
@@ -188,18 +188,13 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
     }
 
     public static class WildCardsPagerAdapter extends FragmentPagerAdapter {
-        private static final int NUM_TABS = 3;
-         final Settings_WildCard_Choice mContext;
-         final Settings_WildCard_Mode mMode;
-         Settings_WildCard_Mode mProbabilities;
+        private static final int TAB_COUNT = 3;
 
-        public WildCardsPagerAdapter(FragmentManager fragmentManager, Settings_WildCard_Choice context, Settings_WildCard_Mode mode, Settings_WildCard_Mode probabilities) {
-            super(fragmentManager);
-            mContext = context;
-            mMode = mode;
-            mProbabilities = probabilities;
+        public WildCardsPagerAdapter(FragmentManager fm) {
+            super(fm);
         }
 
+        @NonNull
         @Override
         public Fragment getItem(int position) {
             switch (position) {
@@ -216,19 +211,19 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
 
         @Override
         public int getCount() {
-            return NUM_TABS;
+            return TAB_COUNT;
         }
 
-
+        @Nullable
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Quiz WildCards";
+                    return "Quiz";
                 case 1:
-                    return "Task WildCards";
+                    return "Task";
                 case 2:
-                    return "Truth WildCards";
+                    return "Truth";
                 default:
                     return super.getPageTitle(position);
             }

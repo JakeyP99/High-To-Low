@@ -17,10 +17,10 @@ public class WildCardsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.b2_settings_wildcard_Page1, container, false);
+        View view = inflater.inflate(R.layout.b2_settings_wildcard_page1, container, false);
 
-        tabLayout = view.findViewById(R.id.tabLayout);
-        viewPager = view.findViewById(R.id.viewPager);
+        tabLayout = view.findViewById(R.id.tablayout);
+        viewPager = view.findViewById(R.id.viewpager);
 
         return view;
     }

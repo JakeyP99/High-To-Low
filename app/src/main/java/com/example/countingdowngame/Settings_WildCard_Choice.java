@@ -35,7 +35,7 @@ public class Settings_WildCard_Choice extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.b2_settings_wildcard_Page1);
+        setContentView(R.layout.b2_settings_wildcard_page1);
 
 
         Settings_WildCard_Probabilities[][] wildCardArrays = loadWildCardProbabilitiesFromStorage(getApplicationContext());
@@ -57,14 +57,14 @@ public class Settings_WildCard_Choice extends ButtonUtilsActivity {
         });
 
         // Initialize ViewPager and Adapter
-        viewPager = findViewById(R.id.viewPager);
-        pagerAdapter = new Settings_WildCard_Adapter.WildCardsPagerAdapter(getSupportFragmentManager(), this, mMode, mProbabilities);
+        viewPager = findViewById(R.id.viewpager);
+        pagerAdapter = new Settings_WildCard_Adapter.WildCardsPagerAdapter(getSupportFragmentManager());
 
         // Set Adapter to ViewPager
         viewPager.setAdapter(pagerAdapter);
 
         // Setup TabLayout with ViewPager
-        TabLayout tabLayout = findViewById(R.id.tabLayout);
+        TabLayout tabLayout = findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
     }
 
