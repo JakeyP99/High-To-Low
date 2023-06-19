@@ -12,7 +12,6 @@ public class Settings_WildCard_Probabilities {
         this.enabled = enabled;
         this.deletable = deletable;
     }
-
     public boolean isEnabled() {
         return enabled;
     }
@@ -41,4 +40,6 @@ public class Settings_WildCard_Probabilities {
     public boolean isDeletable() {
         return deletable;
     }
-}
+
+
+    }
