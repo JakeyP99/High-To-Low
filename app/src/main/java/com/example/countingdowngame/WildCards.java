@@ -1,7 +1,7 @@
 package com.example.countingdowngame;
 
 public class WildCards {
-    public static Settings_WildCard_Probabilities[] getDeletableProbabilities() {
+    public static Settings_WildCard_Probabilities[] getDeletableWildCards() {
         return new Settings_WildCard_Probabilities[]{
                 new Settings_WildCard_Probabilities("Task! Take 1 drink.", 10, true, true),
                 new Settings_WildCard_Probabilities("Task! Take 2 drinks.", 10, true, true),
@@ -120,6 +120,12 @@ public class WildCards {
     }
 
 
-
-
+    public static Settings_WildCard_Probabilities[] getNonDeletableWildcards() {
+        return new Settings_WildCard_Probabilities[]{
+                new Settings_WildCard_Probabilities("Double the current number and go again!", 80, true, false),
+                new Settings_WildCard_Probabilities("Half the current number and go again!", 80, true, false),
+                new Settings_WildCard_Probabilities("Reset the number!", 80, true, false),
+                new Settings_WildCard_Probabilities("Reverse the turn order!", 80, true, false),
+        };
+    }
 }

@@ -146,16 +146,14 @@ public class Settings_WildCard_Choice extends ButtonUtilsActivity {
         nonDeletableAdapter.notifyDataSetChanged(); // Notify the non-deletable adapter that the data has changed
     }
 
-
-
     Settings_WildCard_Probabilities[][] loadWildCardProbabilitiesFromStorage(Context context) {
         SharedPreferences deletablePrefs = context.getSharedPreferences("DeletablePrefs", MODE_PRIVATE);
         SharedPreferences nonDeletablePrefs = context.getSharedPreferences("NonDeletablePrefs", MODE_PRIVATE);
 
-        Settings_WildCard_Probabilities[] deletableProbabilities = WildCards.getDeletableProbabilities();
-
-
+        // Load deletable wild card probabilities
+        Settings_WildCard_Probabilities[] deletableProbabilities = WildCards.getDeletableWildCards();
         int deletableCount = deletablePrefs.getInt("wild_card_count", deletableProbabilities.length);
+
         if (deletableCount > deletableProbabilities.length) {
             deletableProbabilities = Arrays.copyOf(deletableProbabilities, deletableCount);
         }
@@ -176,35 +174,29 @@ public class Settings_WildCard_Choice extends ButtonUtilsActivity {
                 probability = deletablePrefs.getInt("wild_card_probability_" + i, 0);
             }
 
-
             deletableProbabilities[i] = new Settings_WildCard_Probabilities(activity, probability, enabled, true);
         }
 
-        Settings_WildCard_Probabilities[] nonDeletableProbabilities = new Settings_WildCard_Probabilities[]{
-                new Settings_WildCard_Probabilities("Double the current number and go again!", 80, true, false),
-                new Settings_WildCard_Probabilities("Half the current number and go again!", 80, true, false),
-                new Settings_WildCard_Probabilities("Reset the number!", 80, true, false),
-                new Settings_WildCard_Probabilities("Reverse the turn order!", 80, true, false),
-
-        };
-
+        // Load non-deletable wild card probabilities
+        Settings_WildCard_Probabilities[] nonDeletableProbabilities = WildCards.getNonDeletableWildcards();
         int nonDeletableCount = nonDeletablePrefs.getInt("wild_card_count", nonDeletableProbabilities.length);
+
         if (nonDeletableCount > nonDeletableProbabilities.length) {
             nonDeletableProbabilities = Arrays.copyOf(nonDeletableProbabilities, nonDeletableCount);
         }
 
         for (int i = 0; i < nonDeletableProbabilities.length; i++) {
-
             Settings_WildCard_Probabilities p = nonDeletableProbabilities[i];
-
             boolean enabled = nonDeletablePrefs.getBoolean("wild_card_enabled_" + i, p.isEnabled());
             int probability = nonDeletablePrefs.getInt("wild_card_probability_" + i, p.getProbability());
-
             nonDeletableProbabilities[i] = new Settings_WildCard_Probabilities(p.getText(), probability, enabled, false);
         }
 
-        return new Settings_WildCard_Probabilities[][]{deletableProbabilities, nonDeletableProbabilities};
+        return new Settings_WildCard_Probabilities[][] { deletableProbabilities, nonDeletableProbabilities };
     }
+
+
+
     public void saveWildCardProbabilitiesToStorage(Settings_WildCard_Mode mode, Settings_WildCard_Probabilities[] probabilities) {
         switch (mode) {
             case DELETABLE: {
