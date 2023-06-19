@@ -27,6 +27,7 @@ public class TruthWildCardsFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private TruthWildCardsAdapter adapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_truth_wildcards, container, false);
@@ -34,7 +35,9 @@ public class TruthWildCardsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView_WildCard);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        adapter = new TruthWildCardsAdapter(truthWildCards);
+        Settings_WildCard_Mode mode = Settings_WildCard_Mode.DELETABLE;
+
+        TruthWildCardsAdapter adapter = new TruthWildCardsAdapter(truthWildCards, requireContext(), mode);
         recyclerView.setAdapter(adapter);
 
         return view;
