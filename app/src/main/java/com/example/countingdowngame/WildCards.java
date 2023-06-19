@@ -2,7 +2,7 @@ package com.example.countingdowngame;
 
 public class WildCards {
     public static Settings_WildCard_Probabilities[] getDeletableWildCards() {
-        return new Settings_WildCard_Probabilities[]{
+        Settings_WildCard_Probabilities[] taskWildCards = {
                 new Settings_WildCard_Probabilities("Task! Take 1 drink.", 10, true, true),
                 new Settings_WildCard_Probabilities("Task! Take 2 drinks.", 10, true, true),
                 new Settings_WildCard_Probabilities("Task! Take 3 drinks.", 10, true, true),
@@ -53,7 +53,9 @@ public class WildCards {
                 new Settings_WildCard_Probabilities("Task! Tell a cheesy joke. If others laugh, you're safe. If not, take 2 drinks.", 10, true, true),
                 new Settings_WildCard_Probabilities("Task! Draw a picture blindfolded. Others rate your masterpiece. If the crowd does not like it, take 2 drinks.", 10, true, true),
                 new Settings_WildCard_Probabilities("Task! Name three things that should be illegal but aren't. If others agree, you're safe, if not, you take 3 drinks.", 10, true, true),
+        };
 
+        Settings_WildCard_Probabilities[] truthWildCards = {
                 new Settings_WildCard_Probabilities("Truth! Have you ever had a crush on a friend's significant other?", 10, true, true),
                 new Settings_WildCard_Probabilities("Truth! What is your most regrettable romantic rejection?", 10, true, true),
                 new Settings_WildCard_Probabilities("Truth! Have you ever stolen something? If yes, what and why?", 10, true, true),
@@ -66,7 +68,9 @@ public class WildCards {
                 new Settings_WildCard_Probabilities("Truth! Have you ever stolen something valuable from a family member?", 10, true, true),
                 new Settings_WildCard_Probabilities("Truth! Have you ever caused someone to lose their job?", 10, true, true),
                 new Settings_WildCard_Probabilities("Truth! Have you ever destroyed evidence to cover up your wrongdoing?", 10, true, true),
+        };
 
+        Settings_WildCard_Probabilities[] quizWildCards = {
                 new Settings_WildCard_Probabilities("Quiz! Name two famous people with the same initials as yours. If you can't, take 2 drinks, if you can everyone takes 3 drinks.", 10, true, true),
                 new Settings_WildCard_Probabilities("Quiz! Name five countries starting with the letter A. If you can't, take 3 drinks.", 10, true, true),
                 new Settings_WildCard_Probabilities("Quiz! Can you recite the first 7 digits of pi? If yes, go ahead.", 10, true, true),
@@ -116,9 +120,11 @@ public class WildCards {
                 new Settings_WildCard_Probabilities("Quiz! What is the largest continent in the world?", 10, true, true),
                 new Settings_WildCard_Probabilities("Quiz! Who is the author of the novel 'The Lord of the Rings'?", 10, true, true),
                 new Settings_WildCard_Probabilities("Quiz! How many players are there on a soccer team?", 10, true, true),
-        };
-    }
 
+        };
+
+        return taskWildCards;
+    }
 
     public static Settings_WildCard_Probabilities[] getNonDeletableWildcards() {
         return new Settings_WildCard_Probabilities[]{

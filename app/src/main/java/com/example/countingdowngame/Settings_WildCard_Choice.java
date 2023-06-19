@@ -152,6 +152,7 @@ public class Settings_WildCard_Choice extends ButtonUtilsActivity {
 
         // Load deletable wild card probabilities
         Settings_WildCard_Probabilities[] deletableProbabilities = WildCards.getDeletableWildCards();
+
         int deletableCount = deletablePrefs.getInt("wild_card_count", deletableProbabilities.length);
 
         if (deletableCount > deletableProbabilities.length) {
