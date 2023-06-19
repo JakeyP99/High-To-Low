@@ -16,6 +16,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -182,5 +185,53 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
             textSize = 18;
         }
         textView.setTextSize(textSize);
+    }
+
+    public static class WildCardsPagerAdapter extends FragmentPagerAdapter {
+        private static final int NUM_TABS = 3;
+         final Settings_WildCard_Choice mContext;
+         final Settings_WildCard_Mode mMode;
+         Settings_WildCard_Mode mProbabilities;
+
+        public WildCardsPagerAdapter(FragmentManager fragmentManager, Settings_WildCard_Choice context, Settings_WildCard_Mode mode, Settings_WildCard_Mode probabilities) {
+            super(fragmentManager);
+            mContext = context;
+            mMode = mode;
+            mProbabilities = probabilities;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return new QuizWildCardsFragment();
+                case 1:
+                    return new TaskWildCardsFragment();
+                case 2:
+                    return new TruthWildCardsFragment();
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_TABS;
+        }
+
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "Quiz WildCards";
+                case 1:
+                    return "Task WildCards";
+                case 2:
+                    return "Truth WildCards";
+                default:
+                    return super.getPageTitle(position);
+            }
+        }
     }
 }

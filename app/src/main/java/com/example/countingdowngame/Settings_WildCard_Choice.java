@@ -14,46 +14,61 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Settings_WildCard_Choice extends ButtonUtilsActivity {
-        private ListView listViewWildCard;
-        private Settings_WildCard_Adapter deletableAdapter;
-        private Settings_WildCard_Adapter nonDeletableAdapter;
-        private Button btnToggleAll; // Declare the button at the class level
+    private ListView listViewWildCard;
+    private Settings_WildCard_Adapter deletableAdapter;
+    private Settings_WildCard_Adapter nonDeletableAdapter;
+    private Button btnToggleAll;
+    private ViewPager viewPager;
+    private Settings_WildCard_Mode mMode; // Declare the mMode variable
+    private Settings_WildCard_Mode mProbabilities; // Declare the mMode variable
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.b2_settings_wildcard_edit);
+    private Settings_WildCard_Adapter.WildCardsPagerAdapter pagerAdapter; // Declare the pagerAdapter variable
 
-            listViewWildCard = findViewById(R.id.listView_WildCard);
-            ListView listViewWildCardGameMode = findViewById(R.id.listView_GameModeWildCards);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.b2_settings_wildcard_Page1);
 
-            Settings_WildCard_Probabilities[][] wildCardArrays = loadWildCardProbabilitiesFromStorage(getApplicationContext());
-            Settings_WildCard_Probabilities[] deletableWildCards = wildCardArrays[0];
-            Settings_WildCard_Probabilities[] nonDeletableWildCards = wildCardArrays[1];
 
-            deletableAdapter = new Settings_WildCard_Adapter(DELETABLE, this, deletableWildCards);
-            nonDeletableAdapter = new Settings_WildCard_Adapter(NON_DELETABLE, this, nonDeletableWildCards);
+        Settings_WildCard_Probabilities[][] wildCardArrays = loadWildCardProbabilitiesFromStorage(getApplicationContext());
+        Settings_WildCard_Probabilities[] deletableWildCards = wildCardArrays[0];
+        Settings_WildCard_Probabilities[] nonDeletableWildCards = wildCardArrays[1];
 
-            listViewWildCard.setAdapter(deletableAdapter);
-            listViewWildCardGameMode.setAdapter(nonDeletableAdapter);
+        deletableAdapter = new Settings_WildCard_Adapter(DELETABLE, this, deletableWildCards);
+        nonDeletableAdapter = new Settings_WildCard_Adapter(NON_DELETABLE, this, nonDeletableWildCards);
 
-            Button btnAddWildCard = findViewById(R.id.btnAddWildCard);
 
-            btnUtils.setButton(btnAddWildCard, () -> {
+        Button btnAddWildCard = findViewById(R.id.btnAddWildCard);
+        btnUtils.setButton(btnAddWildCard, () -> {
+            addNewWildCard();
+        });
 
-                addNewWildCard();
-            });
-            btnToggleAll = findViewById(R.id.btnToggleAll); // Initialize the button here
+        btnToggleAll = findViewById(R.id.btnToggleAll);
+        btnUtils.setButton(btnToggleAll, () -> {
+            toggleAllWildCards();
+        });
 
-            btnUtils.setButton(btnToggleAll, () -> {
-                toggleAllWildCards();
-            });
-        }
+        // Initialize ViewPager and Adapter
+        viewPager = findViewById(R.id.viewPager);
+        pagerAdapter = new Settings_WildCard_Adapter.WildCardsPagerAdapter(getSupportFragmentManager(), this, mMode, mProbabilities);
+
+        // Set Adapter to ViewPager
+        viewPager.setAdapter(pagerAdapter);
+
+        // Setup TabLayout with ViewPager
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+
 
     private void addNewWildCard() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
