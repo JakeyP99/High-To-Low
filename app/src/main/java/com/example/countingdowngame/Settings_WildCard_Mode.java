@@ -1,5 +1,5 @@
 package com.example.countingdowngame;
 
 public enum Settings_WildCard_Mode {
-    DELETABLE, NON_DELETABLE
+    DELETABLE, QUIZ, TASK, NON_DELETABLE
 }
