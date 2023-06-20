@@ -1,6 +1,13 @@
 package com.example.countingdowngame;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class QuizWildCardsFragment extends Fragment {
     Settings_WildCard_Probabilities[] quizWildCards = {
@@ -55,4 +62,20 @@ public class QuizWildCardsFragment extends Fragment {
             new Settings_WildCard_Probabilities("Quiz! How many players are there on a soccer team?", 10, true, true),
 
     };
+
+    private RecyclerView recyclerView;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_truth_wildcards, container, false);
+
+        recyclerView = view.findViewById(R.id.recyclerView_WildCard);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        Settings_WildCard_Mode mode = Settings_WildCard_Mode.DELETABLE;
+
+        QuizWildCardsAdapter adapter = new QuizWildCardsAdapter(quizWildCards, requireContext(), mode);
+        recyclerView.setAdapter(adapter);
+
+        return view;
+    }
 }

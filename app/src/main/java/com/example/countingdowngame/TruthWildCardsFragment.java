@@ -26,8 +26,6 @@ public class TruthWildCardsFragment extends Fragment {
     };
 
     private RecyclerView recyclerView;
-    private TruthWildCardsAdapter adapter;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_truth_wildcards, container, false);

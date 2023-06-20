@@ -1,6 +1,13 @@
 package com.example.countingdowngame;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class TaskWildCardsFragment extends Fragment {
     Settings_WildCard_Probabilities[] taskWildCards = {
@@ -55,5 +62,19 @@ public class TaskWildCardsFragment extends Fragment {
             new Settings_WildCard_Probabilities("Task! Draw a picture blindfolded. Others rate your masterpiece. If the crowd does not like it, take 2 drinks.", 10, true, true),
             new Settings_WildCard_Probabilities("Task! Name three things that should be illegal but aren't. If others agree, you're safe, if not, you take 3 drinks.", 10, true, true),
     };
+    private RecyclerView recyclerView;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_truth_wildcards, container, false);
 
+        recyclerView = view.findViewById(R.id.recyclerView_WildCard);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        Settings_WildCard_Mode mode = Settings_WildCard_Mode.DELETABLE;
+
+        TaskWildCardsAdapter adapter = new TaskWildCardsAdapter(taskWildCards, requireContext(), mode);
+        recyclerView.setAdapter(adapter);
+
+        return view;
+    }
 }
