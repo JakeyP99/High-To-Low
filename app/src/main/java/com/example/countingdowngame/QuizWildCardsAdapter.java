@@ -39,11 +39,10 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
 
         @Override
         public void bind(Settings_WildCard_Probabilities wildcard) {
-            // Implement the binding logic for TaskWildCardViewHolder
-            // Customize the view based on the specific requirements of the task wild cards
             textViewTitle.setText(wildcard.getText());
-            // Set other views as needed
+            textViewProbabilities.setText(String.valueOf(wildcard.getProbability()));
         }
+
     }
 
     // Additional TaskWildCardsAdapter specific methods and functionality here
