@@ -23,12 +23,10 @@ import androidx.recyclerview.widget.RecyclerView;
 public class QuizWildCardsAdapter extends RecyclerView.Adapter<QuizWildCardsAdapter.QuizWildCardViewHolder> {
     private Settings_WildCard_Probabilities[] quizWildCards;
     private Context mContext;
-    private Settings_WildCard_Mode mMode;
 
-    public QuizWildCardsAdapter(Settings_WildCard_Probabilities[] quizWildCards, Context context, Settings_WildCard_Mode mode) {
+    public QuizWildCardsAdapter(Settings_WildCard_Probabilities[] quizWildCards, Context context) {
         this.quizWildCards = quizWildCards;
         this.mContext = context;
-        this.mMode = mode;
         loadWildCardProbabilitiesFromStorage();
     }
 

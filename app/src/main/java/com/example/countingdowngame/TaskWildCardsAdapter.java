@@ -20,13 +20,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class TaskWildCardsAdapter extends WildCardsAdapter {
-    private Settings_WildCard_Probabilities[] taskWildCards;
     private Context mContext;
     private Settings_WildCard_Mode mMode;
 
     public TaskWildCardsAdapter(Settings_WildCard_Probabilities[] taskWildCards, Context context, Settings_WildCard_Mode mode) {
         super("TaskPrefs", taskWildCards, context, mode);
-        this.taskWildCards = taskWildCards;
         this.mContext = context;
         this.mMode = mode;
         loadWildCardProbabilitiesFromStorage();
@@ -41,13 +39,13 @@ public class TaskWildCardsAdapter extends WildCardsAdapter {
 
     @Override
     public void onBindViewHolder(@NonNull WildCardViewHolder holder, int position) {
-        Settings_WildCard_Probabilities wildcard = taskWildCards[position];
+        Settings_WildCard_Probabilities wildcard = wildCards[position];
         holder.bind(wildcard);
     }
 
     @Override
     public int getItemCount() {
-        return taskWildCards.length;
+        return wildCards.length;
     }
 
     public class TaskWildCardViewHolder extends WildCardViewHolder {
@@ -73,7 +71,7 @@ public class TaskWildCardsAdapter extends WildCardsAdapter {
 
             switchEnabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 wildcard.setEnabled(isChecked);
-                saveWildCardProbabilitiesToStorage(mMode, taskWildCards);
+                saveWildCardProbabilitiesToStorage(wildCards);
             });
 
             editButton.setOnClickListener(v -> {
@@ -95,16 +93,16 @@ public class TaskWildCardsAdapter extends WildCardsAdapter {
                 layout.addView(probabilityInput);
 
                 builder.setView(layout);
-                saveWildCardProbabilitiesToStorage(mMode, taskWildCards);
+                saveWildCardProbabilitiesToStorage(wildCards);
 
                 builder.setNegativeButton(Html.fromHtml("<font color='" + blueDarkColor + "'>Cancel</font>"), (dialog, which) -> dialog.cancel());
 
                 builder.setNeutralButton(Html.fromHtml("<font color='" + blueDarkColor + "'>Delete</font>"), (dialog, which) -> {
-                    ArrayList<Settings_WildCard_Probabilities> wildCardList = new ArrayList<>(Arrays.asList(taskWildCards));
+                    ArrayList<Settings_WildCard_Probabilities> wildCardList = new ArrayList<>(Arrays.asList(wildCards));
                     wildCardList.remove(getAdapterPosition());
-                    taskWildCards = wildCardList.toArray(new Settings_WildCard_Probabilities[0]);
+                    wildCards = wildCardList.toArray(new Settings_WildCard_Probabilities[0]);
                     notifyDataSetChanged();
-                    saveWildCardProbabilitiesToStorage(mMode, taskWildCards);
+                    saveWildCardProbabilitiesToStorage(wildCards);
                 });
 
                 builder.setPositiveButton(Html.fromHtml("<font color='" + blueDarkColor + "'>OK</font>"), (dialog, which) -> {
@@ -138,7 +136,7 @@ public class TaskWildCardsAdapter extends WildCardsAdapter {
                     textViewProbabilities.setText(String.valueOf(wildcard.getProbability()));
                     setProbabilitySizeBasedOnString(textViewProbabilities, String.valueOf(wildcard.getProbability()));
 
-                    saveWildCardProbabilitiesToStorage(mMode, taskWildCards);
+                    saveWildCardProbabilitiesToStorage(wildCards);
                 });
 
                 builder.show();

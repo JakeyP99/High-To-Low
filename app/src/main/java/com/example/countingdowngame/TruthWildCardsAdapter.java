@@ -53,7 +53,7 @@ public class TruthWildCardsAdapter extends WildCardsAdapter {
 
             switchEnabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 wildcard.setEnabled(isChecked);
-                saveWildCardProbabilitiesToStorage(mMode, wildCards);
+                saveWildCardProbabilitiesToStorage(wildCards);
             });
 
             editButton.setOnClickListener(v -> {
@@ -97,7 +97,7 @@ public class TruthWildCardsAdapter extends WildCardsAdapter {
                             wildCardList.remove(getAdapterPosition());
                             wildCards = wildCardList.toArray(new Settings_WildCard_Probabilities[0]);
                             notifyDataSetChanged();
-                            saveWildCardProbabilitiesToStorage(mMode, wildCards);
+                            saveWildCardProbabilitiesToStorage(wildCards);
                         }
                     });
                 }
@@ -138,7 +138,7 @@ public class TruthWildCardsAdapter extends WildCardsAdapter {
                         textViewProbabilities.setText(String.valueOf(wildcard.getProbability()));
                         setProbabilitySizeBasedOnString(textViewProbabilities, String.valueOf(wildcard.getProbability()));
 
-                        saveWildCardProbabilitiesToStorage(mMode, wildCards);
+                        saveWildCardProbabilitiesToStorage(wildCards);
                     }
                 });
 

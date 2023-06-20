@@ -48,6 +48,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
 
             loadedWildCards[i] = new Settings_WildCard_Probabilities(activity, probability, enabled, true);
         }
+        wildCards = loadedWildCards;
         return loadedWildCards;
     }
 
@@ -62,9 +63,9 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
         textView.setTextSize(textSize);
     }
 
-    public void saveWildCardProbabilitiesToStorage(Settings_WildCard_Mode mode, Settings_WildCard_Probabilities[] probabilities) {
+    public void saveWildCardProbabilitiesToStorage(Settings_WildCard_Probabilities[] probabilities) {
         SharedPreferences prefs = mContext.getSharedPreferences(mSaveKey, MODE_PRIVATE);
-
+        wildCards= probabilities;
 
         SharedPreferences.Editor editor = prefs.edit();
 
@@ -80,9 +81,6 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
 
         editor.apply();
     }
-
-
-    // Common methods and functionality here
 
     public abstract class WildCardViewHolder extends RecyclerView.ViewHolder {
         protected TextView textViewTitle;
@@ -105,7 +103,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
 
             switchEnabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 wildcard.setEnabled(isChecked);
-                saveWildCardProbabilitiesToStorage(mMode, wildCards);
+                saveWildCardProbabilitiesToStorage(wildCards);
             });
 
             editButton.setOnClickListener(v -> {
@@ -149,7 +147,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
                             wildCardList.remove(getAdapterPosition());
                             wildCards = wildCardList.toArray(new Settings_WildCard_Probabilities[0]);
                             notifyDataSetChanged();
-                            saveWildCardProbabilitiesToStorage(mMode, wildCards);
+                            saveWildCardProbabilitiesToStorage(wildCards);
                         }
                     });
                 }
@@ -190,7 +188,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
                         textViewProbabilities.setText(String.valueOf(wildcard.getProbability()));
                         setProbabilitySizeBasedOnString(textViewProbabilities, String.valueOf(wildcard.getProbability()));
 
-                        saveWildCardProbabilitiesToStorage(mMode, wildCards);
+                        saveWildCardProbabilitiesToStorage(wildCards);
                     }
                 });
 

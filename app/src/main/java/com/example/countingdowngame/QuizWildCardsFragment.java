@@ -71,9 +71,7 @@ public class QuizWildCardsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView_WildCard);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        Settings_WildCard_Mode mode = Settings_WildCard_Mode.DELETABLE;
-
-        QuizWildCardsAdapter adapter = new QuizWildCardsAdapter(quizWildCards, requireContext(), mode);
+        QuizWildCardsAdapter adapter = new QuizWildCardsAdapter(quizWildCards, requireContext());
         recyclerView.setAdapter(adapter);
 
         return view;
