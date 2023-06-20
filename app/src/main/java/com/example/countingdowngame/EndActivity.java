@@ -42,7 +42,7 @@ public class EndActivity extends ButtonUtilsActivity {
         //-----------------------------------------------------Button actions---------------------------------------------------//
 
         btnUtils.setButton(btnPlayAgain, () -> {
-            Game.getInstance().playAgain();
+            Game.getInstance().resetPlayers(this);
             gotoGameStart();
         });
         btnUtils.setButton(btnNewPlayer, this::gotoGameSetup);

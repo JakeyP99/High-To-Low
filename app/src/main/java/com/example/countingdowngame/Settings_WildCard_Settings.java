@@ -1,5 +1,6 @@
 package com.example.countingdowngame;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
@@ -43,10 +44,11 @@ public class Settings_WildCard_Settings extends ButtonUtilsActivity {
     }
     //-----------------------------------------------------Get WildCard---------------------------------------------------//
 
-    public static int getLoadWildCardAmount() {
-        return loadWildCardAmount;
+    public static int getWildCardAmountFromSettings(Context context) {
+        SharedPreferences wildcardPreferences = context.getSharedPreferences("wildcard_amount", MODE_PRIVATE);
+        int amount = wildcardPreferences.getInt("wildcardAmount", 1);
+        return amount;
     }
-
 
     //-----------------------------------------------------Load and Save Preferences---------------------------------------------------//
 
@@ -68,6 +70,8 @@ public class Settings_WildCard_Settings extends ButtonUtilsActivity {
         SharedPreferences.Editor wildcardEditor = wildcardPreferences.edit();
         wildcardEditor.putInt("wildcardAmount", wildCardAmountSetInSettings);
         wildcardEditor.apply();
-
     }
+
+
+
 }

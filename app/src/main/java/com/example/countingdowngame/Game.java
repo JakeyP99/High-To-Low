@@ -1,5 +1,7 @@
 package com.example.countingdowngame;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -24,14 +26,14 @@ public class Game {
     public static Game getInstance() {
         return gameInstance;
     }
-    public void setPlayers(int playerAmount) {
+    public void setPlayers(Context context, int playerAmount) {
         if (gameStarted)
             return;
 
         players = new ArrayList<>();
 
         for (int playerId = 0; playerId < playerAmount; playerId++) {
-            players.add(new Player(null, null));
+            players.add(new Player(context, null, null));
         }
     }
     public List<Player> getPlayers() {
@@ -73,7 +75,7 @@ public class Game {
         }
     }
 
-    public void nextNumber(final Runnable onEnd) {
+    public void nextNumber(Context context, final Runnable onEnd) {
         Random random = new Random();
         int nextNumber = random.nextInt(currentNumber + 1);
         previousNumbers.add(nextNumber);
@@ -82,7 +84,7 @@ public class Game {
         updatedNumbers.add(nextNumber); // Add the updated number
 
         if (currentNumber == 0) {
-            endGame();
+            endGame(context);
             onEnd.run();
         } else {
             nextPlayer();
@@ -123,7 +125,8 @@ public class Game {
 
     //-----------------------------------------------------End Game ---------------------------------------------------//
 
-    public void endGame() {
+    public void endGame(Context context) {
+        resetPlayers(context);
         gameStarted = false;
     }
 
@@ -146,10 +149,10 @@ public class Game {
     public void setCurrentNumber(int number) {
         currentNumber = number;
     }
-    public void playAgain() {
+    public void resetPlayers(Context context) {
         for (Player player : players) {
             if (player != null) {
-                player.resetAbilities();
+                player.resetWildCardAmount(context);
             }
         }
     }

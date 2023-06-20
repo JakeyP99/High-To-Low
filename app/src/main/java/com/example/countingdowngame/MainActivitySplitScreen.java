@@ -47,7 +47,7 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
-            Game.getInstance().endGame();
+            Game.getInstance().endGame(this);
             gotoHomeScreen();
             return;
         }
@@ -99,7 +99,7 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         List<Player> playerList = PlayerModel.loadSelectedPlayers(this);
         if (playerList != null && !playerList.isEmpty()) {
             // Set the player list in Game class
-            Game.getInstance().setPlayers(playerList.size());
+            Game.getInstance().setPlayers(this, playerList.size());
             Game.getInstance().setPlayerList(playerList);
 
             // Set the game object for each player
@@ -132,7 +132,7 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         btnUtils.setButton(btnBackWild, this::ButtonContinueFunction);
 
         imageButtonExit.setOnClickListener(view -> {
-            Game.getInstance().endGame();
+            Game.getInstance().endGame(this);
             gotoHomeScreen();
         });
 
@@ -145,13 +145,13 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         btnUtils.setButton(btnBackWildPlayer2, this::ButtonContinueFunction);
 
         imageButtonExit.setOnClickListener(view -> {
-            Game.getInstance().endGame();
+            Game.getInstance().endGame(this);
             gotoHomeScreen();
         });
 
 
         imageButtonExitPlayer2.setOnClickListener(view -> {
-            Game.getInstance().endGame();
+            Game.getInstance().endGame(this);
             gotoHomeScreen();
         });
     }
@@ -359,7 +359,7 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
     //-----------------------------------------------------Button Functionality---------------------------------------------------//
 
     private void ButtonGenerateFunction() {
-        Game.getInstance().nextNumber(this::gotoGameEnd);
+        Game.getInstance().nextNumber(this, this::gotoGameEnd);
         wildText.setVisibility(View.INVISIBLE);
         numberText.setVisibility(View.VISIBLE);
         nextPlayerText.setVisibility(View.VISIBLE);

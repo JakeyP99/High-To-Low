@@ -260,7 +260,7 @@ public class PlayerModel extends ButtonUtilsActivity {
         Bitmap zoomedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
         String photoString = convertBitmapToString(zoomedBitmap);
-        Player newPlayer = new Player(photoString, name);
+        Player newPlayer = new Player(this, photoString, name);
         newPlayer.setSelected(false); // Set isSelected to false initially
         playerList.add(newPlayer);
         playerListAdapter.notifyItemInserted(playerList.size() - 1);

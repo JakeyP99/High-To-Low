@@ -1,5 +1,7 @@
 package com.example.countingdowngame;
 
+import android.content.Context;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +14,7 @@ class Player implements Serializable {
     private String name;
     private Game game;
     private final Set<Settings_WildCard_Probabilities> usedWildCards = new HashSet<>();
-    private int wildCardAmount = 5;
+    private int wildCardAmount;
     private boolean selected;
 
     //-----------------------------------------------------Set Game---------------------------------------------------//
@@ -22,10 +24,11 @@ class Player implements Serializable {
     }
 
     //-----------------------------------------------------Player---------------------------------------------------//
-    public Player(String photo, String name) {
+    public Player(Context context, String photo, String name) {
         this.photo = photo;
         this.name = name;
         this.selected = false;
+        resetWildCardAmount(context);
     }
 
     public String getName() {
@@ -50,12 +53,6 @@ class Player implements Serializable {
 
     //-----------------------------------------------------Wild Card/Skip---------------------------------------------------//
 
-//    public int getWildCardAmountFromSettings(Context context) {
-//        SharedPreferences wildcardPreferences = context.getSharedPreferences("wildcard_amount", Context.MODE_PRIVATE);
-//        wildCardAmount = wildcardPreferences.getInt("wildcardAmount", 0);
-//        return wildCardAmount;
-//    }
-
     public int getWildCardAmount() {
         return wildCardAmount;
     }
@@ -76,12 +73,7 @@ class Player implements Serializable {
     }
     //-----------------------------------------------------Reset Abilities---------------------------------------------------//
 
-//    public void resetAbilities() {
-//        this.wildCardAmount = wildCardAmount;
-//    }
-
-    public void resetAbilities() {
-        this.wildCardAmount = 5 ;
+    public void resetWildCardAmount(Context context) {
+        wildCardAmount = Settings_WildCard_Settings.getWildCardAmountFromSettings(context);
     }
-
 }

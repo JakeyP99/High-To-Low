@@ -54,7 +54,7 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
                     .playOn(originalPlayerField);
 
             originalPlayerField.setFocusable(false);
-            Game.getInstance().setPlayers(inputNumber);
+            Game.getInstance().setPlayers(this, inputNumber);
 
         } catch (NumberFormatException e) {
             Toast.makeText(PlayerNumberChoice.this, "Invalid player count", Toast.LENGTH_SHORT).show();

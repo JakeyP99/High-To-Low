@@ -55,7 +55,7 @@ public class MainActivity extends ButtonUtilsActivity {
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
-            Game.getInstance().endGame();
+            Game.getInstance().endGame(this);
             gotoHomeScreen();
             return;
         }
@@ -101,7 +101,7 @@ public class MainActivity extends ButtonUtilsActivity {
         List<Player> playerList = PlayerModel.loadSelectedPlayers(this);
         if (!playerList.isEmpty()) {
             // Set the player list in Game class
-            Game.getInstance().setPlayers(playerList.size());
+            Game.getInstance().setPlayers(this, playerList.size());
             Game.getInstance().setPlayerList(playerList);
 
             // Set the game object for each player
@@ -151,7 +151,7 @@ public class MainActivity extends ButtonUtilsActivity {
         });
 
         imageButtonExit.setOnClickListener(view -> {
-            Game.getInstance().endGame();
+            Game.getInstance().endGame(this);
             gotoHomeScreen();
         });
     }
@@ -200,7 +200,7 @@ public class MainActivity extends ButtonUtilsActivity {
                     numberText.setText(String.valueOf(finalNumber));
 
                     // Call the game logic method with the finalNumber
-                    Game.getInstance().nextNumber(() -> gotoGameEnd());
+                    Game.getInstance().nextNumber(MainActivity.this, () -> gotoGameEnd());
 
                     // Show other relevant UI elements after number generation
                     numberText.setVisibility(View.VISIBLE);
@@ -224,7 +224,7 @@ public class MainActivity extends ButtonUtilsActivity {
             String playerImageString = currentPlayer.getPhoto();
 
             nextPlayerText.setText(playerName + "'s Turn");
-            btnWild.setText((currentPlayer.getWildCardAmount()) + "\n" + "Wild Cards");
+            btnWild.setText((currentPlayer.getWildCardAmount() + "\n" + "Wild Cards"));
 
             if (playerImageString != null) {
                 byte[] decodedString = Base64.decode(playerImageString, Base64.DEFAULT);
