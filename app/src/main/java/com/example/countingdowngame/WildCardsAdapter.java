@@ -25,24 +25,18 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
     protected Settings_WildCard_Probabilities[] wildCards;
     protected Context mContext;
     protected Settings_WildCard_Mode mMode;
+    private String mSaveKey;
 
-    public WildCardsAdapter(Settings_WildCard_Probabilities[] wildCards, Context context, Settings_WildCard_Mode mode) {
+    public WildCardsAdapter(String saveKey, Settings_WildCard_Probabilities[] wildCards, Context context, Settings_WildCard_Mode mode) {
         this.wildCards = wildCards;
         this.mContext = context;
         this.mMode = mode;
-        loadWildCardProbabilitiesFromStorage(mode);
+        this.mSaveKey = saveKey;
+        loadWildCardProbabilitiesFromStorage();
     }
 
-    private Settings_WildCard_Probabilities[] loadWildCardProbabilitiesFromStorage(Settings_WildCard_Mode mode) {
-        SharedPreferences prefs;
-        switch (mode) {
-            case DELETABLE:
-                prefs = mContext.getSharedPreferences("DeletablePrefs", MODE_PRIVATE);
-                break;
-            default:
-                // Handle other modes if necessary
-                return new Settings_WildCard_Probabilities[0];
-        }
+    Settings_WildCard_Probabilities[] loadWildCardProbabilitiesFromStorage() {
+        SharedPreferences prefs = mContext.getSharedPreferences(mSaveKey, MODE_PRIVATE);
 
         int wildCardCount = prefs.getInt("wild_card_count", 0);
         Settings_WildCard_Probabilities[] loadedWildCards = new Settings_WildCard_Probabilities[wildCardCount];
@@ -69,15 +63,8 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
     }
 
     public void saveWildCardProbabilitiesToStorage(Settings_WildCard_Mode mode, Settings_WildCard_Probabilities[] probabilities) {
-        SharedPreferences prefs;
-        switch (mode) {
-            case DELETABLE:
-                prefs = mContext.getSharedPreferences("DeletablePrefs", MODE_PRIVATE);
-                break;
-            default:
-                // Handle other modes if necessary
-                return;
-        }
+        SharedPreferences prefs = mContext.getSharedPreferences(mSaveKey, MODE_PRIVATE);
+
 
         SharedPreferences.Editor editor = prefs.edit();
 

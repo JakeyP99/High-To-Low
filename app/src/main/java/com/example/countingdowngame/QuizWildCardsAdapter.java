@@ -29,7 +29,7 @@ public class QuizWildCardsAdapter extends RecyclerView.Adapter<QuizWildCardsAdap
         this.quizWildCards = quizWildCards;
         this.mContext = context;
         this.mMode = mode;
-        loadWildCardProbabilitiesFromStorage(mode);
+        loadWildCardProbabilitiesFromStorage();
     }
 
     @NonNull
@@ -73,7 +73,7 @@ public class QuizWildCardsAdapter extends RecyclerView.Adapter<QuizWildCardsAdap
 
             switchEnabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 wildcard.setEnabled(isChecked);
-                saveWildCardProbabilitiesToStorage(mMode, quizWildCards);
+                saveWildCardProbabilitiesToStorage(quizWildCards);
             });
 
             editButton.setOnClickListener(v -> {
@@ -94,7 +94,7 @@ public class QuizWildCardsAdapter extends RecyclerView.Adapter<QuizWildCardsAdap
                 layout.addView(probabilityInput);
 
                 builder.setView(layout);
-                saveWildCardProbabilitiesToStorage(mMode, quizWildCards);
+                saveWildCardProbabilitiesToStorage(quizWildCards);
 
                 builder.setNegativeButton(Html.fromHtml("<font color='" + blueDarkColor + "'>Cancel</font>"), (dialog, which) -> dialog.cancel());
 
@@ -116,7 +116,7 @@ public class QuizWildCardsAdapter extends RecyclerView.Adapter<QuizWildCardsAdap
                     textViewProbabilities.setText(String.valueOf(wildcard.getProbability()));
                     setProbabilitySizeBasedOnString(textViewProbabilities, String.valueOf(wildcard.getProbability()));
 
-                    saveWildCardProbabilitiesToStorage(mMode, quizWildCards);
+                    saveWildCardProbabilitiesToStorage(quizWildCards);
                 });
 
                 builder.show();
@@ -124,17 +124,8 @@ public class QuizWildCardsAdapter extends RecyclerView.Adapter<QuizWildCardsAdap
         }
     }
 
-    private Settings_WildCard_Probabilities[] loadWildCardProbabilitiesFromStorage(Settings_WildCard_Mode mode) {
-        SharedPreferences prefs;
-        switch (mode) {
-            case QUIZ: // Change to the appropriate storage name for quiz mode
-                prefs = mContext.getSharedPreferences("QuizPrefs", MODE_PRIVATE);
-                break;
-            default:
-                // Handle other modes if necessary
-                return new Settings_WildCard_Probabilities[0];
-        }
-
+    public Settings_WildCard_Probabilities[] loadWildCardProbabilitiesFromStorage() {
+        SharedPreferences prefs = mContext.getSharedPreferences("QuizPrefs", MODE_PRIVATE);
         int wildCardCount = prefs.getInt("wild_card_count", 0);
         Settings_WildCard_Probabilities[] loadedWildCards = new Settings_WildCard_Probabilities[wildCardCount];
 
@@ -145,22 +136,13 @@ public class QuizWildCardsAdapter extends RecyclerView.Adapter<QuizWildCardsAdap
 
             loadedWildCards[i] = new Settings_WildCard_Probabilities(activity, probability, enabled, false); // Set deletable to false for quiz mode
         }
-
-        quizWildCards = loadedWildCards; // Update the quizWildCards array
+        quizWildCards = loadedWildCards;
         return loadedWildCards;
     }
 
-    public void saveWildCardProbabilitiesToStorage(Settings_WildCard_Mode mode, Settings_WildCard_Probabilities[] probabilities) {
-        SharedPreferences prefs;
+    public void saveWildCardProbabilitiesToStorage(Settings_WildCard_Probabilities[] probabilities) {
+        SharedPreferences prefs = mContext.getSharedPreferences("QuizPrefs", MODE_PRIVATE);
         quizWildCards = probabilities;
-        switch (mode) {
-            case QUIZ: // Change to the appropriate storage name for quiz mode
-                prefs = mContext.getSharedPreferences("QuizPrefs", MODE_PRIVATE);
-                break;
-            default:
-                // Handle other modes if necessary
-                return;
-        }
 
         SharedPreferences.Editor editor = prefs.edit();
 

@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class TruthWildCardsAdapter extends WildCardsAdapter {
-    public TruthWildCardsAdapter(Settings_WildCard_Probabilities[] taskWildCards, Context context, Settings_WildCard_Mode mode) {
-        super(taskWildCards, context, mode);
+    public TruthWildCardsAdapter(Settings_WildCard_Probabilities[] truthWildCards, Context context, Settings_WildCard_Mode mode) {
+        super("TruthPrefs", truthWildCards, context, mode);
     }
 
     @NonNull

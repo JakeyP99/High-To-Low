@@ -41,3 +41,4 @@ public class TruthWildCardsFragment extends Fragment {
         return view;
     }
 }
+

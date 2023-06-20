@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MainActivity extends ButtonUtilsActivity {
 
@@ -137,7 +141,7 @@ public class MainActivity extends ButtonUtilsActivity {
         });
 
         btnUtils.setButton(btnWild, () -> {
-//            wildCardActivate(Game.getInstance().getCurrentPlayer());
+            wildCardActivate(Game.getInstance().getCurrentPlayer());
             wildText.setVisibility(View.VISIBLE);
             btnWild.setVisibility(View.INVISIBLE);
             btnBackWild.setVisibility(View.VISIBLE);
@@ -244,117 +248,122 @@ public class MainActivity extends ButtonUtilsActivity {
 
     //-----------------------------------------------------Wild Card, and Skip Functionality---------------------------------------------------//
 
-//    private void wildCardActivate(Player player) {
-//        Game.getInstance().getCurrentPlayer().useWildCard();
-//        Settings_WildCard_Choice settings = new Settings_WildCard_Choice();
-//        Settings_WildCard_Probabilities[][] probabilitiesArray = settings.loadWildCardProbabilitiesFromStorage(getApplicationContext());
-//
-//        Settings_WildCard_Probabilities[] deletableProbabilities = probabilitiesArray[0];
-//        Settings_WildCard_Probabilities[] nonDeletableProbabilities = probabilitiesArray[1];
-//
-//        List<Settings_WildCard_Probabilities> allProbabilities = new ArrayList<>();
-//        allProbabilities.addAll(Arrays.asList(deletableProbabilities));
-//        allProbabilities.addAll(Arrays.asList(nonDeletableProbabilities));
-//
-//        final TextView wildActivityTextView = findViewById(R.id.wild_textview);
-//
-//
-//        boolean wildCardsEnabled = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("wild_cards_toggle", true);
-//
-//        String selectedActivity = null;
-//        Set<Settings_WildCard_Probabilities> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
-//        if (wildCardsEnabled) {
-//            List<Settings_WildCard_Probabilities> unusedCards = allProbabilities.stream()
-//                    .filter(Settings_WildCard_Probabilities::isEnabled)
-//                    .filter(c -> !usedWildCards.contains(c))
-//                    .collect(Collectors.toList());
-//
-//            if (unusedCards.isEmpty()) {
-//                wildActivityTextView.setText("No wild cards available");
-//                btnWild.setVisibility(View.INVISIBLE);
-//                return;
-//            }
-//
-//            int totalWeight = unusedCards.stream()
-//                    .mapToInt(Settings_WildCard_Probabilities::getProbability)
-//                    .sum();
-//
-//            if (totalWeight <= 0) {
-//                wildActivityTextView.setText("No wild cards available");
-//                return;
-//            }
-//
-//            Random random = new Random();
-//            boolean foundUnusedCard = false;
-//            while (!foundUnusedCard) {
-//                int randomWeight = random.nextInt(totalWeight);
-//                int weightSoFar = 0;
-//
-//                for (Settings_WildCard_Probabilities activityProbability : unusedCards) {
-//                    weightSoFar += activityProbability.getProbability();
-//
-//                    if (randomWeight < weightSoFar) {
-//                        if (usedCards != null && !usedCards.contains(activityProbability)) {
-//                            selectedActivity = activityProbability.getText();
-//                            foundUnusedCard = true;
-//                            usedCards.add(activityProbability);
-//                        }
-//                        break;
-//                    }
-//                }
-//            }
-//            usedWildCard.put(player, usedCards);
-//        }
-//
-//
-//        if (selectedActivity != null) {
-//            wildActivityTextView.setText(selectedActivity);
-//            for (Settings_WildCard_Probabilities wc : allProbabilities) {
-//                if (wc.getText().equals(selectedActivity)) {
-//                    player.addUsedWildCard(wc);
-//                    usedCards.add(wc);
-//                    break;
-//                }
-//            }
-//        }
-//
-//
-//        if (selectedActivity != null && selectedActivity.equals("Double the current number and go again!")) {
-//            int currentNumber = Game.getInstance().getCurrentNumber();
-//            int updatedNumber = currentNumber * 2;
-//            Game.getInstance().setCurrentNumber(updatedNumber);
-//            Game.getInstance().addUpdatedNumber(updatedNumber);
-//            numberText.setText(String.valueOf(updatedNumber));
-//            setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
-//        }
-//
-//        if (selectedActivity != null && selectedActivity.equals("Half the current number and go again!")) {
-//            int currentNumber = Game.getInstance().getCurrentNumber();
-//            int updatedNumber = Math.max(currentNumber / 2, 1);
-//            Game.getInstance().setCurrentNumber(updatedNumber);
-//            Game.getInstance().addUpdatedNumber(updatedNumber);
-//            numberText.setText(String.valueOf(updatedNumber));
-//            setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
-//        }
-//
-//
-//        if (selectedActivity != null && selectedActivity.equals("Reset the number!")) {
-//            Bundle extras = getIntent().getExtras();
-//            if (extras == null) {
-//                throw new RuntimeException("Missing extras");
-//            }
-//            int startingNumber = extras.getInt("startingNumber");
-//            Game.getInstance().setCurrentNumber(startingNumber);
-//            Game.getInstance().addUpdatedNumber(startingNumber);
-//            numberText.setText(String.valueOf(startingNumber));
-//            setTextViewSizeBasedOnInt(numberText, String.valueOf(startingNumber));
-//        }
-//
-//        if (selectedActivity != null && selectedActivity.equals("Reverse the turn order!")) {
-//            reverseTurnOrder(player);
-//        }
-//
-//    }
+    private void wildCardActivate(Player player) {
+        Game.getInstance().getCurrentPlayer().useWildCard();
+        Settings_WildCard_Probabilities[] emptyProbabilitiesArray = new Settings_WildCard_Probabilities[0];
+        QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(emptyProbabilitiesArray,this, Settings_WildCard_Mode.QUIZ);
+        TaskWildCardsAdapter taskAdapter = new TaskWildCardsAdapter(emptyProbabilitiesArray,this, Settings_WildCard_Mode.TASK);
+        TruthWildCardsAdapter truthAdapter = new TruthWildCardsAdapter(emptyProbabilitiesArray,this, Settings_WildCard_Mode.TRUTH);
+
+
+        Settings_WildCard_Probabilities[] quizProbabilities = quizAdapter.loadWildCardProbabilitiesFromStorage();
+        Settings_WildCard_Probabilities[] taskProbabilities = taskAdapter.loadWildCardProbabilitiesFromStorage();
+        Settings_WildCard_Probabilities[] truthProbabilities = truthAdapter.loadWildCardProbabilitiesFromStorage();
+
+        List<Settings_WildCard_Probabilities> allProbabilities = new ArrayList<>();
+        allProbabilities.addAll(Arrays.asList(quizProbabilities));
+        allProbabilities.addAll(Arrays.asList(taskProbabilities));
+        allProbabilities.addAll(Arrays.asList(truthProbabilities));
+
+        final TextView wildActivityTextView = findViewById(R.id.wild_textview);
+
+
+        boolean wildCardsEnabled = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("wild_cards_toggle", true);
+
+        String selectedActivity = null;
+        Set<Settings_WildCard_Probabilities> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
+        if (wildCardsEnabled) {
+            List<Settings_WildCard_Probabilities> unusedCards = allProbabilities.stream()
+                    .filter(Settings_WildCard_Probabilities::isEnabled)
+                    .filter(c -> !usedWildCards.contains(c))
+                    .collect(Collectors.toList());
+
+            if (unusedCards.isEmpty()) {
+                wildActivityTextView.setText("No wild cards available");
+                btnWild.setVisibility(View.INVISIBLE);
+                return;
+            }
+
+            int totalWeight = unusedCards.stream()
+                    .mapToInt(Settings_WildCard_Probabilities::getProbability)
+                    .sum();
+
+            if (totalWeight <= 0) {
+                wildActivityTextView.setText("No wild cards available");
+                return;
+            }
+
+            Random random = new Random();
+            boolean foundUnusedCard = false;
+            while (!foundUnusedCard) {
+                int randomWeight = random.nextInt(totalWeight);
+                int weightSoFar = 0;
+
+                for (Settings_WildCard_Probabilities activityProbability : unusedCards) {
+                    weightSoFar += activityProbability.getProbability();
+
+                    if (randomWeight < weightSoFar) {
+                        if (usedCards != null && !usedCards.contains(activityProbability)) {
+                            selectedActivity = activityProbability.getText();
+                            foundUnusedCard = true;
+                            usedCards.add(activityProbability);
+                        }
+                        break;
+                    }
+                }
+            }
+            usedWildCard.put(player, usedCards);
+        }
+
+
+        if (selectedActivity != null) {
+            wildActivityTextView.setText(selectedActivity);
+            for (Settings_WildCard_Probabilities wc : allProbabilities) {
+                if (wc.getText().equals(selectedActivity)) {
+                    player.addUsedWildCard(wc);
+                    usedCards.add(wc);
+                    break;
+                }
+            }
+        }
+
+
+        if (selectedActivity != null && selectedActivity.equals("Double the current number and go again!")) {
+            int currentNumber = Game.getInstance().getCurrentNumber();
+            int updatedNumber = currentNumber * 2;
+            Game.getInstance().setCurrentNumber(updatedNumber);
+            Game.getInstance().addUpdatedNumber(updatedNumber);
+            numberText.setText(String.valueOf(updatedNumber));
+            setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
+        }
+
+        if (selectedActivity != null && selectedActivity.equals("Half the current number and go again!")) {
+            int currentNumber = Game.getInstance().getCurrentNumber();
+            int updatedNumber = Math.max(currentNumber / 2, 1);
+            Game.getInstance().setCurrentNumber(updatedNumber);
+            Game.getInstance().addUpdatedNumber(updatedNumber);
+            numberText.setText(String.valueOf(updatedNumber));
+            setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
+        }
+
+
+        if (selectedActivity != null && selectedActivity.equals("Reset the number!")) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                throw new RuntimeException("Missing extras");
+            }
+            int startingNumber = extras.getInt("startingNumber");
+            Game.getInstance().setCurrentNumber(startingNumber);
+            Game.getInstance().addUpdatedNumber(startingNumber);
+            numberText.setText(String.valueOf(startingNumber));
+            setTextViewSizeBasedOnInt(numberText, String.valueOf(startingNumber));
+        }
+
+        if (selectedActivity != null && selectedActivity.equals("Reverse the turn order!")) {
+            reverseTurnOrder(player);
+        }
+
+    }
 
     private void reverseTurnOrder(Player player) {
         Game game = Game.getInstance();
