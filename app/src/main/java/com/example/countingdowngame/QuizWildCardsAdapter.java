@@ -19,7 +19,9 @@ import java.util.Arrays;
 
    public class QuizWildCardsAdapter extends WildCardsAdapter {
 
-
+       public Settings_WildCard_Probabilities[] getWildCards() {
+           return wildCards;
+       }
        public boolean areAllEnabled() {
            for (Settings_WildCard_Probabilities wildcard : wildCards) {
                if (!wildcard.isEnabled()) {

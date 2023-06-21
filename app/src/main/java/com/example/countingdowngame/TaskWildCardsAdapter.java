@@ -37,6 +37,20 @@ public class TaskWildCardsAdapter extends WildCardsAdapter {
         return new TaskWildCardViewHolder(view);
     }
 
+    public Settings_WildCard_Probabilities[] getWildCards() {
+        return wildCards;
+    }
+    public void setWildCards(Settings_WildCard_Probabilities[] wildCards) {
+        this.wildCards = wildCards;
+    }
+    public boolean areAllEnabled() {
+        for (Settings_WildCard_Probabilities wildcard : wildCards) {
+            if (!wildcard.isEnabled()) {
+                return false; // If any wildcard is disabled, return false
+            }
+        }
+        return true; // All wildcards are enabled
+    }
     @Override
     public void onBindViewHolder(@NonNull WildCardViewHolder holder, int position) {
         Settings_WildCard_Probabilities wildcard = wildCards[position];

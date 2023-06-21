@@ -34,10 +34,23 @@ public class TruthWildCardsAdapter extends WildCardsAdapter {
         Settings_WildCard_Probabilities wildcard = wildCards[position];
         holder.bind(wildcard);
     }
-
+    public void setWildCards(Settings_WildCard_Probabilities[] wildCards) {
+        this.wildCards = wildCards;
+    }
+    public boolean areAllEnabled() {
+        for (Settings_WildCard_Probabilities wildcard : wildCards) {
+            if (!wildcard.isEnabled()) {
+                return false;
+            }
+        }
+        return true;
+    }
     @Override
     public int getItemCount() {
         return wildCards.length;
+    }
+    public Settings_WildCard_Probabilities[] getWildCards() {
+        return wildCards;
     }
 
     public class TaskWildCardViewHolder extends WildCardViewHolder {

@@ -1,9 +1,15 @@
 package com.example.countingdowngame;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -62,19 +68,98 @@ public class TaskWildCardsFragment extends Fragment {
             new Settings_WildCard_Probabilities("Task! Draw a picture blindfolded. Others rate your masterpiece. If the crowd does not like it, take 2 drinks.", 10, true, true),
             new Settings_WildCard_Probabilities("Task! Name three things that should be illegal but aren't. If others agree, you're safe, if not, you take 3 drinks.", 10, true, true),
     };
-    private RecyclerView recyclerView;
+
+    private TaskWildCardsAdapter adapter; // Declare adapter as a field in the fragment
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_truth_wildcards, container, false);
 
-        recyclerView = view.findViewById(R.id.recyclerView_WildCard);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView_WildCard);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         Settings_WildCard_Mode mode = Settings_WildCard_Mode.DELETABLE;
 
-        TaskWildCardsAdapter adapter = new TaskWildCardsAdapter(taskWildCards, requireContext(), mode);
+        adapter = new TaskWildCardsAdapter(taskWildCards, requireContext(), mode); // Assign the adapter to the field
+
         recyclerView.setAdapter(adapter);
 
+        Button btnAddWildCard = view.findViewById(R.id.btnAddWildCard);
+        btnAddWildCard.setOnClickListener(v -> {
+            addNewWildCard();
+        });
+
+        Button btnToggleAll = view.findViewById(R.id.btnToggleAll);
+        btnToggleAll.setOnClickListener(v -> toggleAllWildCards());
+
         return view;
+    }
+
+
+    private void toggleAllWildCards() {
+        boolean allEnabled = adapter.areAllEnabled();
+
+        for (Settings_WildCard_Probabilities wildcard : adapter.getWildCards()) {
+            wildcard.setEnabled(!allEnabled);
+        }
+
+        adapter.notifyDataSetChanged();
+    }
+
+
+
+    private void addNewWildCard() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Add New Wildcard");
+
+        LinearLayout layout = new LinearLayout(requireContext());
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        final EditText textInput = new EditText(requireContext());
+        textInput.setInputType(InputType.TYPE_CLASS_TEXT);
+        textInput.setHint("Wildcard Title");
+        layout.addView(textInput);
+
+        final EditText probabilityInput = new EditText(requireContext());
+        probabilityInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+        probabilityInput.setHint("Probability (0-9999)");
+        layout.addView(probabilityInput);
+
+        builder.setView(layout);
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            int probability;
+            try {
+                probability = Integer.parseInt(probabilityInput.getText().toString());
+            } catch (NumberFormatException e) {
+                probability = 10; // Invalid input, set to a default value
+            }
+
+            String text = textInput.getText().toString().trim();
+            if (text.isEmpty()) {
+                Toast.makeText(requireContext(), "The wildcard needs some text, please and thanks!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Add "Quiz!" to the start of the wildcard text
+            String wildcardText = "Task! " + text;
+
+            Settings_WildCard_Probabilities newWildCard = new Settings_WildCard_Probabilities(wildcardText, probability, true, true);
+
+            // Create a new array with increased size
+            Settings_WildCard_Probabilities[] newQuizWildCards = new Settings_WildCard_Probabilities[taskWildCards.length + 1];
+            System.arraycopy(taskWildCards, 0, newQuizWildCards, 0, taskWildCards.length);
+            newQuizWildCards[taskWildCards.length] = newWildCard;
+
+            // Update the quizWildCards array with the new array
+            taskWildCards = newQuizWildCards;
+
+            adapter.setWildCards(taskWildCards); // Update the adapter's dataset with the new array
+            adapter.notifyDataSetChanged(); // Notify the adapter about the data change
+        });
+
+        builder.show();
     }
 }

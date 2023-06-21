@@ -69,14 +69,13 @@ public class QuizWildCardsFragment extends Fragment {
 
     };
 
-    private RecyclerView recyclerView;
     private QuizWildCardsAdapter adapter; // Declare adapter as a field in the fragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_truth_wildcards, container, false);
 
-        recyclerView = view.findViewById(R.id.recyclerView_WildCard);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView_WildCard);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         Settings_WildCard_Mode mode = Settings_WildCard_Mode.DELETABLE;
@@ -98,14 +97,15 @@ public class QuizWildCardsFragment extends Fragment {
 
 
     private void toggleAllWildCards() {
-        boolean allEnabled = adapter.areAllEnabled(); // Check if all wildcards are currently enabled
+        boolean allEnabled = adapter.areAllEnabled();
 
-        for (Settings_WildCard_Probabilities wildcard : quizWildCards) {
-            wildcard.setEnabled(!allEnabled); // Toggle the enabled state of each wildcard
+        for (Settings_WildCard_Probabilities wildcard : adapter.getWildCards()) {
+            wildcard.setEnabled(!allEnabled);
         }
 
-        adapter.notifyDataSetChanged(); // Notify the adapter about the data change
+        adapter.notifyDataSetChanged();
     }
+
 
 
     private void addNewWildCard() {
