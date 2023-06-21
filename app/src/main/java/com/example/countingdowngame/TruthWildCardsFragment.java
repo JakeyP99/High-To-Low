@@ -98,9 +98,23 @@ public class TruthWildCardsFragment extends Fragment {
                 probability = 10; // Invalid input, set to a default value
             }
 
+            String inputText = probabilityInput.getText().toString().trim();
             String text = textInput.getText().toString().trim();
             if (text.isEmpty()) {
                 Toast.makeText(requireContext(), "The wildcard needs some text, please and thanks!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (inputText.length() > 4) {
+                Toast.makeText(getContext(), "Please enter a probability with 4 or fewer digits.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (textInput.length() <=0 ) {
+                Toast.makeText(getContext(), "The wildcard needs some text, please and thanks!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (textInput.length() > 100 ) {
+                Toast.makeText(getContext(), "Sorry, way too big of a wildcard boss man, limited to 100 characters.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
