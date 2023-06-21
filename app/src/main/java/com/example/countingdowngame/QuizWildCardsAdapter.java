@@ -18,10 +18,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
    public class QuizWildCardsAdapter extends WildCardsAdapter {
-        public QuizWildCardsAdapter(Settings_WildCard_Probabilities[] quizWildCards, Context context, Settings_WildCard_Mode mode) {
-            super("QuizPrefs", quizWildCards, context, mode);
-        }
 
+
+       public boolean areAllEnabled() {
+           for (Settings_WildCard_Probabilities wildcard : wildCards) {
+               if (!wildcard.isEnabled()) {
+                   return false; // If any wildcard is disabled, return false
+               }
+           }
+           return true; // All wildcards are enabled
+       }
+
+       public QuizWildCardsAdapter(Settings_WildCard_Probabilities[] quizWildCards, Context context, Settings_WildCard_Mode mode) {
+            super("QuizPrefs", quizWildCards, context, mode);
+       }
         @NonNull
         @Override
         public WildCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -34,6 +44,9 @@ import java.util.Arrays;
             Settings_WildCard_Probabilities wildcard = wildCards[position];
             holder.bind(wildcard);
         }
+       public void setWildCards(Settings_WildCard_Probabilities[] wildCards) {
+           this.wildCards = wildCards;
+       }
 
         @Override
         public int getItemCount() {
