@@ -1,19 +1,24 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_WildCard"
         android:layout_width="match_parent"
-        android:layout_height="769dp" />
+        android:layout_height="600dp" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 
     <Button
         android:id="@+id/btnToggleAll"
         android:layout_width="139dp"
         android:layout_height="77dp"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@id/recyclerView_WildCard"
-        android:layout_marginTop="20dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="20dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/outlineforbutton"
         android:text="Toggle All \nOn/Off"
@@ -21,4 +26,4 @@
         android:textColor="@color/bluedark"
         android:textSize="20sp" />
 
-</RelativeLayout>
+</FrameLayout>

@@ -249,7 +249,7 @@ public class MainActivity extends ButtonUtilsActivity {
     private void wildCardActivate(Player player) {
         Game.getInstance().getCurrentPlayer().useWildCard();
         Settings_WildCard_Probabilities[] emptyProbabilitiesArray = new Settings_WildCard_Probabilities[0];
-        QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(emptyProbabilitiesArray,this);
+        QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(emptyProbabilitiesArray,this, Settings_WildCard_Mode.QUIZ);
         TaskWildCardsAdapter taskAdapter = new TaskWildCardsAdapter(emptyProbabilitiesArray,this, Settings_WildCard_Mode.TASK);
         TruthWildCardsAdapter truthAdapter = new TruthWildCardsAdapter(emptyProbabilitiesArray,this, Settings_WildCard_Mode.TRUTH);
 

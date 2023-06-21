@@ -145,5 +145,6 @@ public class TruthWildCardsAdapter extends WildCardsAdapter {
                 builder.show();
             });
         }
+
     }
 }
