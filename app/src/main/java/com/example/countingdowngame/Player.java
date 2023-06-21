@@ -71,6 +71,7 @@ class Player implements Serializable {
     public void addUsedWildCard(Settings_WildCard_Probabilities usedWildCard) {
         usedWildCards.add(usedWildCard);
     }
+
     //-----------------------------------------------------Reset Abilities---------------------------------------------------//
 
     public void resetWildCardAmount(Context context) {

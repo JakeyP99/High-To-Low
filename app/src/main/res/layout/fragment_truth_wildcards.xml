@@ -1,5 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/recyclerView_WildCard"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_WildCard"
+        android:layout_width="match_parent"
+        android:layout_height="769dp" />
+
+    <Button
+        android:id="@+id/btnToggleAll"
+        android:layout_width="139dp"
+        android:layout_height="77dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/recyclerView_WildCard"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/outlineforbutton"
+        android:text="Toggle All \nOn/Off"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="20sp" />
+
+</RelativeLayout>

@@ -168,8 +168,6 @@ public class PlayerModel extends ButtonUtilsActivity {
         });
     }
 
-
-
     //-----------------------------------------------------Image and player creation functionality---------------------------------------------------//
     // Open image picker to capture an image
     private void captureImage() {
@@ -183,8 +181,6 @@ public class PlayerModel extends ButtonUtilsActivity {
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
 
-
-
     // Convert a Bitmap to a Base64-encoded string
     private String convertBitmapToString(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -197,7 +193,6 @@ public class PlayerModel extends ButtonUtilsActivity {
         byte[] decodedString = Base64.decode(bitmapString, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
     }
-
 
     // Handle the result of the image picker activity
     @Override
@@ -217,7 +212,6 @@ public class PlayerModel extends ButtonUtilsActivity {
             // Handle cancelation
         }
     }
-
 
     private void showNameInputDialog(Bitmap bitmap) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -248,6 +242,7 @@ public class PlayerModel extends ButtonUtilsActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
     private void createNewCharacter(Bitmap bitmap, String name) {
         int size = Math.min(bitmap.getWidth(), bitmap.getHeight());
         int desiredSize = size; // Desired zoomed-in size
@@ -270,8 +265,6 @@ public class PlayerModel extends ButtonUtilsActivity {
 
     }
 
-
-
     // Delete a player at a given position
     public void deletePlayer(int position) {
         playerList.remove(position);
@@ -279,7 +272,6 @@ public class PlayerModel extends ButtonUtilsActivity {
         savePlayerData();
         updatePlayerCounter();
     }
-
 
     //-----------------------------------------------------Save and load functionality---------------------------------------------------//
 
@@ -317,10 +309,11 @@ public class PlayerModel extends ButtonUtilsActivity {
         } else {
             loadedPlayerList = new ArrayList<>();
         }
-
+        for (Player p : loadedPlayerList) {
+            p.resetWildCardAmount(context);
+        }
         return loadedPlayerList;
     }
-
 
     // Load player data from SharedPreferences
     public static List<Player> loadSelectedPlayers(Context context) {

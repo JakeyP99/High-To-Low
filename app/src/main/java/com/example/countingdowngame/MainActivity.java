@@ -127,9 +127,7 @@ public class MainActivity extends ButtonUtilsActivity {
 
         btnBackWild.setVisibility(View.INVISIBLE);
 
-        btnUtils.setButton(btnGenerate, () -> {
-            startNumberShuffleAnimation();
-        });
+        btnUtils.setButton(btnGenerate, this::startNumberShuffleAnimation);
 
         btnUtils.setButton(btnBackWild, () -> {
             btnGenerate.setVisibility(View.VISIBLE);
