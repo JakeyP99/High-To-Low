@@ -143,7 +143,10 @@ public class QuizWildCardsFragment extends Fragment {
                 return;
             }
 
-            Settings_WildCard_Probabilities newWildCard = new Settings_WildCard_Probabilities(text, probability, true, true);
+            // Add "Quiz!" to the start of the wildcard text
+            String wildcardText = "Quiz! " + text;
+
+            Settings_WildCard_Probabilities newWildCard = new Settings_WildCard_Probabilities(wildcardText, probability, true, true);
 
             // Create a new array with increased size
             Settings_WildCard_Probabilities[] newQuizWildCards = new Settings_WildCard_Probabilities[quizWildCards.length + 1];
@@ -160,75 +163,4 @@ public class QuizWildCardsFragment extends Fragment {
         builder.show();
     }
 }
-//    private void addNewWildCard() {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle("Add New Wildcard");
-//
-//        LinearLayout layout = new LinearLayout(this);
-//        layout.setOrientation(LinearLayout.VERTICAL);
-//
-//        final EditText textInput = new EditText(this);
-//        textInput.setInputType(InputType.TYPE_CLASS_TEXT);
-//        textInput.setHint("Wildcard Title");
-//        layout.addView(textInput);
-//
-//        final EditText probabilityInput = new EditText(this);
-//        probabilityInput.setInputType(InputType.TYPE_CLASS_NUMBER);
-//        probabilityInput.setHint("Probability (0-9999)");
-//        layout.addView(probabilityInput);
-//
-//        builder.setView(layout);
-//
-//
-//        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-//
-//        builder.setPositiveButton("OK", (dialog, which) -> {
-//            int probability;
-//            try {
-//                probability = Integer.parseInt(probabilityInput.getText().toString());
-//            } catch (NumberFormatException e) {
-//                probability = 10; // Invalid input, set to a negative value
-//            }
-//            String inputText = probabilityInput.getText().toString().trim();
-//            String text = textInput.getText().toString();
-//
-//            if (inputText.length() > 4) {
-//                Toast.makeText(Settings_WildCard_Choice.this, "Please enter a probability with 4 or fewer digits.", Toast.LENGTH_SHORT).show();
-//                return;
-//            }
-//            if (textInput.length() <=0 ) {
-//                Toast.makeText(Settings_WildCard_Choice.this, "The wildcard needs some text, please and thanks!", Toast.LENGTH_SHORT).show();
-//                return;
-//            }
-//            if (textInput.length() > 100 ) {
-//                Toast.makeText(Settings_WildCard_Choice.this, "Sorry, way too big of a wildcard boss man, limited to 100 characters.", Toast.LENGTH_SHORT).show();
-//                return;
-//            }
-//
-//            Settings_WildCard_Probabilities newWildCard = new Settings_WildCard_Probabilities(text, probability, true, true);
-//            Settings_WildCard_Probabilities[][] probabilitiesArray = loadWildCardProbabilitiesFromStorage(getApplicationContext());
-//            Settings_WildCard_Probabilities[] deletableProbabilities = probabilitiesArray[0];
-//
-//            ArrayList<Settings_WildCard_Probabilities> wildCardList = new ArrayList<>(Arrays.asList(deletableProbabilities));
-//            wildCardList.add(newWildCard);
-//
-//            deletableProbabilities = wildCardList.toArray(new Settings_WildCard_Probabilities[0]);
-//
-//            deletableAdapter = new Settings_WildCard_Adapter(DELETABLE, Settings_WildCard_Choice.this, deletableProbabilities);
-//            listViewWildCard.setAdapter(deletableAdapter);
-//
-//            saveWildCardProbabilitiesToStorage(DELETABLE, deletableProbabilities);
-//
-//            probabilitiesArray[0] = deletableProbabilities;
-//
-//            deletableAdapter.notifyDataSetChanged();
-//
-//        });
-//
-//        builder.show();
-//
-//    }
-//
-
-
 
