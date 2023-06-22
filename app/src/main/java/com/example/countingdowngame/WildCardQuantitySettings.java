@@ -5,17 +5,17 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
+import android.view.Gravity;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-public class Settings_WildCard_Settings extends ButtonUtilsActivity {
+public class WildCardQuantitySettings extends ButtonUtilsActivity {
 
 
     //-----------------------------------------------------Initialize---------------------------------------------------//
     private Button btnReturn;
     private EditText wildcardPerPlayerEditText;
-    private boolean isValidInput;
 
 
     //-----------------------------------------------------On Pause---------------------------------------------------//
@@ -36,6 +36,29 @@ public class Settings_WildCard_Settings extends ButtonUtilsActivity {
         loadPreferences();
         setButtonListeners();
     }
+
+    @Override
+    public void onBackPressed() {
+        if (isValidInput()) {
+            savePreferences();
+            super.onBackPressed();
+        } else {
+            String wildCardAmountInput = wildcardPerPlayerEditText.getText().toString().trim();
+            if (wildCardAmountInput.isEmpty()) {
+                wildcardPerPlayerEditText.setText("0");
+                savePreferences();
+                super.onBackPressed();
+            } else {
+                int wildCardAmount = Integer.parseInt(wildCardAmountInput);
+                if (wildCardAmount < 0 || wildCardAmount > 100) {
+                    showToast();
+                } else {
+                    super.onBackPressed();
+                }
+            }
+        }
+    }
+
     //-----------------------------------------------------Initialize Views---------------------------------------------------//
 
     private void initializeViews() {
@@ -61,25 +84,50 @@ public class Settings_WildCard_Settings extends ButtonUtilsActivity {
             }
         });
     }
+    private boolean isValidInput() {
+        String wildCardAmountInput = wildcardPerPlayerEditText.getText().toString().trim();
+
+          if (wildCardAmountInput.length() > 3) {
+            wildCardAmountInput = wildCardAmountInput.substring(0, 3);
+            wildcardPerPlayerEditText.setText(wildCardAmountInput);
+        }
+
+        try {
+            int wildCardAmount = Integer.parseInt(wildCardAmountInput);
+            return wildCardAmount >= 0 && wildCardAmount <= 100;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 
 
     private void setButtonListeners() {
-        btnUtils.setButton(btnReturn, this::onBackPressed);
+        btnUtils.setButton(btnReturn, () -> {
+            if (isValidInput()) {
+                savePreferences();
+                super.onBackPressed();
+            } else {
+                String wildCardAmountInput = wildcardPerPlayerEditText.getText().toString().trim();
+                if (wildCardAmountInput.isEmpty()) {
+                    wildcardPerPlayerEditText.setText("0");
+                    savePreferences();
+                    super.onBackPressed();
+                } else {
+                    int wildCardAmount = Integer.parseInt(wildCardAmountInput);
+                    if (wildCardAmount < 0 || wildCardAmount > 100) {
+                        showToast();
+                    } else {
+                        super.onBackPressed();
+                    }
+                }
+            }
+        });
     }
 
-    private void onReturnButtonClicked(View view) {
-        if (isValidInput) {
-            onBackPressed();
-        }
-    }
 
-    @Override
-    public void onBackPressed() {
-        if (isValidInput) {
-            savePreferences();
-            super.onBackPressed();
-        }
-    }
+
+
+
     //-----------------------------------------------------Get WildCard---------------------------------------------------//
 
     public static int getWildCardAmountFromSettings(Context context) {
@@ -91,23 +139,18 @@ public class Settings_WildCard_Settings extends ButtonUtilsActivity {
     private void validateWildCardAmount() {
         String wildCardAmountInput = wildcardPerPlayerEditText.getText().toString().trim();
 
-       if (wildCardAmountInput.length() > 3) {
+        if (wildCardAmountInput.length() > 3) {
             wildCardAmountInput = wildCardAmountInput.substring(0, 3);
             wildcardPerPlayerEditText.setText(wildCardAmountInput);
             wildcardPerPlayerEditText.setSelection(wildCardAmountInput.length());
         }
 
-        int wildCardAmount;
-        try {
-            wildCardAmount = Integer.parseInt(wildCardAmountInput);
-            if (wildCardAmount > 100) {
-                wildcardPerPlayerEditText.setError("Please enter a number between 0 and 100");
-            } else {
-                wildcardPerPlayerEditText.setError(null);
-            }
-        } catch (NumberFormatException e) {
-            wildcardPerPlayerEditText.setError("Please enter a valid number");
-        }
+    }
+
+    private void showToast() {
+        Toast toast = Toast.makeText(this, "Please enter a number between 0 and 100", Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
     }
 
 

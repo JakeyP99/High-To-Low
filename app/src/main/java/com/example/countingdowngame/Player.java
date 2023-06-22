@@ -75,6 +75,6 @@ class Player implements Serializable {
     //-----------------------------------------------------Reset Abilities---------------------------------------------------//
 
     public void resetWildCardAmount(Context context) {
-        wildCardAmount = Settings_WildCard_Settings.getWildCardAmountFromSettings(context);
+        wildCardAmount = WildCardQuantitySettings.getWildCardAmountFromSettings(context);
     }
 }

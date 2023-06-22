@@ -22,7 +22,7 @@ public class Settings extends ButtonUtilsActivity {
         });
 
         btnUtils.setButton(btnWildCardSettings, () -> {
-            startActivity(getIntentForClass(Settings_WildCard_Settings.class));
+            startActivity(getIntentForClass(WildCardQuantitySettings.class));
         });
 
         btnUtils.setButton(btnGameModeSettings, () -> {
