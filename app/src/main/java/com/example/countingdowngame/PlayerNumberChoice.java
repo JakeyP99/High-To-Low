@@ -23,6 +23,16 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
 
         btnUtils.setButton(btnSubmitPlayers, this::submitPlayerNumber);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        originalPlayerField.setText("");
+        originalPlayerField.setFocusableInTouchMode(true);
+        originalPlayerField.setFocusable(true);
+    }
+
+
     private void submitPlayerNumber() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             originalPlayerField.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO); // Disable Google autofill

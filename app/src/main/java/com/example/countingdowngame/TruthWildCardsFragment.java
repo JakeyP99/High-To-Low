@@ -119,7 +119,7 @@ public class TruthWildCardsFragment extends Fragment {
             }
 
             // Add "Quiz!" to the start of the wildcard text
-            String wildcardText = "Task! " + text;
+            String wildcardText = "Truth! " + text;
 
             Settings_WildCard_Probabilities newWildCard = new Settings_WildCard_Probabilities(wildcardText, probability, true, true);
 
