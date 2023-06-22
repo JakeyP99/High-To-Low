@@ -15,14 +15,12 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 public class Settings_WildCard_Adapter extends ArrayAdapter<WildCardHeadings> {
     private final WildCardChoice mContext;
-    private final WildCardType mMode;
     private WildCardHeadings[] mProbabilities;
 
-    public Settings_WildCard_Adapter(WildCardType mode, WildCardChoice context, WildCardHeadings[] probabilities) {
+    public Settings_WildCard_Adapter( WildCardChoice context, WildCardHeadings[] probabilities) {
         super(context, R.layout.list_view_wild_cards, probabilities);
         mContext = context;
         mProbabilities = probabilities;
-        mMode = mode;
     }
 
     @Override
@@ -71,7 +69,7 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<WildCardHeadings> {
     }
 
     public static class WildCardsPagerAdapter extends FragmentPagerAdapter {
-        private static final int TAB_COUNT = 3;
+        private static final int TAB_COUNT = 4;
 
         public WildCardsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -86,6 +84,8 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<WildCardHeadings> {
                 case 1:
                     return new TaskWildCardsFragment();
                 case 2:
+                    return new TruthWildCardsFragment();
+                case 3:
                     return new TruthWildCardsFragment();
                 default:
                     return null;
@@ -107,6 +107,8 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<WildCardHeadings> {
                     return "Task";
                 case 2:
                     return "Truth";
+                case 3:
+                    return "Extras";
                 default:
                     return super.getPageTitle(position);
             }
