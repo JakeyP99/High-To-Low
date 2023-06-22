@@ -6,7 +6,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
-public class Settings_WildCard_Choice extends ButtonUtilsActivity {
+public class WildCardChoice extends ButtonUtilsActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

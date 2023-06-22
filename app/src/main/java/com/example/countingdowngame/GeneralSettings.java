@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class Settings_GameModeChoice extends ButtonUtilsActivity implements View.OnClickListener {
+public class GeneralSettings extends ButtonUtilsActivity implements View.OnClickListener {
 
     //-----------------------------------------------------Initialize---------------------------------------------------//
 

@@ -21,8 +21,8 @@ import java.util.Set;
 
 public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
-    private final Map<Player, Set<Settings_WildCard_Probabilities>> usedWildCard = new HashMap<>();
-    private final Set<Settings_WildCard_Probabilities> usedWildCards = new HashSet<>();
+    private final Map<Player, Set<WildCardHeadings>> usedWildCard = new HashMap<>();
+    private final Set<WildCardHeadings> usedWildCards = new HashSet<>();
     private TextView numberText;
     private TextView numberTextPlayer2;
     private TextView nextPlayerText;

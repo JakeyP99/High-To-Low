@@ -19,11 +19,11 @@ import java.util.Arrays;
 
    public class QuizWildCardsAdapter extends WildCardsAdapter {
 
-       public Settings_WildCard_Probabilities[] getWildCards() {
+       public WildCardHeadings[] getWildCards() {
            return wildCards;
        }
        public boolean areAllEnabled() {
-           for (Settings_WildCard_Probabilities wildcard : wildCards) {
+           for (WildCardHeadings wildcard : wildCards) {
                if (!wildcard.isEnabled()) {
                    return false; // If any wildcard is disabled, return false
                }
@@ -31,7 +31,7 @@ import java.util.Arrays;
            return true; // All wildcards are enabled
        }
 
-       public QuizWildCardsAdapter(Settings_WildCard_Probabilities[] quizWildCards, Context context, Settings_WildCard_Mode mode) {
+       public QuizWildCardsAdapter(WildCardHeadings[] quizWildCards, Context context, WildCardType mode) {
             super("QuizPrefs", quizWildCards, context, mode);
        }
         @NonNull
@@ -43,10 +43,10 @@ import java.util.Arrays;
 
         @Override
         public void onBindViewHolder(@NonNull WildCardViewHolder holder, int position) {
-            Settings_WildCard_Probabilities wildcard = wildCards[position];
+            WildCardHeadings wildcard = wildCards[position];
             holder.bind(wildcard);
         }
-       public void setWildCards(Settings_WildCard_Probabilities[] wildCards) {
+       public void setWildCards(WildCardHeadings[] wildCards) {
            this.wildCards = wildCards;
        }
 
@@ -61,7 +61,7 @@ import java.util.Arrays;
             }
 
             @Override
-            public void bind(Settings_WildCard_Probabilities wildcard) {
+            public void bind(WildCardHeadings wildcard) {
                 textViewTitle.setText(wildcard.getText());
                 textViewProbabilities.setText(String.valueOf(wildcard.getProbability()));
                 switchEnabled.setChecked(wildcard.isEnabled());
@@ -103,14 +103,14 @@ import java.util.Arrays;
                         }
                     });
 
-                    ArrayList<Settings_WildCard_Probabilities> wildCardList = new ArrayList<>(Arrays.asList(wildCards));
+                    ArrayList<WildCardHeadings> wildCardList = new ArrayList<>(Arrays.asList(wildCards));
 
                     if (wildcard.isDeletable()) {
                         builder.setNeutralButton(Html.fromHtml("<font color='" + blueDarkColor + "'>Delete</font>"), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 wildCardList.remove(getAdapterPosition());
-                                wildCards = wildCardList.toArray(new Settings_WildCard_Probabilities[0]);
+                                wildCards = wildCardList.toArray(new WildCardHeadings[0]);
                                 notifyDataSetChanged();
                                 saveWildCardProbabilitiesToStorage(wildCards);
                             }

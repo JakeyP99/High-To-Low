@@ -47,15 +47,15 @@
             android:name=".InstructionsToPlay" />
 
         <activity
-            android:name=".Settings" />
+            android:name=".SettingsContainer" />
         <activity
-            android:name=".WildCardQuantitySettings" />
+            android:name=".WildCardQuantity" />
         <activity
-            android:name=".Settings_WildCard_Choice"
+            android:name=".WildCardChoice"
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
-            android:name=".Settings_GameModeChoice" />
+            android:name=".GeneralSettings" />
 
         <activity
             android:name=".MainActivitySplitScreen" />

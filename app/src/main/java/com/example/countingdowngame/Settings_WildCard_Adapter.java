@@ -13,12 +13,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Probabilities> {
-    private final Settings_WildCard_Choice mContext;
-    private final Settings_WildCard_Mode mMode;
-    private Settings_WildCard_Probabilities[] mProbabilities;
+public class Settings_WildCard_Adapter extends ArrayAdapter<WildCardHeadings> {
+    private final WildCardChoice mContext;
+    private final WildCardType mMode;
+    private WildCardHeadings[] mProbabilities;
 
-    public Settings_WildCard_Adapter(Settings_WildCard_Mode mode, Settings_WildCard_Choice context, Settings_WildCard_Probabilities[] probabilities) {
+    public Settings_WildCard_Adapter(WildCardType mode, WildCardChoice context, WildCardHeadings[] probabilities) {
         super(context, R.layout.list_view_wild_cards, probabilities);
         mContext = context;
         mProbabilities = probabilities;
@@ -38,7 +38,7 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<Settings_WildCard_Pr
         TextView textViewWildCard = view.findViewById(R.id.textview_wildcard);
         TextView textViewProbability = view.findViewById(R.id.textview_probability);
         Switch switchWildCard = view.findViewById(R.id.switch_wildcard);
-        Settings_WildCard_Probabilities wildCard = mProbabilities[position];
+        WildCardHeadings wildCard = mProbabilities[position];
         textViewWildCard.setText(wildCard.getText());
         textViewProbability.setText(String.valueOf(wildCard.getProbability()));
         switchWildCard.setChecked(wildCard.isEnabled());

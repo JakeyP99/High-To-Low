@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class TruthWildCardsAdapter extends WildCardsAdapter {
-    public TruthWildCardsAdapter(Settings_WildCard_Probabilities[] truthWildCards, Context context, Settings_WildCard_Mode mode) {
+    public TruthWildCardsAdapter(WildCardHeadings[] truthWildCards, Context context, WildCardType mode) {
         super("TruthPrefs", truthWildCards, context, mode);
     }
 
@@ -31,14 +31,14 @@ public class TruthWildCardsAdapter extends WildCardsAdapter {
 
     @Override
     public void onBindViewHolder(@NonNull WildCardViewHolder holder, int position) {
-        Settings_WildCard_Probabilities wildcard = wildCards[position];
+        WildCardHeadings wildcard = wildCards[position];
         holder.bind(wildcard);
     }
-    public void setWildCards(Settings_WildCard_Probabilities[] wildCards) {
+    public void setWildCards(WildCardHeadings[] wildCards) {
         this.wildCards = wildCards;
     }
     public boolean areAllEnabled() {
-        for (Settings_WildCard_Probabilities wildcard : wildCards) {
+        for (WildCardHeadings wildcard : wildCards) {
             if (!wildcard.isEnabled()) {
                 return false;
             }
@@ -49,7 +49,7 @@ public class TruthWildCardsAdapter extends WildCardsAdapter {
     public int getItemCount() {
         return wildCards.length;
     }
-    public Settings_WildCard_Probabilities[] getWildCards() {
+    public WildCardHeadings[] getWildCards() {
         return wildCards;
     }
 
@@ -59,7 +59,7 @@ public class TruthWildCardsAdapter extends WildCardsAdapter {
         }
 
         @Override
-        public void bind(Settings_WildCard_Probabilities wildcard) {
+        public void bind(WildCardHeadings wildcard) {
             textViewTitle.setText(wildcard.getText());
             textViewProbabilities.setText(String.valueOf(wildcard.getProbability()));
             switchEnabled.setChecked(wildcard.isEnabled());
@@ -101,14 +101,14 @@ public class TruthWildCardsAdapter extends WildCardsAdapter {
                     }
                 });
 
-                ArrayList<Settings_WildCard_Probabilities> wildCardList = new ArrayList<>(Arrays.asList(wildCards));
+                ArrayList<WildCardHeadings> wildCardList = new ArrayList<>(Arrays.asList(wildCards));
 
                 if (wildcard.isDeletable()) {
                     builder.setNeutralButton(Html.fromHtml("<font color='" + blueDarkColor + "'>Delete</font>"), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             wildCardList.remove(getAdapterPosition());
-                            wildCards = wildCardList.toArray(new Settings_WildCard_Probabilities[0]);
+                            wildCards = wildCardList.toArray(new WildCardHeadings[0]);
                             notifyDataSetChanged();
                             saveWildCardProbabilitiesToStorage(wildCards);
                         }

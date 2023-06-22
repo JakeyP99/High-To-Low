@@ -21,9 +21,9 @@ import java.util.Arrays;
 
 public class TaskWildCardsAdapter extends WildCardsAdapter {
     private Context mContext;
-    private Settings_WildCard_Mode mMode;
+    private WildCardType mMode;
 
-    public TaskWildCardsAdapter(Settings_WildCard_Probabilities[] taskWildCards, Context context, Settings_WildCard_Mode mode) {
+    public TaskWildCardsAdapter(WildCardHeadings[] taskWildCards, Context context, WildCardType mode) {
         super("TaskPrefs", taskWildCards, context, mode);
         this.mContext = context;
         this.mMode = mode;
@@ -37,14 +37,14 @@ public class TaskWildCardsAdapter extends WildCardsAdapter {
         return new TaskWildCardViewHolder(view);
     }
 
-    public Settings_WildCard_Probabilities[] getWildCards() {
+    public WildCardHeadings[] getWildCards() {
         return wildCards;
     }
-    public void setWildCards(Settings_WildCard_Probabilities[] wildCards) {
+    public void setWildCards(WildCardHeadings[] wildCards) {
         this.wildCards = wildCards;
     }
     public boolean areAllEnabled() {
-        for (Settings_WildCard_Probabilities wildcard : wildCards) {
+        for (WildCardHeadings wildcard : wildCards) {
             if (!wildcard.isEnabled()) {
                 return false; // If any wildcard is disabled, return false
             }
@@ -53,7 +53,7 @@ public class TaskWildCardsAdapter extends WildCardsAdapter {
     }
     @Override
     public void onBindViewHolder(@NonNull WildCardViewHolder holder, int position) {
-        Settings_WildCard_Probabilities wildcard = wildCards[position];
+        WildCardHeadings wildcard = wildCards[position];
         holder.bind(wildcard);
     }
 
@@ -77,7 +77,7 @@ public class TaskWildCardsAdapter extends WildCardsAdapter {
 
         }
 
-        public void bind(Settings_WildCard_Probabilities wildcard) {
+        public void bind(WildCardHeadings wildcard) {
             textViewTitle.setText(wildcard.getText());
             textViewProbabilities.setText(String.valueOf(wildcard.getProbability()));
 
@@ -112,9 +112,9 @@ public class TaskWildCardsAdapter extends WildCardsAdapter {
                 builder.setNegativeButton(Html.fromHtml("<font color='" + blueDarkColor + "'>Cancel</font>"), (dialog, which) -> dialog.cancel());
 
                 builder.setNeutralButton(Html.fromHtml("<font color='" + blueDarkColor + "'>Delete</font>"), (dialog, which) -> {
-                    ArrayList<Settings_WildCard_Probabilities> wildCardList = new ArrayList<>(Arrays.asList(wildCards));
+                    ArrayList<WildCardHeadings> wildCardList = new ArrayList<>(Arrays.asList(wildCards));
                     wildCardList.remove(getAdapterPosition());
-                    wildCards = wildCardList.toArray(new Settings_WildCard_Probabilities[0]);
+                    wildCards = wildCardList.toArray(new WildCardHeadings[0]);
                     notifyDataSetChanged();
                     saveWildCardProbabilitiesToStorage(wildCards);
                 });

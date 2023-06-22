@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class WildCardQuantitySettings extends ButtonUtilsActivity {
+public class WildCardQuantity extends ButtonUtilsActivity {
 
 
     //-----------------------------------------------------Initialize---------------------------------------------------//

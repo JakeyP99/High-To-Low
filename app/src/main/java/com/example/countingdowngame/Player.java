@@ -13,7 +13,7 @@ class Player implements Serializable {
     private final String photo;
     private String name;
     private Game game;
-    private final Set<Settings_WildCard_Probabilities> usedWildCards = new HashSet<>();
+    private final Set<WildCardHeadings> usedWildCards = new HashSet<>();
     private int wildCardAmount;
     private boolean selected;
 
@@ -68,13 +68,13 @@ class Player implements Serializable {
         this.game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.SKIP));
     }
 
-    public void addUsedWildCard(Settings_WildCard_Probabilities usedWildCard) {
+    public void addUsedWildCard(WildCardHeadings usedWildCard) {
         usedWildCards.add(usedWildCard);
     }
 
     //-----------------------------------------------------Reset Abilities---------------------------------------------------//
 
     public void resetWildCardAmount(Context context) {
-        wildCardAmount = WildCardQuantitySettings.getWildCardAmountFromSettings(context);
+        wildCardAmount = WildCardQuantity.getWildCardAmountFromSettings(context);
     }
 }

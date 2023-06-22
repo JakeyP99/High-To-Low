@@ -38,8 +38,8 @@ public class MainActivityGame extends ButtonUtilsActivity {
         AudioManager.getInstance().stopSound(); // Stop the sound
     }
 
-    private final Map<Player, Set<Settings_WildCard_Probabilities>> usedWildCard = new HashMap<>();
-    private final Set<Settings_WildCard_Probabilities> usedWildCards = new HashSet<>();
+    private final Map<Player, Set<WildCardHeadings>> usedWildCard = new HashMap<>();
+    private final Set<WildCardHeadings> usedWildCards = new HashSet<>();
     private TextView numberText;
     private TextView nextPlayerText;
 
@@ -248,17 +248,17 @@ public class MainActivityGame extends ButtonUtilsActivity {
 
     private void wildCardActivate(Player player) {
         Game.getInstance().getCurrentPlayer().useWildCard();
-        Settings_WildCard_Probabilities[] emptyProbabilitiesArray = new Settings_WildCard_Probabilities[0];
-        QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(emptyProbabilitiesArray,this, Settings_WildCard_Mode.QUIZ);
-        TaskWildCardsAdapter taskAdapter = new TaskWildCardsAdapter(emptyProbabilitiesArray,this, Settings_WildCard_Mode.TASK);
-        TruthWildCardsAdapter truthAdapter = new TruthWildCardsAdapter(emptyProbabilitiesArray,this, Settings_WildCard_Mode.TRUTH);
+        WildCardHeadings[] emptyProbabilitiesArray = new WildCardHeadings[0];
+        QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(emptyProbabilitiesArray,this, WildCardType.QUIZ);
+        TaskWildCardsAdapter taskAdapter = new TaskWildCardsAdapter(emptyProbabilitiesArray,this, WildCardType.TASK);
+        TruthWildCardsAdapter truthAdapter = new TruthWildCardsAdapter(emptyProbabilitiesArray,this, WildCardType.TRUTH);
 
 
-        Settings_WildCard_Probabilities[] quizProbabilities = quizAdapter.loadWildCardProbabilitiesFromStorage();
-        Settings_WildCard_Probabilities[] taskProbabilities = taskAdapter.loadWildCardProbabilitiesFromStorage();
-        Settings_WildCard_Probabilities[] truthProbabilities = truthAdapter.loadWildCardProbabilitiesFromStorage();
+        WildCardHeadings[] quizProbabilities = quizAdapter.loadWildCardProbabilitiesFromStorage();
+        WildCardHeadings[] taskProbabilities = taskAdapter.loadWildCardProbabilitiesFromStorage();
+        WildCardHeadings[] truthProbabilities = truthAdapter.loadWildCardProbabilitiesFromStorage();
 
-        List<Settings_WildCard_Probabilities> allProbabilities = new ArrayList<>();
+        List<WildCardHeadings> allProbabilities = new ArrayList<>();
         allProbabilities.addAll(Arrays.asList(quizProbabilities));
         allProbabilities.addAll(Arrays.asList(taskProbabilities));
         allProbabilities.addAll(Arrays.asList(truthProbabilities));
@@ -269,10 +269,10 @@ public class MainActivityGame extends ButtonUtilsActivity {
         boolean wildCardsEnabled = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("wild_cards_toggle", true);
 
         String selectedActivity = null;
-        Set<Settings_WildCard_Probabilities> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
+        Set<WildCardHeadings> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
         if (wildCardsEnabled) {
-            List<Settings_WildCard_Probabilities> unusedCards = allProbabilities.stream()
-                    .filter(Settings_WildCard_Probabilities::isEnabled)
+            List<WildCardHeadings> unusedCards = allProbabilities.stream()
+                    .filter(WildCardHeadings::isEnabled)
                     .filter(c -> !usedWildCards.contains(c))
                     .collect(Collectors.toList());
 
@@ -283,7 +283,7 @@ public class MainActivityGame extends ButtonUtilsActivity {
             }
 
             int totalWeight = unusedCards.stream()
-                    .mapToInt(Settings_WildCard_Probabilities::getProbability)
+                    .mapToInt(WildCardHeadings::getProbability)
                     .sum();
 
             if (totalWeight <= 0) {
@@ -297,7 +297,7 @@ public class MainActivityGame extends ButtonUtilsActivity {
                 int randomWeight = random.nextInt(totalWeight);
                 int weightSoFar = 0;
 
-                for (Settings_WildCard_Probabilities activityProbability : unusedCards) {
+                for (WildCardHeadings activityProbability : unusedCards) {
                     weightSoFar += activityProbability.getProbability();
 
                     if (randomWeight < weightSoFar) {
@@ -316,7 +316,7 @@ public class MainActivityGame extends ButtonUtilsActivity {
 
         if (selectedActivity != null) {
             wildActivityTextView.setText(selectedActivity);
-            for (Settings_WildCard_Probabilities wc : allProbabilities) {
+            for (WildCardHeadings wc : allProbabilities) {
                 if (wc.getText().equals(selectedActivity)) {
                     player.addUsedWildCard(wc);
                     usedCards.add(wc);

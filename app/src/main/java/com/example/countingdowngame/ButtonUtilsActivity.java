@@ -58,7 +58,7 @@ public class ButtonUtilsActivity extends AppCompatActivity {
     }
 
     protected void gotoSettings() {
-        startActivity(getIntentForClass(Settings.class, true));
+        startActivity(getIntentForClass(SettingsContainer.class, true));
     }
 
     //-----------------------------------------------------Sound Functionality---------------------------------------------------//

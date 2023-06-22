@@ -3,7 +3,7 @@ package com.example.countingdowngame;
 import android.os.Bundle;
 import android.widget.Button;
 
-public class Settings extends ButtonUtilsActivity {
+public class SettingsContainer extends ButtonUtilsActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,15 +18,15 @@ public class Settings extends ButtonUtilsActivity {
         btnUtils.setButton(btnReturn, this::onBackPressed);
 
         btnUtils.setButton(btnWildCardChoice, () -> {
-            startActivity(getIntentForClass(Settings_WildCard_Choice.class));
+            startActivity(getIntentForClass(WildCardChoice.class));
         });
 
         btnUtils.setButton(btnWildCardSettings, () -> {
-            startActivity(getIntentForClass(WildCardQuantitySettings.class));
+            startActivity(getIntentForClass(WildCardQuantity.class));
         });
 
         btnUtils.setButton(btnGameModeSettings, () -> {
-            startActivity(getIntentForClass(Settings_GameModeChoice.class));
+            startActivity(getIntentForClass(GeneralSettings.class));
         });
 
     }

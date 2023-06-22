@@ -22,12 +22,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAdapter.WildCardViewHolder> {
-    protected Settings_WildCard_Probabilities[] wildCards;
+    protected WildCardHeadings[] wildCards;
     protected Context mContext;
-    protected Settings_WildCard_Mode mMode;
+    protected WildCardType mMode;
     private String mSaveKey;
 
-    public WildCardsAdapter(String saveKey, Settings_WildCard_Probabilities[] wildCards, Context context, Settings_WildCard_Mode mode) {
+    public WildCardsAdapter(String saveKey, WildCardHeadings[] wildCards, Context context, WildCardType mode) {
         this.wildCards = wildCards;
         this.mContext = context;
         this.mMode = mode;
@@ -35,18 +35,18 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
         loadWildCardProbabilitiesFromStorage();
     }
 
-    Settings_WildCard_Probabilities[] loadWildCardProbabilitiesFromStorage() {
+    WildCardHeadings[] loadWildCardProbabilitiesFromStorage() {
         SharedPreferences prefs = mContext.getSharedPreferences(mSaveKey, MODE_PRIVATE);
 
         int wildCardCount = prefs.getInt("wild_card_count", 0);
-        Settings_WildCard_Probabilities[] loadedWildCards = new Settings_WildCard_Probabilities[wildCardCount];
+        WildCardHeadings[] loadedWildCards = new WildCardHeadings[wildCardCount];
 
         for (int i = 0; i < wildCardCount; i++) {
             boolean enabled = prefs.getBoolean("wild_card_enabled_" + i, false);
             String activity = prefs.getString("wild_card_activity_" + i, "");
             int probability = prefs.getInt("wild_card_probability_" + i, 0);
 
-            loadedWildCards[i] = new Settings_WildCard_Probabilities(activity, probability, enabled, true);
+            loadedWildCards[i] = new WildCardHeadings(activity, probability, enabled, true);
         }
         wildCards = loadedWildCards;
         return loadedWildCards;
@@ -63,7 +63,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
         textView.setTextSize(textSize);
     }
 
-    public void saveWildCardProbabilitiesToStorage(Settings_WildCard_Probabilities[] probabilities) {
+    public void saveWildCardProbabilitiesToStorage(WildCardHeadings[] probabilities) {
         SharedPreferences prefs = mContext.getSharedPreferences(mSaveKey, MODE_PRIVATE);
         wildCards= probabilities;
 
@@ -73,7 +73,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
         editor.putInt("wild_card_count", probabilities.length);
 
         for (int i = 0; i < probabilities.length; i++) {
-            Settings_WildCard_Probabilities probability = probabilities[i];
+            WildCardHeadings probability = probabilities[i];
             editor.putBoolean("wild_card_enabled_" + i, probability.isEnabled());
             editor.putString("wild_card_activity_" + i, probability.getText());
             editor.putInt("wild_card_probability_" + i, probability.getProbability());
@@ -96,7 +96,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
             switchEnabled = itemView.findViewById(R.id.switch_wildcard);
         }
 
-        public void bind(Settings_WildCard_Probabilities wildcard) {
+        public void bind(WildCardHeadings wildcard) {
             textViewTitle.setText(wildcard.getText());
             textViewProbabilities.setText(String.valueOf(wildcard.getProbability()));
             switchEnabled.setChecked(wildcard.isEnabled());
@@ -138,14 +138,14 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
                     }
                 });
 
-                ArrayList<Settings_WildCard_Probabilities> wildCardList = new ArrayList<>(Arrays.asList(wildCards));
+                ArrayList<WildCardHeadings> wildCardList = new ArrayList<>(Arrays.asList(wildCards));
 
                 if (wildcard.isDeletable()) {
                     builder.setNeutralButton(Html.fromHtml("<font color='" + blueDarkColor + "'>Delete</font>"), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             wildCardList.remove(getAdapterPosition());
-                            wildCards = wildCardList.toArray(new Settings_WildCard_Probabilities[0]);
+                            wildCards = wildCardList.toArray(new WildCardHeadings[0]);
                             notifyDataSetChanged();
                             saveWildCardProbabilitiesToStorage(wildCards);
                         }
