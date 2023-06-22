@@ -343,6 +343,8 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
         if (selectedActivity != null) {
             wildActivityTextView.setText(selectedActivity);
+            wildActivityTextViewPlayer2.setText(selectedActivity);
+
             for (WildCardHeadings wc : allProbabilities) {
                 if (wc.getText().equals(selectedActivity)) {
                     player.addUsedWildCard(wc);
@@ -451,20 +453,25 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
     private void ButtonWildFunction() {
         btnWild.setVisibility(View.INVISIBLE);
+        btnWildPlayer2.setVisibility(View.INVISIBLE);
+
         wildText.setVisibility(View.VISIBLE);
+        wildTextPlayer2.setVisibility(View.VISIBLE);
+
         btnBackWild.setVisibility(View.VISIBLE);
+        btnBackWildPlayer2.setVisibility(View.VISIBLE);
+
         btnGenerate.setVisibility(View.INVISIBLE);
+        btnGeneratePlayer2.setVisibility(View.INVISIBLE);
+
         numberText.setVisibility(View.INVISIBLE);
+        numberTextPlayer2.setVisibility(View.INVISIBLE);
+
         nextPlayerText.setVisibility(View.INVISIBLE);
+        nextPlayerTextPlayer2.setVisibility(View.INVISIBLE);
 
         playerImage.setVisibility(View.INVISIBLE);
         playerImagePlayer2.setVisibility(View.INVISIBLE);
-        nextPlayerTextPlayer2.setVisibility(View.INVISIBLE);
-        btnWildPlayer2.setVisibility(View.INVISIBLE);
-        wildTextPlayer2.setVisibility(View.VISIBLE);
-        btnBackWildPlayer2.setVisibility(View.VISIBLE);
-        btnGeneratePlayer2.setVisibility(View.INVISIBLE);
-        numberTextPlayer2.setVisibility(View.INVISIBLE);
 
         Game.getInstance().getCurrentPlayer().useWildCard();
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
@@ -473,20 +480,23 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
     private void ButtonContinueFunction() {
         btnBackWild.setVisibility(View.INVISIBLE);
+        btnBackWildPlayer2.setVisibility(View.INVISIBLE);
+
         btnGenerate.setVisibility(View.VISIBLE);
+        btnGeneratePlayer2.setVisibility(View.VISIBLE);
+
+
         wildText.setVisibility(View.INVISIBLE);
+        wildTextPlayer2.setVisibility(View.INVISIBLE);
+
         numberText.setVisibility(View.VISIBLE);
+        numberTextPlayer2.setVisibility(View.VISIBLE);
 
         playerImage.setVisibility(View.VISIBLE);
         playerImagePlayer2.setVisibility(View.VISIBLE);
 
         nextPlayerText.setVisibility(View.VISIBLE);
         nextPlayerTextPlayer2.setVisibility(View.VISIBLE);
-
-        btnBackWildPlayer2.setVisibility(View.INVISIBLE);
-        btnGeneratePlayer2.setVisibility(View.VISIBLE);
-        wildTextPlayer2.setVisibility(View.INVISIBLE);
-        numberTextPlayer2.setVisibility(View.VISIBLE);
     }
 
     private void setNameSizeBasedOnInt(TextView textView, String text) {
