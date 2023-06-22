@@ -1,7 +1,9 @@
 package com.example.countingdowngame;
 
 import android.app.AlertDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -118,23 +120,61 @@ public class TruthWildCardsFragment extends Fragment {
                 return;
             }
 
-            // Add "Quiz!" to the start of the wildcard text
+            // Add "Truth!" to the start of the wildcard text
             String wildcardText = "Truth! " + text;
 
             WildCardHeadings newWildCard = new WildCardHeadings(wildcardText, probability, true, true);
 
-            // Create a new array with increased size
-            WildCardHeadings[] newQuizWildCards = new WildCardHeadings[truthWildCards.length + 1];
-            System.arraycopy(truthWildCards, 0, newQuizWildCards, 0, truthWildCards.length);
-            newQuizWildCards[truthWildCards.length] = newWildCard;
+            // Add the new wildcard to SharedPreferences
+            saveNewWildCard(newWildCard);
 
-            // Update the quizWildCards array with the new array
-            truthWildCards = newQuizWildCards;
+            // Update the adapter's dataset by loading the wildcards from SharedPreferences
+            loadWildCardsFromSharedPreferences();
 
-            adapter.setWildCards(truthWildCards); // Update the adapter's dataset with the new array
             adapter.notifyDataSetChanged(); // Notify the adapter about the data change
         });
 
         builder.show();
     }
+
+
+    private void saveNewWildCard(WildCardHeadings wildcard) {
+        // Get the SharedPreferences instance
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+
+        // Get the current wildcard count
+        int count = sharedPreferences.getInt("wildcard_count", 0);
+
+        // Increment the count and save it back
+        int newCount = count + 1;
+        sharedPreferences.edit().putInt("wildcard_count", newCount).apply();
+
+        // Save the new wildcard data
+        sharedPreferences.edit()
+                .putString("wildcard_text_" + newCount, wildcard.getText())
+                .putInt("wildcard_probability_" + newCount, wildcard.getProbability())
+                .apply();
+    }
+
+    private void loadWildCardsFromSharedPreferences() {
+        // Get the SharedPreferences instance
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+
+        // Get the wildcard count
+        int count = sharedPreferences.getInt("wildcard_count", 0);
+
+        // Create a new array to store the wildcards
+        WildCardHeadings[] newWildCards = new WildCardHeadings[count];
+
+        // Load the wildcard data from SharedPreferences
+        for (int i = 0; i < count; i++) {
+            String text = sharedPreferences.getString("wildcard_text_" + (i + 1), "");
+            int probability = sharedPreferences.getInt("wildcard_probability_" + (i + 1), 10);
+            newWildCards[i] = new WildCardHeadings(text, probability, true, true);
+        }
+
+        // Update the dataset of the adapter
+        adapter.setWildCards(newWildCards);
+    }
+
 }
