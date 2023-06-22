@@ -79,14 +79,14 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<WildCardHeadings> {
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0:
+                case 3:
                     return new QuizWildCardsFragment();
                 case 1:
                     return new TaskWildCardsFragment();
                 case 2:
                     return new TruthWildCardsFragment();
-                case 3:
-                    return new TruthWildCardsFragment();
+                case 0:
+                    return new ExtrasWildCardsFragment();
                 default:
                     return null;
             }
@@ -101,13 +101,13 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<WildCardHeadings> {
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
-                case 0:
+                case 3:
                     return "Quiz";
                 case 1:
                     return "Task";
                 case 2:
                     return "Truth";
-                case 3:
+                case 0:
                     return "Extras";
                 default:
                     return super.getPageTitle(position);

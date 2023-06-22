@@ -272,17 +272,19 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(emptyProbabilitiesArray,this, WildCardType.QUIZ);
         TaskWildCardsAdapter taskAdapter = new TaskWildCardsAdapter(emptyProbabilitiesArray,this, WildCardType.TASK);
         TruthWildCardsAdapter truthAdapter = new TruthWildCardsAdapter(emptyProbabilitiesArray,this, WildCardType.TRUTH);
+        ExtrasWildCardsAdapter extraAdapter = new ExtrasWildCardsAdapter(emptyProbabilitiesArray,this, WildCardType.EXTRAS);
 
 
         WildCardHeadings[] quizProbabilities = quizAdapter.loadWildCardProbabilitiesFromStorage();
         WildCardHeadings[] taskProbabilities = taskAdapter.loadWildCardProbabilitiesFromStorage();
         WildCardHeadings[] truthProbabilities = truthAdapter.loadWildCardProbabilitiesFromStorage();
+        WildCardHeadings[] extraProbabilities = extraAdapter.loadWildCardProbabilitiesFromStorage();
 
         List<WildCardHeadings> allProbabilities = new ArrayList<>();
         allProbabilities.addAll(Arrays.asList(quizProbabilities));
         allProbabilities.addAll(Arrays.asList(taskProbabilities));
         allProbabilities.addAll(Arrays.asList(truthProbabilities));
-
+        allProbabilities.addAll(Arrays.asList(extraProbabilities));
         final TextView wildActivityTextView = findViewById(R.id.wild_textview);
         final TextView wildActivityTextViewPlayer2 = findViewById(R.id.wild_textviewPlayer2);
 

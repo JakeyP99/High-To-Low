@@ -157,7 +157,7 @@ public class TaskWildCardsFragment extends Fragment {
                 return;
             }
 
-            // Add "Quiz!" to the start of the wildcard text
+            // Add "Task!" to the start of the wildcard text
             String wildcardText = "Task! " + text;
 
             WildCardHeadings newWildCard = new WildCardHeadings(wildcardText, probability, true, true);

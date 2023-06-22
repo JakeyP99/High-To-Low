@@ -17,24 +17,28 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class TruthWildCardsAdapter extends WildCardsAdapter {
-    public TruthWildCardsAdapter(WildCardHeadings[] truthWildCards, Context context, WildCardType mode) {
-        super("TruthPrefs", truthWildCards, context, mode);
+public class ExtrasWildCardsAdapter extends WildCardsAdapter {
+    public ExtrasWildCardsAdapter(WildCardHeadings[] extrasWildCards, Context context, WildCardType mode) {
+        super("ExtrasPrefs", extrasWildCards, context, mode);
     }
+
     @NonNull
     @Override
     public WildCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_view_wild_cards, parent, false);
-        return new TaskWildCardViewHolder(view);
+        return new ExtrasWildCardViewHolder(view);
     }
+
     @Override
     public void onBindViewHolder(@NonNull WildCardViewHolder holder, int position) {
         WildCardHeadings wildcard = wildCards[position];
         holder.bind(wildcard);
     }
+
     public void setWildCards(WildCardHeadings[] wildCards) {
         this.wildCards = wildCards;
     }
+
     public boolean areAllEnabled() {
         for (WildCardHeadings wildcard : wildCards) {
             if (!wildcard.isEnabled()) {
@@ -47,15 +51,14 @@ public class TruthWildCardsAdapter extends WildCardsAdapter {
     public int getItemCount() {
         return wildCards.length;
     }
+
     public WildCardHeadings[] getWildCards() {
         return wildCards;
     }
-
-    public class TaskWildCardViewHolder extends WildCardViewHolder {
-        public TaskWildCardViewHolder(View itemView) {
+    public class ExtrasWildCardViewHolder extends WildCardViewHolder {
+        public ExtrasWildCardViewHolder(View itemView) {
             super(itemView);
         }
-
         @Override
         public void bind(WildCardHeadings wildcard) {
             textViewTitle.setText(wildcard.getText());

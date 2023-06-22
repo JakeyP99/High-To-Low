@@ -38,7 +38,7 @@ import java.util.Arrays;
         @Override
         public WildCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_view_wild_cards, parent, false);
-            return new com.example.countingdowngame.QuizWildCardsAdapter.TaskWildCardViewHolder(view);
+            return new com.example.countingdowngame.QuizWildCardsAdapter.QuizWildCardViewHolder(view);
         }
 
         @Override
@@ -46,27 +46,28 @@ import java.util.Arrays;
             WildCardHeadings wildcard = wildCards[position];
             holder.bind(wildcard);
         }
+
        public void setWildCards(WildCardHeadings[] wildCards) {
            this.wildCards = wildCards;
        }
 
-        @Override
-        public int getItemCount() {
-            return wildCards.length;
-        }
+       @Override
+       public int getItemCount() {
+           return wildCards.length;
+       }
 
-        public class TaskWildCardViewHolder extends WildCardViewHolder {
-            public TaskWildCardViewHolder(View itemView) {
-                super(itemView);
-            }
+       public class QuizWildCardViewHolder extends WildCardViewHolder {
+           public QuizWildCardViewHolder(View itemView) {
+               super(itemView);
+           }
 
-            @Override
-            public void bind(WildCardHeadings wildcard) {
-                textViewTitle.setText(wildcard.getText());
-                textViewProbabilities.setText(String.valueOf(wildcard.getProbability()));
-                switchEnabled.setChecked(wildcard.isEnabled());
+           @Override
+           public void bind(WildCardHeadings wildcard) {
+               textViewTitle.setText(wildcard.getText());
+               textViewProbabilities.setText(String.valueOf(wildcard.getProbability()));
+               switchEnabled.setChecked(wildcard.isEnabled());
 
-                switchEnabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
+               switchEnabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     wildcard.setEnabled(isChecked);
                     saveWildCardProbabilitiesToStorage(wildCards);
                 });
