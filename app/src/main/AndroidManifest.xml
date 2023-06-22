@@ -31,20 +31,20 @@
         </activity>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".MainActivityGame"
         />
 
         <activity
             android:name=".PlayerNumberChoice" />
 
         <activity
-            android:name=".EndActivity" />
+            android:name=".EndActivityGame" />
 
         <activity
-            android:name=".NumberChoice" />
+            android:name=".NumberChoiceForGame" />
 
         <activity
-            android:name=".Instructions" />
+            android:name=".InstructionsToPlay" />
 
         <activity
             android:name=".Settings" />
@@ -61,7 +61,7 @@
             android:name=".MainActivitySplitScreen" />
 
         <activity
-            android:name=".DrawingActivity" />
+            android:name=".DrawingPlayerModels" />
 
         <activity
             android:name=".PlayerModel"

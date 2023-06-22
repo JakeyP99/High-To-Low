@@ -10,10 +10,10 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import java.util.List;
 
-public class InstructionPagerAdapter extends PagerAdapter {
+public class InstructionPageAdapter extends PagerAdapter {
   private final List<String> instructions;
 
-  public InstructionPagerAdapter(List<String> instructions) {
+  public InstructionPageAdapter(List<String> instructions) {
     this.instructions = instructions;
   }
 

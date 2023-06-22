@@ -15,9 +15,9 @@ import com.daimajia.androidanimations.library.YoYo;
 import java.util.Random;
 
 
-public class NumberChoice extends ButtonUtilsActivity {
+public class NumberChoiceForGame extends ButtonUtilsActivity {
     private int startingNumber;
-    private static NumberChoice instance;
+    private static NumberChoiceForGame instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,20 +40,20 @@ public class NumberChoice extends ButtonUtilsActivity {
 
         inputValue.length();
         if (inputValue.length() > 9) {
-            Toast.makeText(NumberChoice.this, "That's a lot of numbers, unfortunately too many :(", Toast.LENGTH_SHORT).show();
+            Toast.makeText(NumberChoiceForGame.this, "That's a lot of numbers, unfortunately too many :(", Toast.LENGTH_SHORT).show();
             return;
         }
 
 
         if (inputValue.isEmpty()) {
-            Toast.makeText(NumberChoice.this, "Please choose a number!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(NumberChoiceForGame.this, "Please choose a number!", Toast.LENGTH_SHORT).show();
             return;
         }
 
         int inputNumber = Integer.parseInt(inputValue);
 
         if (inputNumber <= 0) {
-            Toast.makeText(NumberChoice.this, "Please choose a number greater than zero!", Toast.LENGTH_SHORT)
+            Toast.makeText(NumberChoiceForGame.this, "Please choose a number greater than zero!", Toast.LENGTH_SHORT)
                     .show();
             return;
         }
@@ -82,7 +82,7 @@ public class NumberChoice extends ButtonUtilsActivity {
     private void startMainActivity() {
         SharedPreferences preferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
         boolean switchOneChecked = preferences.getBoolean("button_gameModeOne", true);
-        Class<?> targetClass = switchOneChecked ? MainActivity.class : MainActivitySplitScreen.class;
+        Class<?> targetClass = switchOneChecked ? MainActivityGame.class : MainActivitySplitScreen.class;
         Intent i = getIntentForClass(targetClass, true);
         i.putExtra("startingNumber", startingNumber);
         startActivity(i);

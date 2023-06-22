@@ -9,7 +9,7 @@ import androidx.viewpager.widget.ViewPager;
 import java.util.Arrays;
 import java.util.List;
 
-public class Instructions extends ButtonUtilsActivity {
+public class InstructionsToPlay extends ButtonUtilsActivity {
     private final List<String> instructions = Arrays.asList(
 
             "Welcome to the exhilarating game of Drinking Countdown!\n\nGet ready to embark on a thrilling journey filled with excitement, and suspense.",
@@ -35,7 +35,7 @@ public class Instructions extends ButtonUtilsActivity {
 
         btnUtils.setButton(btnBack, this::onBackPressed);
 
-        InstructionPagerAdapter adapter = new InstructionPagerAdapter(instructions);
+        InstructionPageAdapter adapter = new InstructionPageAdapter(instructions);
 
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {

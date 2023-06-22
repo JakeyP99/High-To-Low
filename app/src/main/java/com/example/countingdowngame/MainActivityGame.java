@@ -24,7 +24,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class MainActivity extends ButtonUtilsActivity {
+public class MainActivityGame extends ButtonUtilsActivity {
 
     @Override
     protected void onResume() {
@@ -198,7 +198,7 @@ public class MainActivity extends ButtonUtilsActivity {
                     numberText.setText(String.valueOf(finalNumber));
 
                     // Call the game logic method with the finalNumber
-                    Game.getInstance().nextNumber(MainActivity.this, () -> gotoGameEnd());
+                    Game.getInstance().nextNumber(MainActivityGame.this, () -> gotoGameEnd());
 
                     // Show other relevant UI elements after number generation
                     numberText.setVisibility(View.VISIBLE);

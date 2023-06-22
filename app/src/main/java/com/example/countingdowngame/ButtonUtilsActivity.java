@@ -42,11 +42,11 @@ public class ButtonUtilsActivity extends AppCompatActivity {
     }
 
     protected void gotoGameEnd() {
-        startActivity(getIntentForClass(EndActivity.class, true));
+        startActivity(getIntentForClass(EndActivityGame.class, true));
     }
 
     protected void gotoGameStart() {
-        startActivity(getIntentForClass(NumberChoice.class, true));
+        startActivity(getIntentForClass(NumberChoiceForGame.class, true));
     }
 
     protected void gotoGameSetup() {
@@ -54,7 +54,7 @@ public class ButtonUtilsActivity extends AppCompatActivity {
     }
 
     protected void gotoInstructions() {
-        startActivity(getIntentForClass(Instructions.class, true));
+        startActivity(getIntentForClass(InstructionsToPlay.class, true));
     }
 
     protected void gotoSettings() {

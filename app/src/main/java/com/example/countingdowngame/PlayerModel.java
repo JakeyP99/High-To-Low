@@ -135,7 +135,7 @@ public class PlayerModel extends ButtonUtilsActivity {
 
     // Helper method to start the DrawingActivity
     private void startDrawingActivity() {
-        Intent intent = new Intent(this, DrawingActivity.class);
+        Intent intent = new Intent(this, DrawingPlayerModels.class);
         startActivityForResult(intent, REQUEST_DRAW);
     }
 
@@ -160,7 +160,7 @@ public class PlayerModel extends ButtonUtilsActivity {
                     }
 
                     saveSelectedPlayers(this, selectedPlayers);
-                    Intent intent = new Intent(this, NumberChoice.class);
+                    Intent intent = new Intent(this, NumberChoiceForGame.class);
                     intent.putStringArrayListExtra("playerNames", (ArrayList<String>) selectedPlayerNames);
                     startActivity(intent);
                 }

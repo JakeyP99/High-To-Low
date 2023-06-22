@@ -10,7 +10,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class DrawingView extends View {
+public class DrawingViewPlayerModels extends View {
 
     private Path drawingPath;
     private Paint drawingPaint;
@@ -20,17 +20,17 @@ public class DrawingView extends View {
     private boolean isEraserMode;
     private float penSize;
 
-    public DrawingView(Context context) {
+    public DrawingViewPlayerModels(Context context) {
         super(context);
         setupDrawing();
     }
 
-    public DrawingView(Context context, AttributeSet attrs) {
+    public DrawingViewPlayerModels(Context context, AttributeSet attrs) {
         super(context, attrs);
         setupDrawing();
     }
 
-    public DrawingView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public DrawingViewPlayerModels(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setupDrawing();
     }

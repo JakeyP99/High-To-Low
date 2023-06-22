@@ -11,8 +11,8 @@ import java.io.ByteArrayOutputStream;
 
 import yuku.ambilwarna.AmbilWarnaDialog;
 
-public class DrawingActivity extends ButtonUtilsActivity {
-    private DrawingView drawingView;
+public class DrawingPlayerModels extends ButtonUtilsActivity {
+    private DrawingViewPlayerModels drawingView;
     private Bitmap drawnBitmap;
     private Button btnCancel;
     private Button btnSave;
@@ -93,7 +93,7 @@ public class DrawingActivity extends ButtonUtilsActivity {
         }
 
         private void showColorPickerDialog () {
-            AmbilWarnaDialog colorPickerDialog = new AmbilWarnaDialog(DrawingActivity.this, currentColor,
+            AmbilWarnaDialog colorPickerDialog = new AmbilWarnaDialog(DrawingPlayerModels.this, currentColor,
                     new AmbilWarnaDialog.OnAmbilWarnaListener() {
                         @Override
                         public void onOk(AmbilWarnaDialog dialog, int color) {
