@@ -26,7 +26,6 @@ public class ButtonUtils {
     private final MediaPlayer bop;
     private final AppCompatActivity mContext;
     private final Drawable buttonHighlight;
-    private final Drawable outlineForButton;
     private boolean isMuted = false;
 
     public ButtonUtils(final AppCompatActivity context) {
@@ -37,7 +36,6 @@ public class ButtonUtils {
         burp[3] = MediaPlayer.create(context, R.raw.burp4);
         bop = MediaPlayer.create(context, R.raw.bop);
         buttonHighlight = AppCompatResources.getDrawable(mContext, R.drawable.buttonhighlight);
-        outlineForButton = AppCompatResources.getDrawable(mContext, R.drawable.outlineforbutton);
     }
     //-----------------------------------------------------Sound Functionality---------------------------------------------------//
     public void toggleMute() {
