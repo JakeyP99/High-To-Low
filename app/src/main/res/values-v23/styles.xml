@@ -16,6 +16,10 @@
         <item name="android:thumbTint">@color/bluedark</item>
     </style>
 
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light">
+        <item name="colorSurface">@color/bluedark</item>
+        <!-- Other theme attributes -->
+    </style>
 
 
     <style name="ActivityTransitionAnimation">

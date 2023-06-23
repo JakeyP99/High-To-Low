@@ -44,8 +44,6 @@ public class PlayerModel extends ButtonUtilsActivity {
     private TextView playerCountTextView;
     private int totalPlayerCount;
     private RecyclerView playerRecyclerView; // Declare playerRecyclerView
-
-    private Button chooseImageButton;
     private static final int REQUEST_DRAW = 2;
 
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;
@@ -143,7 +141,7 @@ public class PlayerModel extends ButtonUtilsActivity {
         Button proceedButton = findViewById(R.id.button_done);
 
         btnUtils.setButton(proceedButton, () -> {
-            List<String> selectedPlayerNames = new ArrayList<>();
+            ArrayList<String> selectedPlayerNames = new ArrayList<>();
             for (Player player : playerList) {
                 if (player.isSelected()) {
                     selectedPlayerNames.add(player.getName());
@@ -161,7 +159,7 @@ public class PlayerModel extends ButtonUtilsActivity {
 
                     saveSelectedPlayers(this, selectedPlayers);
                     Intent intent = new Intent(this, NumberChoiceForGame.class);
-                    intent.putStringArrayListExtra("playerNames", (ArrayList<String>) selectedPlayerNames);
+                    intent.putStringArrayListExtra("playerNames", selectedPlayerNames);
                     startActivity(intent);
                 }
 
@@ -208,14 +206,13 @@ public class PlayerModel extends ButtonUtilsActivity {
             String drawnBitmapString = data.getStringExtra("drawnBitmap");
             Bitmap drawnBitmap = convertStringToBitmap(drawnBitmapString);
             showNameInputDialog(drawnBitmap);
-        } else if (requestCode == REQUEST_DRAW && resultCode == RESULT_CANCELED) {
-            // Handle cancelation
-        }
+        }  // Handle cancellation
+
     }
 
     private void showNameInputDialog(Bitmap bitmap) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Enter Player Name");
+        builder.setTitle("Enter Your Name");
 
         View dialogView = getLayoutInflater().inflate(R.layout.player_enter_name, null);
         EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
@@ -245,9 +242,8 @@ public class PlayerModel extends ButtonUtilsActivity {
 
     private void createNewCharacter(Bitmap bitmap, String name) {
         int size = Math.min(bitmap.getWidth(), bitmap.getHeight());
-        int desiredSize = size; // Desired zoomed-in size
 
-        float scale = (float) desiredSize / size;
+        float scale = (float) size / size;
 
         Matrix matrix = new Matrix();
         matrix.postScale(scale, scale);
@@ -335,12 +331,10 @@ public class PlayerModel extends ButtonUtilsActivity {
     //-----------------------------------------------------Player Counter Functionality---------------------------------------------------//
     public void updatePlayerCounter() {
         int selectedPlayerCount = 0;
-        List<Player> selectedPlayers = new ArrayList<>();
 
         for (Player player : playerList) {
             if (player.isSelected()) {
                 selectedPlayerCount++;
-                selectedPlayers.add(player);
             }
         }
 
