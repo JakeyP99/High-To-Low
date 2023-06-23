@@ -2,16 +2,20 @@ package com.example.countingdowngame;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.InputType;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -212,17 +216,25 @@ public class PlayerModel extends ButtonUtilsActivity {
             String drawnBitmapString = data.getStringExtra("drawnBitmap");
             Bitmap drawnBitmap = convertStringToBitmap(drawnBitmapString);
             showNameInputDialog(drawnBitmap);
-        }  // Handle cancellation
-
+        }
     }
 
     private void showNameInputDialog(Bitmap bitmap) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Enter Your Name");
+        String title = "Enter Your Name";
 
         View dialogView = getLayoutInflater().inflate(R.layout.player_enter_name, null);
         EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
         nameEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+
+        int blueDarkColor = getResources().getColor(R.color.bluedark);
+        nameEditText.getBackground().mutate().setColorFilter(blueDarkColor, PorterDuff.Mode.SRC_ATOP);
+        nameEditText.setHighlightColor(blueDarkColor);
+
+        SpannableString spannableTitle = new SpannableString(title);
+        spannableTitle.setSpan(new ForegroundColorSpan(blueDarkColor), 0, spannableTitle.length(), 0);
+        builder.setTitle(spannableTitle);
+
 
         builder.setView(dialogView)
                 .setPositiveButton("OK", (dialogInterface, i) -> {
@@ -238,13 +250,18 @@ public class PlayerModel extends ButtonUtilsActivity {
                         Toast.makeText(this, "Name must be less than 20 characters.", Toast.LENGTH_SHORT).show();
                         showNameInputDialog(bitmap);
                     }
-                })
+                });
 
-                .setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss());
 
         AlertDialog dialog = builder.create();
         dialog.show();
+
+        Button positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        Button negativeButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        positiveButton.setTextColor(blueDarkColor);
+        negativeButton.setTextColor(blueDarkColor);
     }
+
 
     private void createNewCharacter(Bitmap bitmap, String name) {
         int size = Math.min(bitmap.getWidth(), bitmap.getHeight());
