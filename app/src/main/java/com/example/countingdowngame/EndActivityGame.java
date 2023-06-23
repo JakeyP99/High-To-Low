@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 public class EndActivityGame extends ButtonUtilsActivity {
-    private ArrayAdapter<String> adapter;
 
     //-----------------------------------------------------Handle back press---------------------------------------------------//
 
@@ -37,7 +36,7 @@ public class EndActivityGame extends ButtonUtilsActivity {
         //-----------------------------------------------------Set up previous numbers list---------------------------------------------------//
 
         ArrayList<String> previousNumbersFormatted = Game.getInstance().getPreviousNumbersFormatted();
-        adapter = new ArrayAdapter<>(EndActivityGame.this, R.layout.list_view_end_game, R.id.previousNumbers, previousNumbersFormatted);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(EndActivityGame.this, R.layout.list_view_end_game, R.id.previousNumbers, previousNumbersFormatted);
         previousNumbersList.setAdapter(adapter);
         //-----------------------------------------------------Button actions---------------------------------------------------//
 

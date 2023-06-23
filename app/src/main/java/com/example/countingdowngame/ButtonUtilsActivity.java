@@ -9,6 +9,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ButtonUtilsActivity extends AppCompatActivity {
+
     protected ButtonUtils btnUtils;
     protected Drawable buttonHighlightDrawable;
     protected Drawable outlineForButton;

@@ -10,11 +10,7 @@ public class AudioManager {
     private boolean isPlaying = false;
 
 
-    private AudioManager() {
-        // Private constructor to enforce singleton pattern
-    }
-
-    public static AudioManager getInstance() {
+      public static AudioManager getInstance() {
         if (instance == null) {
             instance = new AudioManager();
         }

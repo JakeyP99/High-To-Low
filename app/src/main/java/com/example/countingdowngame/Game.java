@@ -13,14 +13,12 @@ public class Game {
     private static final Game gameInstance = new Game();
     private GameEventListener gameEventListener;
     private ArrayList<Player> players = new ArrayList<>();
-    private ArrayList<Integer> previousNumbers = new ArrayList<>();
     private int currentPlayerId = 0;
     private int startingNumber = 0;
     int currentNumber = 0;
     private boolean gameStarted = false;
 
     private final ArrayList<Integer> updatedNumbers = new ArrayList<>();
-    private final ArrayList<String> actionsPerformed = new ArrayList<>();
 
 
     public static Game getInstance() {
@@ -56,9 +54,7 @@ public class Game {
         currentNumber = startNum;
         startingNumber = startNum;
         currentPlayerId = 0;
-        previousNumbers = new ArrayList<>();
         updatedNumbers.clear();
-        actionsPerformed.clear();
     }
 
     //-----------------------------------------------------In Game---------------------------------------------------//
@@ -78,7 +74,6 @@ public class Game {
     public void nextNumber(Context context, final Runnable onEnd) {
         Random random = new Random();
         int nextNumber = random.nextInt(currentNumber + 1);
-        previousNumbers.add(nextNumber);
         currentNumber = nextNumber;
 
         updatedNumbers.add(nextNumber); // Add the updated number

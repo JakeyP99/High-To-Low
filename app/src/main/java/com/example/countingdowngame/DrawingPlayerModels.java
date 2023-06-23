@@ -13,7 +13,6 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class DrawingPlayerModels extends ButtonUtilsActivity {
     private DrawingViewPlayerModels drawingView;
-    private Bitmap drawnBitmap;
     private Button btnCancel;
     private Button btnSave;
     private Button colorButton;
@@ -41,19 +40,13 @@ public class DrawingPlayerModels extends ButtonUtilsActivity {
     }
 
     private void setupButtonListeners() {
-        btnUtils.setButton(btnSave, () -> {
-            saveDrawing();
-        });
-        btnUtils.setButton(btnCancel, () -> {
-            cancelDrawing();
-        });
+        btnUtils.setButton(btnSave, this::saveDrawing);
+        btnUtils.setButton(btnCancel, this::cancelDrawing);
         btnUtils.setButton(colorButton, () -> {
             showColorPickerDialog();
             setDefaultPenSize();
         });
-        btnUtils.setButton(eraserButton, () -> {
-            toggleEraserMode();
-        });
+        btnUtils.setButton(eraserButton, this::toggleEraserMode);
     }
     //-----------------------------------------------------Seekbar Functionality---------------------------------------------------//
     private void setupSeekBarListener () {
@@ -78,7 +71,7 @@ public class DrawingPlayerModels extends ButtonUtilsActivity {
     //-----------------------------------------------------Button Functionality---------------------------------------------------//
 
         private void saveDrawing () {
-            drawnBitmap = drawingView.getDrawingBitmap();
+            Bitmap drawnBitmap = drawingView.getDrawingBitmap();
             String drawnBitmapString = convertBitmapToString(drawnBitmap);
 
             Intent intent = new Intent();
