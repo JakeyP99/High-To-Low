@@ -43,14 +43,14 @@ import java.util.List;
 
 public class PlayerModel extends ButtonUtilsActivity {
     private static final int REQUEST_IMAGE_PICK = 1;
+    private static final int REQUEST_DRAW = 2;
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;
     private static List<Player> playerList;
     private static PlayerListAdapter playerListAdapter;
     private TextView playerCountTextView;
     private int totalPlayerCount;
-    private RecyclerView playerRecyclerView; // Declare playerRecyclerView
-    private static final int REQUEST_DRAW = 2;
+    private RecyclerView playerRecyclerView;
 
-    private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,16 +59,15 @@ public class PlayerModel extends ButtonUtilsActivity {
 
         initializeViews();
         setupPlayerRecyclerView();
-        setupDrawButton(); // Add this line
+        setupDrawButton();
         updatePlayerCounter();
         setupProceedButton();
 
-        // Load player data and add it to the existing playerList
         List<Player> loadedPlayerList = loadPlayerData(this);
-        int startPosition = playerList.size(); // Get the start position for new items
+        int startPosition = playerList.size();
 
         playerList.addAll(loadedPlayerList);
-        int newItemCount = playerList.size() - startPosition; // Calculate the number of new items
+        int newItemCount = playerList.size() - startPosition;
 
         if (newItemCount > 0) {
             playerListAdapter.notifyItemRangeInserted(startPosition, newItemCount);
@@ -80,10 +79,7 @@ public class PlayerModel extends ButtonUtilsActivity {
         playerCountTextView = findViewById(R.id.text_view_counter);
 
         totalPlayerCount = Game.getInstance().getPlayerAmount();
-
-        playerList = new ArrayList<>(); // Initialize playerList
-
-        int selectedPlayerCount = totalPlayerCount - playerList.size();
+        playerList = new ArrayList<>();
     }
 
     //-----------------------------------------------------Buttons---------------------------------------------------//
@@ -115,7 +111,6 @@ public class PlayerModel extends ButtonUtilsActivity {
         optionsListView.setOnItemClickListener((parent, view, position, id) -> {
             if (position == 0) {
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    // Request the permission
                     ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
                 } else {
                     captureImage();

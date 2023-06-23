@@ -35,10 +35,6 @@ public class ExtrasWildCardsAdapter extends WildCardsAdapter {
         holder.bind(wildcard);
     }
 
-    public void setWildCards(WildCardHeadings[] wildCards) {
-        this.wildCards = wildCards;
-    }
-
     public boolean areAllEnabled() {
         for (WildCardHeadings wildcard : wildCards) {
             if (!wildcard.isEnabled()) {
@@ -47,6 +43,7 @@ public class ExtrasWildCardsAdapter extends WildCardsAdapter {
         }
         return true;
     }
+
     @Override
     public int getItemCount() {
         return wildCards.length;
@@ -55,6 +52,11 @@ public class ExtrasWildCardsAdapter extends WildCardsAdapter {
     public WildCardHeadings[] getWildCards() {
         return wildCards;
     }
+
+    public void setWildCards(WildCardHeadings[] wildCards) {
+        this.wildCards = wildCards;
+    }
+
     public class ExtrasWildCardViewHolder extends WildCardViewHolder {
         public ExtrasWildCardViewHolder(View itemView) {
             super(itemView);

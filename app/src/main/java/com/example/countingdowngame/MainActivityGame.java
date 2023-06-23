@@ -88,7 +88,8 @@ public class MainActivityGame extends ButtonUtilsActivity {
 
     }
     private void startGame() {
-        AudioManager.getInstance().initialize(this, "cartoonloop");
+        int soundResourceId = R.raw.cartoonloop;
+        AudioManager.getInstance().initialize(this, soundResourceId);
 
         Bundle extras = getIntent().getExtras();
         if (extras == null) {

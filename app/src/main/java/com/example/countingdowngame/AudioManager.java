@@ -2,6 +2,7 @@ package com.example.countingdowngame;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.util.Log;
 
 public class AudioManager {
     private static AudioManager instance;
@@ -10,17 +11,25 @@ public class AudioManager {
     private boolean isPlaying = false;
 
 
-      public static AudioManager getInstance() {
+    private AudioManager() {
+        // Private constructor to enforce singleton pattern
+    }
+
+    public static AudioManager getInstance() {
         if (instance == null) {
             instance = new AudioManager();
         }
         return instance;
     }
-
-    public void initialize(Context context, String soundFileName) {
-        int soundResourceId = context.getResources().getIdentifier(soundFileName, "raw", context.getPackageName());
+    public void initialize(Context context, int soundResourceId) {
         mediaPlayer = MediaPlayer.create(context, soundResourceId);
-        mediaPlayer.setLooping(true);
+        if (mediaPlayer != null) {
+            mediaPlayer.setLooping(true);
+        } else {
+            // Handle the case when MediaPlayer creation fails
+            // For example, you can log an error message
+            Log.e("AudioManager", "Failed to create MediaPlayer");
+        }
     }
 
 
