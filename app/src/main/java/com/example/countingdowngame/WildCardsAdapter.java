@@ -25,7 +25,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
     protected WildCardHeadings[] wildCards;
     protected Context mContext;
     protected WildCardType mMode;
-    private String mSaveKey;
+    private final String mSaveKey;
 
     public WildCardsAdapter(String saveKey, WildCardHeadings[] wildCards, Context context, WildCardType mode) {
         this.wildCards = wildCards;
@@ -35,7 +35,9 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
         loadWildCardProbabilitiesFromStorage();
     }
 
-    WildCardHeadings[] loadWildCardProbabilitiesFromStorage() {
+
+
+     WildCardHeadings[] loadWildCardProbabilitiesFromStorage() {
         SharedPreferences prefs = mContext.getSharedPreferences(mSaveKey, MODE_PRIVATE);
 
         int wildCardCount = prefs.getInt("wild_card_count", 0);
@@ -57,8 +59,6 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
         int textSize = 18;
         if (text.length() > 2) {
             textSize = 12;
-        } else if (text.length() > 0) {
-            textSize = 18;
         }
         textView.setTextSize(textSize);
     }

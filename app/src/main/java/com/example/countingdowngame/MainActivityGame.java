@@ -321,7 +321,6 @@ public class MainActivityGame extends ButtonUtilsActivity {
             wildActivityTextView.setText(selectedActivity);
             for (WildCardHeadings wc : allProbabilities) {
                 if (wc.getText().equals(selectedActivity)) {
-                    player.addUsedWildCard(wc);
                     usedCards.add(wc);
                     break;
                 }

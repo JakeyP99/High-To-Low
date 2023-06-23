@@ -61,8 +61,14 @@ public class PlayerModel extends ButtonUtilsActivity {
 
         // Load player data and add it to the existing playerList
         List<Player> loadedPlayerList = loadPlayerData(this);
+        int startPosition = playerList.size(); // Get the start position for new items
+
         playerList.addAll(loadedPlayerList);
-        playerListAdapter.notifyDataSetChanged();
+        int newItemCount = playerList.size() - startPosition; // Calculate the number of new items
+
+        if (newItemCount > 0) {
+            playerListAdapter.notifyItemRangeInserted(startPosition, newItemCount);
+        }
     }
 
     private void initializeViews() {

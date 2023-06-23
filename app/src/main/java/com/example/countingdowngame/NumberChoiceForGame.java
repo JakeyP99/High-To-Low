@@ -17,7 +17,6 @@ import java.util.Random;
 
 public class NumberChoiceForGame extends ButtonUtilsActivity {
     private int startingNumber;
-    private static NumberChoiceForGame instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +37,8 @@ public class NumberChoiceForGame extends ButtonUtilsActivity {
 
         String inputValue = originalNumberField.getText().toString();
 
-        inputValue.length();
-        if (inputValue.length() > 9) {
+        int length = inputValue.length(); // Store the length of the string
+        if (length > 9) {
             Toast.makeText(NumberChoiceForGame.this, "That's a lot of numbers, unfortunately too many :(", Toast.LENGTH_SHORT).show();
             return;
         }

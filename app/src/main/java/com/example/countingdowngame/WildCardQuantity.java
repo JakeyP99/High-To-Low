@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.core.content.res.ResourcesCompat;
+
 public class WildCardQuantity extends ButtonUtilsActivity {
 
 
@@ -62,8 +64,8 @@ public class WildCardQuantity extends ButtonUtilsActivity {
     //-----------------------------------------------------Initialize Views---------------------------------------------------//
 
     private void initializeViews() {
-        buttonHighlightDrawable = getResources().getDrawable(R.drawable.buttonhighlight);
-        outlineForButton = getResources().getDrawable(R.drawable.outlineforbutton);
+        buttonHighlightDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.buttonhighlight, null);
+        outlineForButton = ResourcesCompat.getDrawable(getResources(), R.drawable.outlineforbutton, null);
         btnReturn = findViewById(R.id.buttonReturn);
 
         wildcardPerPlayerEditText = findViewById(R.id.edittext_wildcard_amount);
@@ -152,9 +154,6 @@ public class WildCardQuantity extends ButtonUtilsActivity {
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
-
-
-
 
     //-----------------------------------------------------Load and Save Preferences---------------------------------------------------//
 

@@ -22,6 +22,7 @@ public class InstructionPageAdapter extends PagerAdapter {
     return instructions.size();
   }
 
+  @NonNull
   @Override
   public Object instantiateItem(ViewGroup container, int position) {
     LayoutInflater inflater = LayoutInflater.from(container.getContext());

@@ -16,6 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class QuizWildCardsFragment extends Fragment {
+
+
+
     WildCardHeadings[] quizWildCards = {
             new WildCardHeadings("Quiz! Name two famous people with the same initials as yours. If you can't, take 2 drinks, if you can everyone takes 3 drinks.", 10, true, true),
             new WildCardHeadings("Quiz! Name five countries starting with the letter A. If you can't, take 3 drinks.", 10, true, true),
@@ -70,6 +73,8 @@ public class QuizWildCardsFragment extends Fragment {
     };
 
     private QuizWildCardsAdapter adapter; // Declare adapter as a field in the fragment
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -175,5 +180,6 @@ public class QuizWildCardsFragment extends Fragment {
 
         builder.show();
     }
+
 }
 

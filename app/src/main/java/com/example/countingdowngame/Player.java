@@ -3,8 +3,6 @@ package com.example.countingdowngame;
 import android.content.Context;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 class Player implements Serializable {
 
@@ -13,7 +11,6 @@ class Player implements Serializable {
     private final String photo;
     private String name;
     private Game game;
-    private final Set<WildCardHeadings> usedWildCards = new HashSet<>();
     private int wildCardAmount;
     private boolean selected;
 
@@ -68,9 +65,6 @@ class Player implements Serializable {
         this.game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.SKIP));
     }
 
-    public void addUsedWildCard(WildCardHeadings usedWildCard) {
-        usedWildCards.add(usedWildCard);
-    }
 
     //-----------------------------------------------------Reset Abilities---------------------------------------------------//
 

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.core.content.res.ResourcesCompat;
+
 public class GeneralSettings extends ButtonUtilsActivity implements View.OnClickListener {
 
     //-----------------------------------------------------Initialize---------------------------------------------------//
@@ -48,8 +50,8 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
     private void initializeViews() {
         button_gameModeOne = findViewById(R.id.button_gameModeOne);
         button_gameModeTwo = findViewById(R.id.button_gameModeTwo);
-        buttonHighlightDrawable = getResources().getDrawable(R.drawable.buttonhighlight);
-        outlineForButton = getResources().getDrawable(R.drawable.outlineforbutton);
+        buttonHighlightDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.buttonhighlight, null);
+        outlineForButton = ResourcesCompat.getDrawable(getResources(), R.drawable.outlineforbutton, null);
         btnReturn = findViewById(R.id.buttonReturn);
         btnMute = findViewById(R.id.button_mute);
         //copyout
@@ -61,27 +63,23 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.button_gameModeOne:
-                toggleButton(button_gameModeOne, button_gameModeTwo);
-                break;
-            case R.id.button_gameModeTwo:
-                toggleButton(button_gameModeTwo, button_gameModeOne);
-                break;
-            case R.id.button_mute:
-                toggleMuteButton();
-                break;
-            //copyout
-            case R.id.button_normal_sound:
-                toggleButton(button_regularSound, button_burpSound);
-                break;
-            case R.id.button_burp_sound:
-                toggleButton(button_burpSound, button_regularSound);
-                break;
-            //
+        int viewId = view.getId(); // Store the view ID in a variable
+
+        if (viewId == R.id.button_gameModeOne) {
+            toggleButton(button_gameModeOne, button_gameModeTwo);
+        } else if (viewId == R.id.button_gameModeTwo) {
+            toggleButton(button_gameModeTwo, button_gameModeOne);
+        } else if (viewId == R.id.button_mute) {
+            toggleMuteButton();
+        } else if (viewId == R.id.button_normal_sound) {
+            toggleButton(button_regularSound, button_burpSound);
+        } else if (viewId == R.id.button_burp_sound) {
+            toggleButton(button_burpSound, button_regularSound);
         }
+
         savePreferences();
     }
+
 
     private void setButtonListeners() {
         button_gameModeOne.setOnClickListener(this);

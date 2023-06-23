@@ -349,7 +349,6 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
             for (WildCardHeadings wc : allProbabilities) {
                 if (wc.getText().equals(selectedActivity)) {
-                    player.addUsedWildCard(wc);
                     usedCards.add(wc);
                     break;
                 }

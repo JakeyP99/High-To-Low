@@ -15,7 +15,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 public class Settings_WildCard_Adapter extends ArrayAdapter<WildCardHeadings> {
     private final WildCardChoice mContext;
-    private WildCardHeadings[] mProbabilities;
+    private final WildCardHeadings[] mProbabilities;
 
     public Settings_WildCard_Adapter( WildCardChoice context, WildCardHeadings[] probabilities) {
         super(context, R.layout.list_view_wild_cards, probabilities);
@@ -30,22 +30,40 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<WildCardHeadings> {
 
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.list_view_wild_cards, null);
+        ViewHolder viewHolder;
 
-        TextView textViewWildCard = view.findViewById(R.id.textview_wildcard);
-        TextView textViewProbability = view.findViewById(R.id.textview_probability);
-        Switch switchWildCard = view.findViewById(R.id.switch_wildcard);
+        if (convertView == null) {
+            LayoutInflater inflater = LayoutInflater.from(mContext);
+            convertView = inflater.inflate(R.layout.list_view_wild_cards, parent, false);
+
+            viewHolder = new ViewHolder();
+            viewHolder.textViewWildCard = convertView.findViewById(R.id.textview_wildcard);
+            viewHolder.textViewProbability = convertView.findViewById(R.id.textview_probability);
+            viewHolder.switchWildCard = convertView.findViewById(R.id.switch_wildcard);
+
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+
         WildCardHeadings wildCard = mProbabilities[position];
-        textViewWildCard.setText(wildCard.getText());
-        textViewProbability.setText(String.valueOf(wildCard.getProbability()));
-        switchWildCard.setChecked(wildCard.isEnabled());
-        String wildCardText = wildCard.getText();
-        setTextViewSizeBasedOnString(textViewWildCard, wildCardText);
-        String probabilityText = String.valueOf(wildCard.getProbability());
-        setProbabilitySizeBasedOnString(textViewProbability, probabilityText);
+        viewHolder.textViewWildCard.setText(wildCard.getText());
+        viewHolder.textViewProbability.setText(String.valueOf(wildCard.getProbability()));
+        viewHolder.switchWildCard.setChecked(wildCard.isEnabled());
 
-        return view;
+        String wildCardText = wildCard.getText();
+        setTextViewSizeBasedOnString(viewHolder.textViewWildCard, wildCardText);
+
+        String probabilityText = String.valueOf(wildCard.getProbability());
+        setProbabilitySizeBasedOnString(viewHolder.textViewProbability, probabilityText);
+
+        return convertView;
+    }
+
+    private static class ViewHolder {
+        TextView textViewWildCard;
+        TextView textViewProbability;
+        Switch switchWildCard;
     }
 
     private void setTextViewSizeBasedOnString(TextView textView, String text) {
@@ -62,8 +80,6 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<WildCardHeadings> {
         int textSize = 18;
         if (text.length() > 2) {
             textSize = 12;
-        } else if (text.length() > 0) {
-            textSize = 18;
         }
         textView.setTextSize(textSize);
     }

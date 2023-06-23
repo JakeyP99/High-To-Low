@@ -20,8 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class TaskWildCardsAdapter extends WildCardsAdapter {
-    private Context mContext;
-    private WildCardType mMode;
+    private final Context mContext;
 
     public TaskWildCardsAdapter(WildCardHeadings[] taskWildCards, Context context, WildCardType mode) {
         super("TaskPrefs", taskWildCards, context, mode);
@@ -63,9 +62,9 @@ public class TaskWildCardsAdapter extends WildCardsAdapter {
     }
 
     public class TaskWildCardViewHolder extends WildCardViewHolder {
-        private TextView textViewTitle;
-        private TextView textViewProbabilities;
-        private Button editButton;
+        private final TextView textViewTitle;
+        private final TextView textViewProbabilities;
+        private final Button editButton;
         private Switch switchEnabled;
 
         public TaskWildCardViewHolder(View itemView) {
