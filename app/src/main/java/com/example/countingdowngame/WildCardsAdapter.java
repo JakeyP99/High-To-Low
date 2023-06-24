@@ -82,7 +82,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
         editor.apply();
     }
 
-    public abstract class WildCardViewHolder extends RecyclerView.ViewHolder {
+    public class WildCardViewHolder extends RecyclerView.ViewHolder {
         protected TextView textViewTitle;
         protected TextView textViewProbabilities;
         protected Button editButton;
