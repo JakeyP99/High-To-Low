@@ -1,5 +1,6 @@
 package com.example.countingdowngame;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,22 +88,30 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<WildCardHeadings> {
     public static class WildCardsPagerAdapter extends FragmentPagerAdapter {
         private static final int TAB_COUNT = 4;
 
-        public WildCardsPagerAdapter(FragmentManager fm) {
+        Context mContext;
+        public WildCardsPagerAdapter(FragmentManager fm, Context context) {
             super(fm);
+            mContext = context;
         }
 
         @NonNull
         @Override
         public Fragment getItem(int position) {
+            WildCardHeadings[] emptyProbabilitiesArray = new WildCardHeadings[0];
+            QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(emptyProbabilitiesArray,mContext, WildCardType.QUIZ);
+            TaskWildCardsAdapter taskAdapter = new TaskWildCardsAdapter(emptyProbabilitiesArray,mContext, WildCardType.TASK);
+            TruthWildCardsAdapter truthAdapter = new TruthWildCardsAdapter(emptyProbabilitiesArray,mContext, WildCardType.TRUTH);
+            ExtrasWildCardsAdapter extraAdapter = new ExtrasWildCardsAdapter(emptyProbabilitiesArray,mContext, WildCardType.EXTRAS);
+
             switch (position) {
                 case 3:
                     return new QuizWildCardsFragment();
                 case 1:
                     return new TaskWildCardsFragment();
                 case 2:
-                    return new TruthWildCardsFragment();
+                    return new TruthWildCardsFragment(mContext, truthAdapter);
                 case 0:
-                    return new ExtrasWildCardsFragment();
+                    return new ExtrasWildCardsFragment(mContext, extraAdapter);
                 default:
                     return null;
             }

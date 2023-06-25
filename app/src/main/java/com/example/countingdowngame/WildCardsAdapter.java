@@ -17,6 +17,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -76,6 +77,37 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
          Log.d("WildCardAdapter", "WildCardsLength" + wildCards.length);
          return loadedWildCards;
      }
+
+
+    public void setWildCards(WildCardHeadings[] wildCards) {
+        this.wildCards = wildCards;
+    }
+
+    public boolean areAllEnabled() {
+        for (WildCardHeadings wildcard : wildCards) {
+            if (!wildcard.isEnabled()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull WildCardViewHolder holder, int position) {
+        WildCardHeadings wildcard = wildCards[position];
+        holder.bind(wildcard);
+    }
+
+
+    @Override
+    public int getItemCount() {
+        return wildCards.length;
+    }
+
+
+    public WildCardHeadings[] getWildCards() {
+        return wildCards;
+    }
 
     void setProbabilitySizeBasedOnString(TextView textView, String text) {
         int textSize = 18;

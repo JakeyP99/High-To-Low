@@ -13,7 +13,7 @@ public class WildCardChoice extends ButtonUtilsActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.b2_settings_wildcard_tabs);
         ViewPager viewPager = findViewById(R.id.viewpager);
-        Settings_WildCard_Adapter.WildCardsPagerAdapter pagerAdapter = new Settings_WildCard_Adapter.WildCardsPagerAdapter(getSupportFragmentManager());
+        Settings_WildCard_Adapter.WildCardsPagerAdapter pagerAdapter = new Settings_WildCard_Adapter.WildCardsPagerAdapter(getSupportFragmentManager(), this);
         viewPager.setAdapter(pagerAdapter);
         TabLayout tabLayout = findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
