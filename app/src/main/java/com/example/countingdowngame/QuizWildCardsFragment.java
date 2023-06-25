@@ -69,7 +69,6 @@ public class QuizWildCardsFragment extends Fragment {
             new WildCardHeadings("Quiz! What is the largest continent in the world?", 10, true, true),
             new WildCardHeadings("Quiz! Who is the author of the novel 'The Lord of the Rings'?", 10, true, true),
             new WildCardHeadings("Quiz! How many players are there on a soccer team?", 10, true, true),
-
     };
 
     private QuizWildCardsAdapter adapter; // Declare adapter as a field in the fragment

@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.text.Html;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,25 +36,46 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
         loadWildCardProbabilitiesFromStorage();
     }
 
-
-
      WildCardHeadings[] loadWildCardProbabilitiesFromStorage() {
-        SharedPreferences prefs = mContext.getSharedPreferences(mSaveKey, MODE_PRIVATE);
+         SharedPreferences prefs = mContext.getSharedPreferences(mSaveKey, MODE_PRIVATE);
 
-        int wildCardCount = prefs.getInt("wild_card_count", 0);
-        WildCardHeadings[] loadedWildCards = new WildCardHeadings[wildCardCount];
+         int lastWildCardCount = prefs.getInt("wild_card_count", 0);
+         int wildCardCount = lastWildCardCount;
 
-        for (int i = 0; i < wildCardCount; i++) {
-            boolean enabled = prefs.getBoolean("wild_card_enabled_" + i, false);
-            String activity = prefs.getString("wild_card_activity_" + i, "");
-            int probability = prefs.getInt("wild_card_probability_" + i, 0);
+         if (wildCardCount < this.wildCards.length) {
+             wildCardCount = this.wildCards.length;
+         }
 
-            loadedWildCards[i] = new WildCardHeadings(activity, probability, enabled, true);
-        }
-        wildCards = loadedWildCards;
-        return loadedWildCards;
-    }
+         WildCardHeadings[] loadedWildCards = new WildCardHeadings[wildCardCount];
 
+         for (int i = 0; i < wildCardCount; i++) {
+
+//             WildCardHeadings card = null;
+//             if (i < this.wildCards.length && i >= lastWildCardCount) {
+//                 card = this.wildCards[i];
+//             }
+             WildCardHeadings card = this.wildCards[i];
+
+             boolean enabled;
+             String activity;
+             int probability;
+
+             if (card != null) {
+                 enabled = prefs.getBoolean("wild_card_enabled_" + i, card.isEnabled());
+                 activity = prefs.getString("wild_card_activity_" + i, card.getText());
+                 probability = prefs.getInt("wild_card_probability_" + i, card.getProbability());
+             } else {
+                 enabled = prefs.getBoolean("wild_card_enabled_" + i, false);
+                 activity = prefs.getString("wild_card_activity_" + i, "");
+                 probability = prefs.getInt("wild_card_probability_" + i, 0);
+             }
+
+             loadedWildCards[i] = new WildCardHeadings(activity, probability, enabled, true);
+         }
+         wildCards = loadedWildCards;
+         Log.d("WildCardAdapter", "WildCardsLength" + wildCards.length);
+         return loadedWildCards;
+     }
 
     void setProbabilitySizeBasedOnString(TextView textView, String text) {
         int textSize = 18;
