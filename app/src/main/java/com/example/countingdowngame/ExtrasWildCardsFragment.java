@@ -15,8 +15,6 @@ public class ExtrasWildCardsFragment extends WildCardsFragments {
             new WildCardHeadings("Quiz! Name two famous people with the same initials as yours. If you can't, take 2 drinks, if you can everyone takes 3 drinks.", 10, true, true),
     };
 
-    ExtrasWildCardsAdapter adapter;
-
     public ExtrasWildCardsFragment(Context context, WildCardsAdapter a) {
         super(context, a);
     }
@@ -28,17 +26,17 @@ public class ExtrasWildCardsFragment extends WildCardsFragments {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         WildCardType mode = WildCardType.DELETABLE;
-        adapter = new ExtrasWildCardsAdapter(extrasWildCards, requireContext(), mode);
-        recyclerView.setAdapter(adapter);
 
+        // Declare adapter as a field in the fragment
+        ExtrasWildCardsAdapter adapter = new ExtrasWildCardsAdapter(extrasWildCards, requireContext(), mode); // Assign the adapter to the field
+
+        recyclerView.setAdapter(adapter);
 
         Button btnAddWildCard = view.findViewById(R.id.btnAddWildCard);
         btnAddWildCard.setOnClickListener(v -> addNewWildCard());
 
         Button btnToggleAll = view.findViewById(R.id.btnToggleAll);
         btnToggleAll.setOnClickListener(v -> toggleAllWildCards());
-
-
         return view;
     }
 

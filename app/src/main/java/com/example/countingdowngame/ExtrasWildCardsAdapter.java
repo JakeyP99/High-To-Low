@@ -15,19 +15,12 @@ public class ExtrasWildCardsAdapter extends WildCardsAdapter {
     @Override
     public WildCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_view_wild_cards, parent, false);
-        return new WildCardViewHolder(view);
+        return new ExtrasWildCardsAdapter.ExtrasWildCardViewHolder(view);
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull WildCardViewHolder holder, int position) {
-        WildCardHeadings wildcard = wildCards[position];
-        holder.bind(wildcard);
+    public class ExtrasWildCardViewHolder extends WildCardViewHolder {
+        public ExtrasWildCardViewHolder(View itemView) {
+            super(itemView);
+        }
     }
-
-
-    @Override
-    public int getItemCount() {
-        return wildCards.length;
-    }
-
 }

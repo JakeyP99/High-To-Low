@@ -104,13 +104,13 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<WildCardHeadings> {
             ExtrasWildCardsAdapter extraAdapter = new ExtrasWildCardsAdapter(emptyProbabilitiesArray,mContext, WildCardType.EXTRAS);
 
             switch (position) {
-                case 3:
-                    return new QuizWildCardsFragment();
                 case 1:
-                    return new TaskWildCardsFragment();
+                    return new QuizWildCardsFragment(mContext, quizAdapter);
                 case 2:
+                    return new TaskWildCardsFragment(mContext, taskAdapter);
+                case 3:
                     return new TruthWildCardsFragment(mContext, truthAdapter);
-                case 0:
+                case 4:
                     return new ExtrasWildCardsFragment(mContext, extraAdapter);
                 default:
                     return null;
@@ -126,13 +126,13 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<WildCardHeadings> {
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
-                case 3:
-                    return "Quiz";
                 case 1:
-                    return "Task";
+                    return "Quiz";
                 case 2:
+                    return "Task";
+                case 3:
                     return "Truth";
-                case 0:
+                case 4:
                     return "Extras";
                 default:
                     return super.getPageTitle(position);
