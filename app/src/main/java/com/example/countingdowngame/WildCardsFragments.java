@@ -24,7 +24,6 @@ public class WildCardsFragments extends Fragment {
 
     protected void toggleAllWildCards() {
         boolean allEnabled = adapter.areAllEnabled();
-
         for (WildCardHeadings wildcard : adapter.getWildCards()) {
             wildcard.setEnabled(!allEnabled);
         }
@@ -82,18 +81,13 @@ public class WildCardsFragments extends Fragment {
                 return;
             }
 
-            // Add "Truth!" to the start of the wildcard text
-            String wildcardText = "Truth! " + text;
+            WildCardHeadings newWildCard = new WildCardHeadings(text, probability, true, true);
 
-            WildCardHeadings newWildCard = new WildCardHeadings(wildcardText, probability, true, true);
-
-            // Add the new wildcard to SharedPreferences
             saveNewWildCard(newWildCard);
 
-            // Update the adapter's dataset by loading the wildcards from SharedPreferences
             loadWildCardsFromSharedPreferences();
 
-            adapter.notifyDataSetChanged(); // Notify the adapter about the data change
+            adapter.notifyDataSetChanged();
         });
 
         builder.show();
@@ -101,17 +95,10 @@ public class WildCardsFragments extends Fragment {
 
 
     protected void saveNewWildCard(WildCardHeadings wildcard) {
-        // Get the SharedPreferences instance
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-
-        // Get the current wildcard count
         int count = sharedPreferences.getInt("wildcard_count", 0);
-
-        // Increment the count and save it back
         int newCount = count + 1;
         sharedPreferences.edit().putInt("wildcard_count", newCount).apply();
-
-        // Save the new wildcard data
         sharedPreferences.edit()
                 .putString("wildcard_text_" + newCount, wildcard.getText())
                 .putInt("wildcard_probability_" + newCount, wildcard.getProbability())
@@ -119,23 +106,18 @@ public class WildCardsFragments extends Fragment {
     }
 
     protected void loadWildCardsFromSharedPreferences() {
-        // Get the SharedPreferences instance
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 
-        // Get the wildcard count
         int count = sharedPreferences.getInt("wildcard_count", 0);
 
-        // Create a new array to store the wildcards
         WildCardHeadings[] newWildCards = new WildCardHeadings[count];
 
-        // Load the wildcard data from SharedPreferences
         for (int i = 0; i < count; i++) {
             String text = sharedPreferences.getString("wildcard_text_" + (i + 1), "");
             int probability = sharedPreferences.getInt("wildcard_probability_" + (i + 1), 10);
             newWildCards[i] = new WildCardHeadings(text, probability, true, true);
         }
 
-        // Update the dataset of the adapter
         adapter.setWildCards(newWildCards);
     }
 
