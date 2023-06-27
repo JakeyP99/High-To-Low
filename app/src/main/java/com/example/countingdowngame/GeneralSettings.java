@@ -146,8 +146,7 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
             button_gameModeTwo.setBackground(buttonHighlightDrawable);
         }
 
-        SharedPreferences mutePreferences = getSharedPreferences("mute_state", MODE_PRIVATE);
-        boolean isMuted = mutePreferences.getBoolean("isMuted", false);
+        boolean isMuted = GeneralSettingsLocalStore.fromContext(this).isMuted();
         btnMute.setSelected(isMuted);
 
         if (isMuted) {
@@ -168,12 +167,8 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
         gameModeEditor.putBoolean("button_gameModeTwo", button_gameModeTwo.isSelected());
         gameModeEditor.apply();
 
-        SharedPreferences mutePreferences = getSharedPreferences("mute_state", MODE_PRIVATE);
-        SharedPreferences.Editor muteEditor = mutePreferences.edit();
-
         boolean isMuted = btnMute.isSelected();
-        muteEditor.putBoolean("isMuted", isMuted);
-        muteEditor.apply();
+        GeneralSettingsLocalStore.fromContext(this).setIsMuted(isMuted);
 
         //copyout
         SharedPreferences soundPreferences = getSharedPreferences("sound_mode_choice", MODE_PRIVATE);

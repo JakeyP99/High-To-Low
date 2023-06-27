@@ -4,6 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class GeneralSettingsLocalStore {
+    public static GeneralSettingsLocalStore fromContext(Context context) {
+        return new GeneralSettingsLocalStore(context);
+    }
+
     private static final String SETTINGS_NAME = "generalSettings";
     private final SharedPreferences mPref;
 

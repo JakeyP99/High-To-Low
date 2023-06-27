@@ -37,10 +37,12 @@ public class ButtonUtils {
         bop = MediaPlayer.create(context, R.raw.bop);
         buttonHighlight = AppCompatResources.getDrawable(mContext, R.drawable.buttonhighlight);
     }
+
     //-----------------------------------------------------Sound Functionality---------------------------------------------------//
     public void toggleMute() {
         isMuted = !isMuted;
     }
+
     public void togglePayForWildCard() {
         isMuted = !isMuted;
     }
@@ -56,13 +58,9 @@ public class ButtonUtils {
         }
     }
 
-    private boolean isMuted() {
-        SharedPreferences mutePreferences = mContext.getSharedPreferences("mute_state", Context.MODE_PRIVATE);
-        return mutePreferences.getBoolean("isMuted", false);
-    }
 
     private void playSoundEffects() {
-        if (isMuted()) {
+        if (GeneralSettingsLocalStore.fromContext(mContext).isMuted()) {
             return;
         }
 
@@ -81,6 +79,7 @@ public class ButtonUtils {
             }
         }
     }
+
     public void onDestroy() {
         for (MediaPlayer b : burp) {
             b.release();
