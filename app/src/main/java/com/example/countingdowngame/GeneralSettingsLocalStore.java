@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class GeneralSettingsLocalStore {
-    private static final String SETTINGS_NAME = "general_settings";
+    private static final String SETTINGS_NAME = "generalSettings";
     private final SharedPreferences mPref;
 
     private GeneralSettingsLocalStore(Context context) {
@@ -15,7 +15,29 @@ public class GeneralSettingsLocalStore {
         return mPref.getBoolean("isMuted", false);
     }
 
+    public void setIsMuted(Boolean value) {
+        SharedPreferences.Editor editor = mPref.edit();
+        editor.putBoolean("isMuted", value);
+        editor.apply();
+    }
+
     public Boolean shouldPlayRegularSound() {
         return mPref.getBoolean("shouldPlayRegularSound", true);
+    }
+
+    public void setShouldPlayRegularSound(Boolean value) {
+        SharedPreferences.Editor editor = mPref.edit();
+        editor.putBoolean("shouldPlayRegularSound", value);
+        editor.apply();
+    }
+
+    public Boolean isSingleScreen() {
+        return mPref.getBoolean("isSingleScreen", true);
+    }
+
+    public void setIsSingleScreen(Boolean value) {
+        SharedPreferences.Editor editor = mPref.edit();
+        editor.putBoolean("isSingleScreen", value);
+        editor.apply();
     }
 }
