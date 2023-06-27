@@ -23,6 +23,8 @@ public class GeneralSettingsLocalStore {
 
     public Boolean shouldPlayRegularSound() {
         return mPref.getBoolean("shouldPlayRegularSound", true);
+
+
     }
 
     public void setShouldPlayRegularSound(Boolean value) {
