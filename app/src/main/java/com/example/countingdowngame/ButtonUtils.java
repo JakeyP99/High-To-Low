@@ -64,8 +64,7 @@ public class ButtonUtils {
             return;
         }
 
-        SharedPreferences preferences = mContext.getSharedPreferences("sound_mode_choice", Context.MODE_PRIVATE);
-        boolean soundEffects = preferences.getBoolean("button_regularSound", true);
+        boolean soundEffects = GeneralSettingsLocalStore.fromContext(mContext).shouldPlayRegularSound();
 
         if (soundEffects) {
             bop.start();

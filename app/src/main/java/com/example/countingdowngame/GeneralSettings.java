@@ -120,11 +120,9 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
 
     private void loadPreferences() {
         //copyout
-        SharedPreferences soundPreferences = getSharedPreferences("sound_mode_choice", MODE_PRIVATE);
-        boolean regularSoundSelected = soundPreferences.getBoolean("button_regularSound", true);
+        boolean regularSoundSelected = GeneralSettingsLocalStore.fromContext(this).shouldPlayRegularSound();
         button_regularSound.setSelected(regularSoundSelected);
         button_burpSound.setSelected(!regularSoundSelected);
-
 //
         if (regularSoundSelected) {
             button_regularSound.setBackground(buttonHighlightDrawable);
@@ -155,7 +153,10 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
         } else {
             btnMute.setBackground(outlineForButton);
         }
+
+
     }
+
 
     private void savePreferences() {
         SharedPreferences gameModePreferences = getSharedPreferences("game_mode_choice", MODE_PRIVATE);
@@ -167,12 +168,6 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
 
         boolean isMuted = btnMute.isSelected();
         GeneralSettingsLocalStore.fromContext(this).setIsMuted(isMuted);
-
-        //copyout
-        SharedPreferences soundPreferences = getSharedPreferences("sound_mode_choice", MODE_PRIVATE);
-        SharedPreferences.Editor soundEditor = soundPreferences.edit();
-        soundEditor.putBoolean("button_regularSound", button_regularSound.isSelected());
-        soundEditor.apply();
-
+        GeneralSettingsLocalStore.fromContext(this).setShouldPlayRegularSound(button_regularSound.isSelected());
     }
 }
