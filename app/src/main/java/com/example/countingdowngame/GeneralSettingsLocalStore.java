@@ -46,4 +46,14 @@ public class GeneralSettingsLocalStore {
         editor.putBoolean("isSingleScreen", value);
         editor.apply();
     }
+
+    public int playerWildCardCount() {
+        return mPref.getInt("playerWildCardCount", 1);
+    }
+
+    public void setPlayerWildCardCount(int value) {
+        SharedPreferences.Editor editor = mPref.edit();
+        editor.putInt("playerWildCardCount", value);
+        editor.apply();
+    }
 }

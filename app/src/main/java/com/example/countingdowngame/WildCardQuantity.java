@@ -132,12 +132,6 @@ public class WildCardQuantity extends ButtonUtilsActivity {
 
     //-----------------------------------------------------Get WildCard---------------------------------------------------//
 
-    public static int getWildCardAmountFromSettings(Context context) {
-        SharedPreferences wildcardPreferences = context.getSharedPreferences("wildcard_amount", MODE_PRIVATE);
-        return wildcardPreferences.getInt("wildcardAmount", 1);
-    }
-
-
     private void validateWildCardAmount() {
         String wildCardAmountInput = wildcardPerPlayerEditText.getText().toString().trim();
 
@@ -158,17 +152,13 @@ public class WildCardQuantity extends ButtonUtilsActivity {
     //-----------------------------------------------------Load and Save Preferences---------------------------------------------------//
 
     private void loadPreferences() {
-        SharedPreferences wildcardPreferences = getSharedPreferences("wildcard_amount", MODE_PRIVATE);
-        int loadWildCardAmount = wildcardPreferences.getInt("wildcardAmount", 1);
+        int loadWildCardAmount = GeneralSettingsLocalStore.fromContext(this).playerWildCardCount();
         wildcardPerPlayerEditText.setText(String.valueOf(loadWildCardAmount));
     }
 
     private void savePreferences() {
         int wildCardAmountSetInSettings = Integer.parseInt(wildcardPerPlayerEditText.getText().toString());
-        SharedPreferences wildcardPreferences = getSharedPreferences("wildcard_amount", MODE_PRIVATE);
-        SharedPreferences.Editor wildcardEditor = wildcardPreferences.edit();
-        wildcardEditor.putInt("wildcardAmount", wildCardAmountSetInSettings);
-        wildcardEditor.apply();
+        GeneralSettingsLocalStore.fromContext(this).setPlayerWildCardCount( wildCardAmountSetInSettings);
     }
 
 }
