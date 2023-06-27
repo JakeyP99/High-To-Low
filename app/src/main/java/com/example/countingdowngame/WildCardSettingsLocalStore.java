@@ -14,13 +14,22 @@ public class WildCardSettingsLocalStore {
     public int wildCardQuantity() {
         return mPref.getInt("wildcardAmount", 1);
     }
+    public void setWildCardQuantity(Boolean value) {
+        SharedPreferences.Editor editor = mPref.edit();
+        editor.putBoolean("wildcardAmount", value);
+        editor.apply();
+    }
+
 
     public int truthWildCard() {
         return mPref.getInt("TruthPrefs", 1);
     }
-
+    public void setTruthWildCard(Boolean value) {
+        SharedPreferences.Editor editor = mPref.edit();
+        editor.putBoolean("wildcardAmount", value);
+        editor.apply();
+    }
 
 
     }
-
 
