@@ -1,7 +1,6 @@
 package com.example.countingdowngame;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +12,6 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
 import java.util.Random;
-
 
 public class NumberChoiceForGame extends ButtonUtilsActivity {
     private int startingNumber;

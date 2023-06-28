@@ -8,7 +8,6 @@ public class HomeScreen extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a1_home_screen);
 

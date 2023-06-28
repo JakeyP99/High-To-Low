@@ -73,13 +73,4 @@ public class ButtonUtilsActivity extends AppCompatActivity {
         btnUtils.toggleMute();
     }
 
-    public void onPayForWildCardClicked(View view) {
-        Button btnPayForWildCard = (Button) view;
-        boolean isMuted = !btnPayForWildCard.isSelected();
-        btnPayForWildCard.setSelected(isMuted);
-        Drawable selectedDrawable = isMuted ? buttonHighlightDrawable : outlineForButton;
-        btnPayForWildCard.setBackground(selectedDrawable);
-        btnUtils.togglePayForWildCard();
-    }
-
 }

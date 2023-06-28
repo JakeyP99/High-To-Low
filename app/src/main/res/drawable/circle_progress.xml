@@ -1,0 +1,13 @@
+<rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fromDegrees="-90"
+    android:toDegrees="-90">
+
+    <shape android:shape="ring"
+        android:innerRadiusRatio="3"
+        android:thicknessRatio="15"
+        android:useLevel="true">
+
+        <solid android:color="#E0E0E0" /> <!-- Background color of the donut -->
+    </shape>
+
+</rotate>

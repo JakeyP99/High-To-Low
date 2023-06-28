@@ -244,7 +244,6 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
             }
         }
-
         if (currentPlayer.getWildCardAmount() > 0) {
             btnWild.setVisibility(View.VISIBLE);
             btnWildPlayer2.setVisibility(View.VISIBLE);

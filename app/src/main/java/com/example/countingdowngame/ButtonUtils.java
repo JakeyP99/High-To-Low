@@ -3,7 +3,6 @@ package com.example.countingdowngame;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
@@ -40,10 +39,6 @@ public class ButtonUtils {
 
     //-----------------------------------------------------Sound Functionality---------------------------------------------------//
     public void toggleMute() {
-        isMuted = !isMuted;
-    }
-
-    public void togglePayForWildCard() {
         isMuted = !isMuted;
     }
 
@@ -110,7 +105,6 @@ public class ButtonUtils {
             return false;
         });
 
-
         button.setOnClickListener(view -> {
             if (buttonAction != null) {
                 buttonAction.run();
@@ -119,6 +113,21 @@ public class ButtonUtils {
             playSoundEffects();
         });
     }
+
+
+    @SuppressLint("ClickableViewAccessibility")
+    public void setButtonWithoutEffects(final Button button, final Runnable buttonAction) {
+        if (button == null) {
+            return;
+        }
+        button.setOnClickListener(view -> {
+            if (buttonAction != null) {
+                buttonAction.run();
+            }
+            vibrateDevice();
+        });
+    }
+
 
     //-----------------------------------------------------Vibrate Functionality---------------------------------------------------//
 

@@ -8,7 +8,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="fill_parent"
-        android:layout_height="450dp"
+        android:layout_height="600dp"
         android:layout_gravity="center"
         app:cardElevation="0dp"
         app:cardUseCompatPadding="true"
@@ -36,41 +36,38 @@
 
     </androidx.cardview.widget.CardView>
 
-
-    <Button
-        android:id="@+id/buttonReturn"
-        android:layout_width="139dp"
-        android:layout_height="77dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="100dp"
-        android:background="@drawable/outlineforbutton"
-        android:text="Return"
-        android:textAllCaps="false"
-        android:textColor="@color/bluedark"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-
+    <FrameLayout
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_view"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/card_view">
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:indeterminate="false"
-        android:max="100"
-        android:padding="20sp"
-        android:progress="0"
-        android:progressDrawable="@drawable/progress"
-        android:progressTint="@color/bluedark"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_view"
-        app:layout_constraintVertical_bias="0.0" />
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:indeterminate="false"
+            android:max="100"
+            android:padding="20sp"
+            android:progress="100"
+            android:progressDrawable="@drawable/circle_progress"
+            android:progressTint="@color/bluedark" />
 
+        <Button
+            android:id="@+id/buttonNext"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="Next"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:textSize="20sp" />
+
+    </FrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
