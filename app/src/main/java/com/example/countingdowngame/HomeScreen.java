@@ -7,20 +7,22 @@ public class HomeScreen extends ButtonUtilsActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+        setupView();
+        setupButtonControls();
+    }
+
+    private void setupView() {
         setContentView(R.layout.a1_home_screen);
+    }
 
-        final Button btnQuickPlay = findViewById(R.id.quickplay);
-        final Button btnInstructions = findViewById(R.id.button_Instructions);
-        final Button btnSettings = findViewById(R.id.button_Settings);
-
+    private void setupButtonControls() {
+        Button btnQuickPlay = findViewById(R.id.quickplay);
+        Button btnInstructions = findViewById(R.id.button_Instructions);
+        Button btnSettings = findViewById(R.id.button_Settings);
         btnUtils.setButton(btnQuickPlay, this::gotoGameSetup);
-
         btnUtils.setButton(btnInstructions, this::gotoInstructions);
-
         btnUtils.setButton(btnSettings, this::gotoSettings);
-
     }
 }
 
