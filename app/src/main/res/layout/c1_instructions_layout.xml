@@ -25,6 +25,9 @@
             app:autoSizeMaxTextSize="23sp"
             app:autoSizeMinTextSize="12sp"
             app:autoSizeStepGranularity="2sp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+
             app:autoSizeTextType="uniform" />
 
         <androidx.viewpager.widget.ViewPager
@@ -36,9 +39,9 @@
 
     </androidx.cardview.widget.CardView>
 
-    <FrameLayout
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+    <RelativeLayout
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/card_view">
@@ -46,28 +49,28 @@
         <ProgressBar
             android:id="@+id/progress_bar"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
             android:indeterminate="false"
             android:max="100"
             android:padding="20sp"
             android:progress="100"
-            android:progressDrawable="@drawable/circle_progress"
-            android:progressTint="@color/bluedark" />
+            android:progressDrawable="@drawable/circle_progress" />
 
         <Button
             android:id="@+id/buttonNext"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/arrow_right"
             android:clickable="true"
+            android:gravity="center"
             android:focusable="true"
-            android:text="Next"
             android:textAllCaps="false"
             android:textColor="@color/bluedark"
             android:textSize="20sp" />
 
-    </FrameLayout>
+    </RelativeLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

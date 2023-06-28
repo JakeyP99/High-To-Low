@@ -11,6 +11,54 @@ import java.util.List;
 import java.util.Objects;
 
 public class InstructionsToPlay extends ButtonUtilsActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setLayout();
+    }
+
+    public void setLayout() {
+        setContentView(R.layout.c1_instructions_layout);
+
+        Button btnNext = findViewById(R.id.buttonNext);
+        ViewPager viewPager = findViewById(R.id.viewpager);
+        ProgressBar progressBar = findViewById(R.id.progress_bar);
+
+        setupButtonControls(btnNext, viewPager);
+        setupProgress(viewPager, progressBar);
+        setupViewPager(viewPager);
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        InstructionPageAdapter adapter = new InstructionPageAdapter(instructions);
+        DepthPageTransformer pageTransformer = new DepthPageTransformer();
+        viewPager.setPageTransformer(true, pageTransformer);
+        viewPager.setAdapter(adapter);
+    }
+
+    public void setupProgress(ViewPager viewPager, ProgressBar progressBar) {
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                progressBar.setProgress(position + 1);
+            }
+        });
+        progressBar.setMax(instructions.size());
+        progressBar.setProgress(1);
+
+    }
+
+    public void setupButtonControls(Button btnNext, ViewPager viewPager) {
+        btnUtils.setButtonWithoutEffects(btnNext, () -> {
+            int currentItem = viewPager.getCurrentItem();
+            if (currentItem < Objects.requireNonNull(viewPager.getAdapter()).getCount() - 1) {
+                viewPager.setCurrentItem(currentItem + 1, true);
+            } else {
+                gotoHomeScreen();
+            }
+        });
+    }
     private final List<Integer> instructions = Arrays.asList(
             R.string.instruction_welcome,
             R.string.instruction_aim,
@@ -26,43 +74,4 @@ public class InstructionsToPlay extends ButtonUtilsActivity {
             R.string.instruction_thanks
     );
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.c1_instructions_layout);
-
-        final Button btnNext = findViewById(R.id.buttonNext);
-        final ViewPager viewPager = findViewById(R.id.viewpager);
-        final ProgressBar progressBar = findViewById(R.id.progress_bar);
-
-        btnUtils.setButtonWithoutEffects(btnNext, () -> {
-            int currentItem = viewPager.getCurrentItem();
-            if (currentItem < Objects.requireNonNull(viewPager.getAdapter()).getCount() - 1) {
-                viewPager.setCurrentItem(currentItem + 1, true);
-            }else
-            {
-                gotoHomeScreen();
-            }
-        });
-
-        InstructionPageAdapter adapter = new InstructionPageAdapter(instructions);
-
-        DepthPageTransformer pageTransformer = new DepthPageTransformer();
-        viewPager.setPageTransformer(true, pageTransformer);
-
-        viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                progressBar.setProgress(position + 1);
-                if (position == adapter.getCount() - 1) {
-                    btnNext.setText("Finish"); // Update button text on the last instruction
-                } else {
-                    btnNext.setText("Next"); // Reset button text on other instructions
-                }
-            }
-        });
-
-        progressBar.setMax(instructions.size());
-        progressBar.setProgress(1);
-    }}
+}

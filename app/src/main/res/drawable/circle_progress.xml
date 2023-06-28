@@ -7,7 +7,7 @@
     <!-- Background Circle -->
     <item>
         <shape android:shape="oval">
-            <solid android:color="@color/bluedarktransparent" /> <!-- Background color of the donut -->
+            <solid android:color="#22021457" /> <!-- Background color of the donut -->
         </shape>
     </item>
 
