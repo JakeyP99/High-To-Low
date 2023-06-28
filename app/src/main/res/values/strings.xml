@@ -1,1 +1,15 @@
-<resources></resources>
+<resources>
+    <string name="instruction_welcome">Welcome Friend!\n\nGet ready to embark on a thrilling journey filled with excitement, and suspense.</string>
+    <string name="instruction_aim">Aim Of The Game!\n\nWithin the game there will be a number that goes after every turn. Beware, if the number hits zero you need to take a shot!</string>
+    <string name="instruction_choose_drink">Choose A Drink!\n\nRemember that shot I mentioned before, well prepare yourself a tantalizing drink for the loser!</string>
+    <string name="instruction_create_players">Create Your Players!\n\nNow this is the fun part, you get to make your character! You can either take a photo of yourself, or if you\'re having a bad hair day, you can draw your character.</string>
+    <string name="instruction_choose_starting_number">Choose A Starting Number!\n\nThe aim of the game is not to get to 0. Tip ~ The lower the number, the faster the game!</string>
+    <string name="instruction_generate_button">Generate Button!\n\nLet me introduce you to the two main buttons. First, there\'s the \'Generate\' button, which will randomly choose a number between 0 and the one you\'ve selected.</string>
+    <string name="instruction_wildcard_button">Wildcard Button!\n\nThis button throws tasks, quizzes, and challenges your way. Fail or skip them, and you\'ll have to take a drink. If you succeed, you can make someone else drink. Oh, and don\'t forget, your turn is skipped after using it.</string>
+    <string name="instruction_the_end">The End!\n\nOnce a player hits that dreaded zero, they\'re the loser and must face the consequence of taking that deliciously sexy shot!</string>
+    <string name="instruction_hurray">Hurray!\n\nYou\'ve completed a round of Drinking Countdown! If the thrill of the game hasn\'t quenched your thirst for excitement, why not play it again, and again, and again. Literally do whatever you want, you\'re a free person so live your gorgeous life.</string>
+    <string name="instruction_settings">Settings!\n\nWithin the settings you will find options to make it one screen, or make it split screen. They both produce the same game, but split screen makes it easier if you are sitting across from someone.</string>
+    <string name="instruction_tips_tricks">Tips And Tricks!\n\nAs I said before, you can also change the wildcards and edit them/add more. A hint about the probability is, the higher the number, the more likely it will occur.</string>
+    <string name="instruction_thanks">Thanks, and I hope you enjoy my game!</string>
+
+</resources>
