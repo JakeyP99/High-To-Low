@@ -2,12 +2,25 @@
     android:fromDegrees="-90"
     android:toDegrees="-90">
 
-    <shape android:shape="ring"
-        android:innerRadiusRatio="3"
-        android:thicknessRatio="15"
-        android:useLevel="true">
+<layer-list>
 
-        <solid android:color="#E0E0E0" /> <!-- Background color of the donut -->
-    </shape>
+    <!-- Background Circle -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/bluedarktransparent" /> <!-- Background color of the donut -->
+        </shape>
+    </item>
 
+    <!-- Donut Shape -->
+    <item>
+        <shape
+            android:innerRadiusRatio="2"
+            android:shape="ring"
+            android:thicknessRatio="15"
+            android:useLevel="true">
+            <solid android:color="@color/bluedark" /> <!-- Color of the donut shape -->
+        </shape>
+    </item>
+
+</layer-list>
 </rotate>
