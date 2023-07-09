@@ -1,6 +1,7 @@
 package com.example.countingdowngame;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,7 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<WildCardHeadings> {
     private final WildCardChoice mContext;
     private final WildCardHeadings[] mProbabilities;
 
-    public Settings_WildCard_Adapter( WildCardChoice context, WildCardHeadings[] probabilities) {
+    public Settings_WildCard_Adapter(WildCardChoice context, WildCardHeadings[] probabilities) {
         super(context, R.layout.list_view_wild_cards, probabilities);
         mContext = context;
         mProbabilities = probabilities;
@@ -89,6 +90,7 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<WildCardHeadings> {
         private static final int TAB_COUNT = 4;
 
         Context mContext;
+
         public WildCardsPagerAdapter(FragmentManager fm, Context context) {
             super(fm);
             mContext = context;
@@ -98,19 +100,19 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<WildCardHeadings> {
         @Override
         public Fragment getItem(int position) {
             WildCardHeadings[] emptyProbabilitiesArray = new WildCardHeadings[0];
-            QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(emptyProbabilitiesArray,mContext, WildCardType.QUIZ);
-            TaskWildCardsAdapter taskAdapter = new TaskWildCardsAdapter(emptyProbabilitiesArray,mContext, WildCardType.TASK);
-            TruthWildCardsAdapter truthAdapter = new TruthWildCardsAdapter(emptyProbabilitiesArray,mContext, WildCardType.TRUTH);
-            ExtrasWildCardsAdapter extraAdapter = new ExtrasWildCardsAdapter(emptyProbabilitiesArray,mContext, WildCardType.EXTRAS);
+            QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(emptyProbabilitiesArray, mContext, WildCardType.QUIZ);
+            TaskWildCardsAdapter taskAdapter = new TaskWildCardsAdapter(emptyProbabilitiesArray, mContext, WildCardType.TASK);
+            TruthWildCardsAdapter truthAdapter = new TruthWildCardsAdapter(emptyProbabilitiesArray, mContext, WildCardType.TRUTH);
+            ExtrasWildCardsAdapter extraAdapter = new ExtrasWildCardsAdapter(emptyProbabilitiesArray, mContext, WildCardType.EXTRAS);
 
             switch (position) {
-                case 1:
+                case 0:
                     return new QuizWildCardsFragment(mContext, quizAdapter);
-                case 2:
+                case 1:
                     return new TaskWildCardsFragment(mContext, taskAdapter);
-                case 3:
+                case 2:
                     return new TruthWildCardsFragment(mContext, truthAdapter);
-                case 4:
+                case 3:
                     return new ExtrasWildCardsFragment(mContext, extraAdapter);
                 default:
                     return null;
@@ -126,16 +128,16 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<WildCardHeadings> {
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
-                case 1:
+                case 0:
                     return "Quiz";
-                case 2:
+                case 1:
                     return "Task";
-                case 3:
+                case 2:
                     return "Truth";
-                case 4:
+                case 3:
                     return "Extras";
                 default:
-                    return super.getPageTitle(position);
+                    return null;
             }
         }
     }
