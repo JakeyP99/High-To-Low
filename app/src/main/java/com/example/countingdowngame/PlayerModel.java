@@ -33,6 +33,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.countingdowngame.game.Game;
+import com.example.countingdowngame.game.Player;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

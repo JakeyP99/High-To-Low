@@ -6,6 +6,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.countingdowngame.game.Game;
+import com.example.countingdowngame.game.Player;
+
 import java.util.ArrayList;
 public class EndActivityGame extends ButtonUtilsActivity {
 

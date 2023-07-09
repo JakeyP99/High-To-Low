@@ -1,4 +1,4 @@
-package com.example.countingdowngame;
+package com.example.countingdowngame.game;
 
 import android.content.Context;
 
