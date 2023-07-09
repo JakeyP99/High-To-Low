@@ -67,7 +67,9 @@
     </string>
 
     <string name="instruction_thanks">
-        Thanks, and I hope you enjoy my game!
+        <b><big>Thank you!</big></b>
+        \n\n
+        I hope you enjoy our game!
     </string>
 
 </resources>
