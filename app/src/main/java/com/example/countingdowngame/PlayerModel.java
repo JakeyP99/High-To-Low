@@ -62,6 +62,13 @@ public class PlayerModel extends ButtonUtilsActivity {
         updatePlayerCounter();
         setupProceedButton();
 
+
+        // Clear the selection of players
+        for (Player player : playerList) {
+            player.setSelected(false);
+        }
+        playerListAdapter.notifyDataSetChanged();
+
         List<Player> loadedPlayerList = PlayerModelLocalStore.fromContext(this).loadPlayerData();
         int startPosition = playerList.size();
 
