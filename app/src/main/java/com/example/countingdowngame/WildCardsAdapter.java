@@ -48,7 +48,13 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
         WildCardHeadings[] loadedWildCards = new WildCardHeadings[wildCardCount];
 
         for (int i = 0; i < wildCardCount; i++) {
+            boolean inBounds = (i >= 0) && (i < wildCards.length);
+
             WildCardHeadings card = null;
+
+            if (inBounds) {
+                card = wildCards[i];
+            }
 
             boolean enabled;
             String activity;
