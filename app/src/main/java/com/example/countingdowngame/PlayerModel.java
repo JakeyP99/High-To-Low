@@ -62,7 +62,6 @@ public class PlayerModel extends ButtonUtilsActivity {
         updatePlayerCounter();
         setupProceedButton();
 
-
         // Clear the selection of players
         for (Player player : playerList) {
             player.setSelected(false);
