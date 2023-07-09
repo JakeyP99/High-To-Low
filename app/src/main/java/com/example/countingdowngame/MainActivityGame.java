@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.GameEventType;
 import com.example.countingdowngame.game.Player;
+import com.example.countingdowngame.stores.PlayerModelLocalStore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -67,7 +68,7 @@ public class MainActivityGame extends ButtonUtilsActivity {
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Press back again to go to the home screen", Toast.LENGTH_SHORT).show();
 
-        new Handler().postDelayed(() -> doubleBackToExitPressedOnce=false, BACK_PRESS_DELAY);
+        new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, BACK_PRESS_DELAY);
     }
     //-----------------------------------------------------Create game---------------------------------------------------//
 
@@ -91,6 +92,7 @@ public class MainActivityGame extends ButtonUtilsActivity {
         shuffleHandler = new Handler();
 
     }
+
     private void startGame() {
         int soundResourceId = R.raw.cartoonloop;
         AudioManager.getInstance().initialize(this, soundResourceId);
@@ -103,7 +105,7 @@ public class MainActivityGame extends ButtonUtilsActivity {
         int startingNumber = extras.getInt("startingNumber");
 
         // Load player data from PlayerModel
-        List<Player> playerList = PlayerModel.loadSelectedPlayers(this);
+        List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
         if (!playerList.isEmpty()) {
             // Set the player list in Game class
             Game.getInstance().setPlayers(this, playerList.size());
@@ -216,12 +218,11 @@ public class MainActivityGame extends ButtonUtilsActivity {
     }
 
 
-
     //-----------------------------------------------------Render Player---------------------------------------------------//
 
     private void renderPlayer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        List<Player> playerList = PlayerModel.loadSelectedPlayers(this);
+        List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
         if (!playerList.isEmpty()) {
             String playerName = currentPlayer.getName();
             String playerImageString = currentPlayer.getPhoto();
@@ -254,10 +255,10 @@ public class MainActivityGame extends ButtonUtilsActivity {
     private void wildCardActivate(Player player) {
         Game.getInstance().getCurrentPlayer().useWildCard();
         WildCardHeadings[] emptyProbabilitiesArray = new WildCardHeadings[0];
-        QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(emptyProbabilitiesArray,this, WildCardType.QUIZ);
-        TaskWildCardsAdapter taskAdapter = new TaskWildCardsAdapter(emptyProbabilitiesArray,this, WildCardType.TASK);
-        TruthWildCardsAdapter truthAdapter = new TruthWildCardsAdapter(emptyProbabilitiesArray,this, WildCardType.TRUTH);
-        ExtrasWildCardsAdapter extraAdapter = new ExtrasWildCardsAdapter(emptyProbabilitiesArray,this, WildCardType.EXTRAS);
+        QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.QUIZ);
+        TaskWildCardsAdapter taskAdapter = new TaskWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.TASK);
+        TruthWildCardsAdapter truthAdapter = new TruthWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.TRUTH);
+        ExtrasWildCardsAdapter extraAdapter = new ExtrasWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.EXTRAS);
 
 
         WildCardHeadings[] quizProbabilities = quizAdapter.loadWildCardProbabilitiesFromStorage();

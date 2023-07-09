@@ -1,10 +1,8 @@
 package com.example.countingdowngame;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -35,11 +33,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.Player;
+import com.example.countingdowngame.stores.PlayerModelLocalStore;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.ByteArrayOutputStream;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,8 +44,8 @@ public class PlayerModel extends ButtonUtilsActivity {
     private static final int REQUEST_IMAGE_PICK = 1;
     private static final int REQUEST_DRAW = 2;
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;
-    private static List<Player> playerList;
-    private static PlayerListAdapter playerListAdapter;
+    private List<Player> playerList;
+    private PlayerListAdapter playerListAdapter;
     private TextView playerCountTextView;
     private int totalPlayerCount;
     private RecyclerView playerRecyclerView;
@@ -65,7 +62,7 @@ public class PlayerModel extends ButtonUtilsActivity {
         updatePlayerCounter();
         setupProceedButton();
 
-        List<Player> loadedPlayerList = loadPlayerData(this);
+        List<Player> loadedPlayerList = PlayerModelLocalStore.fromContext(this).loadPlayerData();
         int startPosition = playerList.size();
 
         playerList.addAll(loadedPlayerList);
@@ -155,20 +152,20 @@ public class PlayerModel extends ButtonUtilsActivity {
                 }
             }
 
-                int remainingPlayers = totalPlayerCount - selectedPlayerNames.size();
-                if (remainingPlayers == 0) {
-                    List<Player> selectedPlayers = new ArrayList<>();
-                    for (Player player : playerList) {
-                        if (player.isSelected()) {
-                            selectedPlayers.add(player);
-                        }
+            int remainingPlayers = totalPlayerCount - selectedPlayerNames.size();
+            if (remainingPlayers == 0) {
+                List<Player> selectedPlayers = new ArrayList<>();
+                for (Player player : playerList) {
+                    if (player.isSelected()) {
+                        selectedPlayers.add(player);
                     }
-
-                    saveSelectedPlayers(this, selectedPlayers);
-                    Intent intent = new Intent(this, NumberChoiceForGame.class);
-                    intent.putStringArrayListExtra("playerNames", selectedPlayerNames);
-                    startActivity(intent);
                 }
+
+                PlayerModelLocalStore.fromContext(this).saveSelectedPlayers(selectedPlayers);
+                Intent intent = new Intent(this, NumberChoiceForGame.class);
+                intent.putStringArrayListExtra("playerNames", selectedPlayerNames);
+                startActivity(intent);
+            }
 
         });
     }
@@ -179,6 +176,7 @@ public class PlayerModel extends ButtonUtilsActivity {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, REQUEST_IMAGE_PICK);
     }
+
     private Bitmap flipBitmap(Bitmap bitmap) {
         Matrix matrix = new Matrix();
         matrix.setScale(-1, 1); // Flip the bitmap horizontally
@@ -293,59 +291,13 @@ public class PlayerModel extends ButtonUtilsActivity {
 
     // Save player data to SharedPreferences
     private void savePlayerData() {
-        SharedPreferences sharedPreferences = getSharedPreferences("player_data", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
         String json = gson.toJson(playerList);
-        editor.putString("player_list", json);
-        editor.apply();
+        PlayerModelLocalStore.fromContext(this).setPlayersJSON(json);
     }
 
-    public static void saveSelectedPlayers(Context context, List<Player> selectedPlayers) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("selected_players", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(selectedPlayers);
-        editor.putString("selected_players_list", json);
-        editor.apply();
-    }
-
-    public static List<Player> loadPlayerData(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("player_data", MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = sharedPreferences.getString("player_list", null);
-        Type type = new TypeToken<ArrayList<Player>>() {}.getType();
-        List<Player> loadedPlayerList = gson.fromJson(json, type);
-
-        // Set isSelected to false for all loaded players
-        if (loadedPlayerList != null) {
-            for (Player player : loadedPlayerList) {
-                player.setSelected(false);
-            }
-        } else {
-            loadedPlayerList = new ArrayList<>();
-        }
-        for (Player p : loadedPlayerList) {
-            p.resetWildCardAmount(context);
-        }
-        return loadedPlayerList;
-    }
 
     // Load player data from SharedPreferences
-    public static List<Player> loadSelectedPlayers(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("selected_players", MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = sharedPreferences.getString("selected_players_list", null);
-        Type type = new TypeToken<ArrayList<Player>>() {}.getType();
-        List<Player> selectedPlayers = gson.fromJson(json, type);
-
-        // Return an empty list if no data is loaded
-        if (selectedPlayers == null) {
-            selectedPlayers = new ArrayList<>();
-        }
-
-        return selectedPlayers;
-    }
 
 
     //-----------------------------------------------------Player Counter Functionality---------------------------------------------------//
@@ -380,9 +332,8 @@ public class PlayerModel extends ButtonUtilsActivity {
 
     //-----------------------------------------------------UI Decoration---------------------------------------------------//
     private void setupPlayerRecyclerView() {
-        playerList = new ArrayList<>();
+        var playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
         playerListAdapter = new PlayerListAdapter(this, playerList);
-        loadSelectedPlayers(this);
 
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
         int spacing = getResources().getDimensionPixelSize(R.dimen.grid_spacing);

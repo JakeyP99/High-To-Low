@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.GameEventType;
 import com.example.countingdowngame.game.Player;
+import com.example.countingdowngame.stores.PlayerModelLocalStore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -117,7 +118,7 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         int startingNumber = extras.getInt("startingNumber");
 
         // Load player data from PlayerModel
-        List<Player> playerList = PlayerModel.loadSelectedPlayers(this);
+        List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
         if (!playerList.isEmpty()) {
             // Set the player list in Game class
             Game.getInstance().setPlayers(this, playerList.size());
@@ -228,7 +229,7 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
     private void renderPlayer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        List<Player> playerList = PlayerModel.loadSelectedPlayers(this);
+        List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
 
         if (!playerList.isEmpty()) {
             String playerName = currentPlayer.getName();
