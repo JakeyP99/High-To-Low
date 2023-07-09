@@ -2,20 +2,22 @@ package com.example.countingdowngame;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ExtrasWildCardsFragment extends WildCardsFragments {
     static final WildCardHeadings[] defaultExtrasWildCards = {
-            new WildCardHeadings("Double the current number and go again!", 3, true, true),
-            new WildCardHeadings("Half the current number and go again!", 3, true, true),
-            new WildCardHeadings("Reset the number!", 3, true, true),
-            new WildCardHeadings("Reverse the turn order!", 3, true, true),
+            new WildCardHeadings("Double the current number and go again!", 3, true, false),
+            new WildCardHeadings("Half the current number and go again!", 3, true, false),
+            new WildCardHeadings("Reset the number!", 3, true, false),
+            new WildCardHeadings("Reverse the turn order!", 3, true, false),
     };
 
     public ExtrasWildCardsFragment(Context context, WildCardsAdapter a) {
@@ -30,15 +32,23 @@ public class ExtrasWildCardsFragment extends WildCardsFragments {
 
         WildCardType mode = WildCardType.EXTRAS;
 
-        // Declare adapter as a field in the fragment
         adapter = new ExtrasWildCardsAdapter(defaultExtrasWildCards, requireContext(), mode);
 
         recyclerView.setAdapter(adapter);
 
         Button btnAddWildCard = view.findViewById(R.id.btnAddWildCard);
-        btnAddWildCard.setOnClickListener(v -> addNewWildCard());
+        btnAddWildCard.setVisibility(View.GONE);
 
         Button btnToggleAll = view.findViewById(R.id.btnToggleAll);
+
+
+
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) btnToggleAll.getLayoutParams();
+        layoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
+        layoutParams.leftMargin = 0;
+        layoutParams.rightMargin = 0;
+        btnToggleAll.setLayoutParams(layoutParams);
+
         btnToggleAll.setOnClickListener(v -> toggleAllWildCards());
         return view;
     }
