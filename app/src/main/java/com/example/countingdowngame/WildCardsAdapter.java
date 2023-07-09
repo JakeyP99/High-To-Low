@@ -49,11 +49,11 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
 
         for (int i = 0; i < wildCardCount; i++) {
 
-//             WildCardHeadings card = null;
-//             if (i < this.wildCards.length && i >= lastWildCardCount) {
-//                 card = this.wildCards[i];
-//             }
-            WildCardHeadings card = this.wildCards[i];
+            WildCardHeadings card = null;
+
+            if (wildCards.length > 0) {
+                card = this.wildCards[i];
+            }
 
             boolean enabled;
             String activity;
@@ -71,8 +71,9 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
 
             loadedWildCards[i] = new WildCardHeadings(activity, probability, enabled, true);
         }
+
         wildCards = loadedWildCards;
-        Log.d("WildCardAdapter", "WildCardsLength" + wildCards.length);
+
         return loadedWildCards;
     }
 
