@@ -332,7 +332,7 @@ public class PlayerModel extends ButtonUtilsActivity {
 
     //-----------------------------------------------------UI Decoration---------------------------------------------------//
     private void setupPlayerRecyclerView() {
-        var playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
+        playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
         playerListAdapter = new PlayerListAdapter(this, playerList);
 
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
