@@ -50,6 +50,20 @@ public class PlayerModel extends ButtonUtilsActivity {
     private int totalPlayerCount;
     private RecyclerView playerRecyclerView;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Clear the player list
+        playerList.clear();
+
+        // Load player data from PlayerModelLocalStore
+        List<Player> loadedPlayerList = PlayerModelLocalStore.fromContext(this).loadPlayerData();
+        playerList.addAll(loadedPlayerList);
+
+        // Notify the adapter of the data change
+        playerListAdapter.notifyDataSetChanged();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
