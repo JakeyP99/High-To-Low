@@ -14,7 +14,7 @@ public class QuizWildCardsFragment extends WildCardsFragments {
 
 
 
-    WildCardHeadings[] quizWildCards = {
+    static final WildCardHeadings[] defaultQuizWildCards = {
             new WildCardHeadings("Quiz! Name two famous people with the same initials as yours. If you can't, take 2 drinks, if you can everyone takes 3 drinks.", 10, true, true),
             new WildCardHeadings("Quiz! Name five countries starting with the letter A. If you can't, take 3 drinks.", 10, true, true),
             new WildCardHeadings("Quiz! Can you recite the first 7 digits of pi? If yes, go ahead.", 10, true, true),
@@ -82,7 +82,7 @@ public class QuizWildCardsFragment extends WildCardsFragments {
         WildCardType mode = WildCardType.DELETABLE;
 
         // Declare adapter as a field in the fragment
-        QuizWildCardsAdapter adapter = new QuizWildCardsAdapter(quizWildCards, requireContext(), mode); // Assign the adapter to the field
+        QuizWildCardsAdapter adapter = new QuizWildCardsAdapter(defaultQuizWildCards, requireContext(), mode); // Assign the adapter to the field
 
         recyclerView.setAdapter(adapter);
 

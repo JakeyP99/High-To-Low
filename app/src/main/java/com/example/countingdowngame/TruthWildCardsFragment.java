@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class TruthWildCardsFragment extends WildCardsFragments {
-    WildCardHeadings[] truthWildCards = {
+    static final WildCardHeadings[] defaultTruthWildCards = {
             new WildCardHeadings("Truth! Have you ever had a crush on a friend's significant other?", 10, true, true),
             new WildCardHeadings("Truth! What is your most regrettable romantic rejection?", 10, true, true),
             new WildCardHeadings("Truth! Have you ever stolen something? If yes, what and why?", 10, true, true),
@@ -40,7 +40,7 @@ public class TruthWildCardsFragment extends WildCardsFragments {
         WildCardType mode = WildCardType.DELETABLE;
 
         // Declare adapter as a field in the fragment
-        TruthWildCardsAdapter adapter = new TruthWildCardsAdapter(truthWildCards, requireContext(), mode); // Assign the adapter to the field
+        TruthWildCardsAdapter adapter = new TruthWildCardsAdapter(defaultTruthWildCards, requireContext(), mode); // Assign the adapter to the field
 
         recyclerView.setAdapter(adapter);
 

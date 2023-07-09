@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class TaskWildCardsFragment extends WildCardsFragments {
-    WildCardHeadings[] taskWildCards = {
+    static final WildCardHeadings[] defaultTaskWildCards = {
             new WildCardHeadings("Task! Take 1 drink.", 10, true, true),
             new WildCardHeadings("Task! Take 2 drinks.", 10, true, true),
             new WildCardHeadings("Task! Take 3 drinks.", 10, true, true),
@@ -79,7 +79,7 @@ public class TaskWildCardsFragment extends WildCardsFragments {
         WildCardType mode = WildCardType.DELETABLE;
 
         // Declare adapter as a field in the fragment
-        TaskWildCardsAdapter adapter = new TaskWildCardsAdapter(taskWildCards, requireContext(), mode); // Assign the adapter to the field
+        TaskWildCardsAdapter adapter = new TaskWildCardsAdapter(defaultTaskWildCards, requireContext(), mode); // Assign the adapter to the field
 
         recyclerView.setAdapter(adapter);
 

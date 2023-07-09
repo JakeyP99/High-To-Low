@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ExtrasWildCardsFragment extends WildCardsFragments {
-    WildCardHeadings[] extrasWildCards = {
+    static final WildCardHeadings[] defaultExtrasWildCards = {
             new WildCardHeadings("Quiz! Name two famous people with the same initials as yours. If you can't, take 2 drinks, if you can everyone takes 3 drinks.", 10, true, true),
     };
 
@@ -28,7 +28,7 @@ public class ExtrasWildCardsFragment extends WildCardsFragments {
         WildCardType mode = WildCardType.DELETABLE;
 
         // Declare adapter as a field in the fragment
-        ExtrasWildCardsAdapter adapter = new ExtrasWildCardsAdapter(extrasWildCards, requireContext(), mode); // Assign the adapter to the field
+        ExtrasWildCardsAdapter adapter = new ExtrasWildCardsAdapter(defaultExtrasWildCards, requireContext(), mode); // Assign the adapter to the field
 
         recyclerView.setAdapter(adapter);
 

@@ -16,7 +16,7 @@ public class WildCardSettingsLocalStore {
     }
 
     public int getWildCardQuantity() {
-        return mPref.getInt("wildcardAmount", 1);
+        return mPref.getInt("wildcardAmount", 0);
     }
 
     public void setWildCardQuantity(int value) {

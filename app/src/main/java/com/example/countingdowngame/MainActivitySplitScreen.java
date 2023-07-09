@@ -279,11 +279,10 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         TruthWildCardsAdapter truthAdapter = new TruthWildCardsAdapter(emptyProbabilitiesArray,this, WildCardType.TRUTH);
         ExtrasWildCardsAdapter extraAdapter = new ExtrasWildCardsAdapter(emptyProbabilitiesArray,this, WildCardType.EXTRAS);
 
-
-        WildCardHeadings[] quizProbabilities = quizAdapter.loadWildCardProbabilitiesFromStorage();
-        WildCardHeadings[] taskProbabilities = taskAdapter.loadWildCardProbabilitiesFromStorage();
-        WildCardHeadings[] truthProbabilities = truthAdapter.loadWildCardProbabilitiesFromStorage();
-        WildCardHeadings[] extraProbabilities = extraAdapter.loadWildCardProbabilitiesFromStorage();
+        WildCardHeadings[] quizProbabilities = quizAdapter.loadWildCardProbabilitiesFromStorage(QuizWildCardsFragment.defaultQuizWildCards);
+        WildCardHeadings[] taskProbabilities = taskAdapter.loadWildCardProbabilitiesFromStorage(TaskWildCardsFragment.defaultTaskWildCards);
+        WildCardHeadings[] truthProbabilities = truthAdapter.loadWildCardProbabilitiesFromStorage(TruthWildCardsFragment.defaultTruthWildCards);
+        WildCardHeadings[] extraProbabilities = extraAdapter.loadWildCardProbabilitiesFromStorage(ExtrasWildCardsFragment.defaultExtrasWildCards);
 
         List<WildCardHeadings> allProbabilities = new ArrayList<>();
         allProbabilities.addAll(Arrays.asList(quizProbabilities));
