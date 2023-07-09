@@ -4,32 +4,57 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class WildCardSettingsLocalStore {
-    private static final String SETTINGS_NAME = "wildcard_settings";
+
+    public static WildCardSettingsLocalStore fromContext(Context context, String saveKey) {
+        return new WildCardSettingsLocalStore(context, saveKey);
+    }
+
     private final SharedPreferences mPref;
 
-    private WildCardSettingsLocalStore(Context context) {
-        mPref = context.getSharedPreferences(SETTINGS_NAME, Context.MODE_PRIVATE);
+    private WildCardSettingsLocalStore(Context context, String saveKey) {
+        mPref = context.getSharedPreferences(saveKey, Context.MODE_PRIVATE);
     }
 
-    public int wildCardQuantity() {
+    public int getWildCardQuantity() {
         return mPref.getInt("wildcardAmount", 1);
     }
-    public void setWildCardQuantity(Boolean value) {
+
+    public void setWildCardQuantity(int value) {
         SharedPreferences.Editor editor = mPref.edit();
-        editor.putBoolean("wildcardAmount", value);
+        editor.putInt("wildcardAmount", value);
         editor.apply();
     }
 
-
-    public int truthWildCard() {
-        return mPref.getInt("TruthPrefs", 1);
+    public Boolean isWildcardEnabled(int index) {
+        return mPref.getBoolean("wild_card_enabled_" + index, false);
     }
-    public void setTruthWildCard(Boolean value) {
+
+    public Boolean isWildcardEnabled(int index, Boolean defValue) {
+        return mPref.getBoolean("wild_card_enabled_" + index, defValue);
+    }
+
+    public String getWildcardActivityText(int index) {
+        return mPref.getString("wild_card_activity_" + index, "");
+    }
+
+    public String getWildcardActivityText(int index, String defValue) {
+        return mPref.getString("wild_card_activity_" + index, defValue);
+    }
+
+    public int getWildcardProbability(int index) {
+        return mPref.getInt("wild_card_probability_" + index, 0);
+    }
+
+    public int getWildcardProbability(int index, int defValue) {
+        return mPref.getInt("wild_card_probability_" + index, defValue);
+    }
+
+    public void setWildcardState(int index, Boolean enabled, String activity, int probability) {
         SharedPreferences.Editor editor = mPref.edit();
-        editor.putBoolean("wildcardAmount", value);
+        editor.putBoolean("wild_card_enabled_" + index, enabled);
+        editor.putString("wild_card_activity_" + index, activity);
+        editor.putInt("wild_card_probability_" + index, probability);
         editor.apply();
     }
-
-
-    }
+}
 

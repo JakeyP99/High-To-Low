@@ -1,11 +1,8 @@
 package com.example.countingdowngame;
 
-import static android.content.Context.MODE_PRIVATE;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.text.Html;
 import android.text.InputType;
 import android.util.Log;
@@ -19,6 +16,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.countingdowngame.stores.WildCardSettingsLocalStore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,46 +36,45 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
         loadWildCardProbabilitiesFromStorage();
     }
 
-     WildCardHeadings[] loadWildCardProbabilitiesFromStorage() {
-         SharedPreferences prefs = mContext.getSharedPreferences(mSaveKey, MODE_PRIVATE);
+    WildCardHeadings[] loadWildCardProbabilitiesFromStorage() {
+        var prefs = WildCardSettingsLocalStore.fromContext(mContext, mSaveKey);
+        int lastWildCardCount = prefs.getWildCardQuantity();
+        int wildCardCount = lastWildCardCount;
 
-         int lastWildCardCount = prefs.getInt("wild_card_count", 0);
-         int wildCardCount = lastWildCardCount;
+        if (wildCardCount < this.wildCards.length) {
+            wildCardCount = this.wildCards.length;
+        }
 
-         if (wildCardCount < this.wildCards.length) {
-             wildCardCount = this.wildCards.length;
-         }
+        WildCardHeadings[] loadedWildCards = new WildCardHeadings[wildCardCount];
 
-         WildCardHeadings[] loadedWildCards = new WildCardHeadings[wildCardCount];
-
-         for (int i = 0; i < wildCardCount; i++) {
+        for (int i = 0; i < wildCardCount; i++) {
 
 //             WildCardHeadings card = null;
 //             if (i < this.wildCards.length && i >= lastWildCardCount) {
 //                 card = this.wildCards[i];
 //             }
-             WildCardHeadings card = this.wildCards[i];
+            WildCardHeadings card = this.wildCards[i];
 
-             boolean enabled;
-             String activity;
-             int probability;
+            boolean enabled;
+            String activity;
+            int probability;
 
-             if (card != null) {
-                 enabled = prefs.getBoolean("wild_card_enabled_" + i, card.isEnabled());
-                 activity = prefs.getString("wild_card_activity_" + i, card.getText());
-                 probability = prefs.getInt("wild_card_probability_" + i, card.getProbability());
-             } else {
-                 enabled = prefs.getBoolean("wild_card_enabled_" + i, false);
-                 activity = prefs.getString("wild_card_activity_" + i, "");
-                 probability = prefs.getInt("wild_card_probability_" + i, 0);
-             }
+            if (card != null) {
+                enabled = prefs.isWildcardEnabled(i, card.isEnabled());
+                activity = prefs.getWildcardActivityText(i, card.getText());
+                probability = prefs.getWildcardProbability(i, card.getProbability());
+            } else {
+                enabled = prefs.isWildcardEnabled(i);
+                activity = prefs.getWildcardActivityText(i);
+                probability = prefs.getWildcardProbability(i);
+            }
 
-             loadedWildCards[i] = new WildCardHeadings(activity, probability, enabled, true);
-         }
-         wildCards = loadedWildCards;
-         Log.d("WildCardAdapter", "WildCardsLength" + wildCards.length);
-         return loadedWildCards;
-     }
+            loadedWildCards[i] = new WildCardHeadings(activity, probability, enabled, true);
+        }
+        wildCards = loadedWildCards;
+        Log.d("WildCardAdapter", "WildCardsLength" + wildCards.length);
+        return loadedWildCards;
+    }
 
 
     public void setWildCards(WildCardHeadings[] wildCards) {
@@ -118,22 +116,16 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
     }
 
     public void saveWildCardProbabilitiesToStorage(WildCardHeadings[] probabilities) {
-        SharedPreferences prefs = mContext.getSharedPreferences(mSaveKey, MODE_PRIVATE);
-        wildCards= probabilities;
+        wildCards = probabilities;
 
-        SharedPreferences.Editor editor = prefs.edit();
-
-        editor.clear();
-        editor.putInt("wild_card_count", probabilities.length);
+        var prefs = WildCardSettingsLocalStore.fromContext(mContext, mSaveKey);
+        prefs.setWildCardQuantity(probabilities.length);
 
         for (int i = 0; i < probabilities.length; i++) {
             WildCardHeadings probability = probabilities[i];
-            editor.putBoolean("wild_card_enabled_" + i, probability.isEnabled());
-            editor.putString("wild_card_activity_" + i, probability.getText());
-            editor.putInt("wild_card_probability_" + i, probability.getProbability());
+            prefs.setWildcardState(i, probability.isEnabled(), probability.getText(), probability.getProbability());
         }
 
-        editor.apply();
     }
 
     public class WildCardViewHolder extends RecyclerView.ViewHolder {

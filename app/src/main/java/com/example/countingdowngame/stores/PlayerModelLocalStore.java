@@ -26,22 +26,22 @@ public class PlayerModelLocalStore {
     }
 
     public String getPlayersJSON() {
-        return mPref.getString("players_list", null);
+        return mPref.getString("playersList", null);
     }
 
     public void setPlayersJSON(String value) {
         SharedPreferences.Editor editor = mPref.edit();
-        editor.putString("players_list", value);
+        editor.putString("playersList", value);
         editor.apply();
     }
 
     public String getSelectedPlayersJSON() {
-        return mPref.getString("selected_players_list", null);
+        return mPref.getString("selectedPlayersList", null);
     }
 
     public void setSelectedPlayersJSON(String value) {
         SharedPreferences.Editor editor = mPref.edit();
-        editor.putString("selected_players_list", value);
+        editor.putString("selectedPlayersList", value);
         editor.apply();
     }
 
