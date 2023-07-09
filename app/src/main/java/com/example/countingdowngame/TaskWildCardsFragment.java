@@ -76,10 +76,10 @@ public class TaskWildCardsFragment extends WildCardsFragments {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView_WildCard);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        WildCardType mode = WildCardType.DELETABLE;
+        WildCardType mode = WildCardType.TASK;
 
         // Declare adapter as a field in the fragment
-        TaskWildCardsAdapter adapter = new TaskWildCardsAdapter(defaultTaskWildCards, requireContext(), mode); // Assign the adapter to the field
+        adapter = new TaskWildCardsAdapter(defaultTaskWildCards, requireContext(), mode);
 
         recyclerView.setAdapter(adapter);
 

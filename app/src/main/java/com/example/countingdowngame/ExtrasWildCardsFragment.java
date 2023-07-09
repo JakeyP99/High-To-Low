@@ -12,7 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ExtrasWildCardsFragment extends WildCardsFragments {
     static final WildCardHeadings[] defaultExtrasWildCards = {
-            new WildCardHeadings("Quiz! Name two famous people with the same initials as yours. If you can't, take 2 drinks, if you can everyone takes 3 drinks.", 10, true, true),
+            new WildCardHeadings("Double the current number and go again!", 3, true, true),
+            new WildCardHeadings("Half the current number and go again!", 3, true, true),
+            new WildCardHeadings("Reset the number!", 3, true, true),
+            new WildCardHeadings("Reverse the turn order!", 3, true, true),
     };
 
     public ExtrasWildCardsFragment(Context context, WildCardsAdapter a) {
@@ -25,10 +28,10 @@ public class ExtrasWildCardsFragment extends WildCardsFragments {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView_WildCard);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        WildCardType mode = WildCardType.DELETABLE;
+        WildCardType mode = WildCardType.EXTRAS;
 
         // Declare adapter as a field in the fragment
-        ExtrasWildCardsAdapter adapter = new ExtrasWildCardsAdapter(defaultExtrasWildCards, requireContext(), mode); // Assign the adapter to the field
+        adapter = new ExtrasWildCardsAdapter(defaultExtrasWildCards, requireContext(), mode);
 
         recyclerView.setAdapter(adapter);
 

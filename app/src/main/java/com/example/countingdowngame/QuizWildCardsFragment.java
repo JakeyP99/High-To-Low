@@ -11,12 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class QuizWildCardsFragment extends WildCardsFragments {
-
-
-
     static final WildCardHeadings[] defaultQuizWildCards = {
-            new WildCardHeadings("Quiz! Name two famous people with the same initials as yours. If you can't, take 2 drinks, if you can everyone takes 3 drinks.", 10, true, true),
-            new WildCardHeadings("Quiz! Name five countries starting with the letter A. If you can't, take 3 drinks.", 10, true, true),
+            new WildCardHeadings("Quiz! Name two famous people with the same initials as yours.", 10, true, true),
+            new WildCardHeadings("Quiz! Name five countries starting with the letter A.", 10, true, true),
             new WildCardHeadings("Quiz! Can you recite the first 7 digits of pi? If yes, go ahead.", 10, true, true),
             new WildCardHeadings("Quiz! In which year was the Great Fire of London?", 10, true, true),
             new WildCardHeadings("Quiz! Can you name all four fundamental forces in physics?", 10, true, true),
@@ -70,8 +67,6 @@ public class QuizWildCardsFragment extends WildCardsFragments {
         super(context, a);
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_truth_wildcards, container, false);
@@ -79,10 +74,10 @@ public class QuizWildCardsFragment extends WildCardsFragments {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView_WildCard);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        WildCardType mode = WildCardType.DELETABLE;
+        WildCardType mode = WildCardType.QUIZ;
 
         // Declare adapter as a field in the fragment
-        QuizWildCardsAdapter adapter = new QuizWildCardsAdapter(defaultQuizWildCards, requireContext(), mode); // Assign the adapter to the field
+        adapter = new QuizWildCardsAdapter(defaultQuizWildCards, requireContext(), mode);
 
         recyclerView.setAdapter(adapter);
 

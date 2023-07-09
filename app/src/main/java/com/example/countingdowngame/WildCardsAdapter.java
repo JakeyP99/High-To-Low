@@ -2,10 +2,8 @@ package com.example.countingdowngame;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.text.Html;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -179,65 +177,53 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
 
                 builder.setView(layout);
 
-                builder.setNegativeButton(Html.fromHtml("<font color='" + blueDarkColor + "'>Cancel</font>"), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                builder.setNegativeButton(Html.fromHtml("<font color='" + blueDarkColor + "'>Cancel</font>"), (dialog, which) -> dialog.cancel());
 
                 ArrayList<WildCardHeadings> wildCardList = new ArrayList<>(Arrays.asList(wildCards));
-
-                if (wildcard.isDeletable()) {
-                    builder.setNeutralButton(Html.fromHtml("<font color='" + blueDarkColor + "'>Delete</font>"), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                    if (wildcard.isDeletable()) {
+                        builder.setNeutralButton(Html.fromHtml("<font color='" + blueDarkColor + "'>Delete</font>"), (dialog, which) -> {
                             wildCardList.remove(getAdapterPosition());
                             wildCards = wildCardList.toArray(new WildCardHeadings[0]);
                             notifyDataSetChanged();
                             saveWildCardProbabilitiesToStorage(wildCards);
-                        }
-                    });
-                }
-
-                builder.setPositiveButton(Html.fromHtml("<font color='" + blueDarkColor + "'>OK</font>"), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String inputText = textInput.getText().toString().trim();
-                        if (wildcard.isDeletable() && inputText.isEmpty()) {
-                            Toast.makeText(mContext, "The wildcard needs some text, please and thanks!", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        int probability;
-                        try {
-                            probability = Integer.parseInt(probabilityInput.getText().toString());
-                        } catch (NumberFormatException e) {
-                            probability = 0; // Invalid input, set to 0
-                        }
-
-                        if (probabilityInput.getText().length() > 4) {
-                            Toast.makeText(mContext, "Please enter a probability with 4 or fewer digits.", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        if (textInput.length() > 100) {
-                            Toast.makeText(mContext, "Sorry, way too big of a wildcard boss man, limited to 100 characters.", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        wildcard.setProbability(probability);
-
-                        if (wildcard.isDeletable()) {
-                            wildcard.setText(inputText);
-                            textViewTitle.setText(wildcard.getText());
-                        }
-
-                        textViewProbabilities.setText(String.valueOf(wildcard.getProbability()));
-                        setProbabilitySizeBasedOnString(textViewProbabilities, String.valueOf(wildcard.getProbability()));
-
-                        saveWildCardProbabilitiesToStorage(wildCards);
+                        });
                     }
+
+                builder.setPositiveButton(Html.fromHtml("<font color='" + blueDarkColor + "'>OK</font>"), (dialog, which) -> {
+                    String inputText = textInput.getText().toString().trim();
+                    if (wildcard.isDeletable() && inputText.isEmpty()) {
+                        Toast.makeText(mContext, "The wildcard needs some text, please and thanks!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    int probability;
+                    try {
+                        probability = Integer.parseInt(probabilityInput.getText().toString());
+                    } catch (NumberFormatException e) {
+                        probability = 0; // Invalid input, set to 0
+                    }
+
+                    if (probabilityInput.getText().length() > 4) {
+                        Toast.makeText(mContext, "Please enter a probability with 4 or fewer digits.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (textInput.length() > 100) {
+                        Toast.makeText(mContext, "Sorry, way too big of a wildcard boss man, limited to 100 characters.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    wildcard.setProbability(probability);
+
+                    if (wildcard.isDeletable()) {
+                        wildcard.setText(inputText);
+                        textViewTitle.setText(wildcard.getText());
+                    }
+
+                    textViewProbabilities.setText(String.valueOf(wildcard.getProbability()));
+                    setProbabilitySizeBasedOnString(textViewProbabilities, String.valueOf(wildcard.getProbability()));
+
+                    saveWildCardProbabilitiesToStorage(wildCards);
                 });
 
                 builder.show();

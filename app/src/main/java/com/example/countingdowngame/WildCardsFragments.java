@@ -24,12 +24,18 @@ public class WildCardsFragments extends Fragment {
 
     protected void toggleAllWildCards() {
         boolean allEnabled = adapter.areAllEnabled();
-        for (WildCardHeadings wildcard : adapter.getWildCards()) {
+
+        WildCardHeadings[] wildCards = adapter.getWildCards();
+        for (WildCardHeadings wildcard : wildCards) {
             wildcard.setEnabled(!allEnabled);
         }
 
+        adapter.setWildCards(wildCards);
         adapter.notifyDataSetChanged();
+        adapter.saveWildCardProbabilitiesToStorage(wildCards);
     }
+
+
 
 
     protected void addNewWildCard() {

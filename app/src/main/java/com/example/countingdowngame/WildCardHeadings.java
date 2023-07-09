@@ -4,7 +4,7 @@ public class WildCardHeadings {
     private String activity;
     private int probability;
     private boolean enabled;
-    private final boolean deletable;
+    private boolean deletable;
 
     public WildCardHeadings(String activity, int probability, boolean enabled, boolean deletable) {
         this.activity = activity;

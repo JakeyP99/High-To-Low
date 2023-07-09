@@ -37,10 +37,10 @@ public class TruthWildCardsFragment extends WildCardsFragments {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView_WildCard);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        WildCardType mode = WildCardType.DELETABLE;
+        WildCardType mode = WildCardType.TRUTH;
 
         // Declare adapter as a field in the fragment
-        TruthWildCardsAdapter adapter = new TruthWildCardsAdapter(defaultTruthWildCards, requireContext(), mode); // Assign the adapter to the field
+        adapter = new TruthWildCardsAdapter(defaultTruthWildCards, requireContext(), mode);
 
         recyclerView.setAdapter(adapter);
 
