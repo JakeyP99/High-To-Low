@@ -2,6 +2,8 @@ package com.example.countingdowngame;
 
 import android.content.Context;
 
+import com.example.countingdowngame.stores.GeneralSettingsLocalStore;
+
 import java.io.Serializable;
 
 class Player implements Serializable {

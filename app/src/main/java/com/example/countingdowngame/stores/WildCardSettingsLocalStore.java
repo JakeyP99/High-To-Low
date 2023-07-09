@@ -1,4 +1,4 @@
-package com.example.countingdowngame;
+package com.example.countingdowngame.stores;
 
 import android.content.Context;
 import android.content.SharedPreferences;

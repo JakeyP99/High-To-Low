@@ -1,12 +1,13 @@
 package com.example.countingdowngame;
 
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.core.content.res.ResourcesCompat;
+
+import com.example.countingdowngame.stores.GeneralSettingsLocalStore;
 
 public class GeneralSettings extends ButtonUtilsActivity implements View.OnClickListener {
 
