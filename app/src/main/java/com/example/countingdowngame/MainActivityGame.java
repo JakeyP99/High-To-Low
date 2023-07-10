@@ -337,7 +337,7 @@ public class MainActivityGame extends ButtonUtilsActivity {
 
         if (selectedActivity != null && selectedActivity.equals("Double the current number and go again!")) {
             int currentNumber = Game.getInstance().getCurrentNumber();
-            int updatedNumber = currentNumber * 2;
+            int updatedNumber = Math.min(currentNumber * 2, 99999999);
             Game.getInstance().setCurrentNumber(updatedNumber);
             Game.getInstance().addUpdatedNumber(updatedNumber);
             numberText.setText(String.valueOf(updatedNumber));

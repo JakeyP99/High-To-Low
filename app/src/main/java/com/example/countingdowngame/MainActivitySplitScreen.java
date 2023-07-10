@@ -164,21 +164,10 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
     //-----------------------------------------------------Button Shuffling---------------------------------------------------//
 
     private void startNumberShuffleAnimation() {
-        // Calculate the range of digits to shuffle based on the current number
         int currentNumber = Game.getInstance().getCurrentNumber();
-        int[] digits = new int[currentNumber + 1];
-        for (int i = 0; i <= currentNumber; i++) {
-            digits[i] = i;
-        }
         final int shuffleDuration = 1500;
 
-        int shuffleInterval; // Declare the variable outside the if-else block
-
-        if (currentNumber >= 1000) {
-            shuffleInterval = 50;
-        } else {
-            shuffleInterval = 100;
-        }
+        int shuffleInterval = currentNumber >= 1000 ? 50 : 100;
 
         final Random random = new Random();
         shuffleHandler.postDelayed(new Runnable() {
@@ -186,7 +175,7 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
             @Override
             public void run() {
-                int randomDigit = digits[random.nextInt(digits.length)];
+                int randomDigit = random.nextInt(currentNumber + 1);
                 numberText.setText(String.valueOf(randomDigit));
                 numberTextPlayer2.setText(String.valueOf(randomDigit));
 
@@ -194,31 +183,12 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
                 if (shuffleTime < shuffleDuration) {
                     shuffleHandler.postDelayed(this, shuffleInterval);
-
-                    btnGenerate.setEnabled(false);
-                    btnWild.setEnabled(false);
-
-                    btnGeneratePlayer2.setEnabled(false);
-                    btnWildPlayer2.setEnabled(false);
-
                 } else {
                     int finalNumber = randomDigit;
                     numberText.setText(String.valueOf(finalNumber));
                     numberTextPlayer2.setText(String.valueOf(finalNumber));
 
                     Game.getInstance().nextNumber(MainActivitySplitScreen.this, () -> gotoGameEnd());
-
-                    numberText.setVisibility(View.VISIBLE);
-                    nextPlayerText.setVisibility(View.VISIBLE);
-                    btnGenerate.setEnabled(true);
-                    btnWild.setEnabled(true);
-
-                    numberTextPlayer2.setVisibility(View.VISIBLE);
-                    nextPlayerTextPlayer2.setVisibility(View.VISIBLE);
-                    btnGeneratePlayer2.setEnabled(true);
-                    btnWildPlayer2.setEnabled(true);
-
-
                 }
             }
         }, shuffleInterval);
@@ -362,7 +332,7 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
         if (selectedActivity != null && selectedActivity.equals("Double the current number and go again!")) {
             int currentNumber = Game.getInstance().getCurrentNumber();
-            int updatedNumber = currentNumber * 2;
+            int updatedNumber = Math.min(currentNumber * 2, 999999999);
             Game.getInstance().setCurrentNumber(updatedNumber);
             Game.getInstance().addUpdatedNumber(updatedNumber);
             numberText.setText(String.valueOf(updatedNumber));
