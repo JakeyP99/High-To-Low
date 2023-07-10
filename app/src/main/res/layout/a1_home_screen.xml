@@ -27,7 +27,7 @@
         android:layout_marginTop="50dp"
         android:fontFamily="@font/viga"
         android:gravity="center"
-        android:text="Drinking Countdown"
+        android:text="High To Low"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:textColor="@color/bluedark"
         android:textSize="40sp"
