@@ -20,9 +20,9 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
     private Button btnReturn;
     private Button btnMute;
 
-    //copyout
-    private Button button_regularSound;
-    private Button button_burpSound;
+//    //copyout
+//    private Button button_regularSound;
+//    private Button button_burpSound;
     //
 
     //-----------------------------------------------------On Pause---------------------------------------------------//
@@ -55,9 +55,9 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
         outlineForButton = ResourcesCompat.getDrawable(getResources(), R.drawable.outlineforbutton, null);
         btnReturn = findViewById(R.id.buttonReturn);
         btnMute = findViewById(R.id.button_mute);
-        //copyout
-        button_regularSound = findViewById(R.id.button_normal_sound);
-        button_burpSound = findViewById(R.id.button_burp_sound);
+//        //copyout
+//        button_regularSound = findViewById(R.id.button_normal_sound);
+//        button_burpSound = findViewById(R.id.button_burp_sound);
     }
 
     //-----------------------------------------------------Button Clicks---------------------------------------------------//
@@ -72,10 +72,13 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
             toggleButton(button_gameModeTwo, button_gameModeOne);
         } else if (viewId == R.id.button_mute) {
             toggleMuteButton();
-        } else if (viewId == R.id.button_normal_sound) {
-            toggleButton(button_regularSound, button_burpSound);
-        } else if (viewId == R.id.button_burp_sound) {
-            toggleButton(button_burpSound, button_regularSound);
+
+//            //CopyOut
+//        } else if (viewId == R.id.button_normal_sound) {
+//            toggleButton(button_regularSound, button_burpSound);
+//        } else if (viewId == R.id.button_burp_sound) {
+//            toggleButton(button_burpSound, button_regularSound);
+//         //
         }
 
         savePreferences();
@@ -87,9 +90,9 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
         button_gameModeTwo.setOnClickListener(this);
         btnUtils.setButton(btnReturn, this::onBackPressed);
         btnMute.setOnClickListener(this);
-        //copyout
-        button_regularSound.setOnClickListener(this);
-        button_burpSound.setOnClickListener(this);
+//        //copyout
+//        button_regularSound.setOnClickListener(this);
+//        button_burpSound.setOnClickListener(this);
     }
 
     private void toggleButton(Button selectedButton, Button unselectedButton) {
@@ -120,19 +123,19 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
     //-----------------------------------------------------Load and Save Preferences---------------------------------------------------//
 
     private void loadPreferences() {
-        //copyout
-        boolean regularSoundSelected = GeneralSettingsLocalStore.fromContext(this).shouldPlayRegularSound();
-        button_regularSound.setSelected(regularSoundSelected);
-        button_burpSound.setSelected(!regularSoundSelected);
+//        //copyout
+//        boolean regularSoundSelected = GeneralSettingsLocalStore.fromContext(this).shouldPlayRegularSound();
+//        button_regularSound.setSelected(regularSoundSelected);
+//        button_burpSound.setSelected(!regularSoundSelected);
 //
-        if (regularSoundSelected) {
-            button_regularSound.setBackground(buttonHighlightDrawable);
-            button_burpSound.setBackground(outlineForButton);
-        } else {
-            button_regularSound.setBackground(outlineForButton);
-            button_burpSound.setBackground(buttonHighlightDrawable);
-        }
-
+//        if (regularSoundSelected) {
+//            button_regularSound.setBackground(buttonHighlightDrawable);
+//            button_burpSound.setBackground(outlineForButton);
+//        } else {
+//            button_regularSound.setBackground(outlineForButton);
+//            button_burpSound.setBackground(buttonHighlightDrawable);
+//        }
+////
         boolean buttonOneSelected = GeneralSettingsLocalStore.fromContext(this).isSingleScreen();
         button_gameModeOne.setSelected(buttonOneSelected);
         button_gameModeTwo.setSelected(!buttonOneSelected);
@@ -162,6 +165,8 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
         GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);
         store.setIsSingleScreen(button_gameModeOne.isSelected());
         store.setIsMuted(btnMute.isSelected());
-        store.setShouldPlayRegularSound(button_regularSound.isSelected());
+
+        //copyout
+//        store.setShouldPlayRegularSound(button_regularSound.isSelected());
     }
 }

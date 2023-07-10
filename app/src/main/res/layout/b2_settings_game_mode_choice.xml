@@ -73,35 +73,36 @@
         android:layout_gravity="center"
         android:onClick="onMuteClicked" />
 
-    <Button
-        android:id="@+id/button_normal_sound"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/outlineforbutton"
-        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-        android:maxLines="4"
-        android:text="Regular Sounds"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textColor="@color/bluedark"
-        android:layout_gravity="center"
-        android:textSize="23sp" />
 
-    <Button
-        android:id="@+id/button_burp_sound"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/outlineforbutton"
-        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-        android:maxLines="4"
-        android:text="Burp Sounds"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textColor="@color/bluedark"
-        android:layout_gravity="center"
-        android:textSize="23sp" />
+<!--    <Button-->
+<!--        android:id="@+id/button_normal_sound"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:background="@drawable/outlineforbutton"-->
+<!--        android:checkMark="?android:attr/listChoiceIndicatorMultiple"-->
+<!--        android:maxLines="4"-->
+<!--        android:text="Regular Sounds"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textAllCaps="false"-->
+<!--        android:textColor="@color/bluedark"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:textSize="23sp" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/button_burp_sound"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:background="@drawable/outlineforbutton"-->
+<!--        android:checkMark="?android:attr/listChoiceIndicatorMultiple"-->
+<!--        android:maxLines="4"-->
+<!--        android:text="Burp Sounds"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textAllCaps="false"-->
+<!--        android:textColor="@color/bluedark"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:textSize="23sp" />-->
 
     <Button
         android:id="@+id/buttonReturn"
