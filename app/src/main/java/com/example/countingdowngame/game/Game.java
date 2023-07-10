@@ -121,8 +121,8 @@ public class Game {
     //-----------------------------------------------------End Game ---------------------------------------------------//
 
     public void endGame(Context context) {
-        resetPlayers(context);
         gameStarted = false;
+        resetPlayers(context);
     }
 
 

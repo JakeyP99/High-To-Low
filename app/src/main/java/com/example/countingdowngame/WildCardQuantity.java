@@ -159,6 +159,7 @@ public class WildCardQuantity extends ButtonUtilsActivity {
     private void savePreferences() {
         int wildCardAmountSetInSettings = Integer.parseInt(wildcardPerPlayerEditText.getText().toString());
         GeneralSettingsLocalStore.fromContext(this).setPlayerWildCardCount( wildCardAmountSetInSettings);
+
     }
 
 }

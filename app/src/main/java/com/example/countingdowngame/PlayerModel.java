@@ -15,6 +15,7 @@ import android.text.InputType;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -49,20 +50,16 @@ public class PlayerModel extends ButtonUtilsActivity {
     private TextView playerCountTextView;
     private int totalPlayerCount;
     private RecyclerView playerRecyclerView;
-
+    private int selectedPlayerCount;
     @Override
     protected void onResume() {
         super.onResume();
-
-        // Clear the player list
         playerList.clear();
-
-        // Load player data from PlayerModelLocalStore
         List<Player> loadedPlayerList = PlayerModelLocalStore.fromContext(this).loadPlayerData();
         playerList.addAll(loadedPlayerList);
-
-        // Notify the adapter of the data change
+        selectedPlayerCount = 0;
         playerListAdapter.notifyDataSetChanged();
+        updatePlayerCounter();
     }
 
     @Override
@@ -70,6 +67,11 @@ public class PlayerModel extends ButtonUtilsActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a3_player_choice);
 
+        totalPlayerCount = Game.getInstance().getPlayerAmount();
+        playerList = new ArrayList<>();
+
+        selectedPlayerCount = 0; // Initialize selectedPlayerCount to 0
+        Log.d("Cunt", ""+ selectedPlayerCount);
         initializeViews();
         setupPlayerRecyclerView();
         setupDrawButton();
@@ -92,6 +94,7 @@ public class PlayerModel extends ButtonUtilsActivity {
             playerListAdapter.notifyItemRangeInserted(startPosition, newItemCount);
         }
     }
+
 
     private void initializeViews() {
         playerRecyclerView = findViewById(R.id.playerRecyclerView);
@@ -294,9 +297,6 @@ public class PlayerModel extends ButtonUtilsActivity {
         playerList.add(newPlayer);
         playerListAdapter.notifyItemInserted(playerList.size() - 1);
         savePlayerData();
-        updatePlayerCounter();
-
-
     }
 
     // Delete a player at a given position
@@ -316,13 +316,9 @@ public class PlayerModel extends ButtonUtilsActivity {
         PlayerModelLocalStore.fromContext(this).setPlayersJSON(json);
     }
 
-
-    // Load player data from SharedPreferences
-
-
     //-----------------------------------------------------Player Counter Functionality---------------------------------------------------//
     public void updatePlayerCounter() {
-        int selectedPlayerCount = 0;
+        selectedPlayerCount = 0;
 
         for (Player player : playerList) {
             if (player.isSelected()) {
@@ -331,11 +327,12 @@ public class PlayerModel extends ButtonUtilsActivity {
         }
 
         int remainingPlayers = totalPlayerCount - selectedPlayerCount;
+
         String counterText;
         if (remainingPlayers == 0) {
             counterText = "❤️ All Players Selected ❤️";
         } else if (remainingPlayers == 1) {
-            counterText = "Please Select 1 More Player ❤️";
+            counterText = "Select 1 More Player ❤️";
         } else if (remainingPlayers < 0) {
             int excessPlayers = Math.abs(remainingPlayers);
             if (excessPlayers == 1) {
@@ -347,6 +344,8 @@ public class PlayerModel extends ButtonUtilsActivity {
             counterText = "Select " + remainingPlayers + " More Players ❤️";
         }
         playerCountTextView.setText(counterText);
+        Log.d("bitch", ""+ selectedPlayerCount);
+
     }
 
 
