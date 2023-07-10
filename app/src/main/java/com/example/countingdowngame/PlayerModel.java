@@ -15,7 +15,6 @@ import android.text.InputType;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -71,7 +70,6 @@ public class PlayerModel extends ButtonUtilsActivity {
         playerList = new ArrayList<>();
 
         selectedPlayerCount = 0; // Initialize selectedPlayerCount to 0
-        Log.d("Cunt", ""+ selectedPlayerCount);
         initializeViews();
         setupPlayerRecyclerView();
         setupDrawButton();
@@ -344,8 +342,6 @@ public class PlayerModel extends ButtonUtilsActivity {
             counterText = "Select " + remainingPlayers + " More Players ❤️";
         }
         playerCountTextView.setText(counterText);
-        Log.d("bitch", ""+ selectedPlayerCount);
-
     }
 
 

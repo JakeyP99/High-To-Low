@@ -42,7 +42,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Player player = players.get(position);
-        holder.bind(player, position);
+        holder.bind(player);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
             });
         }
 
-        public void bind(Player player, int position) {
+        public void bind(Player player) {
             String photoString = player.getPhoto();
             byte[] decodedBytes = Base64.decode(photoString, Base64.DEFAULT);
             Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);

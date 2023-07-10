@@ -241,12 +241,10 @@ public class MainActivityGame extends ButtonUtilsActivity {
         TruthWildCardsAdapter truthAdapter = new TruthWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.TRUTH);
         ExtrasWildCardsAdapter extraAdapter = new ExtrasWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.EXTRAS);
 
-
         WildCardHeadings[] quizProbabilities = quizAdapter.loadWildCardProbabilitiesFromStorage(QuizWildCardsFragment.defaultQuizWildCards);
         WildCardHeadings[] taskProbabilities = taskAdapter.loadWildCardProbabilitiesFromStorage(TaskWildCardsFragment.defaultTaskWildCards);
         WildCardHeadings[] truthProbabilities = truthAdapter.loadWildCardProbabilitiesFromStorage(TruthWildCardsFragment.defaultTruthWildCards);
         WildCardHeadings[] extraProbabilities = extraAdapter.loadWildCardProbabilitiesFromStorage(ExtrasWildCardsFragment.defaultExtrasWildCards);
-
 
         List<WildCardHeadings> allProbabilities = new ArrayList<>();
         allProbabilities.addAll(Arrays.asList(quizProbabilities));
@@ -255,7 +253,6 @@ public class MainActivityGame extends ButtonUtilsActivity {
         allProbabilities.addAll(Arrays.asList(extraProbabilities));
 
         final TextView wildActivityTextView = findViewById(R.id.wild_textview);
-
 
         boolean wildCardsEnabled = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("wild_cards_toggle", true);
 
@@ -273,85 +270,50 @@ public class MainActivityGame extends ButtonUtilsActivity {
                 return;
             }
 
-            int totalWeight = unusedCards.stream()
-                    .mapToInt(WildCardHeadings::getProbability)
-                    .sum();
-
-            if (totalWeight <= 0) {
-                wildActivityTextView.setText("No wild cards available");
-                return;
-            }
-
-            Random random = new Random();
-            boolean foundUnusedCard = false;
-            while (!foundUnusedCard) {
-                int randomWeight = random.nextInt(totalWeight);
-                int weightSoFar = 0;
-
-                for (WildCardHeadings activityProbability : unusedCards) {
-                    weightSoFar += activityProbability.getProbability();
-
-                    if (randomWeight < weightSoFar) {
-                        if (usedCards != null && !usedCards.contains(activityProbability)) {
-                            selectedActivity = activityProbability.getText();
-                            foundUnusedCard = true;
-                            usedCards.add(activityProbability);
-                        }
-                        break;
-                    }
-                }
-            }
+            int totalCards = unusedCards.size();
+            int selectedIndex = new Random().nextInt(totalCards);
+            WildCardHeadings selectedCard = unusedCards.get(selectedIndex);
+            selectedActivity = selectedCard.getText();
+            usedCards.add(selectedCard);
+            usedWildCards.add(selectedCard);
             usedWildCard.put(player, usedCards);
         }
 
-
         if (selectedActivity != null) {
             wildActivityTextView.setText(selectedActivity);
-            for (WildCardHeadings wc : allProbabilities) {
-                if (wc.getText().equals(selectedActivity)) {
-                    usedCards.add(wc);
-                    break;
+        }
+
+        if (selectedActivity != null) {
+            if (selectedActivity.equals("Double the current number!")) {
+                int currentNumber = Game.getInstance().getCurrentNumber();
+                int updatedNumber = Math.min(currentNumber * 2, 999999999);
+                Game.getInstance().setCurrentNumber(updatedNumber);
+                Game.getInstance().addUpdatedNumber(updatedNumber);
+                numberText.setText(String.valueOf(updatedNumber));
+                setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
+            } else if (selectedActivity.equals("Half the current number!")) {
+                int currentNumber = Game.getInstance().getCurrentNumber();
+                int updatedNumber = Math.max(currentNumber / 2, 1);
+                Game.getInstance().setCurrentNumber(updatedNumber);
+                Game.getInstance().addUpdatedNumber(updatedNumber);
+                numberText.setText(String.valueOf(updatedNumber));
+                setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
+            } else if (selectedActivity.equals("Reset the number!")) {
+                Bundle extras = getIntent().getExtras();
+                if (extras == null) {
+                    throw new RuntimeException("Missing extras");
                 }
+                int startingNumber = extras.getInt("startingNumber");
+                Game.getInstance().setCurrentNumber(startingNumber);
+                Game.getInstance().addUpdatedNumber(startingNumber);
+                numberText.setText(String.valueOf(startingNumber));
+                setTextViewSizeBasedOnInt(numberText, String.valueOf(startingNumber));
+            } else if (selectedActivity.equals("Reverse the turn order!")) {
+                reverseTurnOrder(player);
             }
         }
-
-
-        if (selectedActivity != null && selectedActivity.equals("Double the current number and go again!")) {
-            int currentNumber = Game.getInstance().getCurrentNumber();
-            int updatedNumber = Math.min(currentNumber * 2, 999999999);
-            Game.getInstance().setCurrentNumber(updatedNumber);
-            Game.getInstance().addUpdatedNumber(updatedNumber);
-            numberText.setText(String.valueOf(updatedNumber));
-            setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
-        }
-
-        if (selectedActivity != null && selectedActivity.equals("Half the current number and go again!")) {
-            int currentNumber = Game.getInstance().getCurrentNumber();
-            int updatedNumber = Math.max(currentNumber / 2, 1);
-            Game.getInstance().setCurrentNumber(updatedNumber);
-            Game.getInstance().addUpdatedNumber(updatedNumber);
-            numberText.setText(String.valueOf(updatedNumber));
-            setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
-        }
-
-
-        if (selectedActivity != null && selectedActivity.equals("Reset the number!")) {
-            Bundle extras = getIntent().getExtras();
-            if (extras == null) {
-                throw new RuntimeException("Missing extras");
-            }
-            int startingNumber = extras.getInt("startingNumber");
-            Game.getInstance().setCurrentNumber(startingNumber);
-            Game.getInstance().addUpdatedNumber(startingNumber);
-            numberText.setText(String.valueOf(startingNumber));
-            setTextViewSizeBasedOnInt(numberText, String.valueOf(startingNumber));
-        }
-
-        if (selectedActivity != null && selectedActivity.equals("Reverse the turn order!")) {
-            reverseTurnOrder(player);
-        }
-
     }
+
 
     private void reverseTurnOrder(Player player) {
         Game game = Game.getInstance();
