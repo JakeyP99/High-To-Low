@@ -164,21 +164,13 @@ public class MainActivityGame extends ButtonUtilsActivity {
     //-----------------------------------------------------Button Shuffling---------------------------------------------------//
 
     private void startNumberShuffleAnimation() {
-        // Calculate the range of digits to shuffle based on the current number
+        btnGenerate.setEnabled(false);
+        btnWild.setEnabled(false);
+
         int currentNumber = Game.getInstance().getCurrentNumber();
-        int[] digits = new int[currentNumber + 1];
-        for (int i = 0; i <= currentNumber; i++) {
-            digits[i] = i;
-        }
         final int shuffleDuration = 1500;
 
-        int shuffleInterval; // Declare the variable outside the if-else block
-
-        if (currentNumber >= 1000) {
-            shuffleInterval = 50;
-        } else {
-            shuffleInterval = 100;
-        }
+        int shuffleInterval = currentNumber >= 1000 ? 50 : 100;
 
         final Random random = new Random();
         shuffleHandler.postDelayed(new Runnable() {
@@ -186,30 +178,19 @@ public class MainActivityGame extends ButtonUtilsActivity {
 
             @Override
             public void run() {
-                // Generate a random digit and display it
-                int randomDigit = digits[random.nextInt(digits.length)];
+                int randomDigit = random.nextInt(currentNumber + 1);
                 numberText.setText(String.valueOf(randomDigit));
 
-                // Increase the shuffle time
                 shuffleTime += shuffleInterval;
 
                 if (shuffleTime < shuffleDuration) {
-                    // Continue shuffling until the desired duration is reached
                     shuffleHandler.postDelayed(this, shuffleInterval);
-
-                    btnGenerate.setEnabled(false);
-                    btnWild.setEnabled(false);
                 } else {
-                    // Animation finished, generate the final number and display it
-                    int finalNumber = randomDigit;  // Change this as needed based on your game logic
+                    int finalNumber = randomDigit;
                     numberText.setText(String.valueOf(finalNumber));
 
-                    // Call the game logic method with the finalNumber
                     Game.getInstance().nextNumber(MainActivityGame.this, () -> gotoGameEnd());
 
-                    // Show other relevant UI elements after number generation
-                    numberText.setVisibility(View.VISIBLE);
-                    nextPlayerText.setVisibility(View.VISIBLE);
                     btnGenerate.setEnabled(true);
                     btnWild.setEnabled(true);
                 }
@@ -337,7 +318,7 @@ public class MainActivityGame extends ButtonUtilsActivity {
 
         if (selectedActivity != null && selectedActivity.equals("Double the current number and go again!")) {
             int currentNumber = Game.getInstance().getCurrentNumber();
-            int updatedNumber = Math.min(currentNumber * 2, 99999999);
+            int updatedNumber = Math.min(currentNumber * 2, 999999999);
             Game.getInstance().setCurrentNumber(updatedNumber);
             Game.getInstance().addUpdatedNumber(updatedNumber);
             numberText.setText(String.valueOf(updatedNumber));

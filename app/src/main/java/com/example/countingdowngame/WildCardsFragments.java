@@ -82,8 +82,8 @@ public class WildCardsFragments extends Fragment {
                 Toast.makeText(mContext, "The wildcard needs some text, please and thanks!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (textInput.length() > 100) {
-                Toast.makeText(mContext, "Sorry, way too big of a wildcard boss man, limited to 100 characters.", Toast.LENGTH_SHORT).show();
+            if (textInput.length() > 130) {
+                Toast.makeText(mContext, "Sorry, way too big of a wildcard boss man, limited to 130 characters.", Toast.LENGTH_SHORT).show();
                 return;
             }
 

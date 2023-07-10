@@ -53,7 +53,17 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
     private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
 
     private Handler shuffleHandler;
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AudioManager.getInstance().playSound(); // Start playing the sound
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AudioManager.getInstance().stopSound(); // Stop the sound
+    }
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -164,6 +174,11 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
     //-----------------------------------------------------Button Shuffling---------------------------------------------------//
 
     private void startNumberShuffleAnimation() {
+        btnGenerate.setEnabled(false);
+        btnWild.setEnabled(false);
+        btnGeneratePlayer2.setEnabled(false);
+        btnWildPlayer2.setEnabled(false);
+
         int currentNumber = Game.getInstance().getCurrentNumber();
         final int shuffleDuration = 1500;
 
@@ -184,15 +199,20 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
                 if (shuffleTime < shuffleDuration) {
                     shuffleHandler.postDelayed(this, shuffleInterval);
                 } else {
-                    int finalNumber = randomDigit;
-                    numberText.setText(String.valueOf(finalNumber));
-                    numberTextPlayer2.setText(String.valueOf(finalNumber));
+                    numberText.setText(String.valueOf(randomDigit));
+                    numberTextPlayer2.setText(String.valueOf(randomDigit));
 
                     Game.getInstance().nextNumber(MainActivitySplitScreen.this, () -> gotoGameEnd());
+
+                    btnGenerate.setEnabled(true);
+                    btnWild.setEnabled(true);
+                    btnGeneratePlayer2.setEnabled(true);
+                    btnWildPlayer2.setEnabled(true);
                 }
             }
         }, shuffleInterval);
     }
+
 
 
     //-----------------------------------------------------Render Player---------------------------------------------------//
@@ -448,9 +468,9 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         playerImage.setVisibility(View.INVISIBLE);
         playerImagePlayer2.setVisibility(View.INVISIBLE);
 
-        Game.getInstance().getCurrentPlayer().useWildCard();
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         wildCardActivate(currentPlayer);
+
     }
 
     private void ButtonContinueFunction() {
@@ -472,11 +492,15 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
         nextPlayerText.setVisibility(View.VISIBLE);
         nextPlayerTextPlayer2.setVisibility(View.VISIBLE);
+        Game.getInstance().getCurrentPlayer().useSkip();
+
     }
 
     private void setNameSizeBasedOnInt(TextView textView, String text) {
         int textSize;
-        if (text.length() > 18) {
+        if (text.length() > 24) {
+            textSize = 15;
+        } else if (text.length() > 18) {
             textSize = 20;
         } else if (text.length() > 14) {
             textSize = 23;

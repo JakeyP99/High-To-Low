@@ -58,7 +58,7 @@ public class TaskWildCardsFragment extends WildCardsFragments {
             new WildCardHeadings("Task! Perform a dramatic reading of a nursery rhyme. Everyone takes a drink.", 10, true, true),
             new WildCardHeadings("Task! Impersonate your favorite celebrity. Others guess who it is. If they fail, they drink.", 10, true, true),
             new WildCardHeadings("Task! Everyone imitates a farm animal. The last one to start drinks.", 10, true, true),
-            new WildCardHeadings("Task! Create a new cocktail recipe using three random ingredients. Others taste and rate it. If it's bad, you drink.", 10, true, true),
+            new WildCardHeadings("Task! Create a new cocktail recipe using three random ingredients. Drink up baby!", 10, true, true),
             new WildCardHeadings("Task! Tell a cheesy joke. If others laugh, you're safe. If not, take 2 drinks.", 10, true, true),
             new WildCardHeadings("Task! Draw a picture blindfolded. Others rate your masterpiece. If the crowd does not like it, take 2 drinks.", 10, true, true),
             new WildCardHeadings("Task! Name three things that should be illegal but aren't. If others agree, you're safe, if not, you take 3 drinks.", 10, true, true),

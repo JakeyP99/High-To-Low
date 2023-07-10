@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="30dp">
+    android:padding="30dp"
+    >
 
 
     <Button
@@ -25,12 +26,11 @@
         android:layout_marginEnd="40dp"
         android:layout_toStartOf="@+id/switch_wildcard"
         android:layout_toEndOf="@+id/button_edit_probability"
-        android:maxLines="4"
+        android:maxLines="5"
         android:paddingStart="8dp"
-        android:text="This is a very long text that will wrap to the next line if it is too long to fit on one line."
+        android:text="aaaaaaaaaaaaaaaaaaaaaaaaaaTask! Name three things that should be illegal but aren't. If others agree, you're safe, if not, you take 3 drinks."
         android:textAlignment="center"
-        android:textColor="@color/bluedark"
-        />
+        android:textColor="@color/bluedark" />
 
     <TextView
         android:id="@+id/textview_probability"
