@@ -61,11 +61,25 @@
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.85" />
+
+    <Button
+        android:id="@+id/btnAnswer"
+        android:layout_width="165dp"
+        android:layout_height="100dp"
+        android:background="@drawable/outlineforbutton"
+        android:text="Answer"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.673" />
-
 
     <TextView
         android:id="@+id/textView_Number_Turn"
@@ -83,7 +97,7 @@
     <TextView
         android:id="@+id/wild_textview"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="300dp"
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:text=""
@@ -91,6 +105,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:textColor="@color/bluedark"
         android:textSize="30sp"
+        android:layout_margin="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
