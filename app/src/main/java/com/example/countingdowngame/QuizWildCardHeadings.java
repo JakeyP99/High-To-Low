@@ -12,7 +12,7 @@ public class QuizWildCardHeadings extends WildCardHeadings {
         return answer;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
+    public boolean hasAnswer() {
+        return answer != null && !answer.isEmpty();
     }
 }

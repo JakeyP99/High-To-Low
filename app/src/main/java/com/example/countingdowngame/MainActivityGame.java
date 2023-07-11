@@ -47,6 +47,7 @@ public class MainActivityGame extends ButtonUtilsActivity {
     private final Set<WildCardHeadings> usedWildCards = new HashSet<>();
     private TextView numberText;
     private TextView nextPlayerText;
+    private Button btnAnswer;
 
     private Button btnWild;
     private Button btnGenerate;
@@ -55,6 +56,7 @@ public class MainActivityGame extends ButtonUtilsActivity {
     private boolean doubleBackToExitPressedOnce = false;
     private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
     private Handler shuffleHandler;
+    private QuizWildCardHeadings selectedCard; // Declare selectedCard at a higher level
 
     @Override
     public void onBackPressed() {
@@ -86,11 +88,10 @@ public class MainActivityGame extends ButtonUtilsActivity {
         numberText = findViewById(R.id.numberText);
         nextPlayerText = findViewById(R.id.textView_Number_Turn);
         btnWild = findViewById(R.id.btnWild);
+        btnAnswer = findViewById(R.id.btnAnswer);
         btnGenerate = findViewById(R.id.btnGenerate);
         btnBackWild = findViewById(R.id.btnBackWildCard);
-
         shuffleHandler = new Handler();
-
     }
 
     private void startGame() {
@@ -133,10 +134,19 @@ public class MainActivityGame extends ButtonUtilsActivity {
         View wildText = findViewById(R.id.wild_textview);
 
         btnBackWild.setVisibility(View.INVISIBLE);
+        btnAnswer.setVisibility(View.INVISIBLE);
+
+        btnAnswer.setOnClickListener(view -> showAnswer());
 
         btnUtils.setButton(btnGenerate, this::startNumberShuffleAnimation);
 
         btnUtils.setButton(btnBackWild, () -> {
+
+            if (selectedCard != null && selectedCard.hasAnswer()) {
+                btnAnswer.setVisibility(View.VISIBLE);
+            } else {
+                btnAnswer.setVisibility(View.INVISIBLE);
+            }
             btnGenerate.setVisibility(View.VISIBLE);
             Game.getInstance().getCurrentPlayer().useSkip();
             numberText.setVisibility(View.VISIBLE);
@@ -316,16 +326,11 @@ public class MainActivityGame extends ButtonUtilsActivity {
 
             if (selectedCard != null) {
                 selectedActivity = selectedCard.getText();
-                assert usedCards != null;
+                wildActivityTextView.setText(selectedActivity);
                 usedCards.add(selectedCard);
                 usedWildCards.add(selectedCard);
                 usedWildCard.put(player, usedCards);
             }
-        }
-
-
-        if (selectedActivity != null) {
-            wildActivityTextView.setText(selectedActivity);
         }
 
         if (selectedActivity != null) {
@@ -357,6 +362,31 @@ public class MainActivityGame extends ButtonUtilsActivity {
                 reverseTurnOrder(player);
             }
         }
+    }
+
+    private void showAnswer() {
+        QuizWildCardHeadings selectedCard = getSelectedWildCard();
+        if (selectedCard != null) {
+            TextView wildActivityTextView = findViewById(R.id.wild_textview);
+            wildActivityTextView.setText(selectedCard.getAnswer());
+        }
+    }
+
+    private QuizWildCardHeadings getSelectedWildCard() {
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        Set<WildCardHeadings> usedCards = usedWildCard.getOrDefault(currentPlayer, new HashSet<>());
+        QuizWildCardHeadings selectedCard = null;
+
+        if (usedCards != null && !usedCards.isEmpty()) {
+            for (WildCardHeadings card : usedCards) {
+                if (card instanceof QuizWildCardHeadings) {
+                    selectedCard = (QuizWildCardHeadings) card;
+                    break;
+                }
+            }
+        }
+
+        return selectedCard;
     }
 
 
