@@ -146,6 +146,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
             textViewTitle.setText(wildcard.getText());
             textViewProbabilities.setText(String.valueOf(wildcard.getProbability()));
             switchEnabled.setChecked(wildcard.isEnabled());
+            setProbabilitySizeBasedOnString(textViewProbabilities, String.valueOf(wildcard.getProbability()));
 
             switchEnabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 wildcard.setEnabled(isChecked);
