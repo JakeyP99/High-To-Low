@@ -258,8 +258,31 @@ public class MainActivityGame extends ButtonUtilsActivity {
 
         String selectedActivity = null;
         Set<WildCardHeadings> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
+
         if (wildCardsEnabled) {
-            List<WildCardHeadings> unusedCards = allProbabilities.stream()
+            Random random = new Random();
+            int typeChance = random.nextInt(4); // Generate a random number from 0 to 3
+
+            WildCardHeadings[] selectedType = null;
+
+            switch (typeChance) {
+                case 0:
+                    selectedType = quizProbabilities;
+                    break;
+                case 1:
+                    selectedType = taskProbabilities;
+                    break;
+                case 2:
+                    selectedType = truthProbabilities;
+                    break;
+                case 3:
+                    selectedType = extraProbabilities;
+                    break;
+                default:
+                    break;
+            }
+
+            List<WildCardHeadings> unusedCards = Arrays.stream(selectedType)
                     .filter(WildCardHeadings::isEnabled)
                     .filter(c -> !usedWildCards.contains(c))
                     .collect(Collectors.toList());
@@ -270,14 +293,36 @@ public class MainActivityGame extends ButtonUtilsActivity {
                 return;
             }
 
-            int totalCards = unusedCards.size();
-            int selectedIndex = new Random().nextInt(totalCards);
-            WildCardHeadings selectedCard = unusedCards.get(selectedIndex);
-            selectedActivity = selectedCard.getText();
-            usedCards.add(selectedCard);
-            usedWildCards.add(selectedCard);
-            usedWildCard.put(player, usedCards);
+            // Calculate the total probabilities within the selected type
+            int totalTypeProbabilities = unusedCards.stream()
+                    .mapToInt(WildCardHeadings::getProbability)
+                    .sum();
+
+            // Generate a random number within the total probabilities
+            int selectedIndex = random.nextInt(totalTypeProbabilities);
+
+            // Select the wildcard based on the random number and its probability
+            WildCardHeadings selectedCard = null;
+            int cumulativeProbability = 0;
+
+            for (WildCardHeadings card : unusedCards) {
+                cumulativeProbability += card.getProbability();
+
+                if (selectedIndex < cumulativeProbability) {
+                    selectedCard = card;
+                    break;
+                }
+            }
+
+            if (selectedCard != null) {
+                selectedActivity = selectedCard.getText();
+                assert usedCards != null;
+                usedCards.add(selectedCard);
+                usedWildCards.add(selectedCard);
+                usedWildCard.put(player, usedCards);
+            }
         }
+
 
         if (selectedActivity != null) {
             wildActivityTextView.setText(selectedActivity);
