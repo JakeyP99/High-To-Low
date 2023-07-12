@@ -45,7 +45,7 @@ public class WildCardSettingsLocalStore {
         return mPref.getString("wild_card_answer_" + index, "");
     }
     public String getWildcardAnswer(int index, String defValue) {
-        return mPref.getString("wild_card_answer_" + index, "");
+        return mPref.getString("wild_card_answer_" + index, defValue);
     }
 
     public int getWildcardProbability(int index) {

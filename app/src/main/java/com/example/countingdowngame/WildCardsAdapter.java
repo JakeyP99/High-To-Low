@@ -63,7 +63,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
                 enabled = prefs.isWildcardEnabled(i, card.isEnabled());
                 activity = prefs.getWildcardActivityText(i, card.getText());
                 probability = prefs.getWildcardProbability(i, card.getProbability());
-                answer = prefs.getWildcardActivityText(i, card.getAnswer());
+                answer = prefs.getWildcardAnswer(i, card.getAnswer());
             } else {
                 enabled = prefs.isWildcardEnabled(i);
                 activity = prefs.getWildcardActivityText(i);
