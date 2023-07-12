@@ -9,18 +9,11 @@
     <item name="android:windowIsTranslucent">true</item>
     <item name="android:windowBackground">@android:color/transparent</item>
     <item name="android:windowAnimationStyle">@style/ActivityTransitionAnimation</item>
-
 </style>
 
     <style name="SwitchBlueDarkStyle" parent="Widget.AppCompat.CompoundButton.Switch">
         <item name="android:thumbTint">@color/bluedark</item>
     </style>
-
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light">
-        <item name="colorSurface">@color/bluedark</item>
-        <!-- Other theme attributes -->
-    </style>
-
 
     <style name="ActivityTransitionAnimation">
         <item name="android:activityOpenEnterAnimation">@anim/slide_in_from_right</item>

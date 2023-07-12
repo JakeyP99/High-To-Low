@@ -14,10 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ExtrasWildCardsFragment extends WildCardsFragments {
     static final WildCardHeadings[] defaultExtrasWildCards = {
-            new WildCardHeadings("Double the current number!", 10, true, false),
-            new WildCardHeadings("Half the current number!", 10, true, false),
-            new WildCardHeadings("Reset the number!", 10, true, false),
-            new WildCardHeadings("Reverse the turn order!", 10, true, false),
+//            new WildCardHeadings("Double the current number!", 10, true, false),
+//            new WildCardHeadings("Half the current number!", 10, true, false),
+//            new WildCardHeadings("Reset the number!", 10, true, false),
+//            new WildCardHeadings("Reverse the turn order!", 10, true, false),
     };
 
     public ExtrasWildCardsFragment(Context context, WildCardsAdapter a) {

@@ -5,13 +5,16 @@ public class WildCardHeadings {
     private int probability;
     private boolean enabled;
     private boolean deletable;
+    private String answer;
 
-    public WildCardHeadings(String activity, int probability, boolean enabled, boolean deletable) {
+    public WildCardHeadings(String activity, int probability, boolean enabled, boolean deletable, String answer) {
         this.activity = activity;
         this.probability = probability;
         this.enabled = enabled;
         this.deletable = deletable;
+        this.answer = answer;
     }
+
     public boolean isEnabled() {
         return enabled;
     }
@@ -28,7 +31,6 @@ public class WildCardHeadings {
         this.activity = text;
     }
 
-
     public int getProbability() {
         return probability;
     }
@@ -41,5 +43,16 @@ public class WildCardHeadings {
         return deletable;
     }
 
-
+    public String getAnswer() {
+        return answer;
     }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+    public boolean hasAnswer() {
+        return answer != null && !answer.isEmpty();
+    }
+}
+

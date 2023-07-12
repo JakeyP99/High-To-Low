@@ -56,7 +56,7 @@ public class MainActivityGame extends ButtonUtilsActivity {
     private boolean doubleBackToExitPressedOnce = false;
     private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
     private Handler shuffleHandler;
-    private QuizWildCardHeadings selectedCard; // Declare selectedCard at a higher level
+    private WildCardHeadings selectedWildCard; // Declare selectedWildCard at a higher level
 
     @Override
     public void onBackPressed() {
@@ -142,7 +142,7 @@ public class MainActivityGame extends ButtonUtilsActivity {
 
         btnUtils.setButton(btnBackWild, () -> {
 
-            if (selectedCard != null && selectedCard.hasAnswer()) {
+            if (selectedWildCard != null && selectedWildCard.hasAnswer()) {
                 btnAnswer.setVisibility(View.VISIBLE);
             } else {
                 btnAnswer.setVisibility(View.INVISIBLE);
@@ -196,8 +196,7 @@ public class MainActivityGame extends ButtonUtilsActivity {
                 if (shuffleTime < shuffleDuration) {
                     shuffleHandler.postDelayed(this, shuffleInterval);
                 } else {
-                    int finalNumber = randomDigit;
-                    numberText.setText(String.valueOf(finalNumber));
+                    numberText.setText(String.valueOf(randomDigit));
 
                     Game.getInstance().nextNumber(MainActivityGame.this, () -> gotoGameEnd());
 
@@ -330,6 +329,14 @@ public class MainActivityGame extends ButtonUtilsActivity {
                 usedCards.add(selectedCard);
                 usedWildCards.add(selectedCard);
                 usedWildCard.put(player, usedCards);
+
+                if (selectedCard.hasAnswer()) {
+                    btnAnswer.setVisibility(View.VISIBLE);
+                    selectedWildCard = selectedCard;
+                } else {
+                    btnAnswer.setVisibility(View.INVISIBLE);
+                    selectedWildCard = null;
+                }
             }
         }
 
@@ -365,28 +372,10 @@ public class MainActivityGame extends ButtonUtilsActivity {
     }
 
     private void showAnswer() {
-        QuizWildCardHeadings selectedCard = getSelectedWildCard();
-        if (selectedCard != null) {
+        if (selectedWildCard != null) {
             TextView wildActivityTextView = findViewById(R.id.wild_textview);
-            wildActivityTextView.setText(selectedCard.getAnswer());
+            wildActivityTextView.setText(selectedWildCard.getAnswer());
         }
-    }
-
-    private QuizWildCardHeadings getSelectedWildCard() {
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        Set<WildCardHeadings> usedCards = usedWildCard.getOrDefault(currentPlayer, new HashSet<>());
-        QuizWildCardHeadings selectedCard = null;
-
-        if (usedCards != null && !usedCards.isEmpty()) {
-            for (WildCardHeadings card : usedCards) {
-                if (card instanceof QuizWildCardHeadings) {
-                    selectedCard = (QuizWildCardHeadings) card;
-                    break;
-                }
-            }
-        }
-
-        return selectedCard;
     }
 
 

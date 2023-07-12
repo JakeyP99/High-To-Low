@@ -87,7 +87,7 @@ public class WildCardsFragments extends Fragment {
                 return;
             }
 
-            WildCardHeadings newWildCard = new WildCardHeadings(text, probability, true, true);
+            WildCardHeadings newWildCard = new WildCardHeadings(text, probability, true, true, text);
 
             saveNewWildCard(newWildCard);
 
@@ -120,8 +120,9 @@ public class WildCardsFragments extends Fragment {
 
         for (int i = 0; i < count; i++) {
             String text = sharedPreferences.getString("wildcard_text_" + (i + 1), "");
+            String answer = sharedPreferences.getString("wildcard_text_" + (i + 1), "");
             int probability = sharedPreferences.getInt("wildcard_probability_" + (i + 1), 10);
-            newWildCards[i] = new WildCardHeadings(text, probability, true, true);
+            newWildCards[i] = new WildCardHeadings(text, probability, true, true, answer);
         }
 
         adapter.setWildCards(newWildCards);

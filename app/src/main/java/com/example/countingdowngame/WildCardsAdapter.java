@@ -57,18 +57,21 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
             boolean enabled;
             String activity;
             int probability;
+            String answer;
 
             if (card != null) {
                 enabled = prefs.isWildcardEnabled(i, card.isEnabled());
                 activity = prefs.getWildcardActivityText(i, card.getText());
                 probability = prefs.getWildcardProbability(i, card.getProbability());
+                answer = prefs.getWildcardActivityText(i, card.getAnswer());
             } else {
                 enabled = prefs.isWildcardEnabled(i);
                 activity = prefs.getWildcardActivityText(i);
                 probability = prefs.getWildcardProbability(i);
+                answer = prefs.getWildcardAnswer(i);
             }
 
-            loadedWildCards[i] = new WildCardHeadings(activity, probability, enabled, true);
+            loadedWildCards[i] = new WildCardHeadings(activity, probability, enabled, true, answer);
         }
 
         wildCards = loadedWildCards;
@@ -123,7 +126,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
 
         for (int i = 0; i < probabilities.length; i++) {
             WildCardHeadings probability = probabilities[i];
-            prefs.setWildcardState(i, probability.isEnabled(), probability.getText(), probability.getProbability());
+            prefs.setWildcardState(i, probability.isEnabled(), probability.getText(), probability.getProbability(), probability.getAnswer());
         }
 
     }
