@@ -136,17 +136,11 @@ public class MainActivityGame extends ButtonUtilsActivity {
         btnBackWild.setVisibility(View.INVISIBLE);
         btnAnswer.setVisibility(View.INVISIBLE);
 
-        btnAnswer.setOnClickListener(view -> showAnswer());
 
         btnUtils.setButton(btnGenerate, this::startNumberShuffleAnimation);
+        btnUtils.setButton(btnAnswer, this::showAnswer);
 
         btnUtils.setButton(btnBackWild, () -> {
-
-            if (selectedWildCard != null && selectedWildCard.hasAnswer()) {
-                btnAnswer.setVisibility(View.VISIBLE);
-            } else {
-                btnAnswer.setVisibility(View.INVISIBLE);
-            }
             btnGenerate.setVisibility(View.VISIBLE);
             Game.getInstance().getCurrentPlayer().useSkip();
             numberText.setVisibility(View.VISIBLE);
@@ -156,6 +150,12 @@ public class MainActivityGame extends ButtonUtilsActivity {
         });
 
         btnUtils.setButton(btnWild, () -> {
+            if (selectedWildCard != null && selectedWildCard.hasAnswer()) {
+                btnAnswer.setVisibility(View.VISIBLE);
+            } else {
+                btnAnswer.setVisibility(View.INVISIBLE);
+            }
+
             wildCardActivate(Game.getInstance().getCurrentPlayer());
             wildText.setVisibility(View.VISIBLE);
             btnWild.setVisibility(View.INVISIBLE);
@@ -196,7 +196,8 @@ public class MainActivityGame extends ButtonUtilsActivity {
                 if (shuffleTime < shuffleDuration) {
                     shuffleHandler.postDelayed(this, shuffleInterval);
                 } else {
-                    numberText.setText(String.valueOf(randomDigit));
+                    int finalNumber = randomDigit;
+                    numberText.setText(String.valueOf(finalNumber));
 
                     Game.getInstance().nextNumber(MainActivityGame.this, () -> gotoGameEnd());
 
@@ -372,10 +373,8 @@ public class MainActivityGame extends ButtonUtilsActivity {
     }
 
     private void showAnswer() {
-        if (selectedWildCard != null) {
             TextView wildActivityTextView = findViewById(R.id.wild_textview);
             wildActivityTextView.setText(selectedWildCard.getAnswer());
-        }
     }
 
 
