@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class TaskWildCardsFragment extends WildCardsFragments {
-    static final WildCardHeadings[] defaultTaskWildCards = {
+    public static final WildCardHeadings[] defaultTaskWildCards = {
 //            new WildCardHeadings("Task! Take 1 drink.", 10, true, true),
 //            new WildCardHeadings("Task! Take 2 drinks.", 10, true, true),
 //            new WildCardHeadings("Task! Take 3 drinks.", 10, true, true),

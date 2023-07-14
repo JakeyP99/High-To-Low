@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class TruthWildCardsFragment extends WildCardsFragments {
-    static final WildCardHeadings[] defaultTruthWildCards = {
+    public static final WildCardHeadings[] defaultTruthWildCards = {
 //            new WildCardHeadings("Truth! Have you ever had a crush on a friend's significant other?", 10, true, true),
 //            new WildCardHeadings("Truth! What is your most regrettable romantic rejection?", 10, true, true),
 //            new WildCardHeadings("Truth! Have you ever stolen something? If yes, what and why?", 10, true, true),

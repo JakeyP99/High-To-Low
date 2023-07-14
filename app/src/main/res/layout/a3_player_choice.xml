@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="@color/white"
-    tools:context=".MainActivityGame">
+    tools:context=".MainActivity.MainActivityGame">
 
 
     <TextView

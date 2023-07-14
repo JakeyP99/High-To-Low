@@ -30,7 +30,7 @@
         </activity>
 
         <activity
-            android:name=".MainActivityGame"
+            android:name=".MainActivity.MainActivityGame"
         />
 
         <activity
@@ -57,7 +57,7 @@
             android:name=".GeneralSettings" />
 
         <activity
-            android:name=".MainActivitySplitScreen" />
+            android:name=".MainActivity.MainActivitySplitScreen" />
 
         <activity
             android:name=".DrawingPlayerModels" />

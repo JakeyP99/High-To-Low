@@ -6,7 +6,7 @@
     android:background="@android:color/white"
     android:layout_height="match_parent"
 
-    tools:context=".MainActivityGame">
+    tools:context=".MainActivity.MainActivityGame">
 
     <Button
         android:id="@+id/button_wildcardChoice"

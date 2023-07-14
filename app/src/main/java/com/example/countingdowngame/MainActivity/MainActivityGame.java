@@ -1,4 +1,6 @@
-package com.example.countingdowngame;
+package com.example.countingdowngame.MainActivity;
+
+import static com.example.countingdowngame.MainActivity.SharedMainActivity.reverseTurnOrder;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +16,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.countingdowngame.AudioManager;
+import com.example.countingdowngame.ButtonUtilsActivity;
+import com.example.countingdowngame.ExtrasWildCardsAdapter;
+import com.example.countingdowngame.ExtrasWildCardsFragment;
+import com.example.countingdowngame.QuizWildCardsAdapter;
+import com.example.countingdowngame.QuizWildCardsFragment;
+import com.example.countingdowngame.R;
+import com.example.countingdowngame.TaskWildCardsAdapter;
+import com.example.countingdowngame.TaskWildCardsFragment;
+import com.example.countingdowngame.TruthWildCardsAdapter;
+import com.example.countingdowngame.TruthWildCardsFragment;
+import com.example.countingdowngame.WildCardHeadings;
+import com.example.countingdowngame.WildCardType;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.GameEventType;
 import com.example.countingdowngame.game.Player;
@@ -21,7 +36,6 @@ import com.example.countingdowngame.stores.PlayerModelLocalStore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -237,8 +251,8 @@ public class MainActivityGame extends ButtonUtilsActivity {
 
         int currentNumber = Game.getInstance().getCurrentNumber();
         numberText.setText(String.valueOf(currentNumber));
-        setTextViewSizeBasedOnInt(numberText, String.valueOf(currentNumber));
-        setNameSizeBasedOnInt(nextPlayerText, nextPlayerText.getText().toString());
+        SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(currentNumber));
+        SharedMainActivity.setNameSizeBasedOnInt(nextPlayerText, nextPlayerText.getText().toString());
 
     }
 
@@ -349,14 +363,14 @@ public class MainActivityGame extends ButtonUtilsActivity {
                 Game.getInstance().setCurrentNumber(updatedNumber);
                 Game.getInstance().addUpdatedNumber(updatedNumber);
                 numberText.setText(String.valueOf(updatedNumber));
-                setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
+                SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
             } else if (selectedActivity.equals("Half the current number!")) {
                 int currentNumber = Game.getInstance().getCurrentNumber();
                 int updatedNumber = Math.max(currentNumber / 2, 1);
                 Game.getInstance().setCurrentNumber(updatedNumber);
                 Game.getInstance().addUpdatedNumber(updatedNumber);
                 numberText.setText(String.valueOf(updatedNumber));
-                setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
+                SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
             } else if (selectedActivity.equals("Reset the number!")) {
                 Bundle extras = getIntent().getExtras();
                 if (extras == null) {
@@ -366,7 +380,7 @@ public class MainActivityGame extends ButtonUtilsActivity {
                 Game.getInstance().setCurrentNumber(startingNumber);
                 Game.getInstance().addUpdatedNumber(startingNumber);
                 numberText.setText(String.valueOf(startingNumber));
-                setTextViewSizeBasedOnInt(numberText, String.valueOf(startingNumber));
+                SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(startingNumber));
             } else if (selectedActivity.equals("Reverse the turn order!")) {
                 reverseTurnOrder(player);
             }
@@ -386,54 +400,4 @@ public class MainActivityGame extends ButtonUtilsActivity {
     }
 
 
-
-    private void reverseTurnOrder(Player player) {
-        Game game = Game.getInstance();
-        List<Player> players = game.getPlayers();
-        Collections.reverse(players);
-
-        int currentPlayerIndex = players.indexOf(player);
-
-        if (currentPlayerIndex != -1) {
-            int lastIndex = players.size() - 1;
-            int newIndex = lastIndex - currentPlayerIndex;
-
-            // Move the player to the new index
-            players.remove(currentPlayerIndex);
-            players.add(newIndex, player);
-
-            // Update the current player ID if necessary
-            if (game.getCurrentPlayer() == player) {
-                game.setCurrentPlayerId(newIndex);
-            }
-        }
-
-        game.setPlayerList(players);
-    }
-
-    private void setTextViewSizeBasedOnInt(TextView textView, String text) {
-        int defaultTextSize = 70;
-        int minSize = 47;
-
-        if (text.length() > 6) {
-            textView.setTextSize(minSize);
-        } else {
-            textView.setTextSize(defaultTextSize);
-        }
-    }
-
-    private void setNameSizeBasedOnInt(TextView textView, String text) {
-        int textSize;
-
-        if (text.length() > 19) {
-            textSize = 22;
-        } else if (text.length() > 14) {
-            textSize = 30;
-        } else if (text.length() > 8) {
-            textSize = 35;
-        } else {
-            textSize = 45;
-        }
-        textView.setTextSize(textSize);
-    }
 }

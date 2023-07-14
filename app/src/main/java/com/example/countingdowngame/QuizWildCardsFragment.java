@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class QuizWildCardsFragment extends WildCardsFragments {
-    static final WildCardHeadings[] defaultQuizWildCards = {
+    public static final WildCardHeadings[] defaultQuizWildCards = {
             new WildCardHeadings("Quiz! Name two famous people with the same initials as yours.", 10, true, true, "John Doe"),
             new WildCardHeadings("Quiz! Name five countries starting with the letter A.", 10, true, true, "Afghanistan, Albania, Algeria, Andorra, Angola"),
             new WildCardHeadings("Quiz! Can you recite the first 7 digits of pi? If yes, go ahead.", 10, true, true, "3.141592"),

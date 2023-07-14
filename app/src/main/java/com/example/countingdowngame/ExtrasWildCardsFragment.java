@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ExtrasWildCardsFragment extends WildCardsFragments {
-    static final WildCardHeadings[] defaultExtrasWildCards = {
+    public static final WildCardHeadings[] defaultExtrasWildCards = {
 //            new WildCardHeadings("Double the current number!", 10, true, false),
 //            new WildCardHeadings("Half the current number!", 10, true, false),
 //            new WildCardHeadings("Reset the number!", 10, true, false),

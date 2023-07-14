@@ -34,7 +34,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
         loadWildCardProbabilitiesFromStorage(wildCards);
     }
 
-    WildCardHeadings[] loadWildCardProbabilitiesFromStorage(WildCardHeadings[] defaultWildCards) {
+    public WildCardHeadings[] loadWildCardProbabilitiesFromStorage(WildCardHeadings[] defaultWildCards) {
         var prefs = WildCardSettingsLocalStore.fromContext(mContext, mSaveKey);
         int wildCardCount = prefs.getWildCardQuantity();
 
