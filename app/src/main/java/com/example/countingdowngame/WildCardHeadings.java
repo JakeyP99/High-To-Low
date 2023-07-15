@@ -1,7 +1,5 @@
 package com.example.countingdowngame;
 
-import android.util.Log;
-
 public class WildCardHeadings {
     private String activity;
     private int probability;
@@ -54,7 +52,6 @@ public class WildCardHeadings {
     }
 
     public String getAnswer() {
-        Log.d("WildCardHeadings", "Answer: " + answer); // Log the answer value
         return answer;
     }
 

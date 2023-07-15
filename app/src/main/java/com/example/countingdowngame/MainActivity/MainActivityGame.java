@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -39,6 +40,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -71,7 +73,7 @@ public class MainActivityGame extends ButtonUtilsActivity {
     private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
     private Handler shuffleHandler;
     private WildCardHeadings selectedWildCard; // Declare selectedWildCard at a higher level
-
+    private TextView wildText;
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -80,10 +82,8 @@ public class MainActivityGame extends ButtonUtilsActivity {
             gotoHomeScreen();
             return;
         }
-
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Press back again to go to the home screen", Toast.LENGTH_SHORT).show();
-
         new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, BACK_PRESS_DELAY);
     }
     //-----------------------------------------------------Create game---------------------------------------------------//
@@ -106,6 +106,7 @@ public class MainActivityGame extends ButtonUtilsActivity {
         btnGenerate = findViewById(R.id.btnGenerate);
         btnBackWild = findViewById(R.id.btnBackWildCard);
         shuffleHandler = new Handler();
+        wildText = findViewById(R.id.wild_textview);
     }
 
     private void startGame() {
@@ -154,17 +155,7 @@ public class MainActivityGame extends ButtonUtilsActivity {
         btnUtils.setButton(btnGenerate, this::startNumberShuffleAnimation);
         btnUtils.setButton(btnAnswer, this::showAnswer);
 
-        btnUtils.setButton(btnBackWild, () -> {
-            btnGenerate.setVisibility(View.VISIBLE);
-            Game.getInstance().getCurrentPlayer().useSkip();
-            numberText.setVisibility(View.VISIBLE);
-            nextPlayerText.setVisibility(View.VISIBLE);
-            wildText.setVisibility(View.INVISIBLE);
-            btnBackWild.setVisibility(View.INVISIBLE);
-
-
-            btnAnswer.setVisibility(View.INVISIBLE);
-        });
+        btnUtils.setButton(btnBackWild, this::wildCardContinue);
 
         btnUtils.setButton(btnWild, () -> {
             if (selectedWildCard != null && selectedWildCard.hasAnswer()) {
@@ -213,8 +204,7 @@ public class MainActivityGame extends ButtonUtilsActivity {
                 if (shuffleTime < shuffleDuration) {
                     shuffleHandler.postDelayed(this, shuffleInterval);
                 } else {
-                    int finalNumber = randomDigit;
-                    numberText.setText(String.valueOf(finalNumber));
+                    numberText.setText(String.valueOf(randomDigit));
 
                     Game.getInstance().nextNumber(MainActivityGame.this, () -> gotoGameEnd());
 
@@ -259,6 +249,15 @@ public class MainActivityGame extends ButtonUtilsActivity {
     }
 
     //-----------------------------------------------------Wild Card, and Skip Functionality---------------------------------------------------//
+    private void wildCardContinue() {
+        Game.getInstance().getCurrentPlayer().useSkip();
+        btnGenerate.setVisibility(View.VISIBLE);
+        numberText.setVisibility(View.VISIBLE);
+        nextPlayerText.setVisibility(View.VISIBLE);
+        wildText.setVisibility(View.INVISIBLE);
+        btnBackWild.setVisibility(View.INVISIBLE);
+        btnAnswer.setVisibility(View.INVISIBLE);
+    }
 
     private void wildCardActivate(Player player) {
         Game.getInstance().getCurrentPlayer().useWildCard();
@@ -291,34 +290,47 @@ public class MainActivityGame extends ButtonUtilsActivity {
             int typeChance = random.nextInt(4); // Generate a random number from 0 to 3
 
             WildCardHeadings[] selectedType = null;
+            String wildCardType = ""; // Variable to store the type of wildcard
 
             switch (typeChance) {
                 case 0:
                     selectedType = quizProbabilities;
+                    wildCardType = "Quiz";
                     break;
                 case 1:
                     selectedType = taskProbabilities;
+                    wildCardType = "Task";
                     break;
                 case 2:
                     selectedType = truthProbabilities;
+                    wildCardType = "Truth";
                     break;
                 case 3:
                     selectedType = extraProbabilities;
+                    wildCardType = "Extras";
                     break;
                 default:
+                    selectedType = null; // Set selectedType to null when the case is not 0, 1, 2, or 3
+                    wildCardType = "Null";
                     break;
+            }
+
+            int enabledCardsCount = (int) Arrays.stream(selectedType)
+                    .filter(WildCardHeadings::isEnabled)
+                    .count();
+
+            Log.d("SelectedTypeEnabledCount", "SelectedType Enabled Count: " + enabledCardsCount);
+
+            if (enabledCardsCount == 0) {
+                btnAnswer.setVisibility(View.INVISIBLE);
+                wildActivityTextView.setText("No wild cards available");
+                return;
             }
 
             List<WildCardHeadings> unusedCards = Arrays.stream(selectedType)
                     .filter(WildCardHeadings::isEnabled)
                     .filter(c -> !usedWildCards.contains(c))
                     .collect(Collectors.toList());
-
-            if (unusedCards.isEmpty()) {
-                wildActivityTextView.setText("No wild cards available");
-                btnWild.setVisibility(View.INVISIBLE);
-                return;
-            }
 
             // Calculate the total probabilities within the selected type
             int totalTypeProbabilities = unusedCards.stream()
@@ -344,52 +356,82 @@ public class MainActivityGame extends ButtonUtilsActivity {
             if (selectedCard != null) {
                 selectedActivity = selectedCard.getText();
                 wildActivityTextView.setText(selectedActivity);
+                assert usedCards != null;
                 usedCards.add(selectedCard);
                 usedWildCards.add(selectedCard);
                 usedWildCard.put(player, usedCards);
 
-                btnAnswer.setVisibility(selectedCard.hasAnswer() ? View.VISIBLE : View.INVISIBLE);
-                selectedWildCard = selectedCard;
+                selectedWildCard = selectedCard; // Update selectedWildCard to the current selected card
 
-            }
-        }
-
-        if (selectedActivity != null) {
-            if (selectedActivity.equals("Double the current number!")) {
-                int currentNumber = Game.getInstance().getCurrentNumber();
-                int updatedNumber = Math.min(currentNumber * 2, 999999999);
-                Game.getInstance().setCurrentNumber(updatedNumber);
-                Game.getInstance().addUpdatedNumber(updatedNumber);
-                numberText.setText(String.valueOf(updatedNumber));
-                SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
-            } else if (selectedActivity.equals("Half the current number!")) {
-                int currentNumber = Game.getInstance().getCurrentNumber();
-                int updatedNumber = Math.max(currentNumber / 2, 1);
-                Game.getInstance().setCurrentNumber(updatedNumber);
-                Game.getInstance().addUpdatedNumber(updatedNumber);
-                numberText.setText(String.valueOf(updatedNumber));
-                SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
-            } else if (selectedActivity.equals("Reset the number!")) {
-                Bundle extras = getIntent().getExtras();
-                if (extras == null) {
-                    throw new RuntimeException("Missing extras");
+                if (selectedCard.hasAnswer()) {
+                    btnAnswer.setVisibility(View.VISIBLE);
+                } else {
+                    btnAnswer.setVisibility(View.INVISIBLE);
                 }
-                int startingNumber = extras.getInt("startingNumber");
-                Game.getInstance().setCurrentNumber(startingNumber);
-                Game.getInstance().addUpdatedNumber(startingNumber);
-                numberText.setText(String.valueOf(startingNumber));
-                SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(startingNumber));
-            } else if (selectedActivity.equals("Reverse the turn order!")) {
-                reverseTurnOrder(player);
+            } else {
+                btnAnswer.setVisibility(View.INVISIBLE);
+            }
+            Log.d("WildCardType", "Type: " + wildCardType); // Log the type of wildcard
+        }
+
+
+            switch (Objects.requireNonNull(selectedActivity)) {
+                case "Double the current number!": {
+                    int currentNumber = Game.getInstance().getCurrentNumber();
+                    int updatedNumber = Math.min(currentNumber * 2, 999999999);
+                    Game.getInstance().setCurrentNumber(updatedNumber);
+                    Game.getInstance().addUpdatedNumber(updatedNumber);
+                    numberText.setText(String.valueOf(updatedNumber));
+                    SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
+                    break;
+                }
+                case "Half the current number!": {
+                    int currentNumber = Game.getInstance().getCurrentNumber();
+                    int updatedNumber = Math.max(currentNumber / 2, 1);
+                    Game.getInstance().setCurrentNumber(updatedNumber);
+                    Game.getInstance().addUpdatedNumber(updatedNumber);
+                    numberText.setText(String.valueOf(updatedNumber));
+                    SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
+                    break;
+                }
+                case "Reset the number!":
+                    Bundle extras = getIntent().getExtras();
+                    if (extras == null) {
+                        throw new RuntimeException("Missing extras");
+                    }
+                    int startingNumber = extras.getInt("startingNumber");
+                    Game.getInstance().setCurrentNumber(startingNumber);
+                    Game.getInstance().addUpdatedNumber(startingNumber);
+                    numberText.setText(String.valueOf(startingNumber));
+                    SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(startingNumber));
+                    break;
+                case "Reverse the turn order!":
+                    reverseTurnOrder(player);
+                    break;
             }
         }
-    }
+
+
 
     private void showAnswer() {
         TextView wildActivityTextView = findViewById(R.id.wild_textview);
-        btnAnswer.setVisibility(View.INVISIBLE);
-        String answer = selectedWildCard.getAnswer();
-        wildActivityTextView.setText(answer);
+        if (selectedWildCard != null) {
+            if (selectedWildCard.hasAnswer()) {
+                String answer = selectedWildCard.getAnswer();
+                wildActivityTextView.setText(answer);
+                Log.d("Answer", "Quiz WildCard:" + answer);
+
+            } else {
+                // Logging statement to check if this block is executed
+                Log.d("wtf", "Non-Quiz Wild Card: No answer available");
+                wildActivityTextView.setText("No answer available");
             }
+        } else {
+            // Logging statement to check if this block is executed
+            Log.d("wtf1", "No selected wild card");
+            wildActivityTextView.setText("No selected wild card");
+        }
+        btnAnswer.setVisibility(View.INVISIBLE);
+    }
 
 }
