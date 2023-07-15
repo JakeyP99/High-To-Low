@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -162,6 +161,9 @@ public class MainActivityGame extends ButtonUtilsActivity {
             nextPlayerText.setVisibility(View.VISIBLE);
             wildText.setVisibility(View.INVISIBLE);
             btnBackWild.setVisibility(View.INVISIBLE);
+
+
+            btnAnswer.setVisibility(View.INVISIBLE);
         });
 
         btnUtils.setButton(btnWild, () -> {
@@ -346,13 +348,9 @@ public class MainActivityGame extends ButtonUtilsActivity {
                 usedWildCards.add(selectedCard);
                 usedWildCard.put(player, usedCards);
 
-                if (selectedCard.hasAnswer()) {
-                    btnAnswer.setVisibility(View.VISIBLE);
-                    selectedWildCard = selectedCard;
-                } else {
-                    btnAnswer.setVisibility(View.INVISIBLE);
-                    selectedWildCard = null;
-                }
+                btnAnswer.setVisibility(selectedCard.hasAnswer() ? View.VISIBLE : View.INVISIBLE);
+                selectedWildCard = selectedCard;
+
             }
         }
 
@@ -389,15 +387,9 @@ public class MainActivityGame extends ButtonUtilsActivity {
 
     private void showAnswer() {
         TextView wildActivityTextView = findViewById(R.id.wild_textview);
-        Log.d("MainActivityGame", "Selected Wild Card: " + selectedWildCard); // Log selectedWildCard value
-        if (selectedWildCard != null) {
-            String answer = selectedWildCard.getAnswer();
-            Log.d("MainActivityGame", "Answer: " + answer); // Log answer value
-            wildActivityTextView.setText(answer);
-        } else {
-            Log.d("MainActivityGame", "No selected wild card"); // Log when selectedWildCard is null
-        }
-    }
-
+        btnAnswer.setVisibility(View.INVISIBLE);
+        String answer = selectedWildCard.getAnswer();
+        wildActivityTextView.setText(answer);
+            }
 
 }

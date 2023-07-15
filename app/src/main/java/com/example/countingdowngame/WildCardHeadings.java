@@ -17,6 +17,14 @@ public class WildCardHeadings {
         this.answer = answer;
     }
 
+    public WildCardHeadings(String activity, int probability, boolean enabled, boolean deletable) {
+        this.activity = activity;
+        this.probability = probability;
+        this.enabled = enabled;
+        this.deletable = deletable;
+        this.answer = null; // Set answer to null for wildcards without an answer
+    }
+
     public boolean isEnabled() {
         return enabled;
     }
@@ -50,7 +58,6 @@ public class WildCardHeadings {
         return answer;
     }
 
-
     public void setAnswer(String answer) {
         this.answer = answer;
     }
@@ -59,4 +66,3 @@ public class WildCardHeadings {
         return answer != null && !answer.isEmpty();
     }
 }
-
