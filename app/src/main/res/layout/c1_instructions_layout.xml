@@ -8,7 +8,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="fill_parent"
-        android:layout_height="630dp"
+        android:layout_height="520dp"
         android:layout_gravity="center"
         app:cardElevation="0dp"
         app:cardUseCompatPadding="true"
@@ -64,8 +64,8 @@
             android:layout_centerInParent="true"
             android:background="@drawable/arrow_right"
             android:clickable="true"
-            android:gravity="center"
             android:focusable="true"
+            android:gravity="center"
             android:textAllCaps="false"
             android:textColor="@color/bluedark"
             android:textSize="20sp" />

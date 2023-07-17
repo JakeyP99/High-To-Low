@@ -20,27 +20,16 @@
 
     <TextView
         android:id="@+id/textview_wildcard"
-        android:layout_width="wrap_content"
+        android:layout_width="231dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginEnd="40dp"
+        android:layout_marginEnd="7dp"
         android:layout_toStartOf="@+id/switch_wildcard"
         android:layout_toEndOf="@+id/button_edit_probability"
         android:maxLines="5"
         android:paddingStart="8dp"
         android:text="aaaaaaaaaaaaaaaaaaaaaaaaaaTask! Name three things that should be illegal but aren't. If others agree, you're safe, if not, you take 3 drinks."
         android:textAlignment="center"
-        android:textColor="@color/bluedark" />
-
-    <TextView
-        android:id="@+id/textview_probability"
-        android:layout_width="32dp"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginEnd="4dp"
-        android:layout_toStartOf="@+id/switch_wildcard"
-        android:gravity="center"
-        android:text="P"
         android:textColor="@color/bluedark" />
 
     <Switch

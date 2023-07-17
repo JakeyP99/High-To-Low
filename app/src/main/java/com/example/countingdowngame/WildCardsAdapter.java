@@ -110,13 +110,6 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
         return wildCards;
     }
 
-    void setProbabilitySizeBasedOnString(TextView textView, String text) {
-        int textSize = 18;
-        if (text.length() > 2) {
-            textSize = 12;
-        }
-        textView.setTextSize(textSize);
-    }
 
     public void saveWildCardProbabilitiesToStorage(WildCardHeadings[] probabilities) {
         wildCards = probabilities;
@@ -141,15 +134,12 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
             super(itemView);
             textViewTitle = itemView.findViewById(R.id.textview_wildcard);
             editButton = itemView.findViewById(R.id.button_edit_probability);
-            textViewProbabilities = itemView.findViewById(R.id.textview_probability);
             switchEnabled = itemView.findViewById(R.id.switch_wildcard);
         }
 
         public void bind(WildCardHeadings wildcard) {
             textViewTitle.setText(wildcard.getText());
-            textViewProbabilities.setText(String.valueOf(wildcard.getProbability()));
             switchEnabled.setChecked(wildcard.isEnabled());
-            setProbabilitySizeBasedOnString(textViewProbabilities, String.valueOf(wildcard.getProbability()));
 
             switchEnabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 wildcard.setEnabled(isChecked);
@@ -174,10 +164,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
                     textInput.setEnabled(false);
                 }
 
-                final EditText probabilityInput = new EditText(mContext);
-                probabilityInput.setInputType(InputType.TYPE_CLASS_NUMBER);
-                probabilityInput.setText(String.valueOf(wildcard.getProbability()));
-                layout.addView(probabilityInput);
+
 
                 builder.setView(layout);
 
@@ -200,32 +187,15 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
                         return;
                     }
 
-                    int probability;
-                    try {
-                        probability = Integer.parseInt(probabilityInput.getText().toString());
-                    } catch (NumberFormatException e) {
-                        probability = 0; // Invalid input, set to 0
-                    }
-
-                    if (probabilityInput.getText().length() > 4) {
-                        Toast.makeText(mContext, "Please enter a probability with 4 or fewer digits.", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
                     if (textInput.length() > 130) {
                         Toast.makeText(mContext, "Sorry, way too big of a wildcard boss man, limited to 130 characters.", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    wildcard.setProbability(probability);
-
                     if (wildcard.isDeletable()) {
                         wildcard.setText(inputText);
                         textViewTitle.setText(wildcard.getText());
                     }
-
-                    textViewProbabilities.setText(String.valueOf(wildcard.getProbability()));
-                    setProbabilitySizeBasedOnString(textViewProbabilities, String.valueOf(wildcard.getProbability()));
 
                     saveWildCardProbabilitiesToStorage(wildCards);
                 });

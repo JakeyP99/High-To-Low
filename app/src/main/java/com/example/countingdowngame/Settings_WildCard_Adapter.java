@@ -40,7 +40,6 @@ public class Settings_WildCard_Adapter extends ArrayAdapter<WildCardHeadings> {
 
             viewHolder = new ViewHolder();
             viewHolder.textViewWildCard = convertView.findViewById(R.id.textview_wildcard);
-            viewHolder.textViewProbability = convertView.findViewById(R.id.textview_probability);
             viewHolder.switchWildCard = convertView.findViewById(R.id.switch_wildcard);
 
             convertView.setTag(viewHolder);
