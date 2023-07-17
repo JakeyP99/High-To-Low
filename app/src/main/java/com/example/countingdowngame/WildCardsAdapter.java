@@ -126,7 +126,6 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
 
     public class WildCardViewHolder extends RecyclerView.ViewHolder {
         protected TextView textViewTitle;
-        protected TextView textViewProbabilities;
         protected Button editButton;
         protected Switch switchEnabled;
 
