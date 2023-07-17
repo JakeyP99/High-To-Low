@@ -73,4 +73,13 @@ public class Player implements Serializable {
     public void resetWildCardAmount(Context context) {
         wildCardAmount = GeneralSettingsLocalStore.fromContext(context).playerWildCardCount();
     }
+
+    public void gainWildCards() {
+            wildCardAmount = wildCardAmount + 3;
+    }
+
+    public void loseWildCards() {
+        wildCardAmount = Math.max(wildCardAmount - 2, 0);
+    }
+
 }

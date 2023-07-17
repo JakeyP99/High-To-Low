@@ -45,16 +45,9 @@ import java.util.stream.Collectors;
 
 public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
+    private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
     private final Map<Player, Set<WildCardHeadings>> usedWildCard = new HashMap<>();
     private final Set<WildCardHeadings> usedWildCards = new HashSet<>();
-    private TextView numberText;
-    private TextView numberTextPlayer2;
-    private TextView nextPlayerText;
-    private TextView nextPlayerTextPlayer2;
-    private Button btnWild;
-    private Button btnWildPlayer2;
-    private ImageView playerImage;
-    private ImageView playerImagePlayer2;
     Button btnGenerate;
     Button btnGeneratePlayer2;
     Button btnBackWild;
@@ -63,10 +56,17 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
     View wildTextPlayer2;
     ImageButton imageButtonExit;
     ImageButton imageButtonExitPlayer2;
+    private TextView numberText;
+    private TextView numberTextPlayer2;
+    private TextView nextPlayerText;
+    private TextView nextPlayerTextPlayer2;
+    private Button btnWild;
+    private Button btnWildPlayer2;
+    private ImageView playerImage;
+    private ImageView playerImagePlayer2;
     private boolean doubleBackToExitPressedOnce = false;
-    private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
-
     private Handler shuffleHandler;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -78,6 +78,7 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         super.onPause();
         AudioManager.getInstance().stopSound(); // Stop the sound
     }
+
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -90,8 +91,9 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Press back again to go to the home screen", Toast.LENGTH_SHORT).show();
 
-        new Handler().postDelayed(() -> doubleBackToExitPressedOnce=false, BACK_PRESS_DELAY);
+        new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, BACK_PRESS_DELAY);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -226,7 +228,6 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
             }
         }, shuffleInterval);
     }
-
 
 
     //-----------------------------------------------------Render Player---------------------------------------------------//
@@ -372,44 +373,54 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         }
 
         if (selectedActivity != null) {
-            if (selectedActivity.equals("Double the current number!")) {
-                int currentNumber = Game.getInstance().getCurrentNumber();
-                int updatedNumber = Math.min(currentNumber * 2, 999999999);
-                Game.getInstance().setCurrentNumber(updatedNumber);
-                Game.getInstance().addUpdatedNumber(updatedNumber);
-                numberText.setText(String.valueOf(updatedNumber));
-                numberTextPlayer2.setText(String.valueOf(updatedNumber));
-                splitScreenSetTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
-                splitScreenSetTextViewSizeBasedOnInt(numberTextPlayer2, String.valueOf(updatedNumber));
-            } else if (selectedActivity.equals("Half the current number!")) {
-                int currentNumber = Game.getInstance().getCurrentNumber();
-                int updatedNumber = Math.max(currentNumber / 2, 1);
-                Game.getInstance().setCurrentNumber(updatedNumber);
-                Game.getInstance().addUpdatedNumber(updatedNumber);
-                numberText.setText(String.valueOf(updatedNumber));
-                numberTextPlayer2.setText(String.valueOf(updatedNumber));
-                splitScreenSetTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
-                splitScreenSetTextViewSizeBasedOnInt(numberTextPlayer2, String.valueOf(updatedNumber));
-            } else if (selectedActivity.equals("Reset the number!")) {
-                Bundle extras = getIntent().getExtras();
-                if (extras == null) {
-                    throw new RuntimeException("Missing extras");
+            switch (selectedActivity) {
+                case "Double the current number!": {
+                    int currentNumber = Game.getInstance().getCurrentNumber();
+                    int updatedNumber = Math.min(currentNumber * 2, 999999999);
+                    Game.getInstance().setCurrentNumber(updatedNumber);
+                    Game.getInstance().addUpdatedNumber(updatedNumber);
+                    numberText.setText(String.valueOf(updatedNumber));
+                    numberTextPlayer2.setText(String.valueOf(updatedNumber));
+                    splitScreenSetTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
+                    splitScreenSetTextViewSizeBasedOnInt(numberTextPlayer2, String.valueOf(updatedNumber));
+                    break;
                 }
-                int startingNumber = extras.getInt("startingNumber");
-                Game.getInstance().setCurrentNumber(startingNumber);
-                Game.getInstance().addUpdatedNumber(startingNumber);
-                numberText.setText(String.valueOf(startingNumber));
-                numberTextPlayer2.setText(String.valueOf(startingNumber));
-                splitScreenSetTextViewSizeBasedOnInt(numberText, String.valueOf(startingNumber));
-                splitScreenSetTextViewSizeBasedOnInt(numberTextPlayer2, String.valueOf(startingNumber));
-            } else if (selectedActivity.equals("Reverse the turn order!")) {
-                SharedMainActivity.reverseTurnOrder(player);
+                case "Half the current number!": {
+                    int currentNumber = Game.getInstance().getCurrentNumber();
+                    int updatedNumber = Math.max(currentNumber / 2, 1);
+                    Game.getInstance().setCurrentNumber(updatedNumber);
+                    Game.getInstance().addUpdatedNumber(updatedNumber);
+                    numberText.setText(String.valueOf(updatedNumber));
+                    numberTextPlayer2.setText(String.valueOf(updatedNumber));
+                    splitScreenSetTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
+                    splitScreenSetTextViewSizeBasedOnInt(numberTextPlayer2, String.valueOf(updatedNumber));
+                    break;
+                }
+                case "Reset the number!":
+                    Bundle extras = getIntent().getExtras();
+                    if (extras == null) {
+                        throw new RuntimeException("Missing extras");
+                    }
+                    int startingNumber = extras.getInt("startingNumber");
+                    Game.getInstance().setCurrentNumber(startingNumber);
+                    Game.getInstance().addUpdatedNumber(startingNumber);
+                    numberText.setText(String.valueOf(startingNumber));
+                    numberTextPlayer2.setText(String.valueOf(startingNumber));
+                    splitScreenSetTextViewSizeBasedOnInt(numberText, String.valueOf(startingNumber));
+                    splitScreenSetTextViewSizeBasedOnInt(numberTextPlayer2, String.valueOf(startingNumber));
+                    break;
+                case "Reverse the turn order!":
+                    SharedMainActivity.reverseTurnOrder(player);
+                    break;
+                case "Gain a couple more wildcards to use!":
+                    Game.getInstance().getCurrentPlayer().gainWildCards();
+                    break;
+                case "Lose a couple wildcards :( oh also drink 3 lol!":
+                    Game.getInstance().getCurrentPlayer().loseWildCards();
+                    break;
             }
         }
     }
-
-
-
 
 
     //-----------------------------------------------------Button Functionality---------------------------------------------------//

@@ -18,6 +18,8 @@ public class ExtrasWildCardsFragment extends WildCardsFragments {
             new WildCardHeadings("Half the current number!", 10, true, false),
             new WildCardHeadings("Reset the number!", 10, true, false),
             new WildCardHeadings("Reverse the turn order!", 10, true, false),
+            new WildCardHeadings("Gain a couple more wildcards to use, I gotchya back!", 10, true, false),
+            new WildCardHeadings("Lose a couple wildcards :( oh also drink 3 lol!", 10, true, false),
     };
 
     public ExtrasWildCardsFragment(Context context, WildCardsAdapter a) {

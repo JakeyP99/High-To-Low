@@ -408,6 +408,12 @@ public class MainActivityGame extends ButtonUtilsActivity {
                 case "Reverse the turn order!":
                     reverseTurnOrder(player);
                     break;
+                case "Gain a couple more wildcards to use, I gotchya back!":
+                    Game.getInstance().getCurrentPlayer().gainWildCards();
+                    break;
+                case "Lose a couple wildcards :( oh also drink 3 lol!":
+                    Game.getInstance().getCurrentPlayer().loseWildCards();
+                    break;
             }
         }
 
