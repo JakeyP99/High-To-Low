@@ -150,7 +150,6 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                 View customTitleView = LayoutInflater.from(mContext).inflate(R.layout.layout_dialog_title, null);
-                TextView titleTextView = customTitleView.findViewById(R.id.textview_dialog_title);
 
 
                 builder.setCustomTitle(customTitleView);

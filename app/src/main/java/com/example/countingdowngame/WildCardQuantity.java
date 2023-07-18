@@ -33,7 +33,7 @@ public class WildCardQuantity extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.b2_settings_wildcard_settings);
+        setContentView(R.layout.b2_settings_game_mode_choice);
         initializeViews();
         loadPreferences();
         setButtonListeners();
