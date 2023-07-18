@@ -153,8 +153,6 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
 
 
                 builder.setCustomTitle(customTitleView);
-                int blueDarkColor = mContext.getResources().getColor(R.color.bluedark);
-
                 LinearLayout layout = new LinearLayout(mContext);
                 layout.setOrientation(LinearLayout.VERTICAL);
 
@@ -176,11 +174,11 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
 
                 builder.setView(layout);
 
-                builder.setNegativeButton(Html.fromHtml("<font color='" + blueDarkColor + "'>Cancel</font>"), (dialog, which) -> dialog.cancel());
+                builder.setNegativeButton(Html.fromHtml("<font color='" + R.color.bluedark + "'>Cancel</font>"), (dialog, which) -> dialog.cancel());
 
                 ArrayList<WildCardHeadings> wildCardList = new ArrayList<>(Arrays.asList(wildCards));
                 if (wildcard.isDeletable()) {
-                    builder.setNeutralButton(Html.fromHtml("<font color='" + blueDarkColor + "'>Delete</font>"), (dialog, which) -> {
+                    builder.setNeutralButton(Html.fromHtml("<font color='" + R.color.bluedark + "'>Delete</font>"), (dialog, which) -> {
                         wildCardList.remove(getAdapterPosition());
                         wildCards = wildCardList.toArray(new WildCardHeadings[0]);
                         notifyDataSetChanged();
@@ -188,7 +186,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
                     });
                 }
 
-                builder.setPositiveButton(Html.fromHtml("<font color='" + blueDarkColor + "'>OK</font>"), (dialog, which) -> {
+                builder.setPositiveButton(Html.fromHtml("<font color='" + R.color.bluedark + "'>OK</font>"), (dialog, which) -> {
                     String inputText = textInput.getText().toString().trim();
                     if (wildcard.isDeletable() && inputText.isEmpty()) {
                         Toast.makeText(mContext, "The wildcard needs some text, please and thanks!", Toast.LENGTH_SHORT).show();

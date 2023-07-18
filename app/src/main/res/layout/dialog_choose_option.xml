@@ -1,10 +1,8 @@
-<!-- dialog_choose_option.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="20dp"
-    android:layout_centerHorizontal="true">
+    android:padding="20dp">
 
     <TextView
         android:id="@+id/titleTextView"
@@ -12,18 +10,36 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:text="Choose an Option"
+        android:textColor="@color/bluedark"
+
         android:textSize="28sp"
         android:textAlignment="center"/>
 
-    <ListView
-        android:id="@+id/optionsListView"
+    <Button
+        android:id="@+id/capturePhotoButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="@null"
-        android:dividerHeight="40dp"
-        android:layout_gravity="center"
-        android:textAlignment="center"
-        android:gravity="center"
-        />
+        android:text="Capture a Photo"
+        android:textSize="18sp"
+        android:textColor="@color/bluedark"
+        android:backgroundTint="@color/transparent"
+        android:textAllCaps="false"
+        android:paddingVertical="16dp"
+        android:paddingHorizontal="24dp"
+        android:elevation="1dp"
+        android:layout_marginBottom="10dp"/>
+
+    <Button
+        android:id="@+id/drawPhotoButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Draw a Photo"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:textColor="@color/bluedark"
+        android:backgroundTint="@color/transparent"
+        android:paddingVertical="16dp"
+        android:paddingHorizontal="24dp"
+        android:elevation="4dp"/>
 
 </LinearLayout>

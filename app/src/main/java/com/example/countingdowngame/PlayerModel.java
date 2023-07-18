@@ -11,6 +11,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Html;
 import android.text.InputType;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -114,36 +116,31 @@ public class PlayerModel extends ButtonUtilsActivity {
         LayoutInflater inflater = getLayoutInflater();
 
         View dialogView = inflater.inflate(R.layout.dialog_choose_option, null);
-        TextView titleTextView = dialogView.findViewById(R.id.titleTextView);
-        ListView optionsListView = dialogView.findViewById(R.id.optionsListView);
+        Button capturePhotoButton = dialogView.findViewById(R.id.capturePhotoButton);
+        Button drawPhotoButton = dialogView.findViewById(R.id.drawPhotoButton);
 
-        titleTextView.setTextColor(getResources().getColor(R.color.bluedark));
+        capturePhotoButton.setOnClickListener(v -> {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
+            } else {
+                captureImage();
+            }
+            builder.create().dismiss();
+        });
 
-        CharSequence[] options = {"Capture a Photo", "Draw a Photo"};
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(this, R.layout.list_item_option_choose_character, options);
-
-        optionsListView.setAdapter(adapter);
+        drawPhotoButton.setOnClickListener(v -> {
+            startDrawingActivity();
+            builder.create().dismiss();
+        });
 
         AlertDialog dialog = builder.setView(dialogView)
-                .setNegativeButton("Cancel", (dialogInterface, which) -> dialogInterface.dismiss())
+                .setNegativeButton(Html.fromHtml("<font color='" + R.color.bluedark + "'>Cancel</font>"), (dialogInterface, which) -> dialogInterface.dismiss())
                 .create();
-
-        optionsListView.setOnItemClickListener((parent, view, position, id) -> {
-            if (position == 0) {
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
-                } else {
-                    captureImage();
-                }
-            } else if (position == 1) {
-                startDrawingActivity();
-            }
-
-            dialog.dismiss();
-        });
 
         dialog.show();
     }
+
+
 
 
     @Override
