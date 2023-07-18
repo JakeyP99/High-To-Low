@@ -48,8 +48,6 @@
         <activity
             android:name=".SettingsContainer" />
         <activity
-            android:name=".WildCardQuantity" />
-        <activity
             android:name=".WildCardChoice"
             android:windowSoftInputMode="adjustNothing" />
 

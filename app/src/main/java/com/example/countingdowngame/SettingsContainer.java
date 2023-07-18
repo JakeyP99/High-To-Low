@@ -12,17 +12,12 @@ public class SettingsContainer extends ButtonUtilsActivity {
 
         final Button btnReturn = findViewById(R.id.buttonReturn);
         final Button btnWildCardChoice = findViewById(R.id.button_wildcardChoice);
-        final Button btnWildCardSettings = findViewById(R.id.button_wildCardSettings);
         final Button btnGameModeSettings = findViewById(R.id.button_GameModeChoice);
 
         btnUtils.setButton(btnReturn, this::onBackPressed);
 
         btnUtils.setButton(btnWildCardChoice, () -> {
             startActivity(getIntentForClass(WildCardChoice.class));
-        });
-
-        btnUtils.setButton(btnWildCardSettings, () -> {
-            startActivity(getIntentForClass(WildCardQuantity.class));
         });
 
         btnUtils.setButton(btnGameModeSettings, () -> {
