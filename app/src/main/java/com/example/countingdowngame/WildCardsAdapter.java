@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.text.Html;
 import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -146,38 +147,47 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
             });
 
             editButton.setOnClickListener(v -> {
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setTitle("Edit Wildcard Properties");
+                View customTitleView = LayoutInflater.from(mContext).inflate(R.layout.layout_dialog_title, null);
+                TextView titleTextView = customTitleView.findViewById(R.id.textview_dialog_title);
+
+
+                builder.setCustomTitle(customTitleView);
                 int blueDarkColor = mContext.getResources().getColor(R.color.bluedark);
 
                 LinearLayout layout = new LinearLayout(mContext);
                 layout.setOrientation(LinearLayout.VERTICAL);
 
+                // Apply padding to the dialog content
+                int paddingInDp = 16; // Adjust the padding size as needed
+                float density = mContext.getResources().getDisplayMetrics().density;
+                int paddingInPx = (int) (paddingInDp * density);
+                layout.setPadding(paddingInPx, paddingInPx, paddingInPx, paddingInPx);
+
+
                 final EditText textInput = new EditText(mContext);
-
-                if (wildcard.isDeletable()) {
-                    textInput.setInputType(InputType.TYPE_CLASS_TEXT);
-                    textInput.setText(wildcard.getText());
-                    layout.addView(textInput);
-                } else {
-                    textInput.setEnabled(false);
-                }
-
-
+                textInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                textInput.setLines(6); // Set the number of lines to accommodate the wildcard text
+                textInput.setMinLines(2); // Set the minimum number of lines
+                textInput.setMaxLines(8); // Set the maximum number of lines
+                textInput.setVerticalScrollBarEnabled(true);
+                textInput.setText(wildcard.getText());
+                layout.addView(textInput);
 
                 builder.setView(layout);
 
                 builder.setNegativeButton(Html.fromHtml("<font color='" + blueDarkColor + "'>Cancel</font>"), (dialog, which) -> dialog.cancel());
 
                 ArrayList<WildCardHeadings> wildCardList = new ArrayList<>(Arrays.asList(wildCards));
-                    if (wildcard.isDeletable()) {
-                        builder.setNeutralButton(Html.fromHtml("<font color='" + blueDarkColor + "'>Delete</font>"), (dialog, which) -> {
-                            wildCardList.remove(getAdapterPosition());
-                            wildCards = wildCardList.toArray(new WildCardHeadings[0]);
-                            notifyDataSetChanged();
-                            saveWildCardProbabilitiesToStorage(wildCards);
-                        });
-                    }
+                if (wildcard.isDeletable()) {
+                    builder.setNeutralButton(Html.fromHtml("<font color='" + blueDarkColor + "'>Delete</font>"), (dialog, which) -> {
+                        wildCardList.remove(getAdapterPosition());
+                        wildCards = wildCardList.toArray(new WildCardHeadings[0]);
+                        notifyDataSetChanged();
+                        saveWildCardProbabilitiesToStorage(wildCards);
+                    });
+                }
 
                 builder.setPositiveButton(Html.fromHtml("<font color='" + blueDarkColor + "'>OK</font>"), (dialog, which) -> {
                     String inputText = textInput.getText().toString().trim();
