@@ -106,7 +106,21 @@
         app:layout_constraintTop_toTopOf="@+id/btnWild"
         app:layout_constraintVertical_bias="0.0" />
 
+    <Button
+        android:id="@+id/btnAnswer"
+        android:layout_width="115dp"
+        android:layout_height="70dp"
+        android:background="@drawable/outlineforbutton"
+        android:text="Answer"
+        android:textColor="@color/bluedark"
+        android:textSize="18dp"
+        android:textAllCaps="false"
 
+        app:layout_constraintBottom_toBottomOf="@+id/btnWild"
+        app:layout_constraintEnd_toEndOf="@+id/btnWild"
+        app:layout_constraintStart_toStartOf="@+id/btnWild"
+        app:layout_constraintTop_toTopOf="@+id/btnWild"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageButton
         android:id="@+id/imageBtnExit"
@@ -256,6 +270,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnWildPlayer2" />
 
+    <Button
+        android:id="@+id/btnAnswerPlayer2"
+        android:layout_width="115dp"
+        android:layout_height="70dp"
+        android:background="@drawable/outlineforbutton"
+        android:rotation="180"
+        android:text="Answer"
+        android:textColor="@color/bluedark"
+        android:textSize="18dp"
+        android:textAllCaps="false"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnWildPlayer2" />
 
     <ImageButton
         android:id="@+id/imageBtnExitPlayer2"

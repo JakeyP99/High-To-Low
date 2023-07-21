@@ -46,7 +46,20 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MainActivityGame extends ButtonUtilsActivity {
-
+    private final Map<Player, Set<WildCardHeadings>> usedWildCard = new HashMap<>();
+    private final Set<WildCardHeadings> usedWildCards = new HashSet<>();
+    private TextView numberText;
+    private TextView nextPlayerText;
+    private Button btnAnswer;
+    private Button btnWild;
+    private Button btnGenerate;
+    private Button btnBackWild;
+    private ImageView playerImage;
+    private boolean doubleBackToExitPressedOnce = false;
+    private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
+    private Handler shuffleHandler;
+    private WildCardHeadings selectedWildCard; // Declare selectedWildCard at a higher level
+    private TextView wildText;
     @Override
     protected void onResume() {
         super.onResume();
@@ -58,22 +71,6 @@ public class MainActivityGame extends ButtonUtilsActivity {
         super.onPause();
         AudioManager.getInstance().stopSound(); // Stop the sound
     }
-
-    private final Map<Player, Set<WildCardHeadings>> usedWildCard = new HashMap<>();
-    private final Set<WildCardHeadings> usedWildCards = new HashSet<>();
-    private TextView numberText;
-    private TextView nextPlayerText;
-    private Button btnAnswer;
-
-    private Button btnWild;
-    private Button btnGenerate;
-    private Button btnBackWild;
-    private ImageView playerImage;
-    private boolean doubleBackToExitPressedOnce = false;
-    private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
-    private Handler shuffleHandler;
-    private WildCardHeadings selectedWildCard; // Declare selectedWildCard at a higher level
-    private TextView wildText;
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {

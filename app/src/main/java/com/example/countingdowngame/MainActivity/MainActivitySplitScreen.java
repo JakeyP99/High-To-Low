@@ -1,5 +1,6 @@
 package com.example.countingdowngame.MainActivity;
 
+import static com.example.countingdowngame.MainActivity.SharedMainActivity.reverseTurnOrder;
 import static com.example.countingdowngame.MainActivity.SharedMainActivity.splitScreenSetTextViewSizeBasedOnInt;
 
 import android.graphics.Bitmap;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -39,12 +41,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MainActivitySplitScreen extends ButtonUtilsActivity {
-
     private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
     private final Map<Player, Set<WildCardHeadings>> usedWildCard = new HashMap<>();
     private final Set<WildCardHeadings> usedWildCards = new HashSet<>();
@@ -60,12 +62,15 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
     private TextView numberTextPlayer2;
     private TextView nextPlayerText;
     private TextView nextPlayerTextPlayer2;
+    private Button btnAnswer;
+    private Button btnAnswerPlayer2;
     private Button btnWild;
     private Button btnWildPlayer2;
     private ImageView playerImage;
     private ImageView playerImagePlayer2;
     private boolean doubleBackToExitPressedOnce = false;
     private Handler shuffleHandler;
+    private WildCardHeadings selectedWildCard; // Declare selectedWildCard at a higher level
 
     @Override
     protected void onResume() {
@@ -90,7 +95,6 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Press back again to go to the home screen", Toast.LENGTH_SHORT).show();
-
         new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, BACK_PRESS_DELAY);
     }
 
@@ -127,6 +131,9 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
         nextPlayerText = findViewById(R.id.textView_Number_Turn);
         nextPlayerTextPlayer2 = findViewById(R.id.textView_Number_TurnPlayer2);
+
+        btnAnswer = findViewById(R.id.btnAnswer);
+        btnAnswerPlayer2 = findViewById(R.id.btnAnswerPlayer2);
 
         shuffleHandler = new Handler();
 
@@ -167,12 +174,18 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
     //-----------------------------------------------------Buttons---------------------------------------------------//
 
     private void setupButtons() {
-
         btnBackWild.setVisibility(View.INVISIBLE);
         btnBackWildPlayer2.setVisibility(View.INVISIBLE);
+        btnAnswer.setVisibility(View.INVISIBLE);
+        btnAnswerPlayer2.setVisibility(View.INVISIBLE);
+
+        btnUtils.setButton(btnAnswer, this::showAnswer);
+        btnUtils.setButton(btnAnswerPlayer2, this::showAnswer);
+
 
         btnUtils.setButton(btnGenerate, this::ButtonGenerateFunction);
         btnUtils.setButton(btnWild, this::ButtonWildFunction);
+
         btnUtils.setButton(btnBackWild, this::ButtonContinueFunction);
         imageButtonExit.setOnClickListener(view -> {
             Game.getInstance().endGame(this);
@@ -302,40 +315,57 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
         String selectedActivity = null;
         Set<WildCardHeadings> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
+
         if (wildCardsEnabled) {
             Random random = new Random();
             int typeChance = random.nextInt(4); // Generate a random number from 0 to 3
 
             WildCardHeadings[] selectedType = null;
+            String wildCardType = ""; // Variable to store the type of wildcard
 
             switch (typeChance) {
                 case 0:
                     selectedType = quizProbabilities;
+                    wildCardType = "Quiz";
                     break;
                 case 1:
                     selectedType = taskProbabilities;
+                    wildCardType = "Task";
                     break;
                 case 2:
                     selectedType = truthProbabilities;
+                    wildCardType = "Truth";
                     break;
                 case 3:
                     selectedType = extraProbabilities;
+                    wildCardType = "Extras";
                     break;
                 default:
+                    selectedType = null; // Set selectedType to null when the case is not 0, 1, 2, or 3
+                    wildCardType = "Null";
                     break;
+            }
+
+            int enabledCardsCount = (int) Arrays.stream(selectedType)
+                    .filter(WildCardHeadings::isEnabled)
+                    .count();
+
+            Log.d("SelectedTypeEnabledCount", "SelectedType Enabled Count: " + enabledCardsCount);
+
+            if (enabledCardsCount == 0) {
+                btnAnswer.setVisibility(View.INVISIBLE);
+                btnAnswerPlayer2.setVisibility(View.INVISIBLE);
+
+                wildActivityTextView.setText("No wild cards available");
+                wildActivityTextViewPlayer2.setText("No wild cards available");
+
+                return;
             }
 
             List<WildCardHeadings> unusedCards = Arrays.stream(selectedType)
                     .filter(WildCardHeadings::isEnabled)
                     .filter(c -> !usedWildCards.contains(c))
                     .collect(Collectors.toList());
-
-            if (unusedCards.isEmpty()) {
-                wildActivityTextView.setText("No wild cards available");
-                btnWild.setVisibility(View.INVISIBLE);
-                btnWildPlayer2.setVisibility(View.INVISIBLE);
-                return;
-            }
 
             // Calculate the total probabilities within the selected type
             int totalTypeProbabilities = unusedCards.stream()
@@ -360,65 +390,78 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
             if (selectedCard != null) {
                 selectedActivity = selectedCard.getText();
+                wildActivityTextView.setText(selectedActivity);
+                wildActivityTextViewPlayer2.setText(selectedActivity);
+
                 assert usedCards != null;
                 usedCards.add(selectedCard);
                 usedWildCards.add(selectedCard);
                 usedWildCard.put(player, usedCards);
+
+                selectedWildCard = selectedCard; // Update selectedWildCard to the current selected card
+
+                if (selectedCard.hasAnswer()) {
+                    btnAnswer.setVisibility(View.VISIBLE);
+                    btnAnswerPlayer2.setVisibility(View.VISIBLE);
+                    btnBackWild.setVisibility(View.INVISIBLE);
+                    btnBackWildPlayer2.setVisibility(View.INVISIBLE);
+
+                } else {
+                    btnAnswer.setVisibility(View.INVISIBLE);
+                    btnAnswerPlayer2.setVisibility(View.INVISIBLE);
+                    btnBackWild.setVisibility(View.VISIBLE);
+                    btnBackWildPlayer2.setVisibility(View.VISIBLE);
+
+                }
+            } else {
+                btnAnswer.setVisibility(View.INVISIBLE);
+                btnAnswerPlayer2.setVisibility(View.INVISIBLE);
+                btnBackWild.setVisibility(View.VISIBLE);
+                btnBackWildPlayer2.setVisibility(View.VISIBLE);
             }
+            Log.d("WildCardType", "Type: " + wildCardType); // Log the type of wildcard
         }
 
-        if (selectedActivity != null) {
-            wildActivityTextView.setText(selectedActivity);
-            wildActivityTextViewPlayer2.setText(selectedActivity);
-        }
 
-        if (selectedActivity != null) {
-            switch (selectedActivity) {
-                case "Double the current number!": {
-                    int currentNumber = Game.getInstance().getCurrentNumber();
-                    int updatedNumber = Math.min(currentNumber * 2, 999999999);
-                    Game.getInstance().setCurrentNumber(updatedNumber);
-                    Game.getInstance().addUpdatedNumber(updatedNumber);
-                    numberText.setText(String.valueOf(updatedNumber));
-                    numberTextPlayer2.setText(String.valueOf(updatedNumber));
-                    splitScreenSetTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
-                    splitScreenSetTextViewSizeBasedOnInt(numberTextPlayer2, String.valueOf(updatedNumber));
-                    break;
-                }
-                case "Half the current number!": {
-                    int currentNumber = Game.getInstance().getCurrentNumber();
-                    int updatedNumber = Math.max(currentNumber / 2, 1);
-                    Game.getInstance().setCurrentNumber(updatedNumber);
-                    Game.getInstance().addUpdatedNumber(updatedNumber);
-                    numberText.setText(String.valueOf(updatedNumber));
-                    numberTextPlayer2.setText(String.valueOf(updatedNumber));
-                    splitScreenSetTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
-                    splitScreenSetTextViewSizeBasedOnInt(numberTextPlayer2, String.valueOf(updatedNumber));
-                    break;
-                }
-                case "Reset the number!":
-                    Bundle extras = getIntent().getExtras();
-                    if (extras == null) {
-                        throw new RuntimeException("Missing extras");
-                    }
-                    int startingNumber = extras.getInt("startingNumber");
-                    Game.getInstance().setCurrentNumber(startingNumber);
-                    Game.getInstance().addUpdatedNumber(startingNumber);
-                    numberText.setText(String.valueOf(startingNumber));
-                    numberTextPlayer2.setText(String.valueOf(startingNumber));
-                    splitScreenSetTextViewSizeBasedOnInt(numberText, String.valueOf(startingNumber));
-                    splitScreenSetTextViewSizeBasedOnInt(numberTextPlayer2, String.valueOf(startingNumber));
-                    break;
-                case "Reverse the turn order!":
-                    SharedMainActivity.reverseTurnOrder(player);
-                    break;
-                case "Gain a couple more wildcards to use!":
-                    Game.getInstance().getCurrentPlayer().gainWildCards();
-                    break;
-                case "Lose a couple wildcards :( oh also drink 3 lol!":
-                    Game.getInstance().getCurrentPlayer().loseWildCards();
-                    break;
+        switch (Objects.requireNonNull(selectedActivity)) {
+            case "Double the current number!": {
+                int currentNumber = Game.getInstance().getCurrentNumber();
+                int updatedNumber = Math.min(currentNumber * 2, 999999999);
+                Game.getInstance().setCurrentNumber(updatedNumber);
+                Game.getInstance().addUpdatedNumber(updatedNumber);
+                numberText.setText(String.valueOf(updatedNumber));
+                SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
+                break;
             }
+            case "Half the current number!": {
+                int currentNumber = Game.getInstance().getCurrentNumber();
+                int updatedNumber = Math.max(currentNumber / 2, 1);
+                Game.getInstance().setCurrentNumber(updatedNumber);
+                Game.getInstance().addUpdatedNumber(updatedNumber);
+                numberText.setText(String.valueOf(updatedNumber));
+                SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
+                break;
+            }
+            case "Reset the number!":
+                Bundle extras = getIntent().getExtras();
+                if (extras == null) {
+                    throw new RuntimeException("Missing extras");
+                }
+                int startingNumber = extras.getInt("startingNumber");
+                Game.getInstance().setCurrentNumber(startingNumber);
+                Game.getInstance().addUpdatedNumber(startingNumber);
+                numberText.setText(String.valueOf(startingNumber));
+                SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(startingNumber));
+                break;
+            case "Reverse the turn order!":
+                reverseTurnOrder(player);
+                break;
+            case "Gain a couple more wildcards to use, I gotchya back!":
+                Game.getInstance().getCurrentPlayer().gainWildCards();
+                break;
+            case "Lose a couple wildcards :( oh also drink 3 lol!":
+                Game.getInstance().getCurrentPlayer().loseWildCards();
+                break;
         }
     }
 
@@ -437,6 +480,12 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
     }
 
     private void ButtonWildFunction() {
+
+        if (selectedWildCard != null && selectedWildCard.hasAnswer()) {
+            btnAnswer.setVisibility(View.VISIBLE);
+        } else {
+            btnAnswer.setVisibility(View.INVISIBLE);
+        }
         btnWild.setVisibility(View.INVISIBLE);
         btnWildPlayer2.setVisibility(View.INVISIBLE);
 
@@ -458,8 +507,7 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         playerImage.setVisibility(View.INVISIBLE);
         playerImagePlayer2.setVisibility(View.INVISIBLE);
 
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        wildCardActivate(currentPlayer);
+        wildCardActivate(Game.getInstance().getCurrentPlayer());
 
     }
 
@@ -486,5 +534,33 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
     }
 
+    private void showAnswer() {
+        TextView wildActivityTextView = findViewById(R.id.wild_textview);
+        TextView wildActivityTextViewPlayer2 = findViewById(R.id.wild_textviewPlayer2);
 
+        if (selectedWildCard != null) {
+            if (selectedWildCard.hasAnswer()) {
+                String answer = selectedWildCard.getAnswer();
+                wildActivityTextView.setText(answer);
+                wildActivityTextViewPlayer2.setText(answer);
+                Log.d("Answer", "Quiz WildCard:" + answer);
+                btnBackWild.setVisibility(View.VISIBLE);
+                btnBackWildPlayer2.setVisibility(View.VISIBLE);
+
+            } else {
+                // Logging statement to check if this block is executed
+                Log.d("wtf", "Non-Quiz Wild Card: No answer available");
+                wildActivityTextView.setText("No answer available");
+                wildActivityTextViewPlayer2.setText("No answer available");
+
+            }
+        } else {
+            // Logging statement to check if this block is executed
+            Log.d("wtf1", "No selected wild card");
+            wildActivityTextView.setText("No selected wild card");
+            wildActivityTextViewPlayer2.setText("No selected wild card");
+        }
+        btnAnswer.setVisibility(View.INVISIBLE);
+        btnAnswerPlayer2.setVisibility(View.INVISIBLE);
+    }
 }
