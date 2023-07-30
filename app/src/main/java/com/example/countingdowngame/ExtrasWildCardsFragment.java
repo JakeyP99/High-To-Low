@@ -43,8 +43,6 @@ public class ExtrasWildCardsFragment extends WildCardsFragments {
 
         Button btnToggleAll = view.findViewById(R.id.btnToggleAll);
 
-
-
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) btnToggleAll.getLayoutParams();
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
         layoutParams.leftMargin = 0;

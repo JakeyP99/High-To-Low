@@ -38,6 +38,7 @@ public class WildCardsFragments extends Fragment {
         adapter.saveWildCardProbabilitiesToStorage(wildCards);
     }
 
+    //TODO Add new wildcards do not actually work, they will be disabled until they work
     protected void addNewWildCard() {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         View customTitleView = LayoutInflater.from(mContext).inflate(R.layout.layout_dialog_title, null);

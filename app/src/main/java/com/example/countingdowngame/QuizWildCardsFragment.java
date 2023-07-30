@@ -2,10 +2,12 @@ package com.example.countingdowngame;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -142,9 +144,16 @@ public class QuizWildCardsFragment extends WildCardsFragments {
         recyclerView.setAdapter(adapter);
 
         Button btnAddWildCard = view.findViewById(R.id.btnAddWildCard);
-        btnAddWildCard.setOnClickListener(v -> addNewWildCard());
+        btnAddWildCard.setVisibility(View.GONE);
 
         Button btnToggleAll = view.findViewById(R.id.btnToggleAll);
+
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) btnToggleAll.getLayoutParams();
+        layoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
+        layoutParams.leftMargin = 0;
+        layoutParams.rightMargin = 0;
+        btnToggleAll.setLayoutParams(layoutParams);
+
         btnToggleAll.setOnClickListener(v -> toggleAllWildCards());
         return view;
     }
