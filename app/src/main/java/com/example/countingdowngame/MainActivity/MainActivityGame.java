@@ -426,6 +426,17 @@ public class MainActivityGame extends ButtonUtilsActivity {
             }
         }
 
+    private void quizAnswerView(String string){
+        btnBackWild.setVisibility(View.VISIBLE);
+        wildText.setVisibility(View.VISIBLE);
+        btnWild.setVisibility(View.INVISIBLE);
+        btnGenerate.setVisibility(View.INVISIBLE);
+        nextPlayerText.setVisibility(View.INVISIBLE);
+        numberText.setVisibility(View.INVISIBLE);
+
+        wildText.setText(string);
+    }
+
     private void showAnswer() {
         TextView wildActivityTextView = findViewById(R.id.wild_textview);
         btnAnswerRight.setVisibility(View.VISIBLE);
@@ -441,10 +452,16 @@ public class MainActivityGame extends ButtonUtilsActivity {
 
                 btnUtils.setButton(btnAnswerRight, () -> {
                     Game.getInstance().getCurrentPlayer().gainWildCards(1);
-                    wildCardContinue();
+                    btnAnswerRight.setVisibility(View.INVISIBLE);
+                    btnAnswerWrong.setVisibility(View.INVISIBLE);
+                    quizAnswerView("Since you got it right, give out a drink! \n\n P.S. You get to keep your wildcard too.");
                 });
 
-                btnUtils.setButton(btnAnswerWrong, this::wildCardContinue);
+                btnUtils.setButton(btnAnswerWrong, () -> {
+                    btnAnswerRight.setVisibility(View.INVISIBLE);
+                    btnAnswerWrong.setVisibility(View.INVISIBLE);
+                    quizAnswerView("Since you got it wrong, take a drink! \n\n P.S. Maybe read a book once in a while.");
+                });
 
             } else {
                 wildActivityTextView.setText("No answer available");
