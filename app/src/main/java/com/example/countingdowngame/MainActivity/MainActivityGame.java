@@ -425,13 +425,9 @@ public class MainActivityGame extends ButtonUtilsActivity {
                 Log.d("Answer", "Quiz WildCard:" + answer);
 
             } else {
-                // Logging statement to check if this block is executed
-                Log.d("wtf", "Non-Quiz Wild Card: No answer available");
                 wildActivityTextView.setText("No answer available");
             }
         } else {
-            // Logging statement to check if this block is executed
-            Log.d("wtf1", "No selected wild card");
             wildActivityTextView.setText("No selected wild card");
         }
         btnAnswer.setVisibility(View.INVISIBLE);
