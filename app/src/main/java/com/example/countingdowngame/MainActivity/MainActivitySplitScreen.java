@@ -457,7 +457,7 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
                 reverseTurnOrder(player);
                 break;
             case "Gain a couple more wildcards to use, I gotchya back!":
-                Game.getInstance().getCurrentPlayer().gainWildCards();
+                Game.getInstance().getCurrentPlayer().gainWildCards(3);
                 break;
             case "Lose a couple wildcards :( oh also drink 3 lol!":
                 Game.getInstance().getCurrentPlayer().loseWildCards();

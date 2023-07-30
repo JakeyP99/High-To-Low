@@ -54,12 +54,16 @@ public class MainActivityGame extends ButtonUtilsActivity {
     private Button btnWild;
     private Button btnGenerate;
     private Button btnBackWild;
+    private Button btnAnswerRight;
+    private Button btnAnswerWrong;
+
     private ImageView playerImage;
     private boolean doubleBackToExitPressedOnce = false;
     private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
     private Handler shuffleHandler;
     private WildCardHeadings selectedWildCard; // Declare selectedWildCard at a higher level
     private TextView wildText;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -102,6 +106,8 @@ public class MainActivityGame extends ButtonUtilsActivity {
         btnAnswer = findViewById(R.id.btnAnswer);
         btnGenerate = findViewById(R.id.btnGenerate);
         btnBackWild = findViewById(R.id.btnBackWildCard);
+        btnAnswerRight = findViewById(R.id.btnGotQuizRight);
+        btnAnswerWrong = findViewById(R.id.btnGotQuizWrong);
         shuffleHandler = new Handler();
         wildText = findViewById(R.id.wild_textview);
     }
@@ -147,7 +153,8 @@ public class MainActivityGame extends ButtonUtilsActivity {
 
         btnBackWild.setVisibility(View.INVISIBLE);
         btnAnswer.setVisibility(View.INVISIBLE);
-
+        btnAnswerRight.setVisibility(View.INVISIBLE);
+        btnAnswerWrong.setVisibility(View.INVISIBLE);
 
         btnUtils.setButton(btnGenerate, this::startNumberShuffleAnimation);
         btnUtils.setButton(btnAnswer, this::showAnswer);
@@ -155,16 +162,9 @@ public class MainActivityGame extends ButtonUtilsActivity {
         btnUtils.setButton(btnBackWild, this::wildCardContinue);
 
         btnUtils.setButton(btnWild, () -> {
-            if (selectedWildCard != null && selectedWildCard.hasAnswer()) {
-                btnAnswer.setVisibility(View.VISIBLE);
-            } else {
-                btnAnswer.setVisibility(View.INVISIBLE);
-            }
-
             wildCardActivate(Game.getInstance().getCurrentPlayer());
             wildText.setVisibility(View.VISIBLE);
             btnWild.setVisibility(View.INVISIBLE);
-            btnBackWild.setVisibility(View.VISIBLE);
             btnGenerate.setVisibility(View.INVISIBLE);
             nextPlayerText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.INVISIBLE);
@@ -254,6 +254,8 @@ public class MainActivityGame extends ButtonUtilsActivity {
         wildText.setVisibility(View.INVISIBLE);
         btnBackWild.setVisibility(View.INVISIBLE);
         btnAnswer.setVisibility(View.INVISIBLE);
+        btnAnswerRight.setVisibility(View.INVISIBLE);
+        btnAnswerWrong.setVisibility(View.INVISIBLE);
     }
 
     private void wildCardActivate(Player player) {
@@ -311,6 +313,16 @@ public class MainActivityGame extends ButtonUtilsActivity {
                     wildCardType = "Null";
                     break;
             }
+
+            if (selectedType == quizProbabilities) {
+                btnAnswer.setVisibility(View.VISIBLE);
+                btnBackWild.setVisibility(View.INVISIBLE);
+            } else {
+                btnAnswer.setVisibility(View.INVISIBLE);
+                btnBackWild.setVisibility(View.VISIBLE);
+
+            }
+
 
             int enabledCardsCount = (int) Arrays.stream(selectedType)
                     .filter(WildCardHeadings::isEnabled)
@@ -406,7 +418,7 @@ public class MainActivityGame extends ButtonUtilsActivity {
                     reverseTurnOrder(player);
                     break;
                 case "Gain a couple more wildcards to use, I gotchya back!":
-                    Game.getInstance().getCurrentPlayer().gainWildCards();
+                    Game.getInstance().getCurrentPlayer().gainWildCards(3);
                     break;
                 case "Lose a couple wildcards :( oh also drink 3 lol!":
                     Game.getInstance().getCurrentPlayer().loseWildCards();
@@ -414,21 +426,29 @@ public class MainActivityGame extends ButtonUtilsActivity {
             }
         }
 
-
-
     private void showAnswer() {
         TextView wildActivityTextView = findViewById(R.id.wild_textview);
+        btnAnswerRight.setVisibility(View.VISIBLE);
+        btnAnswerWrong.setVisibility(View.VISIBLE);
+
         if (selectedWildCard != null) {
             if (selectedWildCard.hasAnswer()) {
                 String answer = selectedWildCard.getAnswer();
                 wildActivityTextView.setText(answer);
                 Log.d("Answer", "Quiz WildCard:" + answer);
 
+                btnBackWild.setVisibility(View.INVISIBLE);
+
+                btnUtils.setButton(btnAnswerRight, () -> {
+                    Game.getInstance().getCurrentPlayer().gainWildCards(1);
+                    wildCardContinue();
+                });
+
+                btnUtils.setButton(btnAnswerWrong, this::wildCardContinue);
+
             } else {
                 wildActivityTextView.setText("No answer available");
             }
-        } else {
-            wildActivityTextView.setText("No selected wild card");
         }
         btnAnswer.setVisibility(View.INVISIBLE);
     }

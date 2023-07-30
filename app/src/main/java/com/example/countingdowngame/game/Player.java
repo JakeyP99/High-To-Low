@@ -14,6 +14,8 @@ public class Player implements Serializable {
     private String name;
     private Game game;
     private int wildCardAmount;
+    private int gainWildCardAmount;
+
     private boolean selected;
 
     //-----------------------------------------------------Set Game---------------------------------------------------//
@@ -74,9 +76,10 @@ public class Player implements Serializable {
         wildCardAmount = GeneralSettingsLocalStore.fromContext(context).playerWildCardCount();
     }
 
-    public void gainWildCards() {
-            wildCardAmount = wildCardAmount + 3;
+    public void gainWildCards(int numberOfCardsToGain) {
+        wildCardAmount += numberOfCardsToGain;
     }
+
 
     public void loseWildCards() {
         wildCardAmount = Math.max(wildCardAmount - 2, 0);
