@@ -2,17 +2,19 @@ package com.example.countingdowngame;
 
 public class WildCardHeadings {
     private String activity;
-    private int probability;
+    private final int probability;
     private boolean enabled;
-    private boolean deletable;
-    private String answer;
+    private final boolean deletable;
+    private final String answer;
+    private String category; // Add the category field
 
-    public WildCardHeadings(String activity, int probability, boolean enabled, boolean deletable, String answer) {
+    public WildCardHeadings(String activity, int probability, boolean enabled, boolean deletable, String answer, String category) {
         this.activity = activity;
         this.probability = probability;
         this.enabled = enabled;
         this.deletable = deletable;
         this.answer = answer;
+        this.category = category;
     }
 
     public WildCardHeadings(String activity, int probability, boolean enabled, boolean deletable) {
@@ -21,6 +23,7 @@ public class WildCardHeadings {
         this.enabled = enabled;
         this.deletable = deletable;
         this.answer = null; // Set answer to null for wildcards without an answer
+        this.category = category;
     }
 
     public boolean isEnabled() {
@@ -43,10 +46,6 @@ public class WildCardHeadings {
         return probability;
     }
 
-    public void setProbability(int probability) {
-        this.probability = probability;
-    }
-
     public boolean isDeletable() {
         return deletable;
     }
@@ -55,10 +54,9 @@ public class WildCardHeadings {
         return answer;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
+    public String getCategory() {
+        return category;
     }
-
     public boolean hasAnswer() {
         return answer != null && !answer.isEmpty();
     }

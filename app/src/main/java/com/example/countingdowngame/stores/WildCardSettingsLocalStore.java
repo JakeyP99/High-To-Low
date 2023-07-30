@@ -48,6 +48,12 @@ public class WildCardSettingsLocalStore {
         return mPref.getString("wild_card_answer_" + index, defValue);
     }
 
+    public String getWildcardCategory(int index) {
+        return mPref.getString("wild_card_category_" + index, "");
+    }
+    public String getWildCardCategory(int index, String defValue) {
+        return mPref.getString("wild_card_category_" + index, defValue);
+    }
     public int getWildcardProbability(int index) {
         return mPref.getInt("wild_card_probability_" + index, 0);
     }
@@ -56,12 +62,13 @@ public class WildCardSettingsLocalStore {
         return mPref.getInt("wild_card_probability_" + index, defValue);
     }
 
-    public void setWildcardState(int index, Boolean enabled, String activity, int probability, String answer) {
+    public void setWildcardState(int index, Boolean enabled, String activity, int probability, String answer, String category) {
         SharedPreferences.Editor editor = mPref.edit();
         editor.putBoolean("wild_card_enabled_" + index, enabled);
         editor.putString("wild_card_activity_" + index, activity);
         editor.putInt("wild_card_probability_" + index, probability);
         editor.putString("wild_card_answer_" + index, answer);
+        editor.putString("wild_card_category_" + index, answer);
 
         editor.apply();
     }

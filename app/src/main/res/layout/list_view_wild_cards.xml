@@ -28,9 +28,9 @@
         android:layout_toEndOf="@+id/button_edit_probability"
         android:maxLines="5"
         android:paddingStart="8dp"
-        android:paddingRight="8dp"
 
-        android:text="aaaaaaaaaaaaaaaaaaaaaaaaaaTask! Name three things that should be illegal but aren't. If others agree, you're safe, if not, you take 3 drinks."
+        android:paddingRight="8dp"
+        android:text="This is test data: TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
         android:textAlignment="center"
         android:textColor="@color/bluedark" />
 
