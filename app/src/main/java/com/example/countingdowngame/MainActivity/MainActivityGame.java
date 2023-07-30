@@ -288,7 +288,7 @@ public class MainActivityGame extends ButtonUtilsActivity {
             Random random = new Random();
             int typeChance = random.nextInt(4); // Generate a random number from 0 to 3
 
-            WildCardHeadings[] selectedType = null;
+            WildCardHeadings[] selectedType;
             String wildCardType = ""; // Variable to store the type of wildcard
 
             switch (typeChance) {
@@ -320,9 +320,7 @@ public class MainActivityGame extends ButtonUtilsActivity {
             } else {
                 btnAnswer.setVisibility(View.INVISIBLE);
                 btnBackWild.setVisibility(View.VISIBLE);
-
             }
-
 
             int enabledCardsCount = (int) Arrays.stream(selectedType)
                     .filter(WildCardHeadings::isEnabled)
@@ -433,7 +431,6 @@ public class MainActivityGame extends ButtonUtilsActivity {
         btnGenerate.setVisibility(View.INVISIBLE);
         nextPlayerText.setVisibility(View.INVISIBLE);
         numberText.setVisibility(View.INVISIBLE);
-
         wildText.setText(string);
     }
 

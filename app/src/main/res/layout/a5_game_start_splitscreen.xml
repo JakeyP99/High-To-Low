@@ -122,6 +122,30 @@
         app:layout_constraintTop_toTopOf="@+id/btnWild"
         app:layout_constraintVertical_bias="0.0" />
 
+    <Button
+        android:id="@+id/btnAnswerWrong"
+        android:layout_width="115dp"
+        android:layout_height="70dp"
+        android:background="@drawable/outlineforbutton"
+        android:text="Were You Wrong?"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="18dp"
+        app:layout_constraintStart_toEndOf="@+id/btnWild"
+        app:layout_constraintTop_toTopOf="@+id/btnWild" />
+
+    <Button
+        android:id="@+id/btnAnswerRight"
+        android:layout_width="115dp"
+        android:layout_height="70dp"
+        android:background="@drawable/outlineforbutton"
+        android:text="Were You Right?"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toStartOf="@+id/btnWild"
+        app:layout_constraintTop_toTopOf="@+id/btnWild" />
+
     <ImageButton
         android:id="@+id/imageBtnExit"
         android:layout_width="54dp"
@@ -285,6 +309,35 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnWildPlayer2" />
+
+    <Button
+        android:id="@+id/btnAnswerRightPlayer2"
+        android:layout_width="115dp"
+        android:layout_height="70dp"
+        android:background="@drawable/outlineforbutton"
+        android:rotation="180"
+        android:text="Were You Right?"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toStartOf="@+id/btnWildPlayer2"
+        app:layout_constraintTop_toTopOf="@+id/btnWildPlayer2" />
+
+    <Button
+        android:id="@+id/btnAnswerWrongPlayer2"
+        android:layout_width="115dp"
+        android:layout_height="70dp"
+        android:background="@drawable/outlineforbutton"
+        android:rotation="180"
+        android:text="Were You Wrong?"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="18dp"
+
+
+        app:layout_constraintStart_toEndOf="@+id/btnWildPlayer2"
+        app:layout_constraintTop_toTopOf="@+id/btnWildPlayer2" />
+
 
     <ImageButton
         android:id="@+id/imageBtnExitPlayer2"
