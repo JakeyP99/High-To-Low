@@ -111,6 +111,16 @@ public class QuizWildCardsFragment extends WildCardsFragments {
             new WildCardHeadings("Quiz! Which country is known as the 'Land of Fire and Ice'?", 20, true, true, "Iceland", "Geography"),
             new WildCardHeadings("Quiz! What is the highest waterfall in the world?", 20, true, true, "Angel Falls", "Geography"),
             new WildCardHeadings("Quiz! Which city is located on two continents, Europe and Asia?", 20, true, true, "Istanbul", "Geography"),
+            new WildCardHeadings("Quiz! Which country is known as the 'Land of the Midnight Sun'?", 10, true, true, "Norway", "Geography"),
+            new WildCardHeadings("Quiz! What is the largest river in the world by discharge volume?", 10, true, true, "Amazon River", "Geography"),
+            new WildCardHeadings("Quiz! Which country is famous for its tulip fields and windmills?", 10, true, true, "Netherlands", "Geography"),
+            new WildCardHeadings("Quiz! What is the capital of Russia?", 10, true, true, "Moscow", "Geography"),
+            new WildCardHeadings("Quiz! Which African country is known as the 'Pearl of Africa'?", 10, true, true, "Uganda", "Geography"),
+            new WildCardHeadings("Quiz! In which mountain range is Mount Everest located?", 10, true, true, "Himalayas", "Geography"),
+            new WildCardHeadings("Quiz! What is the largest hot desert in the world?", 10, true, true, "Sahara Desert", "Geography"),
+            new WildCardHeadings("Quiz! Which country is famous for the Great Wall?", 10, true, true, "China", "Geography"),
+            new WildCardHeadings("Quiz! In which continent is the Great Barrier Reef located?", 10, true, true, "Australia", "Geography"),
+
 
 // History Quiz Questions
             new WildCardHeadings("Quiz! Who is the current Prime Minister of Japan?", 10, true, true, "Yoshihide Suga", "History"),
@@ -154,13 +164,22 @@ public class QuizWildCardsFragment extends WildCardsFragments {
             new WildCardHeadings("Quiz! In which year did the Treaty of Paris end the American Revolutionary War?", 20, true, true, "1783", "History"),
             new WildCardHeadings("Quiz! Who was the leader of the Bolshevik Party during the October Revolution?", 20, true, true, "Vladimir Lenin", "History"),
             new WildCardHeadings("Quiz! In which year did the Black Death (Bubonic Plague) spread across Europe?", 20, true, true, "1347", "History"),
+            new WildCardHeadings("Quiz! Who was the first female astronaut to travel to space?", 10, true, true, "Valentina Tereshkova", "History"),
+            new WildCardHeadings("Quiz! In which year did the Spanish conquistador Hernán Cortés conquer the Aztec Empire?", 10, true, true, "1521", "History"),
+            new WildCardHeadings("Quiz! Who was the ancient Egyptian queen who ruled alongside her husband, Pharaoh Akhenaten?", 10, true, true, "Nefertiti", "History"),
+            new WildCardHeadings("Quiz! In which year did the Battle of Waterloo take place, leading to the defeat of Napoleon Bonaparte?", 10, true, true, "1815", "History"),
+            new WildCardHeadings("Quiz! Who was the first President of the United States to be impeached?", 10, true, true, "Andrew Johnson", "History"),
+            new WildCardHeadings("Quiz! In which year did the Great Fire of London devastate the city?", 10, true, true, "1666", "History"),
+            new WildCardHeadings("Quiz! Who was the Mongol emperor who established the Yuan Dynasty in China?", 10, true, true, "Kublai Khan", "History"),
+            new WildCardHeadings("Quiz! In which year did the Suez Canal open, connecting the Mediterranean Sea to the Red Sea?", 10, true, true, "1869", "History"),
+            new WildCardHeadings("Quiz! Who was the leader of the Allied forces during World War II?", 10, true, true, "Dwight D. Eisenhower", "History"),
+            new WildCardHeadings("Quiz! In which year did the Treaty of Tordesillas divide the New World between Spain and Portugal?", 10, true, true, "1494", "History"),
+
 
 // Art/Music Quiz Questions
-            new WildCardHeadings("Quiz! Name two famous people with the same initials as yours.", 10, true, true, "Hehe you're a cutie", "Art/Music"),
             new WildCardHeadings("Quiz! How many symphonies did Ludwig van Beethoven compose?", 10, true, true, "9", "Art/Music"),
             new WildCardHeadings("Quiz! Who painted the famous artwork 'The Mona Lisa'?", 10, true, true, "Leonardo da Vinci", "Art/Music"),
             new WildCardHeadings("Quiz! Who composed the famous symphony 'Symphony No. 9'?", 10, true, true, "Ludwig van Beethoven", "Art/Music"),
-            new WildCardHeadings("Quiz! Who is the lead vocalist of the band Queen?", 10, true, true, "Freddie Mercury", "Art/Music"),
             new WildCardHeadings("Quiz! Who painted the famous artwork 'The Starry Night'?", 10, true, true, "Vincent van Gogh", "Art/Music"),
             new WildCardHeadings("Quiz! Who wrote the play 'Hamlet'?", 10, true, true, "William Shakespeare", "Art/Music"),
             new WildCardHeadings("Quiz! Who composed the famous piano composition 'Für Elise'?", 10, true, true, "Ludwig van Beethoven", "Art/Music"),
@@ -177,12 +196,10 @@ public class QuizWildCardsFragment extends WildCardsFragments {
             new WildCardHeadings("Quiz! Who painted the famous artwork 'The Birth of Venus'?", 10, true, true, "Sandro Botticelli", "Art/Music"),
             new WildCardHeadings("Quiz! Who composed the famous piano composition 'Clair de Lune'?", 10, true, true, "Claude Debussy", "Art/Music"),
             new WildCardHeadings("Quiz! Who is the author of the novel 'The Great Gatsby'?", 10, true, true, "F. Scott Fitzgerald", "Art/Music"),
-            new WildCardHeadings("Quiz! Who painted the famous artwork 'The Persistence of Memory'?", 10, true, true, "Salvador Dalí", "Art/Music"),
             new WildCardHeadings("Quiz! How many players are there on a soccer team?", 10, true, true, "11", "Art/Music"),
             new WildCardHeadings("Quiz! Who is the Greek god of the sea?", 10, true, true, "Poseidon", "Art/Music"),
             new WildCardHeadings("Quiz! How many strings does a standard violin have?", 10, true, true, "4", "Art/Music"),
             new WildCardHeadings("Quiz! Who is the lead vocalist of the band Queen?", 20, true, true, "Freddie Mercury", "Art/Music"),
-            new WildCardHeadings("Quiz! Who painted the famous artwork 'The Scream'?", 20, true, true, "Edvard Munch", "Art/Music"),
             new WildCardHeadings("Quiz! Who composed the famous opera 'Carmen'?", 20, true, true, "Georges Bizet", "Art/Music"),
             new WildCardHeadings("Quiz! Who is the lead guitarist of the band Guns N' Roses?", 20, true, true, "Slash", "Art/Music"),
             new WildCardHeadings("Quiz! Who painted the famous artwork 'Girl with a Pearl Earring'?", 20, true, true, "Johannes Vermeer", "Art/Music"),
@@ -201,6 +218,17 @@ public class QuizWildCardsFragment extends WildCardsFragments {
             new WildCardHeadings("Quiz! Who composed the famous opera 'The Marriage of Figaro'?", 20, true, true, "Wolfgang Amadeus Mozart", "Art/Music"),
             new WildCardHeadings("Quiz! Who is the lead guitarist of the band AC/DC?", 20, true, true, "Angus Young", "Art/Music"),
             new WildCardHeadings("Quiz! Who painted the famous artwork 'The Persistence of Memory'?", 20, true, true, "Salvador Dalí", "Art/Music"),
+            new WildCardHeadings("Quiz! Who is the lead singer of the band Coldplay?", 10, true, true, "Chris Martin", "Art/Music"),
+            new WildCardHeadings("Quiz! Which artist sang the song 'Crazy' and collaborated with Gnarls Barkley?", 10, true, true, "CeeLo Green", "Art/Music"),
+            new WildCardHeadings("Quiz! Who is the singer behind the hit 'Yeah!' featuring Lil Jon and Ludacris?", 10, true, true, "Usher", "Art/Music"),
+            new WildCardHeadings("Quiz! Which artist performed 'I Want It That Way' with the Backstreet Boys?", 10, true, true, "AJ McLean", "Art/Music"),
+            new WildCardHeadings("Quiz! Who is the lead vocalist of the band Coldplay, known for songs like 'Yellow' and 'Fix You'?", 10, true, true, "Chris Martin", "Art/Music"),
+            new WildCardHeadings("Quiz! Which artist released the song 'Poker Face' and is known for her unique fashion style?", 10, true, true, "Lady Gaga", "Art/Music"),
+            new WildCardHeadings("Quiz! Who is the rapper and producer behind 'Gold Digger' featuring Jamie Foxx?", 10, true, true, "Kanye West", "Art/Music"),
+            new WildCardHeadings("Quiz! Which artist performed the hit song 'Dilemma' with Kelly Rowland?", 10, true, true, "Nelly", "Art/Music"),
+            new WildCardHeadings("Quiz! Who is the British singer-songwriter behind 'Chasing Pavements' and 'Rolling in the Deep'?", 10, true, true, "Adele", "Art/Music"),
+            new WildCardHeadings("Quiz! Which artist released the song 'Hey There Delilah' and is part of the band Plain White T's?", 10, true, true, "Tom Higgenson", "Art/Music")
+
     };
 
     public QuizWildCardsFragment(Context context, WildCardsAdapter a) {
