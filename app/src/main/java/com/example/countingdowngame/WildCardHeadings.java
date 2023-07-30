@@ -6,7 +6,7 @@ public class WildCardHeadings {
     private boolean enabled;
     private final boolean deletable;
     private final String answer;
-    private String category; // Add the category field
+    private final String category; // Add the category field
 
     public WildCardHeadings(String activity, int probability, boolean enabled, boolean deletable, String answer, String category) {
         this.activity = activity;
@@ -23,7 +23,7 @@ public class WildCardHeadings {
         this.enabled = enabled;
         this.deletable = deletable;
         this.answer = null; // Set answer to null for wildcards without an answer
-        this.category = category;
+        this.category = null;
     }
 
     public boolean isEnabled() {
