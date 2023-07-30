@@ -46,6 +46,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MainActivityGame extends ButtonUtilsActivity {
+    private final boolean animationEnded = false;
+
     private final Map<Player, Set<WildCardHeadings>> usedWildCard = new HashMap<>();
     private final Set<WildCardHeadings> usedWildCards = new HashSet<>();
     private TextView numberText;
@@ -190,7 +192,6 @@ public class MainActivityGame extends ButtonUtilsActivity {
         final Random random = new Random();
         shuffleHandler.postDelayed(new Runnable() {
             int shuffleTime = 0;
-
             @Override
             public void run() {
                 int randomDigit = random.nextInt(currentNumber + 1);
@@ -198,12 +199,13 @@ public class MainActivityGame extends ButtonUtilsActivity {
 
                 shuffleTime += shuffleInterval;
 
+
                 if (shuffleTime < shuffleDuration) {
                     shuffleHandler.postDelayed(this, shuffleInterval);
                 } else {
                     numberText.setText(String.valueOf(randomDigit));
 
-                    Game.getInstance().nextNumber(MainActivityGame.this, () -> gotoGameEnd());
+                    Game.getInstance().nextNumber(MainActivityGame.this, () -> gotoGameEnd(), numberText, null);
 
                     btnGenerate.setEnabled(true);
                     btnWild.setEnabled(true);

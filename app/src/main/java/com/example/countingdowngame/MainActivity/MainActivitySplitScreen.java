@@ -234,17 +234,19 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
                 shuffleTime += shuffleInterval;
 
+
                 if (shuffleTime < shuffleDuration) {
                     shuffleHandler.postDelayed(this, shuffleInterval);
                 } else {
                     numberText.setText(String.valueOf(randomDigit));
                     numberTextPlayer2.setText(String.valueOf(randomDigit));
 
-                    Game.getInstance().nextNumber(MainActivitySplitScreen.this, () -> gotoGameEnd());
+                    Game.getInstance().nextNumber(MainActivitySplitScreen.this, () -> gotoGameEnd(), numberText, numberTextPlayer2);
 
                     btnGenerate.setEnabled(true);
-                    btnWild.setEnabled(true);
                     btnGeneratePlayer2.setEnabled(true);
+
+                    btnWild.setEnabled(true);
                     btnWildPlayer2.setEnabled(true);
                 }
             }

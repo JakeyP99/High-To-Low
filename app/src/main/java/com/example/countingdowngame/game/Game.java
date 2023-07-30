@@ -1,6 +1,11 @@
 package com.example.countingdowngame.game;
 
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.content.Context;
+import android.os.Handler;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +76,7 @@ public class Game {
         }
     }
 
-    public void nextNumber(Context context, final Runnable onEnd) {
+    public void nextNumber(Context context, final Runnable onEnd, TextView textView1, TextView textView2) {
         Random random = new Random();
         int nextNumber = random.nextInt(currentNumber + 1);
         currentNumber = nextNumber;
@@ -79,13 +84,38 @@ public class Game {
         updatedNumbers.add(nextNumber); // Add the updated number
 
         if (currentNumber == 0) {
-            endGame(context);
-            onEnd.run();
+            textView1.setText(String.valueOf(currentNumber)); // Update the textView with the new number
+            textView2.setText(String.valueOf(currentNumber)); // Update the textView with the new number
+
+            applyPulsingEffect(textView1);
+            applyPulsingEffect(textView2);
+
+
+            Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                endGame(context);
+                onEnd.run();
+            }, 2000); // Adjust the delay time (in milliseconds) as per your preference
         } else {
+            textView1.setText(String.valueOf(currentNumber)); // Update the textView with the new number
+            textView2.setText(String.valueOf(currentNumber)); // Update the textView with the new number
             nextPlayer();
         }
     }
 
+
+    private void applyPulsingEffect(TextView textView) {
+        // Apply pulsing effect to textView
+        ObjectAnimator pulseAnimation = ObjectAnimator.ofPropertyValuesHolder(
+                textView,
+                PropertyValuesHolder.ofFloat(View.SCALE_X, 1.0f, 1.2f, 1.0f),
+                PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.0f, 1.2f, 1.0f)
+        );
+        pulseAnimation.setDuration(1000); // Adjust the pulsing duration (in milliseconds) as per your preference
+        pulseAnimation.setRepeatCount(ObjectAnimator.INFINITE);
+        pulseAnimation.setRepeatMode(ObjectAnimator.REVERSE);
+        pulseAnimation.start();
+    }
 
 
     private void nextPlayer() {
