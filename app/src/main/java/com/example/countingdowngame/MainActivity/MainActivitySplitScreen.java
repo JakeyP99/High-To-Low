@@ -184,15 +184,8 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
     //-----------------------------------------------------Buttons---------------------------------------------------//
 
     private void setupButtons() {
-        btnContinue.setVisibility(View.INVISIBLE);
-        btnContinuePlayer2.setVisibility(View.INVISIBLE);
-        btnAnswer.setVisibility(View.INVISIBLE);
-        btnAnswerPlayer2.setVisibility(View.INVISIBLE);
-
-        btnAnswerRight.setVisibility(View.INVISIBLE);
-        btnAnswerRightPlayer2.setVisibility(View.INVISIBLE);
-        btnAnswerWrong.setVisibility(View.INVISIBLE);
-        btnAnswerWrongPlayer2.setVisibility(View.INVISIBLE);
+        setPairedViewsInvisible(btnContinue, btnContinuePlayer2, btnAnswer, btnAnswerPlayer2,
+                btnAnswerRight, btnAnswerRightPlayer2, btnAnswerWrong, btnAnswerWrongPlayer2);
 
         btnUtils.setButton(btnAnswer, this::showAnswer);
         btnUtils.setButton(btnAnswerPlayer2, this::showAnswer);
@@ -201,20 +194,21 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         btnUtils.setButton(btnWild, this::ButtonWildFunction);
 
         btnUtils.setButton(btnContinue, this::ButtonContinueFunction);
+        btnUtils.setButton(btnGeneratePlayer2, this::ButtonGenerateFunction);
+        btnUtils.setButton(btnWildPlayer2, this::ButtonWildFunction);
+        btnUtils.setButton(btnContinuePlayer2, this::ButtonContinueFunction);
 
         imageButtonExit.setOnClickListener(view -> {
             Game.getInstance().endGame(this);
             gotoHomeScreen();
         });
 
-        btnUtils.setButton(btnGeneratePlayer2, this::ButtonGenerateFunction);
-        btnUtils.setButton(btnWildPlayer2, this::ButtonWildFunction);
-        btnUtils.setButton(btnContinuePlayer2, this::ButtonContinueFunction);
         imageButtonExitPlayer2.setOnClickListener(view -> {
             Game.getInstance().endGame(this);
             gotoHomeScreen();
         });
     }
+
     //-----------------------------------------------------Button Shuffling---------------------------------------------------//
 
     private void startNumberShuffleAnimation() {
@@ -279,16 +273,10 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
                 Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                 playerImage.setImageBitmap(decodedBitmap);
                 playerImagePlayer2.setImageBitmap(decodedBitmap);
-
             }
         }
-        if (currentPlayer.getWildCardAmount() > 0) {
-            btnWild.setVisibility(View.VISIBLE);
-            btnWildPlayer2.setVisibility(View.VISIBLE);
-        } else {
-            btnWild.setVisibility(View.INVISIBLE);
-            btnWildPlayer2.setVisibility(View.INVISIBLE);
-        }
+
+        setPairedViewsVisible(nextPlayerText, nextPlayerTextPlayer2, numberText, numberTextPlayer2);
 
         int currentNumber = Game.getInstance().getCurrentNumber();
         numberText.setText(String.valueOf(currentNumber));
@@ -300,6 +288,11 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         SharedMainActivity.setNameSizeBasedOnInt(nextPlayerText, nextPlayerText.getText().toString());
         SharedMainActivity.setNameSizeBasedOnInt(nextPlayerTextPlayer2, nextPlayerTextPlayer2.getText().toString());
 
+        if (currentPlayer.getWildCardAmount() > 0) {
+            setPairedViewsVisible(btnWild, btnWildPlayer2);
+        } else {
+            setPairedViewsInvisible(btnWild, btnWildPlayer2);
+        }
     }
 
     //-----------------------------------------------------Wild Card, and Skip Functionality---------------------------------------------------//
@@ -362,17 +355,13 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
             }
 
             if (selectedType == quizProbabilities) {
-                btnAnswer.setVisibility(View.VISIBLE);
-                btnAnswerPlayer2.setVisibility(View.VISIBLE);
+                setPairedViewsVisible(btnAnswer, btnAnswerPlayer2);
+                setPairedViewsInvisible(btnContinue, btnContinuePlayer2);
 
-                btnContinue.setVisibility(View.INVISIBLE);
-                btnContinuePlayer2.setVisibility(View.INVISIBLE);
             } else {
-                btnAnswer.setVisibility(View.INVISIBLE);
-                btnAnswerPlayer2.setVisibility(View.INVISIBLE);
 
-                btnContinue.setVisibility(View.VISIBLE);
-                btnContinuePlayer2.setVisibility(View.VISIBLE);
+                setPairedViewsInvisible(btnAnswer, btnAnswerPlayer2);
+                setPairedViewsVisible(btnContinue, btnContinuePlayer2);
             }
 
             int enabledCardsCount = (int) Arrays.stream(selectedType)
@@ -480,13 +469,8 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
     //-----------------------------------------------------Button Functionality---------------------------------------------------//
 
     private void ButtonGenerateFunction() {
-        wildText.setVisibility(View.INVISIBLE);
-        numberText.setVisibility(View.VISIBLE);
-        nextPlayerText.setVisibility(View.VISIBLE);
-
-        wildTextPlayer2.setVisibility(View.INVISIBLE);
-        numberTextPlayer2.setVisibility(View.VISIBLE);
-        nextPlayerTextPlayer2.setVisibility(View.VISIBLE);
+        setPairedViewsInvisible(wildText, wildTextPlayer2);
+        setPairedViewsVisible(numberText, numberTextPlayer2, nextPlayerText, nextPlayerTextPlayer2);
         startNumberShuffleAnimation();
     }
 
@@ -494,93 +478,38 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         wildCardActivate(Game.getInstance().getCurrentPlayer());
 
         if (selectedWildCard != null && selectedWildCard.hasAnswer()) {
-            btnAnswer.setVisibility(View.VISIBLE);
-            btnAnswerPlayer2.setVisibility(View.VISIBLE);
-
+            setPairedViewsVisible(btnAnswer, btnAnswerPlayer2);
         } else {
-            btnAnswer.setVisibility(View.INVISIBLE);
-            btnAnswerPlayer2.setVisibility(View.INVISIBLE);
-
+            setPairedViewsInvisible(btnAnswer, btnAnswerPlayer2);
         }
-        btnWild.setVisibility(View.INVISIBLE);
-        btnWildPlayer2.setVisibility(View.INVISIBLE);
 
-        wildText.setVisibility(View.VISIBLE);
-        wildTextPlayer2.setVisibility(View.VISIBLE);
+        setPairedViewsInvisible(btnWild, btnWildPlayer2, btnGenerate, btnGeneratePlayer2, numberText, numberTextPlayer2, nextPlayerText, nextPlayerTextPlayer2, playerImage, playerImagePlayer2);
 
-        btnGenerate.setVisibility(View.INVISIBLE);
-        btnGeneratePlayer2.setVisibility(View.INVISIBLE);
-
-        numberText.setVisibility(View.INVISIBLE);
-        numberTextPlayer2.setVisibility(View.INVISIBLE);
-
-        nextPlayerText.setVisibility(View.INVISIBLE);
-        nextPlayerTextPlayer2.setVisibility(View.INVISIBLE);
-
-        playerImage.setVisibility(View.INVISIBLE);
-        playerImagePlayer2.setVisibility(View.INVISIBLE);
-
+        setPairedViewsVisible(wildText, wildTextPlayer2);
     }
 
     private void ButtonContinueFunction() {
-        btnContinue.setVisibility(View.INVISIBLE);
-        btnContinuePlayer2.setVisibility(View.INVISIBLE);
+        setPairedViewsInvisible(btnContinue, btnContinuePlayer2, btnAnswer, btnAnswerPlayer2, btnAnswerRight, btnAnswerRightPlayer2, btnAnswerWrong, btnAnswerWrongPlayer2, wildText, wildTextPlayer2);
 
-        btnGenerate.setVisibility(View.VISIBLE);
-        btnGeneratePlayer2.setVisibility(View.VISIBLE);
+        setPairedViewsVisible(btnGenerate, btnGeneratePlayer2, numberText, numberTextPlayer2, playerImage, playerImagePlayer2, nextPlayerText, nextPlayerTextPlayer2);
 
-        btnAnswer.setVisibility(View.INVISIBLE);
-        btnAnswerPlayer2.setVisibility(View.INVISIBLE);
-
-        btnAnswerRight.setVisibility(View.INVISIBLE);
-        btnAnswerRightPlayer2.setVisibility(View.INVISIBLE);
-
-        btnAnswerWrong.setVisibility(View.INVISIBLE);
-        btnAnswerWrongPlayer2.setVisibility(View.INVISIBLE);
-
-        wildText.setVisibility(View.INVISIBLE);
-        wildTextPlayer2.setVisibility(View.INVISIBLE);
-
-        numberText.setVisibility(View.VISIBLE);
-        numberTextPlayer2.setVisibility(View.VISIBLE);
-
-        playerImage.setVisibility(View.VISIBLE);
-        playerImagePlayer2.setVisibility(View.VISIBLE);
-
-        nextPlayerText.setVisibility(View.VISIBLE);
-        nextPlayerTextPlayer2.setVisibility(View.VISIBLE);
         Game.getInstance().getCurrentPlayer().useSkip();
-
     }
 
-    private void quizAnswerView(String string){
-        btnContinue.setVisibility(View.VISIBLE);
-        wildText.setVisibility(View.VISIBLE);
-        btnWild.setVisibility(View.INVISIBLE);
-        btnGenerate.setVisibility(View.INVISIBLE);
-        nextPlayerText.setVisibility(View.INVISIBLE);
-        numberText.setVisibility(View.INVISIBLE);
+    private void quizAnswerView(String string) {
+        setPairedViewsVisible(btnContinue, btnContinuePlayer2, wildText, wildTextPlayer2);
+        setPairedViewsInvisible(btnWild, btnWildPlayer2, btnGenerate, btnGeneratePlayer2, nextPlayerText, nextPlayerTextPlayer2, numberText, numberTextPlayer2);
+
         wildText.setText(string);
-
-        btnContinuePlayer2.setVisibility(View.VISIBLE);
-        wildTextPlayer2.setVisibility(View.VISIBLE);
-        btnWildPlayer2.setVisibility(View.INVISIBLE);
-        btnGeneratePlayer2.setVisibility(View.INVISIBLE);
-        nextPlayerTextPlayer2.setVisibility(View.INVISIBLE);
-        numberTextPlayer2.setVisibility(View.INVISIBLE);
         wildTextPlayer2.setText(string);
-
     }
+
 
     private void showAnswer() {
         TextView wildActivityTextView = findViewById(R.id.wild_textview);
         TextView wildActivityTextViewPlayer2 = findViewById(R.id.wild_textviewPlayer2);
 
-        btnAnswerRight.setVisibility(View.VISIBLE);
-        btnAnswerRightPlayer2.setVisibility(View.VISIBLE);
-
-        btnAnswerWrong.setVisibility(View.VISIBLE);
-        btnAnswerWrongPlayer2.setVisibility(View.VISIBLE);
+        setPairedViewsVisible(btnAnswerRight, btnAnswerRightPlayer2, btnAnswerWrong, btnAnswerWrongPlayer2);
 
         if (selectedWildCard != null) {
             if (selectedWildCard.hasAnswer()) {
@@ -590,42 +519,43 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
 
                 Log.d("Answer", "Quiz WildCard:" + answer);
 
-                btnContinue.setVisibility(View.INVISIBLE);
-                btnContinuePlayer2.setVisibility(View.INVISIBLE);
-
+                setPairedViewsInvisible(btnContinue, btnContinuePlayer2);
                 btnUtils.setButton(btnAnswerRight, this::quizAnswerRight);
                 btnUtils.setButton(btnAnswerRightPlayer2, this::quizAnswerRight);
-
-
                 btnUtils.setButton(btnAnswerWrong, this::quizAnswerWrong);
                 btnUtils.setButton(btnAnswerWrongPlayer2, this::quizAnswerWrong);
 
             } else {
                 wildActivityTextView.setText("No answer available");
                 wildActivityTextViewPlayer2.setText("No answer available");
-
             }
         }
-        btnAnswer.setVisibility(View.INVISIBLE);
-        btnAnswerPlayer2.setVisibility(View.INVISIBLE);
+
+        setPairedViewsInvisible(btnAnswer, btnAnswerPlayer2);
     }
 
-    private void quizAnswerRight ()
-    {
+    private void quizAnswerRight() {
         Game.getInstance().getCurrentPlayer().gainWildCards(1);
-        btnAnswerRight.setVisibility(View.INVISIBLE);
-        btnAnswerRightPlayer2.setVisibility(View.INVISIBLE);
-        btnAnswerWrong.setVisibility(View.INVISIBLE);
-        btnAnswerWrongPlayer2.setVisibility(View.INVISIBLE);
+        setPairedViewsInvisible(btnAnswerRight, btnAnswerRightPlayer2, btnAnswerWrong, btnAnswerWrongPlayer2);
         quizAnswerView("Since you got it right, give out a drink! \n\n P.S. You get to keep your wildcard too.");
     }
 
-    private void quizAnswerWrong ()
-    {
-        btnAnswerRight.setVisibility(View.INVISIBLE);
-        btnAnswerRightPlayer2.setVisibility(View.INVISIBLE);
-        btnAnswerWrong.setVisibility(View.INVISIBLE);
-        btnAnswerWrongPlayer2.setVisibility(View.INVISIBLE);
+
+    private void quizAnswerWrong() {
+        setPairedViewsInvisible(btnAnswerRight, btnAnswerRightPlayer2, btnAnswerWrong, btnAnswerWrongPlayer2);
         quizAnswerView("Since you got it wrong, take a drink! \n\n P.S. Maybe read a book once in a while.");
     }
+
+    private void setPairedViewsInvisible(View... views) {
+        for (View view : views) {
+            view.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void setPairedViewsVisible(View... views) {
+        for (View view : views) {
+            view.setVisibility(View.VISIBLE);
+        }
+    }
+
 }
