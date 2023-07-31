@@ -286,35 +286,69 @@ public class MainActivityGame extends ButtonUtilsActivity {
         Set<WildCardHeadings> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
 
         if (wildCardsEnabled) {
-            Random random = new Random();
-            int typeChance = random.nextInt(4); // Generate a random number from 0 to 3
-
-            WildCardHeadings[] selectedType;
+            WildCardHeadings[] selectedType = new WildCardHeadings[0];
             String wildCardType = ""; // Variable to store the type of wildcard
+            boolean foundWildCardType = false;
+            Random random = new Random();
 
-            switch (typeChance) {
-                case 0:
-                    selectedType = quizProbabilities;
-                    wildCardType = "Quiz";
-                    break;
-                case 1:
-                    selectedType = taskProbabilities;
-                    wildCardType = "Task";
-                    break;
-                case 2:
-                    selectedType = truthProbabilities;
-                    wildCardType = "Truth";
-                    break;
-                case 3:
-                    selectedType = extraProbabilities;
-                    wildCardType = "Extras";
-                    break;
-                default:
-                    selectedType = null; // Set selectedType to null when the case is not 0, 1, 2, or 3
-                    wildCardType = "Null";
-                    break;
+            int quizProbabilitiesCount = (int) Arrays.stream(quizProbabilities)
+                    .filter(WildCardHeadings::isEnabled)
+                    .count();
+
+            int taskProbabilitiesCount = (int) Arrays.stream(taskProbabilities)
+                    .filter(WildCardHeadings::isEnabled)
+                    .count();
+
+            int truthProbabilitiesCount = (int) Arrays.stream(truthProbabilities)
+                    .filter(WildCardHeadings::isEnabled)
+                    .count();
+
+            int extraProbabilitiesCount = (int) Arrays.stream(extraProbabilities)
+                    .filter(WildCardHeadings::isEnabled)
+                    .count();
+
+            if (quizProbabilitiesCount == 0 && taskProbabilitiesCount == 0 && truthProbabilitiesCount == 0 && extraProbabilitiesCount == 0) {
+                foundWildCardType = true;
             }
+            while (!foundWildCardType) {
+                int typeChance = random.nextInt(4); // Generate a random number from 0 to 3
+                switch (typeChance) {
+                    case 0:
+                        if (quizProbabilitiesCount > 0) {
+                            selectedType = quizProbabilities;
+                            wildCardType = "Quiz";
+                            foundWildCardType = true;
+                        }
+                        break;
+                    case 1:
+                        if (taskProbabilitiesCount > 0) {
+                            selectedType = taskProbabilities;
+                            wildCardType = "Task";
+                            foundWildCardType = true;
+                        }
+                        break;
+                    case 2:
+                        if (truthProbabilitiesCount > 0) {
+                            selectedType = truthProbabilities;
+                            wildCardType = "Truth";
+                            foundWildCardType = true;
+                        }
+                        break;
+                    case 3:
+                        if (extraProbabilitiesCount > 0) {
+                            selectedType = extraProbabilities;
+                            wildCardType = "Extras";
+                            foundWildCardType = true;
+                        }
+                        break;
+                    default:
+                        selectedType = null;
+                        wildCardType = "Null";
+                        foundWildCardType = true;
+                        break;
+                }
 
+            }
             if (selectedType == quizProbabilities) {
                 btnAnswer.setVisibility(View.VISIBLE);
                 btnBackWild.setVisibility(View.INVISIBLE);

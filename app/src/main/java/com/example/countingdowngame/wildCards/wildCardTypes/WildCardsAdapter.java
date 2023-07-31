@@ -108,7 +108,6 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
         holder.bind(wildcard);
     }
 
-
     @Override
     public int getItemCount() {
         return wildCards.length;

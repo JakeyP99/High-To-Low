@@ -15,7 +15,8 @@
         android:background="@drawable/outlineforbutton"
         android:text="Edit"
         android:textAllCaps="false"
-        android:textColor="@color/bluedark" />
+        android:textColor="@color/bluedark"
+        android:visibility="visible"/>
 
 
     <TextView
@@ -27,10 +28,9 @@
         android:layout_toStartOf="@+id/switch_wildcard"
         android:layout_toEndOf="@+id/button_edit_probability"
         android:maxLines="5"
-
         android:paddingStart="8dp"
         android:paddingRight="8dp"
-        android:text="This is test data: TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
+        android:text="This is test data: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
         android:textAlignment="center"
         android:textColor="@color/bluedark" />
 
