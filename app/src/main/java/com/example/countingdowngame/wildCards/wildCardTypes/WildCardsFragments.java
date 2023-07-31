@@ -15,7 +15,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.wildCards.WildCardHeadings;
+import com.example.countingdowngame.wildCards.WildCardProperties;
 
 public class WildCardsFragments extends Fragment {
 
@@ -31,8 +31,8 @@ public class WildCardsFragments extends Fragment {
     protected void toggleAllWildCards() {
         boolean allEnabled = adapter.areAllEnabled();
 
-        WildCardHeadings[] wildCards = adapter.getWildCards();
-        for (WildCardHeadings wildcard : wildCards) {
+        WildCardProperties[] wildCards = adapter.getWildCards();
+        for (WildCardProperties wildcard : wildCards) {
             wildcard.setEnabled(!allEnabled);
         }
 
@@ -80,7 +80,7 @@ public class WildCardsFragments extends Fragment {
                 return;
             }
 
-            WildCardHeadings newWildCard = new WildCardHeadings(text, probability, true, true, text, text);
+            WildCardProperties newWildCard = new WildCardProperties(text, probability, true, true, text, text);
 
             saveNewWildCard(newWildCard);
 
@@ -93,7 +93,7 @@ public class WildCardsFragments extends Fragment {
     }
 
 
-    protected void saveNewWildCard(WildCardHeadings wildcard) {
+    protected void saveNewWildCard(WildCardProperties wildcard) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         int count = sharedPreferences.getInt("wildcard_count", 0);
         int newCount = count + 1;
@@ -109,14 +109,14 @@ public class WildCardsFragments extends Fragment {
 
         int count = sharedPreferences.getInt("wildcard_count", 0);
 
-        WildCardHeadings[] newWildCards = new WildCardHeadings[count];
+        WildCardProperties[] newWildCards = new WildCardProperties[count];
 
         for (int i = 0; i < count; i++) {
             String text = sharedPreferences.getString("wildcard_text_" + (i + 1), "");
             String answer = sharedPreferences.getString("wildcard_text_" + (i + 1), "");
             int probability = sharedPreferences.getInt("wildcard_probability_" + (i + 1), 10);
             String category = sharedPreferences.getString("wildcard_text_" + (i + 1), "");
-            newWildCards[i] = new WildCardHeadings(text, probability, true, true, answer, category);
+            newWildCards[i] = new WildCardProperties(text, probability, true, true, answer, category);
         }
 
         adapter.setWildCards(newWildCards);

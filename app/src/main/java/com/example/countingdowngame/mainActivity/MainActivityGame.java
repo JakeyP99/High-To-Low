@@ -20,7 +20,7 @@ import com.example.countingdowngame.game.GameEventType;
 import com.example.countingdowngame.game.Player;
 import com.example.countingdowngame.stores.PlayerModelLocalStore;
 import com.example.countingdowngame.utils.AudioManager;
-import com.example.countingdowngame.wildCards.WildCardHeadings;
+import com.example.countingdowngame.wildCards.WildCardProperties;
 import com.example.countingdowngame.wildCards.WildCardType;
 import com.example.countingdowngame.wildCards.wildCardTypes.ExtrasWildCardsAdapter;
 import com.example.countingdowngame.wildCards.wildCardTypes.QuizWildCardsAdapter;
@@ -41,8 +41,8 @@ import java.util.stream.Collectors;
 
 public class MainActivityGame extends SharedMainActivity {
     private final boolean animationEnded = false;
-    private final Map<Player, Set<WildCardHeadings>> usedWildCard = new HashMap<>();
-    private final Set<WildCardHeadings> usedWildCards = new HashSet<>();
+    private final Map<Player, Set<WildCardProperties>> usedWildCard = new HashMap<>();
+    private final Set<WildCardProperties> usedWildCards = new HashSet<>();
     private TextView numberText;
     private TextView nextPlayerText;
     private Button btnAnswer;
@@ -55,7 +55,7 @@ public class MainActivityGame extends SharedMainActivity {
     private boolean doubleBackToExitPressedOnce = false;
     private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
     private Handler shuffleHandler;
-    private WildCardHeadings selectedWildCard; // Declare selectedWildCard at a higher level
+    private WildCardProperties selectedWildCard; // Declare selectedWildCard at a higher level
     private TextView wildText;
 
     @Override
@@ -254,18 +254,18 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void wildCardActivate(Player player) {
         Game.getInstance().getCurrentPlayer().useWildCard();
-        WildCardHeadings[] emptyProbabilitiesArray = new WildCardHeadings[0];
+        WildCardProperties[] emptyProbabilitiesArray = new WildCardProperties[0];
         QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.QUIZ);
         TaskWildCardsAdapter taskAdapter = new TaskWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.TASK);
         TruthWildCardsAdapter truthAdapter = new TruthWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.TRUTH);
         ExtrasWildCardsAdapter extraAdapter = new ExtrasWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.EXTRAS);
 
-        WildCardHeadings[] quizProbabilities = quizAdapter.loadWildCardProbabilitiesFromStorage(WildCardData.QUIZ_WILD_CARDS);
-        WildCardHeadings[] taskProbabilities = taskAdapter.loadWildCardProbabilitiesFromStorage(WildCardData.TASK_WILD_CARDS);
-        WildCardHeadings[] truthProbabilities = truthAdapter.loadWildCardProbabilitiesFromStorage(WildCardData.TRUTH_WILD_CARDS);
-        WildCardHeadings[] extraProbabilities = extraAdapter.loadWildCardProbabilitiesFromStorage(WildCardData.EXTRA_WILD_CARDS);
+        WildCardProperties[] quizProbabilities = quizAdapter.loadWildCardProbabilitiesFromStorage(WildCardData.QUIZ_WILD_CARDS);
+        WildCardProperties[] taskProbabilities = taskAdapter.loadWildCardProbabilitiesFromStorage(WildCardData.TASK_WILD_CARDS);
+        WildCardProperties[] truthProbabilities = truthAdapter.loadWildCardProbabilitiesFromStorage(WildCardData.TRUTH_WILD_CARDS);
+        WildCardProperties[] extraProbabilities = extraAdapter.loadWildCardProbabilitiesFromStorage(WildCardData.EXTRA_WILD_CARDS);
 
-        List<WildCardHeadings> allProbabilities = new ArrayList<>();
+        List<WildCardProperties> allProbabilities = new ArrayList<>();
         allProbabilities.addAll(Arrays.asList(quizProbabilities));
         allProbabilities.addAll(Arrays.asList(taskProbabilities));
         allProbabilities.addAll(Arrays.asList(truthProbabilities));
@@ -276,28 +276,28 @@ public class MainActivityGame extends SharedMainActivity {
         boolean wildCardsEnabled = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("wild_cards_toggle", true);
 
         String selectedActivity = null;
-        Set<WildCardHeadings> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
+        Set<WildCardProperties> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
 
         if (wildCardsEnabled) {
-            WildCardHeadings[] selectedType = new WildCardHeadings[0];
+            WildCardProperties[] selectedType = new WildCardProperties[0];
             String wildCardType = ""; // Variable to store the type of wildcard
             boolean foundWildCardType = false;
             Random random = new Random();
 
             int quizProbabilitiesCount = (int) Arrays.stream(quizProbabilities)
-                    .filter(WildCardHeadings::isEnabled)
+                    .filter(WildCardProperties::isEnabled)
                     .count();
 
             int taskProbabilitiesCount = (int) Arrays.stream(taskProbabilities)
-                    .filter(WildCardHeadings::isEnabled)
+                    .filter(WildCardProperties::isEnabled)
                     .count();
 
             int truthProbabilitiesCount = (int) Arrays.stream(truthProbabilities)
-                    .filter(WildCardHeadings::isEnabled)
+                    .filter(WildCardProperties::isEnabled)
                     .count();
 
             int extraProbabilitiesCount = (int) Arrays.stream(extraProbabilities)
-                    .filter(WildCardHeadings::isEnabled)
+                    .filter(WildCardProperties::isEnabled)
                     .count();
 
             if (quizProbabilitiesCount == 0 && taskProbabilitiesCount == 0 && truthProbabilitiesCount == 0 && extraProbabilitiesCount == 0) {
@@ -351,7 +351,7 @@ public class MainActivityGame extends SharedMainActivity {
             }
 
             int enabledCardsCount = (int) Arrays.stream(selectedType)
-                    .filter(WildCardHeadings::isEnabled)
+                    .filter(WildCardProperties::isEnabled)
                     .count();
 
             Log.d("SelectedTypeEnabledCount", "SelectedType Enabled Count: " + enabledCardsCount);
@@ -362,24 +362,24 @@ public class MainActivityGame extends SharedMainActivity {
                 return;
             }
 
-            List<WildCardHeadings> unusedCards = Arrays.stream(selectedType)
-                    .filter(WildCardHeadings::isEnabled)
+            List<WildCardProperties> unusedCards = Arrays.stream(selectedType)
+                    .filter(WildCardProperties::isEnabled)
                     .filter(c -> !usedWildCards.contains(c))
                     .collect(Collectors.toList());
 
             // Calculate the total probabilities within the selected type
             int totalTypeProbabilities = unusedCards.stream()
-                    .mapToInt(WildCardHeadings::getProbability)
+                    .mapToInt(WildCardProperties::getProbability)
                     .sum();
 
             // Generate a random number within the total probabilities
             int selectedIndex = random.nextInt(totalTypeProbabilities);
 
             // Select the wildcard based on the random number and its probability
-            WildCardHeadings selectedCard = null;
+            WildCardProperties selectedCard = null;
             int cumulativeProbability = 0;
 
-            for (WildCardHeadings card : unusedCards) {
+            for (WildCardProperties card : unusedCards) {
                 cumulativeProbability += card.getProbability();
 
                 if (selectedIndex < cumulativeProbability) {

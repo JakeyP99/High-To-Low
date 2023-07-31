@@ -13,6 +13,7 @@ import com.example.countingdowngame.instructions.InstructionsToPlay;
 import com.example.countingdowngame.mainActivity.HomeScreen;
 import com.example.countingdowngame.mainActivity.NumberChoice;
 import com.example.countingdowngame.mainActivity.PlayerNumberChoice;
+import com.example.countingdowngame.mainActivity.SettingsContainer;
 
 public class ButtonUtilsActivity extends AppCompatActivity {
 

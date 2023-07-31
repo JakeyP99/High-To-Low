@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.text.Html;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -18,19 +19,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.stores.WildCardSettingsLocalStore;
-import com.example.countingdowngame.wildCards.WildCardHeadings;
+import com.example.countingdowngame.wildCards.WildCardProperties;
 import com.example.countingdowngame.wildCards.WildCardType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAdapter.WildCardViewHolder> {
-    protected WildCardHeadings[] wildCards;
+    protected WildCardProperties[] wildCards;
     protected Context mContext;
     protected WildCardType mMode;
     private final String mSaveKey;
 
-    public WildCardsAdapter(String saveKey, WildCardHeadings[] wildCards, Context context, WildCardType mode) {
+    public WildCardsAdapter(String saveKey, WildCardProperties[] wildCards, Context context, WildCardType mode) {
         this.wildCards = wildCards;
         this.mContext = context;
         this.mMode = mode;
@@ -38,7 +39,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
         loadWildCardProbabilitiesFromStorage(wildCards);
     }
 
-    public WildCardHeadings[] loadWildCardProbabilitiesFromStorage(WildCardHeadings[] defaultWildCards) {
+    public WildCardProperties[] loadWildCardProbabilitiesFromStorage(WildCardProperties[] defaultWildCards) {
         var prefs = WildCardSettingsLocalStore.fromContext(mContext, mSaveKey);
         int wildCardCount = prefs.getWildCardQuantity();
 
@@ -47,12 +48,12 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
             wildCards = defaultWildCards;
         }
 
-        WildCardHeadings[] loadedWildCards = new WildCardHeadings[wildCardCount];
+        WildCardProperties[] loadedWildCards = new WildCardProperties[wildCardCount];
 
         for (int i = 0; i < wildCardCount; i++) {
             boolean inBounds = (i >= 0) && (i < wildCards.length);
 
-            WildCardHeadings card = null;
+            WildCardProperties card = null;
 
             if (inBounds) {
                 card = wildCards[i];
@@ -80,7 +81,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
 
             }
 
-            loadedWildCards[i] = new WildCardHeadings(activity, probability, enabled, true, answer, category);
+            loadedWildCards[i] = new WildCardProperties(activity, probability, enabled, true, answer, category);
         }
 
         wildCards = loadedWildCards;
@@ -89,12 +90,12 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
     }
 
 
-    public void setWildCards(WildCardHeadings[] wildCards) {
+    public void setWildCards(WildCardProperties[] wildCards) {
         this.wildCards = wildCards;
     }
 
     public boolean areAllEnabled() {
-        for (WildCardHeadings wildcard : wildCards) {
+        for (WildCardProperties wildcard : wildCards) {
             if (!wildcard.isEnabled()) {
                 return false;
             }
@@ -104,7 +105,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
 
     @Override
     public void onBindViewHolder(@NonNull WildCardViewHolder holder, int position) {
-        WildCardHeadings wildcard = wildCards[position];
+        WildCardProperties wildcard = wildCards[position];
         holder.bind(wildcard);
     }
 
@@ -114,20 +115,29 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
     }
 
 
-    public WildCardHeadings[] getWildCards() {
+    public WildCardProperties[] getWildCards() {
         return wildCards;
     }
 
 
-    public void saveWildCardProbabilitiesToStorage(WildCardHeadings[] probabilities) {
+    public void saveWildCardProbabilitiesToStorage(WildCardProperties[] probabilities) {
         wildCards = probabilities;
 
         var prefs = WildCardSettingsLocalStore.fromContext(mContext, mSaveKey);
         prefs.setWildCardQuantity(probabilities.length);
 
         for (int i = 0; i < probabilities.length; i++) {
-            WildCardHeadings probability = probabilities[i];
-            prefs.setWildcardState(i, probability.isEnabled(), probability.getText(), probability.getProbability(), probability.getAnswer(), probability.getCategory());
+            WildCardProperties probability = probabilities[i];
+
+            if (probability.hasAnswer()) {
+                prefs.setWildcardState(i, probability.isEnabled(), probability.getText(), probability.getProbability(), probability.getAnswer(), probability.getCategory());
+                Log.d("SaveWildCard", "Saving Wild Card at position " + i + ": " + probability.getText() +  ", probability=" + probability.getProbability() + ", isEnabled=" + probability.isEnabled() + ", answer=" + probability.getAnswer() + ", category=" + probability.getCategory());
+
+            }
+            else {
+                prefs.setWildcardState(i, probability.isEnabled(), probability.getText(), probability.getProbability());
+                Log.d("SaveWildCard", "Saving Wild Card at position " + i + ": " + probability.getText() +  ", probability=" + probability.getProbability() + ", isEnabled=" + probability.isEnabled());
+            }
         }
 
     }
@@ -144,7 +154,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
             switchEnabled = itemView.findViewById(R.id.switch_wildcard);
         }
 
-        public void bind(WildCardHeadings wildcard) {
+        public void bind(WildCardProperties wildcard) {
             textViewTitle.setText(wildcard.getText());
             switchEnabled.setChecked(wildcard.isEnabled());
 
@@ -154,6 +164,8 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
             });
 
             editButton.setOnClickListener(v -> {
+                final EditText wildCardTextInput = new EditText(mContext);
+                final EditText answerWildCardTextInput = new EditText(mContext);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                 View customTitleView = LayoutInflater.from(mContext).inflate(R.layout.layout_dialog_title, null);
@@ -169,46 +181,73 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
                 int paddingInPx = (int) (paddingInDp * density);
                 layout.setPadding(paddingInPx, paddingInPx, paddingInPx, paddingInPx);
 
+                layout.addView(wildCardTextInput);
 
-                final EditText textInput = new EditText(mContext);
-                textInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-                textInput.setLines(6); // Set the number of lines to accommodate the wildcard text
-                textInput.setMinLines(2); // Set the minimum number of lines
-                textInput.setMaxLines(8); // Set the maximum number of lines
-                textInput.setVerticalScrollBarEnabled(true);
-                textInput.setText(wildcard.getText());
-                layout.addView(textInput);
+                if (wildcard.getAnswer() !=null)
+                {
+                    answerWildCardTextInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                    answerWildCardTextInput.setLines(6);
+                    answerWildCardTextInput.setMinLines(2);
+                    answerWildCardTextInput.setMaxLines(8);
+                    answerWildCardTextInput.setVerticalScrollBarEnabled(true);
+                    answerWildCardTextInput.setText(wildcard.getAnswer());
+                    layout.addView(answerWildCardTextInput);
+                }
+
+                wildCardTextInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                wildCardTextInput.setLines(6); // Set the number of lines to accommodate the wildcard text
+                wildCardTextInput.setMinLines(2); // Set the minimum number of lines
+                wildCardTextInput.setMaxLines(8); // Set the maximum number of lines
+                wildCardTextInput.setVerticalScrollBarEnabled(true);
+                wildCardTextInput.setText(wildcard.getText());
 
                 builder.setView(layout);
 
                 builder.setNegativeButton(Html.fromHtml("<font color='" + R.color.bluedark + "'>Cancel</font>"), (dialog, which) -> dialog.cancel());
 
-                ArrayList<WildCardHeadings> wildCardList = new ArrayList<>(Arrays.asList(wildCards));
+                ArrayList<WildCardProperties> wildCardList = new ArrayList<>(Arrays.asList(wildCards));
                 if (wildcard.isDeletable()) {
                     builder.setNeutralButton(Html.fromHtml("<font color='" + R.color.bluedark + "'>Delete</font>"), (dialog, which) -> {
                         wildCardList.remove(getAdapterPosition());
-                        wildCards = wildCardList.toArray(new WildCardHeadings[0]);
+                        wildCards = wildCardList.toArray(new WildCardProperties[0]);
                         notifyDataSetChanged();
                         saveWildCardProbabilitiesToStorage(wildCards);
                     });
                 }
 
                 builder.setPositiveButton(Html.fromHtml("<font color='" + R.color.bluedark + "'>OK</font>"), (dialog, which) -> {
-                    String inputText = textInput.getText().toString().trim();
-                    if (wildcard.isDeletable() && inputText.isEmpty()) {
-                        Toast.makeText(mContext, "The wildcard needs some text, please and thanks!", Toast.LENGTH_SHORT).show();
-                        return;
+                    String inputText = wildCardTextInput.getText().toString().trim();
+                    String inputAnswer = answerWildCardTextInput.getText().toString().trim();
+
+
+                    if (!wildcard.hasAnswer()) {
+                        if (inputText.isEmpty()) {
+                            Toast.makeText(mContext, "The wildcard needs some text, please and thanks!", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if (wildCardTextInput.length() > 130) {
+                            Toast.makeText(mContext, "Sorry, way too big of a wildcard boss man, limited to 130 characters.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                            wildcard.setText(inputText);
+                            textViewTitle.setText(wildcard.getText());
                     }
 
-                    if (textInput.length() > 130) {
-                        Toast.makeText(mContext, "Sorry, way too big of a wildcard boss man, limited to 130 characters.", Toast.LENGTH_SHORT).show();
-                        return;
+                    if (wildcard.hasAnswer()) {
+                        if (inputText.isEmpty() | inputAnswer.isEmpty()) {
+                            Toast.makeText(mContext, "The wildcard needs some text in both the question and answer, please and thanks!", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        if (wildCardTextInput.length() > 130 |answerWildCardTextInput.length() >130) {
+                            Toast.makeText(mContext, "Sorry, way too big of a wildcard boss man, limited to 130 characters for the questions or answers.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                            wildcard.setText(inputText);
+                            wildcard.setAnswer(inputAnswer);
+                            textViewTitle.setText(wildcard.getText());
                     }
 
-                    if (wildcard.isDeletable()) {
-                        wildcard.setText(inputText);
-                        textViewTitle.setText(wildcard.getText());
-                    }
 
                     saveWildCardProbabilitiesToStorage(wildCards);
                 });

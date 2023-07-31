@@ -24,11 +24,11 @@ import com.example.countingdowngame.wildCards.wildCardTypes.TaskWildCardsFragmen
 import com.example.countingdowngame.wildCards.wildCardTypes.TruthWildCardsAdapter;
 import com.example.countingdowngame.wildCards.wildCardTypes.TruthWildCardsFragment;
 
-public class WildCardView extends ArrayAdapter<WildCardHeadings> {
+public class WildCardView extends ArrayAdapter<WildCardProperties> {
     private final WildCardChoice mContext;
-    private final WildCardHeadings[] mProbabilities;
+    private final WildCardProperties[] mProbabilities;
 
-    public WildCardView(WildCardChoice context, WildCardHeadings[] probabilities) {
+    public WildCardView(WildCardChoice context, WildCardProperties[] probabilities) {
         super(context, R.layout.list_view_wild_cards, probabilities);
         mContext = context;
         mProbabilities = probabilities;
@@ -56,7 +56,7 @@ public class WildCardView extends ArrayAdapter<WildCardHeadings> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        WildCardHeadings wildCard = mProbabilities[position];
+        WildCardProperties wildCard = mProbabilities[position];
         viewHolder.textViewWildCard.setText(wildCard.getText());
         viewHolder.textViewProbability.setText(String.valueOf(wildCard.getProbability()));
         viewHolder.switchWildCard.setChecked(wildCard.isEnabled());
@@ -107,7 +107,7 @@ public class WildCardView extends ArrayAdapter<WildCardHeadings> {
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            WildCardHeadings[] emptyProbabilitiesArray = new WildCardHeadings[0];
+            WildCardProperties[] emptyProbabilitiesArray = new WildCardProperties[0];
             QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(emptyProbabilitiesArray, mContext, WildCardType.QUIZ);
             TaskWildCardsAdapter taskAdapter = new TaskWildCardsAdapter(emptyProbabilitiesArray, mContext, WildCardType.TASK);
             TruthWildCardsAdapter truthAdapter = new TruthWildCardsAdapter(emptyProbabilitiesArray, mContext, WildCardType.TRUTH);

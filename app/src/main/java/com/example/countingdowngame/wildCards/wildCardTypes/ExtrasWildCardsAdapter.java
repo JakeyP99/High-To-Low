@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.wildCards.WildCardHeadings;
+import com.example.countingdowngame.wildCards.WildCardProperties;
 import com.example.countingdowngame.wildCards.WildCardType;
 
 public class ExtrasWildCardsAdapter extends WildCardsAdapter {
-    public ExtrasWildCardsAdapter(WildCardHeadings[] extrasWildCards, Context context, WildCardType mode) {
+    public ExtrasWildCardsAdapter(WildCardProperties[] extrasWildCards, Context context, WildCardType mode) {
         super("wildCardsKey", extrasWildCards, context, mode);
     }
 
