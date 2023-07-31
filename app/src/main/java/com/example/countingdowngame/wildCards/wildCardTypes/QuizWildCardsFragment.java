@@ -50,4 +50,3 @@ public class QuizWildCardsFragment extends WildCardsFragments {
         return view;
     }
 }
-

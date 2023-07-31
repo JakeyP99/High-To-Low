@@ -21,8 +21,6 @@ public class TaskWildCardsFragment extends WildCardsFragments {
     public TaskWildCardsFragment(Context context, WildCardsAdapter a) {
         super(context, a);
     }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wildcards, container, false);
