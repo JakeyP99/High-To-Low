@@ -27,8 +27,8 @@
         android:layout_toStartOf="@+id/switch_wildcard"
         android:layout_toEndOf="@+id/button_edit_probability"
         android:maxLines="5"
-        android:paddingStart="8dp"
 
+        android:paddingStart="8dp"
         android:paddingRight="8dp"
         android:text="This is test data: TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
         android:textAlignment="center"
