@@ -13,18 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.wildCards.WildCardHeadings;
 import com.example.countingdowngame.wildCards.WildCardType;
 
 public class ExtrasWildCardsFragment extends WildCardsFragments {
-    public static final WildCardHeadings[] defaultExtrasWildCards = {
-            new WildCardHeadings("Double the current number!", 10, true, false),
-            new WildCardHeadings("Half the current number!", 10, true, false),
-            new WildCardHeadings("Reset the number!", 10, true, false),
-            new WildCardHeadings("Reverse the turn order!", 10, true, false),
-            new WildCardHeadings("Gain a couple more wildcards to use, I gotchya back!", 10, true, false),
-            new WildCardHeadings("Lose a couple wildcards :( oh also drink 3 lol!", 10, true, false),
-    };
+
 
     public ExtrasWildCardsFragment(Context context, WildCardsAdapter a) {
         super(context, a);
@@ -38,7 +30,7 @@ public class ExtrasWildCardsFragment extends WildCardsFragments {
 
         WildCardType mode = WildCardType.EXTRAS;
 
-        adapter = new ExtrasWildCardsAdapter(defaultExtrasWildCards, requireContext(), mode);
+        adapter = new ExtrasWildCardsAdapter(WildCardData.EXTRA_WILD_CARDS, requireContext(), mode);
 
         recyclerView.setAdapter(adapter);
 
