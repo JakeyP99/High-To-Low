@@ -1,4 +1,4 @@
-package com.example.countingdowngame;
+package com.example.countingdowngame.instructions;
 
 import android.os.Bundle;
 import android.widget.Button;
@@ -6,9 +6,15 @@ import android.widget.ProgressBar;
 
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.countingdowngame.R;
+import com.example.countingdowngame.utils.ButtonUtilsActivity;
+import com.example.countingdowngame.utils.DepthPageTransformer;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+
+;
 
 public class InstructionsToPlay extends ButtonUtilsActivity {
     private final List<Integer> instructions = Arrays.asList(

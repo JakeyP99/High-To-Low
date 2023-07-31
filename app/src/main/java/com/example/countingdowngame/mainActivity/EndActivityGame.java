@@ -1,4 +1,4 @@
-package com.example.countingdowngame;
+package com.example.countingdowngame.mainActivity;
 
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -6,8 +6,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.Player;
+import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.ArrayList;
 public class EndActivityGame extends ButtonUtilsActivity {

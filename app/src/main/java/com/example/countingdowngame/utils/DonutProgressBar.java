@@ -1,4 +1,4 @@
-package com.example.countingdowngame;
+package com.example.countingdowngame.utils;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -6,6 +6,8 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.widget.ProgressBar;
+
+import com.example.countingdowngame.R;
 
 public class DonutProgressBar extends ProgressBar {
     private RectF rectF;

@@ -1,4 +1,4 @@
-package com.example.countingdowngame;
+package com.example.countingdowngame.mainActivity;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -9,6 +9,9 @@ import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.example.countingdowngame.utils.ButtonUtilsActivity;;
+import com.example.countingdowngame.R;
+import com.example.countingdowngame.createPlayer.PlayerModel;
 import com.example.countingdowngame.game.Game;
 
 public class PlayerNumberChoice extends ButtonUtilsActivity {

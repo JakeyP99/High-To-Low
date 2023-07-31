@@ -1,4 +1,4 @@
-package com.example.countingdowngame;
+package com.example.countingdowngame.utils;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.app.ActivityCompat;
 
+import com.example.countingdowngame.R;
 import com.example.countingdowngame.stores.GeneralSettingsLocalStore;
 
 import java.io.IOException;

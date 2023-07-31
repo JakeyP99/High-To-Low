@@ -1,4 +1,4 @@
-package com.example.countingdowngame;
+package com.example.countingdowngame.utils;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -7,6 +7,12 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.countingdowngame.mainActivity.EndActivityGame;
+import com.example.countingdowngame.instructions.InstructionsToPlay;
+import com.example.countingdowngame.mainActivity.HomeScreen;
+import com.example.countingdowngame.mainActivity.NumberChoice;
+import com.example.countingdowngame.mainActivity.PlayerNumberChoice;
 
 public class ButtonUtilsActivity extends AppCompatActivity {
 
@@ -47,7 +53,7 @@ public class ButtonUtilsActivity extends AppCompatActivity {
     }
 
     protected void gotoGameStart() {
-        startActivity(getIntentForClass(NumberChoiceForGame.class, true));
+        startActivity(getIntentForClass(NumberChoice.class, true));
     }
 
     protected void gotoGameSetup() {

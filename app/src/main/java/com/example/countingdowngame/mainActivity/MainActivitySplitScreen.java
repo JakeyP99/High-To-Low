@@ -17,23 +17,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.countingdowngame.AudioManager;
-import com.example.countingdowngame.ButtonUtilsActivity;
-import com.example.countingdowngame.wildCards.wildCardTypes.ExtrasWildCardsAdapter;
-import com.example.countingdowngame.wildCards.wildCardTypes.ExtrasWildCardsFragment;
-import com.example.countingdowngame.wildCards.wildCardTypes.QuizWildCardsAdapter;
-import com.example.countingdowngame.wildCards.wildCardTypes.QuizWildCardsFragment;
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.TaskWildCardsAdapter;
-import com.example.countingdowngame.wildCards.wildCardTypes.TaskWildCardsFragment;
-import com.example.countingdowngame.wildCards.wildCardTypes.TruthWildCardsAdapter;
-import com.example.countingdowngame.wildCards.wildCardTypes.TruthWildCardsFragment;
-import com.example.countingdowngame.wildCards.WildCardHeadings;
-import com.example.countingdowngame.wildCards.WildCardType;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.GameEventType;
 import com.example.countingdowngame.game.Player;
 import com.example.countingdowngame.stores.PlayerModelLocalStore;
+import com.example.countingdowngame.utils.AudioManager;
+import com.example.countingdowngame.utils.ButtonUtilsActivity;
+import com.example.countingdowngame.wildCards.WildCardHeadings;
+import com.example.countingdowngame.wildCards.WildCardType;
+import com.example.countingdowngame.wildCards.wildCardTypes.ExtrasWildCardsAdapter;
+import com.example.countingdowngame.wildCards.wildCardTypes.ExtrasWildCardsFragment;
+import com.example.countingdowngame.wildCards.wildCardTypes.QuizWildCardsAdapter;
+import com.example.countingdowngame.wildCards.wildCardTypes.QuizWildCardsFragment;
+import com.example.countingdowngame.wildCards.wildCardTypes.TaskWildCardsAdapter;
+import com.example.countingdowngame.wildCards.wildCardTypes.TaskWildCardsFragment;
+import com.example.countingdowngame.wildCards.wildCardTypes.TruthWildCardsAdapter;
+import com.example.countingdowngame.wildCards.wildCardTypes.TruthWildCardsFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +45,8 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+;
 
 public class MainActivitySplitScreen extends ButtonUtilsActivity {
     private static final int BACK_PRESS_DELAY = 3000; // 3 seconds

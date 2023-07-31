@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.TaskWildCardsAdapter;
 import com.example.countingdowngame.wildCards.WildCardHeadings;
 import com.example.countingdowngame.wildCards.WildCardType;
 

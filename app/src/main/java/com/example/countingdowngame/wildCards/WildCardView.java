@@ -15,7 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.TaskWildCardsAdapter;
+import com.example.countingdowngame.wildCards.wildCardTypes.TaskWildCardsAdapter;
 import com.example.countingdowngame.wildCards.wildCardTypes.ExtrasWildCardsAdapter;
 import com.example.countingdowngame.wildCards.wildCardTypes.ExtrasWildCardsFragment;
 import com.example.countingdowngame.wildCards.wildCardTypes.QuizWildCardsAdapter;

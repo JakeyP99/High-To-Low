@@ -1,4 +1,4 @@
-package com.example.countingdowngame;
+package com.example.countingdowngame.mainActivity;
 
 import android.content.Intent;
 import android.os.Build;
@@ -10,13 +10,13 @@ import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.example.countingdowngame.mainActivity.MainActivityGame;
-import com.example.countingdowngame.mainActivity.MainActivitySplitScreen;
+import com.example.countingdowngame.utils.ButtonUtilsActivity;;
+import com.example.countingdowngame.R;
 import com.example.countingdowngame.stores.GeneralSettingsLocalStore;
 
 import java.util.Random;
 
-public class NumberChoiceForGame extends ButtonUtilsActivity {
+public class NumberChoice extends ButtonUtilsActivity {
     private int startingNumber;
 
     @Override
@@ -40,20 +40,20 @@ public class NumberChoiceForGame extends ButtonUtilsActivity {
 
         int length = inputValue.length(); // Store the length of the string
         if (length > 9) {
-            Toast.makeText(NumberChoiceForGame.this, "That's a lot of numbers, unfortunately too many :(", Toast.LENGTH_SHORT).show();
+            Toast.makeText(NumberChoice.this, "That's a lot of numbers, unfortunately too many :(", Toast.LENGTH_SHORT).show();
             return;
         }
 
 
         if (inputValue.isEmpty()) {
-            Toast.makeText(NumberChoiceForGame.this, "Please choose a number!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(NumberChoice.this, "Please choose a number!", Toast.LENGTH_SHORT).show();
             return;
         }
 
         int inputNumber = Integer.parseInt(inputValue);
 
         if (inputNumber <= 0) {
-            Toast.makeText(NumberChoiceForGame.this, "Please choose a number greater than zero!", Toast.LENGTH_SHORT)
+            Toast.makeText(NumberChoice.this, "Please choose a number greater than zero!", Toast.LENGTH_SHORT)
                     .show();
             return;
         }

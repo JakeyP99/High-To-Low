@@ -1,4 +1,4 @@
-package com.example.countingdowngame;
+package com.example.countingdowngame.createPlayer;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -18,11 +18,8 @@ import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +30,9 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.countingdowngame.utils.ButtonUtilsActivity;;
+import com.example.countingdowngame.mainActivity.NumberChoice;
+import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.Player;
 import com.example.countingdowngame.stores.PlayerModelLocalStore;
@@ -180,7 +180,7 @@ public class PlayerModel extends ButtonUtilsActivity {
                 }
 
                 PlayerModelLocalStore.fromContext(this).saveSelectedPlayers(selectedPlayers);
-                Intent intent = new Intent(this, NumberChoiceForGame.class);
+                Intent intent = new Intent(this, NumberChoice.class);
                 intent.putStringArrayListExtra("playerNames", selectedPlayerNames);
                 startActivity(intent);
             }

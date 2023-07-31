@@ -21,7 +21,7 @@
         android:theme="@style/AppTheme.NoActionBar">
 
         <activity
-            android:name=".HomeScreen"
+            android:name=".mainActivity.HomeScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,34 +34,34 @@
         />
 
         <activity
-            android:name=".PlayerNumberChoice" />
+            android:name=".mainActivity.PlayerNumberChoice" />
 
         <activity
-            android:name=".EndActivityGame" />
+            android:name=".mainActivity.EndActivityGame" />
 
         <activity
-            android:name=".NumberChoiceForGame" />
+            android:name=".mainActivity.NumberChoice" />
 
         <activity
-            android:name=".InstructionsToPlay" />
+            android:name=".instructions.InstructionsToPlay" />
 
         <activity
-            android:name=".SettingsContainer" />
+            android:name=".utils.SettingsContainer" />
         <activity
             android:name=".wildCards.WildCardChoice"
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
-            android:name=".GeneralSettings" />
+            android:name=".game.GeneralSettings" />
 
         <activity
             android:name=".mainActivity.MainActivitySplitScreen" />
 
         <activity
-            android:name=".DrawingPlayerModels" />
+            android:name=".createPlayer.DrawingPlayerModels" />
 
         <activity
-            android:name=".PlayerModel"
+            android:name=".createPlayer.PlayerModel"
             android:windowSoftInputMode="adjustNothing" />
 
         <meta-data

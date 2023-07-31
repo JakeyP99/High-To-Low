@@ -1,4 +1,4 @@
-package com.example.countingdowngame;
+package com.example.countingdowngame.utils;
 
 import android.content.Context;
 import android.media.MediaPlayer;

@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.countingdowngame.ButtonUtilsActivity;
+import com.example.countingdowngame.utils.ButtonUtilsActivity;;
 import com.example.countingdowngame.R;
 import com.google.android.material.tabs.TabLayout;
 

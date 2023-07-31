@@ -1,4 +1,4 @@
-package com.example.countingdowngame;
+package com.example.countingdowngame.createPlayer;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Player;
 
 import java.util.List;

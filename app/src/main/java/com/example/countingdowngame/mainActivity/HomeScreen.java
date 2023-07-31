@@ -1,7 +1,10 @@
-package com.example.countingdowngame;
+package com.example.countingdowngame.mainActivity;
 
 import android.os.Bundle;
 import android.widget.Button;
+
+import com.example.countingdowngame.utils.ButtonUtilsActivity;
+import com.example.countingdowngame.R;
 
 public class HomeScreen extends ButtonUtilsActivity {
 
