@@ -1,7 +1,5 @@
 package com.example.countingdowngame.mainActivity;
 
-import static com.example.countingdowngame.mainActivity.SharedMainActivity.reverseTurnOrder;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -22,7 +20,6 @@ import com.example.countingdowngame.game.GameEventType;
 import com.example.countingdowngame.game.Player;
 import com.example.countingdowngame.stores.PlayerModelLocalStore;
 import com.example.countingdowngame.utils.AudioManager;
-import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.example.countingdowngame.wildCards.WildCardHeadings;
 import com.example.countingdowngame.wildCards.WildCardType;
 import com.example.countingdowngame.wildCards.wildCardTypes.ExtrasWildCardsAdapter;
@@ -42,11 +39,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-;
-
-public class MainActivityGame extends ButtonUtilsActivity {
+public class MainActivityGame extends SharedMainActivity {
     private final boolean animationEnded = false;
-
     private final Map<Player, Set<WildCardHeadings>> usedWildCard = new HashMap<>();
     private final Set<WildCardHeadings> usedWildCards = new HashSet<>();
     private TextView numberText;
@@ -57,7 +51,6 @@ public class MainActivityGame extends ButtonUtilsActivity {
     private Button btnBackWild;
     private Button btnAnswerRight;
     private Button btnAnswerWrong;
-
     private ImageView playerImage;
     private boolean doubleBackToExitPressedOnce = false;
     private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
@@ -198,13 +191,13 @@ public class MainActivityGame extends ButtonUtilsActivity {
 
                 shuffleTime += shuffleInterval;
 
-
                 if (shuffleTime < shuffleDuration) {
                     shuffleHandler.postDelayed(this, shuffleInterval);
                 } else {
                     numberText.setText(String.valueOf(randomDigit));
 
-                    Game.getInstance().nextNumber(MainActivityGame.this, () -> gotoGameEnd(), numberText, null);
+                    int currentNumber = Game.getInstance().nextNumber();
+                    renderCurrentNumber(currentNumber,() -> gotoGameEnd(), numberText);
 
                     btnGenerate.setEnabled(true);
                     btnWild.setEnabled(true);

@@ -1,14 +1,68 @@
 package com.example.countingdowngame.mainActivity;
 
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
+import android.os.Handler;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.Player;
+import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.Collections;
 import java.util.List;
 
-public class SharedMainActivity {
+public class SharedMainActivity extends ButtonUtilsActivity {
+
+    public void renderCurrentNumber(int currentNumber, final Runnable onEnd, TextView textView1) {
+        if (currentNumber == 0) {
+            textView1.setText(String.valueOf(currentNumber));
+            applyPulsingEffect(textView1);
+
+            Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                Game.getInstance().endGame(this);
+                onEnd.run();
+            }, 2000);
+        } else {
+            textView1.setText(String.valueOf(currentNumber));
+            Game.getInstance().nextPlayer();
+        }
+    }
+
+    public void renderCurrentNumber(int currentNumber, final Runnable onEnd, TextView textView1, TextView textView2) {
+        if (currentNumber == 0) {
+            textView1.setText(String.valueOf(currentNumber));
+            textView2.setText(String.valueOf(currentNumber));
+
+            applyPulsingEffect(textView1);
+            applyPulsingEffect(textView2);
+
+            Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                Game.getInstance().endGame(this);
+                onEnd.run();
+            }, 2000);
+        } else {
+            textView1.setText(String.valueOf(currentNumber));
+            textView2.setText(String.valueOf(currentNumber));
+            Game.getInstance().nextPlayer();
+        }
+    }
+
+    private void applyPulsingEffect(TextView textView) {
+        // Apply pulsing effect to textView
+        ObjectAnimator pulseAnimation = ObjectAnimator.ofPropertyValuesHolder(
+                textView,
+                PropertyValuesHolder.ofFloat(View.SCALE_X, 1.0f, 1.2f, 1.0f),
+                PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.0f, 1.2f, 1.0f)
+        );
+        pulseAnimation.setDuration(1000); // Adjust the pulsing duration (in milliseconds) as per your preference
+        pulseAnimation.setRepeatCount(ObjectAnimator.INFINITE);
+        pulseAnimation.setRepeatMode(ObjectAnimator.REVERSE);
+        pulseAnimation.start();
+    }
 
     public static void setNameSizeBasedOnInt(TextView textView, String text) {
         int textSize;
@@ -25,8 +79,6 @@ public class SharedMainActivity {
         }
         textView.setTextSize(textSize);
     }
-
-
 
     public static void setTextViewSizeBasedOnInt(TextView textView, String text) {
         int defaultTextSize = 70;

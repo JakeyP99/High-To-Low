@@ -1,8 +1,5 @@
 package com.example.countingdowngame.mainActivity;
 
-import static com.example.countingdowngame.mainActivity.SharedMainActivity.reverseTurnOrder;
-import static com.example.countingdowngame.mainActivity.SharedMainActivity.splitScreenSetTextViewSizeBasedOnInt;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -23,7 +20,6 @@ import com.example.countingdowngame.game.GameEventType;
 import com.example.countingdowngame.game.Player;
 import com.example.countingdowngame.stores.PlayerModelLocalStore;
 import com.example.countingdowngame.utils.AudioManager;
-import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.example.countingdowngame.wildCards.WildCardHeadings;
 import com.example.countingdowngame.wildCards.WildCardType;
 import com.example.countingdowngame.wildCards.wildCardTypes.ExtrasWildCardsAdapter;
@@ -43,9 +39,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-;
-
-public class MainActivitySplitScreen extends ButtonUtilsActivity {
+public class MainActivitySplitScreen extends SharedMainActivity {
     private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
     private final Map<Player, Set<WildCardHeadings>> usedWildCard = new HashMap<>();
     private final Set<WildCardHeadings> usedWildCards = new HashSet<>();
@@ -71,6 +65,10 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
     private Button btnWildPlayer2;
     private ImageView playerImage;
     private ImageView playerImagePlayer2;
+
+    private TextView wildActivityTextView;
+    private TextView wildActivityTextViewPlayer2;
+
     private boolean doubleBackToExitPressedOnce = false;
     private Handler shuffleHandler;
     private WildCardHeadings selectedWildCard; // Declare selectedWildCard at a higher level
@@ -113,6 +111,9 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
     private void initializeViews() {
         btnGenerate = findViewById(R.id.btnGenerate);
         btnGeneratePlayer2 = findViewById(R.id.btnGeneratePlayer2);
+
+        wildActivityTextView  = findViewById(R.id.wild_textview);
+        wildActivityTextViewPlayer2  = findViewById(R.id.wild_textviewPlayer2);
 
         btnContinue = findViewById(R.id.btnBackWildCard);
         btnContinuePlayer2 = findViewById(R.id.btnBackWildCardPlayer2);
@@ -240,7 +241,9 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
                     numberText.setText(String.valueOf(randomDigit));
                     numberTextPlayer2.setText(String.valueOf(randomDigit));
 
-                    Game.getInstance().nextNumber(MainActivitySplitScreen.this, () -> gotoGameEnd(), numberText, numberTextPlayer2);
+                    int currentNumber = Game.getInstance().nextNumber();
+                    renderCurrentNumber(currentNumber,() -> gotoGameEnd(), numberText, numberTextPlayer2);
+
 
                     btnGenerate.setEnabled(true);
                     btnGeneratePlayer2.setEnabled(true);
@@ -317,8 +320,6 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         allProbabilities.addAll(Arrays.asList(truthProbabilities));
         allProbabilities.addAll(Arrays.asList(extraProbabilities));
 
-        final TextView wildActivityTextView = findViewById(R.id.wild_textview);
-        final TextView wildActivityTextViewPlayer2 = findViewById(R.id.wild_textviewPlayer2);
 
         boolean wildCardsEnabled = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("wild_cards_toggle", true);
 
@@ -326,33 +327,68 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         Set<WildCardHeadings> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
 
         if (wildCardsEnabled) {
-            Random random = new Random();
-            int typeChance = random.nextInt(4); // Generate a random number from 0 to 3
-
-            WildCardHeadings[] selectedType;
+            WildCardHeadings[] selectedType = new WildCardHeadings[0];
             String wildCardType = ""; // Variable to store the type of wildcard
+            boolean foundWildCardType = false;
+            Random random = new Random();
 
-            switch (typeChance) {
-                case 0:
-                    selectedType = quizProbabilities;
-                    wildCardType = "Quiz";
-                    break;
-                case 1:
-                    selectedType = taskProbabilities;
-                    wildCardType = "Task";
-                    break;
-                case 2:
-                    selectedType = truthProbabilities;
-                    wildCardType = "Truth";
-                    break;
-                case 3:
-                    selectedType = extraProbabilities;
-                    wildCardType = "Extras";
-                    break;
-                default:
-                    selectedType = null; // Set selectedType to null when the case is not 0, 1, 2, or 3
-                    wildCardType = "Null";
-                    break;
+            int quizProbabilitiesCount = (int) Arrays.stream(quizProbabilities)
+                    .filter(WildCardHeadings::isEnabled)
+                    .count();
+
+            int taskProbabilitiesCount = (int) Arrays.stream(taskProbabilities)
+                    .filter(WildCardHeadings::isEnabled)
+                    .count();
+
+            int truthProbabilitiesCount = (int) Arrays.stream(truthProbabilities)
+                    .filter(WildCardHeadings::isEnabled)
+                    .count();
+
+            int extraProbabilitiesCount = (int) Arrays.stream(extraProbabilities)
+                    .filter(WildCardHeadings::isEnabled)
+                    .count();
+
+            if (quizProbabilitiesCount == 0 && taskProbabilitiesCount == 0 && truthProbabilitiesCount == 0 && extraProbabilitiesCount == 0) {
+                foundWildCardType = true;
+            }
+            while (!foundWildCardType) {
+                int typeChance = random.nextInt(4); // Generate a random number from 0 to 3
+                switch (typeChance) {
+                    case 0:
+                        if (quizProbabilitiesCount > 0) {
+                            selectedType = quizProbabilities;
+                            wildCardType = "Quiz";
+                            foundWildCardType = true;
+                        }
+                        break;
+                    case 1:
+                        if (taskProbabilitiesCount > 0) {
+                            selectedType = taskProbabilities;
+                            wildCardType = "Task";
+                            foundWildCardType = true;
+                        }
+                        break;
+                    case 2:
+                        if (truthProbabilitiesCount > 0) {
+                            selectedType = truthProbabilities;
+                            wildCardType = "Truth";
+                            foundWildCardType = true;
+                        }
+                        break;
+                    case 3:
+                        if (extraProbabilitiesCount > 0) {
+                            selectedType = extraProbabilities;
+                            wildCardType = "Extras";
+                            foundWildCardType = true;
+                        }
+                        break;
+                    default:
+                        selectedType = null;
+                        wildCardType = "Null";
+                        foundWildCardType = true;
+                        break;
+                }
+
             }
 
             if (selectedType == quizProbabilities) {
