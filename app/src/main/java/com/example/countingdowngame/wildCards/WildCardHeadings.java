@@ -1,4 +1,4 @@
-package com.example.countingdowngame;
+package com.example.countingdowngame.wildCards;
 
 public class WildCardHeadings {
     private String activity;

@@ -1,4 +1,4 @@
-package com.example.countingdowngame;
+package com.example.countingdowngame.wildCards.wildCardTypes;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,6 +11,11 @@ import android.widget.FrameLayout;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.countingdowngame.R;
+import com.example.countingdowngame.TaskWildCardsAdapter;
+import com.example.countingdowngame.wildCards.WildCardHeadings;
+import com.example.countingdowngame.wildCards.WildCardType;
 
 public class TaskWildCardsFragment extends WildCardsFragments {
     public static final WildCardHeadings[] defaultTaskWildCards = {

@@ -30,7 +30,7 @@
         </activity>
 
         <activity
-            android:name=".MainActivity.MainActivityGame"
+            android:name=".mainActivity.MainActivityGame"
         />
 
         <activity
@@ -48,14 +48,14 @@
         <activity
             android:name=".SettingsContainer" />
         <activity
-            android:name=".WildCardChoice"
+            android:name=".wildCards.WildCardChoice"
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
             android:name=".GeneralSettings" />
 
         <activity
-            android:name=".MainActivity.MainActivitySplitScreen" />
+            android:name=".mainActivity.MainActivitySplitScreen" />
 
         <activity
             android:name=".DrawingPlayerModels" />

@@ -10,8 +10,8 @@ import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.example.countingdowngame.MainActivity.MainActivityGame;
-import com.example.countingdowngame.MainActivity.MainActivitySplitScreen;
+import com.example.countingdowngame.mainActivity.MainActivityGame;
+import com.example.countingdowngame.mainActivity.MainActivitySplitScreen;
 import com.example.countingdowngame.stores.GeneralSettingsLocalStore;
 
 import java.util.Random;

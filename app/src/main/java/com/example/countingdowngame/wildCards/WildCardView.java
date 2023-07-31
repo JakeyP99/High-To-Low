@@ -1,7 +1,6 @@
-package com.example.countingdowngame;
+package com.example.countingdowngame.wildCards;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +14,21 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-public class Settings_WildCard_Adapter extends ArrayAdapter<WildCardHeadings> {
+import com.example.countingdowngame.R;
+import com.example.countingdowngame.TaskWildCardsAdapter;
+import com.example.countingdowngame.wildCards.wildCardTypes.ExtrasWildCardsAdapter;
+import com.example.countingdowngame.wildCards.wildCardTypes.ExtrasWildCardsFragment;
+import com.example.countingdowngame.wildCards.wildCardTypes.QuizWildCardsAdapter;
+import com.example.countingdowngame.wildCards.wildCardTypes.QuizWildCardsFragment;
+import com.example.countingdowngame.wildCards.wildCardTypes.TaskWildCardsFragment;
+import com.example.countingdowngame.wildCards.wildCardTypes.TruthWildCardsAdapter;
+import com.example.countingdowngame.wildCards.wildCardTypes.TruthWildCardsFragment;
+
+public class WildCardView extends ArrayAdapter<WildCardHeadings> {
     private final WildCardChoice mContext;
     private final WildCardHeadings[] mProbabilities;
 
-    public Settings_WildCard_Adapter(WildCardChoice context, WildCardHeadings[] probabilities) {
+    public WildCardView(WildCardChoice context, WildCardHeadings[] probabilities) {
         super(context, R.layout.list_view_wild_cards, probabilities);
         mContext = context;
         mProbabilities = probabilities;

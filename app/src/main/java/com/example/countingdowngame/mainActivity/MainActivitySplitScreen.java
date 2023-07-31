@@ -1,7 +1,7 @@
-package com.example.countingdowngame.MainActivity;
+package com.example.countingdowngame.mainActivity;
 
-import static com.example.countingdowngame.MainActivity.SharedMainActivity.reverseTurnOrder;
-import static com.example.countingdowngame.MainActivity.SharedMainActivity.splitScreenSetTextViewSizeBasedOnInt;
+import static com.example.countingdowngame.mainActivity.SharedMainActivity.reverseTurnOrder;
+import static com.example.countingdowngame.mainActivity.SharedMainActivity.splitScreenSetTextViewSizeBasedOnInt;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,17 +19,17 @@ import android.widget.Toast;
 
 import com.example.countingdowngame.AudioManager;
 import com.example.countingdowngame.ButtonUtilsActivity;
-import com.example.countingdowngame.ExtrasWildCardsAdapter;
-import com.example.countingdowngame.ExtrasWildCardsFragment;
-import com.example.countingdowngame.QuizWildCardsAdapter;
-import com.example.countingdowngame.QuizWildCardsFragment;
+import com.example.countingdowngame.wildCards.wildCardTypes.ExtrasWildCardsAdapter;
+import com.example.countingdowngame.wildCards.wildCardTypes.ExtrasWildCardsFragment;
+import com.example.countingdowngame.wildCards.wildCardTypes.QuizWildCardsAdapter;
+import com.example.countingdowngame.wildCards.wildCardTypes.QuizWildCardsFragment;
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.TaskWildCardsAdapter;
-import com.example.countingdowngame.TaskWildCardsFragment;
-import com.example.countingdowngame.TruthWildCardsAdapter;
-import com.example.countingdowngame.TruthWildCardsFragment;
-import com.example.countingdowngame.WildCardHeadings;
-import com.example.countingdowngame.WildCardType;
+import com.example.countingdowngame.wildCards.wildCardTypes.TaskWildCardsFragment;
+import com.example.countingdowngame.wildCards.wildCardTypes.TruthWildCardsAdapter;
+import com.example.countingdowngame.wildCards.wildCardTypes.TruthWildCardsFragment;
+import com.example.countingdowngame.wildCards.WildCardHeadings;
+import com.example.countingdowngame.wildCards.WildCardType;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.GameEventType;
 import com.example.countingdowngame.game.Player;

@@ -1,4 +1,4 @@
-package com.example.countingdowngame.MainActivity;
+package com.example.countingdowngame.mainActivity;
 
 import android.widget.TextView;
 

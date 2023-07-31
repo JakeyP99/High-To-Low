@@ -1,4 +1,4 @@
-package com.example.countingdowngame;
+package com.example.countingdowngame.wildCards.wildCardTypes;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,6 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+
+import com.example.countingdowngame.R;
+import com.example.countingdowngame.wildCards.WildCardHeadings;
+import com.example.countingdowngame.wildCards.WildCardType;
 
 public class TruthWildCardsAdapter extends WildCardsAdapter {
     public TruthWildCardsAdapter(WildCardHeadings[] truthWildCards, Context context, WildCardType mode) {

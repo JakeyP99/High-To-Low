@@ -3,6 +3,8 @@ package com.example.countingdowngame;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.example.countingdowngame.wildCards.WildCardChoice;
+
 public class SettingsContainer extends ButtonUtilsActivity {
 
     @Override

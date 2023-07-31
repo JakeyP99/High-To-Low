@@ -1,4 +1,4 @@
-package com.example.countingdowngame;
+package com.example.countingdowngame.wildCards.wildCardTypes;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -13,6 +13,9 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+
+import com.example.countingdowngame.R;
+import com.example.countingdowngame.wildCards.WildCardHeadings;
 
 public class WildCardsFragments extends Fragment {
 

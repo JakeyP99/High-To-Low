@@ -1,4 +1,4 @@
-package com.example.countingdowngame;
+package com.example.countingdowngame.wildCards.wildCardTypes;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -16,7 +16,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.countingdowngame.R;
 import com.example.countingdowngame.stores.WildCardSettingsLocalStore;
+import com.example.countingdowngame.wildCards.WildCardHeadings;
+import com.example.countingdowngame.wildCards.WildCardType;
 
 import java.util.ArrayList;
 import java.util.Arrays;

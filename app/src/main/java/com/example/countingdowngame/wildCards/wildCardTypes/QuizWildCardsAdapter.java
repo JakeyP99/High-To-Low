@@ -1,4 +1,4 @@
-package com.example.countingdowngame;
+package com.example.countingdowngame.wildCards.wildCardTypes;
 
 import android.content.Context;
 import android.util.Log;
@@ -8,6 +8,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+
+import com.example.countingdowngame.R;
+import com.example.countingdowngame.wildCards.WildCardHeadings;
+import com.example.countingdowngame.wildCards.WildCardType;
 
 
 //TODO fix this adapter so it displays the correct wildcards in the correct category

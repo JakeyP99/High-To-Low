@@ -7,6 +7,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
+import com.example.countingdowngame.wildCards.WildCardHeadings;
+import com.example.countingdowngame.wildCards.WildCardType;
+import com.example.countingdowngame.wildCards.wildCardTypes.WildCardsAdapter;
+
 public class TaskWildCardsAdapter extends WildCardsAdapter {
 
     public TaskWildCardsAdapter(WildCardHeadings[] taskWildCards, Context context, WildCardType mode) {
