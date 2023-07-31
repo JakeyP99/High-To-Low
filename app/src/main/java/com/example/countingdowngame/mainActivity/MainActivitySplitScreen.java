@@ -27,13 +27,10 @@ import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.example.countingdowngame.wildCards.WildCardHeadings;
 import com.example.countingdowngame.wildCards.WildCardType;
 import com.example.countingdowngame.wildCards.wildCardTypes.ExtrasWildCardsAdapter;
-import com.example.countingdowngame.wildCards.wildCardTypes.ExtrasWildCardsFragment;
 import com.example.countingdowngame.wildCards.wildCardTypes.QuizWildCardsAdapter;
-import com.example.countingdowngame.wildCards.wildCardTypes.QuizWildCardsFragment;
 import com.example.countingdowngame.wildCards.wildCardTypes.TaskWildCardsAdapter;
-import com.example.countingdowngame.wildCards.wildCardTypes.TaskWildCardsFragment;
 import com.example.countingdowngame.wildCards.wildCardTypes.TruthWildCardsAdapter;
-import com.example.countingdowngame.wildCards.wildCardTypes.TruthWildCardsFragment;
+import com.example.countingdowngame.wildCards.wildCardTypes.WildCardData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -309,10 +306,10 @@ public class MainActivitySplitScreen extends ButtonUtilsActivity {
         TruthWildCardsAdapter truthAdapter = new TruthWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.TRUTH);
         ExtrasWildCardsAdapter extraAdapter = new ExtrasWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.EXTRAS);
 
-        WildCardHeadings[] quizProbabilities = quizAdapter.loadWildCardProbabilitiesFromStorage(QuizWildCardsFragment.defaultQuizWildCards);
-        WildCardHeadings[] taskProbabilities = taskAdapter.loadWildCardProbabilitiesFromStorage(TaskWildCardsFragment.defaultTaskWildCards);
-        WildCardHeadings[] truthProbabilities = truthAdapter.loadWildCardProbabilitiesFromStorage(TruthWildCardsFragment.defaultTruthWildCards);
-        WildCardHeadings[] extraProbabilities = extraAdapter.loadWildCardProbabilitiesFromStorage(ExtrasWildCardsFragment.defaultExtrasWildCards);
+        WildCardHeadings[] quizProbabilities = quizAdapter.loadWildCardProbabilitiesFromStorage(WildCardData.QUIZ_WILD_CARDS);
+        WildCardHeadings[] taskProbabilities = taskAdapter.loadWildCardProbabilitiesFromStorage(WildCardData.TASK_WILD_CARDS);
+        WildCardHeadings[] truthProbabilities = truthAdapter.loadWildCardProbabilitiesFromStorage(WildCardData.TRUTH_WILD_CARDS);
+        WildCardHeadings[] extraProbabilities = extraAdapter.loadWildCardProbabilitiesFromStorage(WildCardData.EXTRA_WILD_CARDS);
 
         List<WildCardHeadings> allProbabilities = new ArrayList<>();
         allProbabilities.addAll(Arrays.asList(quizProbabilities));
