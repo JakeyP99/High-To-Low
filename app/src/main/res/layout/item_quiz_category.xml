@@ -3,10 +3,11 @@
     android:id="@+id/text_category_title"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textSize="18sp"
+    android:textAlignment="center"
+    android:textSize="22sp"
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
-    android:textColor="@android:color/black"
-    android:background="@android:color/darker_gray" />
+    android:textColor="@color/bluedark"
+    android:background="@color/bluedarktransparent" />

@@ -73,7 +73,7 @@ public class TaskWildCardsFragment extends WildCardsFragments {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_truth_wildcards, container, false);
+        View view = inflater.inflate(R.layout.fragment_wildcards, container, false);
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView_WildCard);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
