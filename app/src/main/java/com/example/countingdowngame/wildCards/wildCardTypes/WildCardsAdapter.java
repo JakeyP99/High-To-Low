@@ -81,7 +81,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
 
             }
 
-            loadedWildCards[i] = new WildCardProperties(activity, probability, enabled, true, answer, category);
+            loadedWildCards[i] = new WildCardProperties(activity, probability, enabled, defaultWildCards[i].isDeletable(), answer, category);
         }
 
         wildCards = loadedWildCards;
@@ -131,12 +131,9 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
 
             if (probability.hasAnswer()) {
                 prefs.setWildcardState(i, probability.isEnabled(), probability.getText(), probability.getProbability(), probability.getAnswer(), probability.getCategory());
-                Log.d("SaveWildCard", "Saving Wild Card at position " + i + ": " + probability.getText() +  ", probability=" + probability.getProbability() + ", isEnabled=" + probability.isEnabled() + ", answer=" + probability.getAnswer() + ", category=" + probability.getCategory());
-
             }
             else {
                 prefs.setWildcardState(i, probability.isEnabled(), probability.getText(), probability.getProbability());
-                Log.d("SaveWildCard", "Saving Wild Card at position " + i + ": " + probability.getText() +  ", probability=" + probability.getProbability() + ", isEnabled=" + probability.isEnabled());
             }
         }
 
@@ -164,6 +161,21 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
             });
 
             editButton.setOnClickListener(v -> {
+                //Log the type of wildcard
+                Log.d("WildCardDetails",
+                        "WildCardName " + wildcard.getText() +
+                                ", probability=" + wildcard.getProbability() +
+                                ", isEnabled=" + wildcard.isEnabled() +
+                                ", isDeletable=" + wildcard.isDeletable() +
+                                ", answer=" + wildcard.getAnswer() +
+                                ", category=" + wildcard.getCategory());
+
+                if (!wildcard.isDeletable()) {
+                    Toast.makeText(mContext, "Sorry, these wildcards cannot be edited!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
                 final EditText wildCardTextInput = new EditText(mContext);
                 final EditText answerWildCardTextInput = new EditText(mContext);
 
@@ -219,38 +231,43 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
                     String inputText = wildCardTextInput.getText().toString().trim();
                     String inputAnswer = answerWildCardTextInput.getText().toString().trim();
 
-
                     if (!wildcard.hasAnswer()) {
+                        // Handling wildcards without an answer
                         if (inputText.isEmpty()) {
                             Toast.makeText(mContext, "The wildcard needs some text, please and thanks!", Toast.LENGTH_SHORT).show();
                             return;
                         }
+
                         if (wildCardTextInput.length() > 130) {
                             Toast.makeText(mContext, "Sorry, way too big of a wildcard boss man, limited to 130 characters.", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                            wildcard.setText(inputText);
-                            textViewTitle.setText(wildcard.getText());
-                    }
 
-                    if (wildcard.hasAnswer()) {
-                        if (inputText.isEmpty() | inputAnswer.isEmpty()) {
+                        // Update the wildcard text and title
+                        wildcard.setText(inputText);
+                        textViewTitle.setText(wildcard.getText());
+                    } else {
+                        // Handling wildcards with an answer
+                        if (inputText.isEmpty() || inputAnswer.isEmpty()) {
                             Toast.makeText(mContext, "The wildcard needs some text in both the question and answer, please and thanks!", Toast.LENGTH_SHORT).show();
                             return;
                         }
 
-                        if (wildCardTextInput.length() > 130 |answerWildCardTextInput.length() >130) {
+                        if (wildCardTextInput.length() > 130 || answerWildCardTextInput.length() > 130) {
                             Toast.makeText(mContext, "Sorry, way too big of a wildcard boss man, limited to 130 characters for the questions or answers.", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                            wildcard.setText(inputText);
-                            wildcard.setAnswer(inputAnswer);
-                            textViewTitle.setText(wildcard.getText());
+
+                        // Update the wildcard text, answer, and title
+                        wildcard.setText(inputText);
+                        wildcard.setAnswer(inputAnswer);
+                        textViewTitle.setText(wildcard.getText());
                     }
 
-
+                    // Save the updated wildcards to storage
                     saveWildCardProbabilitiesToStorage(wildCards);
                 });
+
 
                 builder.show();
             });

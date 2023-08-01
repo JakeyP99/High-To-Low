@@ -2,9 +2,9 @@ package com.example.countingdowngame.wildCards;
 
 public class WildCardProperties {
     private String activity;
-    private final int probability;
+    private  int probability;
     private boolean enabled;
-    private final boolean deletable;
+    private boolean deletable;
     private String answer;
     private final String category; // Add the category field
 
