@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -65,7 +66,7 @@ public class WildCardsFragments extends Fragment {
         builder.setNegativeButton(Html.fromHtml("<font color='" + blueDarkColor + "'>Cancel</font>"), (dialog, which) -> dialog.cancel());
 
         builder.setPositiveButton(Html.fromHtml("<font color='" + blueDarkColor + "'>OK</font>"),(dialog, which) -> {
-            int   probability = 10; // Invalid input, set to a default value
+            int  probability = 10; // Invalid input, set to a default value
             String text = textInput.getText().toString().trim();
             if (text.isEmpty()) {
                 Toast.makeText(mContext, "The wildcard needs some text, please and thanks!", Toast.LENGTH_SHORT).show();
@@ -80,9 +81,18 @@ public class WildCardsFragments extends Fragment {
                 return;
             }
 
-            WildCardProperties newWildCard = new WildCardProperties(text, probability, true, true, text, text);
+            WildCardProperties newWildCard = new WildCardProperties(text, probability, true, true, null, null);
 
             saveNewWildCard(newWildCard);
+
+            //Log the type of wildcard
+            Log.d("WildCardDetails",
+                    "WildCardName " + newWildCard.getText() +
+                            ", probability=" + newWildCard.getProbability() +
+                            ", isEnabled=" + newWildCard.isEnabled() +
+                            ", isDeletable=" + newWildCard.isDeletable() +
+                            ", answer=" + newWildCard.getAnswer() +
+                            ", category=" + newWildCard.getCategory());
 
             loadWildCardsFromSharedPreferences();
 
@@ -101,6 +111,8 @@ public class WildCardsFragments extends Fragment {
         sharedPreferences.edit()
                 .putString("wildcard_text_" + newCount, wildcard.getText())
                 .putInt("wildcard_probability_" + newCount, wildcard.getProbability())
+                .putString("wildcard_answer_" + newCount, wildcard.getAnswer()) // Use a different key for answer
+                .putString("wildcard_category_" + newCount, wildcard.getCategory()) // Use a different key for category
                 .apply();
     }
 
@@ -113,14 +125,15 @@ public class WildCardsFragments extends Fragment {
 
         for (int i = 0; i < count; i++) {
             String text = sharedPreferences.getString("wildcard_text_" + (i + 1), "");
-            String answer = sharedPreferences.getString("wildcard_text_" + (i + 1), "");
+            String answer = sharedPreferences.getString("wildcard_answer_" + (i + 1), ""); // Use the correct key for answer
             int probability = sharedPreferences.getInt("wildcard_probability_" + (i + 1), 10);
-            String category = sharedPreferences.getString("wildcard_text_" + (i + 1), "");
+            String category = sharedPreferences.getString("wildcard_category_" + (i + 1), ""); // Use the correct key for category
             newWildCards[i] = new WildCardProperties(text, probability, true, true, answer, category);
         }
 
         adapter.setWildCards(newWildCards);
     }
+
 
 
 }

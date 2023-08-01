@@ -63,12 +63,14 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
             String activity;
             int probability;
             String answer;
+            boolean deletable;
             String category;
 
             if (card != null) {
                 enabled = prefs.isWildcardEnabled(i, card.isEnabled());
                 activity = prefs.getWildcardActivityText(i, card.getText());
                 probability = prefs.getWildcardProbability(i, card.getProbability());
+                deletable = prefs.getWildCardDeletable(i, card.isDeletable());
                 answer = prefs.getWildcardAnswer(i, card.getAnswer());
                 category = prefs.getWildCardCategory(i, card.getCategory());
 
@@ -76,12 +78,13 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
                 enabled = prefs.isWildcardEnabled(i);
                 activity = prefs.getWildcardActivityText(i);
                 probability = prefs.getWildcardProbability(i);
+                deletable = prefs.getWildCardDeletable(i);
                 answer = prefs.getWildcardAnswer(i);
                 category = prefs.getWildcardCategory(i);
 
             }
 
-            loadedWildCards[i] = new WildCardProperties(activity, probability, enabled, defaultWildCards[i].isDeletable(), answer, category);
+            loadedWildCards[i] = new WildCardProperties(activity, probability, enabled, deletable, answer, category);
         }
 
         wildCards = loadedWildCards;

@@ -54,6 +54,14 @@ public class WildCardSettingsLocalStore {
     public String getWildCardCategory(int index, String defValue) {
         return mPref.getString("wild_card_category_" + index, defValue);
     }
+
+    public boolean getWildCardDeletable(int index) {
+        return mPref.getBoolean("wild_card_deletable_" + index, true);
+    }
+    public boolean getWildCardDeletable(int index, boolean defValue) {
+        return mPref.getBoolean("wild_card_deletable_" + index, defValue);
+    }
+
     public int getWildcardProbability(int index) {
         return mPref.getInt("wild_card_probability_" + index, 0);
     }

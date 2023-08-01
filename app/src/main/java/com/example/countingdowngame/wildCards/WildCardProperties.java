@@ -53,6 +53,7 @@ public class WildCardProperties {
     }
 
 
+
     public int getProbability() {
         return probability;
     }
