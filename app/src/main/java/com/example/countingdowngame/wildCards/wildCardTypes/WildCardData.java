@@ -55,7 +55,6 @@ public class WildCardData {
             new WildCardProperties("Quiz! Which gas is produced during photosynthesis?", 20, true, true, "Oxygen (O2)", "Science"),
             new WildCardProperties("Quiz! What is the unit of measurement for electric resistance?", 20, true, true, "Ohm (Ω)", "Science"),
             new WildCardProperties("Quiz! What is the process of a liquid turning into a gas below its boiling point?", 20, true, true, "Evaporation", "Science"),
-            new WildCardProperties("Quiz! What is the chemical symbol for nitrogen on the periodic table?", 20, true, true, "N", "Science"),
 
 // Geography Quiz Questions
             new WildCardProperties("Quiz! What is the national animal of Canada?", 10, true, true, "Beaver", "Geography"),
@@ -108,7 +107,6 @@ public class WildCardData {
             new WildCardProperties("Quiz! In which mountain range is Mount Everest located?", 10, true, true, "Himalayas", "Geography"),
             new WildCardProperties("Quiz! What is the largest hot desert in the world?", 10, true, true, "Sahara Desert", "Geography"),
             new WildCardProperties("Quiz! Which country is famous for the Great Wall?", 10, true, true, "China", "Geography"),
-            new WildCardProperties("Quiz! In which continent is the Great Barrier Reef located?", 10, true, true, "Australia", "Geography"),
 
 
 // History Quiz Questions
@@ -162,7 +160,6 @@ public class WildCardData {
             new WildCardProperties("Quiz! Who was the Mongol emperor who established the Yuan Dynasty in China?", 10, true, true, "Kublai Khan", "History"),
             new WildCardProperties("Quiz! In which year did the Suez Canal open, connecting the Mediterranean Sea to the Red Sea?", 10, true, true, "1869", "History"),
             new WildCardProperties("Quiz! Who was the leader of the Allied forces during World War II?", 10, true, true, "Dwight D. Eisenhower", "History"),
-            new WildCardProperties("Quiz! In which year did the Treaty of Tordesillas divide the New World between Spain and Portugal?", 10, true, true, "1494", "History"),
 
 
 // Art/Music Quiz Questions
@@ -203,7 +200,6 @@ public class WildCardData {
             new WildCardProperties("Quiz! Who painted the famous artwork 'The Guernica'?", 20, true, true, "Pablo Picasso", "Art/Music"),
             new WildCardProperties("Quiz! Who composed the famous piano composition 'Nocturne in E-flat Major'?", 20, true, true, "Frederic Chopin", "Art/Music"),
             new WildCardProperties("Quiz! Who is the author of the novel 'The Lord of the Rings'?", 20, true, true, "J.R.R. Tolkien", "Art/Music"),
-            new WildCardProperties("Quiz! Who painted the famous artwork 'The Last Judgment'?", 20, true, true, "Michelangelo", "Art/Music"),
             new WildCardProperties("Quiz! Who composed the famous opera 'The Marriage of Figaro'?", 20, true, true, "Wolfgang Amadeus Mozart", "Art/Music"),
             new WildCardProperties("Quiz! Who is the lead guitarist of the band AC/DC?", 20, true, true, "Angus Young", "Art/Music"),
             new WildCardProperties("Quiz! Who painted the famous artwork 'The Persistence of Memory'?", 20, true, true, "Salvador Dalí", "Art/Music"),
@@ -269,7 +265,7 @@ public class WildCardData {
             new WildCardProperties("Quiz! What is the name of the famous horse race that takes place annually in the United Kingdom?", 10, true, true, "The Grand National", "Sport"),
             new WildCardProperties("Quiz! Who is the only tennis player to achieve the Golden Slam (winning all four Grand Slam titles and Olympic gold)?", 10, true, true, "Steffi Graf", "Sport"),
             new WildCardProperties("Quiz! Which team has won the most Super Bowl championships in NFL history?", 10, true, true, "Pittsburgh Steelers", "Sport"),
-            new WildCardProperties("Quiz! What is the traditional color of the winner's jersey in the Tour de France?", 10, true, true, "Yellow", "Sport")
+            new WildCardProperties("Quiz! What sport did Lola Bunny play in Space Jam?", 10, true, true, "Basketball", "Sport")
     };
 
 
