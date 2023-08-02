@@ -70,12 +70,6 @@ public class WildCardView extends ArrayAdapter<WildCardProperties> {
         return convertView;
     }
 
-    private static class ViewHolder {
-        TextView textViewWildCard;
-        TextView textViewProbability;
-        Switch switchWildCard;
-    }
-
     private void setTextViewSizeBasedOnString(TextView textView, String text) {
         int textSize = 20;
         if (text.length() > 20) {
@@ -92,6 +86,12 @@ public class WildCardView extends ArrayAdapter<WildCardProperties> {
             textSize = 12;
         }
         textView.setTextSize(textSize);
+    }
+
+    private static class ViewHolder {
+        TextView textViewWildCard;
+        TextView textViewProbability;
+        Switch switchWildCard;
     }
 
     public static class WildCardsPagerAdapter extends FragmentPagerAdapter {

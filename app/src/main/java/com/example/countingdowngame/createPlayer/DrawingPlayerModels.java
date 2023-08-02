@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.SeekBar;
 
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.utils.ButtonUtilsActivity;;
+import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.io.ByteArrayOutputStream;
 

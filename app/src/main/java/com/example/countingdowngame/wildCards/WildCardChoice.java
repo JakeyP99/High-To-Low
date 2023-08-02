@@ -4,8 +4,8 @@ import android.os.Bundle;
 
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.countingdowngame.utils.ButtonUtilsActivity;;
 import com.example.countingdowngame.R;
+import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.google.android.material.tabs.TabLayout;
 
 public class WildCardChoice extends ButtonUtilsActivity {

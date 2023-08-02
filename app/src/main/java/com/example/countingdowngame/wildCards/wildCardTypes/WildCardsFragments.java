@@ -65,8 +65,8 @@ public class WildCardsFragments extends Fragment {
 
         builder.setNegativeButton(Html.fromHtml("<font color='" + blueDarkColor + "'>Cancel</font>"), (dialog, which) -> dialog.cancel());
 
-        builder.setPositiveButton(Html.fromHtml("<font color='" + blueDarkColor + "'>OK</font>"),(dialog, which) -> {
-            int  probability = 10; // Invalid input, set to a default value
+        builder.setPositiveButton(Html.fromHtml("<font color='" + blueDarkColor + "'>OK</font>"), (dialog, which) -> {
+            int probability = 10; // Invalid input, set to a default value
             String text = textInput.getText().toString().trim();
             if (text.isEmpty()) {
                 Toast.makeText(mContext, "The wildcard needs some text, please and thanks!", Toast.LENGTH_SHORT).show();
@@ -133,7 +133,6 @@ public class WildCardsFragments extends Fragment {
 
         adapter.setWildCards(newWildCards);
     }
-
 
 
 }

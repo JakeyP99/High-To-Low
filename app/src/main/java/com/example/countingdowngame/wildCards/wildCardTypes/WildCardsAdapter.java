@@ -26,10 +26,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAdapter.WildCardViewHolder> {
+    private final String mSaveKey;
     protected WildCardProperties[] wildCards;
     protected Context mContext;
     protected WildCardType mMode;
-    private final String mSaveKey;
 
     public WildCardsAdapter(String saveKey, WildCardProperties[] wildCards, Context context, WildCardType mode) {
         this.wildCards = wildCards;
@@ -92,11 +92,6 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
         return loadedWildCards;
     }
 
-
-    public void setWildCards(WildCardProperties[] wildCards) {
-        this.wildCards = wildCards;
-    }
-
     public boolean areAllEnabled() {
         for (WildCardProperties wildcard : wildCards) {
             if (!wildcard.isEnabled()) {
@@ -117,11 +112,13 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
         return wildCards.length;
     }
 
-
     public WildCardProperties[] getWildCards() {
         return wildCards;
     }
 
+    public void setWildCards(WildCardProperties[] wildCards) {
+        this.wildCards = wildCards;
+    }
 
     public void saveWildCardProbabilitiesToStorage(WildCardProperties[] probabilities) {
         wildCards = probabilities;
@@ -134,8 +131,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
 
             if (probability.hasAnswer()) {
                 prefs.setWildcardState(i, probability.isEnabled(), probability.getText(), probability.getProbability(), probability.getAnswer(), probability.getCategory());
-            }
-            else {
+            } else {
                 prefs.setWildcardState(i, probability.isEnabled(), probability.getText(), probability.getProbability());
             }
         }
@@ -198,8 +194,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
 
                 layout.addView(wildCardTextInput);
 
-                if (wildcard.getAnswer() !=null)
-                {
+                if (wildcard.getAnswer() != null) {
                     answerWildCardTextInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                     answerWildCardTextInput.setLines(6);
                     answerWildCardTextInput.setMinLines(2);

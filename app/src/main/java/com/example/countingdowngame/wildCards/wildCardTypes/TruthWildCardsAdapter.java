@@ -15,6 +15,7 @@ public class TruthWildCardsAdapter extends WildCardsAdapter {
     public TruthWildCardsAdapter(WildCardProperties[] truthWildCards, Context context, WildCardType mode) {
         super("TruthPrefs", truthWildCards, context, mode);
     }
+
     @NonNull
     @Override
     public WildCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

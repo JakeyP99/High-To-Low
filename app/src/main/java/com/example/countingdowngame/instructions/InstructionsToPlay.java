@@ -14,8 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-;
-
 public class InstructionsToPlay extends ButtonUtilsActivity {
     private final List<Integer> instructions = Arrays.asList(
             R.string.instruction_welcome,

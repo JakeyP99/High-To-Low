@@ -30,7 +30,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.countingdowngame.utils.ButtonUtilsActivity;;
+import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.example.countingdowngame.mainActivity.NumberChoice;
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;

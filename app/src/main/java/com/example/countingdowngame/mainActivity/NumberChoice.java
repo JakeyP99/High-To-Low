@@ -10,9 +10,9 @@ import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.example.countingdowngame.utils.ButtonUtilsActivity;;
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.stores.GeneralSettingsLocalStore;
+import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.Random;
 
