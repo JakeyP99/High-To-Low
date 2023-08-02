@@ -36,7 +36,7 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
 
     public QuizWildCardsAdapter(WildCardProperties[] quizWildCards, Context context, WildCardType mode) {
         super("QuizPrefs", quizWildCards, context, mode);
-        Arrays.fill(categoryVisibility, false);
+        Arrays.fill(categoryVisibility, true);
     }
 
 
@@ -58,14 +58,6 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
         if (holder instanceof CategoryViewHolder) {
             if (categoryIndex >= 0 && categoryIndex < categoryNames.length) {
                 ((CategoryViewHolder) holder).bind(categoryNames[categoryIndex]);
-
-                int categoryStartIndex = categoryIndex * (ItemsPerCategory + 1);
-                int categoryEndIndex = categoryStartIndex + ItemsPerCategory;
-
-                int actualCardsInCategory = Math.min(ItemsPerCategory, wildCards.length - categoryStartIndex);
-                Log.d("QuizWildCardsAdapter", "Category: " + categoryNames[categoryIndex] +
-                        ", Cards in Category: " + actualCardsInCategory +
-                        ", Displayed under banner: " + (categoryEndIndex - categoryStartIndex));
             }
         } else {
             int quizCardIndex = getQuizCardIndexForPosition(position);
@@ -74,14 +66,25 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
                 ((QuizWildCardViewHolder) holder).bind(wildCard);
                 int positionWithOneBasedIndex = quizCardIndex + 1;
 
-                holder.itemView.setVisibility(categoryVisibility[categoryIndex] ? View.VISIBLE : View.GONE);
+                boolean isVisible = categoryVisibility[categoryIndex];
+                holder.itemView.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+                ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
+                params.height = isVisible ? ViewGroup.LayoutParams.WRAP_CONTENT : 0;
+                holder.itemView.setLayoutParams(params);
 
                 holder.itemView.setOnClickListener(v -> {
                     Log.d("QuizWildCardsAdapter", "Tapped on wildcard: " + wildCard.getText() + " (Category: " + wildCard.getCategory() + "Position: " + positionWithOneBasedIndex + ")");
                 });
+            } else {
+                // Hide the views for invisible items
+                holder.itemView.setVisibility(View.GONE);
+                ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
+                params.height = 0;
+                holder.itemView.setLayoutParams(params);
             }
         }
     }
+
 
 
     private int getCategoryIndexForPosition(int position) {
@@ -95,8 +98,16 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
 
     @Override
     public int getItemCount() {
-        return wildCards.length + CategoryDividerCount;
+        int visibleCount = 0;
+        for (int i = 0; i < categoryNames.length; i++) {
+            if (categoryVisibility[i]) {
+                visibleCount += ItemsPerCategory + 1; // Add the category and its visible items
+            }
+        }
+        return visibleCount;
     }
+
+
 
     @Override
     public int getItemViewType(int position) {
