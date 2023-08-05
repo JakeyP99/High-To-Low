@@ -17,20 +17,22 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-//TODO I still need to figure out why my quiz categories are not being hidden properly
-
+//FixMe I still need to figure out why my quiz categories are not being hidden properly
 
 public class QuizWildCardsAdapter extends WildCardsAdapter {
     private static final int VIEW_TYPE_CATEGORY = 1;
     private static final int VIEW_TYPE_QUIZ_CARD = 2;
     private static final int ItemsPerCategory = 50;
     private final Map<Integer, CategoryVisibility> categoryVisibilityMap = new HashMap<>();
-    private final String[] categoryNames = {"Science", "Geography", "History", "Art/Music", "Sport"};
-    private final int[] bannerIdentifiers = {1, // Science
+    private final String[] categoryNames = {"Science", "Geography", "History", "Art/Music", "Sport", "Movies", "Video Games"};
+    private final int[] bannerIdentifiers = {
+            1, // Science
             2, // Geography
             3, // History
             4, // Art/Music
-            5  // Sport
+            5, //Sport
+            6,// Movies
+            7 //Video Games
     };
     private final boolean[] categoryVisibility = new boolean[categoryNames.length];
 
@@ -68,7 +70,7 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
             int quizCardIndex = getQuizCardIndexForPosition(position);
             if (quizCardIndex >= 0 && quizCardIndex < wildCards.length) {
                 WildCardProperties wildCard = wildCards[quizCardIndex];
-                ((QuizWildCardViewHolder) holder).bind(wildCard);
+                holder.bind(wildCard);
                 int positionWithOneBasedIndex = quizCardIndex + 1;
                 boolean isVisible = getCategoryVisibility(categoryIndex).isVisible();
                 holder.itemView.setVisibility(isVisible ? View.VISIBLE : View.GONE);
