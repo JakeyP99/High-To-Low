@@ -40,18 +40,19 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MainActivityGame extends SharedMainActivity {
-    private final boolean animationEnded = false;
     private final Map<Player, Set<WildCardProperties>> usedWildCard = new HashMap<>();
     private final Set<WildCardProperties> usedWildCards = new HashSet<>();
     private TextView numberText;
     private TextView nextPlayerText;
     private Button btnAnswer;
     private Button btnWild;
+    public static int currentNumber = 0;
     private Button btnGenerate;
     private Button btnBackWild;
     private Button btnAnswerRight;
     private Button btnAnswerWrong;
     private ImageView playerImage;
+    private TextView numberCounter;
     private boolean doubleBackToExitPressedOnce = false;
     private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
     private Handler shuffleHandler;
@@ -94,7 +95,8 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void initializeViews() {
         playerImage = findViewById(R.id.playerImage);
-        numberText = findViewById(R.id.numberText);
+        numberText = findViewById(R.id.textView_NumberText);
+        numberCounter = findViewById(R.id.textView_numberCounter);
         nextPlayerText = findViewById(R.id.textView_Number_Turn);
         btnWild = findViewById(R.id.btnWild);
         btnAnswer = findViewById(R.id.btnAnswer);
@@ -103,7 +105,7 @@ public class MainActivityGame extends SharedMainActivity {
         btnAnswerRight = findViewById(R.id.btnGotQuizRight);
         btnAnswerWrong = findViewById(R.id.btnGotQuizWrong);
         shuffleHandler = new Handler();
-        wildText = findViewById(R.id.wild_textview);
+        wildText = findViewById(R.id.textView_WildText);
     }
 
     private void startGame() {
@@ -142,21 +144,27 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void setupButtons() {
 
-        ImageButton imageButtonExit = findViewById(R.id.imageBtnExit);
-        View wildText = findViewById(R.id.wild_textview);
+        ImageButton imageButtonExit = findViewById(R.id.btnExitGame);
+        View wildText = findViewById(R.id.textView_WildText);
 
         btnBackWild.setVisibility(View.INVISIBLE);
         btnAnswer.setVisibility(View.INVISIBLE);
         btnAnswerRight.setVisibility(View.INVISIBLE);
         btnAnswerWrong.setVisibility(View.INVISIBLE);
 
-        btnUtils.setButton(btnGenerate, this::startNumberShuffleAnimation);
+        btnUtils.setButton(btnGenerate, () -> {
+            startNumberShuffleAnimation();
+            numberCounter();
+            Log.d("btnGenerate", "Generate Clicked");
+        });
+
         btnUtils.setButton(btnAnswer, this::showAnswer);
 
         btnUtils.setButton(btnBackWild, this::wildCardContinue);
 
         btnUtils.setButton(btnWild, () -> {
             wildCardActivate(Game.getInstance().getCurrentPlayer());
+            numberCounter.setVisibility(View.INVISIBLE);
             wildText.setVisibility(View.VISIBLE);
             btnWild.setVisibility(View.INVISIBLE);
             btnGenerate.setVisibility(View.INVISIBLE);
@@ -243,6 +251,8 @@ public class MainActivityGame extends SharedMainActivity {
     private void wildCardContinue() {
         Game.getInstance().getCurrentPlayer().useSkip();
         btnGenerate.setVisibility(View.VISIBLE);
+        numberCounter.setVisibility(View.VISIBLE);
+
         numberText.setVisibility(View.VISIBLE);
         nextPlayerText.setVisibility(View.VISIBLE);
         wildText.setVisibility(View.INVISIBLE);
@@ -271,7 +281,7 @@ public class MainActivityGame extends SharedMainActivity {
         allProbabilities.addAll(Arrays.asList(truthProbabilities));
         allProbabilities.addAll(Arrays.asList(extraProbabilities));
 
-        final TextView wildActivityTextView = findViewById(R.id.wild_textview);
+        final TextView wildActivityTextView = findViewById(R.id.textView_WildText);
 
         boolean wildCardsEnabled = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("wild_cards_toggle", true);
 
@@ -452,7 +462,7 @@ public class MainActivityGame extends SharedMainActivity {
             }
         }
 
-    private void quizAnswerView(String string){
+    private void quizAnswerView(String string) {
         btnBackWild.setVisibility(View.VISIBLE);
         wildText.setVisibility(View.VISIBLE);
         btnWild.setVisibility(View.INVISIBLE);
@@ -462,8 +472,20 @@ public class MainActivityGame extends SharedMainActivity {
         wildText.setText(string);
     }
 
+    public void numberCounter() {
+        currentNumber++;
+        String text;
+        if (currentNumber == 1) {
+            text = "1 Drink";
+        } else {
+            text = currentNumber + " Drinks";
+        }
+        numberCounter.setText(text);
+    }
+
+
     private void showAnswer() {
-        TextView wildActivityTextView = findViewById(R.id.wild_textview);
+        TextView wildActivityTextView = findViewById(R.id.textView_WildText);
         btnAnswerRight.setVisibility(View.VISIBLE);
         btnAnswerWrong.setVisibility(View.VISIBLE);
 

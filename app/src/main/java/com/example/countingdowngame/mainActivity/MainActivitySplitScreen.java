@@ -112,16 +112,16 @@ public class MainActivitySplitScreen extends SharedMainActivity {
         btnGenerate = findViewById(R.id.btnGenerate);
         btnGeneratePlayer2 = findViewById(R.id.btnGeneratePlayer2);
 
-        wildActivityTextView  = findViewById(R.id.wild_textview);
-        wildActivityTextViewPlayer2  = findViewById(R.id.wild_textviewPlayer2);
+        wildActivityTextView = findViewById(R.id.textView_WildText);
+        wildActivityTextViewPlayer2 = findViewById(R.id.wild_textviewPlayer2);
 
         btnContinue = findViewById(R.id.btnBackWildCard);
         btnContinuePlayer2 = findViewById(R.id.btnBackWildCardPlayer2);
 
-        wildText = findViewById(R.id.wild_textview);
+        wildText = findViewById(R.id.textView_WildText);
         wildTextPlayer2 = findViewById(R.id.wild_textviewPlayer2);
 
-        imageButtonExit = findViewById(R.id.imageBtnExit);
+        imageButtonExit = findViewById(R.id.btnExitGame);
         imageButtonExitPlayer2 = findViewById(R.id.imageBtnExitPlayer2);
 
         playerImage = findViewById(R.id.playerImage);
@@ -130,7 +130,7 @@ public class MainActivitySplitScreen extends SharedMainActivity {
         btnWild = findViewById(R.id.btnWild);
         btnWildPlayer2 = findViewById(R.id.btnWildPlayer2);
 
-        numberText = findViewById(R.id.numberText);
+        numberText = findViewById(R.id.textView_NumberText);
         numberTextPlayer2 = findViewById(R.id.numberTextPlayer2);
 
         nextPlayerText = findViewById(R.id.textView_Number_Turn);
@@ -543,7 +543,7 @@ public class MainActivitySplitScreen extends SharedMainActivity {
 
 
     private void showAnswer() {
-        TextView wildActivityTextView = findViewById(R.id.wild_textview);
+        TextView wildActivityTextView = findViewById(R.id.textView_WildText);
         TextView wildActivityTextViewPlayer2 = findViewById(R.id.wild_textviewPlayer2);
 
         setPairedViewsVisible(btnAnswerRight, btnAnswerRightPlayer2, btnAnswerWrong, btnAnswerWrongPlayer2);

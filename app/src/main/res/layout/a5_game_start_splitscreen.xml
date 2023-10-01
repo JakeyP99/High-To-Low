@@ -30,7 +30,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view" />
     <TextView
-        android:id="@+id/wild_textview"
+        android:id="@+id/textView_WildText"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:gravity="center"
@@ -55,11 +55,11 @@
         app:layout_constraintBottom_toTopOf="@+id/btnWild"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/wild_textview"
+        app:layout_constraintTop_toTopOf="@+id/textView_WildText"
         app:layout_constraintVertical_bias="0.5" />
 
     <TextView
-        android:id="@+id/numberText"
+        android:id="@+id/textView_NumberText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/bluedark"
@@ -147,7 +147,7 @@
         app:layout_constraintTop_toTopOf="@+id/btnWild" />
 
     <ImageButton
-        android:id="@+id/imageBtnExit"
+        android:id="@+id/btnExitGame"
         android:layout_width="54dp"
         android:layout_height="54dp"
         android:layout_marginTop="12dp"

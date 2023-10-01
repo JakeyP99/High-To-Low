@@ -5,14 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".mainActivity.MainActivityGame">
+    tools:context=".mainActivity.MainActivityGame"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="39dp">
 
 
     <TextView
-        android:id="@+id/numberText"
+        android:id="@+id/textView_NumberText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/bluedark"
+        android:text="test"
         android:textSize="70sp"
         app:layout_constraintBottom_toBottomOf="@+id/btnGenerate"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,20 +37,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.85" />
-
-    <Button
-        android:id="@+id/btnGenerate"
-        android:layout_width="290dp"
-        android:layout_height="282dp"
-        android:background="@drawable/outlineforbutton"
-        android:textColor="@color/bluedark"
-        android:textSize="21sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.45" />
+        app:layout_constraintVertical_bias="0.87" />
 
 
     <Button
@@ -63,7 +53,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.85" />
+        app:layout_constraintVertical_bias="0.87" />
 
 
     <Button
@@ -77,10 +67,10 @@
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.101"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.85"
-        app:layout_constraintHorizontal_bias="0.1"/>
+        app:layout_constraintVertical_bias="0.87" />
 
     <Button
         android:id="@+id/btnGotQuizWrong"
@@ -93,10 +83,10 @@
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.898"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.85"
-        app:layout_constraintHorizontal_bias="0.9"/>
+        app:layout_constraintVertical_bias="0.87" />
 
 
     <Button
@@ -111,10 +101,10 @@
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.673" />
+        app:layout_constraintVertical_bias="0.721" />
+
 
     <TextView
         android:id="@+id/textView_Number_Turn"
@@ -125,30 +115,58 @@
         android:textSize="35sp"
         app:layout_constraintBottom_toTopOf="@+id/btnGenerate"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playerImage" />
+        app:layout_constraintTop_toBottomOf="@+id/playerImage"
+        app:layout_constraintVertical_bias="0.3" />
 
     <TextView
-        android:id="@+id/wild_textview"
+        android:id="@+id/textView_numberCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 Drinks"
+        android:textColor="@color/bluedark"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnGenerate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_Number_Turn"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/textView_WildText"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_centerHorizontal="true"
+        android:layout_margin="20sp"
         android:gravity="center"
         android:text=""
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:textColor="@color/bluedark"
         android:textSize="30sp"
-        android:layout_margin="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.32" />
+        app:layout_constraintVertical_bias="0.39" />
+
+    <Button
+        android:id="@+id/btnGenerate"
+        android:layout_width="290dp"
+        android:layout_height="282dp"
+        android:background="@drawable/outlineforbutton"
+        android:textColor="@color/bluedark"
+        android:textSize="21sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.541" />
 
     <ImageButton
-        android:id="@+id/imageBtnExit"
+        android:id="@+id/btnExitGame"
         android:layout_width="54dp"
         android:layout_height="54dp"
         android:background="@color/transparent"

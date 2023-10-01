@@ -36,7 +36,16 @@ public class EndActivityGame extends ButtonUtilsActivity {
 
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         String playerName = currentPlayer.getName();
-        String endGameText = "Drink Up " + playerName + " Ya Lil Baby!!";
+        int numberCounter = MainActivityGame.currentNumber; // Access the currentNumber
+
+        String endGameText;
+        if (numberCounter == 1) {
+            endGameText = "Drink " + numberCounter + " time " + playerName + "Ya Lil Baby!!";
+        } else {
+            endGameText = "Drink " + numberCounter + " times " + playerName + "Ya Lil Baby!!";
+        }
+
+
         endGameName.setText(endGameText);
         //-----------------------------------------------------Set up previous numbers list---------------------------------------------------//
 
