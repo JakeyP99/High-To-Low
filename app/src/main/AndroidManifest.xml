@@ -33,20 +33,17 @@
             android:name=".mainActivity.MainActivityGame"
         />
 
-        <activity
-            android:name=".mainActivity.PlayerNumberChoice" />
+        <activity android:name=".mainActivity.PlayerNumberChoice" />
 
-        <activity
-            android:name=".mainActivity.EndActivityGame" />
+        <activity android:name=".mainActivity.EndActivityGame" />
 
-        <activity
-            android:name=".mainActivity.NumberChoice" />
+        <activity android:name=".mainActivity.NumberChoice" />
 
-        <activity
-            android:name=".instructions.InstructionsToPlay" />
+        <activity android:name=".mainActivity.ClassSelection" />
 
-        <activity
-            android:name=".mainActivity.SettingsContainer" />
+        <activity android:name=".instructions.InstructionsToPlay" />
+
+        <activity android:name=".mainActivity.SettingsContainer" />
         <activity
             android:name=".wildCards.WildCardChoice"
             android:windowSoftInputMode="adjustNothing" />
@@ -61,7 +58,7 @@
             android:name=".createPlayer.DrawingPlayerModels" />
 
         <activity
-            android:name=".createPlayer.PlayerModel"
+            android:name=".createPlayer.PlayerChoice"
             android:windowSoftInputMode="adjustNothing" />
 
         <meta-data

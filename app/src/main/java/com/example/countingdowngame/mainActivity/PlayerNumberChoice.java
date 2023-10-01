@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.createPlayer.PlayerModel;
+import com.example.countingdowngame.createPlayer.PlayerChoice;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
@@ -63,7 +63,7 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
                     .duration(300)
                     .onEnd(animator -> {
                         // Animation has ended, start the MainActivity here
-                        startActivity(getIntentForClass(PlayerModel.class, true));
+                        startActivity(getIntentForClass(PlayerChoice.class, true));
                     })
                     .playOn(originalPlayerField);
 

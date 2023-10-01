@@ -16,6 +16,7 @@ import android.text.InputType;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -30,19 +31,20 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.countingdowngame.utils.ButtonUtilsActivity;
-import com.example.countingdowngame.mainActivity.NumberChoice;
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.Player;
+import com.example.countingdowngame.mainActivity.ClassSelection;
+import com.example.countingdowngame.mainActivity.NumberChoice;
 import com.example.countingdowngame.stores.PlayerModelLocalStore;
+import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerModel extends ButtonUtilsActivity {
+public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapter.ClickListener {
     private static final int REQUEST_IMAGE_PICK = 1;
     private static final int REQUEST_DRAW = 2;
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;
@@ -52,6 +54,7 @@ public class PlayerModel extends ButtonUtilsActivity {
     private int totalPlayerCount;
     private RecyclerView playerRecyclerView;
     private int selectedPlayerCount;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -64,12 +67,23 @@ public class PlayerModel extends ButtonUtilsActivity {
     }
 
     @Override
+    public void onPlayerClick(int position) {
+        // Handle player click here
+        Player player = playerList.get(position);
+        Intent intent = new Intent(this, ClassSelection.class);
+        intent.putExtra("selectedPlayer", player);
+        startActivity(intent);
+        Log.d("Player Clicked", "onPlayerClick: True");
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a3_player_choice);
+        setContentView(R.layout.player_choice);
 
         totalPlayerCount = Game.getInstance().getPlayerAmount();
         playerList = new ArrayList<>();
+        playerListAdapter = new PlayerListAdapter(this, playerList, this);
 
         selectedPlayerCount = 0; // Initialize selectedPlayerCount to 0
         initializeViews();
@@ -345,7 +359,7 @@ public class PlayerModel extends ButtonUtilsActivity {
     //-----------------------------------------------------UI Decoration---------------------------------------------------//
     private void setupPlayerRecyclerView() {
         playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
-        playerListAdapter = new PlayerListAdapter(this, playerList);
+        playerListAdapter = new PlayerListAdapter(this, playerList, this);
 
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
         int spacing = getResources().getDimensionPixelSize(R.dimen.grid_spacing);

@@ -15,7 +15,7 @@ import com.example.countingdowngame.mainActivity.NumberChoice;
 import com.example.countingdowngame.mainActivity.PlayerNumberChoice;
 import com.example.countingdowngame.mainActivity.SettingsContainer;
 
-public class ButtonUtilsActivity extends AppCompatActivity {
+public abstract class ButtonUtilsActivity extends AppCompatActivity {
 
     protected ButtonUtils btnUtils;
     protected Drawable buttonHighlightDrawable;

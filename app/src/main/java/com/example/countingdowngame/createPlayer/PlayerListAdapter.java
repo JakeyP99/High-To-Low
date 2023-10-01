@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Shader;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +26,19 @@ import java.util.List;
 
 // RecyclerView adapter for player list
 public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.ViewHolder> {
-    private final PlayerModel context;
+    private final PlayerChoice context;
     private final List<Player> players;
+    private final ClickListener clickListener;
 
-    public PlayerListAdapter(PlayerModel context, List<Player> players) {
+    public PlayerListAdapter(PlayerChoice context, List<Player> players, ClickListener clickListener) {
         this.context = context;
         this.players = players;
+        this.clickListener = clickListener; // Initialize the clickListener with the provided parameter
+    }
+
+
+    public interface ClickListener {
+        void onPlayerClick(int position);
     }
 
     @NonNull
@@ -64,6 +72,16 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
             playerNameTextView = itemView.findViewById(R.id.playerNameTextView);
             deletePlayerImageView = itemView.findViewById(R.id.deletePlayerImageView);
 
+            playerItemView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    clickListener.onPlayerClick(position);
+                }
+                Log.d("Player Clicked", "ViewHolder: Playerclicked");
+
+            });
+
+
             deletePlayerImageView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
@@ -71,13 +89,15 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
                 }
             });
 
-            // Set click listener for player selection
-            playerItemView.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    togglePlayerSelection(position);
-                }
-            });
+
+            //todo put this functionality in classSelection once you choose your class
+//            // Set click listener for player selection
+//            playerItemView.setOnClickListener(v -> {
+//                int position = getAdapterPosition();
+//                if (position != RecyclerView.NO_POSITION) {
+//                    togglePlayerSelection(position);
+//                }
+//            });
 
             // Set long-click listener for player deletion
             playerItemView.setOnLongClickListener(v -> {

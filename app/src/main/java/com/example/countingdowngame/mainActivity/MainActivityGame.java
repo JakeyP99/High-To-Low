@@ -46,7 +46,7 @@ public class MainActivityGame extends SharedMainActivity {
     private TextView nextPlayerText;
     private Button btnAnswer;
     private Button btnWild;
-    public static int currentNumber = 0;
+    public static int numberCounterInt = 0;
     private Button btnGenerate;
     private Button btnBackWild;
     private Button btnAnswerRight;
@@ -58,6 +58,7 @@ public class MainActivityGame extends SharedMainActivity {
     private Handler shuffleHandler;
     private WildCardProperties selectedWildCard; // Declare selectedWildCard at a higher level
     private TextView wildText;
+    private Player firstPlayer;
 
     @Override
     protected void onResume() {
@@ -109,7 +110,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void startGame() {
-        currentNumber = 0;
+        numberCounterInt = 0;
         int soundResourceId = R.raw.cartoonloop;
         AudioManager.getInstance().initialize(this, soundResourceId);
 
@@ -131,6 +132,8 @@ public class MainActivityGame extends SharedMainActivity {
             for (Player player : playerList) {
                 player.setGame(Game.getInstance());
             }
+            firstPlayer = playerList.get(0);
+
         }
 
         Game.getInstance().startGame(startingNumber, (e) -> {
@@ -155,7 +158,6 @@ public class MainActivityGame extends SharedMainActivity {
 
         btnUtils.setButton(btnGenerate, () -> {
             startNumberShuffleAnimation();
-            numberCounter();
             Log.d("btnGenerate", "Generate Clicked");
         });
 
@@ -221,12 +223,25 @@ public class MainActivityGame extends SharedMainActivity {
     private void renderPlayer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
+
+        if (currentPlayer.equals(firstPlayer)) {
+            numberCounterInt++;
+            String text;
+            if (numberCounterInt == 1) {
+                text = "1 Drink";
+            } else {
+                text = numberCounterInt + " Drinks";
+            }
+            numberCounter.setText(text);
+        }
+
         if (!playerList.isEmpty()) {
             String playerName = currentPlayer.getName();
             String playerImageString = currentPlayer.getPhoto();
 
             nextPlayerText.setText(playerName + "'s Turn");
             btnWild.setText((currentPlayer.getWildCardAmount() + "\n" + "Wild Cards"));
+
 
             if (playerImageString != null) {
                 byte[] decodedString = Base64.decode(playerImageString, Base64.DEFAULT);
@@ -472,18 +487,6 @@ public class MainActivityGame extends SharedMainActivity {
         numberText.setVisibility(View.INVISIBLE);
         wildText.setText(string);
     }
-
-    public void numberCounter() {
-        currentNumber++;
-        String text;
-        if (currentNumber == 1) {
-            text = "1 Drink";
-        } else {
-            text = currentNumber + " Drinks";
-        }
-        numberCounter.setText(text);
-    }
-
 
     private void showAnswer() {
         TextView wildActivityTextView = findViewById(R.id.textView_WildText);
