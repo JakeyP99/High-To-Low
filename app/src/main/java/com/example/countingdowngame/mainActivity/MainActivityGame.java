@@ -109,6 +109,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void startGame() {
+        currentNumber = 0;
         int soundResourceId = R.raw.cartoonloop;
         AudioManager.getInstance().initialize(this, soundResourceId);
 

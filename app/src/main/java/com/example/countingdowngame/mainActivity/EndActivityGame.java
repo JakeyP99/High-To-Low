@@ -40,9 +40,9 @@ public class EndActivityGame extends ButtonUtilsActivity {
 
         String endGameText;
         if (numberCounter == 1) {
-            endGameText = "Drink " + numberCounter + " time " + playerName + "Ya Lil Baby!!";
+            endGameText = "Drink " + numberCounter + " time " + playerName + " Ya Lil Baby!!";
         } else {
-            endGameText = "Drink " + numberCounter + " times " + playerName + "Ya Lil Baby!!";
+            endGameText = "Drink " + numberCounter + " times " + playerName + " Ya Lil Baby!!";
         }
 
 
