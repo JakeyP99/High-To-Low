@@ -34,7 +34,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.Player;
-import com.example.countingdowngame.mainActivity.ClassSelection;
 import com.example.countingdowngame.mainActivity.NumberChoice;
 import com.example.countingdowngame.stores.PlayerModelLocalStore;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
@@ -54,7 +53,6 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     private int totalPlayerCount;
     private RecyclerView playerRecyclerView;
     private int selectedPlayerCount;
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -68,9 +66,8 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
 
     @Override
     public void onPlayerClick(int position) {
-        // Handle player click here
         Player player = playerList.get(position);
-        Intent intent = new Intent(this, ClassSelection.class);
+        Intent intent = new Intent(this, CharacterClassSelection.class);
         intent.putExtra("selectedPlayer", player);
         startActivity(intent);
         Log.d("Player Clicked", "onPlayerClick: True");

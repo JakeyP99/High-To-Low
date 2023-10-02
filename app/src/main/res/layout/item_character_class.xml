@@ -1,0 +1,28 @@
+<!-- res/layout/item_character_class.xml -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/classNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:layout_gravity="start"
+        android:gravity="start"
+        android:layout_marginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/specialAbilityTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/bluedarktransparent"
+        android:layout_gravity="start"
+        android:gravity="start" />
+</LinearLayout>

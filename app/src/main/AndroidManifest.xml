@@ -29,9 +29,7 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".mainActivity.MainActivityGame"
-        />
+        <activity android:name=".mainActivity.MainActivityGame" />
 
         <activity android:name=".mainActivity.PlayerNumberChoice" />
 
@@ -39,7 +37,7 @@
 
         <activity android:name=".mainActivity.NumberChoice" />
 
-        <activity android:name=".mainActivity.ClassSelection" />
+        <activity android:name=".createPlayer.CharacterClassSelection" />
 
         <activity android:name=".instructions.InstructionsToPlay" />
 
@@ -48,11 +46,9 @@
             android:name=".wildCards.WildCardChoice"
             android:windowSoftInputMode="adjustNothing" />
 
-        <activity
-            android:name=".game.GeneralSettings" />
+        <activity android:name=".game.GeneralSettings" />
 
-        <activity
-            android:name=".mainActivity.MainActivitySplitScreen" />
+        <activity android:name=".mainActivity.MainActivitySplitScreen" />
 
         <activity
             android:name=".createPlayer.DrawingPlayerModels" />
