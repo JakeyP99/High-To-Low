@@ -12,25 +12,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CharacterClassSelection extends ButtonUtilsActivity {
-
-    private RecyclerView recyclerView;
-    private CharacterClassAdapter adapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.characterclass_selection);
 
-        recyclerView = findViewById(R.id.playerRecyclerView);
+        RecyclerView recyclerView = findViewById(R.id.playerRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Create a list of character classes (Rabbit and Lion)
         List<CharacterClassStore> characterClasses = new ArrayList<>();
-        characterClasses.add(new CharacterClassStore("Rabbit", "Special Ability 1"));
-        characterClasses.add(new CharacterClassStore("Lion", "Special Ability 2"));
+        characterClasses.add(new CharacterClassStore("Rabbit", "You can deny two drinks handed out to you."));
+        characterClasses.add(new CharacterClassStore("Witch", "At any point in the game, you can change the current number to be whatever you want."));
+        characterClasses.add(new CharacterClassStore("Scientist", "For every even number you land on, you can hand out two drinks, but for every odd you have to take a drink."));
 
         // Initialize the adapter and set it to the RecyclerView
-        adapter = new CharacterClassAdapter(characterClasses);
+        CharacterClassAdapter adapter = new CharacterClassAdapter(characterClasses);
         recyclerView.setAdapter(adapter);
     }
 }
