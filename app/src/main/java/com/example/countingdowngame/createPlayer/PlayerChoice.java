@@ -56,7 +56,6 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     @Override
     protected void onResume() {
         super.onResume();
-        playerList.clear();
         List<Player> loadedPlayerList = PlayerModelLocalStore.fromContext(this).loadPlayerData();
         playerList.addAll(loadedPlayerList);
         selectedPlayerCount = 0;

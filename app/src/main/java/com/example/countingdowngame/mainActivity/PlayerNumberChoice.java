@@ -1,5 +1,6 @@
 package com.example.countingdowngame.mainActivity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -63,7 +64,10 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
                     .duration(300)
                     .onEnd(animator -> {
                         // Animation has ended, start the MainActivity here
+                        Intent intent = new Intent(this, PlayerChoice.class);
+                        intent.putExtra("resetPlayers", true); // Do not reset the PlayerChoice activity
                         startActivity(getIntentForClass(PlayerChoice.class, true));
+
                     })
                     .playOn(originalPlayerField);
 

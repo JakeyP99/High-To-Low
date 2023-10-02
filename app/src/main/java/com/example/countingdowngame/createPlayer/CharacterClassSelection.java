@@ -1,6 +1,8 @@
 package com.example.countingdowngame.createPlayer;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,10 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CharacterClassSelection extends ButtonUtilsActivity {
+
+    Button btnProceed;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.characterclass_selection);
+
+        btnProceed = findViewById(R.id.btnProceed);
 
         RecyclerView recyclerView = findViewById(R.id.playerRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -29,5 +36,10 @@ public class CharacterClassSelection extends ButtonUtilsActivity {
         // Initialize the adapter and set it to the RecyclerView
         CharacterClassAdapter adapter = new CharacterClassAdapter(characterClasses);
         recyclerView.setAdapter(adapter);
+
+        btnUtils.setButton(btnProceed, () -> {
+            finish();
+            Log.d("btnProceed", "Proceeded back to player select");
+        });
     }
 }

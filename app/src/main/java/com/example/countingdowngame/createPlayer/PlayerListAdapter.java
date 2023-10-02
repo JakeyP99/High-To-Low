@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -63,10 +64,11 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
         TextView playerNameTextView;
         ImageView deletePlayerImageView;
         View playerItemView;
-
+        Button btnProceed;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             playerItemView = itemView;
+
             playerPhotoImageView = itemView.findViewById(R.id.playerPhotoImageView);
             playerNameTextView = itemView.findViewById(R.id.playerNameTextView);
             deletePlayerImageView = itemView.findViewById(R.id.deletePlayerImageView);
@@ -75,6 +77,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
                     clickListener.onPlayerClick(position);
+                    togglePlayerSelection(position);
                 }
                 Log.d("Player Clicked", "ViewHolder: Playerclicked");
 
@@ -87,16 +90,6 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
                     context.deletePlayer(position);
                 }
             });
-
-
-            //todo put this functionality in classSelection once you choose your class
-//            // Set click listener for player selection
-//            playerItemView.setOnClickListener(v -> {
-//                int position = getAdapterPosition();
-//                if (position != RecyclerView.NO_POSITION) {
-//                    togglePlayerSelection(position);
-//                }
-//            });
 
             // Set long-click listener for player deletion
             playerItemView.setOnLongClickListener(v -> {
