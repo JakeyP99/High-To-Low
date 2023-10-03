@@ -37,8 +37,6 @@
 
         <activity android:name=".mainActivity.NumberChoice" />
 
-        <activity android:name=".createPlayer.CharacterClassSelection" />
-
         <activity android:name=".instructions.InstructionsToPlay" />
 
         <activity android:name=".mainActivity.SettingsContainer" />
