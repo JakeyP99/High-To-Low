@@ -12,10 +12,10 @@ public class Player implements Serializable {
 
     private final String photo;
     private String name;
+    private String classChoice;
+
     private Game game;
     private int wildCardAmount;
-    private int gainWildCardAmount;
-
     private boolean selected;
 
     //-----------------------------------------------------Set Game---------------------------------------------------//
@@ -25,11 +25,20 @@ public class Player implements Serializable {
     }
 
     //-----------------------------------------------------Player---------------------------------------------------//
-    public Player(Context context, String photo, String name) {
+    public Player(Context context, String photo, String name, String classChoice) {
         this.photo = photo;
         this.name = name;
+        this.classChoice = classChoice;
         this.selected = false;
         resetWildCardAmount(context);
+    }
+
+    public String getClassChoice() {
+        return classChoice;
+    }
+
+    public void setClassChoice(String classChoice) {
+        this.classChoice = classChoice;
     }
 
     public String getName() {

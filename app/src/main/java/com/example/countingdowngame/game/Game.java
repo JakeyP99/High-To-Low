@@ -31,7 +31,7 @@ public class Game {
         players = new ArrayList<>();
 
         for (int playerId = 0; playerId < playerAmount; playerId++) {
-            players.add(new Player(context, null, null));
+            players.add(new Player(context, null, null, null));
         }
     }
     public List<Player> getPlayers() {

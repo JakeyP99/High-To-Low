@@ -54,6 +54,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     private int totalPlayerCount;
     private RecyclerView playerRecyclerView;
     private int selectedPlayerCount;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -69,7 +70,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     @Override
     public void onPlayerClick(int position) {
         Log.d("Player Clicked", "onPlayerClick: True");
-        chooseClass();
+        chooseClass(position);
     }
 
     @Override
@@ -121,7 +122,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         btnUtils.setButton(drawButton, this::chooseCharacterCreation);
     }
 
-    private void chooseClass() {
+    private void chooseClass(int position) {
         Log.d("ChooseClass", "chooseClass: Was inflated");
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
@@ -147,13 +148,33 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         AlertDialog dialog = builder.create();
         dialog.show();
 
+        // Capture the selected character class when the "Confirm Class" button is clicked
         confirmClass.setOnClickListener(v -> {
-            Log.d("Dismiss Button", "Dismiss Button Clicked");
-            builder.create().dismiss();
-            dialog.cancel();
+            // Get the selected character class from the adapter
+            int selectedPosition = adapter.getSelectedItemPosition();
+            Player selectedPlayer = playerList.get(position);
+            if (selectedPosition != -1) {
+                CharacterClassStore selectedCharacterClass = characterClasses.get(selectedPosition);
+
+                // Get the selected player based on the position
+
+                // Set the character class for the selected player
+                selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
+
+                // Dismiss the dialog
+            } else {
+                selectedPlayer.setClassChoice(null);
+
+            }
+            Log.d("Confirm Button", "Confirm Button Clicked and " + selectedPlayer.getName() + " choose " + selectedPlayer.getClassChoice());
+
+            dialog.dismiss();
 
         });
+
+
     }
+
 
     private void chooseCharacterCreation() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -331,8 +352,8 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         Bitmap zoomedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
         String photoString = convertBitmapToString(zoomedBitmap);
-        Player newPlayer = new Player(this, photoString, name);
-        newPlayer.setSelected(false); // Set isSelected to false initially
+        Player newPlayer = new Player(this, photoString, name, null);
+        newPlayer.setSelected(true); // Set isSelected to false initially
         playerList.add(newPlayer);
         playerListAdapter.notifyItemInserted(playerList.size() - 1);
         savePlayerData();
