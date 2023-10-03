@@ -56,23 +56,17 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     @Override
     protected void onResume() {
         super.onResume();
-        if (playerList.isEmpty()) {
-            List<Player> loadedPlayerList = PlayerModelLocalStore.fromContext(this).loadPlayerData();
-            playerList.addAll(loadedPlayerList);
-            selectedPlayerCount = 0;
-            playerListAdapter.notifyDataSetChanged();
-            updatePlayerCounter();
-        }
+        playerList.clear();
+        List<Player> loadedPlayerList = PlayerModelLocalStore.fromContext(this).loadPlayerData();
+        playerList.addAll(loadedPlayerList);
+        selectedPlayerCount = 0;
+        playerListAdapter.notifyDataSetChanged();
+        updatePlayerCounter();
     }
+
 
     @Override
     public void onPlayerClick(int position) {
-        Player player = playerList.get(position);
-        if (!player.isSelected()) {
-            Intent intent = new Intent(this, CharacterClassSelection.class);
-            intent.putExtra("selectedPlayer", player);
-            startActivity(intent);
-        }
         Log.d("Player Clicked", "onPlayerClick: True");
     }
 
