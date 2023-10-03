@@ -66,9 +66,11 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     @Override
     public void onPlayerClick(int position) {
         Player player = playerList.get(position);
-        Intent intent = new Intent(this, CharacterClassSelection.class);
-        intent.putExtra("selectedPlayer", player);
-        startActivity(intent);
+        if (!player.isSelected()) {
+            Intent intent = new Intent(this, CharacterClassSelection.class);
+            intent.putExtra("selectedPlayer", player);
+            startActivity(intent);
+        }
         Log.d("Player Clicked", "onPlayerClick: True");
     }
 

@@ -79,8 +79,6 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
                     clickListener.onPlayerClick(position);
                     togglePlayerSelection(position);
                 }
-                Log.d("Player Clicked", "ViewHolder: Playerclicked");
-
             });
 
 
@@ -144,6 +142,8 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
             player.setSelected(!player.isSelected());
             notifyItemChanged(position);
             context.updatePlayerCounter();
+            Log.d("user", "setSelected: " + player.isSelected());
+
         }
     }
 }
