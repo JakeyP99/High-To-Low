@@ -14,7 +14,7 @@ import com.example.countingdowngame.R;
 import java.util.List;
 
 public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAdapter.ViewHolder> {
-    private List<CharacterClassStore> characterClasses;
+    private final List<CharacterClassStore> characterClasses;
     private int selectedItem = -1; // Initialize with no selection
 
     public CharacterClassAdapter(List<CharacterClassStore> characterClasses) {

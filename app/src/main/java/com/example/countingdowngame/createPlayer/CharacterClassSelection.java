@@ -38,7 +38,7 @@ public class CharacterClassSelection extends ButtonUtilsActivity {
         recyclerView.setAdapter(adapter);
 
         btnUtils.setButton(btnProceed, () -> {
-            finish();
+            onBackPressed();
             Log.d("btnProceed", "Proceeded back to player select");
         });
     }
