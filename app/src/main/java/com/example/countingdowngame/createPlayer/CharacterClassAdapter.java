@@ -15,7 +15,7 @@ import java.util.List;
 
 public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAdapter.ViewHolder> {
     private final List<CharacterClassStore> characterClasses;
-    private int selectedItem = -1; // Initialize with no selection
+    private int selectedItem = -1;
 
     public CharacterClassAdapter(List<CharacterClassStore> characterClasses) {
         this.characterClasses = characterClasses;

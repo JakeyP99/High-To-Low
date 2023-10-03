@@ -22,9 +22,8 @@ public class CharacterClassSelection extends ButtonUtilsActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.characterclass_selection);
 
-        btnProceed = findViewById(R.id.btnProceed);
 
-        RecyclerView recyclerView = findViewById(R.id.playerRecyclerView);
+        RecyclerView recyclerView = findViewById(R.id.classRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Create a list of character classes (Rabbit and Lion)

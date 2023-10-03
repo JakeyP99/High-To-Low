@@ -29,6 +29,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.countingdowngame.R;
@@ -68,6 +69,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     @Override
     public void onPlayerClick(int position) {
         Log.d("Player Clicked", "onPlayerClick: True");
+        chooseClass();
     }
 
     @Override
@@ -116,10 +118,44 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
 
     private void setupDrawButton() {
         Button drawButton = findViewById(R.id.createPlayerBtn);
-        btnUtils.setButton(drawButton, this::startDrawing);
+        btnUtils.setButton(drawButton, this::chooseCharacterCreation);
     }
 
-    private void startDrawing() {
+    private void chooseClass() {
+        Log.d("ChooseClass", "chooseClass: Was inflated");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+
+        View dialogView = inflater.inflate(R.layout.characterclass_selection, null);
+        Button confirmClass = dialogView.findViewById(R.id.btnConfirmClass);
+
+        RecyclerView classRecyclerView = dialogView.findViewById(R.id.classRecyclerView);
+        classRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        List<CharacterClassStore> characterClasses = new ArrayList<>();
+        characterClasses.add(new CharacterClassStore("Rabbit", "You can deny two drinks handed out to you."));
+        characterClasses.add(new CharacterClassStore("Witch", "At any point in the game, you can change the current number to be whatever you want."));
+        characterClasses.add(new CharacterClassStore("Scientist", "For every even number you land on, you can hand out two drinks, but for every odd you have to take a drink."));
+        characterClasses.add(new CharacterClassStore("test", "1."));
+        characterClasses.add(new CharacterClassStore("test2", "2."));
+
+        CharacterClassAdapter adapter = new CharacterClassAdapter(characterClasses);
+        classRecyclerView.setAdapter(adapter);
+
+
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        confirmClass.setOnClickListener(v -> {
+            Log.d("Dismiss Button", "Dismiss Button Clicked");
+            builder.create().dismiss();
+            dialog.cancel();
+
+        });
+    }
+
+    private void chooseCharacterCreation() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
 
@@ -302,7 +338,6 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         savePlayerData();
     }
 
-    // Delete a player at a given position
     public void deletePlayer(int position) {
         playerList.remove(position);
         playerListAdapter.notifyItemRemoved(position);
