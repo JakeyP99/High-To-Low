@@ -59,6 +59,7 @@ public class MainActivityGame extends SharedMainActivity {
     private WildCardProperties selectedWildCard; // Declare selectedWildCard at a higher level
     private TextView wildText;
     private Player firstPlayer;
+    private boolean isFirstTurn = true;
 
     @Override
     protected void onResume() {
@@ -158,6 +159,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         btnUtils.setButton(btnGenerate, () -> {
             startNumberShuffleAnimation();
+            isFirstTurn = false;
             Log.d("btnGenerate", "Generate Clicked");
         });
 
@@ -167,6 +169,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         btnUtils.setButton(btnWild, () -> {
             wildCardActivate(Game.getInstance().getCurrentPlayer());
+            isFirstTurn = false;
             numberCounter.setVisibility(View.INVISIBLE);
             wildText.setVisibility(View.VISIBLE);
             btnWild.setVisibility(View.INVISIBLE);
@@ -494,10 +497,18 @@ public class MainActivityGame extends SharedMainActivity {
             }
         }
 
-        if (Objects.equals(currentPlayer.getClassChoice(), "Rabbit")) {
-            Game.getInstance().getCurrentPlayer().gainWildCards(2);
-        }
+        if ("Witch".equals(currentPlayer.getClassChoice())) {
 
+            if (!isFirstTurn) {
+                if (numberCounterInt % 2 == 0) {
+                    // Show a toast message for handing out three drinks
+                    Toast.makeText(this, "Hand out three drinks.", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Show a toast message for taking a drink
+                    Toast.makeText(this, "Take a drink.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 
     private void quizAnswerView(String string) {

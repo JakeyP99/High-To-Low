@@ -136,9 +136,9 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         classRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         List<CharacterClassStore> characterClasses = new ArrayList<>();
-        characterClasses.add(new CharacterClassStore("Archer", "You can hand out three drinks at any time it is not your turn."));
-        characterClasses.add(new CharacterClassStore("Barbarian", "You can deny two drinks handed out to you."));
-        characterClasses.add(new CharacterClassStore("Witch", "For every even number you land on, you can hand out three drinks, but for every odd you have to take a drink."));
+        characterClasses.add(new CharacterClassStore("Archer", "You can hand out three drinks at any time of the game."));
+        characterClasses.add(new CharacterClassStore("Barbarian", "You can deny three drinks handed out to you."));
+        characterClasses.add(new CharacterClassStore("Witch", "For every even number your player lands on, you can hand out three drinks, but for every odd number you have to take a drink."));
         characterClasses.add(new CharacterClassStore("Scientist", "At any point in the game, you can change the current number to be whatever you want."));
         characterClasses.add(new CharacterClassStore("Soldier", "For every third turn, you gain one wildcard."));
 
