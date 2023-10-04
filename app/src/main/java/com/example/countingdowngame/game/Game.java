@@ -79,7 +79,6 @@ public class Game {
         return nextNumber;
     }
 
-
     public void nextPlayer() {
         currentPlayerId = (currentPlayerId + 1) % players.size();
 

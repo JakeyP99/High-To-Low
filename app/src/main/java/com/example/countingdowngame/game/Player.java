@@ -17,6 +17,8 @@ public class Player implements Serializable {
     private int wildCardAmount;
     private boolean selected;
     private int turnCounter;
+    private boolean usedClassAbility;
+
 
     //-----------------------------------------------------Set Game---------------------------------------------------//
 
@@ -30,9 +32,19 @@ public class Player implements Serializable {
         this.name = name;
         this.classChoice = classChoice;
         this.selected = false;
+        this.usedClassAbility = true;
         resetWildCardAmount(context);
         this.turnCounter = 0; // Initialize the turn counter to 0
     }
+
+    public boolean usedClassAbility() {
+        return usedClassAbility;
+    }
+
+    public void setClassAbility(boolean classAbility) {
+        this.usedClassAbility = classAbility;
+    }
+
 
     public void incrementTurnCounter() {
         turnCounter++;

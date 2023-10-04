@@ -1,14 +1,17 @@
 package com.example.countingdowngame.mainActivity;
 
+import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -49,6 +52,8 @@ public class MainActivityGame extends SharedMainActivity {
     public static int numberCounterInt = 0;
     private Button btnGenerate;
     private Button btnBackWild;
+    Player currentPlayer = Game.getInstance().getCurrentPlayer();
+    private Button btnClassAbility;
     private Button btnAnswerRight;
     private Button btnAnswerWrong;
     private ImageView playerImage;
@@ -60,6 +65,7 @@ public class MainActivityGame extends SharedMainActivity {
     private TextView wildText;
     private Player firstPlayer;
     private boolean isFirstTurn = true;
+    private int newNumber = 0;
 
     @Override
     protected void onResume() {
@@ -102,6 +108,7 @@ public class MainActivityGame extends SharedMainActivity {
         nextPlayerText = findViewById(R.id.textView_Number_Turn);
         btnWild = findViewById(R.id.btnWild);
         btnAnswer = findViewById(R.id.btnAnswer);
+        btnClassAbility = findViewById(R.id.btnClassAbility);
         btnGenerate = findViewById(R.id.btnGenerate);
         btnBackWild = findViewById(R.id.btnBackWildCard);
         btnAnswerRight = findViewById(R.id.btnGotQuizRight);
@@ -150,7 +157,6 @@ public class MainActivityGame extends SharedMainActivity {
     private void setupButtons() {
 
         ImageButton imageButtonExit = findViewById(R.id.btnExitGame);
-        View wildText = findViewById(R.id.textView_WildText);
 
         btnBackWild.setVisibility(View.INVISIBLE);
         btnAnswer.setVisibility(View.INVISIBLE);
@@ -160,12 +166,18 @@ public class MainActivityGame extends SharedMainActivity {
         btnUtils.setButton(btnGenerate, () -> {
             startNumberShuffleAnimation();
             isFirstTurn = false;
-            Log.d("btnGenerate", "Generate Clicked");
         });
 
         btnUtils.setButton(btnAnswer, this::showAnswer);
 
         btnUtils.setButton(btnBackWild, this::wildCardContinue);
+
+
+        btnUtils.setButton(btnClassAbility, () -> {
+            characterClassButtonActivities();
+
+        });
+
 
         btnUtils.setButton(btnWild, () -> {
             wildCardActivate(Game.getInstance().getCurrentPlayer());
@@ -183,6 +195,18 @@ public class MainActivityGame extends SharedMainActivity {
             gotoHomeScreen();
         });
     }
+
+    public void characterClassButtonActivities() {
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        Log.d("characterClassButtonActivities", "Class Activated" + currentPlayer.getClassChoice());
+
+        if ("Scientist".equals(currentPlayer.getClassChoice())) {
+            onChangeNumberClick();
+            currentPlayer.setClassAbility(true); // Update class ability to true
+            Log.d("btnClassAbility", "Player class ability " + currentPlayer.usedClassAbility());
+        }
+    }
+
 
     //-----------------------------------------------------Button Shuffling---------------------------------------------------//
 
@@ -228,8 +252,13 @@ public class MainActivityGame extends SharedMainActivity {
         List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
 
         characterClassAffects();
-        Log.d("renderPlayer", currentPlayer.getName() + " is a " + currentPlayer.getClassChoice() + " with " + currentPlayer.getWildCardAmount() + " Wildcards");
+        Log.d("renderPlayer", currentPlayer.getName() + " is a " + currentPlayer.getClassChoice() + " with " + currentPlayer.getWildCardAmount() + " Wildcards" + "and " + currentPlayer.usedClassAbility());
 
+        if (!currentPlayer.usedClassAbility()) {
+            btnClassAbility.setVisibility(View.VISIBLE);
+        } else {
+            btnClassAbility.setVisibility(View.INVISIBLE);
+        }
 
         if (currentPlayer.equals(firstPlayer)) {
             numberCounterInt++;
@@ -488,8 +517,6 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void characterClassAffects() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-
-
         if ("Soldier".equals(currentPlayer.getClassChoice())) {
             int turnCounter = currentPlayer.getTurnCounter();
             if (turnCounter > 0 && turnCounter % 3 == 0) {
@@ -498,7 +525,6 @@ public class MainActivityGame extends SharedMainActivity {
         }
 
         if ("Witch".equals(currentPlayer.getClassChoice())) {
-
             if (!isFirstTurn) {
                 if (numberCounterInt % 2 == 0) {
                     // Show a toast message for handing out three drinks
@@ -510,6 +536,39 @@ public class MainActivityGame extends SharedMainActivity {
             }
         }
     }
+
+    public void onChangeNumberClick() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Change Current Number");
+
+        // Create an EditText field for the player to enter the new number
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        builder.setView(input);
+
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            try {
+                // Get the text entered by the player and parse it as an integer
+                String userInput = input.getText().toString();
+                newNumber = Integer.parseInt(userInput);
+
+                // Update the current number in the game
+                Game.getInstance().setCurrentNumber(newNumber);
+
+                // Update the UI to display the new number
+                numberText.setText(String.valueOf(newNumber));
+            } catch (NumberFormatException e) {
+                // Handle invalid input (e.g., non-numeric input)
+                Toast.makeText(this, "Invalid number input", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+        builder.show();
+    }
+
 
     private void quizAnswerView(String string) {
         btnBackWild.setVisibility(View.VISIBLE);
