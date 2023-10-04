@@ -13,10 +13,10 @@ public class Player implements Serializable {
     private final String photo;
     private String name;
     private String classChoice;
-
     private Game game;
     private int wildCardAmount;
     private boolean selected;
+    private int turnCounter;
 
     //-----------------------------------------------------Set Game---------------------------------------------------//
 
@@ -31,6 +31,16 @@ public class Player implements Serializable {
         this.classChoice = classChoice;
         this.selected = false;
         resetWildCardAmount(context);
+        this.turnCounter = 0; // Initialize the turn counter to 0
+    }
+
+    public void incrementTurnCounter() {
+        turnCounter++;
+    }
+
+
+    public int getTurnCounter() {
+        return turnCounter;
     }
 
     public String getClassChoice() {

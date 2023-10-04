@@ -136,11 +136,11 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         classRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         List<CharacterClassStore> characterClasses = new ArrayList<>();
-        characterClasses.add(new CharacterClassStore("Rabbit", "You can deny two drinks handed out to you."));
-        characterClasses.add(new CharacterClassStore("Witch", "At any point in the game, you can change the current number to be whatever you want."));
-        characterClasses.add(new CharacterClassStore("Scientist", "For every even number you land on, you can hand out two drinks, but for every odd you have to take a drink."));
-        characterClasses.add(new CharacterClassStore("test", "1."));
-        characterClasses.add(new CharacterClassStore("test2", "2."));
+        characterClasses.add(new CharacterClassStore("Archer", "You can hand out three drinks at any time it is not your turn."));
+        characterClasses.add(new CharacterClassStore("Barbarian", "You can deny two drinks handed out to you."));
+        characterClasses.add(new CharacterClassStore("Witch", "For every even number you land on, you can hand out three drinks, but for every odd you have to take a drink."));
+        characterClasses.add(new CharacterClassStore("Scientist", "At any point in the game, you can change the current number to be whatever you want."));
+        characterClasses.add(new CharacterClassStore("Soldier", "For every third turn, you gain one wildcard."));
 
         CharacterClassAdapter adapter = new CharacterClassAdapter(characterClasses);
         classRecyclerView.setAdapter(adapter);
@@ -166,6 +166,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
 
     }
 
+    //-----------------------------------------------------Choose the player creation---------------------------------------------------//
 
     private void chooseCharacterCreation() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

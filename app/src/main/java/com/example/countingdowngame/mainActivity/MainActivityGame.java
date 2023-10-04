@@ -487,6 +487,13 @@ public class MainActivityGame extends SharedMainActivity {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
 
 
+        if ("Soldier".equals(currentPlayer.getClassChoice())) {
+            int turnCounter = currentPlayer.getTurnCounter();
+            if (turnCounter > 0 && turnCounter % 3 == 0) {
+                currentPlayer.gainWildCards(1);
+            }
+        }
+
         if (Objects.equals(currentPlayer.getClassChoice(), "Rabbit")) {
             Game.getInstance().getCurrentPlayer().gainWildCards(2);
         }

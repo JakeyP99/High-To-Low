@@ -83,6 +83,11 @@ public class Game {
     public void nextPlayer() {
         currentPlayerId = (currentPlayerId + 1) % players.size();
 
+        Player currentPlayer = getCurrentPlayer();
+        if (currentPlayer != null) {
+            currentPlayer.incrementTurnCounter();
+        }
+
         if (gameEventListener != null) {
             gameEventListener.onGameEvent(new GameEvent(this, GameEventType.NEXT_PLAYER));
         }
