@@ -52,7 +52,6 @@ public class MainActivityGame extends SharedMainActivity {
     public static int numberCounterInt = 0;
     private Button btnGenerate;
     private Button btnBackWild;
-    Player currentPlayer = Game.getInstance().getCurrentPlayer();
     private Button btnClassAbility;
     private Button btnAnswerRight;
     private Button btnAnswerWrong;
@@ -155,6 +154,8 @@ public class MainActivityGame extends SharedMainActivity {
     //-----------------------------------------------------Buttons---------------------------------------------------//
 
     private void setupButtons() {
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        Log.d("setupButtons", " " + currentPlayer.getClassChoice());
 
         ImageButton imageButtonExit = findViewById(R.id.btnExitGame);
 
@@ -173,11 +174,7 @@ public class MainActivityGame extends SharedMainActivity {
         btnUtils.setButton(btnBackWild, this::wildCardContinue);
 
 
-        btnUtils.setButton(btnClassAbility, () -> {
-            characterClassButtonActivities();
-
-        });
-
+        btnUtils.setButton(btnClassAbility, this::characterClassButtonActivities);
 
         btnUtils.setButton(btnWild, () -> {
             wildCardActivate(Game.getInstance().getCurrentPlayer());
@@ -203,7 +200,6 @@ public class MainActivityGame extends SharedMainActivity {
         if ("Scientist".equals(currentPlayer.getClassChoice())) {
             onChangeNumberClick();
             currentPlayer.setClassAbility(true); // Update class ability to true
-            Log.d("btnClassAbility", "Player class ability " + currentPlayer.usedClassAbility());
         }
     }
 
@@ -254,7 +250,7 @@ public class MainActivityGame extends SharedMainActivity {
         characterClassAffects();
         Log.d("renderPlayer", currentPlayer.getName() + " is a " + currentPlayer.getClassChoice() + " with " + currentPlayer.getWildCardAmount() + " Wildcards" + "and " + currentPlayer.usedClassAbility());
 
-        if (!currentPlayer.usedClassAbility()) {
+        if ("Scientist".equals(currentPlayer.getClassChoice()) && !currentPlayer.usedClassAbility()) {
             btnClassAbility.setVisibility(View.VISIBLE);
         } else {
             btnClassAbility.setVisibility(View.INVISIBLE);
