@@ -224,6 +224,10 @@ public class MainActivityGame extends SharedMainActivity {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
 
+        characterClassAffects();
+        Log.d("renderPlayer", currentPlayer.getName() + " is a " + currentPlayer.getClassChoice() + " with " + currentPlayer.getWildCardAmount() + " Wildcards");
+
+
         if (currentPlayer.equals(firstPlayer)) {
             numberCounterInt++;
             String text;
@@ -476,7 +480,18 @@ public class MainActivityGame extends SharedMainActivity {
                     Game.getInstance().getCurrentPlayer().loseWildCards();
                     break;
             }
+    }
+    //-----------------------------------------------------Character Class Functions---------------------------------------------------//
+
+    private void characterClassAffects() {
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+
+
+        if (Objects.equals(currentPlayer.getClassChoice(), "Rabbit")) {
+            Game.getInstance().getCurrentPlayer().gainWildCards(2);
         }
+
+    }
 
     private void quizAnswerView(String string) {
         btnBackWild.setVisibility(View.VISIBLE);

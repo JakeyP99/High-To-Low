@@ -122,6 +122,8 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         btnUtils.setButton(drawButton, this::chooseCharacterCreation);
     }
 
+    //-----------------------------------------------------Choose the player class---------------------------------------------------//
+
     private void chooseClass(int position) {
         Log.d("ChooseClass", "chooseClass: Was inflated");
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -148,28 +150,17 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        // Capture the selected character class when the "Confirm Class" button is clicked
         confirmClass.setOnClickListener(v -> {
-            // Get the selected character class from the adapter
             int selectedPosition = adapter.getSelectedItemPosition();
             Player selectedPlayer = playerList.get(position);
             if (selectedPosition != -1) {
                 CharacterClassStore selectedCharacterClass = characterClasses.get(selectedPosition);
-
-                // Get the selected player based on the position
-
-                // Set the character class for the selected player
                 selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
-
-                // Dismiss the dialog
             } else {
                 selectedPlayer.setClassChoice(null);
-
             }
             Log.d("Confirm Button", "Confirm Button Clicked and " + selectedPlayer.getName() + " choose " + selectedPlayer.getClassChoice());
-
             dialog.dismiss();
-
         });
 
 
