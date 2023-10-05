@@ -1,0 +1,27 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/dialogbox_textview"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:text="Test"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textColor="@color/bluedark"
+        android:textSize="28sp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/close_button"
+        android:layout_width="48dp"
+        android:layout_gravity="center"
+        android:layout_height="48dp"
+        android:background="@drawable/circle_background" />
+
+
+</LinearLayout>

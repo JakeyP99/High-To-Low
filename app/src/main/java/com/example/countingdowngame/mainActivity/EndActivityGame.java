@@ -36,7 +36,7 @@ public class EndActivityGame extends ButtonUtilsActivity {
 
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         String playerName = currentPlayer.getName();
-        int numberCounter = MainActivityGame.numberCounterInt; // Access the currentNumber
+        int numberCounter = MainActivityGame.drinkNumberCounterInt; // Access the currentNumber
 
         String endGameText;
         if (numberCounter == 1) {

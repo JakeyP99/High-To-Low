@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,7 +50,7 @@ public class MainActivityGame extends SharedMainActivity {
     private TextView nextPlayerText;
     private Button btnAnswer;
     private Button btnWild;
-    public static int numberCounterInt = 0;
+    public static int drinkNumberCounterInt = 0;
     private Button btnGenerate;
     private Button btnBackWild;
     private Button btnClassAbility;
@@ -117,7 +118,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void startGame() {
-        numberCounterInt = 0;
+        drinkNumberCounterInt = 0;
         int soundResourceId = R.raw.cartoonloop;
         AudioManager.getInstance().initialize(this, soundResourceId);
 
@@ -193,15 +194,6 @@ public class MainActivityGame extends SharedMainActivity {
         });
     }
 
-    public void characterClassButtonActivities() {
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        Log.d("characterClassButtonActivities", "Class Activated" + currentPlayer.getClassChoice());
-
-        if ("Scientist".equals(currentPlayer.getClassChoice())) {
-            onChangeNumberClick();
-            currentPlayer.setClassAbility(true); // Update class ability to true
-        }
-    }
 
 
     //-----------------------------------------------------Button Shuffling---------------------------------------------------//
@@ -250,19 +242,20 @@ public class MainActivityGame extends SharedMainActivity {
         characterClassAffects();
         Log.d("renderPlayer", currentPlayer.getName() + " is a " + currentPlayer.getClassChoice() + " with " + currentPlayer.getWildCardAmount() + " Wildcards" + "and " + currentPlayer.usedClassAbility());
 
-        if ("Scientist".equals(currentPlayer.getClassChoice()) && !currentPlayer.usedClassAbility()) {
+        if ("Scientist".equals(currentPlayer.getClassChoice()) | "Archer".equals(currentPlayer.getClassChoice()) && !currentPlayer.usedClassAbility()) {
             btnClassAbility.setVisibility(View.VISIBLE);
         } else {
             btnClassAbility.setVisibility(View.INVISIBLE);
         }
 
+
         if (currentPlayer.equals(firstPlayer)) {
-            numberCounterInt++;
+            drinkNumberCounterInt++;
             String text;
-            if (numberCounterInt == 1) {
+            if (drinkNumberCounterInt == 1) {
                 text = "1 Drink";
             } else {
-                text = numberCounterInt + " Drinks";
+                text = drinkNumberCounterInt + " Drinks";
             }
             numberCounter.setText(text);
         }
@@ -522,7 +515,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         if ("Witch".equals(currentPlayer.getClassChoice())) {
             if (!isFirstTurn) {
-                if (numberCounterInt % 2 == 0) {
+                if (drinkNumberCounterInt % 2 == 0) {
                     // Show a toast message for handing out three drinks
                     Toast.makeText(this, "Hand out three drinks.", Toast.LENGTH_SHORT).show();
                 } else {
@@ -531,7 +524,52 @@ public class MainActivityGame extends SharedMainActivity {
                 }
             }
         }
+
+        if ("Archer".equals(currentPlayer.getClassChoice())) {
+            if (!isFirstTurn) {
+                if (drinkNumberCounterInt % 2 == 0) {
+                    // Show a toast message for handing out three drinks
+                    Toast.makeText(this, "Hand out three drinks.", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Show a toast message for taking a drink
+                    Toast.makeText(this, "Take a drink.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+
     }
+
+    public void characterClassButtonActivities() {
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        Log.d("characterClassButtonActivities", "Class Activated" + currentPlayer.getClassChoice());
+
+        if ("Scientist".equals(currentPlayer.getClassChoice())) {
+            onChangeNumberClick();
+            currentPlayer.setClassAbility(true); // Update class ability to true
+        }
+
+        if ("Archer".equals(currentPlayer.getClassChoice())) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater inflater = getLayoutInflater();
+
+            View dialogView = inflater.inflate(R.layout.mainactivity_dialog_box, null);
+            TextView dialogboxtextview = dialogView.findViewById(R.id.dialogbox_textview); // Use dialogView.findViewById to find the TextView within the dialogView
+            dialogboxtextview.setText("Hand out two drinks.");
+
+            builder.setView(dialogView); // Set the custom view for the dialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+            currentPlayer.setClassAbility(true); // Update class ability to true
+
+            ImageButton closeButton = dialogView.findViewById(R.id.close_button);
+            closeButton.setOnClickListener(v -> {
+                dialog.dismiss();
+            });
+
+        }
+    }
+
 
     public void onChangeNumberClick() {
 
