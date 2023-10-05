@@ -75,9 +75,15 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
 
     @Override
     public void onPlayerClick(int position) {
-        Log.d("Player Clicked", "onPlayerClick: True");
-        chooseClass(position);
+        Player player = playerList.get(position);
+        if (!player.isSelected()) {
+            player.setSelected(false);
+            playerListAdapter.notifyItemChanged(position);
+            updatePlayerCounter();
+            chooseClass(position);
+        }
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
