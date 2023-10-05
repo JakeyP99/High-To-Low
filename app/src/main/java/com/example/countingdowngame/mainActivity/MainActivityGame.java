@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
@@ -529,11 +530,9 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    //Todo make sure you cant submit more than the amount, and you can't submit 0
     private void handleScientistClass(Player currentPlayer) {
         onChangeNumberClick();
         currentPlayer.setClassAbility(true);
-        btnClassAbility.setVisibility(View.INVISIBLE);
     }
 
     private void handleArcherClass(Player currentPlayer) {
@@ -578,28 +577,36 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     public void onChangeNumberClick() {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Change Current Number");
 
-        // Create an EditText field for the player to enter the new number
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+        int maxLength = 9;
+        InputFilter[] filters = new InputFilter[1];
+        filters[0] = new InputFilter.LengthFilter(maxLength);
+        input.setFilters(filters);
+
         builder.setView(input);
 
         builder.setPositiveButton("OK", (dialog, which) -> {
             try {
-                // Get the text entered by the player and parse it as an integer
                 String userInput = input.getText().toString();
                 newNumber = Integer.parseInt(userInput);
-
-                // Update the current number in the game
-                Game.getInstance().setCurrentNumber(newNumber);
-
-                // Update the UI to display the new number
-                numberText.setText(String.valueOf(newNumber));
+                if (newNumber > 999999999) {
+                    displayToastMessage("That number was too high!");
+                    btnClassAbility.setVisibility(View.VISIBLE);
+                } else if (newNumber == 0) {
+                    displayToastMessage("You cannot choose 0 as your number.");
+                    btnClassAbility.setVisibility(View.VISIBLE);
+                } else {
+                    Game.getInstance().setCurrentNumber(newNumber);
+                    SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(newNumber));
+                    numberText.setText(String.valueOf(newNumber));
+                    btnClassAbility.setVisibility(View.INVISIBLE);
+                }
             } catch (NumberFormatException e) {
-                // Handle invalid input (e.g., non-numeric input)
                 displayToastMessage("Invalid number input");
             }
         });
@@ -608,6 +615,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         builder.show();
     }
+
 
     //-----------------------------------------------------Quiz Code---------------------------------------------------//
 
