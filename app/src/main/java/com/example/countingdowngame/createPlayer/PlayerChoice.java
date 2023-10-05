@@ -148,7 +148,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
 
 
         //todo create a null class.
-
+        //todo make the witch class not use toas
         List<CharacterClassStore> characterClasses = new ArrayList<>();
         characterClasses.add(new CharacterClassStore(CLASS_ARCHER, "You can take two drinks off the total amount, and hand them out to players."));
 //        characterClasses.add(new CharacterClassStore(CLASS_BARBARIAN, "You can deny three drinks handed out to you."));

@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         android:text="How many players are there?"
         android:textSize="30sp"
+        android:fontFamily="@font/viga"
         android:textColor="@color/bluedark"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -42,6 +43,7 @@
         android:textSize="20sp"
         android:textAllCaps="false"
         android:background="@drawable/outlineforbutton"
+        android:fontFamily="@font/viga"
 
         android:layout_width="139dp"
         android:layout_height="77dp"

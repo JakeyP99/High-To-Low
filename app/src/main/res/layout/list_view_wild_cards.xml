@@ -11,6 +11,7 @@
         android:layout_width="74dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
+        android:fontFamily="@font/viga"
         android:layout_centerInParent="true"
         android:background="@drawable/outlineforbutton"
         android:text="Edit"

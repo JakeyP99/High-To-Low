@@ -574,6 +574,7 @@ public class MainActivityGame extends SharedMainActivity {
         drinkNumberCounterTextView.setText(drinkNumberText);
     }
 
+    //todo make the acitvate ability vanish if they have clicked a wildcard and reappear
     public void onChangeNumberClick() {
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.character_class_change_number, null);

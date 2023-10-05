@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:text="Choose an Option"
+        android:fontFamily="@font/viga"
         android:textColor="@color/bluedark"
         android:textSize="28sp"
         android:textAlignment="center"/>
@@ -17,6 +18,7 @@
         android:id="@+id/capturePhotoButton"
         android:layout_width="200dp"
         android:layout_gravity="center"
+        android:fontFamily="@font/viga"
         android:layout_height="wrap_content"
         android:text="Capture a Photo"
         android:textSize="18sp"
@@ -35,6 +37,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:fontFamily="@font/viga"
         android:background="@drawable/outlineforbutton"
         android:hapticFeedbackEnabled="true"
         android:paddingHorizontal="24dp"

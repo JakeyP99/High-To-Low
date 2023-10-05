@@ -12,6 +12,7 @@
         android:text="Test"
         android:gravity="center"
         android:textAlignment="center"
+        android:fontFamily="@font/viga"
         android:textColor="@color/bluedark"
         android:textSize="28sp"
         app:layout_constraintTop_toTopOf="parent" />

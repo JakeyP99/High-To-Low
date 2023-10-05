@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:text="Choose your number!"
         android:textColor="@color/bluedark"
+        android:fontFamily="@font/viga"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,6 +44,7 @@
         android:background="@drawable/outlineforbutton"
         android:text="Submit Number"
         android:textAllCaps="false"
+        android:fontFamily="@font/viga"
         android:textColor="@color/bluedark"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -54,6 +56,7 @@
     <Button
         android:id="@+id/btnRandomNumber"
         android:layout_width="139dp"
+        android:fontFamily="@font/viga"
         android:layout_height="77dp"
         android:background="@drawable/outlineforbutton"
         android:text="Random Number"

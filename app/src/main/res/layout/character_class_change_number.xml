@@ -10,6 +10,7 @@
         android:layout_marginBottom="20dp"
         android:text="Choose a number"
         android:textColor="@color/bluedark"
+        android:fontFamily="@font/viga"
         android:textSize="28sp"
         android:textAlignment="center" />
 
@@ -30,6 +31,7 @@
         android:id="@+id/close_button"
         android:layout_width="90dp"
         android:layout_height="50dp"
+        android:fontFamily="@font/viga"
         android:background="@drawable/outlineforbutton"
         android:text="Submit"
         android:textAllCaps="false"
