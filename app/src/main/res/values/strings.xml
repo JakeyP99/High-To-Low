@@ -9,13 +9,9 @@
     <string name="instruction_aim">
          <b><big>Aim Of The Game!</big></b>
         \n\n
-        Within the game there will be a number that goes down after every turn. Beware, if the number hits zero there will be consequences!
-    </string>
-
-    <string name="instruction_choose_drink">
-        <b><big>Choose A Drink!</big></b>
+        Within the game there will be a number that goes down after every turn.
         \n\n
-        Remember that consequence I mentioned before, well I suggest you prepare yourself a tantalizing drink for the loser!
+        However, for each round of players goes by, the drinking counter goes up! If you hit zero, you have to drink the amount on the counter.
     </string>
 
     <string name="instruction_create_players">
@@ -24,10 +20,16 @@
         Now this is the fun part, you get to make your character! You can either take a photo of yourself, or if you\'re having a bad hair day, you can draw your character.
     </string>
 
+    <string name="instruction_choose_class">
+        <b><big>Choose your class!</big></b>
+        \n\n
+        On top of creating your player, you can choose a class which grants you a perk in the game.
+    </string>
+
     <string name="instruction_choose_starting_number">
         <b><big>Choose A Starting Number!</big></b>
         \n\n
-        The aim of the game is not to get to 0. Tip ~ The lower the number, the faster the game!
+        The aim of the game is not to get to 0. Tip ~ The lower the number, the faster the game, and most likely the less you drink!
     </string>
 
     <string name="instruction_generate_button">
@@ -45,7 +47,7 @@
     <string name="instruction_the_end">
         <b><big>The End!</big></b>
         \n\n
-        Once a player hits that dreaded zero, they\'re the loser and must face the consequence of taking that deliciously sexy shot!
+        Once a player hits that dreaded zero, they\'re the loser and must face the consequence of drinking the amount on the counter!
     </string>
 
     <string name="instruction_hurray">
@@ -63,7 +65,7 @@
     <string name="instruction_tips_tricks">
         <b><big>Tips And Tricks!</big></b>
         \n\n
-        As I said before, you can also change the wildcards and edit them/add more. A hint about the probability is, the higher the number, the more likely it will occur.
+        You can also change the wildcards and edit them/add more.
     </string>
 
     <string name="instruction_thanks">

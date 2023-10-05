@@ -2,10 +2,10 @@
     <!-- layout_dialog_title.xml -->
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="80dp"
     android:paddingTop="15dp"
-    android:textSize="20sp"
-    android:text="Edit Wildcard Title"
-android:gravity="center"
-android:textAppearance="?android:attr/textAppearanceMedium"
-android:textColor="@color/bluedark" />
+    android:textSize="26sp"
+    android:text="Edit Wildcard"
+    android:gravity="center"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:textColor="@color/bluedark" />

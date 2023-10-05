@@ -146,6 +146,9 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         RecyclerView classRecyclerView = dialogView.findViewById(R.id.classRecyclerView);
         classRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+
+        //todo create a null class.
+
         List<CharacterClassStore> characterClasses = new ArrayList<>();
         characterClasses.add(new CharacterClassStore(CLASS_ARCHER, "You can take two drinks off the total amount, and hand them out to players."));
 //        characterClasses.add(new CharacterClassStore(CLASS_BARBARIAN, "You can deny three drinks handed out to you."));

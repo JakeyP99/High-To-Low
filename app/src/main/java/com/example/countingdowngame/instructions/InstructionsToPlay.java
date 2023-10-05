@@ -18,8 +18,8 @@ public class InstructionsToPlay extends ButtonUtilsActivity {
     private final List<Integer> instructions = Arrays.asList(
             R.string.instruction_welcome,
             R.string.instruction_aim,
-            R.string.instruction_choose_drink,
             R.string.instruction_create_players,
+            R.string.instruction_choose_class,
             R.string.instruction_choose_starting_number,
             R.string.instruction_generate_button,
             R.string.instruction_wildcard_button,
