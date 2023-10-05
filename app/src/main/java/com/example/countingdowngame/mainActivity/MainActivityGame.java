@@ -6,8 +6,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.text.InputFilter;
-import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -577,23 +575,21 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     public void onChangeNumberClick() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Change Current Number");
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.character_class_change_number, null);
 
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        EditText editCurrentNumberText = dialogView.findViewById(R.id.editCurrentNumberTextView);
+        Button okButton = dialogView.findViewById(R.id.close_button);
 
-        int maxLength = 9;
-        InputFilter[] filters = new InputFilter[1];
-        filters[0] = new InputFilter.LengthFilter(maxLength);
-        input.setFilters(filters);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setView(dialogView);
 
-        builder.setView(input);
+        AlertDialog dialog = builder.create();
 
-        builder.setPositiveButton("OK", (dialog, which) -> {
+        okButton.setOnClickListener(view -> {
             try {
-                String userInput = input.getText().toString();
-                newNumber = Integer.parseInt(userInput);
+                String userInput = editCurrentNumberText.getText().toString();
+                int newNumber = Integer.parseInt(userInput);
                 if (newNumber > 999999999) {
                     displayToastMessage("That number was too high!");
                     btnClassAbility.setVisibility(View.VISIBLE);
@@ -605,15 +601,14 @@ public class MainActivityGame extends SharedMainActivity {
                     SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(newNumber));
                     numberText.setText(String.valueOf(newNumber));
                     btnClassAbility.setVisibility(View.INVISIBLE);
+                    dialog.dismiss(); // Close the dialog on success
                 }
             } catch (NumberFormatException e) {
                 displayToastMessage("Invalid number input");
             }
         });
 
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-
-        builder.show();
+        dialog.show();
     }
 
 

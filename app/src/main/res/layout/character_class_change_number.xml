@@ -1,0 +1,40 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="Choose a number"
+        android:textColor="@color/bluedark"
+        android:textSize="28sp"
+        android:textAlignment="center" />
+
+    <EditText
+        android:id="@+id/editCurrentNumberTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="---"
+        android:inputType="number"
+        android:text=""
+        android:layout_gravity="center"
+        android:textColor="@color/bluedark"
+        android:textColorHint="#DDDDDD"
+        android:maxLength="9"
+        android:textSize="50sp" />
+
+    <Button
+        android:id="@+id/close_button"
+        android:layout_width="90dp"
+        android:layout_height="50dp"
+        android:background="@drawable/outlineforbutton"
+        android:text="Submit"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:layout_gravity="center_horizontal"
+        android:textSize="20sp"
+        android:layout_marginTop="20dp" />
+</LinearLayout>
