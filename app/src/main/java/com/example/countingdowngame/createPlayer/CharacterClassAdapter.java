@@ -38,20 +38,20 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
         holder.classNameTextView.setText(characterClass.getClassName());
         holder.specialAbilityTextView.setText(characterClass.getSpecialAbility());
 
-        // Check if this item is the selected one and update the background
         if (position == selectedItem) {
             holder.itemView.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.buttonhighlight));
-        }  // Set a default background when the item is not selected
+            holder.dottedLineBelow.setVisibility(View.INVISIBLE);
+        }
         else {
-            // Set a default background when the item is not selected
             holder.itemView.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.color.transparent));
+            holder.dottedLineBelow.setVisibility(View.VISIBLE);
         }
         // Set an onClickListener for item clicks
         holder.itemView.setOnClickListener(view -> {
             int previousSelected = selectedItem;
-            selectedItem = holder.getAdapterPosition(); // Get the current position dynamically
-            notifyItemChanged(previousSelected); // Unhighlight previous
-            notifyItemChanged(selectedItem); // Highlight the selected one
+            selectedItem = holder.getAdapterPosition();
+            notifyItemChanged(previousSelected);
+            notifyItemChanged(selectedItem);
         });
     }
     @Override
@@ -62,11 +62,14 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView classNameTextView;
         TextView specialAbilityTextView;
+        View dottedLineAbove;
+        View dottedLineBelow;
 
         public ViewHolder(View itemView) {
             super(itemView);
             classNameTextView = itemView.findViewById(R.id.classNameTextView);
             specialAbilityTextView = itemView.findViewById(R.id.specialAbilityTextView);
+            dottedLineBelow = itemView.findViewById(R.id.dotted_line_below); // Initialize the reference
         }
     }
 }
