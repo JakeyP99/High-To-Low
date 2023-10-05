@@ -57,7 +57,7 @@ public class MainActivityGame extends SharedMainActivity {
     private Button btnAnswerRight;
     private Button btnAnswerWrong;
     private ImageView playerImage;
-    private TextView numberCounter;
+    private TextView drinkNumberCounterTextView;
     private boolean doubleBackToExitPressedOnce = false;
     private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
     private Handler shuffleHandler;
@@ -87,7 +87,7 @@ public class MainActivityGame extends SharedMainActivity {
             return;
         }
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Press back again to go to the home screen", Toast.LENGTH_SHORT).show();
+        displayToastMessage("Press back again to go to the home screen");
         new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, BACK_PRESS_DELAY);
     }
     //-----------------------------------------------------Create game---------------------------------------------------//
@@ -104,7 +104,7 @@ public class MainActivityGame extends SharedMainActivity {
     private void initializeViews() {
         playerImage = findViewById(R.id.playerImage);
         numberText = findViewById(R.id.textView_NumberText);
-        numberCounter = findViewById(R.id.textView_numberCounter);
+        drinkNumberCounterTextView = findViewById(R.id.textView_numberCounter);
         nextPlayerText = findViewById(R.id.textView_Number_Turn);
         btnWild = findViewById(R.id.btnWild);
         btnAnswer = findViewById(R.id.btnAnswer);
@@ -180,7 +180,7 @@ public class MainActivityGame extends SharedMainActivity {
         btnUtils.setButton(btnWild, () -> {
             wildCardActivate(Game.getInstance().getCurrentPlayer());
             isFirstTurn = false;
-            numberCounter.setVisibility(View.INVISIBLE);
+            drinkNumberCounterTextView.setVisibility(View.INVISIBLE);
             wildText.setVisibility(View.VISIBLE);
             btnWild.setVisibility(View.INVISIBLE);
             btnGenerate.setVisibility(View.INVISIBLE);
@@ -251,13 +251,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         if (currentPlayer.equals(firstPlayer)) {
             drinkNumberCounterInt++;
-            String text;
-            if (drinkNumberCounterInt == 1) {
-                text = "1 Drink";
-            } else {
-                text = drinkNumberCounterInt + " Drinks";
-            }
-            numberCounter.setText(text);
+            updateDrinkNumberCounterTextView();
         }
 
         if (!playerList.isEmpty()) {
@@ -292,7 +286,7 @@ public class MainActivityGame extends SharedMainActivity {
     private void wildCardContinue() {
         Game.getInstance().getCurrentPlayer().useSkip();
         btnGenerate.setVisibility(View.VISIBLE);
-        numberCounter.setVisibility(View.VISIBLE);
+        drinkNumberCounterTextView.setVisibility(View.VISIBLE);
 
         numberText.setVisibility(View.VISIBLE);
         nextPlayerText.setVisibility(View.VISIBLE);
@@ -331,7 +325,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         if (wildCardsEnabled) {
             WildCardProperties[] selectedType = new WildCardProperties[0];
-            String wildCardType = ""; // Variable to store the type of wildcard
+            String wildCardType = "";
             boolean foundWildCardType = false;
             Random random = new Random();
 
@@ -355,7 +349,7 @@ public class MainActivityGame extends SharedMainActivity {
                 foundWildCardType = true;
             }
             while (!foundWildCardType) {
-                int typeChance = random.nextInt(4); // Generate a random number from 0 to 3
+                int typeChance = random.nextInt(4);
                 switch (typeChance) {
                     case 0:
                         if (quizProbabilitiesCount > 0) {
@@ -418,15 +412,11 @@ public class MainActivityGame extends SharedMainActivity {
                     .filter(c -> !usedWildCards.contains(c))
                     .collect(Collectors.toList());
 
-            // Calculate the total probabilities within the selected type
             int totalTypeProbabilities = unusedCards.stream()
                     .mapToInt(WildCardProperties::getProbability)
                     .sum();
 
-            // Generate a random number within the total probabilities
             int selectedIndex = random.nextInt(totalTypeProbabilities);
-
-            // Select the wildcard based on the random number and its probability
             WildCardProperties selectedCard = null;
             int cumulativeProbability = 0;
 
@@ -512,64 +502,80 @@ public class MainActivityGame extends SharedMainActivity {
                 currentPlayer.gainWildCards(1);
             }
         }
-
         if ("Witch".equals(currentPlayer.getClassChoice())) {
             if (!isFirstTurn) {
                 if (drinkNumberCounterInt % 2 == 0) {
-                    // Show a toast message for handing out three drinks
-                    Toast.makeText(this, "Hand out three drinks.", Toast.LENGTH_SHORT).show();
+                    displayToastMessage("Hand out three drinks.");
                 } else {
-                    // Show a toast message for taking a drink
-                    Toast.makeText(this, "Take a drink.", Toast.LENGTH_SHORT).show();
+                    displayToastMessage("Take a drink.");
                 }
             }
         }
-
-        if ("Archer".equals(currentPlayer.getClassChoice())) {
-            if (!isFirstTurn) {
-                if (drinkNumberCounterInt % 2 == 0) {
-                    // Show a toast message for handing out three drinks
-                    Toast.makeText(this, "Hand out three drinks.", Toast.LENGTH_SHORT).show();
-                } else {
-                    // Show a toast message for taking a drink
-                    Toast.makeText(this, "Take a drink.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-
     }
 
     public void characterClassButtonActivities() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         Log.d("characterClassButtonActivities", "Class Activated" + currentPlayer.getClassChoice());
-
-        if ("Scientist".equals(currentPlayer.getClassChoice())) {
-            onChangeNumberClick();
-            currentPlayer.setClassAbility(true); // Update class ability to true
-        }
-
-        if ("Archer".equals(currentPlayer.getClassChoice())) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            LayoutInflater inflater = getLayoutInflater();
-
-            View dialogView = inflater.inflate(R.layout.mainactivity_dialog_box, null);
-            TextView dialogboxtextview = dialogView.findViewById(R.id.dialogbox_textview); // Use dialogView.findViewById to find the TextView within the dialogView
-            dialogboxtextview.setText("Hand out two drinks.");
-
-            builder.setView(dialogView); // Set the custom view for the dialog
-            AlertDialog dialog = builder.create();
-            dialog.show();
-
-            currentPlayer.setClassAbility(true); // Update class ability to true
-
-            ImageButton closeButton = dialogView.findViewById(R.id.close_button);
-            closeButton.setOnClickListener(v -> {
-                dialog.dismiss();
-            });
-
+        String classChoice = currentPlayer.getClassChoice();
+        switch (classChoice) {
+            case "Scientist":
+                handleScientistClass(currentPlayer);
+                break;
+            case "Archer":
+                handleArcherClass(currentPlayer);
+                break;
+            default:
+                break;
         }
     }
 
+    //Todo make sure you cant submit more than the amount, and you can't submit 0
+    private void handleScientistClass(Player currentPlayer) {
+        onChangeNumberClick();
+        currentPlayer.setClassAbility(true);
+        btnClassAbility.setVisibility(View.INVISIBLE);
+    }
+
+    private void handleArcherClass(Player currentPlayer) {
+        if (drinkNumberCounterInt >= 2) {
+            showArcherDialog();
+            currentPlayer.setClassAbility(true);
+            drinkNumberCounterInt -= 2;
+            updateDrinkNumberCounterTextView();
+            btnClassAbility.setVisibility(View.INVISIBLE);
+        } else {
+            displayToastMessage("Not enough drinks to subtract.");
+        }
+    }
+
+    private void showArcherDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+
+        View dialogView = inflater.inflate(R.layout.mainactivity_dialog_box, null);
+        TextView dialogboxtextview = dialogView.findViewById(R.id.dialogbox_textview);
+        dialogboxtextview.setText("Hand out two drinks");
+
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        ImageButton closeButton = dialogView.findViewById(R.id.close_button);
+        closeButton.setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+    }
+
+
+    private void updateDrinkNumberCounterTextView() {
+        String drinkNumberText;
+        if (drinkNumberCounterInt == 1) {
+            drinkNumberText = "1 Drink";
+        } else {
+            drinkNumberText = drinkNumberCounterInt + " Drinks";
+        }
+        drinkNumberCounterTextView.setText(drinkNumberText);
+    }
 
     public void onChangeNumberClick() {
 
@@ -594,7 +600,7 @@ public class MainActivityGame extends SharedMainActivity {
                 numberText.setText(String.valueOf(newNumber));
             } catch (NumberFormatException e) {
                 // Handle invalid input (e.g., non-numeric input)
-                Toast.makeText(this, "Invalid number input", Toast.LENGTH_SHORT).show();
+                displayToastMessage("Invalid number input");
             }
         });
 
@@ -603,6 +609,7 @@ public class MainActivityGame extends SharedMainActivity {
         builder.show();
     }
 
+    //-----------------------------------------------------Quiz Code---------------------------------------------------//
 
     private void quizAnswerView(String string) {
         btnBackWild.setVisibility(View.VISIBLE);
@@ -646,5 +653,12 @@ public class MainActivityGame extends SharedMainActivity {
         }
         btnAnswer.setVisibility(View.INVISIBLE);
     }
+
+    //-----------------------------------------------------Toast Code---------------------------------------------------//
+
+    private void displayToastMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
 
 }

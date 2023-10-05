@@ -45,6 +45,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapter.ClickListener {
+
+    public static final String CLASS_ARCHER = "Archer";
+    public static final String CLASS_BARBARIAN = "Barbarian";
+    public static final String CLASS_WITCH = "Witch";
+    public static final String CLASS_SCIENTIST = "Scientist";
+    public static final String CLASS_SOLDIER = "Soldier";
     private static final int REQUEST_IMAGE_PICK = 1;
     private static final int REQUEST_DRAW = 2;
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;
@@ -125,7 +131,6 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     //-----------------------------------------------------Choose the player class---------------------------------------------------//
 
     private void chooseClass(int position) {
-        Log.d("ChooseClass", "chooseClass: Was inflated");
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
 
@@ -136,15 +141,14 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         classRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         List<CharacterClassStore> characterClasses = new ArrayList<>();
-        characterClasses.add(new CharacterClassStore("Archer", "You can take two drinks off the total amount, and hand them out to players."));
-        characterClasses.add(new CharacterClassStore("Barbarian", "You can deny three drinks handed out to you."));
-        characterClasses.add(new CharacterClassStore("Witch", "For every even number your player lands on, you can hand out three drinks, but for every odd number you have to take a drink."));
-        characterClasses.add(new CharacterClassStore("Scientist", "At any point in the game, you can change the current number to be whatever you want."));
-        characterClasses.add(new CharacterClassStore("Soldier", "For every third turn, you gain one wildcard."));
+        characterClasses.add(new CharacterClassStore(CLASS_ARCHER, "You can take two drinks off the total amount, and hand them out to players."));
+//        characterClasses.add(new CharacterClassStore(CLASS_BARBARIAN, "You can deny three drinks handed out to you."));
+        characterClasses.add(new CharacterClassStore(CLASS_WITCH, "For every even number your player lands on, you can hand out three drinks, but for every odd number you have to take a drink."));
+        characterClasses.add(new CharacterClassStore(CLASS_SCIENTIST, "On your turn, you can change the current number to be whatever you want. You must roll again!"));
+        characterClasses.add(new CharacterClassStore(CLASS_SOLDIER, "For every third turn, you gain one wildcard."));
 
         CharacterClassAdapter adapter = new CharacterClassAdapter(characterClasses);
         classRecyclerView.setAdapter(adapter);
-
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
@@ -162,8 +166,6 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
             Log.d("Confirm Button", "Confirm Button Clicked and " + selectedPlayer.getName() + " choose " + selectedPlayer.getClassChoice());
             dialog.dismiss();
         });
-
-
     }
 
     //-----------------------------------------------------Choose the player creation---------------------------------------------------//
