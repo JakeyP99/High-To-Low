@@ -46,6 +46,7 @@ public class MainActivityGame extends SharedMainActivity {
     private final Map<Player, Set<WildCardProperties>> usedWildCard = new HashMap<>();
     private final Set<WildCardProperties> usedWildCards = new HashSet<>();
     private TextView numberText;
+    private int currentPlayerTurnCount = 0;
     private TextView nextPlayerText;
     private Button btnAnswer;
     private Button btnWild;
@@ -64,7 +65,7 @@ public class MainActivityGame extends SharedMainActivity {
     private TextView wildText;
     private Player firstPlayer;
     private boolean isFirstTurn = true;
-    private int newNumber = 0;
+    private Map<Player, Integer> playerTurnCountMap = new HashMap<>();
 
     @Override
     protected void onResume() {
@@ -115,6 +116,12 @@ public class MainActivityGame extends SharedMainActivity {
         shuffleHandler = new Handler();
         wildText = findViewById(R.id.textView_WildText);
     }
+
+    // Initialize a player's turn count to 0 when starting the game or a player's turn
+    private void initializePlayerTurnCount(Player player) {
+        playerTurnCountMap.put(player, 0);
+    }
+
 
     private void startGame() {
         drinkNumberCounterInt = 0;
@@ -515,7 +522,39 @@ public class MainActivityGame extends SharedMainActivity {
                 }
             }
         }
+
+        if ("Archer".equals(currentPlayer.getClassChoice())) {
+            int currentPlayerTurnCount = playerTurnCountMap.getOrDefault(currentPlayer, 0);
+            currentPlayerTurnCount++;
+
+            Log.d("ArcherClass", "Turn count: " + currentPlayerTurnCount);
+            playerTurnCountMap.put(currentPlayer, currentPlayerTurnCount);
+
+            // Check if it's the third turn and apply passive ability
+            if (currentPlayerTurnCount % 3 == 0) {
+                // Debug log to check if the passive ability logic is executed
+                Log.d("ArcherClass", "Passive ability triggered");
+
+                // 50% chance (randomly decide whether to increase or decrease)
+                if (new Random().nextBoolean()) {
+                    drinkNumberCounterInt += 2; // Increase drinking number by 2
+                    if (drinkNumberCounterInt < 0) {
+                        drinkNumberCounterInt = 0; // Cap at zero
+                    }
+                    updateDrinkNumberCounterTextView();
+                    displayToastMessage("Archer's passive ability: Drinking number increased by 2!");
+                } else {
+                    drinkNumberCounterInt -= 2; // Decrease drinking number by 2
+                    if (drinkNumberCounterInt < 0) {
+                        drinkNumberCounterInt = 0; // Cap at zero
+                    }
+                    updateDrinkNumberCounterTextView();
+                    displayToastMessage("Archer's passive ability: Drinking number decreased by 2!");
+                }
+            }
+        }
     }
+
 
     public void characterClassButtonActivities() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
@@ -539,6 +578,9 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void handleArcherClass(Player currentPlayer) {
+        Log.d("ArcherClass", "handleArcherClass called");
+
+        // Active Ability: You can take two drinks off the total amount, and hand them out to players.
         if (drinkNumberCounterInt >= 2) {
             showDialog("Hand out two drinks");
             currentPlayer.setClassAbility(true);
@@ -548,7 +590,10 @@ public class MainActivityGame extends SharedMainActivity {
         } else {
             displayToastMessage("Not enough drinks to subtract.");
         }
+
+
     }
+
 
     private void showDialog(String string) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

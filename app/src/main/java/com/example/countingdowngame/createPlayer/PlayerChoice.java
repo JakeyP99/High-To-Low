@@ -150,11 +150,11 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
 
 
         List<CharacterClassStore> characterClasses = new ArrayList<>();
-        characterClasses.add(new CharacterClassStore(CLASS_ARCHER, "You can take two drinks off the total amount, and hand them out to players."));
+        characterClasses.add(new CharacterClassStore(CLASS_ARCHER, "Active Ability: You can take two drinks off the total amount, and hand them out to players. \n\nPassive Ability: For every third turn, there is a 50% chance the drinking number will increase or decrease by 2."));
 //        characterClasses.add(new CharacterClassStore(CLASS_BARBARIAN, "You can deny three drinks handed out to you."));
-        characterClasses.add(new CharacterClassStore(CLASS_WITCH, "For every even number your player lands on, you can hand out two drinks, but for every odd number you have to take a drink."));
-        characterClasses.add(new CharacterClassStore(CLASS_SCIENTIST, "On your turn, you can change the current number to be whatever you want. You must roll again!"));
-        characterClasses.add(new CharacterClassStore(CLASS_SOLDIER, "For every third turn, you gain one wildcard."));
+        characterClasses.add(new CharacterClassStore(CLASS_WITCH, "Active Ability: You can skip your turn. \n\nPassive Ability: For every even number your player lands on, you can hand out two drinks, but for every odd number you have to take a drink."));
+        characterClasses.add(new CharacterClassStore(CLASS_SCIENTIST, "Active Ability: On your turn, you can change the current number to be whatever you want. You must roll again! \n\nPassive Ability: There's a 10% chance your turn is skipped."));
+        characterClasses.add(new CharacterClassStore(CLASS_SOLDIER, "Passive Ability: If you land between 10 and 15, you escape the game and are not longer in it. \n\nPassive Ability: For every third turn, you gain one wildcard."));
         characterClasses.add(new CharacterClassStore(CLASS_JIM, "Regular Jim does nothing crazy, he can yo-yo pretty good though."));
 
 
