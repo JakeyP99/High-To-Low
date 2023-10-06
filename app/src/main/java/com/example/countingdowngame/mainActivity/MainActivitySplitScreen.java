@@ -39,6 +39,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+//todo make it so if this is class is activated, then the character classes won't be selected.
 public class MainActivitySplitScreen extends SharedMainActivity {
     private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
     private final Map<Player, Set<WildCardProperties>> usedWildCard = new HashMap<>();

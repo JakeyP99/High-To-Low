@@ -117,11 +117,6 @@ public class MainActivityGame extends SharedMainActivity {
         wildText = findViewById(R.id.textView_WildText);
     }
 
-    // Initialize a player's turn count to 0 when starting the game or a player's turn
-    private void initializePlayerTurnCount(Player player) {
-        playerTurnCountMap.put(player, 0);
-    }
-
 
     private void startGame() {
         drinkNumberCounterInt = 0;
@@ -229,10 +224,12 @@ public class MainActivityGame extends SharedMainActivity {
                     numberText.setText(String.valueOf(randomDigit));
 
                     int currentNumber = Game.getInstance().nextNumber();
-                    renderCurrentNumber(currentNumber,() -> gotoGameEnd(), numberText);
+                    renderCurrentNumber(currentNumber, () -> gotoGameEnd(), numberText);
 
                     btnGenerate.setEnabled(true);
                     btnWild.setEnabled(true);
+                    Log.d("startNumberShuffleAnimation", "Next players turn");
+
                 }
             }
         }, shuffleInterval);
@@ -244,9 +241,8 @@ public class MainActivityGame extends SharedMainActivity {
     private void renderPlayer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
-        characterClassAffects();
+        characterPassiveClassAffects();
 
-        Log.d("renderPlayer", currentPlayer.getName() + " is a " + currentPlayer.getClassChoice() + " with " + currentPlayer.getWildCardAmount() + " Wildcards" + "and " + currentPlayer.usedClassAbility());
 
         if ("Scientist".equals(currentPlayer.getClassChoice()) ||
                 "Archer".equals(currentPlayer.getClassChoice()) ||
@@ -282,6 +278,9 @@ public class MainActivityGame extends SharedMainActivity {
         numberText.setText(String.valueOf(currentNumber));
         SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(currentNumber));
         SharedMainActivity.setNameSizeBasedOnInt(nextPlayerText, nextPlayerText.getText().toString());
+
+        Log.d("renderPlayer", "Player was rendered " + currentPlayer.getName() + " is a " + currentPlayer.getClassChoice() + " with " + currentPlayer.getWildCardAmount() + " Wildcards " + "and " + currentPlayer.usedClassAbility());
+
     }
 
 
@@ -299,7 +298,9 @@ public class MainActivityGame extends SharedMainActivity {
         btnAnswerRight.setVisibility(View.INVISIBLE);
         btnAnswerWrong.setVisibility(View.INVISIBLE);
 
-        if ("Scientist".equals(currentPlayer.getClassChoice()) || "Archer".equals(currentPlayer.getClassChoice()) && !currentPlayer.usedClassAbility()) {
+        if ("Scientist".equals(currentPlayer.getClassChoice()) ||
+                "Archer".equals(currentPlayer.getClassChoice()) ||
+                "Witch".equals(currentPlayer.getClassChoice()) && !currentPlayer.usedClassAbility()) {
             btnClassAbility.setVisibility(View.VISIBLE);
         } else {
             btnClassAbility.setVisibility(View.INVISIBLE);
@@ -508,7 +509,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
     //-----------------------------------------------------Character Class Functions---------------------------------------------------//
 
-    private void characterClassAffects() {
+    private void characterPassiveClassAffects() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         if ("Soldier".equals(currentPlayer.getClassChoice())) {
             int turnCounter = currentPlayer.getTurnCounter();
@@ -525,6 +526,20 @@ public class MainActivityGame extends SharedMainActivity {
                 }
             }
         }
+
+        if ("Scientist".equals(currentPlayer.getClassChoice())) {
+            Handler handler = new Handler();
+            int delayMillis = 1;
+            int chance = new Random().nextInt(100);
+
+            handler.postDelayed(() -> {
+                if (chance < 10) {
+                    showDialog(currentPlayer.getName() + " is a scientist and his turn was skipped.");
+                    currentPlayer.useSkip();
+                }
+            }, delayMillis);
+        }
+
 
         if ("Archer".equals(currentPlayer.getClassChoice())) {
             int currentPlayerTurnCount = playerTurnCountMap.getOrDefault(currentPlayer, 0);
@@ -578,6 +593,7 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
+    //todo it doesnt put in the changed number in the previous numbers
     private void handleScientistClass(Player currentPlayer) {
         onChangeNumberClick();
         currentPlayer.setClassAbility(true);
@@ -635,7 +651,7 @@ public class MainActivityGame extends SharedMainActivity {
         drinkNumberCounterTextView.setText(drinkNumberText);
     }
 
-    public void onChangeNumberClick() {
+    private void onChangeNumberClick() {
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.character_class_change_number, null);
 
