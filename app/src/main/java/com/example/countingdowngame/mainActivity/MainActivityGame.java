@@ -509,9 +509,9 @@ public class MainActivityGame extends SharedMainActivity {
         if ("Witch".equals(currentPlayer.getClassChoice())) {
             if (!isFirstTurn) {
                 if (drinkNumberCounterInt % 2 == 0) {
-                    showDialog("Hand out two drinks.");
+                    showDialog(currentPlayer.getName() + " hand out two drinks.");
                 } else {
-                    showDialog("Take a drink.");
+                    showDialog(currentPlayer.getName() + " take a drink.");
                 }
             }
         }

@@ -19,6 +19,7 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
 
     public CharacterClassAdapter(List<CharacterClassStore> characterClasses) {
         this.characterClasses = characterClasses;
+        selectedItem = -1;
     }
 
     public int getSelectedItemPosition() {

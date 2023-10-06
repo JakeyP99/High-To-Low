@@ -152,7 +152,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         List<CharacterClassStore> characterClasses = new ArrayList<>();
         characterClasses.add(new CharacterClassStore(CLASS_ARCHER, "You can take two drinks off the total amount, and hand them out to players."));
 //        characterClasses.add(new CharacterClassStore(CLASS_BARBARIAN, "You can deny three drinks handed out to you."));
-        characterClasses.add(new CharacterClassStore(CLASS_WITCH, "For every even number your player lands on, you can hand out three drinks, but for every odd number you have to take a drink."));
+        characterClasses.add(new CharacterClassStore(CLASS_WITCH, "For every even number your player lands on, you can hand out two drinks, but for every odd number you have to take a drink."));
         characterClasses.add(new CharacterClassStore(CLASS_SCIENTIST, "On your turn, you can change the current number to be whatever you want. You must roll again!"));
         characterClasses.add(new CharacterClassStore(CLASS_SOLDIER, "For every third turn, you gain one wildcard."));
         characterClasses.add(new CharacterClassStore(CLASS_JIM, "Regular Jim does nothing crazy, he can yo-yo pretty good though."));
@@ -163,6 +163,10 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
+
+        // Set a cancel listener for the dialog
+        dialog.setCancelable(false);
+
         dialog.show();
 
         confirmClass.setOnClickListener(v -> {
@@ -171,11 +175,12 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
             if (selectedPosition != -1) {
                 CharacterClassStore selectedCharacterClass = characterClasses.get(selectedPosition);
                 selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
+                dialog.dismiss();
             } else {
-                selectedPlayer.setClassChoice(null);
+                // Show the message when no class is selected
+                Toast.makeText(getApplicationContext(), "Please confirm a class.", Toast.LENGTH_SHORT).show();
             }
             Log.d("Confirm Button", "Confirm Button Clicked and " + selectedPlayer.getName() + " choose " + selectedPlayer.getClassChoice());
-            dialog.dismiss();
         });
     }
 
