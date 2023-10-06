@@ -46,7 +46,6 @@ public class MainActivityGame extends SharedMainActivity {
     private final Map<Player, Set<WildCardProperties>> usedWildCard = new HashMap<>();
     private final Set<WildCardProperties> usedWildCards = new HashSet<>();
     private TextView numberText;
-    private int currentPlayerTurnCount = 0;
     private TextView nextPlayerText;
     private Button btnAnswer;
     private Button btnWild;
@@ -65,6 +64,8 @@ public class MainActivityGame extends SharedMainActivity {
     private TextView wildText;
     private Player firstPlayer;
     private boolean isFirstTurn = true;
+    private boolean soldierRemoval = false;
+    private boolean soldierRemovalLastTurn = false;
     private Map<Player, Integer> playerTurnCountMap = new HashMap<>();
 
     @Override
@@ -242,6 +243,7 @@ public class MainActivityGame extends SharedMainActivity {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
         characterPassiveClassAffects();
+        soldierRemovalLastTurn = soldierRemoval;
 
 
         if ("Scientist".equals(currentPlayer.getClassChoice()) ||
@@ -511,12 +513,19 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void characterPassiveClassAffects() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
+
         if ("Soldier".equals(currentPlayer.getClassChoice())) {
             int turnCounter = currentPlayer.getTurnCounter();
             if (turnCounter > 0 && turnCounter % 3 == 0) {
                 currentPlayer.gainWildCards(1);
             }
+            removeCharacterFromGame(currentPlayer);
+            Log.d("Soldier Passive", currentPlayer.getName() + " Soldier is removed"); // Log the type of wildcard
+
+
         }
+
+
         if ("Witch".equals(currentPlayer.getClassChoice())) {
             if (!isFirstTurn) {
                 if (drinkNumberCounterInt % 2 == 0) {
@@ -569,6 +578,32 @@ public class MainActivityGame extends SharedMainActivity {
                     updateDrinkNumberCounterTextView();
                     displayToastMessage("Archer's passive ability: Drinking number decreased by 2!");
                 }
+            }
+        }
+    }
+
+    private void removeCharacterFromGame(Player player) {
+        int currentNumber = Game.getInstance().getCurrentNumber();
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+
+        int minRange = 10;
+        int maxRange = 10000000;
+
+        if (!soldierRemoval) {
+            if (currentNumber >= minRange && currentNumber <= maxRange) {
+                Game.getInstance().setPlayerToRemove(player);
+                soldierRemoval = true;
+                soldierRemovalLastTurn = true; // Update the flag for the current turn
+                Handler handler = new Handler();
+                int delayMillis = 1;
+                showDialog(currentPlayer.getName() + " has escaped the game as the soldier.");
+                handler.postDelayed(() -> {
+                    renderPlayer();
+                }, delayMillis);
+            }
+        } else {
+            if (currentNumber >= minRange && currentNumber <= maxRange && !soldierRemovalLastTurn) {
+                showDialog("One soldier has already escaped, good luck with the game.");
             }
         }
     }

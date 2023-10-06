@@ -16,6 +16,9 @@ public class Game {
     private int currentPlayerId = 0;
     private int startingNumber = 0;
     int currentNumber = 0;
+    private boolean playerRemoved = false; // Flag to track if a player has been removed
+
+    private Player playerToRemove; // Store the player to be removed
     private boolean gameStarted = false;
 
     private final ArrayList<Integer> updatedNumbers = new ArrayList<>();
@@ -24,6 +27,7 @@ public class Game {
     public static Game getInstance() {
         return gameInstance;
     }
+
     public void setPlayers(Context context, int playerAmount) {
         if (gameStarted)
             return;
@@ -140,6 +144,7 @@ public class Game {
     public void setCurrentNumber(int number) {
         currentNumber = number;
     }
+
     public void resetPlayers(Context context) {
         for (Player player : players) {
             if (player != null) {
@@ -148,6 +153,12 @@ public class Game {
         }
     }
 
+    public void setPlayerToRemove(Player player) {
+        if (!playerRemoved) { // Check if a player has already been removed
+            players.remove(player);
+            playerRemoved = true; // Set the flag to indicate that a player has been removed
+        }
+    }
 
 }
 
