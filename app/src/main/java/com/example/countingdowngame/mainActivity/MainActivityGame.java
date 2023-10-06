@@ -237,16 +237,15 @@ public class MainActivityGame extends SharedMainActivity {
     private void renderPlayer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
-
         characterClassAffects();
+
         Log.d("renderPlayer", currentPlayer.getName() + " is a " + currentPlayer.getClassChoice() + " with " + currentPlayer.getWildCardAmount() + " Wildcards" + "and " + currentPlayer.usedClassAbility());
 
-        if ("Scientist".equals(currentPlayer.getClassChoice()) | "Archer".equals(currentPlayer.getClassChoice()) && !currentPlayer.usedClassAbility()) {
+        if ("Scientist".equals(currentPlayer.getClassChoice()) || "Archer".equals(currentPlayer.getClassChoice()) && !currentPlayer.usedClassAbility()) {
             btnClassAbility.setVisibility(View.VISIBLE);
         } else {
             btnClassAbility.setVisibility(View.INVISIBLE);
         }
-
 
         if (currentPlayer.equals(firstPlayer)) {
             drinkNumberCounterInt++;
@@ -260,7 +259,6 @@ public class MainActivityGame extends SharedMainActivity {
             nextPlayerText.setText(playerName + "'s Turn");
             btnWild.setText((currentPlayer.getWildCardAmount() + "\n" + "Wild Cards"));
 
-
             if (playerImageString != null) {
                 byte[] decodedString = Base64.decode(playerImageString, Base64.DEFAULT);
                 Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -268,25 +266,21 @@ public class MainActivityGame extends SharedMainActivity {
             }
         }
 
-        if (currentPlayer.getWildCardAmount() > 0) {
-            btnWild.setVisibility(View.VISIBLE);
-        } else {
-            btnWild.setVisibility(View.INVISIBLE);
-        }
+        btnWild.setVisibility(currentPlayer.getWildCardAmount() > 0 ? View.VISIBLE : View.INVISIBLE);
 
         int currentNumber = Game.getInstance().getCurrentNumber();
         numberText.setText(String.valueOf(currentNumber));
         SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(currentNumber));
         SharedMainActivity.setNameSizeBasedOnInt(nextPlayerText, nextPlayerText.getText().toString());
-
     }
+
 
     //-----------------------------------------------------Wild Card, and Skip Functionality---------------------------------------------------//
     private void wildCardContinue() {
-        Game.getInstance().getCurrentPlayer().useSkip();
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        currentPlayer.useSkip();
         btnGenerate.setVisibility(View.VISIBLE);
         drinkNumberCounterTextView.setVisibility(View.VISIBLE);
-
         numberText.setVisibility(View.VISIBLE);
         nextPlayerText.setVisibility(View.VISIBLE);
         wildText.setVisibility(View.INVISIBLE);
@@ -294,7 +288,14 @@ public class MainActivityGame extends SharedMainActivity {
         btnAnswer.setVisibility(View.INVISIBLE);
         btnAnswerRight.setVisibility(View.INVISIBLE);
         btnAnswerWrong.setVisibility(View.INVISIBLE);
+
+        if ("Scientist".equals(currentPlayer.getClassChoice()) || "Archer".equals(currentPlayer.getClassChoice()) && !currentPlayer.usedClassAbility()) {
+            btnClassAbility.setVisibility(View.VISIBLE);
+        } else {
+            btnClassAbility.setVisibility(View.INVISIBLE);
+        }
     }
+
 
     private void wildCardActivate(Player player) {
         Game.getInstance().getCurrentPlayer().useWildCard();
@@ -355,6 +356,7 @@ public class MainActivityGame extends SharedMainActivity {
                             selectedType = quizProbabilities;
                             wildCardType = "Quiz";
                             foundWildCardType = true;
+                            btnClassAbility.setVisibility(View.INVISIBLE);
                         }
                         break;
                     case 1:
@@ -362,6 +364,7 @@ public class MainActivityGame extends SharedMainActivity {
                             selectedType = taskProbabilities;
                             wildCardType = "Task";
                             foundWildCardType = true;
+                            btnClassAbility.setVisibility(View.INVISIBLE);
                         }
                         break;
                     case 2:
@@ -369,6 +372,7 @@ public class MainActivityGame extends SharedMainActivity {
                             selectedType = truthProbabilities;
                             wildCardType = "Truth";
                             foundWildCardType = true;
+                            btnClassAbility.setVisibility(View.INVISIBLE);
                         }
                         break;
                     case 3:
@@ -376,6 +380,7 @@ public class MainActivityGame extends SharedMainActivity {
                             selectedType = extraProbabilities;
                             wildCardType = "Extras";
                             foundWildCardType = true;
+                            btnClassAbility.setVisibility(View.INVISIBLE);
                         }
                         break;
                     default:
@@ -574,7 +579,6 @@ public class MainActivityGame extends SharedMainActivity {
         drinkNumberCounterTextView.setText(drinkNumberText);
     }
 
-    //todo make the acitvate ability vanish if they have clicked a wildcard and reappear
     public void onChangeNumberClick() {
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.character_class_change_number, null);
