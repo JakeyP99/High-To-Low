@@ -248,7 +248,10 @@ public class MainActivityGame extends SharedMainActivity {
 
         Log.d("renderPlayer", currentPlayer.getName() + " is a " + currentPlayer.getClassChoice() + " with " + currentPlayer.getWildCardAmount() + " Wildcards" + "and " + currentPlayer.usedClassAbility());
 
-        if ("Scientist".equals(currentPlayer.getClassChoice()) || "Archer".equals(currentPlayer.getClassChoice()) && !currentPlayer.usedClassAbility()) {
+        if ("Scientist".equals(currentPlayer.getClassChoice()) ||
+                "Archer".equals(currentPlayer.getClassChoice()) ||
+                "Witch".equals(currentPlayer.getClassChoice()) &&
+                        !currentPlayer.usedClassAbility()) {
             btnClassAbility.setVisibility(View.VISIBLE);
         } else {
             btnClassAbility.setVisibility(View.INVISIBLE);
@@ -567,6 +570,9 @@ public class MainActivityGame extends SharedMainActivity {
             case "Archer":
                 handleArcherClass(currentPlayer);
                 break;
+            case "Witch":
+                handleWitchClass(currentPlayer);
+                break;
             default:
                 break;
         }
@@ -594,6 +600,11 @@ public class MainActivityGame extends SharedMainActivity {
 
     }
 
+    private void handleWitchClass(Player currentPlayer) {
+        Log.d("WitchClass", "handleWitchClass called");
+        currentPlayer.useSkip();
+        currentPlayer.setClassAbility(true);
+    }
 
     private void showDialog(String string) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
