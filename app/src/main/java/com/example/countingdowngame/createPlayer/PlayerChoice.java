@@ -51,6 +51,8 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     public static final String CLASS_WITCH = "Witch";
     public static final String CLASS_SCIENTIST = "Scientist";
     public static final String CLASS_SOLDIER = "Soldier";
+    public static final String CLASS_JIM = "Jim";
+
     private static final int REQUEST_IMAGE_PICK = 1;
     private static final int REQUEST_DRAW = 2;
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;
@@ -147,14 +149,14 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         classRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
-        //todo create a null class.
-        //todo make the witch class not use toas
         List<CharacterClassStore> characterClasses = new ArrayList<>();
         characterClasses.add(new CharacterClassStore(CLASS_ARCHER, "You can take two drinks off the total amount, and hand them out to players."));
 //        characterClasses.add(new CharacterClassStore(CLASS_BARBARIAN, "You can deny three drinks handed out to you."));
         characterClasses.add(new CharacterClassStore(CLASS_WITCH, "For every even number your player lands on, you can hand out three drinks, but for every odd number you have to take a drink."));
         characterClasses.add(new CharacterClassStore(CLASS_SCIENTIST, "On your turn, you can change the current number to be whatever you want. You must roll again!"));
         characterClasses.add(new CharacterClassStore(CLASS_SOLDIER, "For every third turn, you gain one wildcard."));
+        characterClasses.add(new CharacterClassStore(CLASS_JIM, "Regular Jim does nothing crazy, he can yo-yo pretty good though."));
+
 
         CharacterClassAdapter adapter = new CharacterClassAdapter(characterClasses);
         classRecyclerView.setAdapter(adapter);

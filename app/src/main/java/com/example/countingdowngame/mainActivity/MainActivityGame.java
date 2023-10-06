@@ -504,9 +504,9 @@ public class MainActivityGame extends SharedMainActivity {
         if ("Witch".equals(currentPlayer.getClassChoice())) {
             if (!isFirstTurn) {
                 if (drinkNumberCounterInt % 2 == 0) {
-                    displayToastMessage("Hand out three drinks.");
+                    showDialog("Hand out two drinks.");
                 } else {
-                    displayToastMessage("Take a drink.");
+                    showDialog("Take a drink.");
                 }
             }
         }
@@ -535,7 +535,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void handleArcherClass(Player currentPlayer) {
         if (drinkNumberCounterInt >= 2) {
-            showArcherDialog();
+            showDialog("Hand out two drinks");
             currentPlayer.setClassAbility(true);
             drinkNumberCounterInt -= 2;
             updateDrinkNumberCounterTextView();
@@ -545,13 +545,13 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    private void showArcherDialog() {
+    private void showDialog(String string) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
 
         View dialogView = inflater.inflate(R.layout.mainactivity_dialog_box, null);
         TextView dialogboxtextview = dialogView.findViewById(R.id.dialogbox_textview);
-        dialogboxtextview.setText("Hand out two drinks");
+        dialogboxtextview.setText(string);
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
