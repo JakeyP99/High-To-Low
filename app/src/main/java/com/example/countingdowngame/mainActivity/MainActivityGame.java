@@ -258,7 +258,6 @@ public class MainActivityGame extends SharedMainActivity {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
         characterPassiveClassAffects();
-        boolean soldierRemovalLastTurn = soldierRemoval;
 
 
         if (("Scientist".equals(currentPlayer.getClassChoice()) ||
@@ -590,8 +589,8 @@ public class MainActivityGame extends SharedMainActivity {
                 // Debug log to check if the passive ability logic is executed
                 Log.d("ArcherClass", "Passive ability triggered");
 
-                // 50% chance (randomly decide whether to increase or decrease)
-                if (new Random().nextBoolean()) {
+                // 60% chance (randomly decide whether to increase or decrease)
+                if (new Random().nextInt(100) < 60) {
                     drinkNumberCounterInt += 2; // Increase drinking number by 2
                     if (drinkNumberCounterInt < 0) {
                         drinkNumberCounterInt = 0; // Cap at zero
@@ -752,6 +751,8 @@ public class MainActivityGame extends SharedMainActivity {
                     Game.getInstance().setCurrentNumber(newNumber);
                     SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(newNumber));
                     numberText.setText(String.valueOf(newNumber));
+                    renderCurrentNumber(newNumber, () -> gotoGameEnd(), numberText);
+
                     btnClassAbility.setVisibility(View.INVISIBLE);
                     dialog.dismiss(); // Close the dialog on success
                 }
