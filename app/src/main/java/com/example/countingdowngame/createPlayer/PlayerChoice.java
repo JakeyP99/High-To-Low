@@ -1,5 +1,11 @@
 package com.example.countingdowngame.createPlayer;
 
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_ARCHER_DESCRIPTION;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_JIM_DESCRIPTION;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_SCIENTIST_DESCRIPTION;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_SOLDIER_DESCRIPTION;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_WITCH_DESCRIPTION;
+
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -150,12 +156,15 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
 
 
         List<CharacterClassStore> characterClasses = new ArrayList<>();
-        characterClasses.add(new CharacterClassStore(CLASS_ARCHER, "Active Ability: You can take two drinks off the total amount, and hand them out to players. \n\nPassive Ability: For every third turn, there is a 50% chance the drinking number will increase or decrease by 2."));
-//        characterClasses.add(new CharacterClassStore(CLASS_BARBARIAN, "You can deny three drinks handed out to you."));
-        characterClasses.add(new CharacterClassStore(CLASS_WITCH, "Active Ability: You can skip your turn. \n\nPassive Ability: For every even number your player lands on, you can hand out two drinks, but for every odd number you have to take a drink."));
-        characterClasses.add(new CharacterClassStore(CLASS_SCIENTIST, "Active Ability: On your turn, you can change the current number to be whatever you want. You must roll again! \n\nPassive Ability: There's a 10% chance your turn is skipped."));
-        characterClasses.add(new CharacterClassStore(CLASS_SOLDIER, "Active Ability: You can increase the drinking number by 4 drinks! \n\nPassive Ability: If you land between 10 and 15, you escape the game and are not longer in it."));
-        characterClasses.add(new CharacterClassStore(CLASS_JIM, "Passive Ability: For every third turn, you gain one wildcard."));
+        characterClasses.add(new CharacterClassStore(CLASS_ARCHER, CLASS_ARCHER_DESCRIPTION));
+
+        characterClasses.add(new CharacterClassStore(CLASS_WITCH, CLASS_WITCH_DESCRIPTION));
+
+        characterClasses.add(new CharacterClassStore(CLASS_SCIENTIST, CLASS_SCIENTIST_DESCRIPTION));
+
+        characterClasses.add(new CharacterClassStore(CLASS_SOLDIER, CLASS_SOLDIER_DESCRIPTION));
+
+        characterClasses.add(new CharacterClassStore(CLASS_JIM, CLASS_JIM_DESCRIPTION));
 
 
         CharacterClassAdapter adapter = new CharacterClassAdapter(characterClasses);

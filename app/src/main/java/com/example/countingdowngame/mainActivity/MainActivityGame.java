@@ -1,5 +1,11 @@
 package com.example.countingdowngame.mainActivity;
 
+import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_ARCHER;
+import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_JIM;
+import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_SCIENTIST;
+import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_SOLDIER;
+import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_WITCH;
+
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.countingdowngame.R;
+import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.GameEventType;
 import com.example.countingdowngame.game.Player;
@@ -66,7 +73,6 @@ public class MainActivityGame extends SharedMainActivity {
     private Player firstPlayer;
     private boolean isFirstTurn = true;
     private boolean soldierRemoval = false;
-    private boolean soldierRemovalLastTurn = false;
     private Map<Player, Integer> playerTurnCountMap = new HashMap<>();
 
     @Override
@@ -175,6 +181,9 @@ public class MainActivityGame extends SharedMainActivity {
             isFirstTurn = false;
         });
 
+        setupPlayerImageClickListener(); // Corrected this line
+
+
         btnUtils.setButton(btnAnswer, this::showAnswer);
 
         btnUtils.setButton(btnBackWild, this::wildCardContinue);
@@ -206,6 +215,7 @@ public class MainActivityGame extends SharedMainActivity {
     private void startNumberShuffleAnimation() {
         btnGenerate.setEnabled(false);
         btnWild.setEnabled(false);
+        btnClassAbility.setEnabled(false);
 
         int currentNumber = Game.getInstance().getCurrentNumber();
         final int shuffleDuration = 1500;
@@ -232,6 +242,8 @@ public class MainActivityGame extends SharedMainActivity {
 
                     btnGenerate.setEnabled(true);
                     btnWild.setEnabled(true);
+                    btnClassAbility.setEnabled(true);
+
                     Log.d("startNumberShuffleAnimation", "Next players turn");
 
                 }
@@ -246,7 +258,7 @@ public class MainActivityGame extends SharedMainActivity {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
         characterPassiveClassAffects();
-        soldierRemovalLastTurn = soldierRemoval;
+        boolean soldierRemovalLastTurn = soldierRemoval;
 
 
         if (("Scientist".equals(currentPlayer.getClassChoice()) ||
@@ -763,6 +775,41 @@ public class MainActivityGame extends SharedMainActivity {
         numberText.setVisibility(View.INVISIBLE);
         wildText.setText(string);
     }
+
+    private String getClassDescription(String classChoice) {
+        switch (classChoice) {
+            case CLASS_ARCHER:
+                return CharacterClassDescriptions.CLASS_ARCHER_DESCRIPTION;
+            case CLASS_WITCH:
+                return CharacterClassDescriptions.CLASS_WITCH_DESCRIPTION;
+            case CLASS_SCIENTIST:
+                return CharacterClassDescriptions.CLASS_SCIENTIST_DESCRIPTION;
+            case CLASS_SOLDIER:
+                return CharacterClassDescriptions.CLASS_SOLDIER_DESCRIPTION;
+            case CLASS_JIM:
+                return CharacterClassDescriptions.CLASS_JIM_DESCRIPTION;
+            default:
+                return "Unknown class choice.";
+        }
+    }
+
+    private void setupPlayerImageClickListener() {
+        playerImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle the click event here
+                Player currentPlayer = Game.getInstance().getCurrentPlayer();
+                String currentPlayerClassChoice = currentPlayer.getClassChoice();
+
+                // Retrieve the class description based on the class choice
+                String classDescription = getClassDescription(currentPlayerClassChoice);
+
+                // Show the class description in a dialog with a fixed text size
+                showDialogWithFixedTextSize(classDescription, 20); // 20sp
+            }
+        });
+    }
+
 
     private void showAnswer() {
         TextView wildActivityTextView = findViewById(R.id.textView_WildText);

@@ -2,10 +2,15 @@ package com.example.countingdowngame.mainActivity;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.app.AlertDialog;
 import android.os.Handler;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.Player;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
@@ -106,6 +111,28 @@ public class SharedMainActivity extends ButtonUtilsActivity {
 
             return textSize;
         }
+    }
+
+    public void showDialogWithFixedTextSize(String text, int textSizeSp) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+
+        View dialogView = inflater.inflate(R.layout.mainactivity_dialog_box, null);
+        TextView dialogTextView = dialogView.findViewById(R.id.dialogbox_textview);
+
+        // Set the fixed text size
+        dialogTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSizeSp);
+
+        dialogTextView.setText(text);
+
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        ImageButton closeButton = dialogView.findViewById(R.id.close_button);
+        closeButton.setOnClickListener(v -> {
+            dialog.dismiss();
+        });
     }
 
 
