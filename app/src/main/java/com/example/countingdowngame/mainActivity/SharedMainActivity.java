@@ -91,6 +91,24 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         }
     }
 
+    public static class TextSizeCalculator {
+        public static int calculateTextSizeBasedOnCharacterCount(String text) {
+            int textSize;
+            int charCount = text.length();
+
+            if (charCount <= 30) {
+                textSize = 33; // Set text size to 20sp for short texts
+            } else if (charCount <= 70) {
+                textSize = 28; // Set text size to 16sp for moderately long texts
+            } else {
+                textSize = 25; // Set text size to 12sp for long texts (adjust as needed)
+            }
+
+            return textSize;
+        }
+    }
+
+
     public static void splitScreenSetTextViewSizeBasedOnInt(TextView textView, String text) {
         int defaultTextSize = 65;
         int minSize = 45;

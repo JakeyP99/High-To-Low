@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -465,6 +466,10 @@ public class MainActivityGame extends SharedMainActivity {
                 usedCards.add(selectedCard);
                 usedWildCards.add(selectedCard);
                 usedWildCard.put(player, usedCards);
+
+
+                int textSize = TextSizeCalculator.calculateTextSizeBasedOnCharacterCount(selectedActivity);
+                wildActivityTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
 
                 selectedWildCard = selectedCard; // Update selectedWildCard to the current selected card
 
