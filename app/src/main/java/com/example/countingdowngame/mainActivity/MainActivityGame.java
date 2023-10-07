@@ -145,7 +145,9 @@ public class MainActivityGame extends SharedMainActivity {
             firstPlayer = playerList.get(0);
 
         }
-
+        for (Player player : playerList) {
+            player.setClassAbility(false); // Initialize class ability to false
+        }
         Game.getInstance().startGame(startingNumber, (e) -> {
             if (e.type == GameEventType.NEXT_PLAYER) {
                 renderPlayer();
@@ -248,8 +250,9 @@ public class MainActivityGame extends SharedMainActivity {
 
         if (("Scientist".equals(currentPlayer.getClassChoice()) ||
                 "Archer".equals(currentPlayer.getClassChoice()) ||
-                "Soldier".equals(currentPlayer.getClassChoice()) ||
-                "Witch".equals(currentPlayer.getClassChoice())) &&
+                "Witch".equals(currentPlayer.getClassChoice()) ||
+                "Soldier".equals(currentPlayer.getClassChoice())
+        ) &&
                 !currentPlayer.usedClassAbility()) {
             btnClassAbility.setVisibility(View.VISIBLE);
             Log.d("renderPlayer", "This is " + currentPlayer.getName() + currentPlayer.usedClassAbility() + " ability boolean");
@@ -658,7 +661,6 @@ public class MainActivityGame extends SharedMainActivity {
     private void handleArcherClass(Player currentPlayer) {
         Log.d("ArcherClass", "handleArcherClass called");
 
-        // Active Ability: You can take two drinks off the total amount, and hand them out to players.
         if (drinkNumberCounterInt >= 2) {
             showDialog("Hand out two drinks");
             currentPlayer.setClassAbility(true);
