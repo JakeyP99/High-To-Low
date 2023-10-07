@@ -154,8 +154,8 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
 //        characterClasses.add(new CharacterClassStore(CLASS_BARBARIAN, "You can deny three drinks handed out to you."));
         characterClasses.add(new CharacterClassStore(CLASS_WITCH, "Active Ability: You can skip your turn. \n\nPassive Ability: For every even number your player lands on, you can hand out two drinks, but for every odd number you have to take a drink."));
         characterClasses.add(new CharacterClassStore(CLASS_SCIENTIST, "Active Ability: On your turn, you can change the current number to be whatever you want. You must roll again! \n\nPassive Ability: There's a 10% chance your turn is skipped."));
-        characterClasses.add(new CharacterClassStore(CLASS_SOLDIER, "Passive Ability: If you land between 10 and 15, you escape the game and are not longer in it. \n\nPassive Ability: For every third turn, you gain one wildcard."));
-        characterClasses.add(new CharacterClassStore(CLASS_JIM, "Regular Jim does nothing crazy, he can yo-yo pretty good though."));
+        characterClasses.add(new CharacterClassStore(CLASS_SOLDIER, "Active Ability: You can increase the drinking number by 4 drinks! \n\nPassive Ability: If you land between 10 and 15, you escape the game and are not longer in it."));
+        characterClasses.add(new CharacterClassStore(CLASS_JIM, "Passive Ability: For every third turn, you gain one wildcard."));
 
 
         CharacterClassAdapter adapter = new CharacterClassAdapter(characterClasses);

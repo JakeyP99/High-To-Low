@@ -246,14 +246,20 @@ public class MainActivityGame extends SharedMainActivity {
         soldierRemovalLastTurn = soldierRemoval;
 
 
-        if ("Scientist".equals(currentPlayer.getClassChoice()) ||
+        if (("Scientist".equals(currentPlayer.getClassChoice()) ||
                 "Archer".equals(currentPlayer.getClassChoice()) ||
-                "Witch".equals(currentPlayer.getClassChoice()) &&
-                        !currentPlayer.usedClassAbility()) {
+                "Soldier".equals(currentPlayer.getClassChoice()) ||
+                "Witch".equals(currentPlayer.getClassChoice())) &&
+                !currentPlayer.usedClassAbility()) {
             btnClassAbility.setVisibility(View.VISIBLE);
+            Log.d("renderPlayer", "This is " + currentPlayer.getName() + currentPlayer.usedClassAbility() + " ability boolean");
         } else {
             btnClassAbility.setVisibility(View.INVISIBLE);
         }
+        if ("Jim".equals(currentPlayer.getClassChoice())) {
+            btnClassAbility.setVisibility(View.INVISIBLE);
+        }
+
 
         if (currentPlayer.equals(firstPlayer)) {
             drinkNumberCounterInt++;
@@ -300,13 +306,16 @@ public class MainActivityGame extends SharedMainActivity {
         btnAnswerRight.setVisibility(View.INVISIBLE);
         btnAnswerWrong.setVisibility(View.INVISIBLE);
 
-        if ("Scientist".equals(currentPlayer.getClassChoice()) ||
+        if (("Scientist".equals(currentPlayer.getClassChoice()) ||
                 "Archer".equals(currentPlayer.getClassChoice()) ||
-                "Witch".equals(currentPlayer.getClassChoice()) && !currentPlayer.usedClassAbility()) {
+                "Soldier".equals(currentPlayer.getClassChoice()) ||
+                "Witch".equals(currentPlayer.getClassChoice())) &&
+                !currentPlayer.usedClassAbility()) {
             btnClassAbility.setVisibility(View.VISIBLE);
         } else {
             btnClassAbility.setVisibility(View.INVISIBLE);
         }
+
     }
 
 
@@ -515,16 +524,15 @@ public class MainActivityGame extends SharedMainActivity {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
 
         if ("Soldier".equals(currentPlayer.getClassChoice())) {
+            removeCharacterFromGame(currentPlayer);
+        }
+
+        if ("Jim".equals(currentPlayer.getClassChoice())) {
             int turnCounter = currentPlayer.getTurnCounter();
             if (turnCounter > 0 && turnCounter % 3 == 0) {
                 currentPlayer.gainWildCards(1);
             }
-            removeCharacterFromGame(currentPlayer);
-            Log.d("Soldier Passive", currentPlayer.getName() + " Soldier is removed"); // Log the type of wildcard
-
-
         }
-
 
         if ("Witch".equals(currentPlayer.getClassChoice())) {
             if (!isFirstTurn) {
@@ -624,6 +632,9 @@ public class MainActivityGame extends SharedMainActivity {
             case "Witch":
                 handleWitchClass(currentPlayer);
                 break;
+            case "Soldier":
+                handleSoldierClass(currentPlayer);
+                break;
             default:
                 break;
         }
@@ -634,6 +645,15 @@ public class MainActivityGame extends SharedMainActivity {
         onChangeNumberClick();
         currentPlayer.setClassAbility(true);
     }
+
+    private void handleSoldierClass(Player currentPlayer) {
+        currentPlayer.setClassAbility(true);
+        drinkNumberCounterInt += 4;
+        updateDrinkNumberCounterTextView();
+        btnClassAbility.setVisibility(View.INVISIBLE);
+
+    }
+
 
     private void handleArcherClass(Player currentPlayer) {
         Log.d("ArcherClass", "handleArcherClass called");
