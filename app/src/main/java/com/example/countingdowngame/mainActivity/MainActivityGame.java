@@ -376,7 +376,7 @@ public class MainActivityGame extends SharedMainActivity {
 
             handler.postDelayed(() -> {
                 if (chance < 10) {
-                    showDialog(currentPlayer.getName() + " is a scientist and his turn was skipped.");
+                    showDialog(currentPlayer.getName() + " is a scientist and his turn was skipped. ");
                     currentPlayer.useSkip();
                 }
             }, delayMillis);
