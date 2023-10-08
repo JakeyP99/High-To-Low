@@ -267,7 +267,6 @@ public class MainActivityGame extends SharedMainActivity {
         ) &&
                 !currentPlayer.usedClassAbility()) {
             btnClassAbility.setVisibility(View.VISIBLE);
-            Log.d("renderPlayer", "This is " + currentPlayer.getName() + currentPlayer.usedClassAbility() + " ability boolean");
         } else {
             btnClassAbility.setVisibility(View.INVISIBLE);
         }
@@ -302,7 +301,7 @@ public class MainActivityGame extends SharedMainActivity {
         SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(currentNumber));
         SharedMainActivity.setNameSizeBasedOnInt(nextPlayerText, nextPlayerText.getText().toString());
 
-        Log.d("renderPlayer", "Player was rendered " + currentPlayer.getName() + " is a " + currentPlayer.getClassChoice() + " with " + currentPlayer.getWildCardAmount() + " Wildcards " + "and " + currentPlayer.usedClassAbility());
+        Log.d("renderPlayer", "Player was rendered " + currentPlayer.getName() + " is a " + currentPlayer.getClassChoice() + " with " + currentPlayer.getWildCardAmount() + " Wildcards " + "and " + currentPlayer.usedClassAbility() + " is the class abilitiy");
 
     }
 
@@ -555,13 +554,14 @@ public class MainActivityGame extends SharedMainActivity {
 
         if ("Witch".equals(currentPlayer.getClassChoice())) {
             if (!isFirstTurn) {
-                if (drinkNumberCounterInt % 2 == 0) {
+                if (Game.getInstance().getCurrentNumber() % 2 == 0) {
                     showDialog(currentPlayer.getName() + " hand out two drinks.");
                 } else {
                     showDialog(currentPlayer.getName() + " take a drink.");
                 }
             }
         }
+
 
         if ("Scientist".equals(currentPlayer.getClassChoice())) {
             Handler handler = new Handler();
@@ -592,9 +592,6 @@ public class MainActivityGame extends SharedMainActivity {
                 // 60% chance (randomly decide whether to increase or decrease)
                 if (new Random().nextInt(100) < 60) {
                     drinkNumberCounterInt += 2; // Increase drinking number by 2
-                    if (drinkNumberCounterInt < 0) {
-                        drinkNumberCounterInt = 0; // Cap at zero
-                    }
                     updateDrinkNumberCounterTextView();
                     displayToastMessage("Archer's passive ability: Drinking number increased by 2!");
                 } else {
