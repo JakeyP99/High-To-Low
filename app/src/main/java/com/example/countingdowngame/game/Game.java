@@ -17,8 +17,6 @@ public class Game {
     private int startingNumber = 0;
     int currentNumber = 0;
     private boolean playerRemoved = false; // Flag to track if a player has been removed
-
-    private Player playerToRemove; // Store the player to be removed
     private boolean gameStarted = false;
 
     private final ArrayList<Integer> updatedNumbers = new ArrayList<>();
@@ -74,7 +72,6 @@ public class Game {
             return null;
         }
     }
-
     public int nextNumber() {
         Random random = new Random();
         int nextNumber = random.nextInt(currentNumber + 1);
@@ -85,6 +82,19 @@ public class Game {
 
     public void nextPlayer() {
         currentPlayerId = (currentPlayerId + 1) % players.size();
+
+        Player currentPlayer = getCurrentPlayer();
+        if (currentPlayer != null) {
+            currentPlayer.incrementTurnCounter();
+        }
+
+        if (gameEventListener != null) {
+            gameEventListener.onGameEvent(new GameEvent(this, GameEventType.NEXT_PLAYER));
+        }
+    }
+
+    public void previousPlayer() {
+        currentPlayerId = (currentPlayerId - 1) % players.size();
 
         Player currentPlayer = getCurrentPlayer();
         if (currentPlayer != null) {

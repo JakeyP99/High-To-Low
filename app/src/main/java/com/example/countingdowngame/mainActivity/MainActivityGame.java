@@ -1,5 +1,6 @@
 package com.example.countingdowngame.mainActivity;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_ARCHER;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_JIM;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_SCIENTIST;
@@ -73,6 +74,8 @@ public class MainActivityGame extends SharedMainActivity {
     private Player firstPlayer;
     private boolean isFirstTurn = true;
     private boolean soldierRemoval = false;
+
+    private boolean soldierJustUsedAbility = false;
     private Map<Player, Integer> playerTurnCountMap = new HashMap<>();
 
     @Override
@@ -163,6 +166,35 @@ public class MainActivityGame extends SharedMainActivity {
         renderPlayer();
     }
 
+    private String getClassDescription(String classChoice) {
+        switch (classChoice) {
+            case CLASS_ARCHER:
+                return CharacterClassDescriptions.CLASS_ARCHER_DESCRIPTION;
+            case CLASS_WITCH:
+                return CharacterClassDescriptions.CLASS_WITCH_DESCRIPTION;
+            case CLASS_SCIENTIST:
+                return CharacterClassDescriptions.CLASS_SCIENTIST_DESCRIPTION;
+            case CLASS_SOLDIER:
+                return CharacterClassDescriptions.CLASS_SOLDIER_DESCRIPTION;
+            case CLASS_JIM:
+                return CharacterClassDescriptions.CLASS_JIM_DESCRIPTION;
+            default:
+                return "Unknown class choice.";
+        }
+    }
+
+    private void setupPlayerImageClickListener() {
+        playerImage.setOnClickListener(v -> {
+            Player currentPlayer = Game.getInstance().getCurrentPlayer();
+            String currentPlayerClassChoice = currentPlayer.getClassChoice();
+
+            String classDescription = getClassDescription(currentPlayerClassChoice);
+
+            showDialogWithFixedTextSize(classDescription, 20); // 20sp
+        });
+    }
+
+
     //-----------------------------------------------------Buttons---------------------------------------------------//
 
     private void setupButtons() {
@@ -193,13 +225,13 @@ public class MainActivityGame extends SharedMainActivity {
 
         btnUtils.setButton(btnWild, () -> {
             wildCardActivate(Game.getInstance().getCurrentPlayer());
-            isFirstTurn = false;
             drinkNumberCounterTextView.setVisibility(View.INVISIBLE);
             wildText.setVisibility(View.VISIBLE);
             btnWild.setVisibility(View.INVISIBLE);
             btnGenerate.setVisibility(View.INVISIBLE);
             nextPlayerText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.INVISIBLE);
+            isFirstTurn = false;
         });
 
         imageButtonExit.setOnClickListener(view -> {
@@ -236,7 +268,6 @@ public class MainActivityGame extends SharedMainActivity {
                     shuffleHandler.postDelayed(this, shuffleInterval);
                 } else {
                     numberText.setText(String.valueOf(randomDigit));
-
                     int currentNumber = Game.getInstance().nextNumber();
                     renderCurrentNumber(currentNumber, () -> gotoGameEnd(), numberText);
 
@@ -301,30 +332,319 @@ public class MainActivityGame extends SharedMainActivity {
         SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(currentNumber));
         SharedMainActivity.setNameSizeBasedOnInt(nextPlayerText, nextPlayerText.getText().toString());
 
-        Log.d("renderPlayer", "Player was rendered " + currentPlayer.getName() + " is a " + currentPlayer.getClassChoice() + " with " + currentPlayer.getWildCardAmount() + " Wildcards " + "and " + currentPlayer.usedClassAbility() + " is the class abilitiy");
+        Log.d("renderPlayer", "Current number is " + Game.getInstance().getCurrentNumber() + " - Player was rendered " + currentPlayer.getName() + " is a " + currentPlayer.getClassChoice() + " with " + currentPlayer.getWildCardAmount() + " Wildcards " + "and " + currentPlayer.usedClassAbility() + " is the class abilitiy");
+    }
+
+
+
+    //-----------------------------------------------------Character Class Functions---------------------------------------------------//
+
+    private void characterPassiveClassAffects() {
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+
+        if (currentPlayer == null) {
+            Log.d(TAG, "characterPassiveClassAffects: Character is null");
+            return;
+        }
+
+        if ("Soldier".equals(currentPlayer.getClassChoice())) {
+            removeCharacterFromGame(currentPlayer);
+        }
+
+        if ("Jim".equals(currentPlayer.getClassChoice())) {
+            int turnCounter = currentPlayer.getTurnCounter();
+            if (turnCounter > 0 && turnCounter % 3 == 0) {
+                currentPlayer.gainWildCards(1);
+            }
+        }
+
+        if ("Witch".equals(currentPlayer.getClassChoice())) {
+            if (!isFirstTurn) {
+                if (Game.getInstance().getCurrentNumber() % 2 == 0) {
+                    showDialog(currentPlayer.getName() + " hand out two drinks.");
+                } else {
+                    showDialog(currentPlayer.getName() + " take a drink.");
+                }
+            }
+        }
+
+
+        if ("Scientist".equals(currentPlayer.getClassChoice())) {
+            Handler handler = new Handler();
+            int delayMillis = 1;
+            int chance = new Random().nextInt(100);
+
+            handler.postDelayed(() -> {
+                if (chance < 10) {
+                    showDialog(currentPlayer.getName() + " is a scientist and his turn was skipped.");
+                    currentPlayer.useSkip();
+                }
+            }, delayMillis);
+        }
+
+
+        if ("Archer".equals(currentPlayer.getClassChoice())) {
+            int currentPlayerTurnCount = playerTurnCountMap.getOrDefault(currentPlayer, 0);
+            currentPlayerTurnCount++;
+
+            Log.d("ArcherClass", "Turn count: " + currentPlayerTurnCount);
+            playerTurnCountMap.put(currentPlayer, currentPlayerTurnCount);
+
+            // Check if it's the third turn and apply passive ability
+            if (currentPlayerTurnCount % 3 == 0) {
+                // Debug log to check if the passive ability logic is executed
+                Log.d("ArcherClass", "Passive ability triggered");
+
+                // 60% chance (randomly decide whether to increase or decrease)
+                if (new Random().nextInt(100) < 60) {
+                    drinkNumberCounterInt += 2; // Increase drinking number by 2
+                    updateDrinkNumberCounterTextView();
+                    displayToastMessage("Archer's passive ability: Drinking number increased by 2!");
+                } else {
+                    drinkNumberCounterInt -= 2; // Decrease drinking number by 2
+                    if (drinkNumberCounterInt < 0) {
+                        drinkNumberCounterInt = 0; // Cap at zero
+                    }
+                    updateDrinkNumberCounterTextView();
+                    displayToastMessage("Archer's passive ability: Drinking number decreased by 2!");
+                }
+            }
+        }
+    }
+
+    private void removeCharacterFromGame(Player player) {
+        int currentNumber = Game.getInstance().getCurrentNumber();
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+
+        int minRange = 10;
+        int maxRange = 15;
+
+        if (!isFirstTurn) {
+            if (!soldierRemoval) {
+                if (currentNumber >= minRange && currentNumber <= maxRange) {
+                    Log.d("SoliderRemoval", "Soldier was removed");
+                    Game.getInstance().setPlayerToRemove(player);
+                    soldierRemoval = true;
+                    Handler handler = new Handler();
+                    int delayMillis = 1;
+                    showDialog(currentPlayer.getName() + " has escaped the game as the soldier.");
+                    handler.postDelayed(() -> {
+                        renderPlayer();
+                    }, delayMillis);
+                }
+            } else {
+                if (currentNumber >= minRange && currentNumber <= maxRange) {
+                    showDialog("One soldier has already escaped, good luck with the game.");
+                }
+            }
+        }
+    }
+
+
+    public void characterClassButtonActivities() {
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        Log.d("characterClassButtonActivities", "Class Activated" + currentPlayer.getClassChoice());
+        String classChoice = currentPlayer.getClassChoice();
+        switch (classChoice) {
+            case "Scientist":
+                handleScientistClass(currentPlayer);
+                break;
+            case "Archer":
+                handleArcherClass(currentPlayer);
+                break;
+            case "Witch":
+                handleWitchClass(currentPlayer);
+                break;
+            case "Soldier":
+                handleSoldierClass(currentPlayer);
+                break;
+            default:
+                break;
+        }
+    }
+
+    //todo it doesnt put in the changed number in the previous numbers
+    private void handleScientistClass(Player currentPlayer) {
+        onChangeNumberClick();
+        currentPlayer.setClassAbility(true);
+    }
+
+    private void handleSoldierClass(Player currentPlayer) {
+        if (!isFirstTurn) {
+            if (Game.getInstance().getCurrentNumber() <= 10) {
+                currentPlayer.setClassAbility(true);
+                drinkNumberCounterInt += 4;
+                updateDrinkNumberCounterTextView();
+                btnClassAbility.setVisibility(View.INVISIBLE);
+                soldierJustUsedAbility = true;
+            } else {
+                //todo fix this toast, it covers the screen
+                displayToastMessage("The +4 ability can only be activated when the number is below 10.");
+            }
+        } else {
+            displayToastMessage("Cannot activate on the first turn.");
+
+        }
+    }
+
+
+    private void handleArcherClass(Player currentPlayer) {
+        Log.d("ArcherClass", "handleArcherClass called");
+
+        if (drinkNumberCounterInt >= 2) {
+            showDialog("Hand out two drinks");
+            currentPlayer.setClassAbility(true);
+            drinkNumberCounterInt -= 2;
+            updateDrinkNumberCounterTextView();
+            btnClassAbility.setVisibility(View.INVISIBLE);
+        } else {
+            displayToastMessage("Not enough drinks to subtract.");
+        }
+
 
     }
 
+    private void handleWitchClass(Player currentPlayer) {
+        Log.d("WitchClass", "handleWitchClass called");
+        currentPlayer.useSkip();
+        currentPlayer.setClassAbility(true);
+    }
+
+    private void showDialog(String string) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+
+        View dialogView = inflater.inflate(R.layout.mainactivity_dialog_box, null);
+        TextView dialogboxtextview = dialogView.findViewById(R.id.dialogbox_textview);
+        dialogboxtextview.setText(string);
+
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        ImageButton closeButton = dialogView.findViewById(R.id.close_button);
+        closeButton.setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+    }
+
+
+    private void updateDrinkNumberCounterTextView() {
+        String drinkNumberText;
+        if (drinkNumberCounterInt == 1) {
+            drinkNumberText = "1 Drink";
+        } else {
+            drinkNumberText = drinkNumberCounterInt + " Drinks";
+        }
+        drinkNumberCounterTextView.setText(drinkNumberText);
+    }
+
+    private void onChangeNumberClick() {
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.character_class_change_number, null);
+
+        EditText editCurrentNumberText = dialogView.findViewById(R.id.editCurrentNumberTextView);
+        Button okButton = dialogView.findViewById(R.id.close_button);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setView(dialogView);
+
+        AlertDialog dialog = builder.create();
+
+        okButton.setOnClickListener(view -> {
+            try {
+                String userInput = editCurrentNumberText.getText().toString();
+                int newNumber = Integer.parseInt(userInput);
+                if (newNumber > 999999999) {
+                    displayToastMessage("That number was too high!");
+                    btnClassAbility.setVisibility(View.VISIBLE);
+                } else if (newNumber == 0) {
+                    displayToastMessage("You cannot choose 0 as your number.");
+                    btnClassAbility.setVisibility(View.VISIBLE);
+                } else {
+                    Game.getInstance().setCurrentNumber(newNumber);
+                    SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(newNumber));
+                    numberText.setText(String.valueOf(newNumber));
+                    renderCurrentNumber(newNumber, () -> gotoGameEnd(), numberText);
+
+                    btnClassAbility.setVisibility(View.INVISIBLE);
+                    dialog.dismiss(); // Close the dialog on success
+                }
+            } catch (NumberFormatException e) {
+                displayToastMessage("Invalid number input");
+            }
+        });
+
+        dialog.show();
+    }
+
+
+    //-----------------------------------------------------Quiz Code---------------------------------------------------//
+
+    private void quizAnswerView(String string) {
+        btnBackWild.setVisibility(View.VISIBLE);
+        wildText.setVisibility(View.VISIBLE);
+        btnWild.setVisibility(View.INVISIBLE);
+        btnGenerate.setVisibility(View.INVISIBLE);
+        nextPlayerText.setVisibility(View.INVISIBLE);
+        numberText.setVisibility(View.INVISIBLE);
+        wildText.setText(string);
+    }
+
+    private void showAnswer() {
+        TextView wildActivityTextView = findViewById(R.id.textView_WildText);
+        btnAnswerRight.setVisibility(View.VISIBLE);
+        btnAnswerWrong.setVisibility(View.VISIBLE);
+
+        if (selectedWildCard != null) {
+            if (selectedWildCard.hasAnswer()) {
+                String answer = selectedWildCard.getAnswer();
+                wildActivityTextView.setText(answer);
+                Log.d("Answer", "Quiz WildCard: " + answer);
+
+                btnBackWild.setVisibility(View.INVISIBLE);
+
+                btnUtils.setButton(btnAnswerRight, () -> {
+                    Game.getInstance().getCurrentPlayer().gainWildCards(1);
+                    btnAnswerRight.setVisibility(View.INVISIBLE);
+                    btnAnswerWrong.setVisibility(View.INVISIBLE);
+                    quizAnswerView("Since you got it right, give out a drink! \n\n P.S. You get to keep your wildcard too.");
+                });
+
+                btnUtils.setButton(btnAnswerWrong, () -> {
+                    btnAnswerRight.setVisibility(View.INVISIBLE);
+                    btnAnswerWrong.setVisibility(View.INVISIBLE);
+                    quizAnswerView("Since you got it wrong, take a drink! \n\n P.S. Maybe read a book once in a while.");
+                });
+
+            } else {
+                wildActivityTextView.setText("No answer available");
+            }
+        }
+        btnAnswer.setVisibility(View.INVISIBLE);
+    }
 
     //-----------------------------------------------------Wild Card, and Skip Functionality---------------------------------------------------//
     private void wildCardContinue() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         currentPlayer.useSkip();
+
         btnGenerate.setVisibility(View.VISIBLE);
         drinkNumberCounterTextView.setVisibility(View.VISIBLE);
         numberText.setVisibility(View.VISIBLE);
         nextPlayerText.setVisibility(View.VISIBLE);
+
         wildText.setVisibility(View.INVISIBLE);
         btnBackWild.setVisibility(View.INVISIBLE);
         btnAnswer.setVisibility(View.INVISIBLE);
         btnAnswerRight.setVisibility(View.INVISIBLE);
         btnAnswerWrong.setVisibility(View.INVISIBLE);
-
     }
 
 
     private void wildCardActivate(Player player) {
         Game.getInstance().getCurrentPlayer().useWildCard();
+
         WildCardProperties[] emptyProbabilitiesArray = new WildCardProperties[0];
         QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.QUIZ);
         TaskWildCardsAdapter taskAdapter = new TaskWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.TASK);
@@ -485,358 +805,49 @@ public class MainActivityGame extends SharedMainActivity {
         }
 
 
-            switch (Objects.requireNonNull(selectedActivity)) {
-                case "Double the current number!": {
-                    int currentNumber = Game.getInstance().getCurrentNumber();
-                    int updatedNumber = Math.min(currentNumber * 2, 999999999);
-                    Game.getInstance().setCurrentNumber(updatedNumber);
-                    Game.getInstance().addUpdatedNumber(updatedNumber);
-                    numberText.setText(String.valueOf(updatedNumber));
-                    SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
-                    break;
-                }
-                case "Half the current number!": {
-                    int currentNumber = Game.getInstance().getCurrentNumber();
-                    int updatedNumber = Math.max(currentNumber / 2, 1);
-                    Game.getInstance().setCurrentNumber(updatedNumber);
-                    Game.getInstance().addUpdatedNumber(updatedNumber);
-                    numberText.setText(String.valueOf(updatedNumber));
-                    SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
-                    break;
-                }
-                case "Reset the number!":
-                    Bundle extras = getIntent().getExtras();
-                    if (extras == null) {
-                        throw new RuntimeException("Missing extras");
-                    }
-                    int startingNumber = extras.getInt("startingNumber");
-                    Game.getInstance().setCurrentNumber(startingNumber);
-                    Game.getInstance().addUpdatedNumber(startingNumber);
-                    numberText.setText(String.valueOf(startingNumber));
-                    SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(startingNumber));
-                    break;
-                case "Reverse the turn order!":
-                    reverseTurnOrder(player);
-                    break;
-                case "Gain a couple more wildcards to use, I gotchya back!":
-                    Game.getInstance().getCurrentPlayer().gainWildCards(3);
-                    break;
-                case "Lose a couple wildcards :( oh also drink 3 lol!":
-                    Game.getInstance().getCurrentPlayer().loseWildCards();
-                    break;
-            }
-    }
-    //-----------------------------------------------------Character Class Functions---------------------------------------------------//
-
-    private void characterPassiveClassAffects() {
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
-
-        if ("Soldier".equals(currentPlayer.getClassChoice())) {
-            removeCharacterFromGame(currentPlayer);
-        }
-
-        if ("Jim".equals(currentPlayer.getClassChoice())) {
-            int turnCounter = currentPlayer.getTurnCounter();
-            if (turnCounter > 0 && turnCounter % 3 == 0) {
-                currentPlayer.gainWildCards(1);
-            }
-        }
-
-        if ("Witch".equals(currentPlayer.getClassChoice())) {
-            if (!isFirstTurn) {
-                if (Game.getInstance().getCurrentNumber() % 2 == 0) {
-                    showDialog(currentPlayer.getName() + " hand out two drinks.");
-                } else {
-                    showDialog(currentPlayer.getName() + " take a drink.");
-                }
-            }
-        }
-
-
-        if ("Scientist".equals(currentPlayer.getClassChoice())) {
-            Handler handler = new Handler();
-            int delayMillis = 1;
-            int chance = new Random().nextInt(100);
-
-            handler.postDelayed(() -> {
-                if (chance < 10) {
-                    showDialog(currentPlayer.getName() + " is a scientist and his turn was skipped.");
-                    currentPlayer.useSkip();
-                }
-            }, delayMillis);
-        }
-
-
-        if ("Archer".equals(currentPlayer.getClassChoice())) {
-            int currentPlayerTurnCount = playerTurnCountMap.getOrDefault(currentPlayer, 0);
-            currentPlayerTurnCount++;
-
-            Log.d("ArcherClass", "Turn count: " + currentPlayerTurnCount);
-            playerTurnCountMap.put(currentPlayer, currentPlayerTurnCount);
-
-            // Check if it's the third turn and apply passive ability
-            if (currentPlayerTurnCount % 3 == 0) {
-                // Debug log to check if the passive ability logic is executed
-                Log.d("ArcherClass", "Passive ability triggered");
-
-                // 60% chance (randomly decide whether to increase or decrease)
-                if (new Random().nextInt(100) < 60) {
-                    drinkNumberCounterInt += 2; // Increase drinking number by 2
-                    updateDrinkNumberCounterTextView();
-                    displayToastMessage("Archer's passive ability: Drinking number increased by 2!");
-                } else {
-                    drinkNumberCounterInt -= 2; // Decrease drinking number by 2
-                    if (drinkNumberCounterInt < 0) {
-                        drinkNumberCounterInt = 0; // Cap at zero
-                    }
-                    updateDrinkNumberCounterTextView();
-                    displayToastMessage("Archer's passive ability: Drinking number decreased by 2!");
-                }
-            }
-        }
-    }
-
-    private void removeCharacterFromGame(Player player) {
-        int currentNumber = Game.getInstance().getCurrentNumber();
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
-
-        int minRange = 10;
-        int maxRange = 15;
-
-        if (!isFirstTurn) {
-            if (!soldierRemoval) {
-                if (currentNumber >= minRange && currentNumber <= maxRange) {
-                    Game.getInstance().setPlayerToRemove(player);
-                    soldierRemoval = true;
-                    Handler handler = new Handler();
-                    int delayMillis = 1;
-                    showDialog(currentPlayer.getName() + " has escaped the game as the soldier.");
-                    handler.postDelayed(() -> {
-                        renderPlayer();
-                    }, delayMillis);
-                }
-            } else {
-                if (currentNumber >= minRange && currentNumber <= maxRange) {
-                    showDialog("One soldier has already escaped, good luck with the game.");
-                }
-            }
-        }
-    }
-
-
-    public void characterClassButtonActivities() {
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        Log.d("characterClassButtonActivities", "Class Activated" + currentPlayer.getClassChoice());
-        String classChoice = currentPlayer.getClassChoice();
-        switch (classChoice) {
-            case "Scientist":
-                handleScientistClass(currentPlayer);
+        switch (Objects.requireNonNull(selectedActivity)) {
+            case "Double the current number!": {
+                int currentNumber = Game.getInstance().getCurrentNumber();
+                int updatedNumber = Math.min(currentNumber * 2, 999999999);
+                Game.getInstance().setCurrentNumber(updatedNumber);
+                Game.getInstance().addUpdatedNumber(updatedNumber);
+                numberText.setText(String.valueOf(updatedNumber));
+                SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
                 break;
-            case "Archer":
-                handleArcherClass(currentPlayer);
+            }
+            case "Half the current number!": {
+                int currentNumber = Game.getInstance().getCurrentNumber();
+                int updatedNumber = Math.max(currentNumber / 2, 1);
+                Game.getInstance().setCurrentNumber(updatedNumber);
+                Game.getInstance().addUpdatedNumber(updatedNumber);
+                numberText.setText(String.valueOf(updatedNumber));
+                SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
                 break;
-            case "Witch":
-                handleWitchClass(currentPlayer);
+            }
+            case "Reset the number!":
+                Bundle extras = getIntent().getExtras();
+                if (extras == null) {
+                    throw new RuntimeException("Missing extras");
+                }
+                int startingNumber = extras.getInt("startingNumber");
+                Game.getInstance().setCurrentNumber(startingNumber);
+                Game.getInstance().addUpdatedNumber(startingNumber);
+                numberText.setText(String.valueOf(startingNumber));
+                SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(startingNumber));
                 break;
-            case "Soldier":
-                handleSoldierClass(currentPlayer);
+            case "Reverse the turn order!":
+                reverseTurnOrder(player);
                 break;
-            default:
+            case "Gain a couple more wildcards to use, I gotchya back!":
+                Game.getInstance().getCurrentPlayer().gainWildCards(3);
+                break;
+            case "Lose a couple wildcards :( oh also drink 3 lol!":
+                Game.getInstance().getCurrentPlayer().loseWildCards();
                 break;
         }
     }
 
-    //todo it doesnt put in the changed number in the previous numbers
-    private void handleScientistClass(Player currentPlayer) {
-        onChangeNumberClick();
-        currentPlayer.setClassAbility(true);
-    }
-
-    private void handleSoldierClass(Player currentPlayer) {
-        currentPlayer.setClassAbility(true);
-        drinkNumberCounterInt += 4;
-        updateDrinkNumberCounterTextView();
-        btnClassAbility.setVisibility(View.INVISIBLE);
-
-    }
-
-
-    private void handleArcherClass(Player currentPlayer) {
-        Log.d("ArcherClass", "handleArcherClass called");
-
-        if (drinkNumberCounterInt >= 2) {
-            showDialog("Hand out two drinks");
-            currentPlayer.setClassAbility(true);
-            drinkNumberCounterInt -= 2;
-            updateDrinkNumberCounterTextView();
-            btnClassAbility.setVisibility(View.INVISIBLE);
-        } else {
-            displayToastMessage("Not enough drinks to subtract.");
-        }
-
-
-    }
-
-    private void handleWitchClass(Player currentPlayer) {
-        Log.d("WitchClass", "handleWitchClass called");
-        currentPlayer.useSkip();
-        currentPlayer.setClassAbility(true);
-    }
-
-    private void showDialog(String string) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-
-        View dialogView = inflater.inflate(R.layout.mainactivity_dialog_box, null);
-        TextView dialogboxtextview = dialogView.findViewById(R.id.dialogbox_textview);
-        dialogboxtextview.setText(string);
-
-        builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-        ImageButton closeButton = dialogView.findViewById(R.id.close_button);
-        closeButton.setOnClickListener(v -> {
-            dialog.dismiss();
-        });
-    }
-
-
-    private void updateDrinkNumberCounterTextView() {
-        String drinkNumberText;
-        if (drinkNumberCounterInt == 1) {
-            drinkNumberText = "1 Drink";
-        } else {
-            drinkNumberText = drinkNumberCounterInt + " Drinks";
-        }
-        drinkNumberCounterTextView.setText(drinkNumberText);
-    }
-
-    private void onChangeNumberClick() {
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.character_class_change_number, null);
-
-        EditText editCurrentNumberText = dialogView.findViewById(R.id.editCurrentNumberTextView);
-        Button okButton = dialogView.findViewById(R.id.close_button);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setView(dialogView);
-
-        AlertDialog dialog = builder.create();
-
-        okButton.setOnClickListener(view -> {
-            try {
-                String userInput = editCurrentNumberText.getText().toString();
-                int newNumber = Integer.parseInt(userInput);
-                if (newNumber > 999999999) {
-                    displayToastMessage("That number was too high!");
-                    btnClassAbility.setVisibility(View.VISIBLE);
-                } else if (newNumber == 0) {
-                    displayToastMessage("You cannot choose 0 as your number.");
-                    btnClassAbility.setVisibility(View.VISIBLE);
-                } else {
-                    Game.getInstance().setCurrentNumber(newNumber);
-                    SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(newNumber));
-                    numberText.setText(String.valueOf(newNumber));
-                    renderCurrentNumber(newNumber, () -> gotoGameEnd(), numberText);
-
-                    btnClassAbility.setVisibility(View.INVISIBLE);
-                    dialog.dismiss(); // Close the dialog on success
-                }
-            } catch (NumberFormatException e) {
-                displayToastMessage("Invalid number input");
-            }
-        });
-
-        dialog.show();
-    }
-
-
-    //-----------------------------------------------------Quiz Code---------------------------------------------------//
-
-    private void quizAnswerView(String string) {
-        btnBackWild.setVisibility(View.VISIBLE);
-        wildText.setVisibility(View.VISIBLE);
-        btnWild.setVisibility(View.INVISIBLE);
-        btnGenerate.setVisibility(View.INVISIBLE);
-        nextPlayerText.setVisibility(View.INVISIBLE);
-        numberText.setVisibility(View.INVISIBLE);
-        wildText.setText(string);
-    }
-
-    private String getClassDescription(String classChoice) {
-        switch (classChoice) {
-            case CLASS_ARCHER:
-                return CharacterClassDescriptions.CLASS_ARCHER_DESCRIPTION;
-            case CLASS_WITCH:
-                return CharacterClassDescriptions.CLASS_WITCH_DESCRIPTION;
-            case CLASS_SCIENTIST:
-                return CharacterClassDescriptions.CLASS_SCIENTIST_DESCRIPTION;
-            case CLASS_SOLDIER:
-                return CharacterClassDescriptions.CLASS_SOLDIER_DESCRIPTION;
-            case CLASS_JIM:
-                return CharacterClassDescriptions.CLASS_JIM_DESCRIPTION;
-            default:
-                return "Unknown class choice.";
-        }
-    }
-
-    private void setupPlayerImageClickListener() {
-        playerImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Handle the click event here
-                Player currentPlayer = Game.getInstance().getCurrentPlayer();
-                String currentPlayerClassChoice = currentPlayer.getClassChoice();
-
-                // Retrieve the class description based on the class choice
-                String classDescription = getClassDescription(currentPlayerClassChoice);
-
-                // Show the class description in a dialog with a fixed text size
-                showDialogWithFixedTextSize(classDescription, 20); // 20sp
-            }
-        });
-    }
-
-
-    private void showAnswer() {
-        TextView wildActivityTextView = findViewById(R.id.textView_WildText);
-        btnAnswerRight.setVisibility(View.VISIBLE);
-        btnAnswerWrong.setVisibility(View.VISIBLE);
-
-        if (selectedWildCard != null) {
-            if (selectedWildCard.hasAnswer()) {
-                String answer = selectedWildCard.getAnswer();
-                wildActivityTextView.setText(answer);
-                Log.d("Answer", "Quiz WildCard:" + answer);
-
-                btnBackWild.setVisibility(View.INVISIBLE);
-
-                btnUtils.setButton(btnAnswerRight, () -> {
-                    Game.getInstance().getCurrentPlayer().gainWildCards(1);
-                    btnAnswerRight.setVisibility(View.INVISIBLE);
-                    btnAnswerWrong.setVisibility(View.INVISIBLE);
-                    quizAnswerView("Since you got it right, give out a drink! \n\n P.S. You get to keep your wildcard too.");
-                });
-
-                btnUtils.setButton(btnAnswerWrong, () -> {
-                    btnAnswerRight.setVisibility(View.INVISIBLE);
-                    btnAnswerWrong.setVisibility(View.INVISIBLE);
-                    quizAnswerView("Since you got it wrong, take a drink! \n\n P.S. Maybe read a book once in a while.");
-                });
-
-            } else {
-                wildActivityTextView.setText("No answer available");
-            }
-        }
-        btnAnswer.setVisibility(View.INVISIBLE);
-    }
-
-    //-----------------------------------------------------Toast Code---------------------------------------------------//
-
-    private void displayToastMessage(String message) {
+    public void displayToastMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
-
-
 }

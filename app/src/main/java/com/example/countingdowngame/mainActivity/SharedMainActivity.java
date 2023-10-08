@@ -56,7 +56,7 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         }
     }
 
-    private void applyPulsingEffect(TextView textView) {
+    void applyPulsingEffect(TextView textView) {
         // Apply pulsing effect to textView
         ObjectAnimator pulseAnimation = ObjectAnimator.ofPropertyValuesHolder(
                 textView,

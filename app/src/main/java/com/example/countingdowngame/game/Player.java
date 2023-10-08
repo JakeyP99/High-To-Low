@@ -45,11 +45,9 @@ public class Player implements Serializable {
         this.usedClassAbility = classAbility;
     }
 
-
     public void incrementTurnCounter() {
         turnCounter++;
     }
-
 
     public int getTurnCounter() {
         return turnCounter;
