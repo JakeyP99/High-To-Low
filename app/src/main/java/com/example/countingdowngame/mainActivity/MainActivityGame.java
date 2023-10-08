@@ -320,16 +320,6 @@ public class MainActivityGame extends SharedMainActivity {
         btnAnswerRight.setVisibility(View.INVISIBLE);
         btnAnswerWrong.setVisibility(View.INVISIBLE);
 
-        if (("Scientist".equals(currentPlayer.getClassChoice()) ||
-                "Archer".equals(currentPlayer.getClassChoice()) ||
-                "Soldier".equals(currentPlayer.getClassChoice()) ||
-                "Witch".equals(currentPlayer.getClassChoice())) &&
-                !currentPlayer.usedClassAbility()) {
-            btnClassAbility.setVisibility(View.VISIBLE);
-        } else {
-            btnClassAbility.setVisibility(View.INVISIBLE);
-        }
-
     }
 
 
