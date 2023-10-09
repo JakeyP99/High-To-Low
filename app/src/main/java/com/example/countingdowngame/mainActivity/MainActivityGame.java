@@ -286,11 +286,6 @@ public class MainActivityGame extends SharedMainActivity {
     private void renderPlayer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
 
-        if (currentPlayer.isRemoved()) {
-            Log.d(TAG, "Soldier was skipped due to removal.");
-            currentPlayer.useSkip();
-        }
-
 
         List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
         characterPassiveClassAffects();
@@ -337,8 +332,8 @@ public class MainActivityGame extends SharedMainActivity {
         SharedMainActivity.setNameSizeBasedOnInt(nextPlayerText, nextPlayerText.getText().toString());
 
         Log.d("renderPlayer", "Current number is " + Game.getInstance().getCurrentNumber() + " - Player was rendered " + currentPlayer.getName() + " is a " + currentPlayer.getClassChoice() + " with " + currentPlayer.getWildCardAmount() + " Wildcards " + "and " + currentPlayer.usedClassAbility() + " is the class abilitiy and are they removed ?" + currentPlayer.isRemoved());
-
     }
+
 
 
 
@@ -353,8 +348,16 @@ public class MainActivityGame extends SharedMainActivity {
         }
 
         if ("Soldier".equals(currentPlayer.getClassChoice())) {
-            removeCharacterFromGame();
+            Log.d(TAG, "characterPassiveClassAffects: Soldier is removed?" + currentPlayer.isRemoved());
+            new Handler().postDelayed(() -> {
+                if (!currentPlayer.isRemoved()) {
+                    removeCharacterFromGame();
+                } else {
+                    currentPlayer.useSkip();
+                }
+            }, 1);
         }
+
 
         if ("Jim".equals(currentPlayer.getClassChoice())) {
             int turnCounter = currentPlayer.getTurnCounter();
@@ -432,7 +435,7 @@ public class MainActivityGame extends SharedMainActivity {
                     Log.d("SoliderRemoval", currentPlayer.getName() + " The soldier was removed " + soldierRemoval + " " + currentPlayer.isRemoved());
                     showDialog(currentPlayer.getName() + " has escaped the game as the soldier? ");
                     Handler handler = new Handler();
-                    int delayMillis = 10;
+                    int delayMillis = 1;
 
                     handler.postDelayed(currentPlayer::useSkip, delayMillis);
                 }

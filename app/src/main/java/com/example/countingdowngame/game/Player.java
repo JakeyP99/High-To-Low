@@ -34,6 +34,7 @@ public class Player implements Serializable {
         this.classChoice = classChoice;
         this.selected = false;
         this.usedClassAbility = false;
+        this.removed = false;
         resetWildCardAmount(context);
         this.turnCounter = 0; // Initialize the turn counter to 0
     }
