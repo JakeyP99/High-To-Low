@@ -422,17 +422,14 @@ public class MainActivityGame extends SharedMainActivity {
         int maxRange = 15;
 
         if (!isFirstTurn) {
-            if (!soldierRemoval) {
-                if (currentNumber >= minRange && currentNumber <= maxRange) {
-                    soldierRemoval = true;
-                    currentPlayer.setRemoved(true);
-                    showDialog(currentPlayer.getName() + " has escaped the game as the soldier?");
-                    Handler handler = new Handler();
-                    int delayMillis = 1;
-                    handler.postDelayed(currentPlayer::useSkip, delayMillis);
-                }
-
-            } else {
+            if (!soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {
+                soldierRemoval = true;
+                currentPlayer.setRemoved(true);
+                showDialog(currentPlayer.getName() + " has escaped the game as the soldier.");
+                Handler handler = new Handler();
+                int delayMillis = 1;
+                handler.postDelayed(currentPlayer::useSkip, delayMillis);
+            } else if (soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {
                 showDialog("A soldier has already escaped the game.");
             }
         }
