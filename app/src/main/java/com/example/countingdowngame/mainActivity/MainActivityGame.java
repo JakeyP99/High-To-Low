@@ -624,36 +624,18 @@ public class MainActivityGame extends SharedMainActivity {
     //-----------------------------------------------------Wild Card, and Skip Functionality---------------------------------------------------//
     private void wildCardContinue() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        currentPlayer.useSkip();
 
-        if (Objects.equals(currentPlayer.getClassChoice(), "Soldier")) {
+        btnGenerate.setVisibility(View.VISIBLE);
+        drinkNumberCounterTextView.setVisibility(View.VISIBLE);
+        numberText.setVisibility(View.VISIBLE);
+        nextPlayerText.setVisibility(View.VISIBLE);
 
-            currentPlayer.useSkip();
-
-            btnGenerate.setVisibility(View.VISIBLE);
-            drinkNumberCounterTextView.setVisibility(View.VISIBLE);
-            numberText.setVisibility(View.VISIBLE);
-            nextPlayerText.setVisibility(View.VISIBLE);
-            btnWild.setVisibility(View.VISIBLE);
-
-
-            wildText.setVisibility(View.INVISIBLE);
-            btnBackWild.setVisibility(View.INVISIBLE);
-            btnAnswer.setVisibility(View.INVISIBLE);
-            btnAnswerRight.setVisibility(View.INVISIBLE);
-            btnAnswerWrong.setVisibility(View.INVISIBLE);
-        } else {
-            currentPlayer.useSkip();
-            btnGenerate.setVisibility(View.VISIBLE);
-            drinkNumberCounterTextView.setVisibility(View.VISIBLE);
-            numberText.setVisibility(View.VISIBLE);
-            nextPlayerText.setVisibility(View.VISIBLE);
-
-            wildText.setVisibility(View.INVISIBLE);
-            btnBackWild.setVisibility(View.INVISIBLE);
-            btnAnswer.setVisibility(View.INVISIBLE);
-            btnAnswerRight.setVisibility(View.INVISIBLE);
-            btnAnswerWrong.setVisibility(View.INVISIBLE);
-        }
+        wildText.setVisibility(View.INVISIBLE);
+        btnBackWild.setVisibility(View.INVISIBLE);
+        btnAnswer.setVisibility(View.INVISIBLE);
+        btnAnswerRight.setVisibility(View.INVISIBLE);
+        btnAnswerWrong.setVisibility(View.INVISIBLE);
     }
 
 
