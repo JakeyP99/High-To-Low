@@ -74,8 +74,6 @@ public class MainActivityGame extends SharedMainActivity {
     private Player firstPlayer;
     private boolean isFirstTurn = true;
     private boolean soldierRemoval = false;
-
-    private boolean soldierJustUsedAbility = false;
     private Map<Player, Integer> playerTurnCountMap = new HashMap<>();
 
     @Override
@@ -287,6 +285,13 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void renderPlayer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
+
+        if (currentPlayer.isRemoved()) {
+            Log.d(TAG, "Soldier was skipped due to removal.");
+            currentPlayer.useSkip();
+        }
+
+
         List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
         characterPassiveClassAffects();
 
@@ -304,7 +309,6 @@ public class MainActivityGame extends SharedMainActivity {
         if ("Jim".equals(currentPlayer.getClassChoice())) {
             btnClassAbility.setVisibility(View.INVISIBLE);
         }
-
 
         if (currentPlayer.equals(firstPlayer)) {
             drinkNumberCounterInt++;
@@ -332,7 +336,8 @@ public class MainActivityGame extends SharedMainActivity {
         SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(currentNumber));
         SharedMainActivity.setNameSizeBasedOnInt(nextPlayerText, nextPlayerText.getText().toString());
 
-        Log.d("renderPlayer", "Current number is " + Game.getInstance().getCurrentNumber() + " - Player was rendered " + currentPlayer.getName() + " is a " + currentPlayer.getClassChoice() + " with " + currentPlayer.getWildCardAmount() + " Wildcards " + "and " + currentPlayer.usedClassAbility() + " is the class abilitiy");
+        Log.d("renderPlayer", "Current number is " + Game.getInstance().getCurrentNumber() + " - Player was rendered " + currentPlayer.getName() + " is a " + currentPlayer.getClassChoice() + " with " + currentPlayer.getWildCardAmount() + " Wildcards " + "and " + currentPlayer.usedClassAbility() + " is the class abilitiy and are they removed ?" + currentPlayer.isRemoved());
+
     }
 
 
@@ -348,7 +353,7 @@ public class MainActivityGame extends SharedMainActivity {
         }
 
         if ("Soldier".equals(currentPlayer.getClassChoice())) {
-            removeCharacterFromGame(currentPlayer);
+            removeCharacterFromGame();
         }
 
         if ("Jim".equals(currentPlayer.getClassChoice())) {
@@ -412,30 +417,26 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    private void removeCharacterFromGame(Player player) {
+    private void removeCharacterFromGame() {
         int currentNumber = Game.getInstance().getCurrentNumber();
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
 
-        int minRange = 10;
-        int maxRange = 15;
+        int minRange = 0;
+        int maxRange = 1000;
 
         if (!isFirstTurn) {
             if (!soldierRemoval) {
                 if (currentNumber >= minRange && currentNumber <= maxRange) {
-                    Log.d("SoliderRemoval", "Soldier was removed");
-                    Game.getInstance().setPlayerToRemove(player);
                     soldierRemoval = true;
+                    currentPlayer.setRemoved(true);
+                    Log.d("SoliderRemoval", currentPlayer.getName() + " The soldier was removed " + soldierRemoval + " " + currentPlayer.isRemoved());
+                    showDialog(currentPlayer.getName() + " has escaped the game as the soldier? ");
                     Handler handler = new Handler();
-                    int delayMillis = 1;
-                    showDialog(currentPlayer.getName() + " has escaped the game as the soldier.");
-                    handler.postDelayed(() -> {
-                        renderPlayer();
-                    }, delayMillis);
+                    int delayMillis = 10;
+
+                    handler.postDelayed(currentPlayer::useSkip, delayMillis);
                 }
-            } else {
-                if (currentNumber >= minRange && currentNumber <= maxRange) {
-                    showDialog("One soldier has already escaped, good luck with the game.");
-                }
+
             }
         }
     }
@@ -471,12 +472,11 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void handleSoldierClass(Player currentPlayer) {
         if (!isFirstTurn) {
-            if (Game.getInstance().getCurrentNumber() <= 10) {
+            if (Game.getInstance().getCurrentNumber() <= 100) {
                 currentPlayer.setClassAbility(true);
                 drinkNumberCounterInt += 4;
                 updateDrinkNumberCounterTextView();
                 btnClassAbility.setVisibility(View.INVISIBLE);
-                soldierJustUsedAbility = true;
             } else {
                 //todo fix this toast, it covers the screen
                 displayToastMessage("The +4 ability can only be activated when the number is below 10.");
@@ -627,18 +627,36 @@ public class MainActivityGame extends SharedMainActivity {
     //-----------------------------------------------------Wild Card, and Skip Functionality---------------------------------------------------//
     private void wildCardContinue() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        currentPlayer.useSkip();
 
-        btnGenerate.setVisibility(View.VISIBLE);
-        drinkNumberCounterTextView.setVisibility(View.VISIBLE);
-        numberText.setVisibility(View.VISIBLE);
-        nextPlayerText.setVisibility(View.VISIBLE);
+        if (Objects.equals(currentPlayer.getClassChoice(), "Soldier")) {
 
-        wildText.setVisibility(View.INVISIBLE);
-        btnBackWild.setVisibility(View.INVISIBLE);
-        btnAnswer.setVisibility(View.INVISIBLE);
-        btnAnswerRight.setVisibility(View.INVISIBLE);
-        btnAnswerWrong.setVisibility(View.INVISIBLE);
+            currentPlayer.useSkip();
+
+            btnGenerate.setVisibility(View.VISIBLE);
+            drinkNumberCounterTextView.setVisibility(View.VISIBLE);
+            numberText.setVisibility(View.VISIBLE);
+            nextPlayerText.setVisibility(View.VISIBLE);
+            btnWild.setVisibility(View.VISIBLE);
+
+
+            wildText.setVisibility(View.INVISIBLE);
+            btnBackWild.setVisibility(View.INVISIBLE);
+            btnAnswer.setVisibility(View.INVISIBLE);
+            btnAnswerRight.setVisibility(View.INVISIBLE);
+            btnAnswerWrong.setVisibility(View.INVISIBLE);
+        } else {
+            currentPlayer.useSkip();
+            btnGenerate.setVisibility(View.VISIBLE);
+            drinkNumberCounterTextView.setVisibility(View.VISIBLE);
+            numberText.setVisibility(View.VISIBLE);
+            nextPlayerText.setVisibility(View.VISIBLE);
+
+            wildText.setVisibility(View.INVISIBLE);
+            btnBackWild.setVisibility(View.INVISIBLE);
+            btnAnswer.setVisibility(View.INVISIBLE);
+            btnAnswerRight.setVisibility(View.INVISIBLE);
+            btnAnswerWrong.setVisibility(View.INVISIBLE);
+        }
     }
 
 
@@ -850,4 +868,22 @@ public class MainActivityGame extends SharedMainActivity {
     public void displayToastMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
+
+    public void renderCurrentNumber(int currentNumber, final Runnable onEnd, TextView textView1) {
+
+        if (currentNumber == 0) {
+            textView1.setText(String.valueOf(currentNumber));
+            applyPulsingEffect(textView1);
+
+            Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                Game.getInstance().endGame(this);
+                onEnd.run();
+            }, 2000);
+        } else {
+            textView1.setText(String.valueOf(currentNumber));
+            Game.getInstance().nextPlayer();
+        }
+    }
 }
+

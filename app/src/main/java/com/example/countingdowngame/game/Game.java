@@ -1,6 +1,9 @@
 package com.example.countingdowngame.game;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +19,7 @@ public class Game {
     private int currentPlayerId = 0;
     private int startingNumber = 0;
     int currentNumber = 0;
-    private boolean playerRemoved = false; // Flag to track if a player has been removed
+
     private boolean gameStarted = false;
 
     private final ArrayList<Integer> updatedNumbers = new ArrayList<>();
@@ -36,12 +39,17 @@ public class Game {
             players.add(new Player(context, null, null, null));
         }
     }
+
     public List<Player> getPlayers() {
         return players;
     }
 
     public void setCurrentPlayerId(int playerId) {
         currentPlayerId = playerId;
+    }
+
+    public int getCurrentPlayerId() {
+        return currentPlayerId;
     }
 
     public void startGame(int startNum, GameEventListener listener) {
@@ -81,20 +89,8 @@ public class Game {
     }
 
     public void nextPlayer() {
+        Log.d(TAG, "nextPlayer: It is now the next player " + Game.getInstance().getCurrentPlayer().getName());
         currentPlayerId = (currentPlayerId + 1) % players.size();
-
-        Player currentPlayer = getCurrentPlayer();
-        if (currentPlayer != null) {
-            currentPlayer.incrementTurnCounter();
-        }
-
-        if (gameEventListener != null) {
-            gameEventListener.onGameEvent(new GameEvent(this, GameEventType.NEXT_PLAYER));
-        }
-    }
-
-    public void previousPlayer() {
-        currentPlayerId = (currentPlayerId - 1) % players.size();
 
         Player currentPlayer = getCurrentPlayer();
         if (currentPlayer != null) {
@@ -153,6 +149,8 @@ public class Game {
 
     public void setCurrentNumber(int number) {
         currentNumber = number;
+        Log.d(TAG, currentPlayerId + " This is the ID before.");
+
     }
 
     public void resetPlayers(Context context) {
@@ -160,13 +158,6 @@ public class Game {
             if (player != null) {
                 player.resetWildCardAmount(context);
             }
-        }
-    }
-
-    public void setPlayerToRemove(Player player) {
-        if (!playerRemoved) { // Check if a player has already been removed
-            players.remove(player);
-            playerRemoved = true; // Set the flag to indicate that a player has been removed
         }
     }
 

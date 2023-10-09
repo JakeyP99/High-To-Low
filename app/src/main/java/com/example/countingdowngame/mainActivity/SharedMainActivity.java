@@ -20,21 +20,7 @@ import java.util.List;
 
 public class SharedMainActivity extends ButtonUtilsActivity {
 
-    public void renderCurrentNumber(int currentNumber, final Runnable onEnd, TextView textView1) {
-        if (currentNumber == 0) {
-            textView1.setText(String.valueOf(currentNumber));
-            applyPulsingEffect(textView1);
 
-            Handler handler = new Handler();
-            handler.postDelayed(() -> {
-                Game.getInstance().endGame(this);
-                onEnd.run();
-            }, 2000);
-        } else {
-            textView1.setText(String.valueOf(currentNumber));
-            Game.getInstance().nextPlayer();
-        }
-    }
 
     public void renderCurrentNumber(int currentNumber, final Runnable onEnd, TextView textView1, TextView textView2) {
         if (currentNumber == 0) {

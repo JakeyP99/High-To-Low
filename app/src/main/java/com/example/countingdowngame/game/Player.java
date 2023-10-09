@@ -18,6 +18,7 @@ public class Player implements Serializable {
     private boolean selected;
     private int turnCounter;
     private boolean usedClassAbility;
+    private boolean removed = false;
 
 
     //-----------------------------------------------------Set Game---------------------------------------------------//
@@ -35,6 +36,14 @@ public class Player implements Serializable {
         this.usedClassAbility = false;
         resetWildCardAmount(context);
         this.turnCounter = 0; // Initialize the turn counter to 0
+    }
+
+    public boolean isRemoved() {
+        return removed;
+    }
+
+    public void setRemoved(boolean removed) {
+        this.removed = removed;
     }
 
     public boolean usedClassAbility() {
