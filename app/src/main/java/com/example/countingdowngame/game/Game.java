@@ -19,6 +19,7 @@ public class Game {
     private int currentPlayerId = 0;
     private int startingNumber = 0;
     int currentNumber = 0;
+    private Player soldierAbilityPlayer = null; // Add this variable to track the Soldier class ability
 
     private boolean gameStarted = false;
 
@@ -46,10 +47,6 @@ public class Game {
 
     public void setCurrentPlayerId(int playerId) {
         currentPlayerId = playerId;
-    }
-
-    public int getCurrentPlayerId() {
-        return currentPlayerId;
     }
 
     public void startGame(int startNum, GameEventListener listener) {
@@ -90,7 +87,16 @@ public class Game {
 
     public void nextPlayer() {
         Log.d(TAG, "nextPlayer: It is now the next player " + Game.getInstance().getCurrentPlayer().getName());
-        currentPlayerId = (currentPlayerId + 1) % players.size();
+
+        // Check if the current player is the player who activated the Soldier class ability
+        if (getCurrentPlayer() != soldierAbilityPlayer) {
+            currentPlayerId = (currentPlayerId + 1) % players.size();
+        }
+
+        // Clear the Soldier class ability player after their extra turn
+        if (getCurrentPlayer() == soldierAbilityPlayer) {
+            soldierAbilityPlayer = null;
+        }
 
         Player currentPlayer = getCurrentPlayer();
         if (currentPlayer != null) {
@@ -100,6 +106,10 @@ public class Game {
         if (gameEventListener != null) {
             gameEventListener.onGameEvent(new GameEvent(this, GameEventType.NEXT_PLAYER));
         }
+    }
+
+    public void activateSoldierClassAbility(Player currentPlayer) {
+        soldierAbilityPlayer = currentPlayer; // Set the Soldier class ability player
     }
 
     //-----------------------------------------------------Player Functions---------------------------------------------------//

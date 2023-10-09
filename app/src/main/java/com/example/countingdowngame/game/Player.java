@@ -18,7 +18,7 @@ public class Player implements Serializable {
     private boolean selected;
     private int turnCounter;
     private boolean usedClassAbility;
-    private boolean removed = false;
+    private boolean removed;
 
 
     //-----------------------------------------------------Set Game---------------------------------------------------//

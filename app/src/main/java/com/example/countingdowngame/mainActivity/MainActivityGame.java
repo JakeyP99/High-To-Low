@@ -1,6 +1,5 @@
 package com.example.countingdowngame.mainActivity;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_ARCHER;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_JIM;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_SCIENTIST;
@@ -285,8 +284,6 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void renderPlayer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-
-
         List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
         characterPassiveClassAffects();
 
@@ -331,7 +328,9 @@ public class MainActivityGame extends SharedMainActivity {
         SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(currentNumber));
         SharedMainActivity.setNameSizeBasedOnInt(nextPlayerText, nextPlayerText.getText().toString());
 
-        Log.d("renderPlayer", "Current number is " + Game.getInstance().getCurrentNumber() + " - Player was rendered " + currentPlayer.getName() + " is a " + currentPlayer.getClassChoice() + " with " + currentPlayer.getWildCardAmount() + " Wildcards " + "and " + currentPlayer.usedClassAbility() + " is the class abilitiy and are they removed ?" + currentPlayer.isRemoved());
+        Log.d("renderPlayer", "Current number is " + Game.getInstance().getCurrentNumber() + " - Player was rendered " +
+                currentPlayer.getName() + " is a " + currentPlayer.getClassChoice() + " with " + currentPlayer.getWildCardAmount() +
+                " Wildcards " + "and " + currentPlayer.usedClassAbility() + " is the class abilitiy and are they removed ?" + currentPlayer.isRemoved());
     }
 
 
@@ -343,12 +342,10 @@ public class MainActivityGame extends SharedMainActivity {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
 
         if (currentPlayer == null) {
-            Log.d(TAG, "characterPassiveClassAffects: Character is null");
             return;
         }
 
         if ("Soldier".equals(currentPlayer.getClassChoice())) {
-            Log.d(TAG, "characterPassiveClassAffects: Soldier is removed?" + currentPlayer.isRemoved());
             new Handler().postDelayed(() -> {
                 if (!currentPlayer.isRemoved()) {
                     removeCharacterFromGame();
@@ -398,20 +395,17 @@ public class MainActivityGame extends SharedMainActivity {
             Log.d("ArcherClass", "Turn count: " + currentPlayerTurnCount);
             playerTurnCountMap.put(currentPlayer, currentPlayerTurnCount);
 
-            // Check if it's the third turn and apply passive ability
             if (currentPlayerTurnCount % 3 == 0) {
-                // Debug log to check if the passive ability logic is executed
                 Log.d("ArcherClass", "Passive ability triggered");
 
-                // 60% chance (randomly decide whether to increase or decrease)
                 if (new Random().nextInt(100) < 60) {
-                    drinkNumberCounterInt += 2; // Increase drinking number by 2
+                    drinkNumberCounterInt += 2;
                     updateDrinkNumberCounterTextView();
                     displayToastMessage("Archer's passive ability: Drinking number increased by 2!");
                 } else {
-                    drinkNumberCounterInt -= 2; // Decrease drinking number by 2
+                    drinkNumberCounterInt -= 2;
                     if (drinkNumberCounterInt < 0) {
-                        drinkNumberCounterInt = 0; // Cap at zero
+                        drinkNumberCounterInt = 0;
                     }
                     updateDrinkNumberCounterTextView();
                     displayToastMessage("Archer's passive ability: Drinking number decreased by 2!");
@@ -424,22 +418,22 @@ public class MainActivityGame extends SharedMainActivity {
         int currentNumber = Game.getInstance().getCurrentNumber();
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
 
-        int minRange = 0;
-        int maxRange = 1000;
+        int minRange = 10;
+        int maxRange = 15;
 
         if (!isFirstTurn) {
             if (!soldierRemoval) {
                 if (currentNumber >= minRange && currentNumber <= maxRange) {
                     soldierRemoval = true;
                     currentPlayer.setRemoved(true);
-                    Log.d("SoliderRemoval", currentPlayer.getName() + " The soldier was removed " + soldierRemoval + " " + currentPlayer.isRemoved());
-                    showDialog(currentPlayer.getName() + " has escaped the game as the soldier? ");
+                    showDialog(currentPlayer.getName() + " has escaped the game as the soldier?");
                     Handler handler = new Handler();
                     int delayMillis = 1;
-
                     handler.postDelayed(currentPlayer::useSkip, delayMillis);
                 }
 
+            } else {
+                showDialog("A soldier has already escaped the game.");
             }
         }
     }
@@ -475,8 +469,9 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void handleSoldierClass(Player currentPlayer) {
         if (!isFirstTurn) {
-            if (Game.getInstance().getCurrentNumber() <= 100) {
+            if (Game.getInstance().getCurrentNumber() <= 1000) {
                 currentPlayer.setClassAbility(true);
+                Game.getInstance().activateSoldierClassAbility(currentPlayer);
                 drinkNumberCounterInt += 4;
                 updateDrinkNumberCounterTextView();
                 btnClassAbility.setVisibility(View.INVISIBLE);
@@ -486,7 +481,6 @@ public class MainActivityGame extends SharedMainActivity {
             }
         } else {
             displayToastMessage("Cannot activate on the first turn.");
-
         }
     }
 
