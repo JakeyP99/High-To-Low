@@ -466,7 +466,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void handleSoldierClass(Player currentPlayer) {
         if (!isFirstTurn) {
-            if (Game.getInstance().getCurrentNumber() <= 1000) {
+            if (Game.getInstance().getCurrentNumber() <= 10) {
                 currentPlayer.setClassAbility(true);
                 Game.getInstance().activateSoldierClassAbility(currentPlayer);
                 drinkNumberCounterInt += 4;
