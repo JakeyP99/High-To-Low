@@ -104,14 +104,13 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         playerList = new ArrayList<>();
         playerListAdapter = new PlayerListAdapter(this, playerList, this);
 
-        selectedPlayerCount = 0; // Initialize selectedPlayerCount to 0
+        selectedPlayerCount = 0;
         initializeViews();
         setupPlayerRecyclerView();
         setupDrawButton();
         updatePlayerCounter();
         setupProceedButton();
 
-        // Clear the selection of players
         for (Player player : playerList) {
             player.setSelected(false);
         }
@@ -175,7 +174,6 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
 
-        // Set a cancel listener for the dialog
         dialog.setCancelable(false);
 
         dialog.show();
@@ -188,7 +186,6 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
                 selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
                 dialog.dismiss();
             } else {
-                // Show the message when no class is selected
                 Toast.makeText(getApplicationContext(), "Please confirm a class.", Toast.LENGTH_SHORT).show();
             }
             Log.d("Confirm Button", "Confirm Button Clicked and " + selectedPlayer.getName() + " choose " + selectedPlayer.getClassChoice());
@@ -205,26 +202,27 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         Button capturePhotoButton = dialogView.findViewById(R.id.capturePhotoButton);
         Button drawPhotoButton = dialogView.findViewById(R.id.drawPhotoButton);
 
+        AlertDialog dialog = builder.setView(dialogView)
+                .setNegativeButton(Html.fromHtml("<font color='" + R.color.bluedark + "'>Cancel</font>"), (dialogInterface, which) -> dialogInterface.dismiss())
+                .create();
+
         capturePhotoButton.setOnClickListener(v -> {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
             } else {
                 captureImage();
             }
-            builder.create().dismiss();
+            dialog.dismiss(); // Close the dialog after clicking the button
         });
 
         drawPhotoButton.setOnClickListener(v -> {
             startDrawingActivity();
-            builder.create().dismiss();
+            dialog.dismiss(); // Close the dialog after clicking the button
         });
-
-        AlertDialog dialog = builder.setView(dialogView)
-                .setNegativeButton(Html.fromHtml("<font color='" + R.color.bluedark + "'>Cancel</font>"), (dialogInterface, which) -> dialogInterface.dismiss())
-                .create();
 
         dialog.show();
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -235,7 +233,6 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         }
     }
 
-    // Helper method to start the DrawingActivity
     private void startDrawingActivity() {
         Intent intent = new Intent(this, DrawingPlayerModels.class);
         startActivityForResult(intent, REQUEST_DRAW);
@@ -271,7 +268,6 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     }
 
     //-----------------------------------------------------Image and player creation functionality---------------------------------------------------//
-    // Open image picker to capture an image
     private void captureImage() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, REQUEST_IMAGE_PICK);
@@ -279,12 +275,11 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
 
     private Bitmap flipBitmap(Bitmap bitmap) {
         Matrix matrix = new Matrix();
-        matrix.setScale(-1, 1); // Flip the bitmap horizontally
+        matrix.setScale(-1, 1);
 
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
 
-    // Convert a Bitmap to a Base64-encoded string
     private String convertBitmapToString(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
@@ -297,7 +292,6 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
     }
 
-    // Handle the result of the image picker activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -370,7 +364,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
 
         String photoString = convertBitmapToString(zoomedBitmap);
         Player newPlayer = new Player(this, photoString, name, null);
-        newPlayer.setSelected(true); // Set isSelected to false initially
+        newPlayer.setSelected(false); // Set isSelected to false initially
         playerList.add(newPlayer);
         playerListAdapter.notifyItemInserted(playerList.size() - 1);
         savePlayerData();
