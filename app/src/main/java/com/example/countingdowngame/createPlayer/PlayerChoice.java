@@ -42,6 +42,7 @@ import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.Player;
 import com.example.countingdowngame.mainActivity.NumberChoice;
+import com.example.countingdowngame.stores.GeneralSettingsLocalStore;
 import com.example.countingdowngame.stores.PlayerModelLocalStore;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.google.gson.Gson;
@@ -53,7 +54,6 @@ import java.util.List;
 public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapter.ClickListener {
 
     public static final String CLASS_ARCHER = "Archer";
-    public static final String CLASS_BARBARIAN = "Barbarian";
     public static final String CLASS_WITCH = "Witch";
     public static final String CLASS_SCIENTIST = "Scientist";
     public static final String CLASS_SOLDIER = "Soldier";
@@ -88,7 +88,9 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
             player.setSelected(false);
             playerListAdapter.notifyItemChanged(position);
             updatePlayerCounter();
-            chooseClass(position);
+            if (GeneralSettingsLocalStore.fromContext(this).isSingleScreen()) {
+                chooseClass(position);
+            }
         }
     }
 
@@ -223,10 +225,6 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
 
         dialog.show();
     }
-
-
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

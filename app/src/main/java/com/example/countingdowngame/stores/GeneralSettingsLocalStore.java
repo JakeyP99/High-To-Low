@@ -39,6 +39,10 @@ public class GeneralSettingsLocalStore {
         return mPref.getBoolean("isSingleScreen", true);
     }
 
+    public Boolean getScreenType() {
+        return isSingleScreen(); // Calls the isSingleScreen method
+    }
+
     public void setIsSingleScreen(Boolean value) {
         SharedPreferences.Editor editor = mPref.edit();
         editor.putBoolean("isSingleScreen", value);
