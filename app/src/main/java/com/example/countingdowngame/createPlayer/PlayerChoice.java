@@ -155,18 +155,12 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         RecyclerView classRecyclerView = dialogView.findViewById(R.id.classRecyclerView);
         classRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-
         List<CharacterClassStore> characterClasses = new ArrayList<>();
         characterClasses.add(new CharacterClassStore(CLASS_ARCHER, CLASS_ARCHER_DESCRIPTION));
-
         characterClasses.add(new CharacterClassStore(CLASS_WITCH, CLASS_WITCH_DESCRIPTION));
-
         characterClasses.add(new CharacterClassStore(CLASS_SCIENTIST, CLASS_SCIENTIST_DESCRIPTION));
-
         characterClasses.add(new CharacterClassStore(CLASS_SOLDIER, CLASS_SOLDIER_DESCRIPTION));
-
         characterClasses.add(new CharacterClassStore(CLASS_JIM, CLASS_JIM_DESCRIPTION));
-
 
         CharacterClassAdapter adapter = new CharacterClassAdapter(characterClasses);
         classRecyclerView.setAdapter(adapter);
@@ -174,19 +168,26 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
 
-        dialog.setCancelable(false);
+        dialog.setOnCancelListener(dialogInterface -> {
+            Player selectedPlayer = playerList.get(position);
+            selectedPlayer.setClassChoice(null);
+            dialog.dismiss();
+        });
 
         dialog.show();
 
         confirmClass.setOnClickListener(v -> {
             int selectedPosition = adapter.getSelectedItemPosition();
             Player selectedPlayer = playerList.get(position);
+
             if (selectedPosition != -1) {
                 CharacterClassStore selectedCharacterClass = characterClasses.get(selectedPosition);
                 selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
                 dialog.dismiss();
             } else {
-                Toast.makeText(getApplicationContext(), "Please confirm a class.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "You chose no class, and that's okay!", Toast.LENGTH_SHORT).show();
+                selectedPlayer.setClassChoice(null);
+                dialog.dismiss();
             }
             Log.d("Confirm Button", "Confirm Button Clicked and " + selectedPlayer.getName() + " choose " + selectedPlayer.getClassChoice());
         });

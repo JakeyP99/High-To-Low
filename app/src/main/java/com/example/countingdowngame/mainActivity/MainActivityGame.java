@@ -205,7 +205,7 @@ public class MainActivityGame extends SharedMainActivity {
             case CLASS_JIM:
                 return CharacterClassDescriptions.CLASS_JIM_DESCRIPTION;
             default:
-                return "Unknown class choice.";
+                return "I love you cutie pie hehe. You don't have a class to show any description for.";
         }
     }
 
@@ -229,7 +229,9 @@ public class MainActivityGame extends SharedMainActivity {
             isFirstTurn = false;
         });
 
-        setupPlayerImageClickListener(); // Corrected this line
+        playerImage.setOnClickListener(v -> {
+            setupPlayerImageClickListener(); // Corrected this line
+        });
 
 
         btnUtils.setButton(btnAnswer, this::showAnswer);
@@ -257,16 +259,18 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void setupPlayerImageClickListener() {
-        playerImage.setOnClickListener(v -> {
-            Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        if (currentPlayer != null) {
             String currentPlayerClassChoice = currentPlayer.getClassChoice();
-
-            String classDescription = getClassDescription(currentPlayerClassChoice);
-
-            showDialogWithFixedTextSize(classDescription, 20); // 20sp
-        });
+            if (currentPlayerClassChoice != null) {
+                String classDescription = getClassDescription(currentPlayerClassChoice);
+                showDialogWithFixedTextSize(classDescription, 20);
+            } else {
+                String loveMessage = "I love you cutie pie hehe. You don't have a class to show any description for.";
+                showDialogWithFixedTextSize(loveMessage, 30);
+            }
+        }
     }
-
 
     //-----------------------------------------------------Render Player---------------------------------------------------//
 
