@@ -19,7 +19,7 @@ public class Game {
     private int currentPlayerId = 0;
     private int startingNumber = 0;
     int currentNumber = 0;
-    private Player soldierAbilityPlayer = null; // Add this variable to track the Soldier class ability
+    private Player repeatTurnPlayer = null; // Add this variable to track the Soldier class ability
 
     private boolean gameStarted = false;
 
@@ -89,13 +89,13 @@ public class Game {
         Log.d(TAG, "nextPlayer: It is now the next player " + Game.getInstance().getCurrentPlayer().getName());
 
         // Check if the current player is the player who activated the Soldier class ability
-        if (getCurrentPlayer() != soldierAbilityPlayer) {
+        if (getCurrentPlayer() != repeatTurnPlayer) {
             currentPlayerId = (currentPlayerId + 1) % players.size();
         }
 
         // Clear the Soldier class ability player after their extra turn
-        if (getCurrentPlayer() == soldierAbilityPlayer) {
-            soldierAbilityPlayer = null;
+        if (getCurrentPlayer() == repeatTurnPlayer) {
+            repeatTurnPlayer = null;
         }
 
         Player currentPlayer = getCurrentPlayer();
@@ -108,8 +108,8 @@ public class Game {
         }
     }
 
-    public void activateSoldierClassAbility(Player currentPlayer) {
-        soldierAbilityPlayer = currentPlayer; // Set the Soldier class ability player
+    public void activateRepeatingTurn(Player currentPlayer) {
+        repeatTurnPlayer = currentPlayer; // Set the Soldier class ability player
     }
 
     //-----------------------------------------------------Player Functions---------------------------------------------------//

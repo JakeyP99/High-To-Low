@@ -460,15 +460,15 @@ public class MainActivityGame extends SharedMainActivity {
 
     //todo it doesnt put in the changed number in the previous numbers
     private void handleScientistClass(Player currentPlayer) {
-        onChangeNumberClick();
-        currentPlayer.setClassAbility(true);
+        changeCurrentNumber();
+        Game.getInstance().activateRepeatingTurn(currentPlayer);
     }
 
     private void handleSoldierClass(Player currentPlayer) {
         if (!isFirstTurn) {
             if (Game.getInstance().getCurrentNumber() <= 10) {
                 currentPlayer.setClassAbility(true);
-                Game.getInstance().activateSoldierClassAbility(currentPlayer);
+                Game.getInstance().activateRepeatingTurn(currentPlayer);
                 drinkNumberCounterInt += 4;
                 updateDrinkNumberCounterTextView();
                 btnClassAbility.setVisibility(View.INVISIBLE);
@@ -533,7 +533,9 @@ public class MainActivityGame extends SharedMainActivity {
         drinkNumberCounterTextView.setText(drinkNumberText);
     }
 
-    private void onChangeNumberClick() {
+    private void changeCurrentNumber() {
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.character_class_change_number, null);
 
@@ -559,7 +561,8 @@ public class MainActivityGame extends SharedMainActivity {
                     Game.getInstance().setCurrentNumber(newNumber);
                     SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(newNumber));
                     numberText.setText(String.valueOf(newNumber));
-                    renderCurrentNumber(newNumber, () -> gotoGameEnd(), numberText);
+                    renderCurrentNumber(newNumber, this::gotoGameEnd, numberText);
+                    currentPlayer.setClassAbility(true);
 
                     btnClassAbility.setVisibility(View.INVISIBLE);
                     dialog.dismiss(); // Close the dialog on success
