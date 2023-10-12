@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -14,6 +13,8 @@ import com.example.countingdowngame.R;
 import com.example.countingdowngame.createPlayer.PlayerChoice;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
+
+import io.github.muddz.styleabletoast.StyleableToast;
 
 public class PlayerNumberChoice extends ButtonUtilsActivity {
     private EditText originalPlayerField;
@@ -55,7 +56,8 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
             }
 
             if (inputValue.length() > 3) {
-                Toast.makeText(PlayerNumberChoice.this, "That's way too many players.... Unless you're that popular?", Toast.LENGTH_SHORT).show();
+                StyleableToast.makeText(getApplicationContext(), "That's way too many players.... Unless you're that popular?", R.style.newToast).show();
+
                 return;
             }
 
@@ -75,7 +77,7 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
             Game.getInstance().setPlayers(this, inputNumber);
 
         } catch (NumberFormatException e) {
-            Toast.makeText(PlayerNumberChoice.this, "Invalid player count", Toast.LENGTH_SHORT).show();
+            StyleableToast.makeText(getApplicationContext(), "Invalid player count.", R.style.newToast).show();
         }
     }
 }

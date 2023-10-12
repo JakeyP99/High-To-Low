@@ -4,17 +4,17 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.stores.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
+
+import io.github.muddz.styleabletoast.StyleableToast;
 
 public class GeneralSettings extends ButtonUtilsActivity implements View.OnClickListener {
 
@@ -56,9 +56,7 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
             } else {
                 int wildCardAmount = Integer.parseInt(wildCardAmountInput);
                 if (wildCardAmount < 0 || wildCardAmount > 100) {
-                    Toast toast = Toast.makeText(this, "Please enter a number between 0 and 100", Toast.LENGTH_SHORT);
-                    toast.setGravity(Gravity.CENTER, 0, 0);
-                    toast.show();
+                    StyleableToast.makeText(getApplicationContext(), "Please enter a number between 0 and 100", R.style.newToast).show();
                 } else {
                     super.onBackPressed();
                 }
@@ -187,9 +185,7 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
                 } else {
                     int wildCardAmount = Integer.parseInt(wildCardAmountInput);
                     if (wildCardAmount < 0 || wildCardAmount > 100) {
-                        Toast toast = Toast.makeText(this, "Please enter a number between 0 and 100", Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
+                        StyleableToast.makeText(getApplicationContext(), "Please enter a number between 0 and 100", R.style.newToast).show();
                     } else {
                         super.onBackPressed();
                     }

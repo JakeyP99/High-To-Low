@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +23,8 @@ import com.example.countingdowngame.wildCards.WildCardType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import io.github.muddz.styleabletoast.StyleableToast;
 
 public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAdapter.WildCardViewHolder> {
     private final String mSaveKey;
@@ -170,7 +171,8 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
                                 ", category=" + wildcard.getCategory());
 
                 if (!wildcard.isDeletable()) {
-                    Toast.makeText(mContext, "Sorry, these wildcards cannot be edited!", Toast.LENGTH_SHORT).show();
+                    StyleableToast.makeText(mContext, "Sorry, these wildcards cannot be edited!", R.style.newToast).show();
+
                     return;
                 }
 
@@ -232,12 +234,14 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
                     if (!wildcard.hasAnswer()) {
                         // Handling wildcards without an answer
                         if (inputText.isEmpty()) {
-                            Toast.makeText(mContext, "The wildcard needs some text, please and thanks!", Toast.LENGTH_SHORT).show();
+                            StyleableToast.makeText(mContext, "The wildcard needs some text, please and thanks!", R.style.newToast).show();
+
                             return;
                         }
 
                         if (wildCardTextInput.length() > 130) {
-                            Toast.makeText(mContext, "Sorry, way too big of a wildcard boss man, limited to 130 characters.", Toast.LENGTH_SHORT).show();
+                            StyleableToast.makeText(mContext, "Sorry, way too big of a wildcard boss man, limited to 130 characters.", R.style.newToast).show();
+
                             return;
                         }
 
@@ -247,12 +251,14 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
                     } else {
                         // Handling wildcards with an answer
                         if (inputText.isEmpty() || inputAnswer.isEmpty()) {
-                            Toast.makeText(mContext, "The wildcard needs some text in both the question and answer, please and thanks!", Toast.LENGTH_SHORT).show();
+                            StyleableToast.makeText(mContext, "The wildcard needs some text in both the question and answer, please and thanks!", R.style.newToast).show();
+
                             return;
                         }
 
                         if (wildCardTextInput.length() > 130 || answerWildCardTextInput.length() > 130) {
-                            Toast.makeText(mContext, "Sorry, way too big of a wildcard boss man, limited to 130 characters for the questions or answers.", Toast.LENGTH_SHORT).show();
+                            StyleableToast.makeText(mContext, "Sorry, way too big of a wildcard boss man, limited to 130 characters for the questions or answers.", R.style.newToast).show();
+
                             return;
                         }
 

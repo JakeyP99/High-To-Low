@@ -28,7 +28,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -50,6 +49,9 @@ import com.google.gson.Gson;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.github.muddz.styleabletoast.StyleableToast;
+
 
 public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapter.ClickListener {
 
@@ -174,11 +176,13 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
             if (selectedPosition != -1) {
                 CharacterClassStore selectedCharacterClass = characterClasses.get(selectedPosition);
                 selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
-                String message = selectedPlayer.getName() + " chose " + selectedCharacterClass.getClassName();
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                String message = selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
+                StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
+
             } else {
                 selectedPlayer.setClassChoice(null);
-                Toast.makeText(getApplicationContext(), selectedPlayer.getName() + " chose no class, and that's okay!", Toast.LENGTH_SHORT).show();
+                StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
+
             }
             dialog.dismiss();
         });
@@ -192,11 +196,12 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
             if (selectedPosition != -1) {
                 CharacterClassStore selectedCharacterClass = characterClasses.get(selectedPosition);
                 selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
-                String message = selectedPlayer.getName() + " chose " + selectedCharacterClass.getClassName();
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+                String message = selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
+                StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
                 dialog.dismiss();
             } else {
-                Toast.makeText(getApplicationContext(), selectedPlayer.getName() + " chose no class, and that's okay!", Toast.LENGTH_SHORT).show();
+                StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
                 selectedPlayer.setClassChoice(null);
                 dialog.dismiss();
             }
@@ -342,13 +347,14 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
                     String name = nameEditText.getText().toString();
                     if (name.length() < 20) {
                         if (name.length() == 0) {
-                            Toast.makeText(this, "Sorry, you need to enter a name.", Toast.LENGTH_SHORT).show();
+                            StyleableToast.makeText(this, "Sorry, you need to enter a name.", R.style.newToast).show();
+
                             showNameInputDialog(bitmap);
                         } else {
                             createNewCharacter(bitmap, name);
                         }
                     } else {
-                        Toast.makeText(this, "Name must be less than 20 characters.", Toast.LENGTH_SHORT).show();
+                        StyleableToast.makeText(this, "Name must be less than 20 characters.", R.style.newToast).show();
                         showNameInputDialog(bitmap);
                     }
                 });
@@ -465,4 +471,6 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
             }
         }
     }
+
+
 }

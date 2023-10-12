@@ -11,12 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.wildCards.WildCardProperties;
+
+import io.github.muddz.styleabletoast.StyleableToast;
 
 public class WildCardsFragments extends Fragment {
 
@@ -69,15 +70,15 @@ public class WildCardsFragments extends Fragment {
             int probability = 10; // Invalid input, set to a default value
             String text = textInput.getText().toString().trim();
             if (text.isEmpty()) {
-                Toast.makeText(mContext, "The wildcard needs some text, please and thanks!", Toast.LENGTH_SHORT).show();
+                StyleableToast.makeText(mContext, "The wildcard needs some text, please and thanks!", R.style.newToast).show();
                 return;
             }
             if (textInput.length() <= 0) {
-                Toast.makeText(mContext, "The wildcard needs some text, please and thanks!", Toast.LENGTH_SHORT).show();
+                StyleableToast.makeText(mContext, "The wildcard needs some text, please and thanks!", R.style.newToast).show();
                 return;
             }
             if (textInput.length() > 130) {
-                Toast.makeText(mContext, "Sorry, way too big of a wildcard boss man, limited to 130 characters.", Toast.LENGTH_SHORT).show();
+                StyleableToast.makeText(mContext, "Sorry, way too big of a wildcard boss man, limited to 130 characters.", R.style.newToast).show();
                 return;
             }
 

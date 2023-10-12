@@ -5,7 +5,7 @@ android {
     defaultConfig {
         applicationId "com.mydomain.countingdowngame"
         minSdkVersion 24
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode 19
         versionName "19"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -47,4 +47,7 @@ dependencies {
     implementation 'com.daimajia.androidanimations:library:2.4@aar'
     implementation 'jp.wasabeef:recyclerview-animators:4.0.2'
     implementation 'com.airbnb.android:lottie:6.1.0'
+    implementation 'io.github.muddz:styleabletoast:2.4.0'
+
+
 }

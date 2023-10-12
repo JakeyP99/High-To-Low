@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
@@ -38,6 +37,8 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import io.github.muddz.styleabletoast.StyleableToast;
 
 //todo make it so if this is class is activated, then the character classes won't be selected.
 public class MainActivitySplitScreen extends SharedMainActivity {
@@ -96,7 +97,8 @@ public class MainActivitySplitScreen extends SharedMainActivity {
         }
 
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Press back again to go to the home screen", Toast.LENGTH_SHORT).show();
+        StyleableToast.makeText(getApplicationContext(), "Press back again to go to the home screen.", R.style.newToast).show();
+
         new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, BACK_PRESS_DELAY);
     }
 

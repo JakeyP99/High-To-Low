@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -15,6 +14,8 @@ import com.example.countingdowngame.stores.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.Random;
+
+import io.github.muddz.styleabletoast.StyleableToast;
 
 public class NumberChoice extends ButtonUtilsActivity {
     private int startingNumber;
@@ -40,21 +41,23 @@ public class NumberChoice extends ButtonUtilsActivity {
 
         int length = inputValue.length(); // Store the length of the string
         if (length > 9) {
-            Toast.makeText(NumberChoice.this, "That's a lot of numbers, unfortunately too many :(", Toast.LENGTH_SHORT).show();
+            StyleableToast.makeText(getApplicationContext(), "That's a lot of numbers, unfortunately too many :(", R.style.newToast).show();
+
             return;
         }
 
 
         if (inputValue.isEmpty()) {
-            Toast.makeText(NumberChoice.this, "Please choose a number!", Toast.LENGTH_SHORT).show();
+            StyleableToast.makeText(getApplicationContext(), "Please choose a number!", R.style.newToast).show();
+
             return;
         }
 
         int inputNumber = Integer.parseInt(inputValue);
 
         if (inputNumber <= 0) {
-            Toast.makeText(NumberChoice.this, "Please choose a number greater than zero!", Toast.LENGTH_SHORT)
-                    .show();
+            StyleableToast.makeText(getApplicationContext(), "Please choose a number greater than zero!", R.style.newToast).show();
+
             return;
         }
         startingNumber = inputNumber;

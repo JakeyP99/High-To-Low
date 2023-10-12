@@ -22,7 +22,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
@@ -49,6 +48,8 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import io.github.muddz.styleabletoast.StyleableToast;
 
 public class MainActivityGame extends SharedMainActivity {
 
@@ -108,7 +109,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     public void displayToastMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        StyleableToast.makeText(this, message, R.style.newToast).show();
     }
 
     //-----------------------------------------------------Start Game Functions---------------------------------------------------//
