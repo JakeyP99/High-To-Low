@@ -263,7 +263,7 @@ public class MainActivityGame extends SharedMainActivity {
         if (currentPlayer != null) {
             String currentPlayerClassChoice = currentPlayer.getClassChoice();
             if (currentPlayerClassChoice != null) {
-                String classDescription = getClassDescription(currentPlayerClassChoice);
+                String classDescription = currentPlayer.getClassChoice() + "\n\n" + getClassDescription(currentPlayerClassChoice);
                 showDialogWithFixedTextSize(classDescription, 20);
             } else {
                 String loveMessage = "I love you cutie pie hehe. You don't have a class to show any description for.";
@@ -384,9 +384,9 @@ public class MainActivityGame extends SharedMainActivity {
         if ("Witch".equals(currentPlayer.getClassChoice())) {
             if (!isFirstTurn) {
                 if (Game.getInstance().getCurrentNumber() % 2 == 0) {
-                    showDialog(currentPlayer.getName() + " hand out two drinks.");
+                    showDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " hand out two drinks.");
                 } else {
-                    showDialog(currentPlayer.getName() + " take a drink.");
+                    showDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " take a drink.");
                 }
             }
         }
@@ -397,7 +397,7 @@ public class MainActivityGame extends SharedMainActivity {
 
             handler.postDelayed(() -> {
                 if (chance < 10) {
-                    showDialog(currentPlayer.getName() + " is a scientist and his turn was skipped. ");
+                    showDialog("Scientist's Passive: \n\n" + currentPlayer.getName() + " is a scientist and his turn was skipped. ");
                     currentPlayer.useSkip();
                 }
             }, delayMillis);
@@ -421,14 +421,14 @@ public class MainActivityGame extends SharedMainActivity {
                 if (new Random().nextInt(100) < 60) {
                     drinkNumberCounterInt += 2;
                     updateDrinkNumberCounterTextView();
-                    displayToastMessage("Archer's passive ability: Drinking number increased by 2!");
+                    showDialog("Archer's Passive: \n\nDrinking number increased by 2!");
                 } else {
                     drinkNumberCounterInt -= 2;
                     if (drinkNumberCounterInt < 0) {
                         drinkNumberCounterInt = 0;
                     }
                     updateDrinkNumberCounterTextView();
-                    displayToastMessage("Archer's passive ability: Drinking number decreased by 2!");
+                    showDialog("Archer's Passive: \n\nDrinking number decreased by 2!");
                 }
             }
         }
@@ -483,13 +483,13 @@ public class MainActivityGame extends SharedMainActivity {
         Log.d("ArcherClass", "handleArcherClass called");
 
         if (drinkNumberCounterInt >= 2) {
-            showDialog("Hand out two drinks");
+            showDialog("Archer's Active: \n\n" + currentPlayer.getName() + " hand out two drinks!");
             currentPlayer.setClassAbility(true);
             drinkNumberCounterInt -= 2;
             updateDrinkNumberCounterTextView();
             btnClassAbility.setVisibility(View.INVISIBLE);
         } else {
-            displayToastMessage("Not enough drinks to subtract.");
+            displayToastMessage("There must be more than two total drinks.");
         }
 
 
@@ -535,7 +535,7 @@ public class MainActivityGame extends SharedMainActivity {
                 int delayMillis = 1;
                 handler.postDelayed(currentPlayer::useSkip, delayMillis);
             } else if (soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {
-                showDialog("A soldier has already escaped the game.");
+                showDialog("Sorry" + currentPlayer.getName() + " a soldier has already escaped the game.");
             }
         }
     }
@@ -828,6 +828,8 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void showAnswer() {
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+
         TextView wildActivityTextView = findViewById(R.id.textView_WildText);
         btnAnswerRight.setVisibility(View.VISIBLE);
         btnAnswerWrong.setVisibility(View.VISIBLE);
@@ -844,13 +846,13 @@ public class MainActivityGame extends SharedMainActivity {
                     Game.getInstance().getCurrentPlayer().gainWildCards(1);
                     btnAnswerRight.setVisibility(View.INVISIBLE);
                     btnAnswerWrong.setVisibility(View.INVISIBLE);
-                    quizAnswerView("Since you got it right, give out a drink! \n\n P.S. You get to keep your wildcard too.");
+                    quizAnswerView(currentPlayer.getName() + " since you got it right, give out a drink! \n\n P.S. You get to keep your wildcard too.");
                 });
 
                 btnUtils.setButton(btnAnswerWrong, () -> {
                     btnAnswerRight.setVisibility(View.INVISIBLE);
                     btnAnswerWrong.setVisibility(View.INVISIBLE);
-                    quizAnswerView("Since you got it wrong, take a drink! \n\n P.S. Maybe read a book once in a while.");
+                    quizAnswerView(currentPlayer.getName() + " since you got it wrong, take a drink! \n\n P.S. Maybe read a book once in a while.");
                 });
 
             } else {
