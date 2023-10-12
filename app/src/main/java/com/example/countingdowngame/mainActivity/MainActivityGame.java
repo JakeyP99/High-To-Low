@@ -239,7 +239,6 @@ public class MainActivityGame extends SharedMainActivity {
 
         btnUtils.setButton(btnBackWild, this::wildCardContinue);
 
-
         btnUtils.setButton(btnClassAbility, this::characterActiveAbilities);
 
         btnUtils.setButton(btnWild, () -> {
@@ -279,6 +278,7 @@ public class MainActivityGame extends SharedMainActivity {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
         characterPassiveClassAffects();
+        btnClassAbility.setText(String.format("%s's Ability", currentPlayer.getClassChoice()));
 
 
         if (("Scientist".equals(currentPlayer.getClassChoice()) ||
