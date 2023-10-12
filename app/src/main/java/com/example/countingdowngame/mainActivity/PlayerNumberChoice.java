@@ -46,6 +46,7 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
 
         String inputValue = originalPlayerField.getText().toString();
         if (inputValue.isEmpty()) {
+            StyleableToast.makeText(getApplicationContext(), "You have to have some friends to play with!", R.style.newToast).show();
             return;
         }
 

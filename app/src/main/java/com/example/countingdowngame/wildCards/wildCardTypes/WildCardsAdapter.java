@@ -241,7 +241,6 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
 
                         if (wildCardTextInput.length() > 130) {
                             StyleableToast.makeText(mContext, "Sorry, way too big of a wildcard boss man, limited to 130 characters.", R.style.newToast).show();
-
                             return;
                         }
 

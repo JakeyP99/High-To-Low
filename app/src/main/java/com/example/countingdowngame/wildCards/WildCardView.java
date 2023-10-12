@@ -39,6 +39,7 @@ public class WildCardView extends ArrayAdapter<WildCardProperties> {
         return mProbabilities.length;
     }
 
+    @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ViewHolder viewHolder;
