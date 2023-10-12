@@ -6,70 +6,67 @@
     android:background="@android:color/white"
     android:layout_height="match_parent">
 
+
     <TextView
         android:id="@+id/TextViewlose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="176dp"
-        android:layout_marginTop="146dp"
-        android:layout_marginEnd="178dp"
-        android:layout_marginBottom="566dp"
-        android:gravity="center"
+        android:layout_width="374dp"
+        android:layout_height="92dp"
         android:fontFamily="@font/viga"
-        android:text="Drink up!"
+        android:gravity="center"
+        android:text="Drink up you little baby you goose!"
         android:textColor="@color/bluedark"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.232" />
 
     <Button
         android:id="@+id/btnplayAgain"
         android:layout_width="139dp"
         android:layout_height="77dp"
         android:background="@drawable/outlineforbutton"
-        android:text="Play Again"
-        android:textColor="@color/bluedark"
         android:fontFamily="@font/viga"
-        android:textSize="20sp"
+        android:text="Play Again"
         android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/bluedark"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnNewPlayer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TextViewlose"
-        app:layout_constraintVertical_bias="0.13" />
+        app:layout_constraintVertical_bias="0.797" />
 
     <Button
         android:id="@+id/btnNewPlayer"
         android:layout_width="139dp"
         android:layout_height="77dp"
+        android:layout_marginBottom="52dp"
         android:background="@drawable/outlineforbutton"
-        android:text="New Players"
-        android:textColor="@color/bluedark"
         android:fontFamily="@font/viga"
-        android:textSize="20sp"
+        android:text="New Players"
         android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/bluedark"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/previousNumbersText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnplayAgain"
-        app:layout_constraintVertical_bias="0.13999999" />
-
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
+        android:id="@+id/previousNumbersText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/viga"
         android:text="Previous Numbers:"
         android:textColor="@color/bluedark"
-        android:fontFamily="@font/viga"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/previousNumbers"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@+id/previousNumbers"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1" />
+        app:layout_constraintVertical_bias="1"
+        app:layout_constraintHorizontal_bias="0" />
 
     <ListView
         android:id="@+id/previousNumbers"

@@ -169,8 +169,17 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         AlertDialog dialog = builder.create();
 
         dialog.setOnCancelListener(dialogInterface -> {
+            int selectedPosition = adapter.getSelectedItemPosition();
             Player selectedPlayer = playerList.get(position);
-            selectedPlayer.setClassChoice(null);
+            if (selectedPosition != -1) {
+                CharacterClassStore selectedCharacterClass = characterClasses.get(selectedPosition);
+                selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
+                String message = selectedPlayer.getName() + " chose " + selectedCharacterClass.getClassName();
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+            } else {
+                selectedPlayer.setClassChoice(null);
+                Toast.makeText(getApplicationContext(), selectedPlayer.getName() + " chose no class, and that's okay!", Toast.LENGTH_SHORT).show();
+            }
             dialog.dismiss();
         });
 
@@ -183,9 +192,11 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
             if (selectedPosition != -1) {
                 CharacterClassStore selectedCharacterClass = characterClasses.get(selectedPosition);
                 selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
+                String message = selectedPlayer.getName() + " chose " + selectedCharacterClass.getClassName();
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             } else {
-                Toast.makeText(getApplicationContext(), "You chose no class, and that's okay!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), selectedPlayer.getName() + " chose no class, and that's okay!", Toast.LENGTH_SHORT).show();
                 selectedPlayer.setClassChoice(null);
                 dialog.dismiss();
             }
