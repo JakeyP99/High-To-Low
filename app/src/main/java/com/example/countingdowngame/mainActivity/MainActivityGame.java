@@ -179,6 +179,10 @@ public class MainActivityGame extends SharedMainActivity {
     public void renderCurrentNumber(int currentNumber, final Runnable onEnd, TextView textView1) {
 
         if (currentNumber == 0) {
+            btnGenerate.setEnabled(false);
+            btnWild.setEnabled(false);
+            btnClassAbility.setEnabled(false);
+
             textView1.setText(String.valueOf(currentNumber));
             applyPulsingEffect(textView1);
 
@@ -330,6 +334,7 @@ public class MainActivityGame extends SharedMainActivity {
         btnGenerate.setEnabled(false);
         btnWild.setEnabled(false);
         btnClassAbility.setEnabled(false);
+        playerImage.setEnabled(false);
 
         int currentNumber = Game.getInstance().getCurrentNumber();
         final int shuffleDuration = 1500;
@@ -354,10 +359,13 @@ public class MainActivityGame extends SharedMainActivity {
                     int currentNumber = Game.getInstance().nextNumber();
                     renderCurrentNumber(currentNumber, () -> gotoGameEnd(), numberText);
 
-                    btnGenerate.setEnabled(true);
-                    btnWild.setEnabled(true);
-                    btnClassAbility.setEnabled(true);
+                    if (currentNumber != 0) {
+                        btnGenerate.setEnabled(true);
+                        btnWild.setEnabled(true);
+                        btnClassAbility.setEnabled(true);
+                        playerImage.setEnabled(true);
 
+                    }
                     Log.d("startNumberShuffleAnimation", "Next players turn");
 
                 }

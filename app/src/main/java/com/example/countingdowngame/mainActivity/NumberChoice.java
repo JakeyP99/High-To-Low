@@ -3,6 +3,7 @@ package com.example.countingdowngame.mainActivity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,13 +20,15 @@ import io.github.muddz.styleabletoast.StyleableToast;
 
 public class NumberChoice extends ButtonUtilsActivity {
     private int startingNumber;
+    private Button btnSubmit;
+    private Button btnRandom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a4_number_choice);
-        Button btnSubmit = findViewById(R.id.btnSubmitNumbers);
-        Button btnRandom = findViewById(R.id.btnRandomNumber);
+        btnSubmit = findViewById(R.id.btnSubmitNumbers);
+        btnRandom = findViewById(R.id.btnRandomNumber);
         resetStartingNumber();
         btnUtils.setButton(btnSubmit, this::onSubmitClicked);
         btnUtils.setButton(btnRandom, this::onRandomClicked);
@@ -42,14 +45,12 @@ public class NumberChoice extends ButtonUtilsActivity {
         int length = inputValue.length(); // Store the length of the string
         if (length > 9) {
             StyleableToast.makeText(getApplicationContext(), "That's a lot of numbers, unfortunately too many :(", R.style.newToast).show();
-
             return;
         }
 
 
         if (inputValue.isEmpty()) {
             StyleableToast.makeText(getApplicationContext(), "Please choose a number!", R.style.newToast).show();
-
             return;
         }
 
@@ -57,10 +58,17 @@ public class NumberChoice extends ButtonUtilsActivity {
 
         if (inputNumber <= 0) {
             StyleableToast.makeText(getApplicationContext(), "Please choose a number greater than zero!", R.style.newToast).show();
-
             return;
         }
         startingNumber = inputNumber;
+        btnSubmit.setEnabled(false);
+        btnRandom.setEnabled(false);
+
+        final long delayMillis = 3000;
+        new Handler().postDelayed(() -> {
+            btnSubmit.setEnabled(true);
+            btnRandom.setEnabled(true);
+        }, delayMillis);
 
         YoYo.with(Techniques.RubberBand)
                 .duration(300)
@@ -75,12 +83,22 @@ public class NumberChoice extends ButtonUtilsActivity {
     }
 
     private void onRandomClicked() {
+        btnSubmit.setEnabled(false);
+        btnRandom.setEnabled(false);
+
+        final long delayMillis = 3000;
+        new Handler().postDelayed(() -> {
+            btnSubmit.setEnabled(true);
+            btnRandom.setEnabled(true);
+        }, delayMillis);
+
         Random random = new Random();
         startingNumber = random.nextInt(5000) + 1;
         final EditText originalNumberField = findViewById(R.id.EditTextView_numberchoice);
         originalNumberField.setFocusable(false);
         startMainActivity();
     }
+
 
     private void startMainActivity() {
         boolean switchOneChecked = GeneralSettingsLocalStore.fromContext(this).isSingleScreen();

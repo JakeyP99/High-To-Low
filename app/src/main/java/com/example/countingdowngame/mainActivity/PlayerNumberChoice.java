@@ -3,6 +3,7 @@ package com.example.countingdowngame.mainActivity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,14 +19,15 @@ import io.github.muddz.styleabletoast.StyleableToast;
 
 public class PlayerNumberChoice extends ButtonUtilsActivity {
     private EditText originalPlayerField;
+    private Button btnSubmitPlayers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a2_player_number_choice);
 
-        Button btnSubmitPlayers = findViewById(R.id.btnSubmitPlayers);
         originalPlayerField = findViewById(R.id.EditTextViewplayernumber);
+        btnSubmitPlayers = findViewById(R.id.btnSubmitPlayers);
 
         btnUtils.setButton(btnSubmitPlayers, this::submitPlayerNumber);
     }
@@ -61,7 +63,11 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
 
                 return;
             }
-
+            btnSubmitPlayers.setEnabled(false);
+            final long delayMillis = 3000;
+            new Handler().postDelayed(() -> {
+                btnSubmitPlayers.setEnabled(true);
+            }, delayMillis);
 
             YoYo.with(Techniques.RubberBand)
                     .duration(300)
