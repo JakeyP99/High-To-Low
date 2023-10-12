@@ -73,5 +73,6 @@
         \n\n
         I hope you enjoy our game!
     </string>
+    <string name="placeholder_text">Placeholder Text</string>
 
 </resources>

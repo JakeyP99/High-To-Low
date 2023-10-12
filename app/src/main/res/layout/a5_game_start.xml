@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     tools:context=".mainActivity.MainActivityGame"
-    tools:layout_editor_absoluteX="0dp"
-    tools:layout_editor_absoluteY="39dp">
+    >
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineCenter"
@@ -21,8 +20,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/bluedark"
-        android:text="test"
-
         android:textSize="70sp"
         app:layout_constraintBottom_toBottomOf="@+id/btnGenerate"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,16 +33,16 @@
         android:layout_width="165dp"
         android:layout_height="100dp"
         android:background="@drawable/outlineforbutton"
-        android:text="Wild Card"
+        android:fontFamily="@font/viga"
+        android:text="@string/placeholder_text"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
         android:textSize="25sp"
-        android:fontFamily="@font/viga"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnClassAbility"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.87" />
+        app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
+        app:layout_constraintVertical_bias="0.5" />
 
 
     <Button
@@ -53,7 +50,7 @@
         android:layout_width="300dp"
         android:layout_height="61dp"
         android:background="@drawable/outlineforbutton"
-        android:text="Activate Ability"
+        android:text="@string/placeholder_text"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
         android:textSize="25sp"
@@ -70,16 +67,17 @@
         android:layout_width="165dp"
         android:layout_height="100dp"
         android:background="@drawable/outlineforbutton"
-        android:text="Continue"
+        android:fontFamily="@font/viga"
+        android:text="@string/placeholder_text"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
-        android:fontFamily="@font/viga"
         android:textSize="25sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnClassAbility"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.87" />
+        app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
+        app:layout_constraintVertical_bias="0.5"
+        tools:ignore="TextSizeCheck" />
 
 
     <Button
@@ -87,33 +85,31 @@
         android:layout_width="165dp"
         android:layout_height="100dp"
         android:background="@drawable/outlineforbutton"
-        android:text="Were You Right?"
+        android:fontFamily="@font/viga"
+        android:text="@string/placeholder_text"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
         android:textSize="25sp"
-        android:fontFamily="@font/viga"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnClassAbility"
         app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.87" />
+        app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
+        app:layout_constraintVertical_bias="0.5" />
 
     <Button
         android:id="@+id/btnGotQuizWrong"
         android:layout_width="165dp"
         android:layout_height="100dp"
         android:background="@drawable/outlineforbutton"
-        android:text="Were You Wrong?"
-        android:textAllCaps="false"
         android:fontFamily="@font/viga"
+        android:text="@string/placeholder_text"
+        android:textAllCaps="false"
         android:textColor="@color/bluedark"
         android:textSize="25sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnClassAbility"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guidelineCenter"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.87" />
+        app:layout_constraintTop_toBottomOf="@+id/btnGenerate" />
 
 
     <Button
@@ -121,7 +117,7 @@
         android:layout_width="165dp"
         android:layout_height="100dp"
         android:background="@drawable/outlineforbutton"
-        android:text="Answer"
+        android:text="@string/placeholder_text"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
         android:fontFamily="@font/viga"
@@ -138,7 +134,7 @@
         android:id="@+id/textView_Number_Turn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="test"
+        android:text="@string/placeholder_text"
         android:textColor="@color/bluedark"
         android:fontFamily="@font/viga"
         android:textSize="35sp"
@@ -152,7 +148,7 @@
         android:id="@+id/textView_numberCounter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0 Drinks"
+        android:text="@string/placeholder_text"
         android:textColor="@color/bluedark"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/btnGenerate"
@@ -186,6 +182,7 @@
         android:layout_width="290dp"
         android:layout_height="282dp"
         android:background="@drawable/outlineforbutton"
+        android:contentDescription="@string/placeholder_text"
         android:textColor="@color/bluedark"
         android:textSize="21sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -206,6 +203,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.03"
+        android:contentDescription="@string/placeholder_text"
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
     <de.hdodenhof.circleimageview.CircleImageView
