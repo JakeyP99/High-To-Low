@@ -27,7 +27,7 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
     private Button btnReturn;
     private Button btnMute;
 
-//    //copyout
+//copyout
     private Button button_regularSound;
     private Button button_burpSound;
     //

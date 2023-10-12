@@ -328,7 +328,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
         nameEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 
-        int blueDarkColor = getResources().getColor(R.color.bluedark);
+        int blueDarkColor = ContextCompat.getColor(this, R.color.bluedark);
         nameEditText.getBackground().mutate().setColorFilter(blueDarkColor, PorterDuff.Mode.SRC_ATOP);
         nameEditText.setHighlightColor(blueDarkColor);
 
