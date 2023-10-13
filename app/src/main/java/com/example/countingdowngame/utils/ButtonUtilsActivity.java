@@ -34,6 +34,7 @@ public abstract class ButtonUtilsActivity extends AppCompatActivity {
             btnUtils.onDestroy();
         }
     }
+
     //-----------------------------------------------------Activity Functionality---------------------------------------------------//
     protected Intent getIntentForClass(Class<?> targetClass) {
         return getIntentForClass(targetClass, false);

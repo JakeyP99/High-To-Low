@@ -18,7 +18,7 @@ import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.GameEventType;
 import com.example.countingdowngame.game.Player;
 import com.example.countingdowngame.stores.PlayerModelLocalStore;
-import com.example.countingdowngame.utils.AudioManager;
+import com.example.countingdowngame.utils.BackgroundMusicAudioManager;
 import com.example.countingdowngame.wildCards.WildCardProperties;
 import com.example.countingdowngame.wildCards.WildCardType;
 import com.example.countingdowngame.wildCards.wildCardTypes.ExtrasWildCardsAdapter;
@@ -78,13 +78,13 @@ public class MainActivitySplitScreen extends SharedMainActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        AudioManager.getInstance().playSound(); // Start playing the sound
+        BackgroundMusicAudioManager.getInstance().playSound(); // Start playing the sound
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        AudioManager.getInstance().stopSound(); // Stop the sound
+        BackgroundMusicAudioManager.getInstance().stopSound(); // Stop the sound
     }
 
     @Override
@@ -154,7 +154,7 @@ public class MainActivitySplitScreen extends SharedMainActivity {
 
     private void startGame() {
         int soundResourceId = R.raw.cartoonloop;
-        AudioManager.getInstance().initialize(this, soundResourceId);
+        BackgroundMusicAudioManager.getInstance().initialize(this, soundResourceId);
 
         Bundle extras = getIntent().getExtras();
         if (extras == null) {

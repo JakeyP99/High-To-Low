@@ -10,6 +10,7 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowAnimationStyle">@style/ActivityTransitionAnimation</item>
+        <item name="android:keepScreenOn">true</item>
     </style>
 
     <style name="SwitchBlueDarkStyle" parent="Widget.AppCompat.CompoundButton.Switch">

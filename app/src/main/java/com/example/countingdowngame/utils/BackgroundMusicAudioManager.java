@@ -8,17 +8,18 @@ import com.example.countingdowngame.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-public class AudioManager {
-    private static AudioManager instance;
+public class BackgroundMusicAudioManager {
+    public static BackgroundMusicAudioManager instance;
     private MediaPlayer mediaPlayer;
     private int currentPosition = 0;
     private boolean isPlaying = false;
-    private List<Integer> backgroundMusicList;
-    private Random random = new Random();
+    private int currentSongIndex = -1;
+    private Context context;
 
-    private AudioManager() {
+    private final List<Integer> backgroundMusicList;
+
+    private BackgroundMusicAudioManager() {
         backgroundMusicList = new ArrayList<>();
         backgroundMusicList.add(R.raw.backgroundmusic1);
         backgroundMusicList.add(R.raw.backgroundmusic2);
@@ -26,9 +27,11 @@ public class AudioManager {
         backgroundMusicList.add(R.raw.backgroundmusic4);
     }
 
-    public static AudioManager getInstance() {
+    private final MediaPlayer.OnCompletionListener onCompletionListener = mp -> playNextSong();
+
+    public static BackgroundMusicAudioManager getInstance() {
         if (instance == null) {
-            instance = new AudioManager();
+            instance = new BackgroundMusicAudioManager();
         }
         return instance;
     }
@@ -51,16 +54,27 @@ public class AudioManager {
             mediaPlayer.release();
         }
 
-        int randomIndex = random.nextInt(backgroundMusicList.size());
-        int soundResourceId = backgroundMusicList.get(randomIndex);
+        currentSongIndex = (currentSongIndex + 1) % backgroundMusicList.size();
+        int soundResourceId = backgroundMusicList.get(currentSongIndex);
 
         mediaPlayer = MediaPlayer.create(context, soundResourceId);
+
         if (mediaPlayer != null) {
-            mediaPlayer.setLooping(true);
+            mediaPlayer.setLooping(false);  // Do not loop here
+            mediaPlayer.setOnCompletionListener(onCompletionListener);
             mediaPlayer.start();
             isPlaying = true;
         } else {
             Log.e("AudioManager", "Failed to create MediaPlayer");
+        }
+    }
+
+    private void playNextSong() {
+        if (isPlaying) {
+            if (mediaPlayer != null) {
+                mediaPlayer.release();
+            }
+            playRandomBackgroundMusic(context);
         }
     }
 
