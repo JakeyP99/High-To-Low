@@ -3,8 +3,9 @@ package com.example.countingdowngame.mainActivity;
 import android.os.Bundle;
 import android.widget.Button;
 
-import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.example.countingdowngame.R;
+import com.example.countingdowngame.utils.AudioManager;
+import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 public class HomeScreen extends ButtonUtilsActivity {
 
@@ -13,6 +14,8 @@ public class HomeScreen extends ButtonUtilsActivity {
         super.onCreate(savedInstanceState);
         setupView();
         setupButtonControls();
+
+        AudioManager.getInstance().playRandomBackgroundMusic(this);
     }
 
     private void setupView() {

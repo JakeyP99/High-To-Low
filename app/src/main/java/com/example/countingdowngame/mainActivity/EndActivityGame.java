@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.Player;
+import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class EndActivityGame extends ButtonUtilsActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a6_end_game);
+        AudioManager.getInstance().playRandomBackgroundMusic(this);
 
         //-----------------------------------------------------Initialize UI elements---------------------------------------------------//
 
