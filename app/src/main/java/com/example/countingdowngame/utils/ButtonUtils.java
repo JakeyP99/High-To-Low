@@ -113,6 +113,11 @@ public class ButtonUtils {
 
         button.setOnClickListener(view -> {
             if (buttonAction != null) {
+                button.setEnabled(false);
+
+                new Handler().postDelayed(() -> {
+                    button.setEnabled(true); // Re-enable the button
+                }, 1000);
                 buttonAction.run();
             }
             vibrateDevice();
