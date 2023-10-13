@@ -543,7 +543,7 @@ public class MainActivityGame extends SharedMainActivity {
                 int delayMillis = 1;
                 handler.postDelayed(currentPlayer::useSkip, delayMillis);
             } else if (soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {
-                showDialog("Sorry" + currentPlayer.getName() + " a soldier has already escaped the game.");
+                showDialog("Sorry " + currentPlayer.getName() + ", a soldier has already escaped the game.");
             }
         }
     }
