@@ -232,18 +232,18 @@ public class MainActivityGame extends SharedMainActivity {
         btnUtils.setButton(btnGenerate, () -> {
             startNumberShuffleAnimation();
             isFirstTurn = false;
-        });
+        }, this);
 
         playerImage.setOnClickListener(v -> {
             setupPlayerImageClickListener(); // Corrected this line
         });
 
 
-        btnUtils.setButton(btnAnswer, this::showAnswer);
+        btnUtils.setButton(btnAnswer, this::showAnswer, this);
 
-        btnUtils.setButton(btnBackWild, this::wildCardContinue);
+        btnUtils.setButton(btnBackWild, this::wildCardContinue, this);
 
-        btnUtils.setButton(btnClassAbility, this::characterActiveAbilities);
+        btnUtils.setButton(btnClassAbility, this::characterActiveAbilities, this);
 
         btnUtils.setButton(btnWild, () -> {
             wildCardActivate(Game.getInstance().getCurrentPlayer());
@@ -254,7 +254,7 @@ public class MainActivityGame extends SharedMainActivity {
             nextPlayerText.setVisibility(View.INVISIBLE);
             numberText.setVisibility(View.INVISIBLE);
             isFirstTurn = false;
-        });
+        }, this);
 
         imageButtonExit.setOnClickListener(view -> {
             Game.getInstance().endGame(this);
@@ -855,13 +855,13 @@ public class MainActivityGame extends SharedMainActivity {
                     btnAnswerRight.setVisibility(View.INVISIBLE);
                     btnAnswerWrong.setVisibility(View.INVISIBLE);
                     quizAnswerView(currentPlayer.getName() + " since you got it right, give out a drink! \n\n P.S. You get to keep your wildcard too.");
-                });
+                }, this);
 
                 btnUtils.setButton(btnAnswerWrong, () -> {
                     btnAnswerRight.setVisibility(View.INVISIBLE);
                     btnAnswerWrong.setVisibility(View.INVISIBLE);
                     quizAnswerView(currentPlayer.getName() + " since you got it wrong, take a drink! \n\n P.S. Maybe read a book once in a while.");
-                });
+                }, this);
 
             } else {
                 wildActivityTextView.setText("No answer available");

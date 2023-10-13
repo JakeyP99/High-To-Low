@@ -43,13 +43,13 @@ public class DrawingPlayerModels extends ButtonUtilsActivity {
     }
 
     private void setupButtonListeners() {
-        btnUtils.setButton(btnSave, this::saveDrawing);
-        btnUtils.setButton(btnCancel, this::cancelDrawing);
+        btnUtils.setButton(btnSave, this::saveDrawing, this);
+        btnUtils.setButton(btnCancel, this::cancelDrawing, this);
         btnUtils.setButton(colorButton, () -> {
             showColorPickerDialog();
             setDefaultPenSize();
-        });
-        btnUtils.setButton(eraserButton, this::toggleEraserMode);
+        }, this);
+        btnUtils.setButton(eraserButton, this::toggleEraserMode, this);
     }
     //-----------------------------------------------------Seekbar Functionality---------------------------------------------------//
     private void setupSeekBarListener () {

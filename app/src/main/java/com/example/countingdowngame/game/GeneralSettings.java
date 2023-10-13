@@ -191,7 +191,7 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
                     }
                 }
             }
-        });
+        }, this);
 
         btnMute.setOnClickListener(this);
         //copyout

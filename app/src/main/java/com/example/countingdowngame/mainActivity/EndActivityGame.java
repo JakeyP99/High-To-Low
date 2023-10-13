@@ -18,6 +18,7 @@ public class EndActivityGame extends ButtonUtilsActivity {
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         gotoHomeScreen();
     }
 
@@ -57,7 +58,7 @@ public class EndActivityGame extends ButtonUtilsActivity {
         btnUtils.setButton(btnPlayAgain, () -> {
             Game.getInstance().resetPlayers(this);
             gotoGameStart();
-        });
-        btnUtils.setButton(btnNewPlayer, this::gotoGameSetup);
+        }, this);
+        btnUtils.setButton(btnNewPlayer, this::gotoGameSetup, this);
     }
 }
