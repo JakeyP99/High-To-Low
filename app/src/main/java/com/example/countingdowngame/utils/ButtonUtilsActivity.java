@@ -8,8 +8,8 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.countingdowngame.mainActivity.EndActivityGame;
 import com.example.countingdowngame.instructions.InstructionsToPlay;
+import com.example.countingdowngame.mainActivity.EndActivityGame;
 import com.example.countingdowngame.mainActivity.HomeScreen;
 import com.example.countingdowngame.mainActivity.NumberChoice;
 import com.example.countingdowngame.mainActivity.PlayerNumberChoice;

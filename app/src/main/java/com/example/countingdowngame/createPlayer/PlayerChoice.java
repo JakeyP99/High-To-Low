@@ -144,7 +144,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
 
     private void setupDrawButton() {
         Button drawButton = findViewById(R.id.createPlayerBtn);
-        btnUtils.setButton(drawButton, this::chooseCharacterCreation);
+        btnUtils.setButton(drawButton, this::chooseCharacterCreation, this);
     }
 
     //-----------------------------------------------------Choose the player class---------------------------------------------------//
@@ -287,7 +287,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
                 startActivity(intent);
             }
 
-        });
+        }, this);
     }
 
     //-----------------------------------------------------Image and player creation functionality---------------------------------------------------//

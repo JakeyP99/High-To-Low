@@ -23,9 +23,9 @@ public class HomeScreen extends ButtonUtilsActivity {
         Button btnQuickPlay = findViewById(R.id.quickplay);
         Button btnInstructions = findViewById(R.id.button_Instructions);
         Button btnSettings = findViewById(R.id.button_Settings);
-        btnUtils.setButton(btnQuickPlay, this::gotoGameSetup);
-        btnUtils.setButton(btnInstructions, this::gotoInstructions);
-        btnUtils.setButton(btnSettings, this::gotoSettings);
+        btnUtils.setButton(btnQuickPlay, this::gotoGameSetup, this);
+        btnUtils.setButton(btnInstructions, this::gotoInstructions, this);
+        btnUtils.setButton(btnSettings, this::gotoSettings, this);
     }
 }
 

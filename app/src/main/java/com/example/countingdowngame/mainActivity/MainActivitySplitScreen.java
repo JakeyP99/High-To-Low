@@ -190,16 +190,16 @@ public class MainActivitySplitScreen extends SharedMainActivity {
         setPairedViewsInvisible(btnContinue, btnContinuePlayer2, btnAnswer, btnAnswerPlayer2,
                 btnAnswerRight, btnAnswerRightPlayer2, btnAnswerWrong, btnAnswerWrongPlayer2);
 
-        btnUtils.setButton(btnAnswer, this::showAnswer);
-        btnUtils.setButton(btnAnswerPlayer2, this::showAnswer);
+        btnUtils.setButton(btnAnswer, this::showAnswer, this);
+        btnUtils.setButton(btnAnswerPlayer2, this::showAnswer, this);
 
-        btnUtils.setButton(btnGenerate, this::ButtonGenerateFunction);
-        btnUtils.setButton(btnWild, this::ButtonWildFunction);
+        btnUtils.setButton(btnGenerate, this::ButtonGenerateFunction, this);
+        btnUtils.setButton(btnWild, this::ButtonWildFunction, this);
 
-        btnUtils.setButton(btnContinue, this::ButtonContinueFunction);
-        btnUtils.setButton(btnGeneratePlayer2, this::ButtonGenerateFunction);
-        btnUtils.setButton(btnWildPlayer2, this::ButtonWildFunction);
-        btnUtils.setButton(btnContinuePlayer2, this::ButtonContinueFunction);
+        btnUtils.setButton(btnContinue, this::ButtonContinueFunction, this);
+        btnUtils.setButton(btnGeneratePlayer2, this::ButtonGenerateFunction, this);
+        btnUtils.setButton(btnWildPlayer2, this::ButtonWildFunction, this);
+        btnUtils.setButton(btnContinuePlayer2, this::ButtonContinueFunction, this);
 
         imageButtonExit.setOnClickListener(view -> {
             Game.getInstance().endGame(this);
@@ -560,10 +560,10 @@ public class MainActivitySplitScreen extends SharedMainActivity {
                 Log.d("Answer", "Quiz WildCard:" + answer);
 
                 setPairedViewsInvisible(btnContinue, btnContinuePlayer2);
-                btnUtils.setButton(btnAnswerRight, this::quizAnswerRight);
-                btnUtils.setButton(btnAnswerRightPlayer2, this::quizAnswerRight);
-                btnUtils.setButton(btnAnswerWrong, this::quizAnswerWrong);
-                btnUtils.setButton(btnAnswerWrongPlayer2, this::quizAnswerWrong);
+                btnUtils.setButton(btnAnswerRight, this::quizAnswerRight, this);
+                btnUtils.setButton(btnAnswerRightPlayer2, this::quizAnswerRight, this);
+                btnUtils.setButton(btnAnswerWrong, this::quizAnswerWrong, this);
+                btnUtils.setButton(btnAnswerWrongPlayer2, this::quizAnswerWrong, this);
 
             } else {
                 wildActivityTextView.setText("No answer available");

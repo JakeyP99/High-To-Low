@@ -2,14 +2,17 @@ package com.example.countingdowngame.utils;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Build;
+import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.MotionEvent;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -86,7 +89,7 @@ public class ButtonUtils {
     //-----------------------------------------------------Onclick Functionality---------------------------------------------------//
 
     @SuppressLint("ClickableViewAccessibility")
-    public void setButton(final Button button, final Runnable buttonAction) {
+    public void setButton(final Button button, final Runnable buttonAction, final Activity activity) {
         if (button == null) {
             return;
         }
@@ -114,6 +117,17 @@ public class ButtonUtils {
             }
             vibrateDevice();
             playSoundEffects();
+
+            // Set FLAG_NOT_TOUCHABLE using the provided activity's window
+            activity.getWindow().setFlags(
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+            );
+
+            // Use a Handler to clear the flags after 2 seconds
+            new Handler().postDelayed(() -> {
+                activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }, 500); // 2000 milliseconds (2 seconds)
         });
     }
 

@@ -29,7 +29,7 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
         originalPlayerField = findViewById(R.id.EditTextViewplayernumber);
         btnSubmitPlayers = findViewById(R.id.btnSubmitPlayers);
 
-        btnUtils.setButton(btnSubmitPlayers, this::submitPlayerNumber);
+        btnUtils.setButton(btnSubmitPlayers, this::submitPlayerNumber, this);
     }
 
     @Override
