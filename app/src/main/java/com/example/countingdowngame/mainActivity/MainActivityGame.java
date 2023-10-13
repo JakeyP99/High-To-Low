@@ -29,7 +29,7 @@ import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.GameEventType;
 import com.example.countingdowngame.game.Player;
 import com.example.countingdowngame.stores.PlayerModelLocalStore;
-import com.example.countingdowngame.utils.BackgroundMusicAudioManager;
+import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.wildCards.WildCardProperties;
 import com.example.countingdowngame.wildCards.WildCardType;
 import com.example.countingdowngame.wildCards.wildCardTypes.ExtrasWildCardsAdapter;
@@ -86,13 +86,13 @@ public class MainActivityGame extends SharedMainActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        BackgroundMusicAudioManager.getInstance().playSound(); // Start playing the sound
+        AudioManager.getInstance().playSound(); // Start playing the sound
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        BackgroundMusicAudioManager.getInstance().stopSound(); // Stop the sound
+        AudioManager.getInstance().stopSound(); // Stop the sound
     }
 
     @Override
@@ -141,8 +141,9 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void startGame() {
         drinkNumberCounterInt = 0;
+        AudioManager.getInstance().stopSound();
         int soundResourceId = R.raw.cartoonloop;
-        BackgroundMusicAudioManager.getInstance().initialize(this, soundResourceId);
+        AudioManager.getInstance().initialize(this, soundResourceId);
 
         Bundle extras = getIntent().getExtras();
         if (extras == null) {

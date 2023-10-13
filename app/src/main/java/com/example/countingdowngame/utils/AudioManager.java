@@ -9,8 +9,8 @@ import com.example.countingdowngame.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BackgroundMusicAudioManager {
-    public static BackgroundMusicAudioManager instance;
+public class AudioManager {
+    private static AudioManager instance;
     private MediaPlayer mediaPlayer;
     private int currentPosition = 0;
     private boolean isPlaying = false;
@@ -19,7 +19,7 @@ public class BackgroundMusicAudioManager {
 
     private final List<Integer> backgroundMusicList;
 
-    private BackgroundMusicAudioManager() {
+    private AudioManager() {
         backgroundMusicList = new ArrayList<>();
         backgroundMusicList.add(R.raw.backgroundmusic1);
         backgroundMusicList.add(R.raw.backgroundmusic2);
@@ -29,9 +29,9 @@ public class BackgroundMusicAudioManager {
 
     private final MediaPlayer.OnCompletionListener onCompletionListener = mp -> playNextSong();
 
-    public static BackgroundMusicAudioManager getInstance() {
+    public static AudioManager getInstance() {
         if (instance == null) {
-            instance = new BackgroundMusicAudioManager();
+            instance = new AudioManager();
         }
         return instance;
     }
@@ -53,14 +53,13 @@ public class BackgroundMusicAudioManager {
         if (mediaPlayer != null) {
             mediaPlayer.release();
         }
-
         currentSongIndex = (currentSongIndex + 1) % backgroundMusicList.size();
         int soundResourceId = backgroundMusicList.get(currentSongIndex);
 
         mediaPlayer = MediaPlayer.create(context, soundResourceId);
 
         if (mediaPlayer != null) {
-            mediaPlayer.setLooping(false);  // Do not loop here
+            mediaPlayer.setLooping(false);
             mediaPlayer.setOnCompletionListener(onCompletionListener);
             mediaPlayer.start();
             isPlaying = true;
@@ -71,12 +70,26 @@ public class BackgroundMusicAudioManager {
 
     private void playNextSong() {
         if (isPlaying) {
+            // Increment the currentSongIndex and make sure it wraps around to the first song
+            currentSongIndex = (currentSongIndex + 1) % backgroundMusicList.size();
+
             if (mediaPlayer != null) {
                 mediaPlayer.release();
             }
-            playRandomBackgroundMusic(context);
+
+            int soundResourceId = backgroundMusicList.get(currentSongIndex);
+            mediaPlayer = MediaPlayer.create(context, soundResourceId);
+
+            if (mediaPlayer != null) {
+                mediaPlayer.setLooping(false);
+                mediaPlayer.setOnCompletionListener(onCompletionListener);
+                mediaPlayer.start();
+            } else {
+                Log.e("AudioManager", "Failed to create MediaPlayer");
+            }
         }
     }
+
 
     public void playSound() {
         if (mediaPlayer != null && !isPlaying) {
