@@ -27,7 +27,7 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
 
         originalPlayerField = findViewById(R.id.EditTextViewplayernumber);
         btnSubmitPlayers = findViewById(R.id.btnSubmitPlayers);
-        btnUtils.setButton(btnSubmitPlayers, this::submitPlayerNumber, this);
+        btnUtils.setButton(btnSubmitPlayers, this::submitPlayerNumber);
 
 
     }

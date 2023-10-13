@@ -29,8 +29,8 @@ public class NumberChoice extends ButtonUtilsActivity {
         btnSubmit = findViewById(R.id.btnSubmitNumbers);
         btnRandom = findViewById(R.id.btnRandomNumber);
         resetStartingNumber();
-        btnUtils.setButton(btnSubmit, this::onSubmitClicked, this);
-        btnUtils.setButton(btnRandom, this::onRandomClicked, this);
+        btnUtils.setButton(btnSubmit, this::onSubmitClicked);
+        btnUtils.setButton(btnRandom, this::onRandomClicked);
     }
 
     private void onSubmitClicked() {
