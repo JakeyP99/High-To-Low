@@ -127,7 +127,7 @@ public class ButtonUtils {
             // Use a Handler to clear the flags after 2 seconds
             new Handler().postDelayed(() -> {
                 activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            }, 500); // 2000 milliseconds (2 seconds)
+            }, 800); // 2000 milliseconds (2 seconds)
         });
     }
 

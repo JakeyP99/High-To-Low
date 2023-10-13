@@ -16,7 +16,6 @@ import android.graphics.Matrix;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Html;
 import android.text.InputType;
@@ -276,11 +275,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
                     }
                 }
 
-                proceedButton.setEnabled(false);
-                final long delayMillis = 3000;
-                new Handler().postDelayed(() -> {
-                    proceedButton.setEnabled(true);
-                }, delayMillis);
+
                 PlayerModelLocalStore.fromContext(this).saveSelectedPlayers(selectedPlayers);
                 Intent intent = new Intent(this, NumberChoice.class);
                 intent.putStringArrayListExtra("playerNames", selectedPlayerNames);
