@@ -142,8 +142,13 @@ public class MainActivityGame extends SharedMainActivity {
     private void startGame() {
         drinkNumberCounterInt = 0;
         AudioManager.getInstance().stopSound();
+
         int soundResourceId = R.raw.cartoonloop;
         AudioManager.getInstance().initialize(this, soundResourceId);
+
+
+        AudioManager.getInstance().playSound();
+
 
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
