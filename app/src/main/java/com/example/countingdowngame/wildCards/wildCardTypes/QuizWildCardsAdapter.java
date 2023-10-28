@@ -1,5 +1,7 @@
 package com.example.countingdowngame.wildCards.wildCardTypes;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,7 +47,7 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
             if (existing != null) {
                 result = existing;
             } else {
-                result = new ArrayList();
+                result = new ArrayList<>();
             }
             result.add(props);
             groupedWildCardProps.put(props.getCategory(), result);
@@ -56,9 +58,12 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
     @NonNull
     @Override
     public WildCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.d(TAG, "WildCardViewHolder On Create and View Type = " + viewType);
+
         if (viewType == VIEW_TYPE_CATEGORY) {
             // Inflate the layout for a category view
             View categoryView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_quiz_category, parent, false);
+            Log.d(TAG, "View Type " + viewType + " and CategoryIndex " + categoryIndex);
             return new CategoryViewHolder(categoryView, categoryIndex);
         } else {
             // Inflate the layout for a quiz card view
@@ -74,6 +79,7 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
         var categoryOffset = getPositionCategoryOffset(position);
         int categoryIndex = categoryOffset.getIndex();
         String category = categoryNames[categoryIndex];
+        Log.d(TAG, "Int Position = " + position);
         if (holder instanceof CategoryViewHolder) {
             if (categoryIndex >= 0 && categoryIndex < categoryNames.length) {
                 // Bind category data to a CategoryViewHolder
