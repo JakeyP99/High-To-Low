@@ -52,8 +52,6 @@ public class WildCardProperties {
         this.enabled = enabled;
     }
 
-
-
     public int getProbability() {
         return probability;
     }

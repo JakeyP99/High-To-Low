@@ -1,5 +1,7 @@
 package com.example.countingdowngame.wildCards.wildCardTypes;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,11 +24,10 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
     // Constants for view types
     private static final int VIEW_TYPE_CATEGORY = 1;
     private static final int VIEW_TYPE_QUIZ_CARD = 2;
-    private static final int ItemsPerCategory = 50;
 
     // Map to track visibility of quiz categories
-    private final Map<Integer, CategoryVisibility> categoryVisibilityMap = new HashMap();
-    private final Map<String, ArrayList<WildCardProperties>> groupedWildCardProps = new HashMap();
+    private final Map<Integer, CategoryVisibility> categoryVisibilityMap = new HashMap<>();
+    private final Map<String, ArrayList<WildCardProperties>> groupedWildCardProps = new HashMap<>();
 
     // Array of category names
     private final String[] categoryNames = {"Science", "Geography", "History", "Art/Music", "Sport", "Movies", "Video Games"};
@@ -46,7 +47,7 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
             if (existing != null) {
                 result = existing;
             } else {
-                result = new ArrayList();
+                result = new ArrayList<>();
             }
             result.add(props);
             groupedWildCardProps.put(props.getCategory(), result);
@@ -57,10 +58,13 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
     @NonNull
     @Override
     public WildCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.d(TAG, "WildCardViewHolder On Create and View Type = " + viewType);
+
         if (viewType == VIEW_TYPE_CATEGORY) {
             // Inflate the layout for a category view
             View categoryView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_quiz_category, parent, false);
             int categoryIndex = getCategoryIndexForViewType(viewType);
+            Log.d(TAG, "View Type " + viewType + " and CategoryIndex " + categoryIndex);
             return new CategoryViewHolder(categoryView, categoryIndex);
         } else {
             // Inflate the layout for a quiz card view
@@ -77,6 +81,7 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
     // Bind data to a ViewHolder and handle user interactions
     @Override
     public void onBindViewHolder(@NonNull WildCardViewHolder holder, int position) {
+        Log.d(TAG, "Int Position = " + position);
         int categoryIndex = getCategoryIndexForPosition(position);
         if (holder instanceof CategoryViewHolder) {
             if (categoryIndex >= 0 && categoryIndex < categoryNames.length) {
@@ -109,7 +114,7 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
 
     // Get the category index for a given position
     private int getCategoryIndexForPosition(int position) {
-        return position / (ItemsPerCategory + 1);
+        return position / (50);
     }
 
     // Get the quiz card index for a given position
@@ -126,7 +131,7 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
             if (categoryVisibility[i]) {
                 visibleCount += 1; // Add the category itself
                 if (categoryVisibility[i]) {
-                    visibleCount += ItemsPerCategory; // Add the visible items under the category
+                    visibleCount += 50; // Add the visible items under the category
                 }
             }
         }
@@ -141,7 +146,7 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
 
     // Check if a position is a category divider
     private boolean isCategoryDividerPosition(int position) {
-        return position % (ItemsPerCategory + 1) == 0;
+        return position % (50 + 1) == 0;
     }
 
     // Get the visibility status for a category

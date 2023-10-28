@@ -34,7 +34,6 @@ public class WildCardData {
             new WildCardProperties("Quiz! What is the largest moon in the solar system?", 10, true, true, "Ganymede", "Science"),
             new WildCardProperties("Quiz! What is the freezing point of water in Celsius?", 10, true, true, "0", "Science"),
             new WildCardProperties("Quiz! Who discovered the law of gravity?", 10, true, true, "Isaac Newton", "Science"),
-            new WildCardProperties("Quiz! What is the chemical formula for glucose?", 10, true, true, "C6H12O6", "Science"),
             new WildCardProperties("Quiz! Who invented the first practical telephone?", 10, true, true, "Alexander Graham Bell", "Science"),
             new WildCardProperties("Quiz! What is the chemical symbol for sodium on the periodic table?", 10, true, true, "Na", "Science"),
             new WildCardProperties("Quiz! What is the process by which plants release water vapor through their leaves?", 10, true, true, "Transpiration", "Science"),
@@ -259,12 +258,12 @@ public class WildCardData {
             new WildCardProperties("Quiz! Who is the all-time leading goal scorer in the history of the NBA?", 10, true, true, "Kareem Abdul-Jabbar", "Sport"),
             new WildCardProperties("Quiz! Which country hosted the 2019 ICC Cricket World Cup?", 10, true, true, "England", "Sport"),
             new WildCardProperties("Quiz! How many players are there on a rugby union team?", 10, true, true, "15", "Sport"),
-            new WildCardProperties("Quiz! Who won the Formula 1 Drivers' World Championship in 1021?", 10, true, true, "Lewis Hamilton", "Sport"),
+            new WildCardProperties("Quiz! Who won the Formula 1 Drivers' World Championship in 2021?", 10, true, true, "Lewis Hamilton", "Sport"),
             new WildCardProperties("Quiz! In which city is the headquarters of the International Olympic Committee (IOC) located?", 10, true, true, "Lausanne", "Sport"),
             new WildCardProperties("Quiz! Which country has won the most FIFA Women's World Cup titles?", 10, true, true, "United States", "Sport"),
             new WildCardProperties("Quiz! What is the name of the famous horse race that takes place annually in the United Kingdom?", 10, true, true, "The Grand National", "Sport"),
             new WildCardProperties("Quiz! Who is the only tennis player to achieve the Golden Slam (winning all four Grand Slam titles and Olympic gold)?", 10, true, true, "Steffi Graf", "Sport"),
-            new WildCardProperties("Quiz! Which team has won the most Super Bowl championships in NFL history?", 10, true, true, "Pittsburgh Steelers", "Sport"),
+            new WildCardProperties("Quiz! Which team has won the most Super Bowl championships in NFL history?", 10, true, true, "New England Patriots", "Sport"),
             new WildCardProperties("Quiz! What sport did Lola Bunny play in Space Jam?", 10, true, true, "Basketball", "Sport"),
 
             // Movies
@@ -367,11 +366,10 @@ public class WildCardData {
             new WildCardProperties("Quiz! Which video game series follows the adventures of a young man named Link, who must rescue Princess Zelda from the evil villain Ganon?", 10, true, true, "The Legend of Zelda", "Video Games"),
             new WildCardProperties("Quiz! What is the name of the main antagonist in the 'Assassin's Creed' series, an ancient organization seeking control over humanity?", 10, true, true, "The Templars (Order of the Knights Templar)", "Video Games"),
             new WildCardProperties("Quiz! In the game 'Final Fantasy VII', what is the name of the villain who seeks to destroy the planet by summoning a meteor?", 10, true, true, "Sephiroth", "Video Games"),
-            new WildCardProperties("Quiz! Which video game series features a protagonist named Ezio Auditore da Firenze, who seeks revenge against the Templar Order?", 10, true, true, "Assassin's Creed II", "Video Games"),
+            new WildCardProperties("Quiz! Which video game series features a protagonist named Ezio Auditore da Firenze, who seeks revenge against the Templar Order?", 10, true, true, "Assassin's Creed", "Video Games"),
             new WildCardProperties("Quiz! What is the name of the AI companion that assists the player in 'Half-Life 2' and becomes a key character in the series?", 10, true, true, "Alyx Vance", "Video Games"),
             new WildCardProperties("Quiz! In the game 'The Last of Us', what is the name of the fungal infection that has devastated the world and turned humans into hostile creatures?", 10, true, true, "Cordyceps Brain Infection (CBI)", "Video Games"),
-            new WildCardProperties("Quiz! Which video game series involves a fictional war between the Helghan Empire and the Interplanetary Strategic Alliance?", 10, true, true, "Killzone", "Video Games")
-
+            new WildCardProperties("Quiz! Which video game series involves a fictional war between the Helghan Empire and the Interplanetary Strategic Alliance?", 10, true, true, "Killzone", "Video Games"),
 
     };
 
