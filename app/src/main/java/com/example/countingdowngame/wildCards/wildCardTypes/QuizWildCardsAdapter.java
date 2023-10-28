@@ -13,6 +13,7 @@ import com.example.countingdowngame.R;
 import com.example.countingdowngame.wildCards.WildCardProperties;
 import com.example.countingdowngame.wildCards.WildCardType;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +25,8 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
     private static final int ItemsPerCategory = 50;
 
     // Map to track visibility of quiz categories
-    private final Map<Integer, CategoryVisibility> categoryVisibilityMap = new HashMap<>();
+    private final Map<Integer, CategoryVisibility> categoryVisibilityMap = new HashMap();
+    private final Map<String, ArrayList<WildCardProperties>> groupedWildCardProps = new HashMap();
 
     // Array of category names
     private final String[] categoryNames = {"Science", "Geography", "History", "Art/Music", "Sport", "Movies", "Video Games"};
@@ -38,6 +40,17 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
         super("QuizPrefs", quizWildCards, context, mode);
         // Initialize the categoryVisibility array with 'true'
         Arrays.fill(categoryVisibility, true);
+        for (WildCardProperties props : quizWildCards) {
+            var existing = groupedWildCardProps.get(props.getCategory());
+            ArrayList<WildCardProperties> result;
+            if (existing != null) {
+                result = existing;
+            } else {
+                result = new ArrayList();
+            }
+            result.add(props);
+            groupedWildCardProps.put(props.getCategory(), result);
+        }
     }
 
     // Create a ViewHolder for a specific view type
