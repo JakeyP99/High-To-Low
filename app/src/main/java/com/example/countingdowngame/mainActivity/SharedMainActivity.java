@@ -121,25 +121,6 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         });
     }
 
-    public void showClassDesciptionDialog(String text) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-
-        View dialogView = inflater.inflate(R.layout.mainactivity_dialog_box, null);
-        TextView dialogTextView = dialogView.findViewById(R.id.dialogbox_textview);
-
-        dialogTextView.setText(text);
-
-        builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-        ImageButton closeButton = dialogView.findViewById(R.id.close_button);
-        closeButton.setOnClickListener(v -> {
-            dialog.dismiss();
-        });
-    }
-
 
     public static void splitScreenSetTextViewSizeBasedOnInt(TextView textView, String text) {
         int defaultTextSize = 65;

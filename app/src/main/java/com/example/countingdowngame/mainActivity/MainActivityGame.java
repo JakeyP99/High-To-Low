@@ -610,6 +610,7 @@ public class MainActivityGame extends SharedMainActivity {
     //-----------------------------------------------------Wild Card Functionality---------------------------------------------------//
     private void wildCardActivate(Player player) {
         Game.getInstance().getCurrentPlayer().useWildCard();
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
 
         WildCardProperties[] emptyProbabilitiesArray = new WildCardProperties[0];
         QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.QUIZ);
@@ -804,6 +805,8 @@ public class MainActivityGame extends SharedMainActivity {
             case "Reverse the turn order!":
                 Log.d("WildCard", "wildCardActivate: Reverse Turn");
                 reverseTurnOrder(player);
+                currentPlayer.useSkip();
+
                 break;
             case "Gain a couple more wildcards to use, I gotchya back!":
                 Game.getInstance().getCurrentPlayer().gainWildCards(3);
