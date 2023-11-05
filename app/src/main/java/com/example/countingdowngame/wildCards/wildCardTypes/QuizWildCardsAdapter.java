@@ -26,8 +26,8 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
     private static final int VIEW_TYPE_QUIZ_CARD = 2;
 
     // Map to track visibility of quiz categories
-    private final Map<Integer, CategoryVisibility> categoryVisibilityMap = new HashMap<>();
-    private final Map<String, ArrayList<WildCardProperties>> groupedWildCardProps = new HashMap<>();
+    private final Map<String, CategoryVisibility> categoryVisibilityMap = new HashMap();
+    private final Map<String, ArrayList<WildCardProperties>> groupedWildCardProps = new HashMap();
 
     // Array of category names
     private final String[] categoryNames = {"Science", "Geography", "History", "Art/Music", "Sport", "Movies", "Video Games"};
@@ -63,7 +63,6 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
         if (viewType == VIEW_TYPE_CATEGORY) {
             // Inflate the layout for a category view
             View categoryView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_quiz_category, parent, false);
-            int categoryIndex = getCategoryIndexForViewType(viewType);
             Log.d(TAG, "View Type " + viewType + " and CategoryIndex " + categoryIndex);
             return new CategoryViewHolder(categoryView, categoryIndex);
         } else {
@@ -73,29 +72,27 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
         }
     }
 
-    // Get the category index for a given view type
-    private int getCategoryIndexForViewType(int viewType) {
-        return viewType - VIEW_TYPE_CATEGORY;
-    }
-
     // Bind data to a ViewHolder and handle user interactions
     @Override
     public void onBindViewHolder(@NonNull WildCardViewHolder holder, int position) {
+
+        var categoryOffset = getPositionCategoryOffset(position);
+        int categoryIndex = categoryOffset.getIndex();
+        String category = categoryNames[categoryIndex];
         Log.d(TAG, "Int Position = " + position);
-        int categoryIndex = getCategoryIndexForPosition(position);
         if (holder instanceof CategoryViewHolder) {
             if (categoryIndex >= 0 && categoryIndex < categoryNames.length) {
                 // Bind category data to a CategoryViewHolder
                 ((CategoryViewHolder) holder).bind(categoryNames[categoryIndex]);
             }
         } else {
-            int quizCardIndex = getQuizCardIndexForPosition(position);
+            int quizCardIndex = position - categoryOffset.getOffset();
             if (quizCardIndex >= 0 && quizCardIndex < wildCards.length) {
                 // Bind quiz card data to a QuizWildCardViewHolder and handle visibility
                 WildCardProperties wildCard = wildCards[quizCardIndex];
                 holder.bind(wildCard);
                 int positionWithOneBasedIndex = quizCardIndex + 1;
-                boolean isVisible = getCategoryVisibility(categoryIndex).isVisible();
+                boolean isVisible = getCategoryVisibility(category).isVisible();
                 holder.itemView.setVisibility(isVisible ? View.VISIBLE : View.GONE);
                 ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
                 params.height = isVisible ? ViewGroup.LayoutParams.WRAP_CONTENT : 0;
@@ -112,49 +109,70 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
         }
     }
 
-    // Get the category index for a given position
-    private int getCategoryIndexForPosition(int position) {
-        return position / (50);
-    }
-
-    // Get the quiz card index for a given position
-    private int getQuizCardIndexForPosition(int position) {
-        int categoryIndex = getCategoryIndexForPosition(position);
-        return position - categoryIndex - 1;
-    }
-
     // Get the total item count (including categories)
     @Override
     public int getItemCount() {
         int visibleCount = 0;
-        for (int i = 0; i < categoryNames.length; i++) {
-            if (categoryVisibility[i]) {
-                visibleCount += 1; // Add the category itself
-                if (categoryVisibility[i]) {
-                    visibleCount += 50; // Add the visible items under the category
-                }
+        for (String category : categoryNames) {
+            if (getCategoryVisibility(category).isVisible()) {
+                visibleCount += getCategoryProps(category).size();
             }
         }
         return visibleCount;
     }
 
+    private CategoryOffset getPositionCategoryOffset(int position) {
+        int offset = 0;
+        int index = 0;
+        for (String cursor : categoryNames) {
+            var count = getCategoryProps(cursor).size();
+            if (position > count + offset) {
+                index += 1;
+                offset += count;
+            } else {
+                break;
+            }
+        }
+        return new CategoryOffset(index, offset);
+    }
+
+    private class CategoryOffset {
+        private int offset;
+        private int index;
+
+        public CategoryOffset(int index, int offset) {
+            this.offset = offset;
+            this.index = index;
+        }
+
+        public int getOffset() {
+            return offset;
+        }
+
+        public int getIndex() {
+            return index;
+        }
+    }
+
     // Get the view type for a given position
     @Override
     public int getItemViewType(int position) {
-        return isCategoryDividerPosition(position) ? VIEW_TYPE_CATEGORY : VIEW_TYPE_QUIZ_CARD;
-    }
-
-    // Check if a position is a category divider
-    private boolean isCategoryDividerPosition(int position) {
-        return position % (50 + 1) == 0;
+        return position - getPositionCategoryOffset(position).getOffset() == 0 ? VIEW_TYPE_CATEGORY : VIEW_TYPE_QUIZ_CARD;
     }
 
     // Get the visibility status for a category
-    private CategoryVisibility getCategoryVisibility(int categoryIndex) {
-        if (!categoryVisibilityMap.containsKey(categoryIndex)) {
-            categoryVisibilityMap.put(categoryIndex, new CategoryVisibility());
+    private CategoryVisibility getCategoryVisibility(String category) {
+        if (!categoryVisibilityMap.containsKey(category)) {
+            categoryVisibilityMap.put(category, new CategoryVisibility());
         }
-        return categoryVisibilityMap.get(categoryIndex);
+        return categoryVisibilityMap.get(category);
+    }
+
+    private ArrayList<WildCardProperties> getCategoryProps(String category) {
+        if (!groupedWildCardProps.containsKey(category)) {
+            groupedWildCardProps.put(category, new ArrayList<>());
+        }
+        return groupedWildCardProps.get(category);
     }
 
     // Class to represent the visibility status of a category
@@ -177,11 +195,11 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
     // ViewHolder for category views
     public class CategoryViewHolder extends WildCardViewHolder {
         private final TextView categoryTextView;
-        private int categoryIndex;
+        private String category;
 
-        public CategoryViewHolder(View itemView, int _categoryIndex) {
+        public CategoryViewHolder(View itemView, String _category) {
             super(itemView);
-            categoryIndex = _categoryIndex;
+            category = _category;
             categoryTextView = itemView.findViewById(R.id.text_category_title);
             View categoryBanner = itemView.findViewById(R.id.text_category_title);
             categoryBanner.setOnClickListener(v -> {
@@ -191,7 +209,7 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
 
         // Toggle the visibility of a category and refresh the adapter
         private void toggleCategoryVisibility() {
-            getCategoryVisibility(categoryIndex).toggleVisibility();
+            getCategoryVisibility(category).toggleVisibility();
             notifyDataSetChanged();
         }
 
