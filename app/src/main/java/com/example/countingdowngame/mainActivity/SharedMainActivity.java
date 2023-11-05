@@ -152,29 +152,54 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         }
     }
 
-        public static void reverseTurnOrder(Player player) {
-            Game game = Game.getInstance();
-            List<Player> players = game.getPlayers();
-            Collections.reverse(players);
+    //todo fix reverse turn
+    public static void reverseTurnOrder(Player player) {
+        Game currentGame = Game.getInstance();
+        List<Player> players = currentGame.getPlayers();
+        Collections.reverse(players);
 
-            int currentPlayerIndex = players.indexOf(player);
+        // Find the current player's index
+        int currentPlayerIndex = players.indexOf(player);
 
-            if (currentPlayerIndex != -1) {
-                int lastIndex = players.size() - 1;
-                int newIndex = lastIndex - currentPlayerIndex;
-
-                // Move the player to the new index
-                players.remove(currentPlayerIndex);
-                players.add(newIndex, player);
-
-                // Update the current player ID if necessary
-                if (game.getCurrentPlayer() == player) {
-                    game.setCurrentPlayerId(newIndex);
-                }
+        if (currentPlayerIndex != -1) {
+            // Calculate the new positions for all players
+            int numPlayers = players.size();
+            for (int i = 0; i < numPlayers; i++) {
+                int newPlayerIndex = (currentPlayerIndex + i) % numPlayers;
+                Player currentPlayer = players.get(newPlayerIndex);
+                currentPlayer.setPosition(i);
             }
 
-            game.setPlayerList(players);
+            // Log the updated order of players' turns
+            logTurnOrder(players);
+
+            // Update the current player's ID if necessary
+            int previousPlayerIndex = (currentPlayerIndex - 1 + numPlayers) % numPlayers;
+            currentGame.setCurrentPlayerId(previousPlayerIndex);
+
+            // Log the current player and the next player
+            Player currentPlayer = players.get(currentPlayerIndex);
+            int nextPlayerIndex = (currentPlayerIndex + 1) % numPlayers;
+            Player nextPlayer = players.get(nextPlayerIndex);
+
+            logCurrentAndNextPlayer(currentPlayer, nextPlayer);
         }
+
+        currentGame.setPlayerList(players);
+    }
+
+
+    private static void logTurnOrder(List<Player> players) {
+        System.out.println("Turn order:");
+        for (int i = 0; i < players.size(); i++) {
+            System.out.println("Player " + players.get(i).getName() + " - Position " + i);
+        }
+    }
+
+    private static void logCurrentAndNextPlayer(Player currentPlayer, Player nextPlayer) {
+        System.out.println("Current Player: " + currentPlayer.getName());
+        System.out.println("Next Player: " + nextPlayer.getName());
+    }
 
 
 }

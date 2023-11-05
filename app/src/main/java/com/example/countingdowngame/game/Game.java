@@ -86,9 +86,6 @@ public class Game {
     }
 
     public void nextPlayer() {
-        Log.d(TAG, "nextPlayer: It is now the next player " + Game.getInstance().getCurrentPlayer().getName());
-
-        // Check if the current player is the player who activated the Soldier class ability
         if (getCurrentPlayer() != repeatTurnPlayer) {
             currentPlayerId = (currentPlayerId + 1) % players.size();
         }

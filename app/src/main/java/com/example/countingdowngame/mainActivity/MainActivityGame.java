@@ -331,9 +331,9 @@ public class MainActivityGame extends SharedMainActivity {
         SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(currentNumber));
         SharedMainActivity.setNameSizeBasedOnInt(nextPlayerText, nextPlayerText.getText().toString());
 
-        Log.d("renderPlayer", "Current number is " + Game.getInstance().getCurrentNumber() + " - Player was rendered " +
-                currentPlayer.getName() + " is a " + currentPlayer.getClassChoice() + " with " + currentPlayer.getWildCardAmount() +
-                " Wildcards " + "and " + currentPlayer.usedClassAbility() + " is the class abilitiy and are they removed ?" + currentPlayer.isRemoved());
+        Log.d("renderPlayer", "Current number is " + Game.getInstance().getCurrentNumber() + " - " +
+                currentPlayer.getName() + " is a " + currentPlayer.getClassChoice() + " class, with " + currentPlayer.getWildCardAmount() +
+                " wildcards. Has he used his ability? " + currentPlayer.usedClassAbility() + " Are they removed from the game? " + currentPlayer.isRemoved());
     }
 
     private void startNumberShuffleAnimation() {
@@ -715,7 +715,7 @@ public class MainActivityGame extends SharedMainActivity {
                     .filter(WildCardProperties::isEnabled)
                     .count();
 
-            Log.d("SelectedTypeEnabledCount", "SelectedType Enabled Count: " + enabledCardsCount);
+            Log.d("SelectedTypeEnabledCount", "Wild card has been used, how many wildcards are in this category? " + enabledCardsCount);
 
             if (enabledCardsCount == 0) {
                 btnAnswer.setVisibility(View.INVISIBLE);
@@ -802,6 +802,7 @@ public class MainActivityGame extends SharedMainActivity {
                 SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(startingNumber));
                 break;
             case "Reverse the turn order!":
+                Log.d("WildCard", "wildCardActivate: Reverse Turn");
                 reverseTurnOrder(player);
                 break;
             case "Gain a couple more wildcards to use, I gotchya back!":

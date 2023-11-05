@@ -20,6 +20,7 @@ public class Player implements Serializable {
     private boolean usedClassAbility;
     private boolean removed;
 
+    private int position; // Add a position attribute to store the player's position in the turn order
 
     //-----------------------------------------------------Set Game---------------------------------------------------//
 
@@ -37,6 +38,14 @@ public class Player implements Serializable {
         this.removed = false;
         resetWildCardAmount(context);
         this.turnCounter = 0; // Initialize the turn counter to 0
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     public boolean isRemoved() {
