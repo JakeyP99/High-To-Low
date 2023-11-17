@@ -6,14 +6,21 @@ public class WildCardProperties {
     private boolean enabled;
     private final boolean deletable;
     private String answer;
+    private String wrongAnswer1;
+    private String wrongAnswer2;
+    private String wrongAnswer3;
+
     private final String category; // Add the category field
 
-    public WildCardProperties(String activity, int probability, boolean enabled, boolean deletable, String answer, String category) {
+    public WildCardProperties(String activity, int probability, boolean enabled, boolean deletable, String answer, String wrongAnswer1, String wrongAnswer2, String wrongAnswer3, String category) {
         this.activity = activity;
         this.probability = probability;
         this.enabled = enabled;
         this.deletable = deletable;
         this.answer = answer;
+        this.wrongAnswer1 = wrongAnswer1;
+        this.wrongAnswer2 = wrongAnswer2;
+        this.wrongAnswer3 = wrongAnswer3;
         this.category = category;
     }
 
