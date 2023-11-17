@@ -87,16 +87,16 @@
         android:layout_width="165dp"
         android:layout_height="100dp"
         android:background="@drawable/outlineforbutton"
-        android:visibility="invisible"
         android:fontFamily="@font/viga"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
         android:textSize="25sp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/btnClassAbility"
         app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.6" />
 
     <Button
         android:id="@+id/btnQuizAnswerTL"
@@ -114,7 +114,7 @@
         app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnGenerate"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.95" />
 
     <Button
         android:id="@+id/btnQuizAnswerBR"
@@ -123,13 +123,14 @@
         android:background="@drawable/outlineforbutton"
         android:fontFamily="@font/viga"
         android:textAllCaps="false"
-        android:visibility="invisible"
         android:textColor="@color/bluedark"
         android:textSize="25sp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/btnClassAbility"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guidelineCenter"
-        app:layout_constraintTop_toBottomOf="@+id/btnGenerate" />
+        app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
+        app:layout_constraintVertical_bias="0.6" />
 
 
     <Button
@@ -146,7 +147,8 @@
         app:layout_constraintBottom_toTopOf="@+id/btnQuizAnswerBR"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guidelineCenter"
-        app:layout_constraintTop_toTopOf="@+id/btnGenerate" />
+        app:layout_constraintTop_toTopOf="@+id/btnGenerate"
+        app:layout_constraintVertical_bias="0.95" />
 
     <Button
         android:id="@+id/btnAnswer"

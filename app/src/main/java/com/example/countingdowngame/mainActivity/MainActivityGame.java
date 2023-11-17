@@ -82,10 +82,11 @@ public class MainActivityGame extends SharedMainActivity {
     private Map<Player, Integer> playerTurnCountMap = new HashMap<>();
 
     public static int drinkNumberCounterInt = 0;
-    private WildCardProperties selectedWildCard; // Declare selectedWildCard at a higher level
     private Player firstPlayer;
     private boolean isFirstTurn = true;
     private boolean soldierRemoval = false;
+    public WildCardProperties selectedWildCard;
+
 
     //-----------------------------------------------------Lifecycle Methods---------------------------------------------------//
     @Override
@@ -717,7 +718,6 @@ public class MainActivityGame extends SharedMainActivity {
 
             }
             if (selectedType == quizProbabilities) {
-//                btnAnswer.setVisibility(View.VISIBLE);
                 btnBackWild.setVisibility(View.INVISIBLE);
             } else {
                 btnAnswer.setVisibility(View.INVISIBLE);
@@ -760,6 +760,7 @@ public class MainActivityGame extends SharedMainActivity {
 
             if (selectedCard != null) {
                 selectedActivity = selectedCard.getText();
+
                 wildActivityTextView.setText(selectedActivity);
                 assert usedCards != null;
                 usedCards.add(selectedCard);
@@ -771,42 +772,9 @@ public class MainActivityGame extends SharedMainActivity {
                 wildActivityTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
 
                 if (selectedCard.hasAnswer()) {
-                    btnQuizAnswerTL.setVisibility(View.VISIBLE);
-                    btnQuizAnswerTR.setVisibility(View.VISIBLE);
-                    btnQuizAnswerBL.setVisibility(View.VISIBLE);
-                    btnQuizAnswerBR.setVisibility(View.VISIBLE);
-
-                    String correctAnswer = selectedCard.getAnswer();
-                    String wrongAnswer1 = selectedCard.getWrongAnswer1();
-                    String wrongAnswer2 = selectedCard.getWrongAnswer2();
-                    String wrongAnswer3 = selectedCard.getWrongAnswer3();
-
-// Array to hold the answers
-                    String[] answers = {correctAnswer, wrongAnswer1, wrongAnswer2, wrongAnswer3};
-
-// Shuffle the answers randomly
-                    List<String> answerList = Arrays.asList(answers);
-                    Collections.shuffle(answerList);
-                    answers = answerList.toArray(new String[0]);
-
-// Assign answers to buttons randomly
-                    btnQuizAnswerTL.setText(answers[0]);
-                    btnQuizAnswerTR.setText(answers[1]);
-                    btnQuizAnswerBL.setText(answers[2]);
-                    btnQuizAnswerBR.setText(answers[3]);
-
-                    Log.d("wildcard", "Button TL: " + answers[0]);
-
-
-                    Log.d("AssignedAnswers", "Button TL: " + answers[0]);
-                    Log.d("AssignedAnswers", "Button TR: " + answers[1]);
-                    Log.d("AssignedAnswers", "Button BL: " + answers[2]);
-                    Log.d("AssignedAnswers", "Button BR: " + answers[3]);
-
-
-                } else {
-                    btnAnswer.setVisibility(View.INVISIBLE);
+                    setRandomizedAnswers(selectedCard);
                 }
+
             } else {
                 btnAnswer.setVisibility(View.INVISIBLE);
             }
@@ -862,6 +830,73 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
+    private void setRandomizedAnswers(WildCardProperties selectedCard) {
+        btnQuizAnswerTL.setVisibility(View.VISIBLE);
+        btnQuizAnswerTR.setVisibility(View.VISIBLE);
+        btnQuizAnswerBL.setVisibility(View.VISIBLE);
+        btnQuizAnswerBR.setVisibility(View.VISIBLE);
+
+
+        String correctAnswer = selectedCard.getAnswer();
+        String wrongAnswer1 = selectedCard.getWrongAnswer1();
+        String wrongAnswer2 = selectedCard.getWrongAnswer2();
+        String wrongAnswer3 = selectedCard.getWrongAnswer3();
+
+        // Array to hold the answers
+        String[] answers = {correctAnswer, wrongAnswer1, wrongAnswer2, wrongAnswer3};
+
+        // Shuffle the answers randomly
+        List<String> answerList = Arrays.asList(answers);
+        Collections.shuffle(answerList);
+        answers = answerList.toArray(new String[0]);
+
+        // Assign answers to buttons randomly
+        btnQuizAnswerTL.setText(answers[0]);
+        btnQuizAnswerTR.setText(answers[1]);
+        btnQuizAnswerBL.setText(answers[2]);
+        btnQuizAnswerBR.setText(answers[3]);
+
+
+        // Assuming btnQuizAnswerTL, btnQuizAnswerTR, btnQuizAnswerBL, btnQuizAnswerBR are your answer buttons
+
+        btnQuizAnswerTL.setOnClickListener(v -> {
+            String selectedAnswer = ((Button) v).getText().toString();
+            checkAnswerAndContinue(selectedCard, selectedAnswer);
+        });
+
+        btnQuizAnswerTR.setOnClickListener(v -> {
+            String selectedAnswer = ((Button) v).getText().toString();
+            checkAnswerAndContinue(selectedCard, selectedAnswer);
+        });
+
+        btnQuizAnswerBL.setOnClickListener(v -> {
+            String selectedAnswer = ((Button) v).getText().toString();
+            checkAnswerAndContinue(selectedCard, selectedAnswer);
+        });
+
+        btnQuizAnswerBR.setOnClickListener(v -> {
+            String selectedAnswer = ((Button) v).getText().toString();
+            checkAnswerAndContinue(selectedCard, selectedAnswer);
+        });
+    }
+
+    private void checkAnswerAndContinue(WildCardProperties selectedCard, String selectedAnswer) {
+        String correctAnswer = selectedCard.getAnswer(); // Assuming selectedCard is defined somewhere accessible
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+
+        if (selectedAnswer.equals(correctAnswer)) {
+            Game.getInstance().getCurrentPlayer().gainWildCards(1);
+            hideQuizButtons();
+            quizAnswerView(currentPlayer.getName() + " since you got it right, give out a drink! \n\n P.S. You get to keep your wildcard too.");
+            btnBackWild.setVisibility(View.VISIBLE);
+        } else {
+            hideQuizButtons();
+            quizAnswerView(currentPlayer.getName() + " since you got it wrong, take a drink! \n\n P.S. Maybe read a book once in a while.");
+            btnBackWild.setVisibility(View.VISIBLE);
+        }
+    }
+
+
     private void wildCardContinue() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         currentPlayer.useSkip();
@@ -889,6 +924,23 @@ public class MainActivityGame extends SharedMainActivity {
         numberText.setVisibility(View.INVISIBLE);
         wildText.setText(string);
     }
+
+    private void exposeQuizButtons() {
+        btnQuizAnswerBL.setVisibility(View.VISIBLE);
+        btnQuizAnswerBR.setVisibility(View.VISIBLE);
+        btnQuizAnswerTL.setVisibility(View.VISIBLE);
+        btnQuizAnswerTR.setVisibility(View.VISIBLE);
+
+    }
+
+    private void hideQuizButtons() {
+        btnQuizAnswerBL.setVisibility(View.INVISIBLE);
+        btnQuizAnswerBR.setVisibility(View.INVISIBLE);
+        btnQuizAnswerTL.setVisibility(View.INVISIBLE);
+        btnQuizAnswerTR.setVisibility(View.INVISIBLE);
+
+    }
+
 
     private void showAnswer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
