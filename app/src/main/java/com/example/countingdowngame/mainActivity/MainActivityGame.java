@@ -53,6 +53,8 @@ import io.github.muddz.styleabletoast.StyleableToast;
 
 public class MainActivityGame extends SharedMainActivity {
 
+    //TEST
+
     //-----------------------------------------------------Member Variables---------------------------------------------------//
 
     private TextView numberText;
