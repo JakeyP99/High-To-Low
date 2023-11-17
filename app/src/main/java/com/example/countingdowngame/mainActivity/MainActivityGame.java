@@ -66,8 +66,10 @@ public class MainActivityGame extends SharedMainActivity {
     private Button btnGenerate;
     private Button btnBackWild;
     private Button btnClassAbility;
-    private Button btnAnswerRight;
-    private Button btnAnswerWrong;
+    private Button btnQuizAnswerBL;
+    private Button btnQuizAnswerBR;
+    private Button btnQuizAnswerTR;
+    private Button btnQuizAnswerTL;
 
     private ImageView playerImage;
     private boolean doubleBackToExitPressedOnce = false;
@@ -130,12 +132,19 @@ public class MainActivityGame extends SharedMainActivity {
         drinkNumberCounterTextView = findViewById(R.id.textView_numberCounter);
         nextPlayerText = findViewById(R.id.textView_Number_Turn);
         btnWild = findViewById(R.id.btnWild);
+
         btnAnswer = findViewById(R.id.btnAnswer);
         btnClassAbility = findViewById(R.id.btnClassAbility);
         btnGenerate = findViewById(R.id.btnGenerate);
         btnBackWild = findViewById(R.id.btnBackWildCard);
-        btnAnswerRight = findViewById(R.id.btnGotQuizRight);
-        btnAnswerWrong = findViewById(R.id.btnGotQuizWrong);
+
+
+        btnQuizAnswerBL = findViewById(R.id.btnQuizAnswerBL);
+        btnQuizAnswerBR = findViewById(R.id.btnQuizAnswerBR);
+        btnQuizAnswerTL = findViewById(R.id.btnQuizAnswerTL);
+        btnQuizAnswerTR = findViewById(R.id.btnQuizAnswerTR);
+
+
         shuffleHandler = new Handler();
         wildText = findViewById(R.id.textView_WildText);
     }
@@ -234,8 +243,8 @@ public class MainActivityGame extends SharedMainActivity {
 
         btnBackWild.setVisibility(View.INVISIBLE);
         btnAnswer.setVisibility(View.INVISIBLE);
-        btnAnswerRight.setVisibility(View.INVISIBLE);
-        btnAnswerWrong.setVisibility(View.INVISIBLE);
+        btnQuizAnswerBL.setVisibility(View.INVISIBLE);
+        btnQuizAnswerBR.setVisibility(View.INVISIBLE);
 
         btnUtils.setButton(btnGenerate, () -> {
             startNumberShuffleAnimation();
@@ -671,6 +680,7 @@ public class MainActivityGame extends SharedMainActivity {
                             wildCardType = "Quiz";
                             foundWildCardType = true;
                             btnClassAbility.setVisibility(View.INVISIBLE);
+
                         }
                         break;
                     case 1:
@@ -706,7 +716,7 @@ public class MainActivityGame extends SharedMainActivity {
 
             }
             if (selectedType == quizProbabilities) {
-                btnAnswer.setVisibility(View.VISIBLE);
+//                btnAnswer.setVisibility(View.VISIBLE);
                 btnBackWild.setVisibility(View.INVISIBLE);
             } else {
                 btnAnswer.setVisibility(View.INVISIBLE);
@@ -762,7 +772,16 @@ public class MainActivityGame extends SharedMainActivity {
                 selectedWildCard = selectedCard; // Update selectedWildCard to the current selected card
 
                 if (selectedCard.hasAnswer()) {
-                    btnAnswer.setVisibility(View.VISIBLE);
+                    btnQuizAnswerTL.setVisibility(View.VISIBLE);
+                    btnQuizAnswerTR.setVisibility(View.VISIBLE);
+                    btnQuizAnswerBL.setVisibility(View.VISIBLE);
+                    btnQuizAnswerBR.setVisibility(View.VISIBLE);
+
+                    btnQuizAnswerTL.setText(selectedWildCard.getAnswer());
+                    btnQuizAnswerTR.setText(selectedWildCard.getAnswer());
+                    btnQuizAnswerBL.setText(selectedWildCard.getAnswer());
+                    btnQuizAnswerBR.setText(selectedWildCard.getAnswer());
+
                 } else {
                     btnAnswer.setVisibility(View.INVISIBLE);
                 }
@@ -827,8 +846,8 @@ public class MainActivityGame extends SharedMainActivity {
         wildText.setVisibility(View.INVISIBLE);
         btnBackWild.setVisibility(View.INVISIBLE);
         btnAnswer.setVisibility(View.INVISIBLE);
-        btnAnswerRight.setVisibility(View.INVISIBLE);
-        btnAnswerWrong.setVisibility(View.INVISIBLE);
+        btnQuizAnswerBL.setVisibility(View.INVISIBLE);
+        btnQuizAnswerBR.setVisibility(View.INVISIBLE);
     }
 
     //-----------------------------------------------------Quiz---------------------------------------------------//
@@ -847,8 +866,8 @@ public class MainActivityGame extends SharedMainActivity {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
 
         TextView wildActivityTextView = findViewById(R.id.textView_WildText);
-        btnAnswerRight.setVisibility(View.VISIBLE);
-        btnAnswerWrong.setVisibility(View.VISIBLE);
+        btnQuizAnswerBL.setVisibility(View.VISIBLE);
+        btnQuizAnswerBR.setVisibility(View.VISIBLE);
 
         if (selectedWildCard != null) {
             if (selectedWildCard.hasAnswer()) {
@@ -858,16 +877,16 @@ public class MainActivityGame extends SharedMainActivity {
 
                 btnBackWild.setVisibility(View.INVISIBLE);
 
-                btnUtils.setButton(btnAnswerRight, () -> {
+                btnUtils.setButton(btnQuizAnswerBL, () -> {
                     Game.getInstance().getCurrentPlayer().gainWildCards(1);
-                    btnAnswerRight.setVisibility(View.INVISIBLE);
-                    btnAnswerWrong.setVisibility(View.INVISIBLE);
+                    btnQuizAnswerBL.setVisibility(View.INVISIBLE);
+                    btnQuizAnswerBR.setVisibility(View.INVISIBLE);
                     quizAnswerView(currentPlayer.getName() + " since you got it right, give out a drink! \n\n P.S. You get to keep your wildcard too.");
                 });
 
-                btnUtils.setButton(btnAnswerWrong, () -> {
-                    btnAnswerRight.setVisibility(View.INVISIBLE);
-                    btnAnswerWrong.setVisibility(View.INVISIBLE);
+                btnUtils.setButton(btnQuizAnswerBR, () -> {
+                    btnQuizAnswerBL.setVisibility(View.INVISIBLE);
+                    btnQuizAnswerBR.setVisibility(View.INVISIBLE);
                     quizAnswerView(currentPlayer.getName() + " since you got it wrong, take a drink! \n\n P.S. Maybe read a book once in a while.");
                 });
 

@@ -47,6 +47,19 @@ public class WildCardProperties {
         return answer;
     }
 
+    public String getWrongAnswer1() {
+        return wrongAnswer1;
+    }
+
+    public String getWrongAnswer2() {
+        return wrongAnswer2;
+    }
+
+    public String getWrongAnswer3() {
+        return wrongAnswer3;
+    }
+
+
     public String getCategory() {
         return category;
     }

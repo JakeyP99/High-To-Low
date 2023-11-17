@@ -82,7 +82,7 @@ public class WildCardsFragments extends Fragment {
                 return;
             }
 
-            WildCardProperties newWildCard = new WildCardProperties(text, probability, true, true, null, null);
+            WildCardProperties newWildCard = new WildCardProperties(text, probability, true, true, null, null, null, null, null);
 
             saveNewWildCard(newWildCard);
 
@@ -127,9 +127,13 @@ public class WildCardsFragments extends Fragment {
         for (int i = 0; i < count; i++) {
             String text = sharedPreferences.getString("wildcard_text_" + (i + 1), "");
             String answer = sharedPreferences.getString("wildcard_answer_" + (i + 1), ""); // Use the correct key for answer
+            String wrongAnswer1 = sharedPreferences.getString("wildcard_wronganswer1_" + (i + 1), "");
+            String wrongAnswer2 = sharedPreferences.getString("wildcard_wronganswer2_" + (i + 1), "");
+            String wrongAnswer3 = sharedPreferences.getString("wildcard_wronganswer3_" + (i + 1), "");
+
             int probability = sharedPreferences.getInt("wildcard_probability_" + (i + 1), 10);
             String category = sharedPreferences.getString("wildcard_category_" + (i + 1), ""); // Use the correct key for category
-            newWildCards[i] = new WildCardProperties(text, probability, true, true, answer, category);
+            newWildCards[i] = new WildCardProperties(text, probability, true, true, answer, wrongAnswer1, wrongAnswer2, wrongAnswer3, category);
         }
 
         adapter.setWildCards(newWildCards);
