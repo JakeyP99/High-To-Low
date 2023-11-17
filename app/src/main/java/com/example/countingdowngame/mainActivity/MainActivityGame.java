@@ -40,6 +40,7 @@ import com.example.countingdowngame.wildCards.wildCardTypes.WildCardData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -769,18 +770,39 @@ public class MainActivityGame extends SharedMainActivity {
                 int textSize = TextSizeCalculator.calculateTextSizeBasedOnCharacterCount(selectedActivity);
                 wildActivityTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
 
-                selectedWildCard = selectedCard; // Update selectedWildCard to the current selected card
-
                 if (selectedCard.hasAnswer()) {
                     btnQuizAnswerTL.setVisibility(View.VISIBLE);
                     btnQuizAnswerTR.setVisibility(View.VISIBLE);
                     btnQuizAnswerBL.setVisibility(View.VISIBLE);
                     btnQuizAnswerBR.setVisibility(View.VISIBLE);
 
-                    btnQuizAnswerTL.setText(selectedWildCard.getAnswer());
-                    btnQuizAnswerTR.setText(selectedWildCard.getAnswer());
-                    btnQuizAnswerBL.setText(selectedWildCard.getAnswer());
-                    btnQuizAnswerBR.setText(selectedWildCard.getAnswer());
+                    String correctAnswer = selectedCard.getAnswer();
+                    String wrongAnswer1 = selectedCard.getWrongAnswer1();
+                    String wrongAnswer2 = selectedCard.getWrongAnswer2();
+                    String wrongAnswer3 = selectedCard.getWrongAnswer3();
+
+// Array to hold the answers
+                    String[] answers = {correctAnswer, wrongAnswer1, wrongAnswer2, wrongAnswer3};
+
+// Shuffle the answers randomly
+                    List<String> answerList = Arrays.asList(answers);
+                    Collections.shuffle(answerList);
+                    answers = answerList.toArray(new String[0]);
+
+// Assign answers to buttons randomly
+                    btnQuizAnswerTL.setText(answers[0]);
+                    btnQuizAnswerTR.setText(answers[1]);
+                    btnQuizAnswerBL.setText(answers[2]);
+                    btnQuizAnswerBR.setText(answers[3]);
+
+                    Log.d("wildcard", "Button TL: " + answers[0]);
+
+
+                    Log.d("AssignedAnswers", "Button TL: " + answers[0]);
+                    Log.d("AssignedAnswers", "Button TR: " + answers[1]);
+                    Log.d("AssignedAnswers", "Button BL: " + answers[2]);
+                    Log.d("AssignedAnswers", "Button BR: " + answers[3]);
+
 
                 } else {
                     btnAnswer.setVisibility(View.INVISIBLE);
@@ -788,7 +810,13 @@ public class MainActivityGame extends SharedMainActivity {
             } else {
                 btnAnswer.setVisibility(View.INVISIBLE);
             }
-            Log.d("WildCardType", "Type: " + wildCardType); // Log the type of wildcard
+            Log.d("WildCardInfo", "Type: " + wildCardType + ", " +
+                    "Question: " + selectedCard.getText() + ", " +
+                    "Answer: " + selectedCard.getAnswer() + ", " +
+                    "Wrong Answer 1: " + selectedCard.getWrongAnswer1() + ", " +
+                    "Wrong Answer 2: " + selectedCard.getWrongAnswer2() + ", " +
+                    "Wrong Answer 3: " + selectedCard.getWrongAnswer3() + ", " +
+                    "Category: " + selectedCard.getCategory());
         }
 
 

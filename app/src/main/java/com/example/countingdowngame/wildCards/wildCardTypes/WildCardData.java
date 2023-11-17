@@ -5,7 +5,7 @@ import com.example.countingdowngame.wildCards.WildCardProperties;
 public class WildCardData {
     public static final WildCardProperties[] QUIZ_WILD_CARDS = {
             // Science Quiz Questions
-            new WildCardProperties("Quiz! What is the deepest ocean on Earth?", 10, true, true, "Pacific Ocean", "Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Science"), new WildCardProperties("Quiz! How many legs does a spider have?", 10, true, true, "8", "6", "10", "12", "Science"),
+            new WildCardProperties("Quiz! What is the deepest ocean on Earth?", 10, true, true, "Pacific Ocean", "Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Science"),
             new WildCardProperties("Quiz! How many sides does a heptagon have?", 10, true, true, "7", "5", "8", "6", "Science"),
             new WildCardProperties("Quiz! What is the largest planet in our solar system?", 10, true, true, "Jupiter", "Mars", "Saturn", "Neptune", "Science"),
             new WildCardProperties("Quiz! Can you name all seven colors of the rainbow in order?", 10, true, true, "Red, Orange, Yellow, Green, Blue, Indigo, Violet", "Red, Blue, Yellow, Green, Purple, Pink, Orange", "Yellow, Green, Blue, Purple, Orange, Indigo, Red", "Black, White, Red, Blue, Green, Yellow, Orange", "Science"),
@@ -25,7 +25,6 @@ public class WildCardData {
             new WildCardProperties("Quiz! Who discovered penicillin?", 10, true, true, "Alexander Fleming", "Louis Pasteur", "Marie Curie", "Isaac Newton", "Science"),
             new WildCardProperties("Quiz! What is the formula for calculating the area of a circle?", 10, true, true, "πr^2", "2πr", "πd", "πr", "Science"),
             new WildCardProperties("Quiz! What is the largest species of shark?", 10, true, true, "Whale Shark", "Great White Shark", "Hammerhead Shark", "Tiger Shark", "Science"),
-// ... (continuing with more quiz questions and answers in the same format)
             new WildCardProperties("Quiz! What is the boiling point of water in Fahrenheit?", 10, true, true, "212", "100", "32", "0", "Science"),
             new WildCardProperties("Quiz! Who is known as the 'father of modern chemistry'?", 10, true, true, "Antoine Lavoisier", "John Dalton", "Dmitri Mendeleev", "Robert Boyle", "Science"),
             new WildCardProperties("Quiz! What is the formula for calculating density?", 10, true, true, "Density = Mass / Volume", "Density = Mass x Volume", "Density = Mass + Volume", "Density = Volume / Mass", "Science"),

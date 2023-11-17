@@ -145,7 +145,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
             WildCardProperties probability = probabilities[i];
 
             if (probability.hasAnswer()) {
-                prefs.setWildcardState(i, probability.isEnabled(), probability.getText(), probability.getProbability(), probability.getAnswer(), probability.getCategory());
+                prefs.setWildcardState(i, probability.isEnabled(), probability.getText(), probability.getProbability(), probability.getAnswer(), probability.getWrongAnswer1(), probability.getWrongAnswer2(), probability.getWrongAnswer3(), probability.getCategory());
             } else {
                 prefs.setWildcardState(i, probability.isEnabled(), probability.getText(), probability.getProbability());
             }

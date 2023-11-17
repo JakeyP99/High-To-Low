@@ -93,6 +93,10 @@ public class WildCardsFragments extends Fragment {
                             ", isEnabled=" + newWildCard.isEnabled() +
                             ", isDeletable=" + newWildCard.isDeletable() +
                             ", answer=" + newWildCard.getAnswer() +
+                            ", wronganswer1=" + newWildCard.getWrongAnswer1() +
+                            ", wronganswer2=" + newWildCard.getWrongAnswer2() +
+                            ", wronganswer3=" + newWildCard.getWrongAnswer3() +
+
                             ", category=" + newWildCard.getCategory());
 
             loadWildCardsFromSharedPreferences();
@@ -113,6 +117,10 @@ public class WildCardsFragments extends Fragment {
                 .putString("wildcard_text_" + newCount, wildcard.getText())
                 .putInt("wildcard_probability_" + newCount, wildcard.getProbability())
                 .putString("wildcard_answer_" + newCount, wildcard.getAnswer()) // Use a different key for answer
+                .putString("wildcard_wronganswer1_" + newCount, wildcard.getWrongAnswer1()) // Use a different key for answer
+                .putString("wildcard_wronganswer2_" + newCount, wildcard.getWrongAnswer2()) // Use a different key for answer
+                .putString("wildcard_wronganswer3_" + newCount, wildcard.getWrongAnswer3()) // Use a different key for answer
+
                 .putString("wildcard_category_" + newCount, wildcard.getCategory()) // Use a different key for category
                 .apply();
     }
