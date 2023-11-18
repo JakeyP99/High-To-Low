@@ -1,5 +1,14 @@
 package com.example.countingdowngame.mainActivity;
 
+import static com.example.countingdowngame.R.id.btnBackWildCard;
+import static com.example.countingdowngame.R.id.btnExitGame;
+import static com.example.countingdowngame.R.id.close_button;
+import static com.example.countingdowngame.R.id.dialogbox_textview;
+import static com.example.countingdowngame.R.id.editCurrentNumberTextView;
+import static com.example.countingdowngame.R.id.textView_NumberText;
+import static com.example.countingdowngame.R.id.textView_Number_Turn;
+import static com.example.countingdowngame.R.id.textView_WildText;
+import static com.example.countingdowngame.R.id.textView_numberCounter;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_ARCHER;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_JIM;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_SCIENTIST;
@@ -54,6 +63,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import io.github.muddz.styleabletoast.StyleableToast;
+import pl.droidsonroids.gif.GifImageView;
 
 public class MainActivityGame extends SharedMainActivity {
 
@@ -91,6 +101,11 @@ public class MainActivityGame extends SharedMainActivity {
     public WildCardProperties selectedWildCard;
     private Button[] answerButtons; // Array to hold the answer buttons
 
+    private GifImageView confettiImageViewBL;
+
+    private GifImageView confettiImageViewTL;
+    private GifImageView confettiImageViewBR;
+    private GifImageView confettiImageViewTR;
 
     //-----------------------------------------------------Lifecycle Methods---------------------------------------------------//
     @Override
@@ -134,15 +149,19 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void initializeViews() {
         playerImage = findViewById(R.id.playerImage);
-        numberText = findViewById(R.id.textView_NumberText);
-        drinkNumberCounterTextView = findViewById(R.id.textView_numberCounter);
-        nextPlayerText = findViewById(R.id.textView_Number_Turn);
+        numberText = findViewById(textView_NumberText);
+        drinkNumberCounterTextView = findViewById(textView_numberCounter);
+        nextPlayerText = findViewById(textView_Number_Turn);
         btnWild = findViewById(R.id.btnWild);
+        confettiImageViewBL = findViewById(R.id.confettiImageViewBL);
+        confettiImageViewTL = findViewById(R.id.confettiImageViewTL);
+        confettiImageViewBR = findViewById(R.id.confettiImageViewBR);
+        confettiImageViewTR = findViewById(R.id.confettiImageViewTR);
 
         btnAnswer = findViewById(R.id.btnAnswer);
         btnClassAbility = findViewById(R.id.btnClassAbility);
         btnGenerate = findViewById(R.id.btnGenerate);
-        btnBackWild = findViewById(R.id.btnBackWildCard);
+        btnBackWild = findViewById(btnBackWildCard);
 
 
         btnQuizAnswerBL = findViewById(R.id.btnQuizAnswerBL);
@@ -152,7 +171,7 @@ public class MainActivityGame extends SharedMainActivity {
 
 
         shuffleHandler = new Handler();
-        wildText = findViewById(R.id.textView_WildText);
+        wildText = findViewById(textView_WildText);
     }
 
 
@@ -245,7 +264,7 @@ public class MainActivityGame extends SharedMainActivity {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         Log.d("setupButtons", " " + currentPlayer.getClassChoice());
 
-        ImageButton imageButtonExit = findViewById(R.id.btnExitGame);
+        ImageButton imageButtonExit = findViewById(btnExitGame);
 
         btnBackWild.setVisibility(View.INVISIBLE);
         btnAnswer.setVisibility(View.INVISIBLE);
@@ -537,14 +556,14 @@ public class MainActivityGame extends SharedMainActivity {
         LayoutInflater inflater = getLayoutInflater();
 
         View dialogView = inflater.inflate(R.layout.mainactivity_dialog_box, null);
-        TextView dialogboxtextview = dialogView.findViewById(R.id.dialogbox_textview);
+        TextView dialogboxtextview = dialogView.findViewById(dialogbox_textview);
         dialogboxtextview.setText(string);
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        ImageButton closeButton = dialogView.findViewById(R.id.close_button);
+        ImageButton closeButton = dialogView.findViewById(close_button);
         closeButton.setOnClickListener(v -> {
             dialog.dismiss();
         });
@@ -588,8 +607,8 @@ public class MainActivityGame extends SharedMainActivity {
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.character_class_change_number, null);
 
-        EditText editCurrentNumberText = dialogView.findViewById(R.id.editCurrentNumberTextView);
-        Button okButton = dialogView.findViewById(R.id.close_button);
+        EditText editCurrentNumberText = dialogView.findViewById(editCurrentNumberTextView);
+        Button okButton = dialogView.findViewById(close_button);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setView(dialogView);
@@ -645,7 +664,7 @@ public class MainActivityGame extends SharedMainActivity {
         allProbabilities.addAll(Arrays.asList(truthProbabilities));
         allProbabilities.addAll(Arrays.asList(extraProbabilities));
 
-        final TextView wildActivityTextView = findViewById(R.id.textView_WildText);
+        final TextView wildActivityTextView = findViewById(textView_WildText);
 
         boolean wildCardsEnabled = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("wild_cards_toggle", true);
 
@@ -884,10 +903,26 @@ public class MainActivityGame extends SharedMainActivity {
 
         if (selectedAnswer.equals(correctAnswer)) {
             selectedButton.setBackground(ContextCompat.getDrawable(this, R.drawable.buttonhighlightgreen));
+            int selectedButtonId = selectedButton.getId();
+
+            if (selectedButtonId == R.id.btnQuizAnswerTL) {
+                confettiImageViewTL.setVisibility(View.VISIBLE); // Show confetti for Top Left button
+            } else if (selectedButtonId == R.id.btnQuizAnswerTR) {
+                confettiImageViewTR.setVisibility(View.VISIBLE); // Show confetti for Top Right button
+            } else if (selectedButtonId == R.id.btnQuizAnswerBL) {
+                confettiImageViewBL.setVisibility(View.VISIBLE); // Show confetti for Bottom Left button
+            } else if (selectedButtonId == R.id.btnQuizAnswerBR) {
+                confettiImageViewBR.setVisibility(View.VISIBLE); // Show confetti for Bottom Right button
+            }
 
             new Handler().postDelayed(() -> {
                 resetButtonBackgrounds();
                 checkAnswerAndContinue(selectedCard, selectedAnswer);
+                confettiImageViewTL.setVisibility(View.INVISIBLE); // Show confetti for Top Left button
+                confettiImageViewBL.setVisibility(View.INVISIBLE); // Show confetti for Top Left button
+                confettiImageViewTR.setVisibility(View.INVISIBLE); // Show confetti for Top Left button
+                confettiImageViewBR.setVisibility(View.INVISIBLE); // Show confetti for Top Left button
+
             }, 1500); // Delay for 1 second (1000 milliseconds)
         } else {
             selectedButton.setBackground(ContextCompat.getDrawable(this, R.drawable.buttonhighlightred));
@@ -980,7 +1015,7 @@ public class MainActivityGame extends SharedMainActivity {
     private void showAnswer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
 
-        TextView wildActivityTextView = findViewById(R.id.textView_WildText);
+        TextView wildActivityTextView = findViewById(textView_WildText);
         btnQuizAnswerBL.setVisibility(View.VISIBLE);
         btnQuizAnswerBR.setVisibility(View.VISIBLE);
 
