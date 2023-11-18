@@ -27,20 +27,37 @@
 
 
     <Button
-        android:id="@+id/button_GameModeChoice"
+        android:id="@+id/button_wildCardSettings"
         android:layout_width="239dp"
         android:layout_height="58dp"
         android:layout_centerHorizontal="true"
         android:background="@drawable/outlineforbutton"
-        android:text="General Settings"
         android:fontFamily="@font/viga"
+        android:text="Wild card Settings"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/buttonReturn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_wildcardChoice"
+        app:layout_constraintVertical_bias="0.10" />
+
+    <Button
+        android:id="@+id/button_GeneralSettings"
+        android:layout_width="239dp"
+        android:layout_height="58dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/outlineforbutton"
+        android:fontFamily="@font/viga"
+        android:text="General Settings"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonReturn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_wildCardSettings"
         app:layout_constraintVertical_bias="0.10" />
 
     <Button

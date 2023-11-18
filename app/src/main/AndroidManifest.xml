@@ -31,6 +31,9 @@
 
         <activity android:name=".mainActivity.MainActivityGame" />
 
+        <activity android:name=".mainActivity.WildCardSettings" />
+
+
         <activity android:name=".mainActivity.PlayerNumberChoice" />
 
         <activity android:name=".mainActivity.EndActivityGame" />

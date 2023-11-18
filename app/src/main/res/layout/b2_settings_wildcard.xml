@@ -37,20 +37,20 @@
         android:fontFamily="@font/viga"
         android:gravity="center"
         android:layout_marginTop="30dp"
-        android:text="Layouts"
+        android:text="Quiz Settings"
         android:textColor="@color/bluedark"
         android:layout_gravity="center"
         android:textSize="23sp" />
 
     <Button
-        android:id="@+id/button_singleScreen"
+        android:id="@+id/button_multiChoice"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:maxLines="4"
         android:fontFamily="@font/viga"
         android:textAllCaps="false"
-        android:text="Single Screen"
+        android:text="Multi-choice Answer"
         android:textAlignment="center"
         android:textColor="@color/bluedark"
         android:textSize="23sp"
@@ -58,13 +58,13 @@
         android:background="@drawable/outlineforbutton" />
 
     <Button
-        android:id="@+id/button_splitScreen"
+        android:id="@+id/button_nonMultiChoice"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:maxLines="4"
         android:fontFamily="@font/viga"
-        android:text="Split Screen"
+        android:text="Short Answer"
         android:textAlignment="center"
         android:background="@drawable/outlineforbutton"
         android:textAllCaps="false"
@@ -72,65 +72,6 @@
         android:layout_gravity="center"
         android:textSize="23sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:fontFamily="@font/viga"
-        android:gravity="center"
-        android:textAllCaps="false"
-        android:text="Sound Settings"
-        android:textColor="@color/bluedark"
-        android:layout_gravity="center"
-        android:textSize="23sp" />
-
-    <Button
-        android:id="@+id/button_mute"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/outlineforbutton"
-        android:textAllCaps="false"
-        android:fontFamily="@font/viga"
-        android:text="Mute"
-        android:textAlignment="center"
-        android:textColor="@color/bluedark"
-        android:textSize="23sp"
-        android:layout_gravity="center"
-        android:onClick="onMuteClicked" />
-
-
-    <Button
-        android:id="@+id/button_normal_sound"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/viga"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/outlineforbutton"
-        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-        android:maxLines="4"
-        android:text="Regular Sounds"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textColor="@color/bluedark"
-        android:layout_gravity="center"
-        android:textSize="23sp" />
-
-    <Button
-        android:id="@+id/button_burp_sound"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/outlineforbutton"
-        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-        android:maxLines="4"
-        android:fontFamily="@font/viga"
-        android:text="Burp Sounds"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textColor="@color/bluedark"
-        android:layout_gravity="center"
-        android:textSize="23sp" />
 
     <Button
         android:id="@+id/buttonReturn"
