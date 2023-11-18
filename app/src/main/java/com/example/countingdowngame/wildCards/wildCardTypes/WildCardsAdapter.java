@@ -17,7 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.stores.WildCardSettingsLocalStore;
+import com.example.countingdowngame.settings.WildCardSettingsLocalStore;
 import com.example.countingdowngame.wildCards.WildCardProperties;
 import com.example.countingdowngame.wildCards.WildCardType;
 

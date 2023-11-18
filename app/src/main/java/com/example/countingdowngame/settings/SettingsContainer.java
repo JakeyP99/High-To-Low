@@ -1,10 +1,9 @@
-package com.example.countingdowngame.mainActivity;
+package com.example.countingdowngame.settings;
 
 import android.os.Bundle;
 import android.widget.Button;
 
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.game.GeneralSettings;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.example.countingdowngame.wildCards.WildCardChoice;
 

@@ -1,4 +1,4 @@
-package com.example.countingdowngame.mainActivity;
+package com.example.countingdowngame.settings;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -11,7 +11,6 @@ import android.widget.EditText;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.stores.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import io.github.muddz.styleabletoast.StyleableToast;
