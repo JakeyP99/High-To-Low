@@ -23,13 +23,15 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
+import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.GameEventType;
 import com.example.countingdowngame.game.Player;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
-import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.wildCards.WildCardProperties;
 import com.example.countingdowngame.wildCards.WildCardType;
@@ -87,6 +89,7 @@ public class MainActivityGame extends SharedMainActivity {
     private boolean isFirstTurn = true;
     private boolean soldierRemoval = false;
     public WildCardProperties selectedWildCard;
+    private Button[] answerButtons; // Array to hold the answer buttons
 
 
     //-----------------------------------------------------Lifecycle Methods---------------------------------------------------//
@@ -854,52 +857,70 @@ public class MainActivityGame extends SharedMainActivity {
         // Array to hold the answers
         String[] answers = {correctAnswer, wrongAnswer1, wrongAnswer2, wrongAnswer3};
 
+
         // Shuffle the answers randomly
 
         List<String> answerList = Arrays.asList(answers);
         Collections.shuffle(answerList);
         answers = answerList.toArray(new String[0]);
 
-// Assign answers to buttons randomly
-        btnQuizAnswerTL.setTextSize(TypedValue.COMPLEX_UNIT_SP, quizAnswerTextSize(answers[0]));
-        btnQuizAnswerTL.setText(answers[0]);
+        answerButtons = new Button[]{btnQuizAnswerTL, btnQuizAnswerTR, btnQuizAnswerBL, btnQuizAnswerBR};
 
-        btnQuizAnswerTR.setTextSize(TypedValue.COMPLEX_UNIT_SP, quizAnswerTextSize(answers[1]));
-        btnQuizAnswerTR.setText(answers[1]);
+        for (int i = 0; i < answerButtons.length; i++) {
+            answerButtons[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, quizAnswerTextSize(answers[i]));
+            answerButtons[i].setText(answers[i]);
 
-        btnQuizAnswerBL.setTextSize(TypedValue.COMPLEX_UNIT_SP, quizAnswerTextSize(answers[2]));
-        btnQuizAnswerBL.setText(answers[2]);
-
-        btnQuizAnswerBR.setTextSize(TypedValue.COMPLEX_UNIT_SP, quizAnswerTextSize(answers[3]));
-        btnQuizAnswerBR.setText(answers[3]);
-
-        btnUtils.setButton(btnQuizAnswerTL, () -> {
-            String selectedAnswer = btnQuizAnswerTL.getText().toString();
-            checkAnswerAndContinue(selectedCard, selectedAnswer);
-        });
-
-        btnUtils.setButton(btnQuizAnswerTR, () -> {
-            String selectedAnswer = btnQuizAnswerTR.getText().toString();
-            checkAnswerAndContinue(selectedCard, selectedAnswer);
-        });
-
-        btnUtils.setButton(btnQuizAnswerBL, () -> {
-            String selectedAnswer = btnQuizAnswerBL.getText().toString();
-            checkAnswerAndContinue(selectedCard, selectedAnswer);
-        });
-
-        btnUtils.setButton(btnQuizAnswerBR, () -> {
-            String selectedAnswer = btnQuizAnswerBR.getText().toString();
-            checkAnswerAndContinue(selectedCard, selectedAnswer);
-        });
-
+            int finalI = i;
+            btnUtils.setButton(answerButtons[i], () -> {
+                String selectedAnswer = answerButtons[finalI].getText().toString();
+                handleAnswerSelection(answerButtons[finalI], selectedCard, selectedAnswer);
+            });
+        }
     }
+
+
+    private void handleAnswerSelection(Button selectedButton, WildCardProperties selectedCard, String selectedAnswer) {
+        String correctAnswer = selectedCard.getAnswer();
+
+        if (selectedAnswer.equals(correctAnswer)) {
+            selectedButton.setBackground(ContextCompat.getDrawable(this, R.drawable.buttonhighlightgreen));
+
+            new Handler().postDelayed(() -> {
+                resetButtonBackgrounds();
+                checkAnswerAndContinue(selectedCard, selectedAnswer);
+            }, 1500); // Delay for 1 second (1000 milliseconds)
+        } else {
+            selectedButton.setBackground(ContextCompat.getDrawable(this, R.drawable.buttonhighlightred));
+
+            // Find and highlight the correct answer button in green
+            for (Button button : answerButtons) {
+                if (button.getText().toString().equals(correctAnswer)) {
+                    button.setBackground(ContextCompat.getDrawable(this, R.drawable.buttonhighlightgreen));
+                    break;
+                }
+            }
+
+            new Handler().postDelayed(() -> {
+                resetButtonBackgrounds();
+                checkAnswerAndContinue(selectedCard, selectedAnswer);
+            }, 1500); // Delay for 1 second (1000 milliseconds)
+        }
+    }
+
+    private void resetButtonBackgrounds() {
+        for (Button button : answerButtons) {
+            button.setBackground(ContextCompat.getDrawable(this, R.drawable.outlineforbutton));
+        }
+    }
+
 
     private void checkAnswerAndContinue(WildCardProperties selectedCard, String selectedAnswer) {
         String correctAnswer = selectedCard.getAnswer(); // Assuming selectedCard is defined somewhere accessible
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
 
         if (selectedAnswer.equals(correctAnswer)) {
+
+
             Game.getInstance().getCurrentPlayer().gainWildCards(1);
             hideQuizButtons();
             quizAnswerView(currentPlayer.getName() + " that's right! The answer was " + selectedCard.getAnswer() + "\n\n P.S. You get to keep your wildcard too.");
