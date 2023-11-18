@@ -28,6 +28,7 @@ import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.GameEventType;
 import com.example.countingdowngame.game.Player;
+import com.example.countingdowngame.stores.GeneralSettingsLocalStore;
 import com.example.countingdowngame.stores.PlayerModelLocalStore;
 import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.wildCards.WildCardProperties;
@@ -682,7 +683,6 @@ public class MainActivityGame extends SharedMainActivity {
                             wildCardType = "Quiz";
                             foundWildCardType = true;
                             btnClassAbility.setVisibility(View.INVISIBLE);
-
                         }
                         break;
                     case 1:
@@ -717,8 +717,15 @@ public class MainActivityGame extends SharedMainActivity {
                 }
 
             }
+
             if (selectedType == quizProbabilities) {
-                btnBackWild.setVisibility(View.INVISIBLE);
+
+                if (GeneralSettingsLocalStore.fromContext(this).isMultiChoice()) {
+                    btnBackWild.setVisibility(View.INVISIBLE);
+                } else {
+                    btnAnswer.setVisibility(View.VISIBLE);
+                    btnBackWild.setVisibility(View.INVISIBLE);
+                }
             } else {
                 btnAnswer.setVisibility(View.INVISIBLE);
                 btnBackWild.setVisibility(View.VISIBLE);
@@ -760,7 +767,6 @@ public class MainActivityGame extends SharedMainActivity {
 
             if (selectedCard != null) {
                 selectedActivity = selectedCard.getText();
-
                 wildActivityTextView.setText(selectedActivity);
                 assert usedCards != null;
                 usedCards.add(selectedCard);
@@ -771,10 +777,17 @@ public class MainActivityGame extends SharedMainActivity {
                 int textSize = TextSizeCalculator.calculateTextSizeBasedOnCharacterCount(selectedActivity);
                 wildActivityTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
 
-                if (selectedCard.hasAnswer()) {
-                    setRandomizedAnswers(selectedCard);
-                }
+                selectedWildCard = selectedCard; // Update selectedWildCard to the current selected card
 
+                if (selectedCard.hasAnswer()) {
+                    if (GeneralSettingsLocalStore.fromContext(this).isMultiChoice()) {
+                        setMultiChoiceRandomizedAnswers(selectedCard);
+                    } else {
+                        btnAnswer.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    btnAnswer.setVisibility(View.INVISIBLE);
+                }
             } else {
                 btnAnswer.setVisibility(View.INVISIBLE);
             }
@@ -830,12 +843,8 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    private void setRandomizedAnswers(WildCardProperties selectedCard) {
-        btnQuizAnswerTL.setVisibility(View.VISIBLE);
-        btnQuizAnswerTR.setVisibility(View.VISIBLE);
-        btnQuizAnswerBL.setVisibility(View.VISIBLE);
-        btnQuizAnswerBR.setVisibility(View.VISIBLE);
-
+    private void setMultiChoiceRandomizedAnswers(WildCardProperties selectedCard) {
+        exposeQuizButtons();
 
         String correctAnswer = selectedCard.getAnswer();
         String wrongAnswer1 = selectedCard.getWrongAnswer1();
@@ -846,7 +855,7 @@ public class MainActivityGame extends SharedMainActivity {
         String[] answers = {correctAnswer, wrongAnswer1, wrongAnswer2, wrongAnswer3};
 
         // Shuffle the answers randomly
-// Shuffle the answers randomly
+
         List<String> answerList = Arrays.asList(answers);
         Collections.shuffle(answerList);
         answers = answerList.toArray(new String[0]);
@@ -953,6 +962,9 @@ public class MainActivityGame extends SharedMainActivity {
         TextView wildActivityTextView = findViewById(R.id.textView_WildText);
         btnQuizAnswerBL.setVisibility(View.VISIBLE);
         btnQuizAnswerBR.setVisibility(View.VISIBLE);
+
+        btnQuizAnswerBL.setText("Were you right?");
+        btnQuizAnswerBR.setText("Were you wrong?");
 
         if (selectedWildCard != null) {
             if (selectedWildCard.hasAnswer()) {

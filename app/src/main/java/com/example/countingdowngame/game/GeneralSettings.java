@@ -2,11 +2,8 @@ package com.example.countingdowngame.game;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
 import androidx.core.content.res.ResourcesCompat;
 
@@ -14,12 +11,9 @@ import com.example.countingdowngame.R;
 import com.example.countingdowngame.stores.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
-import io.github.muddz.styleabletoast.StyleableToast;
-
 public class GeneralSettings extends ButtonUtilsActivity implements View.OnClickListener {
 
     //-----------------------------------------------------Initialize---------------------------------------------------//
-    private EditText wildcardPerPlayerEditText;
     private Button button_gameModeOne;
     private Button button_gameModeTwo;
     private Drawable buttonHighlightDrawable;
@@ -27,7 +21,6 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
     private Button btnReturn;
     private Button btnMute;
 
-//copyout
     private Button button_regularSound;
     private Button button_burpSound;
     //
@@ -38,30 +31,6 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
     protected void onPause() {
         super.onPause();
         savePreferences();
-    }
-
-
-
-    @Override
-    public void onBackPressed() {
-        if (isValidInput()) {
-            savePreferences();
-            super.onBackPressed();
-        } else {
-            String wildCardAmountInput = wildcardPerPlayerEditText.getText().toString().trim();
-            if (wildCardAmountInput.isEmpty()) {
-                wildcardPerPlayerEditText.setText("0");
-                savePreferences();
-                super.onBackPressed();
-            } else {
-                int wildCardAmount = Integer.parseInt(wildCardAmountInput);
-                if (wildCardAmount < 0 || wildCardAmount > 100) {
-                    StyleableToast.makeText(getApplicationContext(), "Please enter a number between 0 and 100", R.style.newToast).show();
-                } else {
-                    super.onBackPressed();
-                }
-            }
-        }
     }
 
     //-----------------------------------------------------On Create---------------------------------------------------//
@@ -85,30 +54,10 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
         outlineForButton = ResourcesCompat.getDrawable(getResources(), R.drawable.outlineforbutton, null);
         btnReturn = findViewById(R.id.buttonReturn);
         btnMute = findViewById(R.id.button_mute);
-//        //copyout
+
+
         button_regularSound = findViewById(R.id.button_normal_sound);
         button_burpSound = findViewById(R.id.button_burp_sound);
-
-
-        wildcardPerPlayerEditText = findViewById(R.id.edittext_wildcard_amount);
-
-        wildcardPerPlayerEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // No action needed
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // No action needed
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                validateWildCardAmount();
-            }
-        });
-
     }
 
 
@@ -116,34 +65,6 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
 
 
     //-----------------------------------------------------Button Clicks---------------------------------------------------//
-    private boolean isValidInput() {
-        String wildCardAmountInput = wildcardPerPlayerEditText.getText().toString().trim();
-
-        if (wildCardAmountInput.length() > 3) {
-            wildCardAmountInput = wildCardAmountInput.substring(0, 3);
-            wildcardPerPlayerEditText.setText(wildCardAmountInput);
-        }
-
-        try {
-            int wildCardAmount = Integer.parseInt(wildCardAmountInput);
-            return wildCardAmount >= 0 && wildCardAmount <= 100;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-
-    private void validateWildCardAmount() {
-        String wildCardAmountInput = wildcardPerPlayerEditText.getText().toString().trim();
-
-        if (wildCardAmountInput.length() > 3) {
-            wildCardAmountInput = wildCardAmountInput.substring(0, 3);
-            wildcardPerPlayerEditText.setText(wildCardAmountInput);
-            wildcardPerPlayerEditText.setSelection(wildCardAmountInput.length());
-        }
-
-    }
-
 
     @Override
     public void onClick(View view) {
@@ -173,24 +94,8 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
         button_gameModeTwo.setOnClickListener(this);
 
         btnUtils.setButton(btnReturn, () -> {
-            if (isValidInput()) {
-                savePreferences();
-                super.onBackPressed();
-            } else {
-                String wildCardAmountInput = wildcardPerPlayerEditText.getText().toString().trim();
-                if (wildCardAmountInput.isEmpty()) {
-                    wildcardPerPlayerEditText.setText("0");
-                    savePreferences();
-                    super.onBackPressed();
-                } else {
-                    int wildCardAmount = Integer.parseInt(wildCardAmountInput);
-                    if (wildCardAmount < 0 || wildCardAmount > 100) {
-                        StyleableToast.makeText(getApplicationContext(), "Please enter a number between 0 and 100", R.style.newToast).show();
-                    } else {
-                        super.onBackPressed();
-                    }
-                }
-            }
+            savePreferences();
+            super.onBackPressed();
         });
 
         btnMute.setOnClickListener(this);
@@ -228,7 +133,6 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
 
     private void loadPreferences() {
         int loadWildCardAmount = GeneralSettingsLocalStore.fromContext(this).playerWildCardCount();
-        wildcardPerPlayerEditText.setText(String.valueOf(loadWildCardAmount));
 
         //copyout
         boolean regularSoundSelected = GeneralSettingsLocalStore.fromContext(this).shouldPlayRegularSound();
@@ -270,10 +174,6 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
 
 
     private void savePreferences() {
-        int wildCardAmountSetInSettings = Integer.parseInt(wildcardPerPlayerEditText.getText().toString());
-        GeneralSettingsLocalStore.fromContext(this).setPlayerWildCardCount( wildCardAmountSetInSettings);
-
-
         GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);
         store.setIsSingleScreen(button_gameModeOne.isSelected());
         store.setIsMuted(btnMute.isSelected());
