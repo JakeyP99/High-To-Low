@@ -865,25 +865,38 @@ public class MainActivityGame extends SharedMainActivity {
         btnQuizAnswerBR.setText(answers[3]);
 
 
-        btnQuizAnswerTL.setOnClickListener(v -> {
-            String selectedAnswer = ((Button) v).getText().toString();
+        btnUtils.setButton(btnWild, () -> {
+            wildCardActivate(Game.getInstance().getCurrentPlayer());
+            drinkNumberCounterTextView.setVisibility(View.INVISIBLE);
+            wildText.setVisibility(View.VISIBLE);
+            btnWild.setVisibility(View.INVISIBLE);
+            btnGenerate.setVisibility(View.INVISIBLE);
+            nextPlayerText.setVisibility(View.INVISIBLE);
+            numberText.setVisibility(View.INVISIBLE);
+            isFirstTurn = false;
+        });
+
+
+        btnUtils.setButton(btnQuizAnswerTL, () -> {
+            String selectedAnswer = btnQuizAnswerTL.getText().toString();
             checkAnswerAndContinue(selectedCard, selectedAnswer);
         });
 
-        btnQuizAnswerTR.setOnClickListener(v -> {
-            String selectedAnswer = ((Button) v).getText().toString();
+        btnUtils.setButton(btnQuizAnswerTR, () -> {
+            String selectedAnswer = btnQuizAnswerTL.getText().toString();
             checkAnswerAndContinue(selectedCard, selectedAnswer);
         });
 
-        btnQuizAnswerBL.setOnClickListener(v -> {
-            String selectedAnswer = ((Button) v).getText().toString();
+        btnUtils.setButton(btnQuizAnswerBL, () -> {
+            String selectedAnswer = btnQuizAnswerTL.getText().toString();
             checkAnswerAndContinue(selectedCard, selectedAnswer);
         });
 
-        btnQuizAnswerBR.setOnClickListener(v -> {
-            String selectedAnswer = ((Button) v).getText().toString();
+        btnUtils.setButton(btnQuizAnswerBR, () -> {
+            String selectedAnswer = btnQuizAnswerTL.getText().toString();
             checkAnswerAndContinue(selectedCard, selectedAnswer);
         });
+
     }
 
     private void checkAnswerAndContinue(WildCardProperties selectedCard, String selectedAnswer) {
