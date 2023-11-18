@@ -864,36 +864,23 @@ public class MainActivityGame extends SharedMainActivity {
         btnQuizAnswerBR.setTextSize(TypedValue.COMPLEX_UNIT_SP, quizAnswerTextSize(answers[3]));
         btnQuizAnswerBR.setText(answers[3]);
 
-
-        btnUtils.setButton(btnWild, () -> {
-            wildCardActivate(Game.getInstance().getCurrentPlayer());
-            drinkNumberCounterTextView.setVisibility(View.INVISIBLE);
-            wildText.setVisibility(View.VISIBLE);
-            btnWild.setVisibility(View.INVISIBLE);
-            btnGenerate.setVisibility(View.INVISIBLE);
-            nextPlayerText.setVisibility(View.INVISIBLE);
-            numberText.setVisibility(View.INVISIBLE);
-            isFirstTurn = false;
-        });
-
-
         btnUtils.setButton(btnQuizAnswerTL, () -> {
             String selectedAnswer = btnQuizAnswerTL.getText().toString();
             checkAnswerAndContinue(selectedCard, selectedAnswer);
         });
 
         btnUtils.setButton(btnQuizAnswerTR, () -> {
-            String selectedAnswer = btnQuizAnswerTL.getText().toString();
+            String selectedAnswer = btnQuizAnswerTR.getText().toString();
             checkAnswerAndContinue(selectedCard, selectedAnswer);
         });
 
         btnUtils.setButton(btnQuizAnswerBL, () -> {
-            String selectedAnswer = btnQuizAnswerTL.getText().toString();
+            String selectedAnswer = btnQuizAnswerBL.getText().toString();
             checkAnswerAndContinue(selectedCard, selectedAnswer);
         });
 
         btnUtils.setButton(btnQuizAnswerBR, () -> {
-            String selectedAnswer = btnQuizAnswerTL.getText().toString();
+            String selectedAnswer = btnQuizAnswerBR.getText().toString();
             checkAnswerAndContinue(selectedCard, selectedAnswer);
         });
 
@@ -906,11 +893,11 @@ public class MainActivityGame extends SharedMainActivity {
         if (selectedAnswer.equals(correctAnswer)) {
             Game.getInstance().getCurrentPlayer().gainWildCards(1);
             hideQuizButtons();
-            quizAnswerView(currentPlayer.getName() + " since you got it right, give out a drink! \n\n P.S. You get to keep your wildcard too.");
+            quizAnswerView(currentPlayer.getName() + " that's right! The answer was " + selectedCard.getAnswer() + "\n\n P.S. You get to keep your wildcard too.");
             btnBackWild.setVisibility(View.VISIBLE);
         } else {
             hideQuizButtons();
-            quizAnswerView(currentPlayer.getName() + " since you got it wrong, take a drink! \n\n P.S. Maybe read a book once in a while.");
+            quizAnswerView(currentPlayer.getName() + " big ooooff! The answer actually was " + selectedCard.getAnswer() + "\n\n P.S. Maybe read a book every now and then");
             btnBackWild.setVisibility(View.VISIBLE);
         }
     }
