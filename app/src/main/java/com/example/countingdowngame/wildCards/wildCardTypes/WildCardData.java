@@ -313,7 +313,7 @@ public class WildCardData {
             new WildCardProperties("Quiz! In 'The Shining', what phrase does Jack Nicholson's character repeatedly type on his typewriter?", 10, true, true, "All work and no play makes Jack a dull boy", "Here's Johnny!", "Redrum", "Heeeere's Johnny!", "Movies"),
             new WildCardProperties("Quiz! Which 2014 movie tells the story of a man with dissociative identity disorder?", 10, true, true, "Split", "Shutter Island", "Psycho", "Identity", "Movies"),
             new WildCardProperties("Quiz! Who played the character of Don Vito Corleone in the movie 'The Godfather'?", 10, true, true, "Marlon Brando", "Al Pacino", "Robert De Niro", "James Caan", "Movies"),
-            new WildCardProperties("Quiz! Which movie is about a man who becomes trapped in a time loop, reliving the same day repeatedly?", 10, true, true, "Groundhog Day", "Edge of Tomorrow", "Happy Death Day", "Source Code", "Movies"),
+            new WildCardProperties("Quiz! Which non-military movie is about a man who becomes trapped in a time loop, reliving the same day repeatedly?", 10, true, true, "Groundhog Day", "Edge of Tomorrow", "Happy Death Day", "Source Code", "Movies"),
             new WildCardProperties("Quiz! Who directed the science fiction film 'The Fifth Element'?", 10, true, true, "Luc Besson", "Michael Bay", "James Cameron", "Ridley Scott", "Movies"),
 
             //Video Games

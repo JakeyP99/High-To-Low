@@ -846,18 +846,24 @@ public class MainActivityGame extends SharedMainActivity {
         String[] answers = {correctAnswer, wrongAnswer1, wrongAnswer2, wrongAnswer3};
 
         // Shuffle the answers randomly
+// Shuffle the answers randomly
         List<String> answerList = Arrays.asList(answers);
         Collections.shuffle(answerList);
         answers = answerList.toArray(new String[0]);
 
-        // Assign answers to buttons randomly
+// Assign answers to buttons randomly
+        btnQuizAnswerTL.setTextSize(TypedValue.COMPLEX_UNIT_SP, quizAnswerTextSize(answers[0]));
         btnQuizAnswerTL.setText(answers[0]);
+
+        btnQuizAnswerTR.setTextSize(TypedValue.COMPLEX_UNIT_SP, quizAnswerTextSize(answers[1]));
         btnQuizAnswerTR.setText(answers[1]);
+
+        btnQuizAnswerBL.setTextSize(TypedValue.COMPLEX_UNIT_SP, quizAnswerTextSize(answers[2]));
         btnQuizAnswerBL.setText(answers[2]);
+
+        btnQuizAnswerBR.setTextSize(TypedValue.COMPLEX_UNIT_SP, quizAnswerTextSize(answers[3]));
         btnQuizAnswerBR.setText(answers[3]);
 
-
-        // Assuming btnQuizAnswerTL, btnQuizAnswerTR, btnQuizAnswerBL, btnQuizAnswerBR are your answer buttons
 
         btnQuizAnswerTL.setOnClickListener(v -> {
             String selectedAnswer = ((Button) v).getText().toString();
@@ -938,7 +944,6 @@ public class MainActivityGame extends SharedMainActivity {
         btnQuizAnswerBR.setVisibility(View.INVISIBLE);
         btnQuizAnswerTL.setVisibility(View.INVISIBLE);
         btnQuizAnswerTR.setVisibility(View.INVISIBLE);
-
     }
 
 
