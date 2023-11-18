@@ -2,7 +2,7 @@ package com.example.countingdowngame.game;
 
 import android.content.Context;
 
-import com.example.countingdowngame.stores.GeneralSettingsLocalStore;
+import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 
 import java.io.Serializable;
 

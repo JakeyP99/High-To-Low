@@ -1,4 +1,4 @@
-package com.example.countingdowngame.stores;
+package com.example.countingdowngame.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -39,13 +39,20 @@ public class GeneralSettingsLocalStore {
         return mPref.getBoolean("isSingleScreen", true);
     }
 
-    public Boolean getScreenType() {
-        return isSingleScreen(); // Calls the isSingleScreen method
-    }
-
     public void setIsSingleScreen(Boolean value) {
         SharedPreferences.Editor editor = mPref.edit();
         editor.putBoolean("isSingleScreen", value);
+        editor.apply();
+    }
+
+
+    public Boolean isMultiChoice() {
+        return mPref.getBoolean("isMultiChoice", true);
+    }
+
+    public void setIsMultiChoice(Boolean value) {
+        SharedPreferences.Editor editor = mPref.edit();
+        editor.putBoolean("isMultiChoice", value);
         editor.apply();
     }
 

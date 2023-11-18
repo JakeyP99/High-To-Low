@@ -17,7 +17,7 @@ import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.GameEventType;
 import com.example.countingdowngame.game.Player;
-import com.example.countingdowngame.stores.PlayerModelLocalStore;
+import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.wildCards.WildCardProperties;
 import com.example.countingdowngame.wildCards.WildCardType;

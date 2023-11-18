@@ -82,7 +82,7 @@ public class WildCardsFragments extends Fragment {
                 return;
             }
 
-            WildCardProperties newWildCard = new WildCardProperties(text, probability, true, true, null, null);
+            WildCardProperties newWildCard = new WildCardProperties(text, probability, true, true, null, null, null, null, null);
 
             saveNewWildCard(newWildCard);
 
@@ -93,6 +93,10 @@ public class WildCardsFragments extends Fragment {
                             ", isEnabled=" + newWildCard.isEnabled() +
                             ", isDeletable=" + newWildCard.isDeletable() +
                             ", answer=" + newWildCard.getAnswer() +
+                            ", wronganswer1=" + newWildCard.getWrongAnswer1() +
+                            ", wronganswer2=" + newWildCard.getWrongAnswer2() +
+                            ", wronganswer3=" + newWildCard.getWrongAnswer3() +
+
                             ", category=" + newWildCard.getCategory());
 
             loadWildCardsFromSharedPreferences();
@@ -113,6 +117,10 @@ public class WildCardsFragments extends Fragment {
                 .putString("wildcard_text_" + newCount, wildcard.getText())
                 .putInt("wildcard_probability_" + newCount, wildcard.getProbability())
                 .putString("wildcard_answer_" + newCount, wildcard.getAnswer()) // Use a different key for answer
+                .putString("wildcard_wronganswer1_" + newCount, wildcard.getWrongAnswer1()) // Use a different key for answer
+                .putString("wildcard_wronganswer2_" + newCount, wildcard.getWrongAnswer2()) // Use a different key for answer
+                .putString("wildcard_wronganswer3_" + newCount, wildcard.getWrongAnswer3()) // Use a different key for answer
+
                 .putString("wildcard_category_" + newCount, wildcard.getCategory()) // Use a different key for category
                 .apply();
     }
@@ -127,9 +135,13 @@ public class WildCardsFragments extends Fragment {
         for (int i = 0; i < count; i++) {
             String text = sharedPreferences.getString("wildcard_text_" + (i + 1), "");
             String answer = sharedPreferences.getString("wildcard_answer_" + (i + 1), ""); // Use the correct key for answer
+            String wrongAnswer1 = sharedPreferences.getString("wildcard_wronganswer1_" + (i + 1), "");
+            String wrongAnswer2 = sharedPreferences.getString("wildcard_wronganswer2_" + (i + 1), "");
+            String wrongAnswer3 = sharedPreferences.getString("wildcard_wronganswer3_" + (i + 1), "");
+
             int probability = sharedPreferences.getInt("wildcard_probability_" + (i + 1), 10);
             String category = sharedPreferences.getString("wildcard_category_" + (i + 1), ""); // Use the correct key for category
-            newWildCards[i] = new WildCardProperties(text, probability, true, true, answer, category);
+            newWildCards[i] = new WildCardProperties(text, probability, true, true, answer, wrongAnswer1, wrongAnswer2, wrongAnswer3, category);
         }
 
         adapter.setWildCards(newWildCards);

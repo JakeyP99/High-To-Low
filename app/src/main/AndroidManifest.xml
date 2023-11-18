@@ -31,6 +31,9 @@
 
         <activity android:name=".mainActivity.MainActivityGame" />
 
+        <activity android:name=".settings.WildCardSettings" />
+
+
         <activity android:name=".mainActivity.PlayerNumberChoice" />
 
         <activity android:name=".mainActivity.EndActivityGame" />
@@ -39,13 +42,13 @@
 
         <activity android:name=".instructions.InstructionsToPlay" />
 
-        <activity android:name=".mainActivity.SettingsContainer" />
+        <activity android:name=".settings.SettingsContainer" />
 
         <activity
             android:name=".wildCards.WildCardChoice"
             android:windowSoftInputMode="adjustNothing" />
 
-        <activity android:name=".game.GeneralSettings" />
+        <activity android:name=".settings.GeneralSettings" />
 
         <activity android:name=".mainActivity.MainActivitySplitScreen" />
 

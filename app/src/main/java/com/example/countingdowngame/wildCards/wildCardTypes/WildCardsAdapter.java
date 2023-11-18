@@ -17,7 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.stores.WildCardSettingsLocalStore;
+import com.example.countingdowngame.settings.WildCardSettingsLocalStore;
 import com.example.countingdowngame.wildCards.WildCardProperties;
 import com.example.countingdowngame.wildCards.WildCardType;
 
@@ -64,6 +64,10 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
             String activity;
             int probability;
             String answer;
+            String wrongAnswer1;
+            String wrongAnswer2;
+            String wrongAnswer3;
+
             boolean deletable;
             String category;
 
@@ -73,6 +77,11 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
                 probability = prefs.getWildcardProbability(i, card.getProbability());
                 deletable = prefs.getWildCardDeletable(i, card.isDeletable());
                 answer = prefs.getWildcardAnswer(i, card.getAnswer());
+                wrongAnswer1 = prefs.getWildcardAnswer(i, card.getWrongAnswer1());
+                wrongAnswer2 = prefs.getWildcardAnswer(i, card.getWrongAnswer2());
+                wrongAnswer3 = prefs.getWildcardAnswer(i, card.getWrongAnswer3());
+
+
                 category = prefs.getWildCardCategory(i, card.getCategory());
 
             } else {
@@ -81,11 +90,16 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
                 probability = prefs.getWildcardProbability(i);
                 deletable = prefs.getWildCardDeletable(i);
                 answer = prefs.getWildcardAnswer(i);
+                wrongAnswer1 = prefs.getWildcardAnswer(i);
+                wrongAnswer2 = prefs.getWildcardAnswer(i);
+                wrongAnswer3 = prefs.getWildcardAnswer(i);
+
+
                 category = prefs.getWildcardCategory(i);
 
             }
 
-            loadedWildCards[i] = new WildCardProperties(activity, probability, enabled, deletable, answer, category);
+            loadedWildCards[i] = new WildCardProperties(activity, probability, enabled, deletable, answer, wrongAnswer1, wrongAnswer2, wrongAnswer3, category);
         }
 
         wildCards = loadedWildCards;
@@ -131,7 +145,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
             WildCardProperties probability = probabilities[i];
 
             if (probability.hasAnswer()) {
-                prefs.setWildcardState(i, probability.isEnabled(), probability.getText(), probability.getProbability(), probability.getAnswer(), probability.getCategory());
+                prefs.setWildcardState(i, probability.isEnabled(), probability.getText(), probability.getProbability(), probability.getAnswer(), probability.getWrongAnswer1(), probability.getWrongAnswer2(), probability.getWrongAnswer3(), probability.getCategory());
             } else {
                 prefs.setWildcardState(i, probability.isEnabled(), probability.getText(), probability.getProbability());
             }

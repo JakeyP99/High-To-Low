@@ -42,8 +42,7 @@ import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.Player;
 import com.example.countingdowngame.mainActivity.NumberChoice;
-import com.example.countingdowngame.stores.GeneralSettingsLocalStore;
-import com.example.countingdowngame.stores.PlayerModelLocalStore;
+import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.google.gson.Gson;
 

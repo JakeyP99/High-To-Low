@@ -1,4 +1,4 @@
-package com.example.countingdowngame.stores;
+package com.example.countingdowngame.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -70,12 +70,16 @@ public class WildCardSettingsLocalStore {
         return mPref.getInt("wild_card_probability_" + index, defValue);
     }
 
-    public void setWildcardState(int index, Boolean enabled, String activity, int probability, String answer, String category) {
+    public void setWildcardState(int index, Boolean enabled, String activity, int probability, String answer, String wrongAnswer1, String wrongAnswer2, String wrongAnswer3, String category) {
         SharedPreferences.Editor editor = mPref.edit();
         editor.putString("wild_card_activity_" + index, activity);
         editor.putInt("wild_card_probability_" + index, probability);
         editor.putBoolean("wild_card_enabled_" + index, enabled);
         editor.putString("wild_card_answer_" + index, answer);
+        editor.putString("wild_card_wronganswer1_" + index, wrongAnswer1);
+        editor.putString("wild_card_wronganswer2_" + index, wrongAnswer2);
+        editor.putString("wild_card_wronganswer3_" + index, wrongAnswer3);
+
         editor.putString("wild_card_category_" + index, category);
         editor.apply();
 

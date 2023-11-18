@@ -10,7 +10,7 @@ import android.widget.EditText;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.stores.GeneralSettingsLocalStore;
+import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.Random;

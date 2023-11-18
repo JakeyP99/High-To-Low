@@ -39,9 +39,9 @@
         android:textColor="@color/bluedark"
         android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@+id/btnClassAbility"
-        app:layout_constraintEnd_toEndOf="@+id/btnGotQuizWrong"
+        app:layout_constraintEnd_toEndOf="@+id/btnQuizAnswerBR"
         app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="@+id/btnGotQuizRight"
+        app:layout_constraintStart_toStartOf="@+id/btnQuizAnswerBL"
         app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
         app:layout_constraintVertical_bias="0.495" />
 
@@ -75,46 +75,96 @@
         android:textColor="@color/bluedark"
         android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@+id/btnClassAbility"
-        app:layout_constraintEnd_toEndOf="@+id/btnGotQuizWrong"
-        app:layout_constraintStart_toStartOf="@+id/btnGotQuizRight"
+        app:layout_constraintEnd_toEndOf="@+id/btnQuizAnswerBR"
+        app:layout_constraintStart_toStartOf="@+id/btnQuizAnswerBL"
         app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
         app:layout_constraintVertical_bias="0.5"
         tools:ignore="TextSizeCheck" />
 
 
     <Button
-        android:id="@+id/btnGotQuizRight"
+        android:id="@+id/btnQuizAnswerBL"
         android:layout_width="165dp"
         android:layout_height="100dp"
         android:background="@drawable/outlineforbutton"
+        android:fontFamily="@font/viga"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="25sp"
         android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/btnClassAbility"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
+        app:layout_constraintVertical_bias="0.6"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp" />
+
+    <Button
+        android:id="@+id/btnQuizAnswerTL"
+        android:layout_width="165dp"
+        android:layout_height="100dp"
+        android:background="@drawable/outlineforbutton"
         android:fontFamily="@font/viga"
         android:text="@string/rightQuiz"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
         android:textSize="25sp"
-        app:layout_constraintBottom_toTopOf="@+id/btnClassAbility"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/btnQuizAnswerBL"
         app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintTop_toTopOf="@+id/btnGenerate"
+        app:layout_constraintVertical_bias="0.9"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp" />
 
     <Button
-        android:id="@+id/btnGotQuizWrong"
+        android:id="@+id/btnQuizAnswerBR"
         android:layout_width="165dp"
         android:layout_height="100dp"
         android:background="@drawable/outlineforbutton"
         android:fontFamily="@font/viga"
-        android:text="@string/wrongQuiz"
         android:textAllCaps="false"
-        android:visibility="invisible"
         android:textColor="@color/bluedark"
         android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@+id/btnClassAbility"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guidelineCenter"
-        app:layout_constraintTop_toBottomOf="@+id/btnGenerate" />
+        app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
+        app:layout_constraintVertical_bias="0.6"
+        android:visibility="invisible"
 
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+
+        />
+
+
+    <Button
+        android:id="@+id/btnQuizAnswerTR"
+        android:layout_width="165dp"
+        android:layout_height="100dp"
+        android:background="@drawable/outlineforbutton"
+        android:fontFamily="@font/viga"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:textSize="25sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/btnQuizAnswerBR"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guidelineCenter"
+        app:layout_constraintTop_toTopOf="@+id/btnGenerate"
+        app:layout_constraintVertical_bias="0.9" />
 
     <Button
         android:id="@+id/btnAnswer"

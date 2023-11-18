@@ -18,7 +18,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.app.ActivityCompat;
 
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.stores.GeneralSettingsLocalStore;
+import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 
 import java.io.IOException;
 

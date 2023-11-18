@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="top"
+    android:background="@android:color/white"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/viga"
+        android:text="Wild Card Quantity"
+        android:textColor="@color/bluedark"
+        android:textSize="23sp"
+        android:layout_gravity="center" />
+
+    <EditText
+        android:id="@+id/edittext_wildcard_amount"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:hint="How many wild cards?"
+        android:textAlignment="center"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/viga"
+        android:background="@drawable/outlineforbutton"
+        android:textColorHint="@color/bluedarktransparent"
+        android:inputType="number"
+        android:layout_gravity="center" />
+
+
+    <TextView
+        android:id="@+id/textview_banner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/viga"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:text="Quiz Settings"
+        android:textColor="@color/bluedark"
+        android:layout_gravity="center"
+        android:textSize="23sp" />
+
+    <Button
+        android:id="@+id/button_multiChoice"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:maxLines="4"
+        android:fontFamily="@font/viga"
+        android:textAllCaps="false"
+        android:text="Multi-choice Answer"
+        android:textAlignment="center"
+        android:textColor="@color/bluedark"
+        android:textSize="23sp"
+        android:layout_gravity="center"
+        android:background="@drawable/outlineforbutton" />
+
+    <Button
+        android:id="@+id/button_nonMultiChoice"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:maxLines="4"
+        android:fontFamily="@font/viga"
+        android:text="Short Answer"
+        android:textAlignment="center"
+        android:background="@drawable/outlineforbutton"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:layout_gravity="center"
+        android:textSize="23sp" />
+
+
+    <Button
+        android:id="@+id/buttonReturn"
+        android:layout_width="139dp"
+        android:layout_height="77dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/outlineforbutton"
+        android:text="Return"
+        android:fontFamily="@font/viga"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:layout_gravity="center"
+        android:textSize="20sp" />
+
+</LinearLayout>

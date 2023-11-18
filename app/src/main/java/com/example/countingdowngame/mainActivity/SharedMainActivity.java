@@ -122,6 +122,23 @@ public class SharedMainActivity extends ButtonUtilsActivity {
     }
 
 
+    public static int quizAnswerTextSize(String answer) {
+        int textSize;
+        int answerLength = answer.length();
+
+        if (answerLength > 16) {
+            textSize = 15; // Set text size to 15sp for answers longer than 20 characters
+        } else if (answerLength > 13) {
+            textSize = 18; // Set text size to 18sp for answers longer than 15 characters
+        } else if (answerLength > 10) {
+            textSize = 20; // Set text size to 20sp for answers longer than 10 characters
+        } else {
+            textSize = 23; // Set default text size to 23sp for shorter answers
+        }
+
+        return textSize;
+    }
+
     public static void splitScreenSetTextViewSizeBasedOnInt(TextView textView, String text) {
         int defaultTextSize = 65;
         int minSize = 45;
