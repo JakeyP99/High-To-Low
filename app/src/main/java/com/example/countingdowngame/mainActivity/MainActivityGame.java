@@ -869,6 +869,9 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
+    //-----------------------------------------------------Quiz Multi-Choice---------------------------------------------------//
+
+
     private void setMultiChoiceRandomizedAnswers(WildCardProperties selectedCard) {
         exposeQuizButtons();
 
@@ -905,7 +908,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void handleAnswerSelection(Button selectedButton, String selectedAnswer) {
-        disableAllButtons();
+        disableAllButtons(answerButtons);
 
         String correctAnswer = selectedWildCard.getAnswer();
         boolean isCorrect = selectedAnswer.equals(correctAnswer);
@@ -917,20 +920,16 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    private void disableAllButtons() {
-        for (Button button : answerButtons) {
-            button.setEnabled(false);
-        }
-    }
+
 
     private void handleCorrectAnswer(Button selectedButton, String correctAnswer) {
         selectedButton.setBackground(ContextCompat.getDrawable(this, R.drawable.buttonhighlightgreen));
         displayConfetti(Objects.requireNonNull(getConfettiView(selectedButton.getId())));
 
         new Handler().postDelayed(() -> {
-            resetButtonBackgrounds();
+            resetButtonBackgrounds(answerButtons);
             handleAnswerOutcome(selectedWildCard.equals(correctAnswer));
-            enableAllButtons();
+            enableAllButtons(answerButtons);
         }, DELAY_MILLIS);
     }
 
@@ -946,17 +945,12 @@ public class MainActivityGame extends SharedMainActivity {
         }
 
         new Handler().postDelayed(() -> {
-            resetButtonBackgrounds();
+            resetButtonBackgrounds(answerButtons);
             handleAnswerOutcome(false);
-            enableAllButtons();
+            enableAllButtons(answerButtons);
         }, DELAY_MILLIS);
     }
 
-    private void enableAllButtons() {
-        for (Button button : answerButtons) {
-            button.setEnabled(true);
-        }
-    }
 
     private void handleAnswerOutcome(boolean isCorrect) {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
@@ -972,11 +966,6 @@ public class MainActivityGame extends SharedMainActivity {
         btnBackWild.setVisibility(View.VISIBLE);
     }
 
-    private void resetButtonBackgrounds() {
-        for (Button button : answerButtons) {
-            button.setBackground(ContextCompat.getDrawable(this, R.drawable.outlineforbutton));
-        }
-    }
 
     private void wildCardContinue() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
@@ -1013,7 +1002,6 @@ public class MainActivityGame extends SharedMainActivity {
                 return null;
         }
     }
-
 
     //-----------------------------------------------------Quiz---------------------------------------------------//
 
