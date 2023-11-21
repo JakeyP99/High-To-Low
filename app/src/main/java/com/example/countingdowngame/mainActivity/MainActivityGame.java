@@ -107,6 +107,10 @@ public class MainActivityGame extends SharedMainActivity {
     private GifImageView confettiImageViewBR;
     private GifImageView confettiImageViewTR;
 
+
+    private static final int DELAY_MILLIS = 1500;
+    private static final int BUTTON_COUNT = 4;
+
     //-----------------------------------------------------Lifecycle Methods---------------------------------------------------//
     @Override
     protected void onResume() {
@@ -868,78 +872,104 @@ public class MainActivityGame extends SharedMainActivity {
     private void setMultiChoiceRandomizedAnswers(WildCardProperties selectedCard) {
         exposeQuizButtons();
 
-        String correctAnswer = selectedCard.getAnswer();
-        String wrongAnswer1 = selectedCard.getWrongAnswer1();
-        String wrongAnswer2 = selectedCard.getWrongAnswer2();
-        String wrongAnswer3 = selectedCard.getWrongAnswer3();
-
-        // Array to hold the answers
-        String[] answers = {correctAnswer, wrongAnswer1, wrongAnswer2, wrongAnswer3};
-
-
         // Shuffle the answers randomly
+        String[] answers = {
+                selectedCard.getAnswer(),
+                selectedCard.getWrongAnswer1(),
+                selectedCard.getWrongAnswer2(),
+                selectedCard.getWrongAnswer3()
+        };
 
         List<String> answerList = Arrays.asList(answers);
         Collections.shuffle(answerList);
         answers = answerList.toArray(new String[0]);
 
+        // Set answers to buttons
+        setAnswersToButtons(answers);
+    }
+
+    private void setAnswersToButtons(String[] answers) {
         answerButtons = new Button[]{btnQuizAnswerTL, btnQuizAnswerTR, btnQuizAnswerBL, btnQuizAnswerBR};
 
-        for (int i = 0; i < answerButtons.length; i++) {
-            answerButtons[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, quizAnswerTextSize(answers[i]));
-            answerButtons[i].setText(answers[i]);
+        for (int i = 0; i < BUTTON_COUNT; i++) {
+            Button currentButton = answerButtons[i];
+            currentButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, quizAnswerTextSize(answers[i]));
+            currentButton.setText(answers[i]);
 
-            int finalI = i;
-            btnUtils.setButton(answerButtons[i], () -> {
-                String selectedAnswer = answerButtons[finalI].getText().toString();
-                handleAnswerSelection(answerButtons[finalI], selectedCard, selectedAnswer);
-            });
+            setButtonClickListener(currentButton, answers[i]);
         }
     }
 
+    private void setButtonClickListener(Button button, String answer) {
+        btnUtils.setButton(button, () -> handleAnswerSelection(button, answer));
+    }
 
-    private void handleAnswerSelection(Button selectedButton, WildCardProperties selectedCard, String selectedAnswer) {
-        String correctAnswer = selectedCard.getAnswer();
+    private void handleAnswerSelection(Button selectedButton, String selectedAnswer) {
+        disableAllButtons();
 
-        if (selectedAnswer.equals(correctAnswer)) {
-            selectedButton.setBackground(ContextCompat.getDrawable(this, R.drawable.buttonhighlightgreen));
-            int selectedButtonId = selectedButton.getId();
+        String correctAnswer = selectedWildCard.getAnswer();
+        boolean isCorrect = selectedAnswer.equals(correctAnswer);
 
-            if (selectedButtonId == R.id.btnQuizAnswerTL) {
-                confettiImageViewTL.setVisibility(View.VISIBLE); // Show confetti for Top Left button
-            } else if (selectedButtonId == R.id.btnQuizAnswerTR) {
-                confettiImageViewTR.setVisibility(View.VISIBLE); // Show confetti for Top Right button
-            } else if (selectedButtonId == R.id.btnQuizAnswerBL) {
-                confettiImageViewBL.setVisibility(View.VISIBLE); // Show confetti for Bottom Left button
-            } else if (selectedButtonId == R.id.btnQuizAnswerBR) {
-                confettiImageViewBR.setVisibility(View.VISIBLE); // Show confetti for Bottom Right button
-            }
-
-            new Handler().postDelayed(() -> {
-                resetButtonBackgrounds();
-                checkAnswerAndContinue(selectedCard, selectedAnswer);
-                confettiImageViewTL.setVisibility(View.INVISIBLE); // Show confetti for Top Left button
-                confettiImageViewBL.setVisibility(View.INVISIBLE); // Show confetti for Top Left button
-                confettiImageViewTR.setVisibility(View.INVISIBLE); // Show confetti for Top Left button
-                confettiImageViewBR.setVisibility(View.INVISIBLE); // Show confetti for Top Left button
-
-            }, 1500); // Delay for 1 second (1000 milliseconds)
+        if (isCorrect) {
+            handleCorrectAnswer(selectedButton, correctAnswer);
         } else {
-            selectedButton.setBackground(ContextCompat.getDrawable(this, R.drawable.buttonhighlightred));
-
-            // Find and highlight the correct answer button in green
-            for (Button button : answerButtons) {
-                if (button.getText().toString().equals(correctAnswer)) {
-                    button.setBackground(ContextCompat.getDrawable(this, R.drawable.buttonhighlightgreen));
-                    break;
-                }
-            }
-
-            new Handler().postDelayed(() -> {
-                resetButtonBackgrounds();
-                checkAnswerAndContinue(selectedCard, selectedAnswer);
-            }, 1500); // Delay for 1 second (1000 milliseconds)
+            handleIncorrectAnswer(selectedButton, correctAnswer);
         }
+    }
+
+    private void disableAllButtons() {
+        for (Button button : answerButtons) {
+            button.setEnabled(false);
+        }
+    }
+
+    private void handleCorrectAnswer(Button selectedButton, String correctAnswer) {
+        selectedButton.setBackground(ContextCompat.getDrawable(this, R.drawable.buttonhighlightgreen));
+        displayConfetti(Objects.requireNonNull(getConfettiView(selectedButton.getId())));
+
+        new Handler().postDelayed(() -> {
+            resetButtonBackgrounds();
+            handleAnswerOutcome(selectedWildCard.equals(correctAnswer));
+            enableAllButtons();
+        }, DELAY_MILLIS);
+    }
+
+    private void handleIncorrectAnswer(Button selectedButton, String correctAnswer) {
+        selectedButton.setBackground(ContextCompat.getDrawable(this, R.drawable.buttonhighlightred));
+
+        // Highlight the correct answer button in green
+        for (Button button : answerButtons) {
+            if (button.getText().toString().equals(correctAnswer)) {
+                button.setBackground(ContextCompat.getDrawable(this, R.drawable.buttonhighlightgreen));
+                break;
+            }
+        }
+
+        new Handler().postDelayed(() -> {
+            resetButtonBackgrounds();
+            handleAnswerOutcome(false);
+            enableAllButtons();
+        }, DELAY_MILLIS);
+    }
+
+    private void enableAllButtons() {
+        for (Button button : answerButtons) {
+            button.setEnabled(true);
+        }
+    }
+
+    private void handleAnswerOutcome(boolean isCorrect) {
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+
+        if (isCorrect) {
+            currentPlayer.gainWildCards(1);
+            quizAnswerView(currentPlayer.getName() + " that's right! The answer was " + selectedWildCard.getAnswer() + "\n\n P.S. You get to keep your wildcard too.");
+        } else {
+            quizAnswerView(currentPlayer.getName() + " big ooooff! The answer actually was " + selectedWildCard.getAnswer() + "\n\n P.S. Maybe read a book every now and then");
+        }
+
+        hideQuizButtons();
+        btnBackWild.setVisibility(View.VISIBLE);
     }
 
     private void resetButtonBackgrounds() {
@@ -947,26 +977,6 @@ public class MainActivityGame extends SharedMainActivity {
             button.setBackground(ContextCompat.getDrawable(this, R.drawable.outlineforbutton));
         }
     }
-
-
-    private void checkAnswerAndContinue(WildCardProperties selectedCard, String selectedAnswer) {
-        String correctAnswer = selectedCard.getAnswer(); // Assuming selectedCard is defined somewhere accessible
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
-
-        if (selectedAnswer.equals(correctAnswer)) {
-
-
-            Game.getInstance().getCurrentPlayer().gainWildCards(1);
-            hideQuizButtons();
-            quizAnswerView(currentPlayer.getName() + " that's right! The answer was " + selectedCard.getAnswer() + "\n\n P.S. You get to keep your wildcard too.");
-            btnBackWild.setVisibility(View.VISIBLE);
-        } else {
-            hideQuizButtons();
-            quizAnswerView(currentPlayer.getName() + " big ooooff! The answer actually was " + selectedCard.getAnswer() + "\n\n P.S. Maybe read a book every now and then");
-            btnBackWild.setVisibility(View.VISIBLE);
-        }
-    }
-
 
     private void wildCardContinue() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
@@ -983,6 +993,27 @@ public class MainActivityGame extends SharedMainActivity {
         btnQuizAnswerBL.setVisibility(View.INVISIBLE);
         btnQuizAnswerBR.setVisibility(View.INVISIBLE);
     }
+
+    private void displayConfetti(View confettiView) {
+        confettiView.setVisibility(View.VISIBLE);
+        new Handler().postDelayed(() -> confettiView.setVisibility(View.INVISIBLE), 1500);
+    }
+
+    private View getConfettiView(int buttonId) {
+        switch (buttonId) {
+            case R.id.btnQuizAnswerTL:
+                return confettiImageViewTL;
+            case R.id.btnQuizAnswerTR:
+                return confettiImageViewTR;
+            case R.id.btnQuizAnswerBL:
+                return confettiImageViewBL;
+            case R.id.btnQuizAnswerBR:
+                return confettiImageViewBR;
+            default:
+                return null;
+        }
+    }
+
 
     //-----------------------------------------------------Quiz---------------------------------------------------//
 
