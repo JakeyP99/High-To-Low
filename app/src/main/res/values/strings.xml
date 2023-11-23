@@ -74,11 +74,8 @@
         I hope you enjoy our game!
     </string>
     <string name="placeholder_text">Placeholder Text</string>
-    <string name="answerQuiz">Answer</string>
     <string name="Answer">Answer</string>
     <string name="rightQuiz">Were You Right?</string>
-    <string name="wrongQuiz">Were You Wrong?</string>
-    <string name="generate">Generate</string>
     <string name="wild">Wild Card</string>
     <string name="continueTxt">Continue</string>
 

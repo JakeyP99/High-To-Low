@@ -71,23 +71,26 @@ public class AudioManager {
 
     private void playNextSong() {
         if (isPlaying) {
-            // Increment the currentSongIndex and make sure it wraps around to the first song
             currentSongIndex = (currentSongIndex + 1) % backgroundMusicList.size();
-
-            if (mediaPlayer != null) {
-                mediaPlayer.release();
-            }
 
             int soundResourceId = backgroundMusicList.get(currentSongIndex);
             mediaPlayer = MediaPlayer.create(context, soundResourceId);
+            mediaPlayer.start();
+        }
+    }
 
-            if (mediaPlayer != null) {
-                mediaPlayer.setLooping(false);
-                mediaPlayer.setOnCompletionListener(onCompletionListener);
-                mediaPlayer.start();
-            } else {
-                Log.e("AudioManager", "Failed to create MediaPlayer");
+    public void playNextSongPublic(Context context) {
+        if (mediaPlayer != null) {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.stop();
+                mediaPlayer.reset(); // Resetting the MediaPlayer
             }
+            currentSongIndex = (currentSongIndex + 1) % backgroundMusicList.size();
+
+            int soundResourceId = backgroundMusicList.get(currentSongIndex);
+            mediaPlayer = MediaPlayer.create(context, soundResourceId);
+            mediaPlayer.start();
+            Log.d("TAG", "Play NextSong");
         }
     }
 

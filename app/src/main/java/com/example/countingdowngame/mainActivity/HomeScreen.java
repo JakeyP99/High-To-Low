@@ -1,11 +1,14 @@
 package com.example.countingdowngame.mainActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
+
+import pl.droidsonroids.gif.GifImageView;
 
 public class HomeScreen extends ButtonUtilsActivity {
 
@@ -23,12 +26,21 @@ public class HomeScreen extends ButtonUtilsActivity {
     }
 
     private void setupButtonControls() {
+        GifImageView gifDrink = findViewById(R.id.drinkGif);
         Button btnQuickPlay = findViewById(R.id.quickplay);
         Button btnInstructions = findViewById(R.id.button_Instructions);
         Button btnSettings = findViewById(R.id.button_Settings);
         btnUtils.setButton(btnQuickPlay, this::gotoGameSetup);
         btnUtils.setButton(btnInstructions, this::gotoInstructions);
         btnUtils.setButton(btnSettings, this::gotoSettings);
+
+        gifDrink.setOnClickListener(view -> {
+            AudioManager audioManager = AudioManager.getInstance();
+            audioManager.playNextSongPublic(getApplicationContext()); // Pass the valid context here
+            Log.d("TAG", "setupButtonControls: Glass Clicked");
+            // Add further functionality related to the drink GIF here
+        });
+
     }
 }
 

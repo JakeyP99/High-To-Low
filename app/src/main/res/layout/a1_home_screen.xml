@@ -8,6 +8,7 @@
 
 
     <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/drinkGif"
         android:layout_width="247dp"
         android:layout_height="348dp"
         android:layout_centerHorizontal="true"

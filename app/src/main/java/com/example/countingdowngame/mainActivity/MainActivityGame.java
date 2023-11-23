@@ -90,7 +90,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     private final Map<Player, Set<WildCardProperties>> usedWildCard = new HashMap<>();
     private final Set<WildCardProperties> usedWildCards = new HashSet<>();
-    private Map<Player, Integer> playerTurnCountMap = new HashMap<>();
+    private final Map<Player, Integer> playerTurnCountMap = new HashMap<>();
 
     public static int drinkNumberCounterInt = 0;
     private Player firstPlayer;
