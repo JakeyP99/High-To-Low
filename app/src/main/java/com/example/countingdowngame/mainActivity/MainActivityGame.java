@@ -1,5 +1,14 @@
 package com.example.countingdowngame.mainActivity;
 
+import static com.example.countingdowngame.R.id.btnBackWildCard;
+import static com.example.countingdowngame.R.id.btnExitGame;
+import static com.example.countingdowngame.R.id.close_button;
+import static com.example.countingdowngame.R.id.dialogbox_textview;
+import static com.example.countingdowngame.R.id.editCurrentNumberTextView;
+import static com.example.countingdowngame.R.id.textView_NumberText;
+import static com.example.countingdowngame.R.id.textView_Number_Turn;
+import static com.example.countingdowngame.R.id.textView_WildText;
+import static com.example.countingdowngame.R.id.textView_numberCounter;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_ARCHER;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_JIM;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_SCIENTIST;
@@ -23,13 +32,15 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
+import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.GameEventType;
 import com.example.countingdowngame.game.Player;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
-import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.wildCards.WildCardProperties;
 import com.example.countingdowngame.wildCards.WildCardType;
@@ -52,6 +63,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import io.github.muddz.styleabletoast.StyleableToast;
+import pl.droidsonroids.gif.GifImageView;
 
 public class MainActivityGame extends SharedMainActivity {
 
@@ -87,7 +99,17 @@ public class MainActivityGame extends SharedMainActivity {
     private boolean isFirstTurn = true;
     private boolean soldierRemoval = false;
     public WildCardProperties selectedWildCard;
+    private Button[] answerButtons; // Array to hold the answer buttons
 
+    private GifImageView confettiImageViewBL;
+
+    private GifImageView confettiImageViewTL;
+    private GifImageView confettiImageViewBR;
+    private GifImageView confettiImageViewTR;
+
+
+    private static final int DELAY_MILLIS = 1500;
+    private static final int BUTTON_COUNT = 4;
 
     //-----------------------------------------------------Lifecycle Methods---------------------------------------------------//
     @Override
@@ -131,15 +153,19 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void initializeViews() {
         playerImage = findViewById(R.id.playerImage);
-        numberText = findViewById(R.id.textView_NumberText);
-        drinkNumberCounterTextView = findViewById(R.id.textView_numberCounter);
-        nextPlayerText = findViewById(R.id.textView_Number_Turn);
+        numberText = findViewById(textView_NumberText);
+        drinkNumberCounterTextView = findViewById(textView_numberCounter);
+        nextPlayerText = findViewById(textView_Number_Turn);
         btnWild = findViewById(R.id.btnWild);
+        confettiImageViewBL = findViewById(R.id.confettiImageViewBL);
+        confettiImageViewTL = findViewById(R.id.confettiImageViewTL);
+        confettiImageViewBR = findViewById(R.id.confettiImageViewBR);
+        confettiImageViewTR = findViewById(R.id.confettiImageViewTR);
 
         btnAnswer = findViewById(R.id.btnAnswer);
         btnClassAbility = findViewById(R.id.btnClassAbility);
         btnGenerate = findViewById(R.id.btnGenerate);
-        btnBackWild = findViewById(R.id.btnBackWildCard);
+        btnBackWild = findViewById(btnBackWildCard);
 
 
         btnQuizAnswerBL = findViewById(R.id.btnQuizAnswerBL);
@@ -149,7 +175,7 @@ public class MainActivityGame extends SharedMainActivity {
 
 
         shuffleHandler = new Handler();
-        wildText = findViewById(R.id.textView_WildText);
+        wildText = findViewById(textView_WildText);
     }
 
 
@@ -242,7 +268,7 @@ public class MainActivityGame extends SharedMainActivity {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         Log.d("setupButtons", " " + currentPlayer.getClassChoice());
 
-        ImageButton imageButtonExit = findViewById(R.id.btnExitGame);
+        ImageButton imageButtonExit = findViewById(btnExitGame);
 
         btnBackWild.setVisibility(View.INVISIBLE);
         btnAnswer.setVisibility(View.INVISIBLE);
@@ -534,14 +560,14 @@ public class MainActivityGame extends SharedMainActivity {
         LayoutInflater inflater = getLayoutInflater();
 
         View dialogView = inflater.inflate(R.layout.mainactivity_dialog_box, null);
-        TextView dialogboxtextview = dialogView.findViewById(R.id.dialogbox_textview);
+        TextView dialogboxtextview = dialogView.findViewById(dialogbox_textview);
         dialogboxtextview.setText(string);
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        ImageButton closeButton = dialogView.findViewById(R.id.close_button);
+        ImageButton closeButton = dialogView.findViewById(close_button);
         closeButton.setOnClickListener(v -> {
             dialog.dismiss();
         });
@@ -585,8 +611,8 @@ public class MainActivityGame extends SharedMainActivity {
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.character_class_change_number, null);
 
-        EditText editCurrentNumberText = dialogView.findViewById(R.id.editCurrentNumberTextView);
-        Button okButton = dialogView.findViewById(R.id.close_button);
+        EditText editCurrentNumberText = dialogView.findViewById(editCurrentNumberTextView);
+        Button okButton = dialogView.findViewById(close_button);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setView(dialogView);
@@ -643,7 +669,7 @@ public class MainActivityGame extends SharedMainActivity {
         allProbabilities.addAll(Arrays.asList(truthProbabilities));
         allProbabilities.addAll(Arrays.asList(extraProbabilities));
 
-        final TextView wildActivityTextView = findViewById(R.id.textView_WildText);
+        final TextView wildActivityTextView = findViewById(textView_WildText);
 
         boolean wildCardsEnabled = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("wild_cards_toggle", true);
 
@@ -847,72 +873,101 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
+    //-----------------------------------------------------Quiz Multi-Choice---------------------------------------------------//
+
+
     private void setMultiChoiceRandomizedAnswers(WildCardProperties selectedCard) {
         exposeQuizButtons();
 
-        String correctAnswer = selectedCard.getAnswer();
-        String wrongAnswer1 = selectedCard.getWrongAnswer1();
-        String wrongAnswer2 = selectedCard.getWrongAnswer2();
-        String wrongAnswer3 = selectedCard.getWrongAnswer3();
-
-        // Array to hold the answers
-        String[] answers = {correctAnswer, wrongAnswer1, wrongAnswer2, wrongAnswer3};
-
         // Shuffle the answers randomly
+        String[] answers = {
+                selectedCard.getAnswer(),
+                selectedCard.getWrongAnswer1(),
+                selectedCard.getWrongAnswer2(),
+                selectedCard.getWrongAnswer3()
+        };
 
         List<String> answerList = Arrays.asList(answers);
         Collections.shuffle(answerList);
         answers = answerList.toArray(new String[0]);
 
-// Assign answers to buttons randomly
-        btnQuizAnswerTL.setTextSize(TypedValue.COMPLEX_UNIT_SP, quizAnswerTextSize(answers[0]));
-        btnQuizAnswerTL.setText(answers[0]);
-
-        btnQuizAnswerTR.setTextSize(TypedValue.COMPLEX_UNIT_SP, quizAnswerTextSize(answers[1]));
-        btnQuizAnswerTR.setText(answers[1]);
-
-        btnQuizAnswerBL.setTextSize(TypedValue.COMPLEX_UNIT_SP, quizAnswerTextSize(answers[2]));
-        btnQuizAnswerBL.setText(answers[2]);
-
-        btnQuizAnswerBR.setTextSize(TypedValue.COMPLEX_UNIT_SP, quizAnswerTextSize(answers[3]));
-        btnQuizAnswerBR.setText(answers[3]);
-
-        btnUtils.setButton(btnQuizAnswerTL, () -> {
-            String selectedAnswer = btnQuizAnswerTL.getText().toString();
-            checkAnswerAndContinue(selectedCard, selectedAnswer);
-        });
-
-        btnUtils.setButton(btnQuizAnswerTR, () -> {
-            String selectedAnswer = btnQuizAnswerTR.getText().toString();
-            checkAnswerAndContinue(selectedCard, selectedAnswer);
-        });
-
-        btnUtils.setButton(btnQuizAnswerBL, () -> {
-            String selectedAnswer = btnQuizAnswerBL.getText().toString();
-            checkAnswerAndContinue(selectedCard, selectedAnswer);
-        });
-
-        btnUtils.setButton(btnQuizAnswerBR, () -> {
-            String selectedAnswer = btnQuizAnswerBR.getText().toString();
-            checkAnswerAndContinue(selectedCard, selectedAnswer);
-        });
-
+        // Set answers to buttons
+        setAnswersToButtons(answers);
     }
 
-    private void checkAnswerAndContinue(WildCardProperties selectedCard, String selectedAnswer) {
-        String correctAnswer = selectedCard.getAnswer(); // Assuming selectedCard is defined somewhere accessible
+    private void setAnswersToButtons(String[] answers) {
+        answerButtons = new Button[]{btnQuizAnswerTL, btnQuizAnswerTR, btnQuizAnswerBL, btnQuizAnswerBR};
+
+        for (int i = 0; i < BUTTON_COUNT; i++) {
+            Button currentButton = answerButtons[i];
+            currentButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, quizAnswerTextSize(answers[i]));
+            currentButton.setText(answers[i]);
+
+            setButtonClickListener(currentButton, answers[i]);
+        }
+    }
+
+    private void setButtonClickListener(Button button, String answer) {
+        btnUtils.setButton(button, () -> handleAnswerSelection(button, answer));
+    }
+
+    private void handleAnswerSelection(Button selectedButton, String selectedAnswer) {
+        disableAllButtons(answerButtons);
+
+        String correctAnswer = selectedWildCard.getAnswer();
+        boolean isCorrect = selectedAnswer.equals(correctAnswer);
+
+        if (isCorrect) {
+            handleCorrectAnswer(selectedButton, correctAnswer);
+        } else {
+            handleIncorrectAnswer(selectedButton, correctAnswer);
+        }
+    }
+
+
+
+    private void handleCorrectAnswer(Button selectedButton, String correctAnswer) {
+        selectedButton.setBackground(ContextCompat.getDrawable(this, R.drawable.buttonhighlightgreen));
+        displayConfetti(Objects.requireNonNull(getConfettiView(selectedButton.getId())));
+
+        new Handler().postDelayed(() -> {
+            resetButtonBackgrounds(answerButtons);
+            handleAnswerOutcome(selectedWildCard.equals(correctAnswer));
+            enableAllButtons(answerButtons);
+        }, DELAY_MILLIS);
+    }
+
+    private void handleIncorrectAnswer(Button selectedButton, String correctAnswer) {
+        selectedButton.setBackground(ContextCompat.getDrawable(this, R.drawable.buttonhighlightred));
+
+        // Highlight the correct answer button in green
+        for (Button button : answerButtons) {
+            if (button.getText().toString().equals(correctAnswer)) {
+                button.setBackground(ContextCompat.getDrawable(this, R.drawable.buttonhighlightgreen));
+                break;
+            }
+        }
+
+        new Handler().postDelayed(() -> {
+            resetButtonBackgrounds(answerButtons);
+            handleAnswerOutcome(false);
+            enableAllButtons(answerButtons);
+        }, DELAY_MILLIS);
+    }
+
+
+    private void handleAnswerOutcome(boolean isCorrect) {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
 
-        if (selectedAnswer.equals(correctAnswer)) {
-            Game.getInstance().getCurrentPlayer().gainWildCards(1);
-            hideQuizButtons();
-            quizAnswerView(currentPlayer.getName() + " that's right! The answer was " + selectedCard.getAnswer() + "\n\n P.S. You get to keep your wildcard too.");
-            btnBackWild.setVisibility(View.VISIBLE);
+        if (isCorrect) {
+            currentPlayer.gainWildCards(1);
+            quizAnswerView(currentPlayer.getName() + " that's right! The answer was " + selectedWildCard.getAnswer() + "\n\n P.S. You get to keep your wildcard too.");
         } else {
-            hideQuizButtons();
-            quizAnswerView(currentPlayer.getName() + " big ooooff! The answer actually was " + selectedCard.getAnswer() + "\n\n P.S. Maybe read a book every now and then");
-            btnBackWild.setVisibility(View.VISIBLE);
+            quizAnswerView(currentPlayer.getName() + " big ooooff! The answer actually was " + selectedWildCard.getAnswer() + "\n\n P.S. Maybe read a book every now and then");
         }
+
+        hideQuizButtons();
+        btnBackWild.setVisibility(View.VISIBLE);
     }
 
 
@@ -930,6 +985,26 @@ public class MainActivityGame extends SharedMainActivity {
         btnAnswer.setVisibility(View.INVISIBLE);
         btnQuizAnswerBL.setVisibility(View.INVISIBLE);
         btnQuizAnswerBR.setVisibility(View.INVISIBLE);
+    }
+
+    private void displayConfetti(View confettiView) {
+        confettiView.setVisibility(View.VISIBLE);
+        new Handler().postDelayed(() -> confettiView.setVisibility(View.INVISIBLE), 1500);
+    }
+
+    private View getConfettiView(int buttonId) {
+        switch (buttonId) {
+            case R.id.btnQuizAnswerTL:
+                return confettiImageViewTL;
+            case R.id.btnQuizAnswerTR:
+                return confettiImageViewTR;
+            case R.id.btnQuizAnswerBL:
+                return confettiImageViewBL;
+            case R.id.btnQuizAnswerBR:
+                return confettiImageViewBR;
+            default:
+                return null;
+        }
     }
 
     //-----------------------------------------------------Quiz---------------------------------------------------//
@@ -963,7 +1038,7 @@ public class MainActivityGame extends SharedMainActivity {
     private void showAnswer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
 
-        TextView wildActivityTextView = findViewById(R.id.textView_WildText);
+        TextView wildActivityTextView = findViewById(textView_WildText);
         btnQuizAnswerBL.setVisibility(View.VISIBLE);
         btnQuizAnswerBR.setVisibility(View.VISIBLE);
 

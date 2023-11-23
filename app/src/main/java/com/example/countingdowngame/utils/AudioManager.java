@@ -8,6 +8,7 @@ import com.example.countingdowngame.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class AudioManager {
     private static AudioManager instance;
@@ -53,7 +54,7 @@ public class AudioManager {
         if (mediaPlayer != null) {
             mediaPlayer.release();
         }
-        currentSongIndex = (currentSongIndex + 1) % backgroundMusicList.size();
+        currentSongIndex = new Random().nextInt(backgroundMusicList.size());
         int soundResourceId = backgroundMusicList.get(currentSongIndex);
 
         mediaPlayer = MediaPlayer.create(context, soundResourceId);

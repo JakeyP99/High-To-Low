@@ -7,8 +7,11 @@ import android.os.Handler;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
@@ -96,6 +99,24 @@ public class SharedMainActivity extends ButtonUtilsActivity {
             }
 
             return textSize;
+        }
+    }
+
+    public void disableAllButtons(Button[] buttons) {
+        for (Button button : buttons) {
+            button.setEnabled(false);
+        }
+    }
+
+    public void enableAllButtons(Button[] buttons) {
+        for (Button button : buttons) {
+            button.setEnabled(true);
+        }
+    }
+
+    public void resetButtonBackgrounds(Button[] buttons) {
+        for (Button button : buttons) {
+            button.setBackground(ContextCompat.getDrawable(this, R.drawable.outlineforbutton));
         }
     }
 

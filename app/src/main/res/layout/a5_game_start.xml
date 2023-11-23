@@ -100,7 +100,28 @@
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:paddingTop="8dp"
-        android:paddingBottom="8dp" />
+        android:paddingBottom="8dp"
+
+
+        />
+
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/confettiImageViewBL"
+        android:layout_width="167dp"
+        android:layout_height="132dp"
+        android:paddingStart="8dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="8dp"
+        android:src="@drawable/confetti"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/btnClassAbility"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
+        app:layout_constraintVertical_bias="0.6" />
+
 
     <Button
         android:id="@+id/btnQuizAnswerTL"
@@ -123,6 +144,26 @@
         android:paddingEnd="8dp"
         android:paddingTop="8dp"
         android:paddingBottom="8dp" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/confettiImageViewTL"
+        android:layout_width="167dp"
+        android:layout_height="132dp"
+        android:src="@drawable/confetti"
+        app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
+        android:visibility="invisible"
+
+        app:layout_constraintBottom_toTopOf="@+id/btnQuizAnswerBL"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnGenerate"
+        app:layout_constraintVertical_bias="0.9"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp" />
+
 
     <Button
         android:id="@+id/btnQuizAnswerBR"
@@ -147,6 +188,22 @@
 
         />
 
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/confettiImageViewBR"
+        android:layout_width="167dp"
+        android:layout_height="132dp"
+        android:src="@drawable/confetti"
+        app:layout_constraintBottom_toTopOf="@+id/btnClassAbility"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guidelineCenter"
+        app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
+        app:layout_constraintVertical_bias="0.6"
+        android:visibility="invisible"
+
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp" />
 
     <Button
         android:id="@+id/btnQuizAnswerTR"
@@ -165,6 +222,21 @@
         app:layout_constraintStart_toStartOf="@+id/guidelineCenter"
         app:layout_constraintTop_toTopOf="@+id/btnGenerate"
         app:layout_constraintVertical_bias="0.9" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/confettiImageViewTR"
+        android:layout_width="167dp"
+        android:layout_height="132dp"
+        android:src="@drawable/confetti"
+        app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
+        android:visibility="invisible"
+
+        app:layout_constraintBottom_toTopOf="@+id/btnQuizAnswerBR"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guidelineCenter"
+        app:layout_constraintTop_toTopOf="@+id/btnGenerate"
+        app:layout_constraintVertical_bias="0.9" />
+
 
     <Button
         android:id="@+id/btnAnswer"
