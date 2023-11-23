@@ -327,54 +327,79 @@ public class MainActivityGame extends SharedMainActivity {
     private void renderPlayer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
+
         characterPassiveClassAffects();
+        updateClassAbilityButton(currentPlayer);
+        updateDrinkNumberCounter(currentPlayer);
+
+        if (!playerList.isEmpty()) {
+            updatePlayerInfo(currentPlayer);
+        }
+
+        updateWildCardVisibility(currentPlayer);
+        updateNumberText();
+        logPlayerInformation(currentPlayer);
+    }
+
+    private void updateClassAbilityButton(Player currentPlayer) {
         btnClassAbility.setText(String.format("%s's Ability", currentPlayer.getClassChoice()));
 
-
-        if (("Scientist".equals(currentPlayer.getClassChoice()) ||
+        boolean showClassAbilityButton = ("Scientist".equals(currentPlayer.getClassChoice()) ||
                 "Archer".equals(currentPlayer.getClassChoice()) ||
                 "Witch".equals(currentPlayer.getClassChoice()) ||
-                "Soldier".equals(currentPlayer.getClassChoice())
-        ) &&
-                !currentPlayer.usedClassAbility()) {
-            btnClassAbility.setVisibility(View.VISIBLE);
-        } else {
-            btnClassAbility.setVisibility(View.INVISIBLE);
-        }
-        if ("Jim".equals(currentPlayer.getClassChoice())) {
-            btnClassAbility.setVisibility(View.INVISIBLE);
-        }
+                "Soldier".equals(currentPlayer.getClassChoice())) &&
+                !currentPlayer.usedClassAbility();
 
+        btnClassAbility.setVisibility(showClassAbilityButton ? View.VISIBLE : View.INVISIBLE);
+
+        if ("Jim".equals(currentPlayer.getClassChoice()) || "No Class".equals(currentPlayer.getClassChoice())) {
+            btnClassAbility.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void updateDrinkNumberCounter(Player currentPlayer) {
         if (currentPlayer.equals(firstPlayer)) {
             drinkNumberCounterInt++;
             updateDrinkNumberCounterTextView();
         }
+    }
 
-        if (!playerList.isEmpty()) {
-            String playerName = currentPlayer.getName();
-            String playerImageString = currentPlayer.getPhoto();
+    private void updatePlayerInfo(Player currentPlayer) {
+        String playerName = currentPlayer.getName();
+        String playerImageString = currentPlayer.getPhoto();
 
-            nextPlayerText.setText(playerName + "'s Turn");
-            btnWild.setText((currentPlayer.getWildCardAmount() + "\n" + "Wild Cards"));
+        nextPlayerText.setText(playerName + "'s Turn");
+        btnWild.setText((currentPlayer.getWildCardAmount() + "\n" + "Wild Cards"));
 
-            if (playerImageString != null) {
-                byte[] decodedString = Base64.decode(playerImageString, Base64.DEFAULT);
-                Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                playerImage.setImageBitmap(decodedBitmap);
-            }
+        if (playerImageString != null) {
+            byte[] decodedString = Base64.decode(playerImageString, Base64.DEFAULT);
+            Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            playerImage.setImageBitmap(decodedBitmap);
         }
+    }
 
+    private void updateWildCardVisibility(Player currentPlayer) {
         btnWild.setVisibility(currentPlayer.getWildCardAmount() > 0 ? View.VISIBLE : View.INVISIBLE);
+    }
 
+    private void updateNumberText() {
         int currentNumber = Game.getInstance().getCurrentNumber();
         numberText.setText(String.valueOf(currentNumber));
         SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(currentNumber));
         SharedMainActivity.setNameSizeBasedOnInt(nextPlayerText, nextPlayerText.getText().toString());
-
-        Log.d("renderPlayer", "Current number is " + Game.getInstance().getCurrentNumber() + " - Player was rendered " +
-                currentPlayer.getName() + " is a " + currentPlayer.getClassChoice() + " with " + currentPlayer.getWildCardAmount() +
-                " Wildcards " + "and " + currentPlayer.usedClassAbility() + " is the class abilitiy and are they removed ?" + currentPlayer.isRemoved());
     }
+
+    private void logPlayerInformation(Player currentPlayer) {
+        Log.d("renderPlayer", "Current number is " + Game.getInstance().getCurrentNumber() +
+                " - Player was rendered " + currentPlayer.getName() +
+                " is a " + currentPlayer.getClassChoice() +
+                " with " + currentPlayer.getWildCardAmount() +
+                " Wildcards " +
+                "and " + currentPlayer.usedClassAbility() +
+                " is the class ability and are they removed ?" +
+                currentPlayer.isRemoved());
+    }
+
 
     private void startNumberShuffleAnimation() {
         btnGenerate.setEnabled(false);
