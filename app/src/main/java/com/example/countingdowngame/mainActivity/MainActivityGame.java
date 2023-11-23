@@ -953,7 +953,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         new Handler().postDelayed(() -> {
             resetButtonBackgrounds(answerButtons);
-            handleAnswerOutcome(selectedWildCard.equals(correctAnswer));
+            handleAnswerOutcome(selectedWildCard.getAnswer().equals(correctAnswer));
             enableAllButtons(answerButtons);
         }, DELAY_MILLIS);
     }
