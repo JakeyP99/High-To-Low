@@ -18,7 +18,9 @@ public class HomeScreen extends ButtonUtilsActivity {
         setupView();
         setupButtonControls();
 
-        AudioManager.getInstance().playRandomBackgroundMusic(this);
+        AudioManager audioManager = AudioManager.getInstance();
+        audioManager.setContext(getApplicationContext()); // Set the context before calling playNextSong or other methods
+        audioManager.playRandomBackgroundMusic(getApplicationContext()); // Initialize and start playing music
     }
 
     private void setupView() {
@@ -36,7 +38,7 @@ public class HomeScreen extends ButtonUtilsActivity {
 
         gifDrink.setOnClickListener(view -> {
             AudioManager audioManager = AudioManager.getInstance();
-            audioManager.playNextSongPublic(getApplicationContext()); // Pass the valid context here
+            audioManager.playNextSong(); // Pass the valid context here
             Log.d("TAG", "setupButtonControls: Glass Clicked");
             // Add further functionality related to the drink GIF here
         });

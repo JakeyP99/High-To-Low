@@ -19,15 +19,13 @@ import io.github.muddz.styleabletoast.StyleableToast;
 
 public class NumberChoice extends ButtonUtilsActivity {
     private int startingNumber;
-    private Button btnSubmit;
-    private Button btnRandom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a4_number_choice);
-        btnSubmit = findViewById(R.id.btnSubmitNumbers);
-        btnRandom = findViewById(R.id.btnRandomNumber);
+        Button btnSubmit = findViewById(R.id.btnSubmitNumbers);
+        Button btnRandom = findViewById(R.id.btnRandomNumber);
         resetStartingNumber();
         btnUtils.setButton(btnSubmit, this::onSubmitClicked);
         btnUtils.setButton(btnRandom, this::onRandomClicked);

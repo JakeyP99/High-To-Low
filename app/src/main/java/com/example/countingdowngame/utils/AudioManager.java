@@ -28,6 +28,10 @@ public class AudioManager {
         backgroundMusicList.add(R.raw.backgroundmusic4);
     }
 
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
     private final MediaPlayer.OnCompletionListener onCompletionListener = mp -> playNextSong();
 
     public static AudioManager getInstance() {
@@ -69,28 +73,29 @@ public class AudioManager {
         }
     }
 
-    private void playNextSong() {
-        if (isPlaying) {
-            currentSongIndex = (currentSongIndex + 1) % backgroundMusicList.size();
+    public void playNextSong() {
+        if (context != null) {
+            if (mediaPlayer != null) {
+                if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.stop();
+                    mediaPlayer.reset(); // Resetting the MediaPlayer
+                }
+                currentSongIndex = (currentSongIndex + 1) % backgroundMusicList.size();
 
-            int soundResourceId = backgroundMusicList.get(currentSongIndex);
-            mediaPlayer = MediaPlayer.create(context, soundResourceId);
-            mediaPlayer.start();
-        }
-    }
+                int soundResourceId = backgroundMusicList.get(currentSongIndex);
+                mediaPlayer = MediaPlayer.create(context, soundResourceId);
 
-    public void playNextSongPublic(Context context) {
-        if (mediaPlayer != null) {
-            if (mediaPlayer.isPlaying()) {
-                mediaPlayer.stop();
-                mediaPlayer.reset(); // Resetting the MediaPlayer
+                if (mediaPlayer != null) {
+                    mediaPlayer.setOnCompletionListener(onCompletionListener);
+                    mediaPlayer.start();
+                    Log.d("TAG", "Play NextSong");
+                } else {
+                    Log.e("AudioManager", "Failed to create MediaPlayer");
+                }
             }
-            currentSongIndex = (currentSongIndex + 1) % backgroundMusicList.size();
-
-            int soundResourceId = backgroundMusicList.get(currentSongIndex);
-            mediaPlayer = MediaPlayer.create(context, soundResourceId);
-            mediaPlayer.start();
-            Log.d("TAG", "Play NextSong");
+        } else {
+            Log.e("AudioManager", "Context is null");
+            // Handle the null context case, perhaps by logging an error or taking appropriate action.
         }
     }
 
