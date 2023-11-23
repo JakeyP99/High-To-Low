@@ -287,7 +287,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         btnUtils.setButton(btnBackWild, this::wildCardContinue);
 
-        btnUtils.setButton(btnClassAbility, this::characterActiveAbilities);
+        btnUtils.setButton(btnClassAbility, this::activateActiveAbility);
 
         btnUtils.setButton(btnWild, () -> {
             wildCardActivate(Game.getInstance().getCurrentPlayer());
@@ -449,6 +449,15 @@ public class MainActivityGame extends SharedMainActivity {
         if (currentPlayer == null) {
             return;
         }
+
+        handleSoldierPassive(currentPlayer);
+        handleWitchPassive(currentPlayer);
+        handleScientistPassive(currentPlayer);
+        handleJimPassive(currentPlayer);
+        handleArcherPassive(currentPlayer);
+    }
+
+    private void handleSoldierPassive(Player currentPlayer) {
         if ("Soldier".equals(currentPlayer.getClassChoice())) {
             new Handler().postDelayed(() -> {
                 if (!currentPlayer.isRemoved()) {
@@ -458,15 +467,19 @@ public class MainActivityGame extends SharedMainActivity {
                 }
             }, 1);
         }
-        if ("Witch".equals(currentPlayer.getClassChoice())) {
-            if (!isFirstTurn) {
-                if (Game.getInstance().getCurrentNumber() % 2 == 0) {
-                    showDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " hand out two drinks.");
-                } else {
-                    showDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " take a drink.");
-                }
+    }
+
+    private void handleWitchPassive(Player currentPlayer) {
+        if ("Witch".equals(currentPlayer.getClassChoice()) && !isFirstTurn) {
+            if (Game.getInstance().getCurrentNumber() % 2 == 0) {
+                showDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " hand out two drinks.");
+            } else {
+                showDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " take a drink.");
             }
         }
+    }
+
+    private void handleScientistPassive(Player currentPlayer) {
         if ("Scientist".equals(currentPlayer.getClassChoice())) {
             Handler handler = new Handler();
             int delayMillis = 1;
@@ -479,12 +492,18 @@ public class MainActivityGame extends SharedMainActivity {
                 }
             }, delayMillis);
         }
+    }
+
+    private void handleJimPassive(Player currentPlayer) {
         if ("Jim".equals(currentPlayer.getClassChoice())) {
             int turnCounter = currentPlayer.getTurnCounter();
             if (turnCounter > 0 && turnCounter % 3 == 0) {
                 currentPlayer.gainWildCards(1);
             }
         }
+    }
+
+    private void handleArcherPassive(Player currentPlayer) {
         if ("Archer".equals(currentPlayer.getClassChoice())) {
             int currentPlayerTurnCount = playerTurnCountMap.getOrDefault(currentPlayer, 0);
             currentPlayerTurnCount++;
@@ -495,7 +514,8 @@ public class MainActivityGame extends SharedMainActivity {
             if (currentPlayerTurnCount % 3 == 0) {
                 Log.d("ArcherClass", "Passive ability triggered");
 
-                if (new Random().nextInt(100) < 60) {
+                int chance = new Random().nextInt(100);
+                if (chance < 60) {
                     drinkNumberCounterInt += 2;
                     updateDrinkNumberCounterTextView();
                     showDialog("Archer's Passive: \n\nDrinking number increased by 2!");
@@ -511,9 +531,9 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    public void characterActiveAbilities() {
+    public void activateActiveAbility() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        Log.d("characterActiveAbilities", "Class Activated" + currentPlayer.getClassChoice());
+        Log.d("activateActiveAbility", "Class Activated" + currentPlayer.getClassChoice());
         String classChoice = currentPlayer.getClassChoice();
         switch (classChoice) {
             case "Scientist":
@@ -982,6 +1002,9 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void handleIncorrectAnswer(Button selectedButton, String correctAnswer) {
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        Game.getInstance().activateRepeatingTurn(currentPlayer);
+
         selectedButton.setBackground(ContextCompat.getDrawable(this, R.drawable.buttonhighlightred));
 
         // Highlight the correct answer button in green
@@ -1005,9 +1028,9 @@ public class MainActivityGame extends SharedMainActivity {
 
         if (isCorrect) {
             currentPlayer.gainWildCards(1);
-            quizAnswerView(currentPlayer.getName() + " that's right! The answer was " + selectedWildCard.getAnswer() + "\n\n P.S. You get to keep your wildcard too.");
+            quizAnswerView(currentPlayer.getName() + " that's right! The answer was " + selectedWildCard.getAnswer() + "\n\n P.S. Give out a drink, and you get to keep your wildcard too.");
         } else {
-            quizAnswerView(currentPlayer.getName() + " big ooooff! The answer actually was " + selectedWildCard.getAnswer() + "\n\n P.S. Maybe read a book every now and then");
+            quizAnswerView(currentPlayer.getName() + " big ooooff! The answer actually was " + selectedWildCard.getAnswer() + "\n\n Take a drink and repeat your turn.");
         }
 
         hideQuizButtons();
