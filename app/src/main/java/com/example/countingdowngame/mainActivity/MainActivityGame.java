@@ -678,6 +678,8 @@ public class MainActivityGame extends SharedMainActivity {
                     numberText.setText(String.valueOf(newNumber));
                     renderCurrentNumber(newNumber, this::gotoGameEnd, numberText);
                     currentPlayer.setClassAbility(true);
+                    updateNumber(newNumber);
+
 
                     btnClassAbility.setVisibility(View.INVISIBLE);
                     dialog.dismiss(); // Close the dialog on success

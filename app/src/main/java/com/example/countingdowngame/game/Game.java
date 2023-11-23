@@ -159,8 +159,6 @@ public class Game {
 
     public void setCurrentNumber(int number) {
         currentNumber = number;
-        Log.d(TAG, currentPlayerId + " This is the ID before.");
-
     }
 
     public void resetPlayers(Context context) {
