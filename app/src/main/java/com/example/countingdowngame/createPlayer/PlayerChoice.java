@@ -177,30 +177,39 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         dialog.setOnCancelListener(dialogInterface -> {
             int selectedPosition = adapter.getSelectedItemPosition();
             Player selectedPlayer = playerList.get(position);
-            if (selectedPosition != -1) {
+
+            // Check bounds before accessing characterClasses
+            if (selectedPosition >= 0 && selectedPosition < characterClasses.size()) {
                 CharacterClassStore selectedCharacterClass = characterClasses.get(selectedPosition);
                 selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
-                String message = selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
-                StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
 
+                if (!selectedCharacterClass.getClassName().equals("No Class")) {
+                    String message = selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
+                    StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
+                } else {
+                    selectedPlayer.setClassChoice(null);
+                    StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
+                }
             } else {
+                // Handle invalid selection or out-of-bounds position
                 selectedPlayer.setClassChoice(null);
                 StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
-
             }
+
             dialog.dismiss();
         });
+
 
         dialog.show();
 
         confirmClass.setOnClickListener(v -> {
             int selectedPosition = adapter.getSelectedItemPosition();
             Player selectedPlayer = playerList.get(position);
+            CharacterClassStore selectedCharacterClass = characterClasses.get(selectedPosition);
+            selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
 
-            if (selectedPosition != -1) {
-                CharacterClassStore selectedCharacterClass = characterClasses.get(selectedPosition);
-                selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
 
+            if (selectedPosition != -1 && !selectedCharacterClass.getClassName().equals("No Class")) {
                 String message = selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
                 StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
                 dialog.dismiss();

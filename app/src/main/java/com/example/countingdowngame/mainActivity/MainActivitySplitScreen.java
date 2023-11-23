@@ -500,7 +500,7 @@ public class MainActivitySplitScreen extends SharedMainActivity {
                 Game.getInstance().getCurrentPlayer().gainWildCards(3);
                 break;
             case "Lose a couple wildcards :( oh also drink 3 lol!":
-                Game.getInstance().getCurrentPlayer().loseWildCards();
+                Game.getInstance().getCurrentPlayer().loseWildCards(2);
                 break;
         }
     }

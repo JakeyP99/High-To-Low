@@ -67,8 +67,6 @@ import pl.droidsonroids.gif.GifImageView;
 
 public class MainActivityGame extends SharedMainActivity {
 
-    //TEST
-
     //-----------------------------------------------------Member Variables---------------------------------------------------//
 
     private TextView numberText;
@@ -851,47 +849,72 @@ public class MainActivityGame extends SharedMainActivity {
                     "Category: " + selectedCard.getCategory());
         }
 
+        performWildCardAction(selectedActivity, player);
+    }
 
-        switch (Objects.requireNonNull(selectedActivity)) {
-            case "Double the current number!": {
-                int currentNumber = Game.getInstance().getCurrentNumber();
-                int updatedNumber = Math.min(currentNumber * 2, 999999999);
-                Game.getInstance().setCurrentNumber(updatedNumber);
-                Game.getInstance().addUpdatedNumber(updatedNumber);
-                numberText.setText(String.valueOf(updatedNumber));
-                SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
+    private void performWildCardAction(String selectedActivity, Player player) {
+        switch (selectedActivity) {
+            case "Double the current number!":
+                doubleCurrentNumber();
                 break;
-            }
-            case "Half the current number!": {
-                int currentNumber = Game.getInstance().getCurrentNumber();
-                int updatedNumber = Math.max(currentNumber / 2, 1);
-                Game.getInstance().setCurrentNumber(updatedNumber);
-                Game.getInstance().addUpdatedNumber(updatedNumber);
-                numberText.setText(String.valueOf(updatedNumber));
-                SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
+            case "Half the current number!":
+                halveCurrentNumber();
                 break;
-            }
             case "Reset the number!":
-                Bundle extras = getIntent().getExtras();
-                if (extras == null) {
-                    throw new RuntimeException("Missing extras");
-                }
-                int startingNumber = extras.getInt("startingNumber");
-                Game.getInstance().setCurrentNumber(startingNumber);
-                Game.getInstance().addUpdatedNumber(startingNumber);
-                numberText.setText(String.valueOf(startingNumber));
-                SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(startingNumber));
+                resetNumber();
                 break;
             case "Reverse the turn order!":
                 reverseTurnOrder(player);
                 break;
             case "Gain a couple more wildcards to use, I gotchya back!":
-                Game.getInstance().getCurrentPlayer().gainWildCards(3);
+                gainWildCards();
                 break;
             case "Lose a couple wildcards :( oh also drink 3 lol!":
-                Game.getInstance().getCurrentPlayer().loseWildCards();
+                loseWildCards();
+                break;
+            // Add more cases for other wild card actions if needed...
+            default:
+                // Handle default case if needed
                 break;
         }
+    }
+
+// Methods for specific wild card actions
+
+    private void doubleCurrentNumber() {
+        int currentNumber = Game.getInstance().getCurrentNumber();
+        int updatedNumber = Math.min(currentNumber * 2, 999999999);
+        updateNumber(updatedNumber);
+    }
+
+    private void halveCurrentNumber() {
+        int currentNumber = Game.getInstance().getCurrentNumber();
+        int updatedNumber = Math.max(currentNumber / 2, 1);
+        updateNumber(updatedNumber);
+    }
+
+    private void resetNumber() {
+        Bundle extras = getIntent().getExtras();
+        if (extras == null) {
+            throw new RuntimeException("Missing extras");
+        }
+        int startingNumber = extras.getInt("startingNumber");
+        updateNumber(startingNumber);
+    }
+
+    private void updateNumber(int updatedNumber) {
+        Game.getInstance().setCurrentNumber(updatedNumber);
+        Game.getInstance().addUpdatedNumber(updatedNumber);
+        numberText.setText(String.valueOf(updatedNumber));
+        SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
+    }
+
+    private void gainWildCards() {
+        Game.getInstance().getCurrentPlayer().gainWildCards(3);
+    }
+
+    private void loseWildCards() {
+        Game.getInstance().getCurrentPlayer().loseWildCards(2);
     }
 
     //-----------------------------------------------------Quiz Multi-Choice---------------------------------------------------//

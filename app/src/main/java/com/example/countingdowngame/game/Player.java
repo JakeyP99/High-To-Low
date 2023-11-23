@@ -120,8 +120,8 @@ public class Player implements Serializable {
     }
 
 
-    public void loseWildCards() {
-        wildCardAmount = Math.max(wildCardAmount - 2, 0);
+    public void loseWildCards(int numberOfWildCardsToLose) {
+        wildCardAmount = Math.max(wildCardAmount - numberOfWildCardsToLose, 0);
     }
 
 }
