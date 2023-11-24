@@ -18,6 +18,9 @@ public class Player implements Serializable {
     private boolean selected;
     private int turnCounter;
     private boolean usedClassAbility;
+
+    private boolean usedWildCard;
+
     private boolean removed;
 
 
@@ -34,6 +37,8 @@ public class Player implements Serializable {
         this.classChoice = classChoice;
         this.selected = false;
         this.usedClassAbility = false;
+        this.usedWildCard = false;
+
         this.removed = false;
         resetWildCardAmount(context);
         this.turnCounter = 0; // Initialize the turn counter to 0
@@ -49,6 +54,14 @@ public class Player implements Serializable {
 
     public boolean usedClassAbility() {
         return usedClassAbility;
+    }
+
+    public void setJustUsedWildCard(boolean used) {
+        this.usedWildCard = used;
+    }
+
+    public boolean getJustUsedWildCard() {
+        return this.usedWildCard;
     }
 
     public void setClassAbility(boolean classAbility) {
@@ -123,5 +136,6 @@ public class Player implements Serializable {
     public void loseWildCards(int numberOfWildCardsToLose) {
         wildCardAmount = Math.max(wildCardAmount - numberOfWildCardsToLose, 0);
     }
+
 
 }

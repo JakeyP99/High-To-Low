@@ -1,5 +1,6 @@
 package com.example.countingdowngame.mainActivity;
 
+import static android.content.ContentValues.TAG;
 import static com.example.countingdowngame.R.id.btnBackWildCard;
 import static com.example.countingdowngame.R.id.btnExitGame;
 import static com.example.countingdowngame.R.id.close_button;
@@ -292,6 +293,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         btnUtils.setButton(btnClassAbility, this::activateActiveAbility);
 
+
         btnUtils.setButton(btnWild, () -> {
             wildCardActivate(Game.getInstance().getCurrentPlayer());
             drinkNumberCounterTextView.setVisibility(View.INVISIBLE);
@@ -340,6 +342,16 @@ public class MainActivityGame extends SharedMainActivity {
         updateWildCardVisibility(currentPlayer);
         updateNumberText();
         logPlayerInformation(currentPlayer);
+
+        Log.d(TAG, "renderPlayer: Is repeat turn active? " + currentPlayer.getJustUsedWildCard());
+        if (currentPlayer.getJustUsedWildCard()) {
+            btnWild.setVisibility(View.INVISIBLE);
+            currentPlayer.setJustUsedWildCard(false);
+        } else {
+            btnWild.setVisibility(View.VISIBLE);
+        }
+
+
     }
 
     private void updateClassAbilityButton(Player currentPlayer) {
@@ -559,6 +571,10 @@ public class MainActivityGame extends SharedMainActivity {
             case "Soldier":
                 handleSoldierClass(currentPlayer);
                 break;
+            case "Quiz Magician":
+                handleQuizMagicianClass(currentPlayer);
+                break;
+
             default:
                 break;
         }
@@ -583,6 +599,20 @@ public class MainActivityGame extends SharedMainActivity {
             }
         } else {
             displayToastMessage("Cannot activate on the first turn.");
+        }
+    }
+
+    private void handleQuizMagicianClass(Player currentPlayer) {
+        Game gameInstance = Game.getInstance();
+        List<Player> players = gameInstance.getPlayers();
+        showDialog("Quiz Magician's Active: \n\n" + "Everyone but " + currentPlayer.getName() + " loses a wildcard!");
+
+        for (Player player : players) {
+            if (player != currentPlayer) {
+                player.loseWildCards(1);
+                currentPlayer.setClassAbility(true);
+                btnClassAbility.setVisibility(View.INVISIBLE);
+            }
         }
     }
 
@@ -1042,6 +1072,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         new Handler().postDelayed(() -> {
             resetButtonBackgrounds(answerButtons);
+
             handleAnswerOutcome(selectedWildCard.getAnswer().equals(correctAnswer));
             enableAllButtons(answerButtons);
         }, DELAY_MILLIS);
@@ -1052,6 +1083,7 @@ public class MainActivityGame extends SharedMainActivity {
         Game.getInstance().activateRepeatingTurn(currentPlayer);
 
         selectedButton.setBackground(ContextCompat.getDrawable(this, R.drawable.buttonhighlightred));
+        currentPlayer.setJustUsedWildCard(true);
 
         // Highlight the correct answer button in green
         for (Button button : answerButtons) {

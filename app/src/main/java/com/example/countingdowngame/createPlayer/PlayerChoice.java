@@ -210,21 +210,28 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         confirmClass.setOnClickListener(v -> {
             int selectedPosition = adapter.getSelectedItemPosition();
             Player selectedPlayer = playerList.get(position);
-            CharacterClassStore selectedCharacterClass = characterClasses.get(selectedPosition);
-            selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
 
+            if (selectedPosition >= 0 && selectedPosition < characterClasses.size()) {
+                CharacterClassStore selectedCharacterClass = characterClasses.get(selectedPosition);
+                selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
 
-            if (selectedPosition != -1 && !selectedCharacterClass.getClassName().equals("No Class")) {
-                String message = selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
-                StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
+                if (!selectedCharacterClass.getClassName().equals("No Class")) {
+                    String message = selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
+                    StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
+                } else {
+                    StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
+                    selectedPlayer.setClassChoice(null);
+                }
                 dialog.dismiss();
             } else {
+                // Handle invalid selection or out-of-bounds position
                 StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
                 selectedPlayer.setClassChoice(null);
                 dialog.dismiss();
             }
             Log.d("Confirm Button", "Confirm Button Clicked and " + selectedPlayer.getName() + " choose " + selectedPlayer.getClassChoice());
         });
+
     }
 
     //-----------------------------------------------------Choose the player creation---------------------------------------------------//
