@@ -14,7 +14,7 @@ public class AudioManager {
     private static AudioManager instance;
     private MediaPlayer mediaPlayer;
     private int currentPosition = 0;
-    private boolean isPlaying = false;
+    public boolean isPlaying = false;
     private int currentSongIndex = -1;
     private Context context;
 
@@ -119,4 +119,9 @@ public class AudioManager {
             isPlaying = false;
         }
     }
+
+    public boolean isPlaying() {
+        return isPlaying;
+    }
+
 }

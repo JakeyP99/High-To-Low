@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Button;
 
 import com.example.countingdowngame.R;
+import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
@@ -19,9 +20,14 @@ public class HomeScreen extends ButtonUtilsActivity {
         setupButtonControls();
 
         AudioManager audioManager = AudioManager.getInstance();
-        audioManager.setContext(getApplicationContext()); // Set the context before calling playNextSong or other methods
-        audioManager.playRandomBackgroundMusic(getApplicationContext()); // Initialize and start playing music
+        audioManager.setContext(getApplicationContext()); // Set the context before calling playRandomBackgroundMusic or other methods
+
+        // Check if the mute button is not selected before starting the music
+        if (!GeneralSettingsLocalStore.fromContext(this).isMuted()) {
+            audioManager.playRandomBackgroundMusic(getApplicationContext()); // Initialize and start playing music
+        }
     }
+
 
     private void setupView() {
         setContentView(R.layout.a1_home_screen);
