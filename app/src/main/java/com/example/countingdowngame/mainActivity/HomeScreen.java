@@ -1,7 +1,6 @@
 package com.example.countingdowngame.mainActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 
 import com.example.countingdowngame.R;
@@ -44,9 +43,7 @@ public class HomeScreen extends ButtonUtilsActivity {
 
         gifDrink.setOnClickListener(view -> {
             AudioManager audioManager = AudioManager.getInstance();
-            audioManager.playNextSong(); // Pass the valid context here
-            Log.d("TAG", "setupButtonControls: Glass Clicked");
-            // Add further functionality related to the drink GIF here
+            audioManager.playNextSong();
         });
 
     }

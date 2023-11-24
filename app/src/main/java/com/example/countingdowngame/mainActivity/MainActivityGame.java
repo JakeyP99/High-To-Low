@@ -11,6 +11,7 @@ import static com.example.countingdowngame.R.id.textView_WildText;
 import static com.example.countingdowngame.R.id.textView_numberCounter;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_ARCHER;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_JIM;
+import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_QUIZ_MAGICIAN;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_SCIENTIST;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_SOLDIER;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_WITCH;
@@ -98,7 +99,6 @@ public class MainActivityGame extends SharedMainActivity {
     private boolean soldierRemoval = false;
     public WildCardProperties selectedWildCard;
     private Button[] answerButtons; // Array to hold the answer buttons
-
     private GifImageView confettiImageViewBL;
 
     private GifImageView confettiImageViewTL;
@@ -108,6 +108,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     private static final int DELAY_MILLIS = 1500;
     private static final int BUTTON_COUNT = 4;
+    private static final int BUTTON_COUNT_2 = 2;
 
     //-----------------------------------------------------Lifecycle Methods---------------------------------------------------//
     @Override
@@ -251,6 +252,8 @@ public class MainActivityGame extends SharedMainActivity {
                 return CharacterClassDescriptions.CLASS_SCIENTIST_DESCRIPTION;
             case CLASS_SOLDIER:
                 return CharacterClassDescriptions.CLASS_SOLDIER_DESCRIPTION;
+            case CLASS_QUIZ_MAGICIAN:
+                return CharacterClassDescriptions.CLASS_QUIZ_MAGICIAN_DESCRIPTION;
             case CLASS_JIM:
                 return CharacterClassDescriptions.CLASS_JIM_DESCRIPTION;
             default:
@@ -345,6 +348,7 @@ public class MainActivityGame extends SharedMainActivity {
         boolean showClassAbilityButton = ("Scientist".equals(currentPlayer.getClassChoice()) ||
                 "Archer".equals(currentPlayer.getClassChoice()) ||
                 "Witch".equals(currentPlayer.getClassChoice()) ||
+                "Quiz Magician".equals(currentPlayer.getClassChoice()) ||
                 "Soldier".equals(currentPlayer.getClassChoice())) &&
                 !currentPlayer.usedClassAbility();
 
@@ -449,6 +453,7 @@ public class MainActivityGame extends SharedMainActivity {
         if (currentPlayer == null) {
             return;
         }
+        handleQuizMagicianPassive(currentPlayer);
 
         handleSoldierPassive(currentPlayer);
         handleWitchPassive(currentPlayer);
@@ -456,6 +461,12 @@ public class MainActivityGame extends SharedMainActivity {
         handleJimPassive(currentPlayer);
         handleArcherPassive(currentPlayer);
     }
+
+
+    private void handleQuizMagicianPassive(Player currentPlayer) {
+
+    }
+
 
     private void handleSoldierPassive(Player currentPlayer) {
         if ("Soldier".equals(currentPlayer.getClassChoice())) {
@@ -851,7 +862,9 @@ public class MainActivityGame extends SharedMainActivity {
                 selectedWildCard = selectedCard; // Update selectedWildCard to the current selected card
 
                 if (selectedCard.hasAnswer()) {
-                    if (GeneralSettingsLocalStore.fromContext(this).isMultiChoice()) {
+                    if (Objects.equals(Game.getInstance().getCurrentPlayer().getClassChoice(), "Quiz Magician")) {
+                        setMultiChoiceRandomizedAnswersForQuizMagician(selectedCard);
+                    } else if (GeneralSettingsLocalStore.fromContext(this).isMultiChoice()) {
                         setMultiChoiceRandomizedAnswers(selectedCard);
                     } else {
                         btnAnswer.setVisibility(View.VISIBLE);
@@ -957,18 +970,49 @@ public class MainActivityGame extends SharedMainActivity {
         Collections.shuffle(answerList);
         answers = answerList.toArray(new String[0]);
 
-        // Set answers to buttons
-        setAnswersToButtons(answers);
+        // Set answers to buttons for four buttons scenario
+        setAnswersToFourButtons(answers);
     }
 
-    private void setAnswersToButtons(String[] answers) {
+    private void setMultiChoiceRandomizedAnswersForQuizMagician(WildCardProperties selectedCard) {
+        exposeQuizButtons();
+
+        // Assign two random answers
+        Random random = new Random();
+        String[] answers = {
+                selectedCard.getAnswer(),
+                random.nextBoolean() ? selectedCard.getWrongAnswer1() : (random.nextBoolean() ? selectedCard.getWrongAnswer2() : selectedCard.getWrongAnswer3())
+        };
+
+        List<String> answerList = Arrays.asList(answers);
+        Collections.shuffle(answerList);
+        answers = answerList.toArray(new String[0]);
+
+        // Set answers to buttons for two buttons scenario
+        setAnswersToTwoButtons(answers);
+    }
+
+    private void setAnswersToFourButtons(String[] answers) {
         answerButtons = new Button[]{btnQuizAnswerTL, btnQuizAnswerTR, btnQuizAnswerBL, btnQuizAnswerBR};
 
         for (int i = 0; i < BUTTON_COUNT; i++) {
             Button currentButton = answerButtons[i];
             currentButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, quizAnswerTextSize(answers[i]));
             currentButton.setText(answers[i]);
+            setButtonClickListener(currentButton, answers[i]);
+        }
+    }
 
+    private void setAnswersToTwoButtons(String[] answers) {
+        answerButtons = new Button[]{btnQuizAnswerTL, btnQuizAnswerTR};
+
+        btnQuizAnswerBL.setVisibility(View.INVISIBLE);
+        btnQuizAnswerBR.setVisibility(View.INVISIBLE);
+
+        for (int i = 0; i < BUTTON_COUNT_2; i++) {
+            Button currentButton = answerButtons[i];
+            currentButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, quizAnswerTextSize(answers[i]));
+            currentButton.setText(answers[i]);
             setButtonClickListener(currentButton, answers[i]);
         }
     }

@@ -3,6 +3,7 @@ package com.example.countingdowngame.createPlayer;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_ARCHER_DESCRIPTION;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_JIM_DESCRIPTION;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_NONE_DESCRIPTION;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_QUIZ_MAGICIAN_DESCRIPTION;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_SCIENTIST_DESCRIPTION;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_SOLDIER_DESCRIPTION;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_WITCH_DESCRIPTION;
@@ -61,6 +62,9 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     public static final String CLASS_SCIENTIST = "Scientist";
     public static final String CLASS_SOLDIER = "Soldier";
     public static final String CLASS_JIM = "Jim";
+
+    public static final String CLASS_QUIZ_MAGICIAN = "Quiz Magician";
+
     private static final String CLASS_NONE = "No Class";
 
     private static final int REQUEST_IMAGE_PICK = 1;
@@ -165,6 +169,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         characterClasses.add(new CharacterClassStore(CLASS_WITCH, CLASS_WITCH_DESCRIPTION));
         characterClasses.add(new CharacterClassStore(CLASS_SCIENTIST, CLASS_SCIENTIST_DESCRIPTION));
         characterClasses.add(new CharacterClassStore(CLASS_SOLDIER, CLASS_SOLDIER_DESCRIPTION));
+        characterClasses.add(new CharacterClassStore(CLASS_QUIZ_MAGICIAN, CLASS_QUIZ_MAGICIAN_DESCRIPTION));
         characterClasses.add(new CharacterClassStore(CLASS_JIM, CLASS_JIM_DESCRIPTION));
         characterClasses.add(new CharacterClassStore(CLASS_NONE, CLASS_NONE_DESCRIPTION));
 
