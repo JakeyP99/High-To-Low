@@ -149,6 +149,24 @@ public class MainActivityGame extends SharedMainActivity {
         initializeViews();
         setupButtons();
         startGame();
+
+        AudioManager audioManager = AudioManager.getInstance();
+        audioManager.setContext(getApplicationContext()); // Set the context before calling playRandomBackgroundMusic or other methods
+
+        // Check if the mute button is not selected before starting the music
+        if (!GeneralSettingsLocalStore.fromContext(this).isMuted()) {
+
+            AudioManager.getInstance().stopSound();
+
+            int soundResourceId = R.raw.cartoonloop;
+            AudioManager.getInstance().initialize(this, soundResourceId);
+
+
+            AudioManager.getInstance().playSound();
+
+        }
+
+
     }
 
     private void initializeViews() {
@@ -181,13 +199,6 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void startGame() {
         drinkNumberCounterInt = 0;
-        AudioManager.getInstance().stopSound();
-
-        int soundResourceId = R.raw.cartoonloop;
-        AudioManager.getInstance().initialize(this, soundResourceId);
-
-
-        AudioManager.getInstance().playSound();
 
 
         Bundle extras = getIntent().getExtras();

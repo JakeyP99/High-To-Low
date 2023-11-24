@@ -18,6 +18,7 @@ import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.GameEventType;
 import com.example.countingdowngame.game.Player;
 import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
+import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.wildCards.WildCardProperties;
 import com.example.countingdowngame.wildCards.WildCardType;
@@ -109,6 +110,15 @@ public class MainActivitySplitScreen extends SharedMainActivity {
         initializeViews();
         setupButtons();
         startGame();
+
+        AudioManager audioManager = AudioManager.getInstance();
+        audioManager.setContext(getApplicationContext()); // Set the context before calling playRandomBackgroundMusic or other methods
+
+        // Check if the mute button is not selected before starting the music
+        if (!GeneralSettingsLocalStore.fromContext(this).isMuted()) {
+            audioManager.playRandomBackgroundMusic(getApplicationContext()); // Initialize and start playing music
+        }
+
     }
 
     private void initializeViews() {
