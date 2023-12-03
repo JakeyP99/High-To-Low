@@ -34,8 +34,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
-
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
 import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
@@ -1077,7 +1075,9 @@ public class MainActivityGame extends SharedMainActivity {
 
 
     private void handleCorrectAnswer(Button selectedButton, String correctAnswer) {
-        selectedButton.setBackground(ContextCompat.getDrawable(this, R.drawable.buttonhighlightgreen));
+        selectedButton.setBackgroundResource(R.drawable.buttonhighlightgreen);
+
+
         displayConfetti(Objects.requireNonNull(getConfettiView(selectedButton.getId())));
 
         new Handler().postDelayed(() -> {
@@ -1092,13 +1092,13 @@ public class MainActivityGame extends SharedMainActivity {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         Game.getInstance().activateRepeatingTurn(currentPlayer);
 
-        selectedButton.setBackground(ContextCompat.getDrawable(this, R.drawable.buttonhighlightred));
+        selectedButton.setBackgroundResource(R.drawable.buttonhighlightred);
         currentPlayer.setJustUsedWildCard(true);
 
         // Highlight the correct answer button in green
         for (Button button : answerButtons) {
             if (button.getText().toString().equals(correctAnswer)) {
-                button.setBackground(ContextCompat.getDrawable(this, R.drawable.buttonhighlightgreen));
+                button.setBackgroundResource(R.drawable.buttonhighlightgreen);
                 break;
             }
         }
