@@ -350,7 +350,6 @@ public class MainActivityGame extends SharedMainActivity {
             updatePlayerInfo(currentPlayer);
         }
 
-        updateWildCardVisibility(currentPlayer);
         updateNumberText();
         logPlayerInformation(currentPlayer);
 
@@ -359,7 +358,7 @@ public class MainActivityGame extends SharedMainActivity {
             btnWild.setVisibility(View.INVISIBLE);
             currentPlayer.setJustUsedWildCard(false);
         } else {
-            btnWild.setVisibility(View.VISIBLE);
+            updateWildCardVisibility(currentPlayer);
         }
 
 
