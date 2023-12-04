@@ -13,7 +13,7 @@ public class CharacterClassStore {
         return className;
     }
 
-    public String getSpecialAbility() {
+    public String getCharacterClassDescriptions() {
         return specialAbility;
     }
 

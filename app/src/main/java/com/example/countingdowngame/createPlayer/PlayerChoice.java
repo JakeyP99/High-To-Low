@@ -37,8 +37,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
@@ -62,11 +62,8 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     public static final String CLASS_SCIENTIST = "Scientist";
     public static final String CLASS_SOLDIER = "Soldier";
     public static final String CLASS_JIM = "Jim";
-
     public static final String CLASS_QUIZ_MAGICIAN = "Quiz Magician";
-
     private static final String CLASS_NONE = "No Class";
-
     private static final int REQUEST_IMAGE_PICK = 1;
     private static final int REQUEST_DRAW = 2;
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;
@@ -77,6 +74,11 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     private RecyclerView playerRecyclerView;
     private int selectedPlayerCount;
     private Button proceedButton;
+
+
+    private ViewPager viewPager; // Declare ViewPager as a class member
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -89,7 +91,6 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     }
 
 
-    @Override
     public void onPlayerClick(int position) {
         Player player = playerList.get(position);
         if (!player.isSelected()) {
@@ -97,11 +98,17 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
             playerListAdapter.notifyItemChanged(position);
             updatePlayerCounter();
             if (GeneralSettingsLocalStore.fromContext(this).isSingleScreen()) {
-                chooseClass(position);
+                CharacterClassAdapter adapter = createCharacterClassAdapter(); // Replace this with your actual adapter creation logic
+                chooseClass(position, adapter);
             }
         }
     }
 
+    private CharacterClassAdapter createCharacterClassAdapter() {
+        // Create and return an instance of CharacterClassAdapter with the appropriate data
+        List<CharacterClassStore> characterClasses = generateCharacterClasses(); // Assuming this method generates character classes
+        return new CharacterClassAdapter(characterClasses);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +119,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         playerList = new ArrayList<>();
         playerListAdapter = new PlayerListAdapter(this, playerList, this);
         proceedButton = findViewById(R.id.button_done);
+
 
         selectedPlayerCount = 0;
         initializeViews();
@@ -154,16 +162,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
 
     //-----------------------------------------------------Choose the player class---------------------------------------------------//
 
-    private void chooseClass(int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-
-        View dialogView = inflater.inflate(R.layout.characterclass_selection, null);
-        Button confirmClass = dialogView.findViewById(R.id.btnConfirmClass);
-
-        RecyclerView classRecyclerView = dialogView.findViewById(R.id.classRecyclerView);
-        classRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+    private List<CharacterClassStore> generateCharacterClasses() {
         List<CharacterClassStore> characterClasses = new ArrayList<>();
         characterClasses.add(new CharacterClassStore(CLASS_ARCHER, CLASS_ARCHER_DESCRIPTION));
         characterClasses.add(new CharacterClassStore(CLASS_WITCH, CLASS_WITCH_DESCRIPTION));
@@ -172,9 +171,46 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         characterClasses.add(new CharacterClassStore(CLASS_QUIZ_MAGICIAN, CLASS_QUIZ_MAGICIAN_DESCRIPTION));
         characterClasses.add(new CharacterClassStore(CLASS_JIM, CLASS_JIM_DESCRIPTION));
         characterClasses.add(new CharacterClassStore(CLASS_NONE, CLASS_NONE_DESCRIPTION));
+        return characterClasses;
+    }
 
-        CharacterClassAdapter adapter = new CharacterClassAdapter(characterClasses);
-        classRecyclerView.setAdapter(adapter);
+    private void chooseClass(int position, CharacterClassAdapter adapter) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+
+        View dialogView = inflater.inflate(R.layout.characterclass_selection, null);
+        Button confirmClass = dialogView.findViewById(R.id.btnConfirmClass);
+
+
+        // Prepare your character class data here
+        List<CharacterClassStore> characterClasses = generateCharacterClasses();
+
+        int itemsPerPage = 1; // Set the number of items per page
+        List<List<CharacterClassStore>> pages = new ArrayList<>();
+        for (int i = 0; i < characterClasses.size(); i += itemsPerPage) {
+            int endIndex = Math.min(i + itemsPerPage, characterClasses.size());
+            pages.add(characterClasses.subList(i, endIndex));
+        }
+
+
+        // Initialize the ViewPager and its adapter
+        ViewPager viewPager = dialogView.findViewById(R.id.classRecyclerView);
+        CharacterClassPagerAdapter pagerAdapter = new CharacterClassPagerAdapter(pages);
+        viewPager.setAdapter(pagerAdapter);
+
+        // Set an OnArrowClickListener for the adapter
+        pagerAdapter.setArrowClickListener(new CharacterClassAdapter.OnArrowClickListener() {
+
+            @Override
+            public void onLeftArrowClick() {
+                // Handle left arrow click
+            }
+
+            @Override
+            public void onRightArrowClick() {
+                // Handle right arrow click
+            }
+        });
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
@@ -184,8 +220,8 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
             Player selectedPlayer = playerList.get(position);
 
             // Check bounds before accessing characterClasses
-            if (selectedPosition >= 0 && selectedPosition < characterClasses.size()) {
-                CharacterClassStore selectedCharacterClass = characterClasses.get(selectedPosition);
+            if (selectedPosition >= 0 && selectedPosition < generateCharacterClasses().size()) {
+                CharacterClassStore selectedCharacterClass = generateCharacterClasses().get(selectedPosition);
                 selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
 
                 if (!selectedCharacterClass.getClassName().equals("No Class")) {
@@ -211,8 +247,8 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
             int selectedPosition = adapter.getSelectedItemPosition();
             Player selectedPlayer = playerList.get(position);
 
-            if (selectedPosition >= 0 && selectedPosition < characterClasses.size()) {
-                CharacterClassStore selectedCharacterClass = characterClasses.get(selectedPosition);
+            if (selectedPosition >= 0 && selectedPosition < generateCharacterClasses().size()) {
+                CharacterClassStore selectedCharacterClass = generateCharacterClasses().get(selectedPosition);
                 selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
 
                 if (!selectedCharacterClass.getClassName().equals("No Class")) {
