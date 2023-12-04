@@ -5,5 +5,9 @@ public class CharacterClassDescriptions {
     public static final String CLASS_WITCH_DESCRIPTION = "Active Ability: You can skip your turn. \n\nPassive Ability: For every even number your player lands on, you can hand out two drinks, but for every odd number you have to take a drink.";
     public static final String CLASS_SCIENTIST_DESCRIPTION = "Active Ability: On your turn, you can change the current number to be whatever you want. You have to repeat your turn! \n\nPassive Ability: There's a 10% chance your turn is skipped.";
     public static final String CLASS_SOLDIER_DESCRIPTION = "Active Ability: If the number is equal to or below 10, you can increase the drinking number by 4 drinks! Beware, you will have two go twice after using this ability. \n\nPassive Ability: If you land between 10 and 15, you escape the game and are safe.";
+    public static final String CLASS_QUIZ_MAGICIAN_DESCRIPTION = "Active Ability: Remove a wildcard from all players. \n\nPassive Ability: All multi-choice quizzes now have only two answers available, instead of four.";
+
     public static final String CLASS_JIM_DESCRIPTION = "Passive Ability: For every third turn, you gain one wildcard.";
+    public static final String CLASS_NONE_DESCRIPTION = "Choose this if you don't want to have any abilities.";
+
 }

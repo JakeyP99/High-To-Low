@@ -18,7 +18,6 @@ import io.github.muddz.styleabletoast.StyleableToast;
 
 public class PlayerNumberChoice extends ButtonUtilsActivity {
     private EditText originalPlayerField;
-    private Button btnSubmitPlayers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +25,7 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
         setContentView(R.layout.a2_player_number_choice);
 
         originalPlayerField = findViewById(R.id.EditTextViewplayernumber);
-        btnSubmitPlayers = findViewById(R.id.btnSubmitPlayers);
+        Button btnSubmitPlayers = findViewById(R.id.btnSubmitPlayers);
         btnUtils.setButton(btnSubmitPlayers, this::submitPlayerNumber);
 
 

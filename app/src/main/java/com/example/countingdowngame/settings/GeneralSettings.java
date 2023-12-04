@@ -8,6 +8,7 @@ import android.widget.Button;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.countingdowngame.R;
+import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 public class GeneralSettings extends ButtonUtilsActivity implements View.OnClickListener {
@@ -23,6 +24,7 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
     private Button button_regularSound;
     private Button button_burpSound;
     //
+    private AudioManager audioManager; // Instantiate AudioManager in your activity or fragment
 
     //-----------------------------------------------------On Pause---------------------------------------------------//
 
@@ -42,6 +44,8 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
         initializeViews();
         loadPreferences();
         setButtonListeners();
+        audioManager = AudioManager.getInstance(); // Initialize AudioManager instance
+
     }
 
     //-----------------------------------------------------Initialize Views---------------------------------------------------//
@@ -121,14 +125,23 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
         Drawable selectedDrawable = isSelected ? buttonHighlightDrawable : outlineForButton;
         btnMute.setBackground(selectedDrawable);
 
-        btnUtils.toggleMute(); // Toggle the mute state
+        if (audioManager != null) {
+            if (isSelected) {
+                audioManager.stopSound();
+
+            } else {
+                if (!audioManager.isPlaying()) {
+                    audioManager.playRandomBackgroundMusic(this);
+                }
+            }
+        }
+        // Optionally, update preferences or perform other tasks related to mute state change.
     }
 
 
     //-----------------------------------------------------Load and Save Preferences---------------------------------------------------//
 
     private void loadPreferences() {
-        int loadWildCardAmount = GeneralSettingsLocalStore.fromContext(this).playerWildCardCount();
 
         //copyout
         boolean regularSoundSelected = GeneralSettingsLocalStore.fromContext(this).shouldPlayRegularSound();
@@ -161,10 +174,15 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
 
         if (isMuted) {
             btnMute.setBackground(buttonHighlightDrawable);
+            if (audioManager != null) {
+                audioManager.stopSound();
+            }
         } else {
             btnMute.setBackground(outlineForButton);
+            if (audioManager != null && !audioManager.isPlaying()) {
+                audioManager.playRandomBackgroundMusic(this);
+            }
         }
-
 
     }
 
@@ -173,8 +191,6 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
         GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);
         store.setIsSingleScreen(button_gameModeOne.isSelected());
         store.setIsMuted(btnMute.isSelected());
-
-        //copyout
         store.setShouldPlayRegularSound(button_regularSound.isSelected());
     }
 }

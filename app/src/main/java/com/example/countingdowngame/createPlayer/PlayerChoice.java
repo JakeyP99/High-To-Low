@@ -2,6 +2,8 @@ package com.example.countingdowngame.createPlayer;
 
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_ARCHER_DESCRIPTION;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_JIM_DESCRIPTION;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_NONE_DESCRIPTION;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_QUIZ_MAGICIAN_DESCRIPTION;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_SCIENTIST_DESCRIPTION;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_SOLDIER_DESCRIPTION;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_WITCH_DESCRIPTION;
@@ -60,6 +62,10 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     public static final String CLASS_SCIENTIST = "Scientist";
     public static final String CLASS_SOLDIER = "Soldier";
     public static final String CLASS_JIM = "Jim";
+
+    public static final String CLASS_QUIZ_MAGICIAN = "Quiz Magician";
+
+    private static final String CLASS_NONE = "No Class";
 
     private static final int REQUEST_IMAGE_PICK = 1;
     private static final int REQUEST_DRAW = 2;
@@ -163,7 +169,9 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         characterClasses.add(new CharacterClassStore(CLASS_WITCH, CLASS_WITCH_DESCRIPTION));
         characterClasses.add(new CharacterClassStore(CLASS_SCIENTIST, CLASS_SCIENTIST_DESCRIPTION));
         characterClasses.add(new CharacterClassStore(CLASS_SOLDIER, CLASS_SOLDIER_DESCRIPTION));
+        characterClasses.add(new CharacterClassStore(CLASS_QUIZ_MAGICIAN, CLASS_QUIZ_MAGICIAN_DESCRIPTION));
         characterClasses.add(new CharacterClassStore(CLASS_JIM, CLASS_JIM_DESCRIPTION));
+        characterClasses.add(new CharacterClassStore(CLASS_NONE, CLASS_NONE_DESCRIPTION));
 
         CharacterClassAdapter adapter = new CharacterClassAdapter(characterClasses);
         classRecyclerView.setAdapter(adapter);
@@ -174,19 +182,28 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         dialog.setOnCancelListener(dialogInterface -> {
             int selectedPosition = adapter.getSelectedItemPosition();
             Player selectedPlayer = playerList.get(position);
-            if (selectedPosition != -1) {
+
+            // Check bounds before accessing characterClasses
+            if (selectedPosition >= 0 && selectedPosition < characterClasses.size()) {
                 CharacterClassStore selectedCharacterClass = characterClasses.get(selectedPosition);
                 selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
-                String message = selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
-                StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
 
+                if (!selectedCharacterClass.getClassName().equals("No Class")) {
+                    String message = selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
+                    StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
+                } else {
+                    selectedPlayer.setClassChoice(null);
+                    StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
+                }
             } else {
+                // Handle invalid selection or out-of-bounds position
                 selectedPlayer.setClassChoice(null);
                 StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
-
             }
+
             dialog.dismiss();
         });
+
 
         dialog.show();
 
@@ -194,20 +211,27 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
             int selectedPosition = adapter.getSelectedItemPosition();
             Player selectedPlayer = playerList.get(position);
 
-            if (selectedPosition != -1) {
+            if (selectedPosition >= 0 && selectedPosition < characterClasses.size()) {
                 CharacterClassStore selectedCharacterClass = characterClasses.get(selectedPosition);
                 selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
 
-                String message = selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
-                StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
+                if (!selectedCharacterClass.getClassName().equals("No Class")) {
+                    String message = selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
+                    StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
+                } else {
+                    StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
+                    selectedPlayer.setClassChoice(null);
+                }
                 dialog.dismiss();
             } else {
+                // Handle invalid selection or out-of-bounds position
                 StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
                 selectedPlayer.setClassChoice(null);
                 dialog.dismiss();
             }
             Log.d("Confirm Button", "Confirm Button Clicked and " + selectedPlayer.getName() + " choose " + selectedPlayer.getClassChoice());
         });
+
     }
 
     //-----------------------------------------------------Choose the player creation---------------------------------------------------//

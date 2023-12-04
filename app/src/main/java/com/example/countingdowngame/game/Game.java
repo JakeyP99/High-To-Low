@@ -109,6 +109,10 @@ public class Game {
         repeatTurnPlayer = currentPlayer; // Set the Soldier class ability player
     }
 
+    public boolean isRepeatTurnActive() {
+        return repeatTurnPlayer != null;
+    }
+
     //-----------------------------------------------------Player Functions---------------------------------------------------//
     private final PlayerEventListener playerEventListener = e -> {
         if (e.type == PlayerEventType.SKIP) {
@@ -156,8 +160,6 @@ public class Game {
 
     public void setCurrentNumber(int number) {
         currentNumber = number;
-        Log.d(TAG, currentPlayerId + " This is the ID before.");
-
     }
 
     public void resetPlayers(Context context) {
