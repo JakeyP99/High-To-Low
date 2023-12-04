@@ -3,7 +3,6 @@ package com.example.countingdowngame.createPlayer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,7 +16,6 @@ import java.util.List;
 public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAdapter.ViewHolder> {
     private final List<CharacterClassStore> characterClasses;
     private static int selectedItem = -1;
-    private OnArrowClickListener arrowClickListener;
 
     public CharacterClassAdapter(List<CharacterClassStore> characterClasses) {
         this.characterClasses = characterClasses;
@@ -28,10 +26,6 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
         return selectedItem;
     }
 
-    public void setOnArrowClickListener(OnArrowClickListener listener) {
-        this.arrowClickListener = listener;
-    }
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CharacterClassStore characterClass = characterClasses.get(position);
@@ -40,23 +34,9 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
 
         if (position == selectedItem) {
             holder.itemView.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.buttonhighlight));
-            holder.dottedLineBelow.setVisibility(View.INVISIBLE);
         } else {
             holder.itemView.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.color.transparent));
-            holder.dottedLineBelow.setVisibility(View.VISIBLE);
         }
-
-        holder.leftArrow.setOnClickListener(v -> {
-            if (arrowClickListener != null) {
-                arrowClickListener.onLeftArrowClick();
-            }
-        });
-
-        holder.rightArrow.setOnClickListener(v -> {
-            if (arrowClickListener != null) {
-                arrowClickListener.onRightArrowClick();
-            }
-        });
 
 
         // Set an onClickListener for item clicks
@@ -76,12 +56,6 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
         return new ViewHolder(view);
     }
 
-    public interface OnArrowClickListener {
-        void onLeftArrowClick();
-
-        void onRightArrowClick();
-    }
-
     @Override
     public int getItemCount() {
         return characterClasses.size();
@@ -90,17 +64,11 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView classNameTextView;
         TextView specialAbilityTextView;
-        View dottedLineBelow;
-        ImageButton leftArrow;
-        ImageButton rightArrow;
 
         public ViewHolder(View itemView) {
             super(itemView);
             classNameTextView = itemView.findViewById(R.id.classNameTextView);
             specialAbilityTextView = itemView.findViewById(R.id.specialAbilityTextView);
-            dottedLineBelow = itemView.findViewById(R.id.dotted_line_below); // Initialize the reference
-            leftArrow = itemView.findViewById(R.id.leftArrow);
-            rightArrow = itemView.findViewById(R.id.rightArrow);
         }
     }
 }

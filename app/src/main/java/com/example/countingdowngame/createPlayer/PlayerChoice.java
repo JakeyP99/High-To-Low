@@ -198,20 +198,6 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         CharacterClassPagerAdapter pagerAdapter = new CharacterClassPagerAdapter(pages);
         viewPager.setAdapter(pagerAdapter);
 
-        // Set an OnArrowClickListener for the adapter
-        pagerAdapter.setArrowClickListener(new CharacterClassAdapter.OnArrowClickListener() {
-
-            @Override
-            public void onLeftArrowClick() {
-                // Handle left arrow click
-            }
-
-            @Override
-            public void onRightArrowClick() {
-                // Handle right arrow click
-            }
-        });
-
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
 
