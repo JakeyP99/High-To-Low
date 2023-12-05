@@ -181,18 +181,15 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         View dialogView = inflater.inflate(R.layout.characterclass_selection, null);
         Button confirmClass = dialogView.findViewById(R.id.btnConfirmClass);
 
-        // Prepare your character class data here
         List<CharacterClassStore> characterClasses = generateCharacterClasses();
 
-        int itemsPerPage = 1; // Set the number of items per page
+        int itemsPerPage = 1;
         List<List<CharacterClassStore>> pages = new ArrayList<>();
         for (int i = 0; i < characterClasses.size(); i += itemsPerPage) {
             int endIndex = Math.min(i + itemsPerPage, characterClasses.size());
             pages.add(characterClasses.subList(i, endIndex));
         }
 
-
-        // Initialize the ViewPager and its adapter
         ViewPager viewPager = dialogView.findViewById(R.id.classRecyclerView);
         CharacterClassPagerAdapter pagerAdapter = new CharacterClassPagerAdapter(pages);
         viewPager.setAdapter(pagerAdapter);
@@ -200,78 +197,67 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
 
-
-        dialog.setOnCancelListener(dialogInterface -> {
-            int selectedPosition = adapter.getSelectedItemPosition();
-            Player selectedPlayer = playerList.get(position);
-            int selectedPageNumber = pagerAdapter.getPageNumber();
-
-            CharacterClassStore selectedCharacterClass = null;
-            for (CharacterClassStore characterClass : generateCharacterClasses()) {
-                if (characterClass.getId() == selectedPageNumber) {
-                    selectedCharacterClass = characterClass;
-                    break;
-                }
-            }
-
-            // Check bounds before accessing characterClasses
-            if (selectedCharacterClass != null) {
-                selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
-
-                if (!selectedCharacterClass.getClassName().equals("No Class")) {
-                    String message = selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
-                    StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
-                } else {
-                    selectedPlayer.setClassChoice(null);
-                    StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
-                }
-            } else {
-                // Handle invalid selection or out-of-bounds position
-                selectedPlayer.setClassChoice(null);
-                StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
-            }
-
-            dialog.dismiss();
-        });
-
+        dialog.setOnCancelListener(dialogInterface -> handleCancelClick(position, pagerAdapter, dialog));
 
         dialog.show();
 
-        confirmClass.setOnClickListener(v -> {
-            int selectedPageNumber = pagerAdapter.getPageNumber();
-            Player selectedPlayer = playerList.get(position);
-
-            CharacterClassStore selectedCharacterClass = null;
-            for (CharacterClassStore characterClass : generateCharacterClasses()) {
-                if (characterClass.getId() == selectedPageNumber) {
-                    selectedCharacterClass = characterClass;
-                    break;
-                }
-            }
-
-            if (selectedCharacterClass != null) {
-                // Set the class choice for the selected player
-                selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
-
-                if (!selectedCharacterClass.getClassName().equals("No Class")) {
-                    String message = selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
-                    StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
-                } else {
-                    StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
-                    selectedPlayer.setClassChoice(null);
-                }
-            } else {
-                // Handle invalid selection or out-of-bounds position
-                StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
-                selectedPlayer.setClassChoice(null);
-            }
-
-            dialog.dismiss();
-            Log.d("Confirm Button", "Confirm Button Clicked and " + selectedPlayer.getName() + " choose " + selectedPlayer.getClassChoice());
-        });
-
-
+        confirmClass.setOnClickListener(v -> handleConfirmClick(position, pagerAdapter, dialog));
     }
+
+    private void handleCancelClick(int position, CharacterClassPagerAdapter pagerAdapter, AlertDialog dialog) {
+        int selectedPageNumber = pagerAdapter.getPageNumber();
+        Player selectedPlayer = playerList.get(position);
+
+        CharacterClassStore selectedCharacterClass = findSelectedCharacterClass(selectedPageNumber);
+
+        if (selectedCharacterClass != null) {
+            selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
+
+            String message = selectedCharacterClass.getClassName().equals("No Class") ?
+                    selectedPlayer.getName() + " chose no class!" :
+                    selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
+
+            StyleableToast.makeText(this, message, R.style.newToast).show();
+        } else {
+            selectedPlayer.setClassChoice(null);
+            StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
+        }
+
+        dialog.dismiss();
+    }
+
+    private void handleConfirmClick(int position, CharacterClassPagerAdapter pagerAdapter, AlertDialog dialog) {
+        int selectedPageNumber = pagerAdapter.getPageNumber();
+        Player selectedPlayer = playerList.get(position);
+
+        CharacterClassStore selectedCharacterClass = findSelectedCharacterClass(selectedPageNumber);
+
+        if (selectedCharacterClass != null) {
+            selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
+
+            String message = selectedCharacterClass.getClassName().equals("No Class") ?
+                    selectedPlayer.getName() + " chose no class!" :
+                    selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
+
+            StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
+        } else {
+            selectedPlayer.setClassChoice(null);
+            StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
+        }
+
+        dialog.dismiss();
+        Log.d("Confirm Button", "Confirm Button Clicked and " + selectedPlayer.getName() + " choose " + selectedPlayer.getClassChoice());
+    }
+
+    private CharacterClassStore findSelectedCharacterClass(int selectedPageNumber) {
+        for (CharacterClassStore characterClass : generateCharacterClasses()) {
+            if (characterClass.getId() == selectedPageNumber) {
+                return characterClass;
+            }
+        }
+        return null;
+    }
+
 
     //-----------------------------------------------------Choose the player creation---------------------------------------------------//
 
