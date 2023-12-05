@@ -1,6 +1,5 @@
 package com.example.countingdowngame.createPlayer;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,38 +39,38 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        CharacterClassStore characterClass = characterClasses.get(position);
+        CharacterClassStore characterClass = characterClasses.get(holder.getAdapterPosition());
 
         // Set the data to the views in the ViewHolder
         holder.classNameTextView.setText(characterClass.getClassName());
         holder.specialAbilityTextView.setText(characterClass.getCharacterClassDescriptions());
 
         // Check if you are on the selectedItem, we expect it to be highlighted
-        if (position == selectedItemPosition) {
+        if (holder.getAdapterPosition() == selectedItemPosition) {
             // Highlight the selected item
             holder.itemView.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.buttonhighlight));
         } else {
             // Remove highlight from other items
-            holder.itemView.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.outlineforbutton));
+            holder.itemView.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.color.transparent));
         }
 
         holder.itemView.setOnClickListener(view -> {
             int previousSelected = selectedItemPosition;
 
-            if (position != selectedItemPosition) {
-                selectedItemPosition = position;
+            if (holder.getAdapterPosition() != selectedItemPosition) {
+                selectedItemPosition = holder.getAdapterPosition();
                 notifyItemChanged(previousSelected);
                 notifyItemChanged(selectedItemPosition);
                 if (onItemSelectedListener != null) {
-                    onItemSelectedListener.onItemSelected(position); // Notify listener about the item selection
+                    onItemSelectedListener.onItemSelected(holder.getAdapterPosition()); // Notify listener about the item selection
                 }
             } else {
                 selectedItemPosition = -1;
                 notifyItemChanged(previousSelected);
-
             }
         });
     }
+
 
     @NonNull
     @Override
