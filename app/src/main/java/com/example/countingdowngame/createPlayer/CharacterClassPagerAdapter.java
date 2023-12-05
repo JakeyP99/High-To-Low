@@ -11,7 +11,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import java.util.List;
 
 public class CharacterClassPagerAdapter extends PagerAdapter {
-    private int pageNumber;
+    public static int pageNumber;
 
     private final List<List<CharacterClassStore>> characterClassesPages;
 

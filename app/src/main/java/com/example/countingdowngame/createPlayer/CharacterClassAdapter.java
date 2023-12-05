@@ -45,8 +45,8 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
         holder.classNameTextView.setText(characterClass.getClassName());
         holder.specialAbilityTextView.setText(characterClass.getCharacterClassDescriptions());
 
-        // Check if you are on the selectedItem, we expect it to be highlighted
-        if (holder.getAdapterPosition() == selectedItemPosition) {
+        // Check if the current item is selected based on the isSelected flag in CharacterClassStore
+        if (characterClass.isSelected()) {
             // Highlight the selected item
             holder.itemView.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.buttonhighlight));
         } else {
@@ -55,18 +55,31 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
         }
 
         holder.itemView.setOnClickListener(view -> {
-            int previousSelected = selectedItemPosition;
+            int adapterPosition = holder.getAdapterPosition();
 
-            if (holder.getAdapterPosition() != selectedItemPosition) {
-                selectedItemPosition = holder.getAdapterPosition();
-                notifyItemChanged(previousSelected);
-                notifyItemChanged(selectedItemPosition);
-                if (onItemSelectedListener != null) {
-                    onItemSelectedListener.onItemSelected(holder.getAdapterPosition()); // Notify listener about the item selection
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                if (characterClass.isSelected()) {
+                    // Deselect the clicked item
+                    characterClass.setSelected(false);
+                    selectedItemPosition = RecyclerView.NO_POSITION;
+                    notifyItemChanged(adapterPosition);
+                } else {
+                    // Deselect the previously selected item
+                    if (selectedItemPosition != RecyclerView.NO_POSITION) {
+                        characterClasses.get(selectedItemPosition).setSelected(false);
+                        notifyItemChanged(selectedItemPosition);
+                    }
+
+                    // Select the clicked item
+                    characterClass.setSelected(true);
+                    selectedItemPosition = adapterPosition;
+                    notifyItemChanged(adapterPosition);
                 }
-            } else {
-                selectedItemPosition = -1;
-                notifyItemChanged(previousSelected);
+
+                // Notify listener about the item selection
+                if (onItemSelectedListener != null) {
+                    onItemSelectedListener.onItemSelected(characterClass.getId()); // Pass the selected ID
+                }
             }
         });
     }
