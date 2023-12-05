@@ -16,7 +16,10 @@ import java.util.List;
 
 public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAdapter.ViewHolder> {
     private final List<CharacterClassStore> characterClasses; // List to hold character class data
+
+
     private int selectedItemPosition = -1; // Variable to keep track of the selected item position
+    private OnItemSelectedListener onItemSelectedListener; // Interface instance
 
     public CharacterClassAdapter(List<CharacterClassStore> characterClasses) {
         this.characterClasses = characterClasses;
@@ -26,50 +29,55 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
         return selectedItemPosition; // Method to retrieve the position of the selected item
     }
 
+    public void setOnItemSelectedListener(OnItemSelectedListener listener) {
+        this.onItemSelectedListener = listener; // Method to set the listener
+    }
+
+    public interface OnItemSelectedListener {
+        void onItemSelected(int position);
+    }
+
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // Get the character class at the current position
         CharacterClassStore characterClass = characterClasses.get(position);
 
         // Set the data to the views in the ViewHolder
         holder.classNameTextView.setText(characterClass.getClassName());
         holder.specialAbilityTextView.setText(characterClass.getCharacterClassDescriptions());
 
-        // Check if the current position is the selected item
+        // Check if you are on the selectedItem, we expect it to be highlighted
         if (position == selectedItemPosition) {
             // Highlight the selected item
             holder.itemView.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.buttonhighlight));
         } else {
             // Remove highlight from other items
-            holder.itemView.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.color.transparent));
+            holder.itemView.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.outlineforbutton));
         }
 
         holder.itemView.setOnClickListener(view -> {
-            if (position == selectedItemPosition) {
-                // If the tapped item is already selected, deselect it
-                int previousSelected = selectedItemPosition;
-                selectedItemPosition = -1; // Deselect the item
-                notifyItemChanged(previousSelected); // Notify the adapter that the item has changed
-                Log.d("CharacterClassAdapter", "Item at position " + position + " is DESELECTED: " + characterClasses.get(position).getClassName());
-            } else {
-                // If a different item is tapped, select it
-                int previousSelected = selectedItemPosition;
-                selectedItemPosition = position; // Update the selected item position
-                notifyItemChanged(previousSelected); // Notify the adapter that the previous item has changed
-                notifyItemChanged(selectedItemPosition); // Notify the adapter that the selected item has changed
+            int previousSelected = selectedItemPosition;
 
-                // Logging selected and unselected items
-                for (int i = 0; i < getItemCount(); i++) {
-                    if (i == selectedItemPosition) {
-                        Log.d("CharacterClassAdapter", "Item at position " + i + " is SELECTED: " + characterClasses.get(i).getClassName());
-                    } else {
-                        Log.d("CharacterClassAdapter", "Item at position " + i + " is NOT SELECTED: " + characterClasses.get(i).getClassName());
-                    }
+            if (position != selectedItemPosition) {
+                selectedItemPosition = position;
+                notifyItemChanged(previousSelected);
+                notifyItemChanged(selectedItemPosition);
+
+                Log.d("CharacterClassAdapter", "Item at position " + position + " is SELECTED: " + characterClass.getClassName());
+                Log.d("CharacterClassAdapter", "Selected Position: " + selectedItemPosition); // Debug: Log the selected position
+
+                if (onItemSelectedListener != null) {
+                    onItemSelectedListener.onItemSelected(position); // Notify listener about the item selection
                 }
+            } else {
+                selectedItemPosition = -1;
+                notifyItemChanged(previousSelected);
+
+                Log.d("CharacterClassAdapter", "Item at position " + position + " is DESELECTED: " + characterClass.getClassName());
+                Log.d("CharacterClassAdapter", "Selected Position: " + selectedItemPosition); // Debug: Log the selected position
             }
         });
     }
-
 
     @NonNull
     @Override
@@ -81,9 +89,8 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
 
     @Override
     public int getItemCount() {
-        return characterClasses.size(); // Return the total number of items in the list
+        return characterClasses.size();
     }
-
     // ViewHolder class representing each item in the RecyclerView
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView classNameTextView;
@@ -91,7 +98,6 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
 
         public ViewHolder(View itemView) {
             super(itemView);
-            // Initialize TextViews from the layout for each item
             classNameTextView = itemView.findViewById(R.id.classNameTextView);
             specialAbilityTextView = itemView.findViewById(R.id.specialAbilityTextView);
         }

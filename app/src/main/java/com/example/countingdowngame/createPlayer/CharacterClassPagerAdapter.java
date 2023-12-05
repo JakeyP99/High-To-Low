@@ -1,6 +1,5 @@
 package com.example.countingdowngame.createPlayer;
 
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -12,7 +11,10 @@ import androidx.viewpager.widget.PagerAdapter;
 import java.util.List;
 
 public class CharacterClassPagerAdapter extends PagerAdapter {
+    private int pageNumber;
+
     private final List<List<CharacterClassStore>> characterClassesPages;
+
     public CharacterClassPagerAdapter(List<List<CharacterClassStore>> characterClassesPages) {
         this.characterClassesPages = characterClassesPages;
     }
@@ -31,19 +33,46 @@ public class CharacterClassPagerAdapter extends PagerAdapter {
         CharacterClassAdapter adapter = new CharacterClassAdapter(characterClassesPages.get(position));
         recyclerView.setAdapter(adapter);
 
-        container.addView(recyclerView);
-        Log.d("CharacterClassPagerAdapter", "Current Page Position: " + position);
+        // Update selected item in the adapter when clicked
+        adapter.setOnItemSelectedListener(selectedPosition -> {
+            pageNumber = position + 1; // Increment by 1 to display the correct page number
+//            logSelectedItems(adapter, pageNumber);
+            notifyDataSetChanged();
+        });
 
+        container.addView(recyclerView);
         return recyclerView;
     }
 
     @Override
-    public boolean isViewFromObject(View view, Object object) {
+    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
         return view.equals(object);
     }
 
     @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         container.removeView((View) object);
     }
+
+    public int getPageNumber() {
+        return pageNumber;
+    }
+
+//    private void logSelectedItems(CharacterClassAdapter adapter, int pageNumber) {
+//        int selectedPosition = adapter.getSelectedItemPosition();
+//        List<CharacterClassStore> characterClasses = adapter.getCharacterClasses();
+//
+//        for (int i = 0; i < characterClasses.size(); i++) {
+//            if (i == selectedPosition) {
+//                CharacterClassStore selectedCharacter = characterClasses.get(i);
+//                if (selectedCharacter != null) {
+//                    Log.d("CharacterClassPagerAdapter", "Page " + pageNumber +
+//                            " - Item at position " + i + " is SELECTED: " + selectedCharacter.getClassName());
+//                }
+//            } else {
+//                Log.d("CharacterClassPagerAdapter", "Page " + pageNumber +
+//                        " - Item at position " + i + " is NOT SELECTED: " + characterClasses.get(i).getClassName());
+//            }
+//        }
+//    }
 }

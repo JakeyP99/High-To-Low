@@ -164,13 +164,13 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
 
     private List<CharacterClassStore> generateCharacterClasses() {
         List<CharacterClassStore> characterClasses = new ArrayList<>();
-        characterClasses.add(new CharacterClassStore(CLASS_ARCHER, CLASS_ARCHER_DESCRIPTION));
-        characterClasses.add(new CharacterClassStore(CLASS_WITCH, CLASS_WITCH_DESCRIPTION));
-        characterClasses.add(new CharacterClassStore(CLASS_SCIENTIST, CLASS_SCIENTIST_DESCRIPTION));
-        characterClasses.add(new CharacterClassStore(CLASS_SOLDIER, CLASS_SOLDIER_DESCRIPTION));
-        characterClasses.add(new CharacterClassStore(CLASS_QUIZ_MAGICIAN, CLASS_QUIZ_MAGICIAN_DESCRIPTION));
-        characterClasses.add(new CharacterClassStore(CLASS_JIM, CLASS_JIM_DESCRIPTION));
-        characterClasses.add(new CharacterClassStore(CLASS_NONE, CLASS_NONE_DESCRIPTION));
+        characterClasses.add(new CharacterClassStore(1, CLASS_ARCHER, CLASS_ARCHER_DESCRIPTION));
+        characterClasses.add(new CharacterClassStore(2, CLASS_WITCH, CLASS_WITCH_DESCRIPTION));
+        characterClasses.add(new CharacterClassStore(3, CLASS_SCIENTIST, CLASS_SCIENTIST_DESCRIPTION));
+        characterClasses.add(new CharacterClassStore(4, CLASS_SOLDIER, CLASS_SOLDIER_DESCRIPTION));
+        characterClasses.add(new CharacterClassStore(5, CLASS_QUIZ_MAGICIAN, CLASS_QUIZ_MAGICIAN_DESCRIPTION));
+        characterClasses.add(new CharacterClassStore(6, CLASS_JIM, CLASS_JIM_DESCRIPTION));
+        characterClasses.add(new CharacterClassStore(7, CLASS_NONE, CLASS_NONE_DESCRIPTION));
         return characterClasses;
     }
 
@@ -230,11 +230,20 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         dialog.show();
 
         confirmClass.setOnClickListener(v -> {
-            int selectedPosition = adapter.getSelectedItemPosition();
+            int selectedPageNumber = pagerAdapter.getPageNumber();
             Player selectedPlayer = playerList.get(position);
 
-            if (selectedPosition >= 0 && selectedPosition < generateCharacterClasses().size()) {
-                CharacterClassStore selectedCharacterClass = generateCharacterClasses().get(selectedPosition);
+            // Find the selectedCharacterClass based on the ID
+            CharacterClassStore selectedCharacterClass = null;
+            for (CharacterClassStore characterClass : generateCharacterClasses()) {
+                if (characterClass.getId() == selectedPageNumber) {
+                    selectedCharacterClass = characterClass;
+                    break;
+                }
+            }
+
+            if (selectedCharacterClass != null) {
+                // Set the class choice for the selected player
                 selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
 
                 if (!selectedCharacterClass.getClassName().equals("No Class")) {
@@ -249,9 +258,9 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
                 // Handle invalid selection or out-of-bounds position
                 StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
                 selectedPlayer.setClassChoice(null);
-                dialog.dismiss();
             }
             Log.d("Confirm Button", "Confirm Button Clicked and " + selectedPlayer.getName() + " choose " + selectedPlayer.getClassChoice());
+            dialog.dismiss();
         });
 
     }
