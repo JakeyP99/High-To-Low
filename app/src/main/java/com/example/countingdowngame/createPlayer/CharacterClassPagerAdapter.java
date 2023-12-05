@@ -36,7 +36,6 @@ public class CharacterClassPagerAdapter extends PagerAdapter {
         // Update selected item in the adapter when clicked
         adapter.setOnItemSelectedListener(selectedPosition -> {
             pageNumber = position + 1; // Increment by 1 to display the correct page number
-//            logSelectedItems(adapter, pageNumber);
             notifyDataSetChanged();
         });
 
@@ -57,22 +56,4 @@ public class CharacterClassPagerAdapter extends PagerAdapter {
     public int getPageNumber() {
         return pageNumber;
     }
-
-//    private void logSelectedItems(CharacterClassAdapter adapter, int pageNumber) {
-//        int selectedPosition = adapter.getSelectedItemPosition();
-//        List<CharacterClassStore> characterClasses = adapter.getCharacterClasses();
-//
-//        for (int i = 0; i < characterClasses.size(); i++) {
-//            if (i == selectedPosition) {
-//                CharacterClassStore selectedCharacter = characterClasses.get(i);
-//                if (selectedCharacter != null) {
-//                    Log.d("CharacterClassPagerAdapter", "Page " + pageNumber +
-//                            " - Item at position " + i + " is SELECTED: " + selectedCharacter.getClassName());
-//                }
-//            } else {
-//                Log.d("CharacterClassPagerAdapter", "Page " + pageNumber +
-//                        " - Item at position " + i + " is NOT SELECTED: " + characterClasses.get(i).getClassName());
-//            }
-//        }
-//    }
 }

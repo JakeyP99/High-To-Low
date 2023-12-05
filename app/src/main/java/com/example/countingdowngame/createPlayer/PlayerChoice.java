@@ -181,7 +181,6 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         View dialogView = inflater.inflate(R.layout.characterclass_selection, null);
         Button confirmClass = dialogView.findViewById(R.id.btnConfirmClass);
 
-
         // Prepare your character class data here
         List<CharacterClassStore> characterClasses = generateCharacterClasses();
 
@@ -201,13 +200,22 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
 
+
         dialog.setOnCancelListener(dialogInterface -> {
             int selectedPosition = adapter.getSelectedItemPosition();
             Player selectedPlayer = playerList.get(position);
+            int selectedPageNumber = pagerAdapter.getPageNumber();
+
+            CharacterClassStore selectedCharacterClass = null;
+            for (CharacterClassStore characterClass : generateCharacterClasses()) {
+                if (characterClass.getId() == selectedPageNumber) {
+                    selectedCharacterClass = characterClass;
+                    break;
+                }
+            }
 
             // Check bounds before accessing characterClasses
-            if (selectedPosition >= 0 && selectedPosition < generateCharacterClasses().size()) {
-                CharacterClassStore selectedCharacterClass = generateCharacterClasses().get(selectedPosition);
+            if (selectedCharacterClass != null) {
                 selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
 
                 if (!selectedCharacterClass.getClassName().equals("No Class")) {
@@ -233,7 +241,6 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
             int selectedPageNumber = pagerAdapter.getPageNumber();
             Player selectedPlayer = playerList.get(position);
 
-            // Find the selectedCharacterClass based on the ID
             CharacterClassStore selectedCharacterClass = null;
             for (CharacterClassStore characterClass : generateCharacterClasses()) {
                 if (characterClass.getId() == selectedPageNumber) {
@@ -253,15 +260,16 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
                     StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
                     selectedPlayer.setClassChoice(null);
                 }
-                dialog.dismiss();
             } else {
                 // Handle invalid selection or out-of-bounds position
                 StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
                 selectedPlayer.setClassChoice(null);
             }
-            Log.d("Confirm Button", "Confirm Button Clicked and " + selectedPlayer.getName() + " choose " + selectedPlayer.getClassChoice());
+
             dialog.dismiss();
+            Log.d("Confirm Button", "Confirm Button Clicked and " + selectedPlayer.getName() + " choose " + selectedPlayer.getClassChoice());
         });
+
 
     }
 

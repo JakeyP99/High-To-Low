@@ -62,10 +62,6 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
                 selectedItemPosition = position;
                 notifyItemChanged(previousSelected);
                 notifyItemChanged(selectedItemPosition);
-
-                Log.d("CharacterClassAdapter", "Item at position " + position + " is SELECTED: " + characterClass.getClassName());
-                Log.d("CharacterClassAdapter", "Selected Position: " + selectedItemPosition); // Debug: Log the selected position
-
                 if (onItemSelectedListener != null) {
                     onItemSelectedListener.onItemSelected(position); // Notify listener about the item selection
                 }
@@ -73,8 +69,6 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
                 selectedItemPosition = -1;
                 notifyItemChanged(previousSelected);
 
-                Log.d("CharacterClassAdapter", "Item at position " + position + " is DESELECTED: " + characterClass.getClassName());
-                Log.d("CharacterClassAdapter", "Selected Position: " + selectedItemPosition); // Debug: Log the selected position
             }
         });
     }
