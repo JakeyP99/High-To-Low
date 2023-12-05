@@ -1,5 +1,6 @@
 package com.example.countingdowngame.createPlayer;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -31,6 +32,8 @@ public class CharacterClassPagerAdapter extends PagerAdapter {
         recyclerView.setAdapter(adapter);
 
         container.addView(recyclerView);
+        Log.d("CharacterClassPagerAdapter", "Current Page Position: " + position);
+
         return recyclerView;
     }
 
