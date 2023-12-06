@@ -35,6 +35,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -191,8 +192,31 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         }
 
         ViewPager viewPager = dialogView.findViewById(R.id.classRecyclerView);
+        ProgressBar progressBar = dialogView.findViewById(R.id.progress);
+
         CharacterClassPagerAdapter pagerAdapter = new CharacterClassPagerAdapter(pages);
         viewPager.setAdapter(pagerAdapter);
+
+// Add a scroll listener to the ViewPager to update the progress bar
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                // Calculate the progress based on the ViewPager's scroll position
+                int maxProgress = pagerAdapter.getCount() - 1;
+                int currentProgress = calculateProgress(position, maxProgress);
+                progressBar.setProgress(currentProgress);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                // Unused method
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                // Unused method
+            }
+        });
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
@@ -202,6 +226,11 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         dialog.show();
 
         confirmClass.setOnClickListener(v -> handleConfirmClick(position, dialog));
+    }
+
+    private int calculateProgress(int position, int maxProgress) {
+        // Calculate progress based on the position and the maximum progress value
+        return (int) ((position * 100) / maxProgress);
     }
 
     private void handleCancelClick(int position, AlertDialog dialog) {

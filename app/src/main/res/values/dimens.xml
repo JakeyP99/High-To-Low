@@ -1,3 +1,5 @@
 <resources>
     <dimen name="grid_spacing">8dp</dimen>
+    <dimen name="indicator_size">24dp</dimen> <!-- Change '24dp' to your desired size -->
+
 </resources>

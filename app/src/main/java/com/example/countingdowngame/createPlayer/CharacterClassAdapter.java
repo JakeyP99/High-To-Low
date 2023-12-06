@@ -15,9 +15,14 @@ import java.util.List;
 
 public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAdapter.ViewHolder> {
     private final List<CharacterClassStore> characterClasses; // List to hold character class data
+    private OnRecyclerViewScrollListener scrollListener;
 
     public CharacterClassAdapter(List<CharacterClassStore> characterClasses) {
         this.characterClasses = characterClasses;
+    }
+
+    public interface OnRecyclerViewScrollListener {
+        void onScrolled(int dy);
     }
 
     @Override
@@ -26,6 +31,13 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
         holder.classNameTextView.setText(characterClass.getClassName());
         holder.activeAbilityTextView.setText(characterClass.getCharacterActiveDescriptions());
         holder.passiveAbilityTextView.setText(characterClass.getCharacterPassiveDescriptions());
+
+        holder.itemView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            if (scrollListener != null) {
+                scrollListener.onScrolled(scrollY - oldScrollY);
+            }
+        });
+
 
         // Set the visibility of Active Ability and Passive Ability TextViews based on the class
         if (characterClass.getClassName().equals("No Class")) {
