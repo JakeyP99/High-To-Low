@@ -49,6 +49,7 @@ dependencies {
     implementation 'jp.wasabeef:recyclerview-animators:4.0.2'
     implementation 'com.airbnb.android:lottie:6.1.0'
     implementation 'io.github.muddz:styleabletoast:2.4.0'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.23'
 
 
 }

@@ -75,10 +75,6 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     private int selectedPlayerCount;
     private Button proceedButton;
 
-
-    private ViewPager viewPager; // Declare ViewPager as a class member
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -98,15 +94,14 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
             playerListAdapter.notifyItemChanged(position);
             updatePlayerCounter();
             if (GeneralSettingsLocalStore.fromContext(this).isSingleScreen()) {
-                CharacterClassAdapter adapter = createCharacterClassAdapter(); // Replace this with your actual adapter creation logic
+                CharacterClassAdapter adapter = createCharacterClassAdapter();
                 chooseClass(position, adapter);
             }
         }
     }
 
     private CharacterClassAdapter createCharacterClassAdapter() {
-        // Create and return an instance of CharacterClassAdapter with the appropriate data
-        List<CharacterClassStore> characterClasses = generateCharacterClasses(); // Assuming this method generates character classes
+        List<CharacterClassStore> characterClasses = generateCharacterClasses();
         return new CharacterClassAdapter(characterClasses);
     }
 
@@ -164,13 +159,13 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
 
     private List<CharacterClassStore> generateCharacterClasses() {
         List<CharacterClassStore> characterClasses = new ArrayList<>();
-        characterClasses.add(new CharacterClassStore(1, CLASS_ARCHER, CLASS_ARCHER_DESCRIPTION));
-        characterClasses.add(new CharacterClassStore(2, CLASS_WITCH, CLASS_WITCH_DESCRIPTION));
-        characterClasses.add(new CharacterClassStore(3, CLASS_SCIENTIST, CLASS_SCIENTIST_DESCRIPTION));
-        characterClasses.add(new CharacterClassStore(4, CLASS_SOLDIER, CLASS_SOLDIER_DESCRIPTION));
-        characterClasses.add(new CharacterClassStore(5, CLASS_QUIZ_MAGICIAN, CLASS_QUIZ_MAGICIAN_DESCRIPTION));
-        characterClasses.add(new CharacterClassStore(6, CLASS_JIM, CLASS_JIM_DESCRIPTION));
-        characterClasses.add(new CharacterClassStore(7, CLASS_NONE, CLASS_NONE_DESCRIPTION));
+        characterClasses.add(new CharacterClassStore(1, CLASS_ARCHER, CLASS_ARCHER_DESCRIPTION, R.drawable.archer));
+        characterClasses.add(new CharacterClassStore(2, CLASS_WITCH, CLASS_WITCH_DESCRIPTION, R.drawable.witch));
+        characterClasses.add(new CharacterClassStore(3, CLASS_SCIENTIST, CLASS_SCIENTIST_DESCRIPTION, R.drawable.scientist));
+        characterClasses.add(new CharacterClassStore(4, CLASS_SOLDIER, CLASS_SOLDIER_DESCRIPTION, R.drawable.helmet));
+        characterClasses.add(new CharacterClassStore(5, CLASS_QUIZ_MAGICIAN, CLASS_QUIZ_MAGICIAN_DESCRIPTION, R.drawable.books));
+        characterClasses.add(new CharacterClassStore(6, CLASS_JIM, CLASS_JIM_DESCRIPTION, R.drawable.jim));
+        characterClasses.add(new CharacterClassStore(7, CLASS_NONE, CLASS_NONE_DESCRIPTION, R.drawable.noclass));
         return characterClasses;
     }
 
@@ -197,34 +192,26 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
 
-//        dialog.setOnCancelListener(dialogInterface -> handleCancelClick(position, pagerAdapter, dialog));
+        dialog.setOnCancelListener(dialogInterface -> handleCancelClick(position, dialog));
 
         dialog.show();
 
         confirmClass.setOnClickListener(v -> handleConfirmClick(position, pagerAdapter, dialog));
     }
 
-//    private void handleCancelClick(int position, CharacterClassPagerAdapter pagerAdapter, AlertDialog dialog) {
-//        int selectedPageNumber = pagerAdapter.getPageNumber();
-//        Player selectedPlayer = playerList.get(position);
-//
-//        CharacterClassStore selectedCharacterClass = findSelectedCharacterClass(selectedPageNumber);
-//
-//        if (selectedCharacterClass != null) {
-//            selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
-//
-//            String message = selectedCharacterClass.getClassName().equals("No Class") ?
-//                    selectedPlayer.getName() + " chose no class!" :
-//                    selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
-//
-//            StyleableToast.makeText(this, message, R.style.newToast).show();
-//        } else {
-//            selectedPlayer.setClassChoice(null);
-//            StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
-//        }
-//
-//        dialog.dismiss();
-//    }
+    private void handleCancelClick(int position, AlertDialog dialog) {
+        Player player = playerList.get(position);
+        dialog.dismiss();
+
+        if (player.isSelected()) {
+            player.setSelected(false);
+            playerListAdapter.notifyItemChanged(position);
+            updatePlayerCounter();
+            Log.d("Confirm Button", "Player selection was cancelled");
+
+        }
+
+    }
 
     private void handleConfirmClick(int position, CharacterClassPagerAdapter pagerAdapter, AlertDialog dialog) {
         Player selectedPlayer = playerList.get(position);
@@ -234,38 +221,34 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
             int selectedPage = viewPager.getCurrentItem();
             int selectedPageNumber = selectedPage + 1; // Add 1 since ViewPager starts counting from 0
 
-            // Retrieve the character class based on the selected page number
             CharacterClassStore selectedCharacterClass = findCharacterClassById(selectedPageNumber);
 
             if (selectedCharacterClass != null) {
                 selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
 
-                String message = selectedCharacterClass.getClassName().equals("No Class") ?
-                        selectedPlayer.getName() + " chose no class!" :
-                        selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
+
+                String message = selectedCharacterClass.getClassName().equals("No Class") ? selectedPlayer.getName() + " chose no class!" : selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
 
                 StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
 
-                // Log the selected page number and ID
                 Log.d("Confirm Button", "Confirm Button Clicked - Page Number: " + selectedPageNumber + ", Character ID: " + selectedCharacterClass.getId());
+                dialog.dismiss();
+
             } else {
                 selectedPlayer.setClassChoice(null);
                 StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
-
-                // Log that no class was chosen
                 Log.d("Confirm Button", "No class chosen");
-            }
+                dialog.dismiss();
 
-            dialog.dismiss();
-            Log.d("Confirm Button", selectedPlayer.getName() + " chose " + selectedPlayer.getClassChoice());
+            }
         } else {
-            // Handle the case when viewPager is null
             Log.e("Confirm Button", "ViewPager not found");
+            dialog.dismiss();
+
         }
     }
 
 
-    // Method to find CharacterClassStore by ID
     private CharacterClassStore findCharacterClassById(int id) {
         List<CharacterClassStore> characterClasses = generateCharacterClasses();
         for (CharacterClassStore characterClass : characterClasses) {
@@ -287,9 +270,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         Button capturePhotoButton = dialogView.findViewById(R.id.capturePhotoButton);
         Button drawPhotoButton = dialogView.findViewById(R.id.drawPhotoButton);
 
-        AlertDialog dialog = builder.setView(dialogView)
-                .setNegativeButton(Html.fromHtml("<font color='" + R.color.bluedark + "'>Cancel</font>"), (dialogInterface, which) -> dialogInterface.dismiss())
-                .create();
+        AlertDialog dialog = builder.setView(dialogView).setNegativeButton(Html.fromHtml("<font color='" + R.color.bluedark + "'>Cancel</font>"), (dialogInterface, which) -> dialogInterface.dismiss()).create();
 
         capturePhotoButton.setOnClickListener(v -> {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -414,22 +395,21 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         builder.setTitle(spannableTitle);
 
 
-        builder.setView(dialogView)
-                .setPositiveButton("OK", (dialogInterface, i) -> {
-                    String name = nameEditText.getText().toString();
-                    if (name.length() < 20) {
-                        if (name.length() == 0) {
-                            StyleableToast.makeText(this, "Sorry, you need to enter a name.", R.style.newToast).show();
+        builder.setView(dialogView).setPositiveButton("OK", (dialogInterface, i) -> {
+            String name = nameEditText.getText().toString();
+            if (name.length() < 20) {
+                if (name.length() == 0) {
+                    StyleableToast.makeText(this, "Sorry, you need to enter a name.", R.style.newToast).show();
 
-                            showNameInputDialog(bitmap);
-                        } else {
-                            createNewCharacter(bitmap, name);
-                        }
-                    } else {
-                        StyleableToast.makeText(this, "Name must be less than 20 characters.", R.style.newToast).show();
-                        showNameInputDialog(bitmap);
-                    }
-                });
+                    showNameInputDialog(bitmap);
+                } else {
+                    createNewCharacter(bitmap, name);
+                }
+            } else {
+                StyleableToast.makeText(this, "Name must be less than 20 characters.", R.style.newToast).show();
+                showNameInputDialog(bitmap);
+            }
+        });
 
 
         AlertDialog dialog = builder.create();

@@ -3,10 +3,10 @@ package com.example.countingdowngame.createPlayer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.countingdowngame.R;
@@ -27,15 +27,7 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
         // Set the data to the views in the ViewHolder
         holder.classNameTextView.setText(characterClass.getClassName());
         holder.specialAbilityTextView.setText(characterClass.getCharacterClassDescriptions());
-
-        // Check if the current item is selected based on the isSelected flag in CharacterClassStore
-        if (characterClass.isSelected()) {
-            // Highlight the selected item
-            holder.itemView.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.buttonhighlight));
-        } else {
-            // Remove highlight from other items
-            holder.itemView.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.color.transparent));
-        }
+        holder.classImageView.setImageResource(characterClass.getImageResource());
     }
 
     @NonNull
@@ -53,13 +45,16 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
 
     // ViewHolder class representing each item in the RecyclerView
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView classImageView;
         TextView classNameTextView;
         TextView specialAbilityTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            classImageView = itemView.findViewById(R.id.classImageView);
             classNameTextView = itemView.findViewById(R.id.classNameTextView);
             specialAbilityTextView = itemView.findViewById(R.id.specialAbilityTextView);
         }
     }
+
 }
