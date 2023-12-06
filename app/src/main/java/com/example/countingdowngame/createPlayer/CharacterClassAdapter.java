@@ -16,26 +16,9 @@ import java.util.List;
 public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAdapter.ViewHolder> {
     private final List<CharacterClassStore> characterClasses; // List to hold character class data
 
-
-    private int selectedItemPosition = -1; // Variable to keep track of the selected item position
-    private OnItemSelectedListener onItemSelectedListener; // Interface instance
-
     public CharacterClassAdapter(List<CharacterClassStore> characterClasses) {
         this.characterClasses = characterClasses;
     }
-
-    public int getSelectedItemPosition() {
-        return selectedItemPosition; // Method to retrieve the position of the selected item
-    }
-
-    public void setOnItemSelectedListener(OnItemSelectedListener listener) {
-        this.onItemSelectedListener = listener; // Method to set the listener
-    }
-
-    public interface OnItemSelectedListener {
-        void onItemSelected(int position);
-    }
-
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
@@ -53,37 +36,7 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
             // Remove highlight from other items
             holder.itemView.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.color.transparent));
         }
-
-        holder.itemView.setOnClickListener(view -> {
-            int adapterPosition = holder.getAdapterPosition();
-
-            if (adapterPosition != RecyclerView.NO_POSITION) {
-                if (characterClass.isSelected()) {
-                    // Deselect the clicked item
-                    characterClass.setSelected(false);
-                    selectedItemPosition = RecyclerView.NO_POSITION;
-                    notifyItemChanged(adapterPosition);
-                } else {
-                    // Deselect the previously selected item
-                    if (selectedItemPosition != RecyclerView.NO_POSITION) {
-                        characterClasses.get(selectedItemPosition).setSelected(false);
-                        notifyItemChanged(selectedItemPosition);
-                    }
-
-                    // Select the clicked item
-                    characterClass.setSelected(true);
-                    selectedItemPosition = adapterPosition;
-                    notifyItemChanged(adapterPosition);
-                }
-
-                // Notify listener about the item selection
-                if (onItemSelectedListener != null) {
-                    onItemSelectedListener.onItemSelected(characterClass.getId()); // Pass the selected ID
-                }
-            }
-        });
     }
-
 
     @NonNull
     @Override
@@ -97,6 +50,7 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
     public int getItemCount() {
         return characterClasses.size();
     }
+
     // ViewHolder class representing each item in the RecyclerView
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView classNameTextView;

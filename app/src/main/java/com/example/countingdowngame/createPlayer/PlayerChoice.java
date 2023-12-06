@@ -197,65 +197,83 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
 
-        dialog.setOnCancelListener(dialogInterface -> handleCancelClick(position, pagerAdapter, dialog));
+//        dialog.setOnCancelListener(dialogInterface -> handleCancelClick(position, pagerAdapter, dialog));
 
         dialog.show();
 
         confirmClass.setOnClickListener(v -> handleConfirmClick(position, pagerAdapter, dialog));
     }
 
-    private void handleCancelClick(int position, CharacterClassPagerAdapter pagerAdapter, AlertDialog dialog) {
-        int selectedPageNumber = pagerAdapter.getPageNumber();
-        Player selectedPlayer = playerList.get(position);
-
-        CharacterClassStore selectedCharacterClass = findSelectedCharacterClass(selectedPageNumber);
-
-        if (selectedCharacterClass != null) {
-            selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
-
-            String message = selectedCharacterClass.getClassName().equals("No Class") ?
-                    selectedPlayer.getName() + " chose no class!" :
-                    selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
-
-            StyleableToast.makeText(this, message, R.style.newToast).show();
-        } else {
-            selectedPlayer.setClassChoice(null);
-            StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
-        }
-
-        dialog.dismiss();
-    }
+//    private void handleCancelClick(int position, CharacterClassPagerAdapter pagerAdapter, AlertDialog dialog) {
+//        int selectedPageNumber = pagerAdapter.getPageNumber();
+//        Player selectedPlayer = playerList.get(position);
+//
+//        CharacterClassStore selectedCharacterClass = findSelectedCharacterClass(selectedPageNumber);
+//
+//        if (selectedCharacterClass != null) {
+//            selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
+//
+//            String message = selectedCharacterClass.getClassName().equals("No Class") ?
+//                    selectedPlayer.getName() + " chose no class!" :
+//                    selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
+//
+//            StyleableToast.makeText(this, message, R.style.newToast).show();
+//        } else {
+//            selectedPlayer.setClassChoice(null);
+//            StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
+//        }
+//
+//        dialog.dismiss();
+//    }
 
     private void handleConfirmClick(int position, CharacterClassPagerAdapter pagerAdapter, AlertDialog dialog) {
-        int selectedPageNumber = pagerAdapter.getPageNumber();
         Player selectedPlayer = playerList.get(position);
+        ViewPager viewPager = dialog.findViewById(R.id.classRecyclerView);
 
-        CharacterClassStore selectedCharacterClass = findSelectedCharacterClass(selectedPageNumber);
+        if (viewPager != null) {
+            int selectedPage = viewPager.getCurrentItem();
+            int selectedPageNumber = selectedPage + 1; // Add 1 since ViewPager starts counting from 0
 
-        if (selectedCharacterClass != null) {
-            selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
+            // Retrieve the character class based on the selected page number
+            CharacterClassStore selectedCharacterClass = findCharacterClassById(selectedPageNumber);
 
-            String message = selectedCharacterClass.getClassName().equals("No Class") ?
-                    selectedPlayer.getName() + " chose no class!" :
-                    selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
+            if (selectedCharacterClass != null) {
+                selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
 
-            StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
+                String message = selectedCharacterClass.getClassName().equals("No Class") ?
+                        selectedPlayer.getName() + " chose no class!" :
+                        selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
+
+                StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
+
+                // Log the selected page number and ID
+                Log.d("Confirm Button", "Confirm Button Clicked - Page Number: " + selectedPageNumber + ", Character ID: " + selectedCharacterClass.getId());
+            } else {
+                selectedPlayer.setClassChoice(null);
+                StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
+
+                // Log that no class was chosen
+                Log.d("Confirm Button", "No class chosen");
+            }
+
+            dialog.dismiss();
+            Log.d("Confirm Button", selectedPlayer.getName() + " chose " + selectedPlayer.getClassChoice());
         } else {
-            selectedPlayer.setClassChoice(null);
-            StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
+            // Handle the case when viewPager is null
+            Log.e("Confirm Button", "ViewPager not found");
         }
-
-        dialog.dismiss();
-        Log.d("Confirm Button", "Confirm Button Clicked and " + selectedPlayer.getName() + " choose " + selectedPlayer.getClassChoice());
     }
 
-    private CharacterClassStore findSelectedCharacterClass(int selectedPageNumber) {
-        for (CharacterClassStore characterClass : generateCharacterClasses()) {
-            if (characterClass.getId() == selectedPageNumber) {
+
+    // Method to find CharacterClassStore by ID
+    private CharacterClassStore findCharacterClassById(int id) {
+        List<CharacterClassStore> characterClasses = generateCharacterClasses();
+        for (CharacterClassStore characterClass : characterClasses) {
+            if (characterClass.getId() == id) {
                 return characterClass;
             }
         }
-        return null;
+        return null; // If ID is not found, return null
     }
 
 

@@ -33,12 +33,6 @@ public class CharacterClassPagerAdapter extends PagerAdapter {
         CharacterClassAdapter adapter = new CharacterClassAdapter(characterClassesPages.get(position));
         recyclerView.setAdapter(adapter);
 
-        // Update selected item in the adapter when clicked
-        adapter.setOnItemSelectedListener(selectedPosition -> {
-            pageNumber = position + 1; // Increment by 1 to display the correct page number
-            notifyDataSetChanged();
-        });
-
         container.addView(recyclerView);
         return recyclerView;
     }
@@ -56,4 +50,6 @@ public class CharacterClassPagerAdapter extends PagerAdapter {
     public int getPageNumber() {
         return pageNumber;
     }
+
+
 }
