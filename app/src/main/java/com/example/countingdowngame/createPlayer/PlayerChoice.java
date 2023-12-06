@@ -1,12 +1,17 @@
 package com.example.countingdowngame.createPlayer;
 
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_ARCHER_DESCRIPTION;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_JIM_DESCRIPTION;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_NONE_DESCRIPTION;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_QUIZ_MAGICIAN_DESCRIPTION;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_SCIENTIST_DESCRIPTION;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_SOLDIER_DESCRIPTION;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.CLASS_WITCH_DESCRIPTION;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.archerActiveDescription;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.archerPassiveDescription;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.jimPassiveDescription;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.noClassDescription;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.quizMagicianActiveDescription;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.quizMagicianPassiveDescription;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.scientistActiveDescription;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.scientistPassiveDescription;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.soldierActiveDescription;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.soldierPassiveDescription;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.witchActiveDescription;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.witchPassiveDescription;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -95,7 +100,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
             updatePlayerCounter();
             if (GeneralSettingsLocalStore.fromContext(this).isSingleScreen()) {
                 CharacterClassAdapter adapter = createCharacterClassAdapter();
-                chooseClass(position, adapter);
+                chooseClass(position);
             }
         }
     }
@@ -159,17 +164,17 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
 
     private List<CharacterClassStore> generateCharacterClasses() {
         List<CharacterClassStore> characterClasses = new ArrayList<>();
-        characterClasses.add(new CharacterClassStore(1, CLASS_ARCHER, CLASS_ARCHER_DESCRIPTION, R.drawable.archer));
-        characterClasses.add(new CharacterClassStore(2, CLASS_WITCH, CLASS_WITCH_DESCRIPTION, R.drawable.witch));
-        characterClasses.add(new CharacterClassStore(3, CLASS_SCIENTIST, CLASS_SCIENTIST_DESCRIPTION, R.drawable.scientist));
-        characterClasses.add(new CharacterClassStore(4, CLASS_SOLDIER, CLASS_SOLDIER_DESCRIPTION, R.drawable.helmet));
-        characterClasses.add(new CharacterClassStore(5, CLASS_QUIZ_MAGICIAN, CLASS_QUIZ_MAGICIAN_DESCRIPTION, R.drawable.books));
-        characterClasses.add(new CharacterClassStore(6, CLASS_JIM, CLASS_JIM_DESCRIPTION, R.drawable.jim));
-        characterClasses.add(new CharacterClassStore(7, CLASS_NONE, CLASS_NONE_DESCRIPTION, R.drawable.noclass));
+        characterClasses.add(new CharacterClassStore(1, CLASS_ARCHER, archerActiveDescription, archerPassiveDescription, R.drawable.archer));
+        characterClasses.add(new CharacterClassStore(2, CLASS_WITCH, witchActiveDescription, witchPassiveDescription, R.drawable.witch));
+        characterClasses.add(new CharacterClassStore(3, CLASS_SCIENTIST, scientistActiveDescription, scientistPassiveDescription, R.drawable.scientist));
+        characterClasses.add(new CharacterClassStore(4, CLASS_SOLDIER, soldierActiveDescription, soldierPassiveDescription, R.drawable.helmet));
+        characterClasses.add(new CharacterClassStore(5, CLASS_QUIZ_MAGICIAN, quizMagicianActiveDescription, quizMagicianPassiveDescription, R.drawable.books));
+        characterClasses.add(new CharacterClassStore(6, CLASS_JIM, null, jimPassiveDescription, R.drawable.jim));
+        characterClasses.add(new CharacterClassStore(7, CLASS_NONE, noClassDescription, null, R.drawable.noclass));
         return characterClasses;
     }
 
-    private void chooseClass(int position, CharacterClassAdapter adapter) {
+    private void chooseClass(int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
 
@@ -196,7 +201,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
 
         dialog.show();
 
-        confirmClass.setOnClickListener(v -> handleConfirmClick(position, pagerAdapter, dialog));
+        confirmClass.setOnClickListener(v -> handleConfirmClick(position, dialog));
     }
 
     private void handleCancelClick(int position, AlertDialog dialog) {
@@ -213,24 +218,19 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
 
     }
 
-    private void handleConfirmClick(int position, CharacterClassPagerAdapter pagerAdapter, AlertDialog dialog) {
+    private void handleConfirmClick(int position, AlertDialog dialog) {
         Player selectedPlayer = playerList.get(position);
         ViewPager viewPager = dialog.findViewById(R.id.classRecyclerView);
 
         if (viewPager != null) {
             int selectedPage = viewPager.getCurrentItem();
             int selectedPageNumber = selectedPage + 1; // Add 1 since ViewPager starts counting from 0
-
             CharacterClassStore selectedCharacterClass = findCharacterClassById(selectedPageNumber);
 
             if (selectedCharacterClass != null) {
                 selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
-
-
                 String message = selectedCharacterClass.getClassName().equals("No Class") ? selectedPlayer.getName() + " chose no class!" : selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
-
                 StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
-
                 Log.d("Confirm Button", "Confirm Button Clicked - Page Number: " + selectedPageNumber + ", Character ID: " + selectedCharacterClass.getId());
                 dialog.dismiss();
 
@@ -239,12 +239,10 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
                 StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
                 Log.d("Confirm Button", "No class chosen");
                 dialog.dismiss();
-
             }
         } else {
             Log.e("Confirm Button", "ViewPager not found");
             dialog.dismiss();
-
         }
     }
 

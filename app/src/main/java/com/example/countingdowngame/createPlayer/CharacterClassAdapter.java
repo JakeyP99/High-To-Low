@@ -22,13 +22,26 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        CharacterClassStore characterClass = characterClasses.get(holder.getAdapterPosition());
-
-        // Set the data to the views in the ViewHolder
+        CharacterClassStore characterClass = characterClasses.get(position);
         holder.classNameTextView.setText(characterClass.getClassName());
-        holder.specialAbilityTextView.setText(characterClass.getCharacterClassDescriptions());
+        holder.activeAbilityTextView.setText(characterClass.getCharacterActiveDescriptions());
+        holder.passiveAbilityTextView.setText(characterClass.getCharacterPassiveDescriptions());
+
+        // Set the visibility of Active Ability and Passive Ability TextViews based on the class
+        if (characterClass.getClassName().equals("No Class")) {
+            holder.activeAbilityText.setVisibility(View.GONE);
+            holder.passiveAbilityText.setVisibility(View.GONE);
+        } else if (characterClass.getClassName().equals("Jim")) {
+            holder.activeAbilityText.setVisibility(View.GONE);
+            holder.activeAbilityTextView.setVisibility(View.GONE);
+        } else {
+            holder.activeAbilityTextView.setVisibility(View.VISIBLE);
+            holder.passiveAbilityTextView.setVisibility(View.VISIBLE);
+        }
+
         holder.classImageView.setImageResource(characterClass.getImageResource());
     }
+
 
     @NonNull
     @Override
@@ -47,13 +60,21 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView classImageView;
         TextView classNameTextView;
-        TextView specialAbilityTextView;
+        TextView activeAbilityTextView;
+        TextView passiveAbilityTextView;
+        TextView activeAbilityText; // Declaration of activeAbilityTextView
+        TextView passiveAbilityText;
 
         public ViewHolder(View itemView) {
             super(itemView);
             classImageView = itemView.findViewById(R.id.classImageView);
             classNameTextView = itemView.findViewById(R.id.classNameTextView);
-            specialAbilityTextView = itemView.findViewById(R.id.specialAbilityTextView);
+            activeAbilityTextView = itemView.findViewById(R.id.activeAbilityTextView);
+            passiveAbilityTextView = itemView.findViewById(R.id.passiveAbilityTextView);
+            activeAbilityText = itemView.findViewById(R.id.activeAbilityText); // Initialization of activeAbilityTextView
+            passiveAbilityText = itemView.findViewById(R.id.passiveAbilityText);
+
+
         }
     }
 

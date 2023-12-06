@@ -21,9 +21,9 @@
             android:layout_marginBottom="4dp"
             android:fontFamily="@font/viga"
             android:gravity="start"
-            android:text="Programmer"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
+            android:text="Quiz Magician"
+            android:textColor="@color/bluedark"
+            android:textSize="30sp"
             android:textStyle="bold" />
 
         <pl.droidsonroids.gif.GifImageView
@@ -35,11 +35,46 @@
             android:src="@drawable/wine" />
 
         <TextView
-            android:id="@+id/specialAbilityTextView"
+            android:id="@+id/activeAbilityText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="start"
+            android:text="Active Ability"
+            android:textStyle="bold"
+            android:textColor="@color/bluedark"
+            android:textSize="23sp" />
+
+        <TextView
+            android:id="@+id/activeAbilityTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="start"
+            android:text="This is a sample description."
+            android:textColor="@color/bluedark"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/passiveAbilityText"
+            android:layout_width="wrap_content"
+            android:paddingTop="20dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="start"
+            android:text="Passive Ability"
+            android:textColor="@color/bluedark"
+            android:textSize="23sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/passiveAbilityTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="start"
+
+
             android:text="This is a sample description."
             android:textColor="@color/bluedark"
             android:textSize="16sp" />

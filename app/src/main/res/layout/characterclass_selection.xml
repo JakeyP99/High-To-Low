@@ -8,12 +8,27 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/classRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="480dp"
+        android:layout_height="450dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="false"
+        android:max="100"
+        android:padding="20sp"
+        android:progress="0"
+        android:progressDrawable="@drawable/progress"
+        android:progressTint="@color/bluedark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/card_view"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/btnConfirmClass"

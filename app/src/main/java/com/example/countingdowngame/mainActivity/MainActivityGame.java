@@ -255,17 +255,17 @@ public class MainActivityGame extends SharedMainActivity {
     private String getClassDescription(String classChoice) {
         switch (classChoice) {
             case CLASS_ARCHER:
-                return CharacterClassDescriptions.CLASS_ARCHER_DESCRIPTION;
+                return CharacterClassDescriptions.archerActiveDescription;
             case CLASS_WITCH:
-                return CharacterClassDescriptions.CLASS_WITCH_DESCRIPTION;
+                return CharacterClassDescriptions.witchActiveDescription;
             case CLASS_SCIENTIST:
-                return CharacterClassDescriptions.CLASS_SCIENTIST_DESCRIPTION;
+                return CharacterClassDescriptions.scientistActiveDescription;
             case CLASS_SOLDIER:
-                return CharacterClassDescriptions.CLASS_SOLDIER_DESCRIPTION;
+                return CharacterClassDescriptions.soldierActiveDescription;
             case CLASS_QUIZ_MAGICIAN:
-                return CharacterClassDescriptions.CLASS_QUIZ_MAGICIAN_DESCRIPTION;
+                return CharacterClassDescriptions.quizMagicianActiveDescription;
             case CLASS_JIM:
-                return CharacterClassDescriptions.CLASS_JIM_DESCRIPTION;
+                return CharacterClassDescriptions.jimActiveDescription;
             default:
                 return "I love you cutie pie hehe. You don't have a class to show any description for.";
         }
