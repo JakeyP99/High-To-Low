@@ -252,7 +252,8 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    private String getClassDescription(String classChoice) {
+    //todo I need to make sure these descriptions match
+    private String getClassActiveDescription(String classChoice) {
         switch (classChoice) {
             case CLASS_ARCHER:
                 return CharacterClassDescriptions.archerActiveDescription;
@@ -271,7 +272,24 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-
+    private String getClassPassiveDescription(String classChoice) {
+        switch (classChoice) {
+            case CLASS_ARCHER:
+                return CharacterClassDescriptions.archerPassiveDescription;
+            case CLASS_WITCH:
+                return CharacterClassDescriptions.witchPassiveDescription;
+            case CLASS_SCIENTIST:
+                return CharacterClassDescriptions.scientistPassiveDescription;
+            case CLASS_SOLDIER:
+                return CharacterClassDescriptions.soldierPassiveDescription;
+            case CLASS_QUIZ_MAGICIAN:
+                return CharacterClassDescriptions.quizMagicianPassiveDescription;
+            case CLASS_JIM:
+                return CharacterClassDescriptions.jimPassiveDescription;
+            default:
+                return "";
+        }
+    }
 
     //-----------------------------------------------------Buttons---------------------------------------------------//
 
@@ -291,9 +309,7 @@ public class MainActivityGame extends SharedMainActivity {
             isFirstTurn = false;
         });
 
-        playerImage.setOnClickListener(v -> {
-            setupPlayerImageClickListener(); // Corrected this line
-        });
+        playerImage.setOnClickListener(v -> setupPlayerImageClickListener());
 
 
         btnUtils.setButton(btnAnswer, this::showAnswer);
@@ -325,14 +341,16 @@ public class MainActivityGame extends SharedMainActivity {
         if (currentPlayer != null) {
             String currentPlayerClassChoice = currentPlayer.getClassChoice();
             if (currentPlayerClassChoice != null) {
-                String classDescription = currentPlayer.getClassChoice() + "\n\n" + getClassDescription(currentPlayerClassChoice);
-                showDialogWithFixedTextSize(classDescription, 20);
+                String classDescription = currentPlayer.getClassChoice() + "'s Abilities" + "\n\n" + "Active: " + getClassActiveDescription(currentPlayerClassChoice)
+                        + "\n\n" + "Passive: " + getClassPassiveDescription(currentPlayerClassChoice);
+                showDialogWithFixedTextSize(classDescription, 18);
             } else {
                 String loveMessage = "I love you cutie pie hehe. You don't have a class to show any description for.";
                 showDialogWithFixedTextSize(loveMessage, 30);
             }
         }
     }
+
 
     //-----------------------------------------------------Render Player---------------------------------------------------//
 
