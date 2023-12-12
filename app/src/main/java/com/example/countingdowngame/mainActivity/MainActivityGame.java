@@ -93,7 +93,6 @@ public class MainActivityGame extends SharedMainActivity {
     private final Map<Player, Integer> playerTurnCountMap = new HashMap<>();
 
     public static int drinkNumberCounterInt = 0;
-    private Player firstPlayer;
     private boolean isFirstTurn = true;
     private boolean soldierRemoval = false;
     public WildCardProperties selectedWildCard;
@@ -104,6 +103,7 @@ public class MainActivityGame extends SharedMainActivity {
     private GifImageView confettiImageViewBR;
     private GifImageView confettiImageViewTR;
 
+    private int turnCounter = 0;
 
     private static final int DELAY_MILLIS = 1500;
     private static final int BUTTON_COUNT = 4;
@@ -196,7 +196,6 @@ public class MainActivityGame extends SharedMainActivity {
 
 
     private void startGame() {
-        drinkNumberCounterInt = 0;
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
             throw new RuntimeException("Missing extras");
@@ -215,7 +214,7 @@ public class MainActivityGame extends SharedMainActivity {
             for (Player player : playerList) {
                 player.setGame(Game.getInstance());
             }
-            firstPlayer = playerList.get(0);
+            Player firstPlayer = playerList.get(0);
 
         }
         for (Player player : playerList) {
@@ -227,6 +226,7 @@ public class MainActivityGame extends SharedMainActivity {
             }
         });
         renderPlayer();
+        updateDrinkNumberCounter(1);
     }
 
     public void renderCurrentNumber(int currentNumber, final Runnable onEnd, TextView textView1) {
@@ -358,7 +358,15 @@ public class MainActivityGame extends SharedMainActivity {
 
         characterPassiveClassAffects();
         updateClassAbilityButton(currentPlayer);
-        updateDrinkNumberCounter(1);
+
+        turnCounter++;
+
+
+        if (turnCounter == 4) {
+            updateDrinkNumberCounter(1);
+            turnCounter = 0;
+        }
+
 
         if (!playerList.isEmpty()) {
             updatePlayerInfo(currentPlayer);
@@ -412,8 +420,6 @@ public class MainActivityGame extends SharedMainActivity {
             }
 
             updateDrinkNumberCounterTextView();
-            Log.d(TAG, "totalDrinkAmount: " + maxTotalDrinkAmount);
-            Log.d(TAG, "drink counter: " + drinkNumberCounterInt);
         }
     }
 
