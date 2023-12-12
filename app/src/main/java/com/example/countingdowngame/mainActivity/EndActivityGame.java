@@ -59,8 +59,8 @@ public class EndActivityGame extends ButtonUtilsActivity {
 
         btnUtils.setButton(btnPlayAgain, () -> {
             Game.getInstance().resetPlayers(this);
-            gotoGameStart();
+            gotoNumberChoice();
         });
-        btnUtils.setButton(btnNewPlayer, this::gotoGameSetup);
+        btnUtils.setButton(btnNewPlayer, this::gotoPlayerNumberChoice);
     }
 }

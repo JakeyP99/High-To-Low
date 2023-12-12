@@ -65,4 +65,16 @@ public class GeneralSettingsLocalStore {
         editor.putInt("playerWildCardCount", value);
         editor.apply();
     }
+
+    /////////Total Drink Amount
+
+    public int totalDrinkAmount() {
+        return mPref.getInt("totalDrinkAmount", 5);
+    }
+
+    public void setTotalDrinkAmount(int value) {
+        SharedPreferences.Editor editor = mPref.edit();
+        editor.putInt("totalDrinkAmount", value);
+        editor.apply();
+    }
 }

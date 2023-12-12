@@ -11,6 +11,7 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
+import com.example.countingdowngame.settings.WildCardSettings;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.Random;
@@ -62,7 +63,7 @@ public class NumberChoice extends ButtonUtilsActivity {
                 .duration(300)
                 .onEnd(animator -> {
                     // Animation has ended, start the MainActivity here
-                    startMainActivity();
+                    goToInGameSettings();
                 })
                 .playOn(originalNumberField);
 
@@ -75,13 +76,13 @@ public class NumberChoice extends ButtonUtilsActivity {
         startingNumber = random.nextInt(5000) + 1;
         final EditText originalNumberField = findViewById(R.id.EditTextView_numberchoice);
         originalNumberField.setFocusable(false);
-        startMainActivity();
+        goToInGameSettings();
     }
 
 
-    private void startMainActivity() {
+    private void goToInGameSettings() {
         boolean switchOneChecked = GeneralSettingsLocalStore.fromContext(this).isSingleScreen();
-        Class<?> targetClass = switchOneChecked ? MainActivityGame.class : MainActivitySplitScreen.class;
+        Class<?> targetClass = switchOneChecked ? WildCardSettings.class : MainActivitySplitScreen.class;
         Intent i = getIntentForClass(targetClass, true);
         i.putExtra("startingNumber", startingNumber);
         startActivity(i);

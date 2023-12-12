@@ -29,6 +29,29 @@
         android:inputType="number"
         android:layout_gravity="center" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/viga"
+        android:text="Total Drink Limit"
+        android:textColor="@color/bluedark"
+        android:textSize="23sp"
+        android:layout_gravity="center" />
+
+    <EditText
+        android:id="@+id/edittext_drink_amount"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:hint="What is the drink limit?"
+        android:textAlignment="center"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/viga"
+        android:background="@drawable/outlineforbutton"
+        android:textColorHint="@color/bluedarktransparent"
+        android:inputType="number"
+        android:layout_gravity="center" />
+
 
     <TextView
         android:id="@+id/textview_banner"
@@ -74,12 +97,12 @@
 
 
     <Button
-        android:id="@+id/buttonReturn"
+        android:id="@+id/btnContinueToGame"
         android:layout_width="139dp"
         android:layout_height="77dp"
         android:layout_marginTop="100dp"
         android:background="@drawable/outlineforbutton"
-        android:text="Return"
+        android:text="Continue"
         android:fontFamily="@font/viga"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"

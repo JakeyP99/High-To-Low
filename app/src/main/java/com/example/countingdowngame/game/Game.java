@@ -112,9 +112,6 @@ public class Game {
         repeatTurnPlayer = currentPlayer; // Set the Soldier class ability player
     }
 
-    public boolean isRepeatTurnActive() {
-        return repeatTurnPlayer != null;
-    }
 
     //-----------------------------------------------------Player Functions---------------------------------------------------//
     private final PlayerEventListener playerEventListener = e -> {

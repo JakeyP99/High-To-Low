@@ -197,8 +197,6 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void startGame() {
         drinkNumberCounterInt = 0;
-
-
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
             throw new RuntimeException("Missing extras");
@@ -360,7 +358,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         characterPassiveClassAffects();
         updateClassAbilityButton(currentPlayer);
-        updateDrinkNumberCounter(currentPlayer);
+        updateDrinkNumberCounter(1);
 
         if (!playerList.isEmpty()) {
             updatePlayerInfo(currentPlayer);
@@ -397,12 +395,28 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    private void updateDrinkNumberCounter(Player currentPlayer) {
-        if (currentPlayer.equals(firstPlayer)) {
-            drinkNumberCounterInt++;
+    private void updateDrinkNumberCounter(int drinkNumberCounterInput) {
+        Bundle extras = getIntent().getExtras();
+        if (extras == null) {
+            throw new RuntimeException("Missing extras");
+        }
+
+        int maxTotalDrinkAmount = extras.getInt("totalDrinkNumber");
+        int remainingDrinksNeeded = maxTotalDrinkAmount - drinkNumberCounterInt;
+
+        if (remainingDrinksNeeded > 0) {
+            if (drinkNumberCounterInput <= remainingDrinksNeeded) {
+                drinkNumberCounterInt += drinkNumberCounterInput; // Increment by drinkNumberCounterInput
+            } else {
+                drinkNumberCounterInt = maxTotalDrinkAmount; // Set to the maximum value
+            }
+
             updateDrinkNumberCounterTextView();
+            Log.d(TAG, "totalDrinkAmount: " + maxTotalDrinkAmount);
+            Log.d(TAG, "drink counter: " + drinkNumberCounterInt);
         }
     }
+
 
     private void updatePlayerInfo(Player currentPlayer) {
         String playerName = currentPlayer.getName();
@@ -500,7 +514,7 @@ public class MainActivityGame extends SharedMainActivity {
         handleArcherPassive(currentPlayer);
     }
 
-
+    //todo finish this
     private void handleQuizMagicianPassive(Player currentPlayer) {
 
     }
@@ -565,7 +579,7 @@ public class MainActivityGame extends SharedMainActivity {
 
                 int chance = new Random().nextInt(100);
                 if (chance < 60) {
-                    drinkNumberCounterInt += 2;
+                    updateDrinkNumberCounter(2);
                     updateDrinkNumberCounterTextView();
                     showDialog("Archer's Passive: \n\nDrinking number increased by 2!");
                 } else {
