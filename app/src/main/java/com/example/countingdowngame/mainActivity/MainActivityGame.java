@@ -511,20 +511,12 @@ public class MainActivityGame extends SharedMainActivity {
         if (currentPlayer == null) {
             return;
         }
-        handleQuizMagicianPassive(currentPlayer);
-
         handleSoldierPassive(currentPlayer);
         handleWitchPassive(currentPlayer);
         handleScientistPassive(currentPlayer);
         handleJimPassive(currentPlayer);
         handleArcherPassive(currentPlayer);
     }
-
-    //todo finish this
-    private void handleQuizMagicianPassive(Player currentPlayer) {
-
-    }
-
 
     private void handleSoldierPassive(Player currentPlayer) {
         if ("Soldier".equals(currentPlayer.getClassChoice())) {
