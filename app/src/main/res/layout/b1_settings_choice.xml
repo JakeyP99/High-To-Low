@@ -37,20 +37,6 @@
         app:layout_constraintVertical_bias="0.10" />
 
     <Button
-        android:id="@+id/button_wildCardSettings"
-        android:layout_width="239dp"
-        android:layout_height="58dp"
-        android:layout_marginTop="50dp"
-
-        android:background="@drawable/outlineforbutton"
-        android:fontFamily="@font/viga"
-        android:text="Wild card Settings"
-        android:textAllCaps="false"
-        android:textColor="@color/bluedark"
-        android:textSize="20sp"
-        android:layout_gravity="center" />
-
-    <Button
         android:id="@+id/button_GeneralSettings"
         android:layout_width="239dp"
         android:layout_height="58dp"

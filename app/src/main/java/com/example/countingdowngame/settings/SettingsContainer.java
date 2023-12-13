@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.mainActivity.inGameSettings;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.example.countingdowngame.wildCards.WildCardChoice;
 
@@ -17,7 +16,6 @@ public class SettingsContainer extends ButtonUtilsActivity {
 
         final Button btnReturn = findViewById(R.id.buttonReturn);
         final Button btnWildCardChoice = findViewById(R.id.button_wildcardChoice);
-        final Button btnWildCardSettings = findViewById(R.id.button_wildCardSettings);
         final Button btnSettings = findViewById(R.id.button_GeneralSettings);
 
         btnUtils.setButton(btnReturn, this::onBackPressed);
@@ -26,9 +24,6 @@ public class SettingsContainer extends ButtonUtilsActivity {
             startActivity(getIntentForClass(WildCardChoice.class));
         });
 
-        btnUtils.setButton(btnWildCardSettings, () -> {
-            startActivity(getIntentForClass(inGameSettings.class));
-        });
 
         btnUtils.setButton(btnSettings, () -> {
             startActivity(getIntentForClass(GeneralSettings.class));

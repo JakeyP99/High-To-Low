@@ -113,7 +113,11 @@ public class MainActivityGame extends SharedMainActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        AudioManager.getInstance().playSound(); // Start playing the sound
+
+        // Check if the mute button is not selected before starting the music
+        if (!GeneralSettingsLocalStore.fromContext(this).isMuted()) {
+            AudioManager.getInstance().playSound(); // Start playing the sound
+        }
     }
 
     @Override
