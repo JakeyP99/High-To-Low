@@ -1,4 +1,4 @@
-package com.example.countingdowngame.settings;
+package com.example.countingdowngame.mainActivity;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -12,12 +12,12 @@ import android.widget.EditText;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.mainActivity.MainActivityGame;
+import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import io.github.muddz.styleabletoast.StyleableToast;
 
-public class WildCardSettings extends ButtonUtilsActivity implements View.OnClickListener {
+public class inGameSettings extends ButtonUtilsActivity implements View.OnClickListener {
 
     //-----------------------------------------------------Initialize---------------------------------------------------//
     private EditText wildcardPerPlayerEditText;
@@ -43,8 +43,8 @@ public class WildCardSettings extends ButtonUtilsActivity implements View.OnClic
         String wildCardAmountInput = wildcardPerPlayerEditText.getText().toString().trim();
         String totalDrinkAmountInput = totalDrinksEditText.getText().toString().trim();
 
-        boolean isWildCardValid = isValidInput(wildCardAmountInput, 3, 100);
-        boolean isTotalDrinkValid = isValidInput(totalDrinkAmountInput, 2, 20);
+        boolean isWildCardValid = isValidInput(wildCardAmountInput, 3, 0, 100);
+        boolean isTotalDrinkValid = isValidInput(totalDrinkAmountInput, 2, 1, 20);
 
         if (isWildCardValid && isTotalDrinkValid) {
             savePreferences();
@@ -134,24 +134,28 @@ public class WildCardSettings extends ButtonUtilsActivity implements View.OnClic
         }
     }
 
-    private boolean isValidInput(String input, int maxLength, int maxValue) {
+    private boolean isValidInput(String input, int maxLength, int minValue, int maxValue) {
         if (input.length() > maxLength) {
             input = input.substring(0, maxLength);
         }
-
+        if (input.length() < minValue) {
+            // Handle the scenario where input is empty or shorter than minValue
+            input = ""; // Set input to an empty string or handle as per your logic
+        }
         try {
             int value = Integer.parseInt(input);
-            return value >= 0 && value <= maxValue;
+            return value >= minValue && value <= maxValue;
         } catch (NumberFormatException e) {
             return false;
         }
     }
 
+
     private void isValidTotalDrinkAmount() {
         if (!isValidInput(
                 totalDrinksEditText.getText().toString().trim(),
                 2, // Max length
-                // Minimum value
+                1, // Minimum value
                 20 // Maximum value
         )) {
             // Handle invalid total drink amount
@@ -162,7 +166,7 @@ public class WildCardSettings extends ButtonUtilsActivity implements View.OnClic
         isValidInput(
                 wildcardPerPlayerEditText.getText().toString().trim(),
                 3, // Max length
-                // Minimum value
+                0,  // Minimum value
                 100 // Maximum value
         );// Handle invalid wild card amount
     }
@@ -190,8 +194,8 @@ public class WildCardSettings extends ButtonUtilsActivity implements View.OnClic
             String wildCardAmountInput = wildcardPerPlayerEditText.getText().toString().trim();
             String totalDrinkAmountInput = totalDrinksEditText.getText().toString().trim();
 
-            boolean isWildCardAmountValid = isValidInput(wildCardAmountInput, 3, 100);
-            boolean isTotalDrinkAmountValid = isValidInput(totalDrinkAmountInput, 2, 20);
+            boolean isWildCardAmountValid = isValidInput(wildCardAmountInput, 3, 0, 100);
+            boolean isTotalDrinkAmountValid = isValidInput(totalDrinkAmountInput, 2, 1, 20);
 
             if (isWildCardAmountValid && isTotalDrinkAmountValid) {
                 savePreferences();

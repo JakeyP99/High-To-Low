@@ -214,7 +214,6 @@ public class MainActivityGame extends SharedMainActivity {
             for (Player player : playerList) {
                 player.setGame(Game.getInstance());
             }
-            Player firstPlayer = playerList.get(0);
 
         }
         for (Player player : playerList) {
@@ -226,68 +225,12 @@ public class MainActivityGame extends SharedMainActivity {
             }
         });
         renderPlayer();
-        updateDrinkNumberCounter(1);
+        drinkNumberCounterInt = 1;
+        updateDrinkNumberCounterTextView();
     }
 
-    public void renderCurrentNumber(int currentNumber, final Runnable onEnd, TextView textView1) {
 
-        if (currentNumber == 0) {
-            btnGenerate.setEnabled(false);
-            btnWild.setEnabled(false);
-            btnClassAbility.setEnabled(false);
 
-            textView1.setText(String.valueOf(currentNumber));
-            applyPulsingEffect(textView1);
-
-            Handler handler = new Handler();
-            handler.postDelayed(() -> {
-                Game.getInstance().endGame(this);
-                onEnd.run();
-            }, 2000);
-        } else {
-            textView1.setText(String.valueOf(currentNumber));
-            Game.getInstance().nextPlayer();
-        }
-    }
-
-    //todo I need to make sure these descriptions match
-    private String getClassActiveDescription(String classChoice) {
-        switch (classChoice) {
-            case CLASS_ARCHER:
-                return CharacterClassDescriptions.archerActiveDescription;
-            case CLASS_WITCH:
-                return CharacterClassDescriptions.witchActiveDescription;
-            case CLASS_SCIENTIST:
-                return CharacterClassDescriptions.scientistActiveDescription;
-            case CLASS_SOLDIER:
-                return CharacterClassDescriptions.soldierActiveDescription;
-            case CLASS_QUIZ_MAGICIAN:
-                return CharacterClassDescriptions.quizMagicianActiveDescription;
-            case CLASS_JIM:
-                return CharacterClassDescriptions.jimActiveDescription;
-            default:
-                return "I love you cutie pie hehe. You don't have a class to show any description for.";
-        }
-    }
-
-    private String getClassPassiveDescription(String classChoice) {
-        switch (classChoice) {
-            case CLASS_ARCHER:
-                return CharacterClassDescriptions.archerPassiveDescription;
-            case CLASS_WITCH:
-                return CharacterClassDescriptions.witchPassiveDescription;
-            case CLASS_SCIENTIST:
-                return CharacterClassDescriptions.scientistPassiveDescription;
-            case CLASS_SOLDIER:
-                return CharacterClassDescriptions.soldierPassiveDescription;
-            case CLASS_QUIZ_MAGICIAN:
-                return CharacterClassDescriptions.quizMagicianPassiveDescription;
-            case CLASS_JIM:
-                return CharacterClassDescriptions.jimPassiveDescription;
-            default:
-                return "";
-        }
-    }
 
     //-----------------------------------------------------Buttons---------------------------------------------------//
 
@@ -353,6 +296,7 @@ public class MainActivityGame extends SharedMainActivity {
     //-----------------------------------------------------Render Player---------------------------------------------------//
 
     private void renderPlayer() {
+
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
 
@@ -360,13 +304,10 @@ public class MainActivityGame extends SharedMainActivity {
         updateClassAbilityButton(currentPlayer);
 
         turnCounter++;
-
-
         if (turnCounter == 4) {
             updateDrinkNumberCounter(1);
             turnCounter = 0;
         }
-
 
         if (!playerList.isEmpty()) {
             updatePlayerInfo(currentPlayer);
@@ -386,6 +327,27 @@ public class MainActivityGame extends SharedMainActivity {
 
     }
 
+    public void renderCurrentNumber(int currentNumber, final Runnable onEnd, TextView textView1) {
+        if (currentNumber == 0) {
+            btnGenerate.setEnabled(false);
+            btnWild.setEnabled(false);
+            btnClassAbility.setEnabled(false);
+
+            textView1.setText(String.valueOf(currentNumber));
+            applyPulsingEffect(textView1);
+
+            Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                Game.getInstance().endGame(this);
+                onEnd.run();
+            }, 2000);
+        } else {
+            textView1.setText(String.valueOf(currentNumber));
+            Game.getInstance().nextPlayer();
+        }
+    }
+
+
     private void updateClassAbilityButton(Player currentPlayer) {
         btnClassAbility.setText(String.format("%s's Ability", currentPlayer.getClassChoice()));
 
@@ -404,12 +366,9 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void updateDrinkNumberCounter(int drinkNumberCounterInput) {
-        Bundle extras = getIntent().getExtras();
-        if (extras == null) {
-            throw new RuntimeException("Missing extras");
-        }
 
-        int maxTotalDrinkAmount = extras.getInt("totalDrinkNumber");
+
+        int maxTotalDrinkAmount = GeneralSettingsLocalStore.fromContext(this).totalDrinkAmount();
         int remainingDrinksNeeded = maxTotalDrinkAmount - drinkNumberCounterInt;
 
         if (remainingDrinksNeeded > 0) {
@@ -423,6 +382,15 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
+    private void updateDrinkNumberCounterTextView() {
+        String drinkNumberText;
+        if (drinkNumberCounterInt == 1) {
+            drinkNumberText = "1 Drink";
+        } else {
+            drinkNumberText = drinkNumberCounterInt + " Drinks";
+        }
+        drinkNumberCounterTextView.setText(drinkNumberText);
+    }
 
     private void updatePlayerInfo(Player currentPlayer) {
         String playerName = currentPlayer.getName();
@@ -505,6 +473,44 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     //-----------------------------------------------------Character Class Functions---------------------------------------------------//
+    //todo I need to make sure these descriptions match
+    private String getClassActiveDescription(String classChoice) {
+        switch (classChoice) {
+            case CLASS_ARCHER:
+                return CharacterClassDescriptions.archerActiveDescription;
+            case CLASS_WITCH:
+                return CharacterClassDescriptions.witchActiveDescription;
+            case CLASS_SCIENTIST:
+                return CharacterClassDescriptions.scientistActiveDescription;
+            case CLASS_SOLDIER:
+                return CharacterClassDescriptions.soldierActiveDescription;
+            case CLASS_QUIZ_MAGICIAN:
+                return CharacterClassDescriptions.quizMagicianActiveDescription;
+            case CLASS_JIM:
+                return CharacterClassDescriptions.jimActiveDescription;
+            default:
+                return "I love you cutie pie hehe. You don't have a class to show any description for.";
+        }
+    }
+
+    private String getClassPassiveDescription(String classChoice) {
+        switch (classChoice) {
+            case CLASS_ARCHER:
+                return CharacterClassDescriptions.archerPassiveDescription;
+            case CLASS_WITCH:
+                return CharacterClassDescriptions.witchPassiveDescription;
+            case CLASS_SCIENTIST:
+                return CharacterClassDescriptions.scientistPassiveDescription;
+            case CLASS_SOLDIER:
+                return CharacterClassDescriptions.soldierPassiveDescription;
+            case CLASS_QUIZ_MAGICIAN:
+                return CharacterClassDescriptions.quizMagicianPassiveDescription;
+            case CLASS_JIM:
+                return CharacterClassDescriptions.jimPassiveDescription;
+            default:
+                return "";
+        }
+    }
 
     private void characterPassiveClassAffects() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
@@ -581,7 +587,7 @@ public class MainActivityGame extends SharedMainActivity {
                     updateDrinkNumberCounterTextView();
                     showDialog("Archer's Passive: \n\nDrinking number increased by 2!");
                 } else {
-                    drinkNumberCounterInt -= 2;
+                    updateDrinkNumberCounter(-2);
                     if (drinkNumberCounterInt < 0) {
                         drinkNumberCounterInt = 0;
                     }
@@ -628,7 +634,7 @@ public class MainActivityGame extends SharedMainActivity {
             if (Game.getInstance().getCurrentNumber() <= 10) {
                 currentPlayer.setClassAbility(true);
                 Game.getInstance().activateRepeatingTurn(currentPlayer);
-                drinkNumberCounterInt += 4;
+                updateDrinkNumberCounter(4);
                 updateDrinkNumberCounterTextView();
                 btnClassAbility.setVisibility(View.INVISIBLE);
             } else {
@@ -661,7 +667,7 @@ public class MainActivityGame extends SharedMainActivity {
         if (drinkNumberCounterInt >= 2) {
             showDialog("Archer's Active: \n\n" + currentPlayer.getName() + " hand out two drinks!");
             currentPlayer.setClassAbility(true);
-            drinkNumberCounterInt -= 2;
+            updateDrinkNumberCounter(-2);
             updateDrinkNumberCounterTextView();
             btnClassAbility.setVisibility(View.INVISIBLE);
         } else {
@@ -717,15 +723,6 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
 
-    private void updateDrinkNumberCounterTextView() {
-        String drinkNumberText;
-        if (drinkNumberCounterInt == 1) {
-            drinkNumberText = "1 Drink";
-        } else {
-            drinkNumberText = drinkNumberCounterInt + " Drinks";
-        }
-        drinkNumberCounterTextView.setText(drinkNumberText);
-    }
 
     private void changeCurrentNumber() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();

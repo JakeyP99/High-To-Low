@@ -15,7 +15,7 @@ import com.example.countingdowngame.mainActivity.MainActivityGame;
 import com.example.countingdowngame.mainActivity.NumberChoice;
 import com.example.countingdowngame.mainActivity.PlayerNumberChoice;
 import com.example.countingdowngame.settings.SettingsContainer;
-import com.example.countingdowngame.settings.WildCardSettings;
+import com.example.countingdowngame.mainActivity.inGameSettings;
 
 public abstract class ButtonUtilsActivity extends AppCompatActivity {
 
@@ -77,7 +77,7 @@ public abstract class ButtonUtilsActivity extends AppCompatActivity {
     }
 
     protected void gotoInGameSettings() {
-        startActivity(getIntentForClass(WildCardSettings.class, true));
+        startActivity(getIntentForClass(inGameSettings.class, true));
     }
 
     //-----------------------------------------------------Sound Functionality---------------------------------------------------//

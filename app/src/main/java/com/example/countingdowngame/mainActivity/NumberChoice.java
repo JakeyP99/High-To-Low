@@ -11,7 +11,6 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
-import com.example.countingdowngame.settings.WildCardSettings;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.Random;
@@ -20,11 +19,23 @@ import io.github.muddz.styleabletoast.StyleableToast;
 
 public class NumberChoice extends ButtonUtilsActivity {
     private int startingNumber;
+    private EditText originalNumberField;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        originalNumberField.setText("");
+        originalNumberField.setFocusableInTouchMode(true);
+        originalNumberField.setFocusable(true);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a4_number_choice);
+        originalNumberField = findViewById(R.id.EditTextView_numberchoice);
+
         Button btnSubmit = findViewById(R.id.btnSubmitNumbers);
         Button btnRandom = findViewById(R.id.btnRandomNumber);
         resetStartingNumber();
@@ -82,7 +93,7 @@ public class NumberChoice extends ButtonUtilsActivity {
 
     private void goToInGameSettings() {
         boolean switchOneChecked = GeneralSettingsLocalStore.fromContext(this).isSingleScreen();
-        Class<?> targetClass = switchOneChecked ? WildCardSettings.class : MainActivitySplitScreen.class;
+        Class<?> targetClass = switchOneChecked ? inGameSettings.class : MainActivitySplitScreen.class;
         Intent i = getIntentForClass(targetClass, true);
         i.putExtra("startingNumber", startingNumber);
         startActivity(i);
