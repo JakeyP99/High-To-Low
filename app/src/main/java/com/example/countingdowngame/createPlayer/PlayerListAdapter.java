@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Player;
+import com.example.countingdowngame.mainActivity.PlayerChoice;
 
 import java.util.List;
 

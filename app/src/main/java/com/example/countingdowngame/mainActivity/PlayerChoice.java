@@ -1,4 +1,4 @@
-package com.example.countingdowngame.createPlayer;
+package com.example.countingdowngame.mainActivity;
 
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.archerActiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.archerPassiveDescription;
@@ -47,9 +47,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.countingdowngame.R;
+import com.example.countingdowngame.createPlayer.CharacterClassAdapter;
+import com.example.countingdowngame.createPlayer.CharacterClassPagerAdapter;
+import com.example.countingdowngame.createPlayer.CharacterClassStore;
+import com.example.countingdowngame.createPlayer.PlayerListAdapter;
+import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.Player;
-import com.example.countingdowngame.mainActivity.NumberChoice;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.google.gson.Gson;

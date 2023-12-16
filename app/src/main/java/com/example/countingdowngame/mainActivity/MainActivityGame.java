@@ -10,12 +10,12 @@ import static com.example.countingdowngame.R.id.textView_NumberText;
 import static com.example.countingdowngame.R.id.textView_Number_Turn;
 import static com.example.countingdowngame.R.id.textView_WildText;
 import static com.example.countingdowngame.R.id.textView_numberCounter;
-import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_ARCHER;
-import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_JIM;
-import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_QUIZ_MAGICIAN;
-import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_SCIENTIST;
-import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_SOLDIER;
-import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_WITCH;
+import static com.example.countingdowngame.mainActivity.PlayerChoice.CLASS_ARCHER;
+import static com.example.countingdowngame.mainActivity.PlayerChoice.CLASS_JIM;
+import static com.example.countingdowngame.mainActivity.PlayerChoice.CLASS_QUIZ_MAGICIAN;
+import static com.example.countingdowngame.mainActivity.PlayerChoice.CLASS_SCIENTIST;
+import static com.example.countingdowngame.mainActivity.PlayerChoice.CLASS_SOLDIER;
+import static com.example.countingdowngame.mainActivity.PlayerChoice.CLASS_WITCH;
 
 import android.app.AlertDialog;
 import android.graphics.Bitmap;

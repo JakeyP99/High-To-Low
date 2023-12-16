@@ -11,11 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.countingdowngame.instructions.InstructionsToPlay;
 import com.example.countingdowngame.mainActivity.EndActivityGame;
 import com.example.countingdowngame.mainActivity.HomeScreen;
-import com.example.countingdowngame.mainActivity.MainActivityGame;
 import com.example.countingdowngame.mainActivity.NumberChoice;
 import com.example.countingdowngame.mainActivity.PlayerNumberChoice;
 import com.example.countingdowngame.settings.SettingsContainer;
-import com.example.countingdowngame.mainActivity.inGameSettings;
 
 public abstract class ButtonUtilsActivity extends AppCompatActivity {
 
@@ -64,20 +62,12 @@ public abstract class ButtonUtilsActivity extends AppCompatActivity {
         startActivity(getIntentForClass(PlayerNumberChoice.class, true));
     }
 
-    protected void gotoMainGame() {
-        startActivity(getIntentForClass(MainActivityGame.class, true));
-    }
-
     protected void gotoInstructions() {
         startActivity(getIntentForClass(InstructionsToPlay.class, true));
     }
 
     protected void gotoSettings() {
         startActivity(getIntentForClass(SettingsContainer.class, true));
-    }
-
-    protected void gotoInGameSettings() {
-        startActivity(getIntentForClass(inGameSettings.class, true));
     }
 
     //-----------------------------------------------------Sound Functionality---------------------------------------------------//

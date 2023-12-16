@@ -33,7 +33,6 @@
 
         <activity android:name=".mainActivity.inGameSettings" />
 
-
         <activity android:name=".mainActivity.PlayerNumberChoice" />
 
         <activity android:name=".mainActivity.EndActivityGame" />
@@ -52,11 +51,10 @@
 
         <activity android:name=".mainActivity.MainActivitySplitScreen" />
 
-        <activity
-            android:name=".createPlayer.DrawingPlayerModels" />
+        <activity android:name=".mainActivity.DrawingPlayerModels" />
 
         <activity
-            android:name=".createPlayer.PlayerChoice"
+            android:name=".mainActivity.PlayerChoice"
             android:windowSoftInputMode="adjustNothing" />
 
         <meta-data

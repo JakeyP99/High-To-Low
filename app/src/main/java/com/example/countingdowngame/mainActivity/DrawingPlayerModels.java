@@ -1,4 +1,4 @@
-package com.example.countingdowngame.createPlayer;
+package com.example.countingdowngame.mainActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.SeekBar;
 
 import com.example.countingdowngame.R;
+import com.example.countingdowngame.createPlayer.DrawingViewPlayerModels;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.io.ByteArrayOutputStream;

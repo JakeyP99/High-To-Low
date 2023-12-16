@@ -42,12 +42,15 @@ public class HomeScreen extends ButtonUtilsActivity {
         btnUtils.setButton(btnSettings, this::gotoSettings);
 
         gifDrink.setOnClickListener(view -> {
-            AudioManager audioManager = AudioManager.getInstance();
-            audioManager.playNextSong();
+            if (!GeneralSettingsLocalStore.fromContext(this).isMuted()) {
+                AudioManager audioManager = AudioManager.getInstance();
+                audioManager.playNextSong();
+            }
         });
 
     }
 }
+
 
 
 
