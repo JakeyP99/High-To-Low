@@ -49,8 +49,6 @@
 
         <activity android:name=".settings.GeneralSettings" />
 
-        <activity android:name=".mainActivity.MainActivitySplitScreen" />
-
         <activity android:name=".mainActivity.DrawingPlayerModels" />
 
         <activity
