@@ -69,6 +69,15 @@ public class MainActivityGame extends SharedMainActivity {
 
     //-----------------------------------------------------Member Variables---------------------------------------------------//
 
+    private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
+    private static final int DELAY_MILLIS = 1500;
+    private static final int BUTTON_COUNT = 4;
+    private static final int BUTTON_COUNT_2 = 2;
+    public static int drinkNumberCounterInt = 0;
+    private final Map<Player, Set<WildCardProperties>> usedWildCard = new HashMap<>();
+    private final Set<WildCardProperties> usedWildCards = new HashSet<>();
+    private final Map<Player, Integer> playerTurnCountMap = new HashMap<>();
+    public WildCardProperties selectedWildCard;
     private TextView numberText;
     private TextView nextPlayerText;
     private TextView drinkNumberCounterTextView;
@@ -82,32 +91,17 @@ public class MainActivityGame extends SharedMainActivity {
     private Button btnQuizAnswerBR;
     private Button btnQuizAnswerTR;
     private Button btnQuizAnswerTL;
-
     private ImageView playerImage;
     private boolean doubleBackToExitPressedOnce = false;
-    private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
     private Handler shuffleHandler;
-
-    private final Map<Player, Set<WildCardProperties>> usedWildCard = new HashMap<>();
-    private final Set<WildCardProperties> usedWildCards = new HashSet<>();
-    private final Map<Player, Integer> playerTurnCountMap = new HashMap<>();
-
-    public static int drinkNumberCounterInt = 0;
     private boolean isFirstTurn = true;
     private boolean soldierRemoval = false;
-    public WildCardProperties selectedWildCard;
     private Button[] answerButtons; // Array to hold the answer buttons
     private GifImageView confettiImageViewBL;
-
     private GifImageView confettiImageViewTL;
     private GifImageView confettiImageViewBR;
     private GifImageView confettiImageViewTR;
-
     private int turnCounter = 0;
-
-    private static final int DELAY_MILLIS = 1500;
-    private static final int BUTTON_COUNT = 4;
-    private static final int BUTTON_COUNT_2 = 2;
 
     //-----------------------------------------------------Lifecycle Methods---------------------------------------------------//
     @Override
@@ -234,8 +228,6 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
 
-
-
     //-----------------------------------------------------Buttons---------------------------------------------------//
 
     private void setupButtons() {
@@ -316,7 +308,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         turnCounter++;
         if (turnCounter == 4) {
-            updateDrinkNumberCounter(1);
+            updateDrinkNumberCounter(1, false);
             turnCounter = 0;
         }
 
@@ -376,18 +368,26 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    private void updateDrinkNumberCounter(int drinkNumberCounterInput) {
+    private void updateDrinkNumberCounter(int drinkNumberCounterInput, boolean activatedByAbility) {
         int maxTotalDrinkAmount = GeneralSettingsLocalStore.fromContext(this).totalDrinkAmount();
+        int potentialNewValue = drinkNumberCounterInt + drinkNumberCounterInput;
 
         // Increment the counter
         if (drinkNumberCounterInput > 0) {
-            int potentialNewValue = drinkNumberCounterInt + drinkNumberCounterInput;
-            drinkNumberCounterInt = Math.min(potentialNewValue, maxTotalDrinkAmount);
+            if (!activatedByAbility & potentialNewValue <= maxTotalDrinkAmount) {
+                drinkNumberCounterInt = potentialNewValue;
+            } else if (activatedByAbility) {
+                drinkNumberCounterInt += drinkNumberCounterInput;
+
+            }
         }
         // Decrement the counter
         else if (drinkNumberCounterInput < 0) {
-            int potentialNewValue = drinkNumberCounterInt + drinkNumberCounterInput;
-            drinkNumberCounterInt = Math.max(potentialNewValue, 0);
+            if (!activatedByAbility) {
+                drinkNumberCounterInt = Math.max(potentialNewValue, 0);
+            } else {
+                drinkNumberCounterInt = Math.max(drinkNumberCounterInt + drinkNumberCounterInput, 0);
+            }
         }
 
         updateDrinkNumberCounterTextView();
@@ -395,12 +395,19 @@ public class MainActivityGame extends SharedMainActivity {
 
 
     private void updateDrinkNumberCounterTextView() {
+        int maxTotalDrinkAmount = GeneralSettingsLocalStore.fromContext(this).totalDrinkAmount();
+
         String drinkNumberText;
-        if (drinkNumberCounterInt == 1) {
-            drinkNumberText = "1 Drink";
+        if (drinkNumberCounterInt <= maxTotalDrinkAmount) {
+            if (drinkNumberCounterInt == 1) {
+                drinkNumberText = "1 Drink";
+            } else {
+                drinkNumberText = drinkNumberCounterInt + " Drinks";
+            }
         } else {
-            drinkNumberText = drinkNumberCounterInt + " Drinks";
+            drinkNumberText = maxTotalDrinkAmount + " (+" + (drinkNumberCounterInt - maxTotalDrinkAmount) + ")";
         }
+
         drinkNumberCounterTextView.setText(drinkNumberText);
     }
 
@@ -485,7 +492,6 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     //-----------------------------------------------------Character Class Functions---------------------------------------------------//
-    //todo I need to make sure these descriptions match
     private String getClassActiveDescription(String classChoice) {
         switch (classChoice) {
             case CLASS_ARCHER:
@@ -595,11 +601,11 @@ public class MainActivityGame extends SharedMainActivity {
 
                 int chance = new Random().nextInt(100);
                 if (chance < 60) {
-                    updateDrinkNumberCounter(2);
+                    updateDrinkNumberCounter(2, true);
                     updateDrinkNumberCounterTextView();
                     showDialog("Archer's Passive: \n\nDrinking number increased by 2!");
                 } else {
-                    updateDrinkNumberCounter(-2);
+                    updateDrinkNumberCounter(-2, true);
                     if (drinkNumberCounterInt < 0) {
                         drinkNumberCounterInt = 0;
                     }
@@ -635,6 +641,7 @@ public class MainActivityGame extends SharedMainActivity {
                 break;
         }
     }
+
     private void handleScientistClass(Player currentPlayer) {
         changeCurrentNumber();
         Game.getInstance().activateRepeatingTurn(currentPlayer);
@@ -645,11 +652,10 @@ public class MainActivityGame extends SharedMainActivity {
             if (Game.getInstance().getCurrentNumber() <= 10) {
                 currentPlayer.setClassAbility(true);
                 Game.getInstance().activateRepeatingTurn(currentPlayer);
-                updateDrinkNumberCounter(4);
+                updateDrinkNumberCounter(4, true);
                 updateDrinkNumberCounterTextView();
                 btnClassAbility.setVisibility(View.INVISIBLE);
             } else {
-                //todo fix this toast, it covers the screen
                 displayToastMessage("The +4 ability can only be activated when the number is below 10.");
             }
         } else {
@@ -678,7 +684,7 @@ public class MainActivityGame extends SharedMainActivity {
         if (drinkNumberCounterInt >= 2) {
             showDialog("Archer's Active: \n\n" + currentPlayer.getName() + " hand out two drinks!");
             currentPlayer.setClassAbility(true);
-            updateDrinkNumberCounter(-2);
+            updateDrinkNumberCounter(-2, true);
             updateDrinkNumberCounterTextView();
             btnClassAbility.setVisibility(View.INVISIBLE);
         } else {
@@ -732,7 +738,6 @@ public class MainActivityGame extends SharedMainActivity {
             }
         }
     }
-
 
 
     private void changeCurrentNumber() {
@@ -1109,7 +1114,6 @@ public class MainActivityGame extends SharedMainActivity {
             handleIncorrectAnswer(selectedButton, correctAnswer);
         }
     }
-
 
 
     private void handleCorrectAnswer(Button selectedButton, String correctAnswer) {
