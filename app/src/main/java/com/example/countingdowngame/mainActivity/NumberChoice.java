@@ -10,7 +10,6 @@ import android.widget.EditText;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.Random;
@@ -92,9 +91,7 @@ public class NumberChoice extends ButtonUtilsActivity {
 
 
     private void goToInGameSettings() {
-        boolean switchOneChecked = GeneralSettingsLocalStore.fromContext(this).isSingleScreen();
-        Class<?> targetClass = switchOneChecked ? inGameSettings.class : MainActivitySplitScreen.class;
-        Intent i = getIntentForClass(targetClass, true);
+        Intent i = getIntentForClass(MainActivityGame.class, true);
         i.putExtra("startingNumber", startingNumber);
         startActivity(i);
     }

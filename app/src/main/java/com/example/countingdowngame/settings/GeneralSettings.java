@@ -51,8 +51,6 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
     //-----------------------------------------------------Initialize Views---------------------------------------------------//
 
     private void initializeViews() {
-        button_gameModeOne = findViewById(R.id.button_singleScreen);
-        button_gameModeTwo = findViewById(R.id.button_splitScreen);
         buttonHighlightDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.buttonhighlight, null);
         outlineForButton = ResourcesCompat.getDrawable(getResources(), R.drawable.outlineforbutton, null);
         btnReturn = findViewById(R.id.buttonReturn);
@@ -73,29 +71,21 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
     public void onClick(View view) {
         int viewId = view.getId(); // Store the view ID in a variable
 
-        if (viewId == R.id.button_singleScreen) {
-            toggleButton(button_gameModeOne, button_gameModeTwo);
-        } else if (viewId == R.id.button_splitScreen) {
-            toggleButton(button_gameModeTwo, button_gameModeOne);
-        } else if (viewId == R.id.button_mute) {
-            toggleMuteButton();
+      if (viewId == R.id.button_mute) {
+          toggleMuteButton();
 
-//            //CopyOut
-        } else if (viewId == R.id.button_normal_sound) {
-            toggleButton(button_regularSound, button_burpSound);
-        } else if (viewId == R.id.button_burp_sound) {
-            toggleButton(button_burpSound, button_regularSound);
-            //
-        }
+      } else if (viewId == R.id.button_normal_sound) {
+          toggleButton(button_regularSound, button_burpSound);
+      } else if (viewId == R.id.button_burp_sound) {
+          toggleButton(button_burpSound, button_regularSound);
+          //
+      }
 
         savePreferences();
     }
 
 
     private void setButtonListeners() {
-        button_gameModeOne.setOnClickListener(this);
-        button_gameModeTwo.setOnClickListener(this);
-
         btnUtils.setButton(btnReturn, () -> {
             savePreferences();
             super.onBackPressed();
@@ -160,18 +150,6 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
         }
 
 
-        boolean buttonOneSelected = GeneralSettingsLocalStore.fromContext(this).isSingleScreen();
-        button_gameModeOne.setSelected(buttonOneSelected);
-        button_gameModeTwo.setSelected(!buttonOneSelected);
-
-        if (buttonOneSelected) {
-            button_gameModeOne.setBackground(buttonHighlightDrawable);
-            button_gameModeTwo.setBackground(outlineForButton);
-        } else {
-            button_gameModeOne.setBackground(outlineForButton);
-            button_gameModeTwo.setBackground(buttonHighlightDrawable);
-        }
-
         boolean isMuted = GeneralSettingsLocalStore.fromContext(this).isMuted();
         btnMute.setSelected(isMuted);
 
@@ -192,7 +170,6 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
 
     private void savePreferences() {
         GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);
-        store.setIsSingleScreen(button_gameModeOne.isSelected());
         store.setIsMuted(btnMute.isSelected());
         store.setShouldPlayRegularSound(button_regularSound.isSelected());
     }

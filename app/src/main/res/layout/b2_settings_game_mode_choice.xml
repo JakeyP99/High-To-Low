@@ -7,48 +7,6 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textview_banner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/viga"
-        android:gravity="center"
-        android:layout_marginTop="30dp"
-        android:text="Layouts"
-        android:textColor="@color/bluedark"
-        android:layout_gravity="center"
-        android:textSize="23sp" />
-
-    <Button
-        android:id="@+id/button_singleScreen"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:maxLines="4"
-        android:fontFamily="@font/viga"
-        android:textAllCaps="false"
-        android:text="Single Screen"
-        android:textAlignment="center"
-        android:textColor="@color/bluedark"
-        android:textSize="23sp"
-        android:layout_gravity="center"
-        android:background="@drawable/outlineforbutton" />
-
-    <Button
-        android:id="@+id/button_splitScreen"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:maxLines="4"
-        android:fontFamily="@font/viga"
-        android:text="Split Screen"
-        android:textAlignment="center"
-        android:background="@drawable/outlineforbutton"
-        android:textAllCaps="false"
-        android:textColor="@color/bluedark"
-        android:layout_gravity="center"
-        android:textSize="23sp" />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"

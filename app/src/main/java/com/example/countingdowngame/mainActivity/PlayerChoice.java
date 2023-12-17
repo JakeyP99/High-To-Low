@@ -54,7 +54,6 @@ import com.example.countingdowngame.createPlayer.PlayerListAdapter;
 import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.Player;
-import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.google.gson.Gson;
 
@@ -103,10 +102,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
             player.setSelected(false);
             playerListAdapter.notifyItemChanged(position);
             updatePlayerCounter();
-            if (GeneralSettingsLocalStore.fromContext(this).isSingleScreen()) {
-                CharacterClassAdapter adapter = createCharacterClassAdapter();
-                chooseClass(position);
-            }
+            chooseClass(position);
         }
     }
 

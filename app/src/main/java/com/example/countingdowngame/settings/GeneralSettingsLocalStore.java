@@ -35,17 +35,6 @@ public class GeneralSettingsLocalStore {
         editor.apply();
     }
 
-    public Boolean isSingleScreen() {
-        return mPref.getBoolean("isSingleScreen", true);
-    }
-
-    public void setIsSingleScreen(Boolean value) {
-        SharedPreferences.Editor editor = mPref.edit();
-        editor.putBoolean("isSingleScreen", value);
-        editor.apply();
-    }
-
-
     public Boolean isMultiChoice() {
         return mPref.getBoolean("isMultiChoice", true);
     }
