@@ -286,8 +286,15 @@ public class MainActivityGame extends SharedMainActivity {
         if (currentPlayer != null) {
             String currentPlayerClassChoice = currentPlayer.getClassChoice();
             if (currentPlayerClassChoice != null) {
-                String classDescription = currentPlayer.getClassChoice() + "'s Abilities" + "\n\n" + "Active: " + getClassActiveDescription(currentPlayerClassChoice)
-                        + "\n\n" + "Passive: " + getClassPassiveDescription(currentPlayerClassChoice);
+                String classDescription;
+                if (currentPlayerClassChoice.equalsIgnoreCase("Jim")) {
+                    // For 'jim' class, show only passive description
+                    classDescription = currentPlayerClassChoice + "'s Abilities" + "\n\n" + "Passive: " + getClassPassiveDescription(currentPlayerClassChoice);
+                } else {
+                    // For other classes, show both active and passive descriptions
+                    classDescription = currentPlayerClassChoice + "'s Abilities" + "\n\n" + "Active: " + getClassActiveDescription(currentPlayerClassChoice)
+                            + "\n\n" + "Passive: " + getClassPassiveDescription(currentPlayerClassChoice);
+                }
                 showDialogWithFixedTextSize(classDescription, 18);
             } else {
                 String loveMessage = "I love you cutie pie hehe. You don't have a class to show any description for.";
