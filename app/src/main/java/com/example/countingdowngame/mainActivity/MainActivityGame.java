@@ -370,21 +370,22 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void updateDrinkNumberCounter(int drinkNumberCounterInput) {
-
-
         int maxTotalDrinkAmount = GeneralSettingsLocalStore.fromContext(this).totalDrinkAmount();
-        int remainingDrinksNeeded = maxTotalDrinkAmount - drinkNumberCounterInt;
 
-        if (remainingDrinksNeeded > 0) {
-            if (drinkNumberCounterInput <= remainingDrinksNeeded) {
-                drinkNumberCounterInt += drinkNumberCounterInput; // Increment by drinkNumberCounterInput
-            } else {
-                drinkNumberCounterInt = maxTotalDrinkAmount; // Set to the maximum value
-            }
-
-            updateDrinkNumberCounterTextView();
+        // Increment the counter
+        if (drinkNumberCounterInput > 0) {
+            int potentialNewValue = drinkNumberCounterInt + drinkNumberCounterInput;
+            drinkNumberCounterInt = Math.min(potentialNewValue, maxTotalDrinkAmount);
         }
+        // Decrement the counter
+        else if (drinkNumberCounterInput < 0) {
+            int potentialNewValue = drinkNumberCounterInt + drinkNumberCounterInput;
+            drinkNumberCounterInt = Math.max(potentialNewValue, 0);
+        }
+
+        updateDrinkNumberCounterTextView();
     }
+
 
     private void updateDrinkNumberCounterTextView() {
         String drinkNumberText;
@@ -627,7 +628,6 @@ public class MainActivityGame extends SharedMainActivity {
                 break;
         }
     }
-    //todo it doesnt put in the changed number in the previous numbers
     private void handleScientistClass(Player currentPlayer) {
         changeCurrentNumber();
         Game.getInstance().activateRepeatingTurn(currentPlayer);
