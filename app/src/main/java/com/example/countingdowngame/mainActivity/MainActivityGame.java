@@ -559,7 +559,7 @@ public class MainActivityGame extends SharedMainActivity {
             if (Game.getInstance().getCurrentNumber() % 2 == 0) {
                 showDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " hand out two drinks.");
             } else {
-                showDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " take a drink.");
+                showDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " take two drinks.");
             }
         }
     }
