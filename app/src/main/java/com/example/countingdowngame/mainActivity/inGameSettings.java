@@ -52,25 +52,22 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
         } else {
             if (!isWildCardValid) {
                 if (wildCardAmountInput.isEmpty()) {
-                    wildcardPerPlayerEditText.setText("0");
-                    savePreferences();
-                    super.onBackPressed();
+                    wildcardPerPlayerEditText.setText("1");
                 } else {
                     StyleableToast.makeText(getApplicationContext(), "Please enter a number between 0 and 100", R.style.newToast).show();
                 }
             }
 
             if (!isTotalDrinkValid) {
-                if (totalDrinkAmountInput.isEmpty()) {
-                    totalDrinksEditText.setText("0");
-                    savePreferences();
-                    super.onBackPressed();
-                } else {
-                    StyleableToast.makeText(getApplicationContext(), "Please enter a number between 0 and 20", R.style.newToast).show();
-                }
+                totalDrinksEditText.setText("1");
+
             }
+
+            savePreferences();
+            super.onBackPressed();
         }
     }
+
 
 
     //-----------------------------------------------------On Create---------------------------------------------------//
@@ -207,7 +204,7 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
                         savePreferences();
                         goToMainGameWithExtra(Integer.parseInt(totalDrinkAmountInput));
                     } else {
-                        StyleableToast.makeText(getApplicationContext(), "Please enter a number between 0 and 100", R.style.newToast).show();
+                        StyleableToast.makeText(getApplicationContext(), "Please enter a wildcard quantity between 0 and 100", R.style.newToast).show();
                     }
                 }
 
@@ -217,7 +214,7 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
                         savePreferences();
                         goToMainGameWithExtra(Integer.parseInt(totalDrinkAmountInput));
                     } else {
-                        StyleableToast.makeText(getApplicationContext(), "Please enter a number between 0 and 20", R.style.newToast).show();
+                        StyleableToast.makeText(getApplicationContext(), "Please enter a total drink limit between 1 and 20", R.style.newToast).show();
                     }
                 }
             }
