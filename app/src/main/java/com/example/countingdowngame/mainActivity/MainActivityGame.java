@@ -405,7 +405,7 @@ public class MainActivityGame extends SharedMainActivity {
                 drinkNumberText = drinkNumberCounterInt + " Drinks";
             }
         } else {
-            drinkNumberText = maxTotalDrinkAmount + " (+" + (drinkNumberCounterInt - maxTotalDrinkAmount) + ")";
+            drinkNumberText = maxTotalDrinkAmount + " (+" + (drinkNumberCounterInt - maxTotalDrinkAmount) + ") Drinks";
         }
 
         drinkNumberCounterTextView.setText(drinkNumberText);
