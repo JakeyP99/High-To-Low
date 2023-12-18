@@ -303,7 +303,6 @@ public class MainActivityGame extends SharedMainActivity {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
 
-        characterPassiveClassAffects();
         updateClassAbilityButton(currentPlayer);
 
         turnCounter++;
@@ -325,6 +324,7 @@ public class MainActivityGame extends SharedMainActivity {
             currentPlayer.setJustUsedWildCard(false);
         } else {
             updateWildCardVisibility(currentPlayer);
+            characterPassiveClassAffects();
         }
 
 
