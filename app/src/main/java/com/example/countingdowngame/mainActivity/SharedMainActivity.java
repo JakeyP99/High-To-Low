@@ -3,7 +3,6 @@ package com.example.countingdowngame.mainActivity;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.app.AlertDialog;
-import android.os.Handler;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,27 +22,6 @@ import java.util.List;
 
 public class SharedMainActivity extends ButtonUtilsActivity {
 
-
-
-    public void renderCurrentNumber(int currentNumber, final Runnable onEnd, TextView textView1, TextView textView2) {
-        if (currentNumber == 0) {
-            textView1.setText(String.valueOf(currentNumber));
-            textView2.setText(String.valueOf(currentNumber));
-
-            applyPulsingEffect(textView1);
-            applyPulsingEffect(textView2);
-
-            Handler handler = new Handler();
-            handler.postDelayed(() -> {
-                Game.getInstance().endGame(this);
-                onEnd.run();
-            }, 2000);
-        } else {
-            textView1.setText(String.valueOf(currentNumber));
-            textView2.setText(String.valueOf(currentNumber));
-            Game.getInstance().nextPlayer();
-        }
-    }
 
     void applyPulsingEffect(TextView textView) {
         // Apply pulsing effect to textView
@@ -160,27 +138,16 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         return textSize;
     }
 
-    public static void splitScreenSetTextViewSizeBasedOnInt(TextView textView, String text) {
-        int defaultTextSize = 65;
-        int minSize = 45;
+    public static void reverseTurnOrder(Player player) {
+        Game game = Game.getInstance();
+        List<Player> players = game.getPlayers();
+        Collections.reverse(players);
 
-        if (text.length() > 6) {
-            textView.setTextSize(minSize);
-        } else {
-            textView.setTextSize(defaultTextSize);
-        }
-    }
+        int currentPlayerIndex = players.indexOf(player);
 
-        public static void reverseTurnOrder(Player player) {
-            Game game = Game.getInstance();
-            List<Player> players = game.getPlayers();
-            Collections.reverse(players);
-
-            int currentPlayerIndex = players.indexOf(player);
-
-            if (currentPlayerIndex != -1) {
-                int lastIndex = players.size() - 1;
-                int newIndex = lastIndex - currentPlayerIndex;
+        if (currentPlayerIndex != -1) {
+            int lastIndex = players.size() - 1;
+            int newIndex = lastIndex - currentPlayerIndex;
 
                 // Move the player to the new index
                 players.remove(currentPlayerIndex);
