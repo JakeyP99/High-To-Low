@@ -156,6 +156,7 @@ public class MainActivityGame extends SharedMainActivity {
         setupButtons();
         startGame();
 
+
         AudioManager audioManager = AudioManager.getInstance();
         audioManager.setContext(getApplicationContext()); // Set the context before calling playRandomBackgroundMusic or other methods
 
@@ -220,13 +221,13 @@ public class MainActivityGame extends SharedMainActivity {
 
             // Set the game object for each player
             for (Player player : playerList) {
+                player.resetWildCardAmount(this); // Reset wild card count using GeneralSettingsLocalStore
                 player.setGame(Game.getInstance());
+                player.setClassAbility(false); // Initialize class ability to false
             }
 
         }
-        for (Player player : playerList) {
-            player.setClassAbility(false); // Initialize class ability to false
-        }
+
         Game.getInstance().startGame(startingNumber, (e) -> {
             if (e.type == GameEventType.NEXT_PLAYER) {
                 renderPlayer();

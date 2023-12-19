@@ -1,10 +1,13 @@
 package com.example.countingdowngame.mainActivity;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -149,14 +152,12 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
 
 
     private void isValidTotalDrinkAmount() {
-        if (!isValidInput(
+        isValidInput(
                 totalDrinksEditText.getText().toString().trim(),
                 2, // Max length
                 1, // Minimum value
                 20 // Maximum value
-        )) {
-            // Handle invalid total drink amount
-        }
+        );// Handle invalid total drink amount
     }
 
     private void isValidWildCardAmount() {
@@ -240,9 +241,14 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
 
     // Inside WildCardSettings or any other settings activity
     private void goToMainGameWithExtra(int totalDrinkNumber) {
+
+        GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);
+        int wildCardCount = store.playerWildCardCount();
+        Log.d(TAG, "Wild Card Count: " + wildCardCount);
+
+
         // Retrieve the extras passed from NumberChoice activity
         int startingNumber = getIntent().getIntExtra("startingNumber", 0); // 0 is the default value if the extra is not found
-
         // Create an Intent to start the main game activity
         Intent intent = new Intent(this, MainActivityGame.class);
 
