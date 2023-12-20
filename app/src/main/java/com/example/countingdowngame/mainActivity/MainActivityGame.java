@@ -327,7 +327,7 @@ public class MainActivityGame extends SharedMainActivity {
         }
 
         updateNumberText();
-        logPlayerInformation(currentPlayer);
+        SharedMainActivity.logPlayerInformation(currentPlayer);
 
         Log.d(TAG, "renderPlayer: Is repeat turn active? " + currentPlayer.getJustUsedWildCard());
         if (currentPlayer.getJustUsedWildCard()) {
@@ -966,6 +966,7 @@ public class MainActivityGame extends SharedMainActivity {
             } else {
                 btnAnswer.setVisibility(View.INVISIBLE);
             }
+            assert selectedCard != null;
             Log.d("WildCardInfo", "Type: " + wildCardType + ", " +
                     "Question: " + selectedCard.getText() + ", " +
                     "Answer: " + selectedCard.getAnswer() + ", " +
@@ -975,6 +976,7 @@ public class MainActivityGame extends SharedMainActivity {
                     "Category: " + selectedCard.getCategory());
         }
 
+        assert selectedActivity != null;
         performWildCardAction(selectedActivity, player);
     }
 
@@ -998,9 +1000,7 @@ public class MainActivityGame extends SharedMainActivity {
             case "Lose a couple wildcards :( oh also drink 3 lol!":
                 loseWildCards();
                 break;
-            // Add more cases for other wild card actions if needed...
             default:
-                // Handle default case if needed
                 break;
         }
     }
@@ -1049,7 +1049,6 @@ public class MainActivityGame extends SharedMainActivity {
     private void setMultiChoiceRandomizedAnswers(WildCardProperties selectedCard) {
         exposeQuizButtons();
 
-        // Shuffle the answers randomly
         String[] answers = {
                 selectedCard.getAnswer(),
                 selectedCard.getWrongAnswer1(),
@@ -1061,7 +1060,6 @@ public class MainActivityGame extends SharedMainActivity {
         Collections.shuffle(answerList);
         answers = answerList.toArray(new String[0]);
 
-        // Set answers to buttons for four buttons scenario
         setAnswersToFourButtons(answers);
     }
 
@@ -1278,19 +1276,6 @@ public class MainActivityGame extends SharedMainActivity {
             }
         }
         btnAnswer.setVisibility(View.INVISIBLE);
-    }
-
-    //-----------------------------------------------------Log Player Info---------------------------------------------------//
-
-    private void logPlayerInformation(Player currentPlayer) {
-        Log.d("renderPlayer", "Current number is " + Game.getInstance().getCurrentNumber() +
-                " - Player was rendered " + currentPlayer.getName() +
-                " is a " + currentPlayer.getClassChoice() +
-                " with " + currentPlayer.getWildCardAmount() +
-                " Wildcards " +
-                "and " + currentPlayer.usedClassAbility() +
-                " is the class ability and are they removed ?" +
-                currentPlayer.isRemoved());
     }
 
 }

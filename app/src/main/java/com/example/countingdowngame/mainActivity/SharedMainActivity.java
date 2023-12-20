@@ -3,6 +3,7 @@ package com.example.countingdowngame.mainActivity;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.app.AlertDialog;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -153,14 +154,25 @@ public class SharedMainActivity extends ButtonUtilsActivity {
                 players.remove(currentPlayerIndex);
                 players.add(newIndex, player);
 
-                // Update the current player ID if necessary
-                if (game.getCurrentPlayer() == player) {
-                    game.setCurrentPlayerId(newIndex);
-                }
+            // Update the current player ID if necessary
+            if (game.getCurrentPlayer() == player) {
+                game.setCurrentPlayerId(newIndex);
             }
-
-            game.setPlayerList(players);
         }
 
+        game.setPlayerList(players);
+    }
+
+
+    static void logPlayerInformation(Player currentPlayer) {
+        Log.d("renderPlayer", "Current number is " + Game.getInstance().getCurrentNumber() +
+                " - Player was rendered " + currentPlayer.getName() +
+                " is a " + currentPlayer.getClassChoice() +
+                " with " + currentPlayer.getWildCardAmount() +
+                " Wildcards " +
+                "and " + currentPlayer.usedClassAbility() +
+                " is the class ability and are they removed ?" +
+                currentPlayer.isRemoved());
+    }
 
 }
