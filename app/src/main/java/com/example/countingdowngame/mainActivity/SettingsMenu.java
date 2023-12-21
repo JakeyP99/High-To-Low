@@ -49,10 +49,7 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
         boolean isWildCardValid = isValidInput(wildCardAmountInput, 3, 0, 100);
         boolean isTotalDrinkValid = isValidInput(totalDrinkAmountInput, 2, 1, 20);
 
-        if (isWildCardValid && isTotalDrinkValid) {
-            savePreferences();
-            super.onBackPressed();
-        } else {
+        if (!isWildCardValid || !isTotalDrinkValid) {
             if (!isWildCardValid) {
                 if (wildCardAmountInput.isEmpty()) {
                     wildcardPerPlayerEditText.setText("1");
@@ -66,9 +63,9 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
 
             }
 
-            savePreferences();
-            super.onBackPressed();
         }
+        savePreferences();
+        super.onBackPressed();
     }
 
 
@@ -83,6 +80,8 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
         initializeViews();
         loadPreferences();
         setButtonListeners();
+
+
     }
 
     //-----------------------------------------------------Initialize Views---------------------------------------------------//

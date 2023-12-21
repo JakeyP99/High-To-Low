@@ -11,46 +11,49 @@ import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import pl.droidsonroids.gif.GifImageView;
 
 public class HomeScreen extends ButtonUtilsActivity {
-    private GifImageView muteGif;
-    private GifImageView soundGif;
-    private GifImageView drinkGif;
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        boolean isMuted = getMuteSoundState();
-        AudioManager.updateMuteSoundButtonsForBackgroundMusic(isMuted, muteGif, soundGif);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a1_home_screen);
-
-        initializeViews();
-        setupAudioManagerForMuteButtons(muteGif, soundGif);
+        setupView();
         setupButtonControls();
+
+        AudioManager audioManager = AudioManager.getInstance();
+        audioManager.setContext(getApplicationContext()); // Set the context before calling playRandomBackgroundMusic or other methods
+
+        // Check if the mute button is not selected before starting the music
+        if (!GeneralSettingsLocalStore.fromContext(this).isMuted()) {
+            if (!AudioManager.getInstance().isPlaying()) {
+                audioManager.playRandomBackgroundMusic(getApplicationContext()); // Initialize and start playing music
+            }
+        }
     }
 
-    private void initializeViews() {
-        muteGif = findViewById(R.id.muteGif);
-        soundGif = findViewById(R.id.soundGif);
-        drinkGif = findViewById(R.id.drinkGif);
-    }
 
+    private void setupView() {
+        setContentView(R.layout.a1_home_screen);
+    }
 
     private void setupButtonControls() {
+        GifImageView gifDrink = findViewById(R.id.drinkGif);
         Button btnQuickPlay = findViewById(R.id.quickplay);
         Button btnInstructions = findViewById(R.id.button_Instructions);
-
-        // Set onClickListener for buttons
+        Button btnSettings = findViewById(R.id.button_Settings);
         btnUtils.setButton(btnQuickPlay, this::gotoPlayerNumberChoice);
         btnUtils.setButton(btnInstructions, this::gotoInstructions);
+        btnUtils.setButton(btnSettings, this::gotoSettings);
 
-        drinkGif.setOnClickListener(view -> {
-            GeneralSettingsLocalStore settingsStore = GeneralSettingsLocalStore.fromContext(this);
-            boolean regularSoundSelected = settingsStore.shouldPlayRegularSound();
-            settingsStore.setShouldPlayRegularSound(!regularSoundSelected);
+        gifDrink.setOnClickListener(view -> {
+            if (!GeneralSettingsLocalStore.fromContext(this).isMuted()) {
+                AudioManager audioManager = AudioManager.getInstance();
+                audioManager.playNextSong();
+            }
         });
+
     }
 }
+
+
+
+
+
