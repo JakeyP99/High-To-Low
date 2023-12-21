@@ -20,14 +20,10 @@ public class SettingsContainer extends ButtonUtilsActivity {
 
         btnUtils.setButton(btnReturn, this::onBackPressed);
 
-        btnUtils.setButton(btnWildCardChoice, () -> {
-            startActivity(getIntentForClass(WildCardChoice.class));
-        });
+        btnUtils.setButton(btnWildCardChoice, () -> startActivity(getIntentForClass(WildCardChoice.class)));
 
 
-        btnUtils.setButton(btnSettings, () -> {
-            startActivity(getIntentForClass(GeneralSettings.class));
-        });
+        btnUtils.setButton(btnSettings, () -> startActivity(getIntentForClass(GeneralSettings.class)));
 
     }
 }

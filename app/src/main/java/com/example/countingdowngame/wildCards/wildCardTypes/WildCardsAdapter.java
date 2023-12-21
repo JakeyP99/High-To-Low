@@ -52,7 +52,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
         WildCardProperties[] loadedWildCards = new WildCardProperties[wildCardCount];
 
         for (int i = 0; i < wildCardCount; i++) {
-            boolean inBounds = (i >= 0) && (i < wildCards.length);
+            boolean inBounds = i < wildCards.length;
 
             WildCardProperties card = null;
 

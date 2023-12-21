@@ -60,6 +60,7 @@ import com.google.gson.Gson;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.github.muddz.styleabletoast.StyleableToast;
 
@@ -230,7 +231,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
 
     private int calculateProgress(int position, int maxProgress) {
         // Calculate progress based on the position and the maximum progress value
-        return (int) ((position * 100) / maxProgress);
+        return (position * 100) / maxProgress;
     }
 
     private void handleCancelClick(int position, AlertDialog dialog) {
@@ -352,9 +353,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
 
                 proceedButton.setEnabled(false);
                 final long delayMillis = 3000;
-                new Handler().postDelayed(() -> {
-                    proceedButton.setEnabled(true);
-                }, delayMillis);
+                new Handler().postDelayed(() -> proceedButton.setEnabled(true), delayMillis);
                 PlayerModelLocalStore.fromContext(this).saveSelectedPlayers(selectedPlayers);
                 Intent intent = new Intent(this, NumberChoice.class);
                 intent.putStringArrayListExtra("playerNames", selectedPlayerNames);
@@ -394,7 +393,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK && data != null) {
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            Bitmap bitmap = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
             Bitmap rotatedBitmap = flipBitmap(bitmap); // Rotate the bitmap
 
             showNameInputDialog(rotatedBitmap);

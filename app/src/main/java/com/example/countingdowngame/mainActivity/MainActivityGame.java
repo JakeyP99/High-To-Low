@@ -723,9 +723,7 @@ public class MainActivityGame extends SharedMainActivity {
         dialog.show();
 
         ImageButton closeButton = dialogView.findViewById(close_button);
-        closeButton.setOnClickListener(v -> {
-            dialog.dismiss();
-        });
+        closeButton.setOnClickListener(v -> dialog.dismiss());
     }
 
     private void removeCharacterFromGame() {

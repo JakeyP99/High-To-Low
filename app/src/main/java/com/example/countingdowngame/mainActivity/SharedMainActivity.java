@@ -116,9 +116,7 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         dialog.show();
 
         ImageButton closeButton = dialogView.findViewById(R.id.close_button);
-        closeButton.setOnClickListener(v -> {
-            dialog.dismiss();
-        });
+        closeButton.setOnClickListener(v -> dialog.dismiss());
     }
 
 

@@ -37,7 +37,7 @@ public class DonutProgressBar extends ProgressBar {
     @Override
     protected synchronized void onDraw(Canvas canvas) {
         rectF.set(0, 0, getWidth(), getHeight());
-        float angle = 360 * getProgress() / getMax();
+        float angle = (float) (360 * getProgress()) / getMax();
         paint.setColor(getResources().getColor(R.color.colorPrimary)); // Progress color
         canvas.drawArc(rectF, -90, angle, true, paint);
     }

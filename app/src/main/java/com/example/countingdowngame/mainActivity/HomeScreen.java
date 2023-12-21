@@ -23,7 +23,9 @@ public class HomeScreen extends ButtonUtilsActivity {
 
         // Check if the mute button is not selected before starting the music
         if (!GeneralSettingsLocalStore.fromContext(this).isMuted()) {
-            audioManager.playRandomBackgroundMusic(getApplicationContext()); // Initialize and start playing music
+            if (!AudioManager.getInstance().isPlaying()) {
+                audioManager.playRandomBackgroundMusic(getApplicationContext()); // Initialize and start playing music
+            }
         }
     }
 

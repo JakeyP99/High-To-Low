@@ -114,9 +114,7 @@ public class ButtonUtils {
 
                 button.setEnabled(false);
 
-                new Handler().postDelayed(() -> {
-                    button.setEnabled(true);
-                }, 1500);
+                new Handler().postDelayed(() -> button.setEnabled(true), 1500);
 
                 buttonAction.run();
             }

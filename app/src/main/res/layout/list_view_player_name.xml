@@ -5,7 +5,8 @@
         android:id="@+id/deletePlayerImageView"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:src="@drawable/cross" />
+        android:src="@drawable/cross"
+        android:contentDescription="TODO" />
 
     <ImageView
         android:id="@+id/playerPhotoImageView"
@@ -15,7 +16,8 @@
         android:scaleType="centerCrop"
         android:layout_below="@id/deletePlayerImageView"
         android:src="@drawable/wine"
-        android:layout_marginTop="-10dp"/>
+        android:layout_marginTop="-10dp"
+        android:contentDescription="TODO" />
 
     <TextView
         android:id="@+id/playerNameTextView"

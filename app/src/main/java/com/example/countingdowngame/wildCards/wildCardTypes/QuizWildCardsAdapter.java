@@ -77,9 +77,7 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
                 ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
                 params.height = isVisible ? ViewGroup.LayoutParams.WRAP_CONTENT : 0;
                 holder.itemView.setLayoutParams(params);
-                holder.itemView.setOnClickListener(v -> {
-                    Log.d("QuizWildCardsAdapter", "Tapped on wildcard: " + wildCard.getText() + " (Category: " + wildCard.getCategory() + "Position: " + positionWithOneBasedIndex + ")");
-                });
+                holder.itemView.setOnClickListener(v -> Log.d("QuizWildCardsAdapter", "Tapped on wildcard: " + wildCard.getText() + " (Category: " + wildCard.getCategory() + "Position: " + positionWithOneBasedIndex + ")"));
             } else {
                 holder.itemView.setVisibility(View.GONE);
                 ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
@@ -160,9 +158,7 @@ public class QuizWildCardsAdapter extends WildCardsAdapter {
             super(itemView);
             categoryTextView = itemView.findViewById(R.id.text_category_title);
             View categoryBanner = itemView.findViewById(R.id.text_category_title);
-            categoryBanner.setOnClickListener(v -> {
-                toggleCategoryVisibility(bannerIdentifier);
-            });
+            categoryBanner.setOnClickListener(v -> toggleCategoryVisibility(bannerIdentifier));
         }
 
         private void toggleCategoryVisibility(int bannerIdentifier) {
