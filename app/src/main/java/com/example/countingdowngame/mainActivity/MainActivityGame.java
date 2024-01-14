@@ -570,9 +570,13 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void handleSurvivorClass(Player currentPlayer) {
-        halveCurrentNumber();
-        currentPlayer.setClassAbility(true);
-        btnClassAbility.setVisibility(View.INVISIBLE);
+        if (Game.getInstance().getCurrentNumber() > 1) {
+            halveCurrentNumber();
+            currentPlayer.setClassAbility(true);
+            btnClassAbility.setVisibility(View.INVISIBLE);
+        } else {
+            displayToastMessage("You can only halve the number when it is greater than 1.");
+        }
     }
 
     private void handleArcherClass(Player currentPlayer) {
@@ -707,10 +711,13 @@ public class MainActivityGame extends SharedMainActivity {
         int currentNumber = Game.getInstance().getCurrentNumber();
         Log.d(TAG, "handleSurvivorPassive: current number = " + currentNumber);
 
+        String drinksText = (drinkNumberCounterInt == 1) ? "drink" : "drinks";
+
         if ("Survivor".equals(currentPlayer.getClassChoice()) && currentNumber == 1) {
-            showDialog("Survivor's Passive: \n\n" + currentPlayer.getName() + " survived a 1, hand out " + drinkNumberCounterInt + " drinks");
+            showDialog("Survivor's Passive: \n\n" + currentPlayer.getName() + " survived a 1, hand out " + drinkNumberCounterInt + " " + drinksText);
         }
     }
+
 
 
     //-----------------------------------------------------External Class Effects---------------------------------------------------//
@@ -1129,13 +1136,10 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void handleCorrectAnswer(Button selectedButton, String correctAnswer) {
         selectedButton.setBackgroundResource(R.drawable.buttonhighlightgreen);
-
-
         displayConfetti(Objects.requireNonNull(getConfettiView(selectedButton.getId())));
 
         new Handler().postDelayed(() -> {
             resetButtonBackgrounds(answerButtons);
-
             handleAnswerOutcome(selectedWildCard.getAnswer().equals(correctAnswer));
             enableAllButtons(answerButtons);
         }, DELAY_MILLIS);
@@ -1168,8 +1172,7 @@ public class MainActivityGame extends SharedMainActivity {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
 
         if (isCorrect) {
-            currentPlayer.gainWildCards(1);
-            quizAnswerView(currentPlayer.getName() + " that's right! The answer was " + selectedWildCard.getAnswer() + "\n\n P.S. Give out a drink, and you get to keep your wildcard too.");
+            quizAnswerView(currentPlayer.getName() + " that's right! The answer was " + selectedWildCard.getAnswer() + "\n\n P.S. You get to give out a drink");
         } else {
             quizAnswerView(currentPlayer.getName() + " big ooooff! The answer actually was " + selectedWildCard.getAnswer() + "\n\n Take a drink and repeat your turn.");
         }
@@ -1262,10 +1265,9 @@ public class MainActivityGame extends SharedMainActivity {
                 btnBackWild.setVisibility(View.INVISIBLE);
 
                 btnUtils.setButton(btnQuizAnswerBL, () -> {
-                    Game.getInstance().getCurrentPlayer().gainWildCards(1);
                     btnQuizAnswerBL.setVisibility(View.INVISIBLE);
                     btnQuizAnswerBR.setVisibility(View.INVISIBLE);
-                    quizAnswerView(currentPlayer.getName() + " since you got it right, give out a drink! \n\n P.S. You get to keep your wildcard too.");
+                    quizAnswerView(currentPlayer.getName() + " since you got it right, give out a drink!");
                 });
 
                 btnUtils.setButton(btnQuizAnswerBR, () -> {
