@@ -664,7 +664,7 @@ public class MainActivityGame extends SharedMainActivity {
 
             handler.postDelayed(() -> {
                 if (chance < 10) {
-                    showDialog("Scientist's Passive: \n\n" + currentPlayer.getName() + " is a scientist and his turn was skipped. ");
+                    showDialog("Scientist's Passive: \n\n" + currentPlayer.getName() + " is a scientist and their turn was skipped. ");
                     currentPlayer.useSkip();
                 }
             }, delayMillis);

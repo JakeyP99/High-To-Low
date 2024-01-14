@@ -704,7 +704,6 @@ public class WildCardData {
             new WildCardProperties("Task! Whoever has the longest hair takes 2 drinks.", 10, true, true),
             new WildCardProperties("Task! Whoever is wearing a watch takes 2 drinks.", 10, true, true),
             new WildCardProperties("Task! Whoever has a necklace on takes 2 drinks.", 10, true, true),
-            new WildCardProperties("Task! Double the ending drink (whoever loses must now do double the consequence).", 10, true, true),
             new WildCardProperties("Task! Have a drink for courage, then deliver a line from your favourite film making it as dramatic as possible!", 10, true, true),
             new WildCardProperties("Task! Give 1 drink for every cheese you can name in 10 seconds.", 10, true, true),
             new WildCardProperties("Task! The shortest person at the table must take 4 drinks then give 4 drinks.", 10, true, true),

@@ -47,7 +47,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.createPlayer.CharacterClassAdapter;
 import com.example.countingdowngame.createPlayer.CharacterClassPagerAdapter;
 import com.example.countingdowngame.createPlayer.CharacterClassStore;
 import com.example.countingdowngame.createPlayer.PlayerListAdapter;
@@ -105,11 +104,6 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
             updatePlayerCounter();
             chooseClass(position);
         }
-    }
-
-    private CharacterClassAdapter createCharacterClassAdapter() {
-        List<CharacterClassStore> characterClasses = generateCharacterClasses();
-        return new CharacterClassAdapter(characterClasses);
     }
 
     @Override
