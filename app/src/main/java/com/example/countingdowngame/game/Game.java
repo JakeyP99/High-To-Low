@@ -1,14 +1,9 @@
 package com.example.countingdowngame.game;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.content.Context;
-import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 public class Game {
@@ -21,8 +16,7 @@ public class Game {
     private int currentPlayerId = 0;
     private int startingNumber = 0;
     int currentNumber = 0;
-    // Add this variable to track the Soldier class ability
-    private final Map<Player, Integer> repeatingTurnsMap = new HashMap<>();
+    private Player repeatTurnPlayer = null; // Add this variable to track the Soldier class ability
 
     private boolean gameStarted = false;
 
@@ -89,19 +83,19 @@ public class Game {
     }
 
     public void nextPlayer() {
-        Player currentPlayer = getCurrentPlayer();
-
-        // Check if the current player has repeating turns left
-        if (repeatingTurnsMap.containsKey(currentPlayer) && repeatingTurnsMap.get(currentPlayer) > 0) {
-            repeatingTurnsMap.put(currentPlayer, repeatingTurnsMap.get(currentPlayer) - 1);
-        } else {
+        // Check if the current player is the player who activated the Soldier class ability
+        if (getCurrentPlayer() != repeatTurnPlayer) {
             currentPlayerId = (currentPlayerId + 1) % players.size();
         }
 
-        // Clear the repeating turn for the player after their last extra turn
-        if (repeatingTurnsMap.containsKey(currentPlayer) && repeatingTurnsMap.get(currentPlayer) == 0) {
-            repeatingTurnsMap.remove(currentPlayer);
-            currentPlayer.setInRepeatingTurn(); // Clear repeating turn state
+        // Clear the Soldier class ability player after their extra turn
+        if (getCurrentPlayer() == repeatTurnPlayer) {
+            repeatTurnPlayer = null;
+        }
+
+        Player currentPlayer = getCurrentPlayer();
+        if (currentPlayer != null) {
+            currentPlayer.incrementTurnCounter();
         }
 
         if (gameEventListener != null) {
@@ -109,12 +103,8 @@ public class Game {
         }
     }
 
-
-    public void activateRepeatingTurn(Player currentPlayer, int numberOfTurns) {
-        repeatingTurnsMap.put(currentPlayer, numberOfTurns);
-        currentPlayer.setInRepeatingTurn();
-        Log.d(TAG, "activateRepeatingTurn: Repeating turn was activated for Player " +
-                currentPlayer.getName() + ". Turns to go: " + numberOfTurns);
+    public void activateRepeatingTurn(Player currentPlayer) {
+        repeatTurnPlayer = currentPlayer; // Set the Soldier class ability player
     }
 
 
