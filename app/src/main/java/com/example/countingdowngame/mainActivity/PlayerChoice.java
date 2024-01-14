@@ -10,6 +10,8 @@ import static com.example.countingdowngame.createPlayer.CharacterClassDescriptio
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.scientistPassiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.soldierActiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.soldierPassiveDescription;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.survivorActiveDescription;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.survivorPassiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.witchActiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.witchPassiveDescription;
 
@@ -72,6 +74,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     public static final String CLASS_SOLDIER = "Soldier";
     public static final String CLASS_JIM = "Jim";
     public static final String CLASS_QUIZ_MAGICIAN = "Quiz Magician";
+    public static final String CLASS_SURVIVOR = "Survivor";
     private static final String CLASS_NONE = "No Class";
     private static final int REQUEST_IMAGE_PICK = 1;
     private static final int REQUEST_DRAW = 2;
@@ -165,8 +168,9 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         characterClasses.add(new CharacterClassStore(3, CLASS_SCIENTIST, scientistActiveDescription, scientistPassiveDescription, R.drawable.scientist));
         characterClasses.add(new CharacterClassStore(4, CLASS_SOLDIER, soldierActiveDescription, soldierPassiveDescription, R.drawable.helmet));
         characterClasses.add(new CharacterClassStore(5, CLASS_QUIZ_MAGICIAN, quizMagicianActiveDescription, quizMagicianPassiveDescription, R.drawable.books));
-        characterClasses.add(new CharacterClassStore(6, CLASS_JIM, null, jimPassiveDescription, R.drawable.jim));
-        characterClasses.add(new CharacterClassStore(7, CLASS_NONE, noClassDescription, null, R.drawable.noclass));
+        characterClasses.add(new CharacterClassStore(6, CLASS_SURVIVOR, survivorActiveDescription, survivorPassiveDescription, R.drawable.bandaids));
+        characterClasses.add(new CharacterClassStore(7, CLASS_JIM, null, jimPassiveDescription, R.drawable.jim));
+        characterClasses.add(new CharacterClassStore(8, CLASS_NONE, noClassDescription, null, R.drawable.noclass));
         return characterClasses;
     }
 
