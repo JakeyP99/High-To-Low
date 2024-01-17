@@ -22,6 +22,7 @@ public class Player implements Serializable {
     private boolean usedWildCard;
 
     private boolean removed;
+    private int survivorActiveTurnCounter; // Add a counter for the active turns of the Survivor class
 
 
     //-----------------------------------------------------Set Game---------------------------------------------------//
@@ -38,11 +39,28 @@ public class Player implements Serializable {
         this.selected = false;
         this.usedClassAbility = false;
         this.usedWildCard = false;
-
         this.removed = false;
         resetWildCardAmount(context);
         this.turnCounter = 0; // Initialize the turn counter to 0
+        this.survivorActiveTurnCounter = 0; // Initialize the Survivor class active turn counter to 0
     }
+
+    //-----------------------------------------------------Survivor Ability---------------------------------------------------//
+
+    public void incrementSurvivorActiveTurnCounter() {
+        survivorActiveTurnCounter++;
+    }
+
+    public void resetSurvivorActiveTurnCounter() {
+        survivorActiveTurnCounter = 0;
+    }
+
+    public int getSurvivorActiveTurnCounter() {
+        return survivorActiveTurnCounter;
+    }
+
+
+    //--------------------------------------------------------------------------------------------------------//
 
     public boolean isRemoved() {
         return removed;
