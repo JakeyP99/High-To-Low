@@ -77,14 +77,12 @@ public class MainActivityGame extends SharedMainActivity {
 
     //-----------------------------------------------------Public ---------------------------------------------------//
     public static int drinkNumberCounterInt = 0;
-    private int turnCounter = 0;
-    public WildCardProperties selectedWildCard;
-
     //-----------------------------------------------------Maps and Sets---------------------------------------------------//
     private final Map<Player, Set<WildCardProperties>> usedWildCard = new HashMap<>();
     private final Set<WildCardProperties> usedWildCards = new HashSet<>();
     private final Map<Player, Integer> playerTurnCountMap = new HashMap<>();
-
+    public WildCardProperties selectedWildCard;
+    private int turnCounter = 0;
     //-----------------------------------------------------Views---------------------------------------------------//
     private Button btnAnswer;
     private Button btnBackWild;
@@ -109,6 +107,8 @@ public class MainActivityGame extends SharedMainActivity {
     private boolean doubleBackToExitPressedOnce = false;
     private boolean isFirstTurn = true;
     private boolean soldierRemoval = false;
+    private boolean repeatedTurn = false;
+
 
     //-----------------------------------------------------Array---------------------------------------------------//
     private Button[] answerButtons; // Array to hold the answer buttons
@@ -296,6 +296,7 @@ public class MainActivityGame extends SharedMainActivity {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
         updateClassAbilityButton(currentPlayer);
+
         turnCounter++;
         if (turnCounter == 4) {
             updateDrinkNumberCounter(1, false);
@@ -307,13 +308,22 @@ public class MainActivityGame extends SharedMainActivity {
         updateNumberText();
         SharedMainActivity.logPlayerInformation(currentPlayer);
 
-        Log.d(TAG, "renderPlayer: Is repeat turn active? " + currentPlayer.getJustUsedWildCard());
+        Log.d(TAG, "renderPlayer: Was wildcard just used? " + currentPlayer.getJustUsedWildCard());
+
+        if (repeatedTurn) {
+            btnWild.setVisibility(View.INVISIBLE);
+            repeatedTurn = false;
+        } else {
+            if (!currentPlayer.getJustUsedWildCard()) {
+                updateWildCardVisibility(currentPlayer);
+                characterPassiveClassAffects();
+            }
+            updateWildCardVisibility(currentPlayer);
+        }
+
         if (currentPlayer.getJustUsedWildCard()) {
             btnWild.setVisibility(View.INVISIBLE);
             currentPlayer.setJustUsedWildCard(false);
-        } else {
-            updateWildCardVisibility(currentPlayer);
-            characterPassiveClassAffects();
         }
     }
 
@@ -536,16 +546,18 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void handleScientistClass(Player currentPlayer) {
         changeCurrentNumber();
-        Game.getInstance().activateRepeatingTurn(currentPlayer);
+        Game.getInstance().activateRepeatingTurn(currentPlayer, 1);
     }
 
     private void handleSoldierClass(Player currentPlayer) {
         if (!isFirstTurn) {
             if (Game.getInstance().getCurrentNumber() <= 10) {
                 currentPlayer.setClassAbility(true);
-                Game.getInstance().activateRepeatingTurn(currentPlayer);
+                Game.getInstance().activateRepeatingTurn(currentPlayer, 1);
+                repeatedTurn = true;
                 updateDrinkNumberCounter(4, true);
                 updateDrinkNumberCounterTextView();
+                btnWild.setVisibility(View.INVISIBLE);
                 btnClassAbility.setVisibility(View.INVISIBLE);
             } else {
                 displayToastMessage("The +4 ability can only be activated when the number is below 10.");
@@ -620,6 +632,7 @@ public class MainActivityGame extends SharedMainActivity {
                 return "";
         }
     }
+
     private void characterPassiveClassAffects() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         if (currentPlayer == null) {
@@ -717,7 +730,6 @@ public class MainActivityGame extends SharedMainActivity {
             showDialog("Survivor's Passive: \n\n" + currentPlayer.getName() + " survived a 1, hand out " + drinkNumberCounterInt + " " + drinksText);
         }
     }
-
 
 
     //-----------------------------------------------------External Class Effects---------------------------------------------------//
@@ -1147,7 +1159,8 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void handleIncorrectAnswer(Button selectedButton, String correctAnswer) {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        Game.getInstance().activateRepeatingTurn(currentPlayer);
+        Game.getInstance().activateRepeatingTurn(currentPlayer, 1);
+
 
         selectedButton.setBackgroundResource(R.drawable.buttonhighlightred);
         currentPlayer.setJustUsedWildCard(true);
