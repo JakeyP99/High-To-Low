@@ -5,7 +5,7 @@ public class CharacterClassDescriptions {
     public static final String archerActiveDescription = "You can take two drinks off the total amount, and hand them out to players. You have to repeat your turn!";
     public static final String witchActiveDescription = "Once per game you can skip your turn.";
     public static final String scientistActiveDescription = "You can change the current number to be whatever you want. You have to repeat your turn!";
-    public static final String soldierActiveDescription = "If the number less than or equal to 10, add 4 drinks, but you must repeat your turn twice.";
+    public static final String soldierActiveDescription = "If the number less than or equal to 10, add 4 drinks to the counter, but you must generate the number twice.";
     public static final String quizMagicianActiveDescription = "Remove one wildcard from all players.";
     public static final String survivorActiveDescription = "Half the current number, and continue your turn.";
     public static final String jimActiveDescription = "";
