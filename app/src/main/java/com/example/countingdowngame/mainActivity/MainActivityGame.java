@@ -305,6 +305,18 @@ public class MainActivityGame extends SharedMainActivity {
         if (!playerList.isEmpty()) {
             updatePlayerInfo(currentPlayer);
         }
+
+
+        if ("Survivor".equals(currentPlayer.getClassChoice()) && currentPlayer.usedClassAbility()) {
+            currentPlayer.incrementSurvivorActiveTurnCounter();
+            Log.d(TAG, "renderPlayer: Survivor abilities turn counter = " + currentPlayer.getSurvivorActiveTurnCounter());
+            if (currentPlayer.getSurvivorActiveTurnCounter() == 3) {
+                currentPlayer.setClassAbility(false);
+                currentPlayer.resetSurvivorActiveTurnCounter();
+            }
+        }
+
+
         updateNumberText();
         SharedMainActivity.logPlayerInformation(currentPlayer);
 

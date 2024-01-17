@@ -16,11 +16,13 @@ public class Player implements Serializable {
     private Game game;
     private int wildCardAmount;
     private boolean selected;
-    private final int turnCounter;
+    private int turnCounter;
     private boolean usedClassAbility;
+
     private boolean usedWildCard;
+
     private boolean removed;
-    private int specificActiveTurnCounter; // Add a counter for the active turns of the Survivor class
+    private int survivorActiveTurnCounter; // Add a counter for the active turns of the Survivor class
 
 
     //-----------------------------------------------------Set Game---------------------------------------------------//
@@ -40,20 +42,23 @@ public class Player implements Serializable {
         this.removed = false;
         resetWildCardAmount(context);
         this.turnCounter = 0; // Initialize the turn counter to 0
-        this.specificActiveTurnCounter = 0; // Initialize the Survivor class active turn counter to 0
+        this.survivorActiveTurnCounter = 0; // Initialize the Survivor class active turn counter to 0
     }
 
     //-----------------------------------------------------Survivor Ability---------------------------------------------------//
 
-    public void incrementSpecificTurnCounter() {
-        specificActiveTurnCounter++;
+    public void incrementSurvivorActiveTurnCounter() {
+        survivorActiveTurnCounter++;
     }
-    public void resetSpecificTurnCounter() {
-        specificActiveTurnCounter = 0;
+
+    public void resetSurvivorActiveTurnCounter() {
+        survivorActiveTurnCounter = 0;
     }
-    public int getSpecificActiveTurnCounter() {
-        return specificActiveTurnCounter;
+
+    public int getSurvivorActiveTurnCounter() {
+        return survivorActiveTurnCounter;
     }
+
 
     //--------------------------------------------------------------------------------------------------------//
 
@@ -121,24 +126,30 @@ public class Player implements Serializable {
     public int getWildCardAmount() {
         return wildCardAmount;
     }
+
     public void useWildCard() {
         if (game != null) {
             game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.WILD_CARD));
         }
         wildCardAmount--; // Decrease the wildcard amount
     }
+
     public void useSkip() {
         this.game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.SKIP));
     }
+
 
     //-----------------------------------------------------Reset Abilities---------------------------------------------------//
 
     public void resetWildCardAmount(Context context) {
         wildCardAmount = GeneralSettingsLocalStore.fromContext(context).playerWildCardCount();
     }
+
     public void gainWildCards(int numberOfCardsToGain) {
         wildCardAmount += numberOfCardsToGain;
     }
+
+
     public void loseWildCards(int numberOfWildCardsToLose) {
         wildCardAmount = Math.max(wildCardAmount - numberOfWildCardsToLose, 0);
     }
