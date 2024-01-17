@@ -53,19 +53,19 @@
     <string name="instruction_wildcard_choices_quiz">
         <b><big>Wildcard Choices: Quizzes!</big></b>
         \n\n
-        If you get a quiz, and get the right answer, your turn is skipped, you get to keep your wildcard, and you can hand out a drink.
+        If you get a quiz, and get the right answer, your turn is skipped and you can hand out a drink.
     </string>
 
     <string name="instruction_wildcard_choices_task">
         <b><big>Wildcard Choices: Tasks!</big></b>
         \n\n
-        This category will provide you with something to do. It might be an impersontation, or it might be a drink. Who knows really!
+        This category will provide you with something to do. It might be an impersonation, or it might be a drink. Who knows really!
     </string>
 
     <string name="instruction_wildcard_choices_truth">
         <b><big>Wildcard Choices: Truths!</big></b>
         \n\n
-        Like truth or dare, but bewarned, some of these are quite challenging!
+        Like truth or dare, but bewared, some of these are quite challenging!
     </string>
 
     <string name="instruction_wildcard_choices_extras">
