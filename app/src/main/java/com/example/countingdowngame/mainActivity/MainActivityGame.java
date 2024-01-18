@@ -294,54 +294,16 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void renderPlayer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
         updateClassAbilityButton(currentPlayer);
-
-        turnCounter++;
-        if (turnCounter == 4) {
-            updateDrinkNumberCounter(1, false);
-            turnCounter = 0;
-        }
-        if (!playerList.isEmpty()) {
-            updatePlayerInfo(currentPlayer);
-        }
-
-
-        if ("Survivor".equals(currentPlayer.getClassChoice()) && currentPlayer.usedClassAbility()) {
-            currentPlayer.incrementSurvivorActiveTurnCounter();
-            Log.d(TAG, "renderPlayer: Survivor abilities turn counter = " + currentPlayer.getSurvivorActiveTurnCounter());
-            if (currentPlayer.getSurvivorActiveTurnCounter() == 3) {
-                currentPlayer.setClassAbility(false);
-                currentPlayer.resetSurvivorActiveTurnCounter();
-            }
-        }
-
-
+        updateTurnCounter();
+        updateSurvivorAbilities(currentPlayer);
+        updatePlayerInfo(currentPlayer);
         updateNumberText();
-        SharedMainActivity.logPlayerInformation(currentPlayer);
-
-        Log.d(TAG, "renderPlayer: Was wildcard just used? " + currentPlayer.getJustUsedWildCard());
-
-        if (repeatedTurn) {
-            btnWild.setVisibility(View.INVISIBLE);
-            repeatedTurn = false;
-        } else {
-            if (!currentPlayer.getJustUsedWildCard()) {
-                updateWildCardVisibility(currentPlayer);
-                characterPassiveClassAffects();
-            }
-            updateWildCardVisibility(currentPlayer);
-        }
-
-        if (currentPlayer.getJustUsedWildCard()) {
-            btnWild.setVisibility(View.INVISIBLE);
-            currentPlayer.setJustUsedWildCard(false);
-        }
+        logPlayerInformation(currentPlayer);
+        updateWildCardVisibilityIfNeeded(currentPlayer);
     }
 
     public void renderCurrentNumber(int currentNumber, final Runnable onEnd, TextView generatedNumberTextView) {
-
-
         if (currentNumber == 0) {
             btnGenerate.setEnabled(false);
             btnWild.setEnabled(false);
@@ -363,6 +325,29 @@ public class MainActivityGame extends SharedMainActivity {
 
     //-----------------------------------------------------Update Player's Info---------------------------------------------------//
 
+    private void updateTurnCounter() {
+        turnCounter++;
+        if (turnCounter == 4) {
+            updateDrinkNumberCounter(1, false);
+            turnCounter = 0;
+        }
+    }
+
+    private void updateWildCardVisibilityIfNeeded(Player currentPlayer) {
+        if (repeatedTurn) {
+            btnWild.setVisibility(View.INVISIBLE);
+            repeatedTurn = false;
+        } else {
+            if (!currentPlayer.getJustUsedWildCard()) {
+                updateWildCardVisibility(currentPlayer);
+                characterPassiveClassAffects();
+            }
+        }
+        if (currentPlayer.getJustUsedWildCard()) {
+            btnWild.setVisibility(View.INVISIBLE);
+            currentPlayer.setJustUsedWildCard(false);
+        }
+    }
 
     private void updateClassAbilityButton(Player currentPlayer) {
         btnClassAbility.setText(String.format("%s's Ability", currentPlayer.getClassChoice()));
@@ -603,6 +588,16 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
+    private void updateSurvivorAbilities(Player currentPlayer) {
+        if ("Survivor".equals(currentPlayer.getClassChoice()) && currentPlayer.usedClassAbility()) {
+            currentPlayer.incrementSpecificTurnCounter();
+            if (currentPlayer.getSpecificActiveTurnCounter() == 3) {
+                currentPlayer.setClassAbility(false);
+                currentPlayer.resetSpecificTurnCounter();
+            }
+        }
+    }
+
     private void handleArcherClass(Player currentPlayer) {
         Log.d("ArcherClass", "handleArcherClass called");
 
@@ -705,13 +700,10 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void handleArcherPassive(Player currentPlayer) {
         if ("Archer".equals(currentPlayer.getClassChoice())) {
-            int currentPlayerTurnCount = playerTurnCountMap.getOrDefault(currentPlayer, 0);
-            currentPlayerTurnCount++;
+            currentPlayer.incrementSpecificTurnCounter();
 
-            Log.d("ArcherClass", "Turn count: " + currentPlayerTurnCount);
-            playerTurnCountMap.put(currentPlayer, currentPlayerTurnCount);
-
-            if (currentPlayerTurnCount % 3 == 0) {
+            if (currentPlayer.getSpecificActiveTurnCounter() == 4) {
+                currentPlayer.resetSpecificTurnCounter();
                 Log.d("ArcherClass", "Passive ability triggered");
 
                 int chance = new Random().nextInt(100);
