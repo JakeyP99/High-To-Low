@@ -688,11 +688,10 @@ public class MainActivityGame extends SharedMainActivity {
             }, delayMillis);
         }
     }
-
     private void handleJimPassive(Player currentPlayer) {
         if ("Jim".equals(currentPlayer.getClassChoice())) {
-            int turnCounter = currentPlayer.getTurnCounter();
-            if (turnCounter > 0 && turnCounter % 3 == 0) {
+            currentPlayer.incrementSpecificTurnCounter();
+            if (currentPlayer.getSpecificActiveTurnCounter() == 3) {
                 currentPlayer.gainWildCards(1);
             }
         }

@@ -18,9 +18,7 @@ public class Player implements Serializable {
     private boolean selected;
     private final int turnCounter;
     private boolean usedClassAbility;
-
     private boolean usedWildCard;
-
     private boolean removed;
     private int specificActiveTurnCounter; // Add a counter for the active turns of the Survivor class
 
@@ -50,15 +48,12 @@ public class Player implements Serializable {
     public void incrementSpecificTurnCounter() {
         specificActiveTurnCounter++;
     }
-
     public void resetSpecificTurnCounter() {
         specificActiveTurnCounter = 0;
     }
-
     public int getSpecificActiveTurnCounter() {
         return specificActiveTurnCounter;
     }
-
 
     //--------------------------------------------------------------------------------------------------------//
 
@@ -126,30 +121,24 @@ public class Player implements Serializable {
     public int getWildCardAmount() {
         return wildCardAmount;
     }
-
     public void useWildCard() {
         if (game != null) {
             game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.WILD_CARD));
         }
         wildCardAmount--; // Decrease the wildcard amount
     }
-
     public void useSkip() {
         this.game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.SKIP));
     }
-
 
     //-----------------------------------------------------Reset Abilities---------------------------------------------------//
 
     public void resetWildCardAmount(Context context) {
         wildCardAmount = GeneralSettingsLocalStore.fromContext(context).playerWildCardCount();
     }
-
     public void gainWildCards(int numberOfCardsToGain) {
         wildCardAmount += numberOfCardsToGain;
     }
-
-
     public void loseWildCards(int numberOfWildCardsToLose) {
         wildCardAmount = Math.max(wildCardAmount - numberOfWildCardsToLose, 0);
     }
