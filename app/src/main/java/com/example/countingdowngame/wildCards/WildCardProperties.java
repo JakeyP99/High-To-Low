@@ -5,11 +5,12 @@ public class WildCardProperties {
     private final int probability;
     private boolean enabled;
     private final boolean deletable;
-    private final String answer;
+    private String answer;
     private String wrongAnswer1;
     private String wrongAnswer2;
     private String wrongAnswer3;
-    private final String category;
+
+    private final String category; // Add the category field
 
     public WildCardProperties(String activity, int probability, boolean enabled, boolean deletable, String answer, String wrongAnswer1, String wrongAnswer2, String wrongAnswer3, String category) {
         this.activity = activity;
@@ -28,8 +29,12 @@ public class WildCardProperties {
         this.probability = probability;
         this.enabled = enabled;
         this.deletable = deletable;
-        this.answer = null;
+        this.answer = null; // Set answer to null for wildcards without an answer
         this.category = null;
+    }
+
+    public String getActivity() {
+        return activity;
     }
 
     public void setText(String text) {
@@ -38,6 +43,10 @@ public class WildCardProperties {
 
     public String getText() {
         return activity;
+    }
+
+    public void setAnswer(String text) {
+        this.answer = text;
     }
 
     public String getAnswer() {
@@ -56,6 +65,7 @@ public class WildCardProperties {
         return wrongAnswer3;
     }
 
+
     public String getCategory() {
         return category;
     }
@@ -68,6 +78,8 @@ public class WildCardProperties {
         this.enabled = enabled;
     }
 
+
+
     public int getProbability() {
         return probability;
     }
@@ -75,6 +87,7 @@ public class WildCardProperties {
     public boolean isDeletable() {
         return deletable;
     }
+
 
     public boolean hasAnswer() {
         return answer != null && !answer.isEmpty();

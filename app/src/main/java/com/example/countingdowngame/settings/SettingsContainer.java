@@ -5,7 +5,6 @@ import android.widget.Button;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
-import com.example.countingdowngame.wildCards.WildCardChoice;
 
 public class SettingsContainer extends ButtonUtilsActivity {
 
@@ -20,7 +19,7 @@ public class SettingsContainer extends ButtonUtilsActivity {
 
         btnUtils.setButton(btnReturn, this::onBackPressed);
 
-        btnUtils.setButton(btnWildCardChoice, () -> startActivity(getIntentForClass(WildCardChoice.class)));
+//        btnUtils.setButton(btnWildCardChoice, () -> startActivity(getIntentForClass(WildCardChoice.class)));
 
 
         btnUtils.setButton(btnSettings, () -> startActivity(getIntentForClass(GeneralSettings.class)));
