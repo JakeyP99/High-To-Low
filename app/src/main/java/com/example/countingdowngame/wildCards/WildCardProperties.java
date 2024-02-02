@@ -32,9 +32,15 @@ public class WildCardProperties {
         this.answer = null; // Set answer to null for wildcards without an answer
         this.category = null;
     }
+
+    public String getActivity() {
+        return activity;
+    }
+
     public void setText(String text) {
         this.activity = text;
     }
+
     public String getText() {
         return activity;
     }

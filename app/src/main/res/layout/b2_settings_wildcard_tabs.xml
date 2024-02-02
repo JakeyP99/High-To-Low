@@ -6,7 +6,7 @@
     android:background="@color/white">
 
     <TextView
-        android:id="@+id/textview_banner"
+        android:id="@+id/quiz_banner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/viga"
@@ -21,7 +21,7 @@
         android:id="@+id/tablayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textview_banner"
+        android:layout_below="@id/quiz_banner"
         android:layout_alignParentEnd="true"
         android:background="@color/white"
         android:textColor="@color/white"
