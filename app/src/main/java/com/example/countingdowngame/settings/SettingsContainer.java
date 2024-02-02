@@ -14,13 +14,9 @@ public class SettingsContainer extends ButtonUtilsActivity {
         setContentView(R.layout.b1_settings_choice);
 
         final Button btnReturn = findViewById(R.id.buttonReturn);
-        final Button btnWildCardChoice = findViewById(R.id.button_wildcardChoice);
         final Button btnSettings = findViewById(R.id.button_GeneralSettings);
 
         btnUtils.setButton(btnReturn, this::onBackPressed);
-
-//        btnUtils.setButton(btnWildCardChoice, () -> startActivity(getIntentForClass(WildCardChoice.class)));
-
 
         btnUtils.setButton(btnSettings, () -> startActivity(getIntentForClass(GeneralSettings.class)));
 

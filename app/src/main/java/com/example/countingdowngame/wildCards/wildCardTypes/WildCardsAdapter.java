@@ -2,6 +2,9 @@ package com.example.countingdowngame.wildCards.wildCardTypes;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,6 +53,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
             String wrongAnswer1;
             String wrongAnswer2;
             String wrongAnswer3;
+
             boolean deletable;
             String category;
 
@@ -59,9 +63,9 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
                 probability = prefs.getWildcardProbability(i, card.getProbability());
                 deletable = prefs.getWildCardDeletable(i, card.isDeletable());
                 answer = prefs.getWildcardAnswer(i, card.getAnswer());
-                wrongAnswer1 = prefs.getWildcardWrongAnswer(i, card.getWrongAnswer1());
-                wrongAnswer2 = prefs.getWildcardWrongAnswer2(i, card.getWrongAnswer2());
-                wrongAnswer3 = prefs.getWildcardWrongAnswer3(i, card.getWrongAnswer3());
+                wrongAnswer1 = prefs.getWildcardAnswer(i, card.getWrongAnswer1());
+                wrongAnswer2 = prefs.getWildcardAnswer(i, card.getWrongAnswer2());
+                wrongAnswer3 = prefs.getWildcardAnswer(i, card.getWrongAnswer3());
 
 
                 category = prefs.getWildCardCategory(i, card.getCategory());
@@ -112,10 +116,9 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
             } else {
                 prefs.setWildcardState(i, probability.isEnabled(), probability.getText(), probability.getProbability());
             }
-
         }
-    }
 
+    }
 
     public static class WildCardViewHolder extends RecyclerView.ViewHolder {
         public WildCardViewHolder(View itemView) {

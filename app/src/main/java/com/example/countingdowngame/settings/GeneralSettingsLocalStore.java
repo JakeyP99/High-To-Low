@@ -30,7 +30,6 @@ public class GeneralSettingsLocalStore {
         editor.apply();
     }
 
-
     private int getIntPreference(String key, int defaultValue) {
         return mPref.getInt(key, defaultValue);
     }
@@ -67,6 +66,14 @@ public class GeneralSettingsLocalStore {
         return getBooleanPreference("isExtrasActive");
     }
 
+    public boolean isMuted() {
+        return mPref.getBoolean("isMuted", false);
+    }
+
+    public void setIsMuted(boolean value) {
+        setBooleanPreference("isMuted", value);
+    }
+
     public boolean shouldPlayRegularSound() {
         return mPref.getBoolean("shouldPlayRegularSound", true);
     }
@@ -98,6 +105,4 @@ public class GeneralSettingsLocalStore {
     public void setTotalDrinkAmount(int value) {
         setIntPreference("totalDrinkAmount", value);
     }
-
-
 }
