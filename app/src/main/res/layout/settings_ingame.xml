@@ -170,14 +170,14 @@
             android:textSize="23sp" />
 
         <Button
-            android:id="@+id/button_misc_toggle"
+            android:id="@+id/button_extras_toggle"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@drawable/outlineforbutton"
             android:fontFamily="@font/viga"
             android:maxLines="4"
-            android:text="Misc"
+            android:text="Extras"
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textColor="@color/bluedark"
