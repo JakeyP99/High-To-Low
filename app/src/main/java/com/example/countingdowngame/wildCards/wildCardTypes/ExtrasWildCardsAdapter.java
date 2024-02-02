@@ -13,7 +13,7 @@ import com.example.countingdowngame.wildCards.WildCardType;
 
 public class ExtrasWildCardsAdapter extends WildCardsAdapter {
     public ExtrasWildCardsAdapter(WildCardProperties[] extrasWildCards, Context context, WildCardType mode) {
-        super("wildCardsKey", extrasWildCards, context, mode);
+        super("ExtrasPrefs", extrasWildCards, context, mode);
     }
 
     @NonNull

@@ -910,7 +910,8 @@ public class MainActivityGame extends SharedMainActivity {
                     default:
                         selectedType = null;
                         wildCardType = "Null";
-                        foundWildCardType = true;
+                        foundWildCardType = false;
+                        btnClassAbility.setVisibility(View.INVISIBLE);
                         break;
                 }
 
