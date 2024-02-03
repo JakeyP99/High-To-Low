@@ -5,7 +5,7 @@ public class WildCardProperties {
     private final int probability;
     private boolean enabled;
     private final boolean deletable;
-    private String answer;
+    private final String answer;
     private String wrongAnswer1;
     private String wrongAnswer2;
     private String wrongAnswer3;
@@ -42,10 +42,6 @@ public class WildCardProperties {
 
     public String getAnswer() {
         return answer;
-    }
-
-    public void setAnswer(String answer) {
-        this.answer = answer;
     }
 
     public String getWrongAnswer1() {
