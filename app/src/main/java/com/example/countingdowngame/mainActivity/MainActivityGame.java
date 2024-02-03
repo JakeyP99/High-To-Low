@@ -1075,6 +1075,8 @@ public class MainActivityGame extends SharedMainActivity {
     private void setMultiChoiceRandomizedAnswers(WildCardProperties selectedCard) {
         exposeQuizButtons();
 
+        Log.d(TAG, "setMultiChoiceRandomizedAnswers: ");
+
         String[] answers = {
                 selectedCard.getAnswer(),
                 selectedCard.getWrongAnswer1(),

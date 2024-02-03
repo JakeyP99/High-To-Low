@@ -105,9 +105,8 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
         initializeViews();
         loadPreferences();
         setButtonListeners();
-
-
     }
+
 
     //-----------------------------------------------------Initialize Views---------------------------------------------------//
 
@@ -210,11 +209,8 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
 
         switch (viewId) {
             case R.id.button_multiChoice:
-                toggleButton(button_multiChoice, button_nonMultiChoice, button_multiChoice.isSelected());
-                break;
-
-            case R.id.button_nonMultiChoice:
-                toggleButton(button_nonMultiChoice, button_multiChoice, button_nonMultiChoice.isSelected());
+                boolean isMultiChoiceSelected = !button_multiChoice.isSelected();
+                toggleButton(button_multiChoice, button_nonMultiChoice, isMultiChoiceSelected);
                 break;
 
             case R.id.button_quiz_toggle:
@@ -284,15 +280,6 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
     }
 
 
-    private void toggleButtonChoice(Button selectedButton, Button unselectedButton) {
-        boolean isSelected = !selectedButton.isSelected();
-        selectedButton.setSelected(isSelected);
-        unselectedButton.setSelected(!isSelected);
-
-        selectedButton.setBackground(isSelected ? buttonHighlightDrawable : outlineForButton);
-        unselectedButton.setBackground(!isSelected ? buttonHighlightDrawable : outlineForButton);
-    }
-
     //-----------------------------------------------------Wild Card Choices---------------------------------------------------//
 
 
@@ -312,10 +299,16 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
 
     private void toggleButton(Button selectedButton, Button unselectedButton, boolean isSelected) {
         selectedButton.setSelected(isSelected);
-        unselectedButton.setSelected(!isSelected);
         selectedButton.setBackground(isSelected ? buttonHighlightDrawable : outlineForButton);
+
+        unselectedButton.setSelected(!isSelected);
         unselectedButton.setBackground(!isSelected ? buttonHighlightDrawable : outlineForButton);
+
+        // Set the toggle state for the selected button
+        selectedButton.setSelected(isSelected);
+        selectedButton.setBackground(isSelected ? buttonHighlightDrawable : outlineForButton);
     }
+
 
     private void toggleWildCardButton(Button button, String targetActivity, WildCardsAdapter adapter) {
         Log.d(TAG, "toggleWildCardButton: " + targetActivity + " is toggled");
@@ -363,8 +356,10 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
         totalDrinksEditText.setText(String.valueOf(loadTotalDrinkAmount));
 
         // Load multi-choice status and toggle buttons accordingly
-        boolean multiChoiceSelected = GeneralSettingsLocalStore.fromContext(this).isMultiChoice();
-        toggleButton(button_multiChoice, button_nonMultiChoice, multiChoiceSelected);
+        boolean isMultiChoiceSelected = GeneralSettingsLocalStore.fromContext(this).isMultiChoice();
+        toggleButton(button_multiChoice, button_nonMultiChoice, isMultiChoiceSelected);
+
+
         // Load activation status for each wild card type and toggle buttons accordingly
 
         toggleButtonActivation(button_quiz_toggle, GeneralSettingsLocalStore.fromContext(this).isQuizActivated());
