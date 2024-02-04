@@ -56,16 +56,25 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
 
     //-----------------------------------------------------On Pause---------------------------------------------------//
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadPreferences();
+        Log.d("YourActivity", "onResume called");
+
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
+        Log.d("YourActivity", "onPause called");
         savePreferences();
     }
 
     public inGameSettings() {
         // Default constructor with no arguments
     }
-
     @Override
     public void onBackPressed() {
         String wildCardAmountInput = wildcardPerPlayerEditText.getText().toString().trim();
@@ -85,7 +94,6 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
 
             if (!isTotalDrinkValid) {
                 totalDrinksEditText.setText("1");
-
             }
 
         }
@@ -103,10 +111,11 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_ingame);
         initializeViews();
-        loadPreferences();
+        loadPreferences();  // Load preferences here
         setButtonListeners();
-    }
+        Log.d("YourActivity", "onCreate called");
 
+    }
 
     //-----------------------------------------------------Initialize Views---------------------------------------------------//
 
@@ -141,14 +150,10 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // No action needed
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // No action needed
             }
-
             @Override
             public void afterTextChanged(Editable s) {
                 validateInput(editText, maxLength);
@@ -172,8 +177,7 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
             input = input.substring(0, maxLength);
         }
         if (input.length() < minValue) {
-            // Handle the scenario where input is empty or shorter than minValue
-            input = ""; // Set input to an empty string or handle as per your logic
+            input = "";
         }
         try {
             int value = Integer.parseInt(input);
@@ -187,19 +191,19 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
     private void isValidTotalDrinkAmount() {
         isValidInput(
                 totalDrinksEditText.getText().toString().trim(),
-                2, // Max length
-                1, // Minimum value
-                20 // Maximum value
-        );// Handle invalid total drink amount
+                2,
+                1,
+                20
+        );
     }
 
     private void isValidWildCardAmount() {
         isValidInput(
                 wildcardPerPlayerEditText.getText().toString().trim(),
-                3, // Max length
-                0,  // Minimum value
-                100 // Maximum value
-        );// Handle invalid wild card amount
+                3,
+                0,
+                100
+        );
     }
 
 
@@ -210,28 +214,33 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
         switch (viewId) {
             case R.id.button_multiChoice:
                 boolean isMultiChoiceSelected = !button_multiChoice.isSelected();
-                toggleButton(button_multiChoice, button_nonMultiChoice, isMultiChoiceSelected);
+                toggleMultipleButtons(button_multiChoice, button_nonMultiChoice, isMultiChoiceSelected);
                 break;
 
             case R.id.button_quiz_toggle:
-                toggleWildCardButton(button_quiz_toggle, "Quiz", quizWildCardsAdapter);
+                boolean isQuizSelected = !button_quiz_toggle.isSelected();
+                toggleWildCardButton(button_quiz_toggle, quizWildCardsAdapter, isQuizSelected);
                 break;
 
             case R.id.button_task_toggle:
-                toggleWildCardButton(button_task_toggle, "Task", taskWildCardsAdapter);
+                boolean isTaskSelected = !button_task_toggle.isSelected();
+                toggleWildCardButton(button_task_toggle, taskWildCardsAdapter, isTaskSelected);
                 break;
 
             case R.id.button_truth_toggle:
-                toggleWildCardButton(button_truth_toggle, "Truth", truthWildCardsAdapter);
+                boolean isTruthSelected = !button_truth_toggle.isSelected();
+                toggleWildCardButton(button_truth_toggle, truthWildCardsAdapter, isTruthSelected);
                 break;
 
             case R.id.button_extras_toggle:
-                toggleWildCardButton(button_extras_toggle, "Extras", extrasWildCardsAdapter);
+                boolean isExtrasSelected = !button_extras_toggle.isSelected();
+                toggleWildCardButton(button_extras_toggle, extrasWildCardsAdapter, isExtrasSelected);
                 break;
         }
 
         savePreferences();
     }
+
 
 
 
@@ -283,7 +292,23 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
     //-----------------------------------------------------Wild Card Choices---------------------------------------------------//
 
 
-    private void toggleWildCards(WildCardsAdapter adapter, boolean isSelected) {
+    private void toggleMultipleButtons(Button selectedButton, Button unselectedButton, boolean isSelected) {
+        selectedButton.setSelected(isSelected);
+        selectedButton.setBackground(isSelected ? buttonHighlightDrawable : outlineForButton);
+
+        unselectedButton.setSelected(!isSelected);
+        unselectedButton.setBackground(!isSelected ? buttonHighlightDrawable : outlineForButton);
+
+        // Set the toggle state for the selected button
+        selectedButton.setSelected(isSelected);
+        selectedButton.setBackground(isSelected ? buttonHighlightDrawable : outlineForButton);
+    }
+
+
+    private void toggleWildCardButton(Button button, WildCardsAdapter adapter, boolean isSelected) {
+        button.setSelected(isSelected);
+        button.setBackground(isSelected ? buttonHighlightDrawable : outlineForButton);
+
         if (adapter != null) {
             WildCardProperties[] wildCards = adapter.getWildCards();
             for (WildCardProperties wildcard : wildCards) {
@@ -297,37 +322,12 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
         }
     }
 
-    private void toggleButton(Button selectedButton, Button unselectedButton, boolean isSelected) {
-        selectedButton.setSelected(isSelected);
-        selectedButton.setBackground(isSelected ? buttonHighlightDrawable : outlineForButton);
-
-        unselectedButton.setSelected(!isSelected);
-        unselectedButton.setBackground(!isSelected ? buttonHighlightDrawable : outlineForButton);
-
-        // Set the toggle state for the selected button
-        selectedButton.setSelected(isSelected);
-        selectedButton.setBackground(isSelected ? buttonHighlightDrawable : outlineForButton);
-    }
-
-
-    private void toggleWildCardButton(Button button, String targetActivity, WildCardsAdapter adapter) {
-        Log.d(TAG, "toggleWildCardButton: " + targetActivity + " is toggled");
-        boolean isSelected = !button.isSelected();
-        button.setSelected(isSelected);
-        button.setBackground(isSelected ? buttonHighlightDrawable : outlineForButton);
-
-        toggleWildCards(adapter, isSelected);
-    }
-
-    private void toggleButtonActivation(Button button, boolean isActivated) {
-        button.setBackground(isActivated ? buttonHighlightDrawable : outlineForButton);
-    }
 
     //-----------------------------------------------------Load and Save Preferences---------------------------------------------------//
 
     // Inside WildCardSettings or any other settings activity
     private void goToMainGameWithExtra(int totalDrinkNumber) {
-
+        savePreferences();
         GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);
         int wildCardCount = store.playerWildCardCount();
         Log.d(TAG, "Wild Card Count: " + wildCardCount);
@@ -357,26 +357,28 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
 
         // Load multi-choice status and toggle buttons accordingly
         boolean isMultiChoiceSelected = GeneralSettingsLocalStore.fromContext(this).isMultiChoice();
-        toggleButton(button_multiChoice, button_nonMultiChoice, isMultiChoiceSelected);
+        toggleMultipleButtons(button_multiChoice, button_nonMultiChoice, isMultiChoiceSelected);
 
 
         // Load activation status for each wild card type and toggle buttons accordingly
 
-        toggleButtonActivation(button_quiz_toggle, GeneralSettingsLocalStore.fromContext(this).isQuizActivated());
-        toggleButtonActivation(button_task_toggle, GeneralSettingsLocalStore.fromContext(this).isTaskActivated());
-        toggleButtonActivation(button_truth_toggle, GeneralSettingsLocalStore.fromContext(this).isTruthActivated());
-        toggleButtonActivation(button_extras_toggle, GeneralSettingsLocalStore.fromContext(this).isExtrasActivated());
+        toggleWildCardButton(button_quiz_toggle, quizWildCardsAdapter, GeneralSettingsLocalStore.fromContext(this).isQuizActivated());
+        toggleWildCardButton(button_task_toggle, taskWildCardsAdapter, GeneralSettingsLocalStore.fromContext(this).isTaskActivated());
+        toggleWildCardButton(button_truth_toggle, truthWildCardsAdapter, GeneralSettingsLocalStore.fromContext(this).isTruthActivated());
+        toggleWildCardButton(button_extras_toggle, extrasWildCardsAdapter, GeneralSettingsLocalStore.fromContext(this).isExtrasActivated());
+
     }
 
 
     private void savePreferences() {
+        GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);
+
         int wildCardAmountSetInSettings = Integer.parseInt(wildcardPerPlayerEditText.getText().toString());
         GeneralSettingsLocalStore.fromContext(this).setPlayerWildCardCount(wildCardAmountSetInSettings);
 
         int totalDrinkAmountSetInSettings = Integer.parseInt(totalDrinksEditText.getText().toString());
         GeneralSettingsLocalStore.fromContext(this).setTotalDrinkAmount(totalDrinkAmountSetInSettings);
 
-        GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);
         store.setIsMultiChoice(button_multiChoice.isSelected());
 
         // Save the selected state of other buttons

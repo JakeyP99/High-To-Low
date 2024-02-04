@@ -1,7 +1,6 @@
 package com.example.countingdowngame.wildCards.wildCardTypes;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -83,17 +82,6 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
             }
 
             loadedWildCards[i] = new WildCardProperties(activity, probability, enabled, deletable, answer, wrongAnswer1, wrongAnswer2, wrongAnswer3, category);
-
-            // Log the first three quizzes and their answers/wrong answers
-            if (i < 3) {
-                Log.d("WildCardsAdapter", "Loaded Quiz Question " + (i + 1) + ": ");
-                Log.d("WildCardsAdapter", " - Activity: " + loadedWildCards[i].getText());
-                Log.d("WildCardsAdapter", " - Answer: " + loadedWildCards[i].getAnswer());
-                Log.d("WildCardsAdapter", " - Wrong Answer 1: " + loadedWildCards[i].getWrongAnswer1());
-                Log.d("WildCardsAdapter", " - Wrong Answer 2: " + loadedWildCards[i].getWrongAnswer2());
-                Log.d("WildCardsAdapter", " - Wrong Answer 3: " + loadedWildCards[i].getWrongAnswer3());
-            }
-
         }
 
         wildCards = loadedWildCards;
@@ -125,15 +113,6 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
                 prefs.setWildcardState(i, probability.isEnabled(), probability.getText(), probability.getProbability());
             }
 
-            // Log the first three quizzes and their answers/wrong answers
-            if (i < 3) {
-                Log.d("WildCardsAdapter", "Saved Quiz Question " + (i + 1) + ": ");
-                Log.d("WildCardsAdapter", " - Activity: " + probability.getText());
-                Log.d("WildCardsAdapter", " - Answer: " + probability.getAnswer());
-                Log.d("WildCardsAdapter", " - Wrong Answer 1: " + probability.getWrongAnswer1());
-                Log.d("WildCardsAdapter", " - Wrong Answer 2: " + probability.getWrongAnswer2());
-                Log.d("WildCardsAdapter", " - Wrong Answer 3: " + probability.getWrongAnswer3());
-            }
         }
     }
 

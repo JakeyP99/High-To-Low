@@ -14,8 +14,6 @@ import com.example.countingdowngame.utils.ButtonUtilsActivity;
 public class GeneralSettings extends ButtonUtilsActivity implements View.OnClickListener {
 
     //-----------------------------------------------------Initialize---------------------------------------------------//
-    private Button button_gameModeOne;
-    private Button button_gameModeTwo;
     private Drawable buttonHighlightDrawable;
     private Drawable outlineForButton;
     private Button btnReturn;
@@ -92,7 +90,6 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
         });
 
         btnMute.setOnClickListener(this);
-        //copyout
         button_regularSound.setOnClickListener(this);
         button_burpSound.setOnClickListener(this);
     }
@@ -135,8 +132,6 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
     //-----------------------------------------------------Load and Save Preferences---------------------------------------------------//
 
     private void loadPreferences() {
-
-        //copyout
         boolean regularSoundSelected = GeneralSettingsLocalStore.fromContext(this).shouldPlayRegularSound();
         button_regularSound.setSelected(regularSoundSelected);
         button_burpSound.setSelected(!regularSoundSelected);
@@ -148,11 +143,8 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
             button_regularSound.setBackground(outlineForButton);
             button_burpSound.setBackground(buttonHighlightDrawable);
         }
-
-
         boolean isMuted = GeneralSettingsLocalStore.fromContext(this).isMuted();
         btnMute.setSelected(isMuted);
-
         if (isMuted) {
             btnMute.setBackground(buttonHighlightDrawable);
             if (audioManager != null) {
@@ -166,7 +158,6 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
         }
 
     }
-
 
     private void savePreferences() {
         GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);
