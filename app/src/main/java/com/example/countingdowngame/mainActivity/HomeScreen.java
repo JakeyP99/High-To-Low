@@ -18,6 +18,18 @@ public class HomeScreen extends ButtonUtilsActivity {
         AudioManager.getInstance().playRandomBackgroundMusic(this);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AudioManager.getInstance().stopSound();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AudioManager.getInstance().playSound();
+    }
+
     private void setupView() {
         setContentView(R.layout.a1_home_screen);
     }
