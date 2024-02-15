@@ -30,6 +30,7 @@ public class GeneralSettingsLocalStore {
         editor.apply();
     }
 
+
     private int getIntPreference(String key, int defaultValue) {
         return mPref.getInt(key, defaultValue);
     }
@@ -105,4 +106,6 @@ public class GeneralSettingsLocalStore {
     public void setTotalDrinkAmount(int value) {
         setIntPreference("totalDrinkAmount", value);
     }
+
+
 }
