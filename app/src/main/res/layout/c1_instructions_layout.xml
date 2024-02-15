@@ -41,8 +41,8 @@
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/soundGif"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_centerHorizontal="true"
         android:background="@android:color/transparent"
         android:src="@drawable/sound"
@@ -56,8 +56,8 @@
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/muteGif"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_centerHorizontal="true"
         android:background="@android:color/transparent"
         android:src="@drawable/mute"

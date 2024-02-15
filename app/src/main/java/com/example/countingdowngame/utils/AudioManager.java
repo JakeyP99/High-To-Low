@@ -16,13 +16,13 @@ import java.util.Random;
 import pl.droidsonroids.gif.GifImageView;
 
 public class AudioManager {
-    private static AudioManager audioManager;
+    private static AudioManager instance;
     private final List<Integer> backgroundMusicList;
     public boolean isPlaying = false;
     private MediaPlayer mediaPlayer;
     private int currentPosition = 0;
     private int currentSongIndex = -1;
-    private static Context context;
+    private Context context;
 
     private AudioManager() {
         backgroundMusicList = new ArrayList<>();
@@ -33,16 +33,18 @@ public class AudioManager {
     }
 
     public static AudioManager getInstance() {
-        if (audioManager == null) {
-            audioManager = new AudioManager();
+        if (instance == null) {
+            instance = new AudioManager();
         }
-        return audioManager;
+        return instance;
     }
 
-    // Set the context
+
     public void setContext(Context context) {
         this.context = context;
     }
+
+    private final MediaPlayer.OnCompletionListener onCompletionListener = mp -> playNextSong();
 
     public void initialize(Context context, int soundResourceId) {
         if (mediaPlayer != null) {
@@ -76,8 +78,6 @@ public class AudioManager {
         }
     }
 
-    private final MediaPlayer.OnCompletionListener onCompletionListener = mp -> playNextSong();
-
     public void playNextSong() {
         if (context != null) {
             if (mediaPlayer != null) {
@@ -108,15 +108,12 @@ public class AudioManager {
         if (mediaPlayer != null && !isPlaying) {
             if (currentPosition == 0) {
                 mediaPlayer.start();
-                Log.d(TAG, "playSound: Started playing sound");
             } else {
                 mediaPlayer.seekTo(currentPosition);
                 mediaPlayer.start();
-                Log.d(TAG, "playSound: Resumed playing sound");
             }
             isPlaying = true;
         }
-
     }
 
     public void stopSound() {
@@ -124,28 +121,29 @@ public class AudioManager {
             mediaPlayer.pause();
             currentPosition = mediaPlayer.getCurrentPosition();
             isPlaying = false;
-            Log.d(TAG, "stopSound: Paused sound");
         }
     }
 
-    public static void updateMuteSoundButtonsForBackgroundMusic(boolean isMuted, GifImageView muteGif, GifImageView soundGif) {
-        if (isMuted) {
-            Log.d(TAG, "updateMuteSoundButtonsForBackgroundMusic: mute gif should be visible");
-            audioManager.stopSound();
-            muteGif.setVisibility(View.VISIBLE);
-            soundGif.setVisibility(View.INVISIBLE);
-        } else {
-            Log.d(TAG, "updateMuteSoundButtonsForBackgroundMusic: sound gif should be visible");
-            if (audioManager.isNotPlaying()) {
-                audioManager.playRandomBackgroundMusic(context);
+    public void updateMuteSoundButtons(boolean isMuted, AudioManager audioManager, GifImageView muteGif, GifImageView soundGif) {
+        if (audioManager != null) {
+            if (isMuted) {
+                Log.d(TAG, "updateMuteSoundButtons: mute gif should be visible");
+                muteGif.setVisibility(View.VISIBLE);
+                soundGif.setVisibility(View.INVISIBLE);
+
+                audioManager.stopSound();
+            } else if (!audioManager.isPlaying()) {
+                Log.d(TAG, "updateMuteSoundButtons: sound gif should be visible");
+                audioManager.playSound();
+
+                muteGif.setVisibility(View.INVISIBLE);
+                soundGif.setVisibility(View.VISIBLE);
             }
-            muteGif.setVisibility(View.INVISIBLE);
-            soundGif.setVisibility(View.VISIBLE);
         }
     }
-
-    public boolean isNotPlaying() {
-        return !isPlaying;
+    public boolean isPlaying() {
+        return isPlaying;
     }
+
 
 }
