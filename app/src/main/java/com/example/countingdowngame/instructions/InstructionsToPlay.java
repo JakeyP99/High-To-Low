@@ -2,14 +2,13 @@ package com.example.countingdowngame.instructions;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.example.countingdowngame.utils.DepthPageTransformer;
@@ -21,6 +20,10 @@ import java.util.Objects;
 import pl.droidsonroids.gif.GifImageView;
 
 public class InstructionsToPlay extends ButtonUtilsActivity {
+    GifImageView muteGif;
+    GifImageView soundGif;
+    AudioManager audioManager = AudioManager.getInstance();
+
     private final List<Integer> instructions = Arrays.asList(
             R.string.instruction_welcome,
             R.string.instruction_aim,
@@ -40,48 +43,35 @@ public class InstructionsToPlay extends ButtonUtilsActivity {
             R.string.instruction_thanks
     );
 
-    private AudioManager audioManager;
-    GifImageView muteGif;
-    GifImageView soundGif;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setLayout();
         muteGif = findViewById(R.id.muteGif);
         soundGif = findViewById(R.id.soundGif);
+        boolean isMuted = getMuteSoundState();
 
-        setupView();
-
-        audioManager = AudioManager.getInstance();
         audioManager.setContext(getApplicationContext()); // Set the context before calling playRandomBackgroundMusic or other methods
-
-        // Initialize GifImageViews after setting the content view
-        muteGif = findViewById(R.id.muteGif);
-        soundGif = findViewById(R.id.soundGif);
 
         // Restore mute/sound state
-        boolean isMuted = getMuteSoundState();
         AudioManager.getInstance().updateMuteSoundButtons(isMuted, audioManager, muteGif, soundGif);
 
-        audioManager.setContext(getApplicationContext()); // Set the context before calling playRandomBackgroundMusic or other methods
+
         setupAudioManager();
-
-
-        setupAudioManagerAndButtonControls();
+        setupButtonControls();
     }
 
     private void setupAudioManager() {
         muteGif.setOnClickListener(view -> {
 
-            saveMuteSoundState(true); // Save the mute state
+            saveMuteSoundState(false); // Save the mute state
             AudioManager.getInstance().updateMuteSoundButtons(false, audioManager, muteGif, soundGif); // Update the visibility of buttons
         });
 
         // Set onClickListener for sound button
         soundGif.setOnClickListener(view -> {
 
-            saveMuteSoundState(false); // Save the sound state
+            saveMuteSoundState(true); // Save the sound state
             AudioManager.getInstance().updateMuteSoundButtons(true, audioManager, muteGif, soundGif); // Update the visibility of buttons
         });
 
@@ -92,7 +82,11 @@ public class InstructionsToPlay extends ButtonUtilsActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("isMuted", isMuted);
         editor.apply();
+
+        // Log the saved mute state
+        Log.d("InstructionsToPlay", "Mute state saved: " + isMuted);
     }
+
 
     // Retrieve the mute/sound state
     private boolean getMuteSoundState() {
@@ -143,15 +137,8 @@ public class InstructionsToPlay extends ButtonUtilsActivity {
         });
     }
 
-    private void setupView() {
-        if (GeneralSettingsLocalStore.fromContext(this).isMuted()) {
-            muteGif.setVisibility(View.VISIBLE);
-        } else {
-            soundGif.setVisibility(View.VISIBLE);
-        }
-    }
 
-    private void setupAudioManagerAndButtonControls() {
+    private void setupButtonControls() {
         Button btnQuickPlay = findViewById(R.id.quickplay);
         Button btnInstructions = findViewById(R.id.button_Instructions);
         Button btnSettings = findViewById(R.id.button_Settings);
@@ -162,4 +149,7 @@ public class InstructionsToPlay extends ButtonUtilsActivity {
         btnUtils.setButton(btnInstructions, this::gotoInstructions);
         btnUtils.setButton(btnSettings, this::gotoSettings);
     }
+
+
+
 }
