@@ -13,7 +13,6 @@ import com.example.countingdowngame.mainActivity.EndActivityGame;
 import com.example.countingdowngame.mainActivity.HomeScreen;
 import com.example.countingdowngame.mainActivity.NumberChoice;
 import com.example.countingdowngame.mainActivity.PlayerNumberChoice;
-import com.example.countingdowngame.settings.SettingsContainer;
 
 public abstract class ButtonUtilsActivity extends AppCompatActivity {
 
@@ -66,9 +65,6 @@ public abstract class ButtonUtilsActivity extends AppCompatActivity {
         startActivity(getIntentForClass(InstructionsToPlay.class, true));
     }
 
-    protected void gotoSettings() {
-        startActivity(getIntentForClass(SettingsContainer.class, true));
-    }
 
     //-----------------------------------------------------Sound Functionality---------------------------------------------------//
 
