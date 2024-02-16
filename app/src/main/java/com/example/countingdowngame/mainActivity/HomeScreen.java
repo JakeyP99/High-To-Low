@@ -2,18 +2,27 @@ package com.example.countingdowngame.mainActivity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 
 import com.example.countingdowngame.R;
+import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import pl.droidsonroids.gif.GifImageView;
 
 public class HomeScreen extends ButtonUtilsActivity {
-    GifImageView muteGif;
-    GifImageView soundGif;
-    AudioManager audioManager = AudioManager.getInstance();
+    private GifImageView muteGif;
+    private GifImageView soundGif;
+    private AudioManager audioManager = AudioManager.getInstance();
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        boolean isMuted = getMuteSoundState();
+        audioManager.updateMuteSoundButtons(isMuted, audioManager, muteGif, soundGif);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,29 +34,28 @@ public class HomeScreen extends ButtonUtilsActivity {
         soundGif = findViewById(R.id.soundGif);
 
         // Restore mute/sound state
-        boolean isMuted = getMuteSoundState();
-        AudioManager.getInstance().updateMuteSoundButtons(isMuted, audioManager, muteGif, soundGif);
+        boolean isMuted = GeneralSettingsLocalStore.fromContext(this).isMuted();
+        audioManager.updateMuteSoundButtons(isMuted, audioManager, muteGif, soundGif);
 
         audioManager.setContext(getApplicationContext()); // Set the context before calling playRandomBackgroundMusic or other methods
         setupAudioManager();
-        setupAudioManagerAndButtonControls();
+        setupButtonControls();
+
+        Log.d("HomeScreen", "onCreate: ");
 
         // Check if the mute button is not selected before starting the music
         if (!isMuted) {
-            if (!audioManager.isPlaying()) {
-                audioManager.playRandomBackgroundMusic(getApplicationContext()); // Initialize and start playing music
-            }
+            audioManager.playRandomBackgroundMusic(getApplicationContext()); // Initialize and start playing music
+            Log.d("HomeScreen", "Background music started");
         }
     }
 
-
-    private void setupAudioManagerAndButtonControls() {
+    private void setupButtonControls() {
         Button btnQuickPlay = findViewById(R.id.quickplay);
         Button btnInstructions = findViewById(R.id.button_Instructions);
         Button btnSettings = findViewById(R.id.button_Settings);
 
-        // Set onClickListener for mute button
-
+        // Set onClickListener for buttons
         btnUtils.setButton(btnQuickPlay, this::gotoPlayerNumberChoice);
         btnUtils.setButton(btnInstructions, this::gotoInstructions);
         btnUtils.setButton(btnSettings, this::gotoSettings);
@@ -55,18 +63,14 @@ public class HomeScreen extends ButtonUtilsActivity {
 
     private void setupAudioManager() {
         muteGif.setOnClickListener(view -> {
-
-            saveMuteSoundState(true); // Save the mute state
-            AudioManager.getInstance().updateMuteSoundButtons(false, audioManager, muteGif, soundGif); // Update the visibility of buttons
+            saveMuteSoundState(false); // Save the mute state
+            audioManager.updateMuteSoundButtons(false, audioManager, muteGif, soundGif);
         });
 
-        // Set onClickListener for sound button
         soundGif.setOnClickListener(view -> {
-
-            saveMuteSoundState(false); // Save the sound state
-            AudioManager.getInstance().updateMuteSoundButtons(true, audioManager, muteGif, soundGif); // Update the visibility of buttons
+            saveMuteSoundState(true); // Save the sound state
+            audioManager.updateMuteSoundButtons(true, audioManager, muteGif, soundGif);
         });
-
     }
 
     private void saveMuteSoundState(boolean isMuted) {
@@ -74,14 +78,11 @@ public class HomeScreen extends ButtonUtilsActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("isMuted", isMuted);
         editor.apply();
+        Log.d("HomeScreen", "Mute state saved: " + isMuted);
     }
 
-    // Retrieve the mute/sound state
     private boolean getMuteSoundState() {
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         return sharedPreferences.getBoolean("isMuted", false); // Default to false if not found
     }
-
-    // Update the visibility of mute/sound buttons based on the mute/sound state
-
 }
