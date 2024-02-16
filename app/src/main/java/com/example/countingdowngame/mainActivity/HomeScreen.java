@@ -53,12 +53,10 @@ public class HomeScreen extends ButtonUtilsActivity {
     private void setupButtonControls() {
         Button btnQuickPlay = findViewById(R.id.quickplay);
         Button btnInstructions = findViewById(R.id.button_Instructions);
-        Button btnSettings = findViewById(R.id.button_Settings);
 
         // Set onClickListener for buttons
         btnUtils.setButton(btnQuickPlay, this::gotoPlayerNumberChoice);
         btnUtils.setButton(btnInstructions, this::gotoInstructions);
-        btnUtils.setButton(btnSettings, this::gotoSettings);
     }
 
     private void setupAudioManager() {
