@@ -153,8 +153,10 @@ public class MainActivitySplitScreen extends SharedMainActivity {
     }
 
     private void startGame() {
+        AudioManager.getInstance().stopSound();
+
         int soundResourceId = R.raw.cartoonloop;
-        AudioManager.getInstance().initialize(this, soundResourceId);
+        AudioManager.getInstance().setupAndPlaySound(this, soundResourceId);
 
         Bundle extras = getIntent().getExtras();
         if (extras == null) {

@@ -11,13 +11,12 @@ import java.util.List;
 
 public class AudioManager {
     private static AudioManager instance;
+    private final List<Integer> backgroundMusicList;
+
     private MediaPlayer mediaPlayer;
     private int currentPosition = 0;
     private boolean isPlaying = false;
     private int currentSongIndex = -1;
-    private Context context;
-
-    private final List<Integer> backgroundMusicList;
 
     private AudioManager() {
         backgroundMusicList = new ArrayList<>();
@@ -27,8 +26,6 @@ public class AudioManager {
         backgroundMusicList.add(R.raw.backgroundmusic4);
     }
 
-    private final MediaPlayer.OnCompletionListener onCompletionListener = mp -> playNextSong();
-
     public static AudioManager getInstance() {
         if (instance == null) {
             instance = new AudioManager();
@@ -36,60 +33,70 @@ public class AudioManager {
         return instance;
     }
 
-    public void initialize(Context context, int soundResourceId) {
+    private void setupPlayer(Context context) {
         if (mediaPlayer != null) {
             mediaPlayer.release();
+            mediaPlayer = null;
         }
-
+        currentPosition = 0;
+        currentSongIndex = (currentSongIndex + 1) % backgroundMusicList.size();
+        int soundResourceId = backgroundMusicList.get(currentSongIndex);
         mediaPlayer = MediaPlayer.create(context, soundResourceId);
+    }
+
+    private void setupPlayer(Context context, int soundResourceId) {
         if (mediaPlayer != null) {
-            mediaPlayer.setLooping(true);
-        } else {
-            Log.e("AudioManager", "Failed to create MediaPlayer");
+            mediaPlayer.release();
+            mediaPlayer = null;
         }
+        currentPosition = 0;
+        mediaPlayer = MediaPlayer.create(context, soundResourceId);
     }
 
     public void playRandomBackgroundMusic(Context context) {
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
+        if (isPlaying) {
+            return;
         }
-        currentSongIndex = (currentSongIndex + 1) % backgroundMusicList.size();
-        int soundResourceId = backgroundMusicList.get(currentSongIndex);
 
-        mediaPlayer = MediaPlayer.create(context, soundResourceId);
+        this.setupPlayer(context);
 
         if (mediaPlayer != null) {
             mediaPlayer.setLooping(false);
-            mediaPlayer.setOnCompletionListener(onCompletionListener);
-            mediaPlayer.start();
-            isPlaying = true;
+            mediaPlayer.setOnCompletionListener(mp -> playNextSong(context));
+            this.playSound();
         } else {
             Log.e("AudioManager", "Failed to create MediaPlayer");
         }
     }
 
-    private void playNextSong() {
+    private void playNextSong(Context context) {
         if (isPlaying) {
-            // Increment the currentSongIndex and make sure it wraps around to the first song
-            currentSongIndex = (currentSongIndex + 1) % backgroundMusicList.size();
-
-            if (mediaPlayer != null) {
-                mediaPlayer.release();
-            }
-
-            int soundResourceId = backgroundMusicList.get(currentSongIndex);
-            mediaPlayer = MediaPlayer.create(context, soundResourceId);
+            this.setupPlayer(context);
 
             if (mediaPlayer != null) {
                 mediaPlayer.setLooping(false);
-                mediaPlayer.setOnCompletionListener(onCompletionListener);
-                mediaPlayer.start();
+                mediaPlayer.setOnCompletionListener(mp -> playNextSong(context));
+                this.playSound();
             } else {
                 Log.e("AudioManager", "Failed to create MediaPlayer");
             }
         }
     }
 
+    public void setupAndPlaySound(Context context, int soundResourceId) {
+        if (isPlaying) {
+            return;
+        }
+
+        this.setupPlayer(context, soundResourceId);
+
+        if (mediaPlayer != null) {
+            mediaPlayer.setLooping(true);
+            this.playSound();
+        } else {
+            Log.e("AudioManager", "Failed to create MediaPlayer");
+        }
+    }
 
     public void playSound() {
         if (mediaPlayer != null && !isPlaying) {

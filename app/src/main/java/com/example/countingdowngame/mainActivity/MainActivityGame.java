@@ -158,11 +158,7 @@ public class MainActivityGame extends SharedMainActivity {
         AudioManager.getInstance().stopSound();
 
         int soundResourceId = R.raw.cartoonloop;
-        AudioManager.getInstance().initialize(this, soundResourceId);
-
-
-        AudioManager.getInstance().playSound();
-
+        AudioManager.getInstance().setupAndPlaySound(this, soundResourceId);
 
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
