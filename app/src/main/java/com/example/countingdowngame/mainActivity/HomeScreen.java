@@ -12,10 +12,10 @@ public class HomeScreen extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AudioManager.getInstance().playRandomBackgroundMusic(this);
+
         setupView();
         setupButtonControls();
-
-        AudioManager.getInstance().playRandomBackgroundMusic(this);
     }
 
     @Override

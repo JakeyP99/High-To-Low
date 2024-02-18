@@ -7,6 +7,7 @@ import android.widget.ProgressBar;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.countingdowngame.R;
+import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.example.countingdowngame.utils.DepthPageTransformer;
 
@@ -32,6 +33,8 @@ public class InstructionsToPlay extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AudioManager.getInstance().playRandomBackgroundMusic(this);
+
         setLayout();
     }
 

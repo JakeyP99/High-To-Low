@@ -53,22 +53,6 @@ public class AudioManager {
         mediaPlayer = MediaPlayer.create(context, soundResourceId);
     }
 
-    public void playRandomBackgroundMusic(Context context) {
-        if (isPlaying) {
-            return;
-        }
-
-        this.setupPlayer(context);
-
-        if (mediaPlayer != null) {
-            mediaPlayer.setLooping(false);
-            mediaPlayer.setOnCompletionListener(mp -> playNextSong(context));
-            this.playSound();
-        } else {
-            Log.e("AudioManager", "Failed to create MediaPlayer");
-        }
-    }
-
     private void playNextSong(Context context) {
         if (isPlaying) {
             this.setupPlayer(context);
@@ -80,6 +64,26 @@ public class AudioManager {
             } else {
                 Log.e("AudioManager", "Failed to create MediaPlayer");
             }
+        }
+    }
+
+    public void playRandomBackgroundMusic(Context context) {
+        if (isPlaying) {
+            return;
+        }
+
+        if (mediaPlayer == null) {
+            this.setupPlayer(context);
+        } else {
+            this.playSound();
+        }
+
+        if (mediaPlayer != null) {
+            mediaPlayer.setLooping(false);
+            mediaPlayer.setOnCompletionListener(mp -> playNextSong(context));
+            this.playSound();
+        } else {
+            Log.e("AudioManager", "Failed to create MediaPlayer");
         }
     }
 
