@@ -10,19 +10,15 @@ import android.widget.EditText;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.Random;
 
 import io.github.muddz.styleabletoast.StyleableToast;
-import pl.droidsonroids.gif.GifImageView;
 
 public class NumberChoice extends ButtonUtilsActivity {
     private int startingNumber;
     private EditText originalNumberField;
-    private GifImageView muteGif;
-    private GifImageView soundGif;
 
     @Override
     protected void onResume() {
@@ -30,9 +26,6 @@ public class NumberChoice extends ButtonUtilsActivity {
         originalNumberField.setText("");
         originalNumberField.setFocusableInTouchMode(true);
         originalNumberField.setFocusable(true);
-
-        boolean isMuted = getMuteSoundState();
-        AudioManager.updateMuteSoundButtonsForBackgroundMusic(isMuted, muteGif, soundGif);
     }
 
 
@@ -40,24 +33,11 @@ public class NumberChoice extends ButtonUtilsActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a4_number_choice);
-
-        initializeViews();
-        setupAudioManagerForMuteButtons(muteGif, soundGif);
-        resetStartingNumber();
-        setupButtonControls();
-    }
-
-    private void initializeViews() {
-        muteGif = findViewById(R.id.muteGif);
-        soundGif = findViewById(R.id.soundGif);
         originalNumberField = findViewById(R.id.EditTextView_numberchoice);
-    }
 
-    private void setupButtonControls() {
         Button btnSubmit = findViewById(R.id.btnSubmitNumbers);
         Button btnRandom = findViewById(R.id.btnRandomNumber);
-
-        // Set onClickListener for buttons
+        resetStartingNumber();
         btnUtils.setButton(btnSubmit, this::onSubmitClicked);
         btnUtils.setButton(btnRandom, this::onRandomClicked);
     }
@@ -111,7 +91,7 @@ public class NumberChoice extends ButtonUtilsActivity {
 
 
     private void goToInGameSettings() {
-        Intent i = getIntentForClass(SettingsMenu.class);
+        Intent i = getIntentForClass(inGameSettings.class);
         i.putExtra("startingNumber", startingNumber);
         startActivity(i);
     }

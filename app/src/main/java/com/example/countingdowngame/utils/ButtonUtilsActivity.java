@@ -16,6 +16,8 @@ import com.example.countingdowngame.mainActivity.PlayerNumberChoice;
 
 public abstract class ButtonUtilsActivity extends AppCompatActivity {
 
+    //todo my pop noise doesnt work
+
     protected ButtonUtils btnUtils;
     protected Drawable buttonHighlightDrawable;
     protected Drawable outlineForButton;
@@ -34,35 +36,29 @@ public abstract class ButtonUtilsActivity extends AppCompatActivity {
         }
     }
 
-    //-----------------------------------------------------Activity Functionality---------------------------------------------------//
     protected Intent getIntentForClass(Class<?> targetClass) {
-        return getIntentForClass(targetClass, false);
-    }
-    protected Intent getIntentForClass(Class<?> targetClass, boolean clearTop) {
         Intent i = new Intent(this, targetClass);
-        if (clearTop) {
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        }
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         return i;
     }
     protected void gotoHomeScreen() {
-        startActivity(getIntentForClass(HomeScreen.class, true));
+        startActivity(getIntentForClass(HomeScreen.class));
     }
 
     protected void gotoGameEnd() {
-        startActivity(getIntentForClass(EndActivityGame.class, true));
+        startActivity(getIntentForClass(EndActivityGame.class));
     }
 
     protected void gotoNumberChoice() {
-        startActivity(getIntentForClass(NumberChoice.class, true));
+        startActivity(getIntentForClass(NumberChoice.class));
     }
 
     protected void gotoPlayerNumberChoice() {
-        startActivity(getIntentForClass(PlayerNumberChoice.class, true));
+        startActivity(getIntentForClass(PlayerNumberChoice.class));
     }
 
     protected void gotoInstructions() {
-        startActivity(getIntentForClass(InstructionsToPlay.class, true));
+        startActivity(getIntentForClass(InstructionsToPlay.class));
     }
 
 
