@@ -69,7 +69,7 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
                         // Animation has ended, start the MainActivity here
                         Intent intent = new Intent(this, PlayerChoice.class);
                         intent.putExtra("resetPlayers", true); // Do not reset the PlayerChoice activity
-                        startActivity(getIntentForClass(PlayerChoice.class, true));
+                        startActivity(getIntentForClass(PlayerChoice.class));
 
                     })
                     .playOn(originalPlayerField);

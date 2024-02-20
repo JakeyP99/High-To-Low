@@ -1,8 +1,11 @@
 package com.example.countingdowngame.utils;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
@@ -59,7 +62,7 @@ public class ButtonUtils {
 
 
     private void playSoundEffects() {
-        if (GeneralSettingsLocalStore.fromContext(mContext).isMuted()) {
+        if (isMuted()) {
             return;
         }
 
@@ -78,11 +81,18 @@ public class ButtonUtils {
         }
     }
 
+
     public void onDestroy() {
         for (MediaPlayer b : burp) {
             b.release();
         }
         bop.release();
+    }
+
+
+    private boolean isMuted() {
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        return sharedPreferences.getBoolean("isMuted", false); // Default to false if not found
     }
     //-----------------------------------------------------Onclick Functionality---------------------------------------------------//
 
