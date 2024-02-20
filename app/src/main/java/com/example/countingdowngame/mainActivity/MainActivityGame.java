@@ -80,7 +80,6 @@ public class MainActivityGame extends SharedMainActivity {
     //-----------------------------------------------------Maps and Sets---------------------------------------------------//
     private final Map<Player, Set<WildCardProperties>> usedWildCard = new HashMap<>();
     private final Set<WildCardProperties> usedWildCards = new HashSet<>();
-    private final Map<Player, Integer> playerTurnCountMap = new HashMap<>();
     public WildCardProperties selectedWildCard;
     private int turnCounter = 0;
     //-----------------------------------------------------Views---------------------------------------------------//
@@ -97,6 +96,8 @@ public class MainActivityGame extends SharedMainActivity {
     private GifImageView confettiImageViewBR;
     private GifImageView confettiImageViewTL;
     private GifImageView confettiImageViewTR;
+    private GifImageView muteGif;
+    private GifImageView soundGif;
     private ImageView playerImage;
     private TextView drinkNumberCounterTextView;
     private TextView nextPlayerText;
@@ -118,17 +119,9 @@ public class MainActivityGame extends SharedMainActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!GeneralSettingsLocalStore.fromContext(this).isMuted()) {
-            AudioManager.getInstance().playSound(); // Start playing the sound
-        }
+        boolean isMuted = getMuteSoundState();
+        AudioManager.updateMuteSoundButtonsForBackgroundMusic(isMuted, muteGif, soundGif);
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        AudioManager.getInstance().stopSound(); // Stop the sound
-    }
-
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -152,20 +145,17 @@ public class MainActivityGame extends SharedMainActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a5_game_start);
         initializeViews();
+
+        setupAudioManagerForMuteButtons(muteGif, soundGif);
         setupButtons();
         startGame();
-
-        AudioManager audioManager = AudioManager.getInstance();
-        audioManager.setContext(getApplicationContext()); // Set the context before calling playRandomBackgroundMusic or other methods
-        if (!GeneralSettingsLocalStore.fromContext(this).isMuted()) {
-            AudioManager.getInstance().stopSound();
-            int soundResourceId = R.raw.cartoonloop;
-            AudioManager.getInstance().initialize(this, soundResourceId);
-            AudioManager.getInstance().playSound();
-        }
     }
 
     private void initializeViews() {
+        muteGif = findViewById(R.id.muteGif);
+        soundGif = findViewById(R.id.soundGif);
+
+
         playerImage = findViewById(R.id.playerImage);
         numberText = findViewById(textView_NumberText);
         drinkNumberCounterTextView = findViewById(textView_numberCounter);
@@ -688,6 +678,7 @@ public class MainActivityGame extends SharedMainActivity {
             }, delayMillis);
         }
     }
+
     private void handleJimPassive(Player currentPlayer) {
         if ("Jim".equals(currentPlayer.getClassChoice())) {
             currentPlayer.incrementSpecificTurnCounter();

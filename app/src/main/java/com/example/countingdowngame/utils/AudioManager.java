@@ -128,15 +128,15 @@ public class AudioManager {
         }
     }
 
-    public static void updateMuteSoundButtons(boolean isMuted, GifImageView muteGif, GifImageView soundGif) {
+    public static void updateMuteSoundButtonsForBackgroundMusic(boolean isMuted, GifImageView muteGif, GifImageView soundGif) {
         if (isMuted) {
-            Log.d(TAG, "updateMuteSoundButtons: mute gif should be visible");
+            Log.d(TAG, "updateMuteSoundButtonsForBackgroundMusic: mute gif should be visible");
             audioManager.stopSound();
             muteGif.setVisibility(View.VISIBLE);
             soundGif.setVisibility(View.INVISIBLE);
         } else {
-            Log.d(TAG, "updateMuteSoundButtons: sound gif should be visible");
-            if (!audioManager.isPlaying()) {
+            Log.d(TAG, "updateMuteSoundButtonsForBackgroundMusic: sound gif should be visible");
+            if (audioManager.isNotPlaying()) {
                 audioManager.playRandomBackgroundMusic(context);
             }
             muteGif.setVisibility(View.INVISIBLE);
@@ -144,10 +144,8 @@ public class AudioManager {
         }
     }
 
-
-    public boolean isPlaying() {
-        return isPlaying;
+    public boolean isNotPlaying() {
+        return !isPlaying;
     }
-
 
 }

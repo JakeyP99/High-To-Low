@@ -9,13 +9,16 @@ import android.widget.TextView;
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.Player;
-import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.ArrayList;
 
+import pl.droidsonroids.gif.GifImageView;
+
 public class EndActivityGame extends ButtonUtilsActivity {
+    private GifImageView muteGif;
+    private GifImageView soundGif;
 
     @Override
     public void onBackPressed() {
@@ -24,22 +27,39 @@ public class EndActivityGame extends ButtonUtilsActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        boolean isMuted = getMuteSoundState();
+        AudioManager.updateMuteSoundButtonsForBackgroundMusic(isMuted, muteGif, soundGif);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a6_end_game);
 
-        if (!GeneralSettingsLocalStore.fromContext(this).isMuted()) {
-            AudioManager.getInstance().playRandomBackgroundMusic(this);
-        }
+        initializeViews();
+        setupAudioManagerForMuteButtons(muteGif, soundGif);
+
+        setupButtonControls();
+        setupEndGameText();
+    }
+
+    private void initializeViews() {
+        muteGif = findViewById(R.id.muteGif);
+        soundGif = findViewById(R.id.soundGif);
 
         ListView previousNumbersList = findViewById(R.id.previousNumbers);
+        setupPreviousNumbersList(previousNumbersList);
+    }
+
+    private void setupButtonControls() {
         Button btnPlayAgain = findViewById(R.id.btnplayAgain);
         Button btnNewPlayer = findViewById(R.id.btnNewPlayer);
 
-        setupEndGameText();
-        setupPreviousNumbersList(previousNumbersList);
         setButtonActions(btnPlayAgain, btnNewPlayer);
     }
+
 
     private void setupEndGameText() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();

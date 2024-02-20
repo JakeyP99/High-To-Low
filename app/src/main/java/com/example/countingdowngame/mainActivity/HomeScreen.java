@@ -17,7 +17,7 @@ public class HomeScreen extends ButtonUtilsActivity {
     protected void onResume() {
         super.onResume();
         boolean isMuted = getMuteSoundState();
-        AudioManager.updateMuteSoundButtons(isMuted, muteGif, soundGif);
+        AudioManager.updateMuteSoundButtonsForBackgroundMusic(isMuted, muteGif, soundGif);
     }
 
     @Override
@@ -28,7 +28,6 @@ public class HomeScreen extends ButtonUtilsActivity {
         initializeViews();
         setupAudioManagerForMuteButtons(muteGif, soundGif);
         setupButtonControls();
-        setupBackgroundMusic();
     }
 
     private void initializeViews() {
