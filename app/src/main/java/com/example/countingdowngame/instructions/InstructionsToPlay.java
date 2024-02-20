@@ -1,15 +1,12 @@
 package com.example.countingdowngame.instructions;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.example.countingdowngame.utils.DepthPageTransformer;
 
@@ -22,7 +19,6 @@ import pl.droidsonroids.gif.GifImageView;
 public class InstructionsToPlay extends ButtonUtilsActivity {
     GifImageView muteGif;
     GifImageView soundGif;
-    AudioManager audioManager = AudioManager.getInstance();
 
     private final List<Integer> instructions = Arrays.asList(
             R.string.instruction_welcome,
@@ -47,60 +43,19 @@ public class InstructionsToPlay extends ButtonUtilsActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setLayout();
-        muteGif = findViewById(R.id.muteGif);
-        soundGif = findViewById(R.id.soundGif);
-        boolean isMuted = getMuteSoundState();
-
-        audioManager.setContext(getApplicationContext()); // Set the context before calling playRandomBackgroundMusic or other methods
-
-        // Restore mute/sound state
-        AudioManager.getInstance().updateMuteSoundButtons(isMuted, audioManager, muteGif, soundGif);
-
-
-        setupAudioManager();
+        setupAudioManagerForMuteButtons(muteGif, soundGif);
         setupButtonControls();
-    }
-
-    private void setupAudioManager() {
-        muteGif.setOnClickListener(view -> {
-
-            saveMuteSoundState(false); // Save the mute state
-            AudioManager.getInstance().updateMuteSoundButtons(false, audioManager, muteGif, soundGif); // Update the visibility of buttons
-        });
-
-        // Set onClickListener for sound button
-        soundGif.setOnClickListener(view -> {
-
-            saveMuteSoundState(true); // Save the sound state
-            AudioManager.getInstance().updateMuteSoundButtons(true, audioManager, muteGif, soundGif); // Update the visibility of buttons
-        });
-
-    }
-
-    private void saveMuteSoundState(boolean isMuted) {
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("isMuted", isMuted);
-        editor.apply();
-
-        // Log the saved mute state
-        Log.d("InstructionsToPlay", "Mute state saved: " + isMuted);
-    }
-
-
-    // Retrieve the mute/sound state
-    private boolean getMuteSoundState() {
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        return sharedPreferences.getBoolean("isMuted", false); // Default to false if not found
     }
 
 
     public void setLayout() {
         setContentView(R.layout.c1_instructions_layout);
-
         Button btnNext = findViewById(R.id.buttonNext);
         ViewPager viewPager = findViewById(R.id.viewpager);
         ProgressBar progressBar = findViewById(R.id.progress_bar);
+
+        muteGif = findViewById(R.id.muteGif);
+        soundGif = findViewById(R.id.soundGif);
 
         setupButtonControls(btnNext, viewPager);
         setupProgress(viewPager, progressBar);
@@ -123,7 +78,6 @@ public class InstructionsToPlay extends ButtonUtilsActivity {
         });
         progressBar.setMax(instructions.size());
         progressBar.setProgress(1);
-
     }
 
     public void setupButtonControls(Button btnNext, ViewPager viewPager) {
@@ -137,17 +91,10 @@ public class InstructionsToPlay extends ButtonUtilsActivity {
         });
     }
 
-
     private void setupButtonControls() {
         Button btnQuickPlay = findViewById(R.id.quickplay);
         Button btnInstructions = findViewById(R.id.button_Instructions);
-
-        // Set onClickListener for mute button
-
         btnUtils.setButton(btnQuickPlay, this::gotoPlayerNumberChoice);
         btnUtils.setButton(btnInstructions, this::gotoInstructions);
     }
-
-
-
 }

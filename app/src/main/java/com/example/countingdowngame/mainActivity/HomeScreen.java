@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import com.example.countingdowngame.R;
+import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import pl.droidsonroids.gif.GifImageView;
@@ -11,6 +12,13 @@ import pl.droidsonroids.gif.GifImageView;
 public class HomeScreen extends ButtonUtilsActivity {
     private GifImageView muteGif;
     private GifImageView soundGif;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        boolean isMuted = getMuteSoundState();
+        AudioManager.updateMuteSoundButtons(isMuted, muteGif, soundGif);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

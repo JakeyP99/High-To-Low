@@ -1,5 +1,7 @@
 package com.example.countingdowngame.utils;
 
+import static com.example.countingdowngame.utils.AudioManager.updateMuteSoundButtons;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -15,7 +17,6 @@ import com.example.countingdowngame.mainActivity.EndActivityGame;
 import com.example.countingdowngame.mainActivity.HomeScreen;
 import com.example.countingdowngame.mainActivity.NumberChoice;
 import com.example.countingdowngame.mainActivity.PlayerNumberChoice;
-import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -83,23 +84,34 @@ public abstract class ButtonUtilsActivity extends AppCompatActivity {
     public void setupAudioManagerForMuteButtons(GifImageView muteGif, GifImageView soundGif) {
         audioManager = AudioManager.getInstance();
         audioManager.setContext(getApplicationContext());
-        boolean isMuted = GeneralSettingsLocalStore.fromContext(this).isMuted();
-        audioManager.updateMuteSoundButtons(isMuted, audioManager, muteGif, soundGif);
-
-        muteGif.setOnClickListener(view -> audioManager.updateMuteSoundButtons(false, audioManager, muteGif, soundGif));
-        soundGif.setOnClickListener(view -> audioManager.updateMuteSoundButtons(true, audioManager, muteGif, soundGif));
+        boolean isMuted = getMuteSoundState();
+        AudioManager.updateMuteSoundButtons(isMuted, muteGif, soundGif);
+        setupMuteSoundClickListeners(muteGif, soundGif);
         saveMuteSoundState(isMuted);
-
     }
+
+    private void setupMuteSoundClickListeners(GifImageView muteGif, GifImageView soundGif) {
+        muteGif.setOnClickListener(view -> {
+            updateMuteSoundButtons(false, muteGif, soundGif);
+            saveMuteSoundState(false);
+            Log.d("TAG", "setupMuteSoundClickListeners: is muted is false");
+        });
+        soundGif.setOnClickListener(view -> {
+            updateMuteSoundButtons(true, muteGif, soundGif);
+            saveMuteSoundState(true);
+            Log.d("TAG", "setupMuteSoundClickListeners: is muted is true");
+
+        });
+    }
+
 
     private void saveMuteSoundState(boolean isMuted) {
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("isMuted", isMuted);
-        editor.apply();
+        sharedPreferences.edit().putBoolean("isMuted", isMuted).apply();
     }
 
-    private boolean getMuteSoundState() {
+
+    public boolean getMuteSoundState() {
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         return sharedPreferences.getBoolean("isMuted", false); // Default to false if not found
     }
