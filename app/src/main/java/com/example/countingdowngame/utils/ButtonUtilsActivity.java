@@ -1,6 +1,6 @@
 package com.example.countingdowngame.utils;
 
-import static com.example.countingdowngame.utils.AudioManager.updateMuteSoundButtons;
+import static com.example.countingdowngame.utils.AudioManager.updateMuteSoundButtonsForBackgroundMusic;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,7 +22,6 @@ import pl.droidsonroids.gif.GifImageView;
 
 public abstract class ButtonUtilsActivity extends AppCompatActivity {
 
-    //todo my pop noise doesnt work
 
     protected ButtonUtils btnUtils;
     protected Drawable buttonHighlightDrawable;
@@ -85,19 +84,19 @@ public abstract class ButtonUtilsActivity extends AppCompatActivity {
         audioManager = AudioManager.getInstance();
         audioManager.setContext(getApplicationContext());
         boolean isMuted = getMuteSoundState();
-        AudioManager.updateMuteSoundButtons(isMuted, muteGif, soundGif);
+        AudioManager.updateMuteSoundButtonsForBackgroundMusic(isMuted, muteGif, soundGif);
         setupMuteSoundClickListeners(muteGif, soundGif);
         saveMuteSoundState(isMuted);
     }
 
     private void setupMuteSoundClickListeners(GifImageView muteGif, GifImageView soundGif) {
         muteGif.setOnClickListener(view -> {
-            updateMuteSoundButtons(false, muteGif, soundGif);
+            updateMuteSoundButtonsForBackgroundMusic(false, muteGif, soundGif);
             saveMuteSoundState(false);
             Log.d("TAG", "setupMuteSoundClickListeners: is muted is false");
         });
         soundGif.setOnClickListener(view -> {
-            updateMuteSoundButtons(true, muteGif, soundGif);
+            updateMuteSoundButtonsForBackgroundMusic(true, muteGif, soundGif);
             saveMuteSoundState(true);
             Log.d("TAG", "setupMuteSoundClickListeners: is muted is true");
 

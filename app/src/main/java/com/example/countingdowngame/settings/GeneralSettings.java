@@ -120,7 +120,7 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
                 audioManager.stopSound();
 
             } else {
-                if (!audioManager.isPlaying()) {
+                if (audioManager.isNotPlaying()) {
                     audioManager.playRandomBackgroundMusic(this);
                 }
             }
@@ -152,7 +152,7 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
             }
         } else {
             btnMute.setBackground(outlineForButton);
-            if (audioManager != null && !audioManager.isPlaying()) {
+            if (audioManager != null && audioManager.isNotPlaying()) {
                 audioManager.playRandomBackgroundMusic(this);
             }
         }

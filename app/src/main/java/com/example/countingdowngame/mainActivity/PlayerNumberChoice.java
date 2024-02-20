@@ -11,24 +11,16 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
+import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import io.github.muddz.styleabletoast.StyleableToast;
+import pl.droidsonroids.gif.GifImageView;
 
 public class PlayerNumberChoice extends ButtonUtilsActivity {
     private EditText originalPlayerField;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.a2_player_number_choice);
-
-        originalPlayerField = findViewById(R.id.EditTextViewplayernumber);
-        Button btnSubmitPlayers = findViewById(R.id.btnSubmitPlayers);
-        btnUtils.setButton(btnSubmitPlayers, this::submitPlayerNumber);
-
-
-    }
+    private GifImageView muteGif;
+    private GifImageView soundGif;
 
     @Override
     protected void onResume() {
@@ -36,6 +28,30 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
         originalPlayerField.setText("");
         originalPlayerField.setFocusableInTouchMode(true);
         originalPlayerField.setFocusable(true);
+        boolean isMuted = getMuteSoundState();
+        AudioManager.updateMuteSoundButtonsForBackgroundMusic(isMuted, muteGif, soundGif);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.a2_player_number_choice);
+
+        initializeViews();
+        setupButtonControls();
+        setupAudioManagerForMuteButtons(muteGif, soundGif);
+    }
+
+    private void initializeViews() {
+        muteGif = findViewById(R.id.muteGif);
+        soundGif = findViewById(R.id.soundGif);
+        originalPlayerField = findViewById(R.id.EditTextViewplayernumber);
+    }
+
+
+    private void setupButtonControls() {
+        Button btnSubmitPlayers = findViewById(R.id.btnSubmitPlayers);
+        btnUtils.setButton(btnSubmitPlayers, this::submitPlayerNumber);
     }
 
 
