@@ -67,14 +67,6 @@ public class GeneralSettingsLocalStore {
         return getBooleanPreference("isExtrasActive");
     }
 
-    public boolean isMuted() {
-        return mPref.getBoolean("isMuted", false);
-    }
-
-    public void setIsMuted(boolean value) {
-        setBooleanPreference("isMuted", value);
-    }
-
     public boolean shouldPlayRegularSound() {
         return mPref.getBoolean("shouldPlayRegularSound", true);
     }

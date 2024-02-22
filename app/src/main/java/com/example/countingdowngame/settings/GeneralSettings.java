@@ -17,7 +17,6 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
     private Drawable buttonHighlightDrawable;
     private Drawable outlineForButton;
     private Button btnReturn;
-    private Button btnMute;
 
     private Button button_regularSound;
     private Button button_burpSound;
@@ -52,7 +51,6 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
         buttonHighlightDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.buttonhighlight, null);
         outlineForButton = ResourcesCompat.getDrawable(getResources(), R.drawable.outlineforbutton, null);
         btnReturn = findViewById(R.id.buttonReturn);
-        btnMute = findViewById(R.id.button_mute);
 
 
         button_regularSound = findViewById(R.id.button_normal_sound);
@@ -67,18 +65,6 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
 
     @Override
     public void onClick(View view) {
-        int viewId = view.getId(); // Store the view ID in a variable
-
-      if (viewId == R.id.button_mute) {
-          toggleMuteButton();
-
-      } else if (viewId == R.id.button_normal_sound) {
-          toggleButton(button_regularSound, button_burpSound);
-      } else if (viewId == R.id.button_burp_sound) {
-          toggleButton(button_burpSound, button_regularSound);
-          //
-      }
-
         savePreferences();
     }
 
@@ -89,43 +75,8 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
             super.onBackPressed();
         });
 
-        btnMute.setOnClickListener(this);
         button_regularSound.setOnClickListener(this);
         button_burpSound.setOnClickListener(this);
-    }
-
-    private void toggleButton(Button selectedButton, Button unselectedButton) {
-        boolean isSelected = !selectedButton.isSelected();
-        selectedButton.setSelected(isSelected);
-        unselectedButton.setSelected(!isSelected);
-
-        if (isSelected) {
-            selectedButton.setBackground(buttonHighlightDrawable);
-            unselectedButton.setBackground(outlineForButton);
-        } else {
-            selectedButton.setBackground(outlineForButton);
-            unselectedButton.setBackground(buttonHighlightDrawable);
-        }
-    }
-
-    private void toggleMuteButton() {
-        boolean isSelected = !btnMute.isSelected();
-        btnMute.setSelected(isSelected);
-
-        Drawable selectedDrawable = isSelected ? buttonHighlightDrawable : outlineForButton;
-        btnMute.setBackground(selectedDrawable);
-
-        if (audioManager != null) {
-            if (isSelected) {
-                audioManager.stopSound();
-
-            } else {
-                if (audioManager.isNotPlaying()) {
-                    audioManager.playRandomBackgroundMusic(this);
-                }
-            }
-        }
-        // Optionally, update preferences or perform other tasks related to mute state change.
     }
 
 
@@ -143,25 +94,11 @@ public class GeneralSettings extends ButtonUtilsActivity implements View.OnClick
             button_regularSound.setBackground(outlineForButton);
             button_burpSound.setBackground(buttonHighlightDrawable);
         }
-        boolean isMuted = GeneralSettingsLocalStore.fromContext(this).isMuted();
-        btnMute.setSelected(isMuted);
-        if (isMuted) {
-            btnMute.setBackground(buttonHighlightDrawable);
-            if (audioManager != null) {
-                audioManager.stopSound();
-            }
-        } else {
-            btnMute.setBackground(outlineForButton);
-            if (audioManager != null && audioManager.isNotPlaying()) {
-                audioManager.playRandomBackgroundMusic(this);
-            }
         }
 
-    }
 
     private void savePreferences() {
         GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);
-        store.setIsMuted(btnMute.isSelected());
         store.setShouldPlayRegularSound(button_regularSound.isSelected());
     }
 }
