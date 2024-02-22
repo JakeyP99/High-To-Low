@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Button;
 
@@ -70,8 +71,10 @@ public class ButtonUtils {
 
         if (soundEffects) {
             bop.start();
+            Log.d("TAG", "playSoundEffects: Bop is playing");
         } else {
             currentSoundIndex = (currentSoundIndex + 1) % NUM_SOUNDS;
+            Log.d("TAG", "playSoundEffects: Burp is playing");
             try {
                 stopAllSounds();
                 burp[currentSoundIndex].start();
