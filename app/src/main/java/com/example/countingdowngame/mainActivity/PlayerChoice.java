@@ -114,42 +114,34 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.player_choice);
 
-        totalPlayerCount = Game.getInstance().getPlayerAmount();
-        playerList = new ArrayList<>();
-        playerListAdapter = new PlayerListAdapter(this, playerList, this);
-        proceedButton = findViewById(R.id.button_done);
-
-
-        selectedPlayerCount = 0;
         initializeViews();
         setupPlayerRecyclerView();
         setupDrawButton();
-        updatePlayerCounter();
         setupProceedButton();
+        updatePlayerCounter();
+        clearPlayerSelection();
+        loadPlayerData();
+    }
 
+    private void clearPlayerSelection() {
         for (Player player : playerList) {
             player.setSelected(false);
         }
         playerListAdapter.notifyDataSetChanged();
-
-        List<Player> loadedPlayerList = PlayerModelLocalStore.fromContext(this).loadPlayerData();
-        int startPosition = playerList.size();
-
-        playerList.addAll(loadedPlayerList);
-        int newItemCount = playerList.size() - startPosition;
-
-        if (newItemCount > 0) {
-            playerListAdapter.notifyItemRangeInserted(startPosition, newItemCount);
-        }
     }
-
 
     private void initializeViews() {
         playerRecyclerView = findViewById(R.id.playerRecyclerView);
         playerCountTextView = findViewById(R.id.text_view_counter);
 
+
         totalPlayerCount = Game.getInstance().getPlayerAmount();
         playerList = new ArrayList<>();
+        playerListAdapter = new PlayerListAdapter(this, playerList, this);
+        proceedButton = findViewById(R.id.button_done);
+        selectedPlayerCount = 0;
+
+
     }
 
     //-----------------------------------------------------Buttons---------------------------------------------------//
@@ -478,6 +470,19 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         Gson gson = new Gson();
         String json = gson.toJson(playerList);
         PlayerModelLocalStore.fromContext(this).setPlayersJSON(json);
+    }
+
+    private void loadPlayerData() {
+        // Load player data from local store
+        List<Player> loadedPlayerList = PlayerModelLocalStore.fromContext(this).loadPlayerData();
+        int startPosition = playerList.size();
+        playerList.addAll(loadedPlayerList);
+        int newItemCount = playerList.size() - startPosition;
+
+        // Notify adapter for any new items added
+        if (newItemCount > 0) {
+            playerListAdapter.notifyItemRangeInserted(startPosition, newItemCount);
+        }
     }
 
     //-----------------------------------------------------Player Counter Functionality---------------------------------------------------//

@@ -41,14 +41,6 @@
 
         <activity android:name=".instructions.InstructionsToPlay" />
 
-        <activity android:name=".settings.SettingsContainer" />
-
-        <activity
-            android:name=".wildCards.WildCardChoice"
-            android:windowSoftInputMode="adjustNothing" />
-
-        <activity android:name=".settings.GeneralSettings" />
-
         <activity android:name=".mainActivity.DrawingPlayerModels" />
 
         <activity
