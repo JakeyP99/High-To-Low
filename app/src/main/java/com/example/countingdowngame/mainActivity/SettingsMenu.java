@@ -217,6 +217,11 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
                 toggleMultipleButtons(button_multiChoice, button_nonMultiChoice, isMultiChoiceSelected);
                 break;
 
+            case R.id.button_nonMultiChoice:
+                boolean isNonMultiChoiceSelected = !button_nonMultiChoice.isSelected();
+                toggleMultipleButtons(button_multiChoice, button_nonMultiChoice, !isNonMultiChoiceSelected);
+                break;
+
             case R.id.button_quiz_toggle:
                 boolean isQuizSelected = !button_quiz_toggle.isSelected();
                 toggleWildCardButton(button_quiz_toggle, quizWildCardsAdapter, isQuizSelected);
