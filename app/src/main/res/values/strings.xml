@@ -9,39 +9,69 @@
     <string name="instruction_aim">
          <b><big>Aim Of The Game!</big></b>
         \n\n
-        Within the game there will be a number that goes down after every turn.
+        The game starts with a number that decreases when clicked, this is known as the countdown number.
         \n\n
-        However, for each round of players goes by, the drinking counter goes up! If you hit zero, you have to drink the amount on the counter.
+        However, every third turn increases the drinking counter! If the countdown number reaches zero, the losing player has to drink the total amount shown on the drinking counter.
     </string>
 
     <string name="instruction_create_players">
         <b><big>Create Your Players!</big></b>
         \n\n
-        Now this is the fun part, you get to make your character! You can either take a photo of yourself, or if you\'re having a bad hair day, you can draw your character.
+        Before we begin, we have to create your character! You can either take a photo of yourself, or if you\'re having a bad hair day, you can draw your character.
     </string>
 
     <string name="instruction_choose_class">
         <b><big>Choose your class!</big></b>
         \n\n
-        On top of creating your player, you can choose a class which grants you a perk in the game.
+        On top of creating your player, you can choose a class which grants you a perk in the game. This can range from skipping your turn, to making quizzes easier.
     </string>
 
     <string name="instruction_choose_starting_number">
         <b><big>Choose A Starting Number!</big></b>
         \n\n
-        The aim of the game is not to get to 0. Tip ~ The lower the number, the faster the game, and most likely the less you drink!
+        The aim of the game is not to get to 0. Tip ~ The lower the number, the faster the game!
+    </string>
+
+    <string name="instruction_settings">
+         <b><big>Settings!</big></b>
+        \n\n
+        Within the settings you will find options to disable different wildcards, make the quiz multi-choice or verbal answers, change the max losing drinking number, and so on.
     </string>
 
     <string name="instruction_generate_button">
         <b><big>Generate Button!</big></b>
         \n\n
-        Let me introduce you to the two main buttons. First, there\'s the \'Generate\' button, which will randomly choose a number between 0 and the one you\'ve selected.
+        Let me introduce you to the two main buttons. First, there\'s the \'Generate\' button, which will randomly choose a number between 0 and the number on screen.
     </string>
 
     <string name="instruction_wildcard_button">
         <b><big>Wildcard Button!</big></b>
         \n\n
-        This button throws tasks, quizzes, and challenges your way. Fail or skip them, and you\'ll have to take a drink. If you succeed, you can make someone else drink. Oh, and don\'t forget, your turn is skipped after using it.
+        This button throws tasks, quizzes, and challenges your way. Fail or skip them, and you\'ll have to take a drink. If you succeed, you can make someone else drink.
+    </string>
+
+    <string name="instruction_wildcard_choices_quiz">
+        <b><big>Wildcard Choices: Quizzes!</big></b>
+        \n\n
+        If you get a quiz, and get the right answer, your turn is skipped and you can hand out a drink.
+    </string>
+
+    <string name="instruction_wildcard_choices_task">
+        <b><big>Wildcard Choices: Tasks!</big></b>
+        \n\n
+        This category will provide you with something to do. It might be an impersonation, or it might be a drink. Who knows really!
+    </string>
+
+    <string name="instruction_wildcard_choices_truth">
+        <b><big>Wildcard Choices: Truths!</big></b>
+        \n\n
+        Like truth or dare, but bewared, some of these are quite challenging!
+    </string>
+
+    <string name="instruction_wildcard_choices_extras">
+        <b><big>Wildcard Choices: Extras!</big></b>
+        \n\n
+        These wildcards change the game. For example, it might grant you more wildcards, or it might reset the number back to the starting number.
     </string>
 
     <string name="instruction_the_end">
@@ -54,12 +84,6 @@
         <b><big>Hurray!</big></b>
         \n\n
         You\'ve completed a round of High To Low! If the thrill of the game hasn\'t quenched your thirst for excitement, why not play it again, and again, and again. Literally do whatever you want, you\'re a free person so live your gorgeous life.
-    </string>
-
-    <string name="instruction_settings">
-         <b><big>Settings!</big></b>
-        \n\n
-        Within the settings you will find options to make it one screen, or make it split screen. They both produce the same game, but split screen makes it easier if you are sitting across from someone.
     </string>
 
     <string name="instruction_tips_tricks">

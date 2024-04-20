@@ -20,6 +20,36 @@
         app:layout_constraintTop_toBottomOf="@+id/countingdowntext"
         app:layout_constraintVertical_bias="0.533" />
 
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/soundGif"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/transparent"
+        android:src="@drawable/sound"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.01" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/muteGif"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/transparent"
+        android:src="@drawable/mute"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.01" />
+
     <TextView
         android:id="@+id/countingdowntext"
         android:layout_width="wrap_content"
@@ -45,34 +75,16 @@
         android:layout_height="77dp"
         android:layout_centerHorizontal="true"
         android:background="@drawable/outlineforbutton"
+        android:fontFamily="@font/viga"
         android:text="Play"
         android:textAllCaps="false"
-        android:fontFamily="@font/viga"
         android:textColor="@color/bluedark"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.65999997" />
-
-    <Button
-        android:id="@+id/button_Settings"
-        android:layout_width="139dp"
-        android:layout_height="77dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="13dp"
-        android:background="@drawable/outlineforbutton"
-        android:text="Settings"
-        android:textAllCaps="false"
-        android:textColor="@color/bluedark"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:fontFamily="@font/viga"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_Instructions"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.702" />
 
     <Button
         android:id="@+id/button_Instructions"
@@ -90,7 +102,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/quickplay"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.091" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

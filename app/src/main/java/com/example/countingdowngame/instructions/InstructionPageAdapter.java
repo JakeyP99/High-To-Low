@@ -41,7 +41,7 @@ public class InstructionPageAdapter extends PagerAdapter {
   }
 
   @Override
-  public void destroyItem(ViewGroup container, int position, Object object) {
-    container.removeView((View) object);
+  public void destroyItem(ViewGroup container, int position, @NonNull Object object) {
+      container.removeView((View) object);
   }
 }

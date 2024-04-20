@@ -4,65 +4,100 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class GeneralSettingsLocalStore {
+    private final SharedPreferences mPref;
+
+    private GeneralSettingsLocalStore(Context context) {
+        mPref = context.getSharedPreferences("generalSettings", Context.MODE_PRIVATE);
+    }
+
     public static GeneralSettingsLocalStore fromContext(Context context) {
         return new GeneralSettingsLocalStore(context);
     }
 
-    private static final String SETTINGS_NAME = "generalSettings";
-    private final SharedPreferences mPref;
-
-    private GeneralSettingsLocalStore(Context context) {
-        mPref = context.getSharedPreferences(SETTINGS_NAME, Context.MODE_PRIVATE);
-    }
-
-    public Boolean isMuted() {
-        return mPref.getBoolean("isMuted", false);
-    }
-
-    public void setIsMuted(Boolean value) {
+    private void setBooleanPreference(String key, boolean value) {
         SharedPreferences.Editor editor = mPref.edit();
-        editor.putBoolean("isMuted", value);
+        editor.putBoolean(key, value);
         editor.apply();
     }
 
-    public Boolean shouldPlayRegularSound() {
+    private boolean getBooleanPreference(String key) {
+        return mPref.getBoolean(key, true);
+    }
+
+    private void setIntPreference(String key, int value) {
+        SharedPreferences.Editor editor = mPref.edit();
+        editor.putInt(key, value);
+        editor.apply();
+    }
+
+
+    private int getIntPreference(String key, int defaultValue) {
+        return mPref.getInt(key, defaultValue);
+    }
+
+    public void setIsQuizActivated(boolean value) {
+        setBooleanPreference("isQuizActive", value);
+    }
+
+    public boolean isQuizActivated() {
+        return getBooleanPreference("isQuizActive");
+    }
+
+    public void setIsTaskActivated(boolean value) {
+        setBooleanPreference("isTaskActive", value);
+    }
+
+    public boolean isTaskActivated() {
+        return getBooleanPreference("isTaskActive");
+    }
+
+    public void setIsTruthActivated(boolean value) {
+        setBooleanPreference("isTruthActive", value);
+    }
+
+    public boolean isTruthActivated() {
+        return getBooleanPreference("isTruthActive");
+    }
+
+    public void setIsExtrasActivated(boolean value) {
+        setBooleanPreference("isExtrasActive", value);
+    }
+
+    public boolean isExtrasActivated() {
+        return getBooleanPreference("isExtrasActive");
+    }
+
+    public boolean shouldPlayRegularSound() {
         return mPref.getBoolean("shouldPlayRegularSound", true);
     }
 
-    public void setShouldPlayRegularSound(Boolean value) {
-        SharedPreferences.Editor editor = mPref.edit();
-        editor.putBoolean("shouldPlayRegularSound", value);
-        editor.apply();
+    public void setShouldPlayRegularSound(boolean value) {
+        setBooleanPreference("shouldPlayRegularSound", value);
     }
 
-    public Boolean isSingleScreen() {
-        return mPref.getBoolean("isSingleScreen", true);
-    }
-
-    public void setIsSingleScreen(Boolean value) {
-        SharedPreferences.Editor editor = mPref.edit();
-        editor.putBoolean("isSingleScreen", value);
-        editor.apply();
-    }
-
-
-    public Boolean isMultiChoice() {
+    public boolean isMultiChoice() {
         return mPref.getBoolean("isMultiChoice", true);
     }
 
-    public void setIsMultiChoice(Boolean value) {
-        SharedPreferences.Editor editor = mPref.edit();
-        editor.putBoolean("isMultiChoice", value);
-        editor.apply();
+    public void setIsMultiChoice(boolean value) {
+        setBooleanPreference("isMultiChoice", value);
     }
 
     public int playerWildCardCount() {
-        return mPref.getInt("playerWildCardCount", 1);
+        return getIntPreference("playerWildCardCount", 1);
     }
 
     public void setPlayerWildCardCount(int value) {
-        SharedPreferences.Editor editor = mPref.edit();
-        editor.putInt("playerWildCardCount", value);
-        editor.apply();
+        setIntPreference("playerWildCardCount", value);
     }
+
+    public int totalDrinkAmount() {
+        return getIntPreference("totalDrinkAmount", 5);
+    }
+
+    public void setTotalDrinkAmount(int value) {
+        setIntPreference("totalDrinkAmount", value);
+    }
+
+
 }

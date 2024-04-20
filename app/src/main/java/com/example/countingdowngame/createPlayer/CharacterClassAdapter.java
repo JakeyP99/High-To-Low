@@ -3,10 +3,10 @@ package com.example.countingdowngame.createPlayer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.countingdowngame.R;
@@ -14,63 +14,80 @@ import com.example.countingdowngame.R;
 import java.util.List;
 
 public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAdapter.ViewHolder> {
-    private final List<CharacterClassStore> characterClasses;
-    private static int selectedItem = -1;
+    private final List<CharacterClassStore> characterClasses; // List to hold character class data
+    private OnRecyclerViewScrollListener scrollListener;
 
     public CharacterClassAdapter(List<CharacterClassStore> characterClasses) {
         this.characterClasses = characterClasses;
-        selectedItem = -1;
     }
 
-    public int getSelectedItemPosition() {
-        return selectedItem;
-    }
-
-    @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.character_class_item, parent, false);
-        return new ViewHolder(view);
+    public interface OnRecyclerViewScrollListener {
+        void onScrolled(int dy);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CharacterClassStore characterClass = characterClasses.get(position);
         holder.classNameTextView.setText(characterClass.getClassName());
-        holder.specialAbilityTextView.setText(characterClass.getSpecialAbility());
+        holder.activeAbilityTextView.setText(characterClass.getCharacterActiveDescriptions());
+        holder.passiveAbilityTextView.setText(characterClass.getCharacterPassiveDescriptions());
 
-        if (position == selectedItem) {
-            holder.itemView.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.buttonhighlight));
-            holder.dottedLineBelow.setVisibility(View.INVISIBLE);
-        }
-        else {
-            holder.itemView.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.color.transparent));
-            holder.dottedLineBelow.setVisibility(View.VISIBLE);
-        }
-        // Set an onClickListener for item clicks
-        holder.itemView.setOnClickListener(view -> {
-            int previousSelected = selectedItem;
-            selectedItem = holder.getAdapterPosition();
-            notifyItemChanged(previousSelected);
-            notifyItemChanged(selectedItem);
+        holder.itemView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            if (scrollListener != null) {
+                scrollListener.onScrolled(scrollY - oldScrollY);
+            }
         });
+
+
+        // Set the visibility of Active Ability and Passive Ability TextViews based on the class
+        if (characterClass.getClassName().equals("No Class")) {
+            holder.activeAbilityText.setVisibility(View.GONE);
+            holder.passiveAbilityText.setVisibility(View.GONE);
+        } else if (characterClass.getClassName().equals("Jim")) {
+            holder.activeAbilityText.setVisibility(View.GONE);
+            holder.activeAbilityTextView.setVisibility(View.GONE);
+        } else {
+            holder.activeAbilityTextView.setVisibility(View.VISIBLE);
+            holder.passiveAbilityTextView.setVisibility(View.VISIBLE);
+        }
+
+        holder.classImageView.setImageResource(characterClass.getImageResource());
     }
+
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Inflate the layout for each item of the RecyclerView
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.character_class_item, parent, false);
+        return new ViewHolder(view); // Return a ViewHolder instance for each item
+    }
+
     @Override
     public int getItemCount() {
         return characterClasses.size();
     }
 
+    // ViewHolder class representing each item in the RecyclerView
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView classImageView;
         TextView classNameTextView;
-        TextView specialAbilityTextView;
-        View dottedLineAbove;
-        View dottedLineBelow;
+        TextView activeAbilityTextView;
+        TextView passiveAbilityTextView;
+        TextView activeAbilityText; // Declaration of activeAbilityTextView
+        TextView passiveAbilityText;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            classImageView = itemView.findViewById(R.id.classImageView);
             classNameTextView = itemView.findViewById(R.id.classNameTextView);
-            specialAbilityTextView = itemView.findViewById(R.id.specialAbilityTextView);
-            dottedLineBelow = itemView.findViewById(R.id.dotted_line_below); // Initialize the reference
+            activeAbilityTextView = itemView.findViewById(R.id.activeAbilityTextView);
+            passiveAbilityTextView = itemView.findViewById(R.id.passiveAbilityTextView);
+            activeAbilityText = itemView.findViewById(R.id.activeAbilityText); // Initialization of activeAbilityTextView
+            passiveAbilityText = itemView.findViewById(R.id.passiveAbilityText);
+
+
         }
     }
+
 }

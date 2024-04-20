@@ -10,6 +10,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
 public class DrawingViewPlayerModels extends View {
 
     private Path drawingPath;
@@ -58,8 +60,9 @@ public class DrawingViewPlayerModels extends View {
         canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         drawingCanvas.setBitmap(canvasBitmap);
     }
+
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
 
         canvas.drawBitmap(canvasBitmap, 0, 0, drawingPaint);

@@ -1,8 +1,11 @@
 package com.example.countingdowngame.utils;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
@@ -10,6 +13,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Button;
 
@@ -59,7 +63,7 @@ public class ButtonUtils {
 
 
     private void playSoundEffects() {
-        if (GeneralSettingsLocalStore.fromContext(mContext).isMuted()) {
+        if (isMuted()) {
             return;
         }
 
@@ -67,8 +71,10 @@ public class ButtonUtils {
 
         if (soundEffects) {
             bop.start();
+            Log.d("TAG", "playSoundEffects: Bop is playing");
         } else {
             currentSoundIndex = (currentSoundIndex + 1) % NUM_SOUNDS;
+            Log.d("TAG", "playSoundEffects: Burp is playing");
             try {
                 stopAllSounds();
                 burp[currentSoundIndex].start();
@@ -78,11 +84,18 @@ public class ButtonUtils {
         }
     }
 
+
     public void onDestroy() {
         for (MediaPlayer b : burp) {
             b.release();
         }
         bop.release();
+    }
+
+
+    private boolean isMuted() {
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        return sharedPreferences.getBoolean("isMuted", false); // Default to false if not found
     }
     //-----------------------------------------------------Onclick Functionality---------------------------------------------------//
 
@@ -114,9 +127,7 @@ public class ButtonUtils {
 
                 button.setEnabled(false);
 
-                new Handler().postDelayed(() -> {
-                    button.setEnabled(true);
-                }, 1500);
+                new Handler().postDelayed(() -> button.setEnabled(true), 1500);
 
                 buttonAction.run();
             }

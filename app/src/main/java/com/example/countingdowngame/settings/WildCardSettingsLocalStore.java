@@ -44,13 +44,27 @@ public class WildCardSettingsLocalStore {
     public String getWildcardAnswer(int index) {
         return mPref.getString("wild_card_answer_" + index, "");
     }
+
     public String getWildcardAnswer(int index, String defValue) {
         return mPref.getString("wild_card_answer_" + index, defValue);
+    }
+
+    public String getWildcardWrongAnswer(int index, String defValue) {
+        return mPref.getString("wild_card_wronganswer1_" + index, defValue);
+    }
+
+    public String getWildcardWrongAnswer2(int index, String defValue) {
+        return mPref.getString("wild_card_wronganswer2_" + index, defValue);
+    }
+
+    public String getWildcardWrongAnswer3(int index, String defValue) {
+        return mPref.getString("wild_card_wronganswer3_" + index, defValue);
     }
 
     public String getWildcardCategory(int index) {
         return mPref.getString("wild_card_category_" + index, "");
     }
+
     public String getWildCardCategory(int index, String defValue) {
         return mPref.getString("wild_card_category_" + index, defValue);
     }

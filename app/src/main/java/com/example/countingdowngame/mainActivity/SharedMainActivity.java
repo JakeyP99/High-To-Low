@@ -3,7 +3,7 @@ package com.example.countingdowngame.mainActivity;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.app.AlertDialog;
-import android.os.Handler;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,27 +23,6 @@ import java.util.List;
 
 public class SharedMainActivity extends ButtonUtilsActivity {
 
-
-
-    public void renderCurrentNumber(int currentNumber, final Runnable onEnd, TextView textView1, TextView textView2) {
-        if (currentNumber == 0) {
-            textView1.setText(String.valueOf(currentNumber));
-            textView2.setText(String.valueOf(currentNumber));
-
-            applyPulsingEffect(textView1);
-            applyPulsingEffect(textView2);
-
-            Handler handler = new Handler();
-            handler.postDelayed(() -> {
-                Game.getInstance().endGame(this);
-                onEnd.run();
-            }, 2000);
-        } else {
-            textView1.setText(String.valueOf(currentNumber));
-            textView2.setText(String.valueOf(currentNumber));
-            Game.getInstance().nextPlayer();
-        }
-    }
 
     void applyPulsingEffect(TextView textView) {
         // Apply pulsing effect to textView
@@ -137,9 +116,7 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         dialog.show();
 
         ImageButton closeButton = dialogView.findViewById(R.id.close_button);
-        closeButton.setOnClickListener(v -> {
-            dialog.dismiss();
-        });
+        closeButton.setOnClickListener(v -> dialog.dismiss());
     }
 
 
@@ -160,65 +137,40 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         return textSize;
     }
 
-    public static void splitScreenSetTextViewSizeBasedOnInt(TextView textView, String text) {
-        int defaultTextSize = 65;
-        int minSize = 45;
-
-        if (text.length() > 6) {
-            textView.setTextSize(minSize);
-        } else {
-            textView.setTextSize(defaultTextSize);
-        }
-    }
-
-    //todo fix reverse turn
     public static void reverseTurnOrder(Player player) {
-        Game currentGame = Game.getInstance();
-        List<Player> players = currentGame.getPlayers();
+        Game game = Game.getInstance();
+        List<Player> players = game.getPlayers();
         Collections.reverse(players);
 
-        // Find the current player's index
         int currentPlayerIndex = players.indexOf(player);
 
         if (currentPlayerIndex != -1) {
-            // Calculate the new positions for all players
-            int numPlayers = players.size();
-            for (int i = 0; i < numPlayers; i++) {
-                int newPlayerIndex = (currentPlayerIndex + i) % numPlayers;
-                Player currentPlayer = players.get(newPlayerIndex);
-                currentPlayer.setPosition(i);
+            int lastIndex = players.size() - 1;
+            int newIndex = lastIndex - currentPlayerIndex;
+
+                // Move the player to the new index
+                players.remove(currentPlayerIndex);
+                players.add(newIndex, player);
+
+            // Update the current player ID if necessary
+            if (game.getCurrentPlayer() == player) {
+                game.setCurrentPlayerId(newIndex);
             }
-
-            // Log the updated order of players' turns
-            logTurnOrder(players);
-
-            // Update the current player's ID if necessary
-            int previousPlayerIndex = (currentPlayerIndex - 1 + numPlayers) % numPlayers;
-            currentGame.setCurrentPlayerId(previousPlayerIndex);
-
-            // Log the current player and the next player
-            Player currentPlayer = players.get(currentPlayerIndex);
-            int nextPlayerIndex = (currentPlayerIndex + 1) % numPlayers;
-            Player nextPlayer = players.get(nextPlayerIndex);
-
-            logCurrentAndNextPlayer(currentPlayer, nextPlayer);
         }
 
-        currentGame.setPlayerList(players);
+        game.setPlayerList(players);
     }
 
 
-    private static void logTurnOrder(List<Player> players) {
-        System.out.println("Turn order:");
-        for (int i = 0; i < players.size(); i++) {
-            System.out.println("Player " + players.get(i).getName() + " - Position " + i);
-        }
+    static void logPlayerInformation(Player currentPlayer) {
+        Log.d("renderPlayer", "Current number is " + Game.getInstance().getCurrentNumber() +
+                " - Player was rendered " + currentPlayer.getName() +
+                " is a " + currentPlayer.getClassChoice() +
+                " with " + currentPlayer.getWildCardAmount() +
+                " Wildcards " +
+                "and " + currentPlayer.usedClassAbility() +
+                " is the class ability and are they removed ?" +
+                currentPlayer.isRemoved());
     }
-
-    private static void logCurrentAndNextPlayer(Player currentPlayer, Player nextPlayer) {
-        System.out.println("Current Player: " + currentPlayer.getName());
-        System.out.println("Next Player: " + nextPlayer.getName());
-    }
-
 
 }

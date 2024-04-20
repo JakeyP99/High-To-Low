@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="top"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/viga"
+        android:text="Wild Card Quantity"
+        android:textColor="@color/bluedark"
+        android:textSize="23sp" />
+
+    <EditText
+        android:id="@+id/edittext_wildcard_amount"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/outlineforbutton"
+        android:fontFamily="@font/viga"
+        android:hint="How many wild cards?"
+        android:inputType="number"
+        android:textAlignment="center"
+        android:textColorHint="@color/bluedarktransparent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp"
+        android:fontFamily="@font/viga"
+        android:text="Total Drink Limit"
+        android:textColor="@color/bluedark"
+        android:textSize="23sp" />
+
+    <EditText
+        android:id="@+id/edittext_drink_amount"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/outlineforbutton"
+        android:fontFamily="@font/viga"
+        android:hint="What is the drink limit?"
+        android:inputType="number"
+        android:textAlignment="center"
+        android:textColorHint="@color/bluedarktransparent" />
+
+
+    <TextView
+        android:id="@+id/quiz_banner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp"
+        android:fontFamily="@font/viga"
+        android:gravity="center"
+        android:text="Quiz Settings"
+        android:textColor="@color/bluedark"
+        android:textSize="23sp" />
+
+    <Button
+        android:id="@+id/button_multiChoice"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/outlineforbutton"
+        android:fontFamily="@font/viga"
+        android:maxLines="4"
+        android:text="Multi-choice Answer"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="23sp" />
+
+    <Button
+        android:id="@+id/button_nonMultiChoice"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/outlineforbutton"
+        android:fontFamily="@font/viga"
+        android:maxLines="4"
+        android:text="Short Answer"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="23sp" />
+
+    <TextView
+        android:id="@+id/wildcard_settings_banner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp"
+        android:fontFamily="@font/viga"
+        android:gravity="center"
+        android:text="Wild Card Choices"
+        android:textColor="@color/bluedark"
+        android:textSize="23sp" />
+
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:color/white"
+        android:columnCount="2"
+        android:orientation="vertical"
+        android:rowCount="2">
+
+        <Button
+            android:id="@+id/button_quiz_toggle"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="25dp"
+
+            android:background="@drawable/outlineforbutton"
+            android:fontFamily="@font/viga"
+            android:maxLines="4"
+            android:text="Quizzes"
+
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:textSize="23sp" />
+
+        <Button
+            android:id="@+id/button_task_toggle"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/outlineforbutton"
+            android:fontFamily="@font/viga"
+            android:layout_marginEnd="30dp"
+
+            android:text="Tasks"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:textSize="23sp" />
+
+        <Button
+            android:id="@+id/button_truth_toggle"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="25dp"
+
+            android:background="@drawable/outlineforbutton"
+            android:fontFamily="@font/viga"
+            android:maxLines="4"
+            android:text="Truths"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:textSize="23sp" />
+
+        <Button
+            android:id="@+id/button_extras_toggle"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/outlineforbutton"
+            android:fontFamily="@font/viga"
+            android:maxLines="4"
+            android:text="Extras"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:textSize="23sp" />
+
+    </GridLayout>
+
+
+    <Button
+        android:id="@+id/btnContinueToGame"
+        android:layout_width="139dp"
+        android:layout_height="77dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/outlineforbutton"
+        android:fontFamily="@font/viga"
+        android:text="Continue"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="20sp" />
+
+</LinearLayout>

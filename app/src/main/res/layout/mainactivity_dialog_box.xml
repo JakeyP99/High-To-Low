@@ -22,7 +22,8 @@
         android:layout_width="48dp"
         android:layout_gravity="center"
         android:layout_height="48dp"
-        android:background="@drawable/circle_background" />
+        android:background="@drawable/circle_background"
+        android:contentDescription="TODO" />
 
 
 </LinearLayout>

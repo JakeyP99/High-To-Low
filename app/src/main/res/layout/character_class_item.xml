@@ -1,39 +1,86 @@
 <!-- res/layout/item_character_class.xml -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/classNameTextView"
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:text="Programmer"
-        android:fontFamily="@font/viga"
-        android:textColor="@android:color/black"
-        android:layout_gravity="center"
-        android:gravity="start"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="4dp" />
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="8dp">
 
-    <TextView
-        android:id="@+id/specialAbilityTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:layout_margin="10dp"
-        android:text="This is a sample description."
-        android:textColor="@color/bluedark"
-        android:layout_gravity="start"
-        android:gravity="start" />
+        <TextView
+            android:id="@+id/classNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="@font/viga"
+            android:gravity="start"
+            android:text="Quiz Magician"
+            android:textColor="@color/bluedark"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
-    <View
-        android:id="@+id/dotted_line_below"
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@drawable/dotted_line"
-        android:layout_marginBottom="10dp" />
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/classImageView"
+            android:layout_width="185dp"
+            android:layout_height="130dp"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:src="@drawable/wine" />
+
+        <TextView
+            android:id="@+id/activeAbilityText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="start"
+            android:text="Active Ability"
+            android:textStyle="bold"
+            android:textColor="@color/bluedark"
+            android:textSize="23sp" />
+
+        <TextView
+            android:id="@+id/activeAbilityTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="start"
+            android:text="This is a sample description."
+            android:textColor="@color/bluedark"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/passiveAbilityText"
+            android:layout_width="wrap_content"
+            android:paddingTop="20dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="start"
+            android:text="Passive Ability"
+            android:textColor="@color/bluedark"
+            android:textSize="23sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/passiveAbilityTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="start"
+
+
+            android:text="This is a sample description."
+            android:textColor="@color/bluedark"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+
 </LinearLayout>
+

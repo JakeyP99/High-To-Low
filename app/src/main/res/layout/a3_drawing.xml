@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".createPlayer.DrawingPlayerModels">
+    tools:context=".mainActivity.DrawingPlayerModels">
 
     <LinearLayout
         android:id="@+id/topLinearLayout"
@@ -22,7 +22,8 @@
             android:fontFamily="@font/viga"
             android:textSize="20sp"
             android:text="Color"
-            android:layout_margin="16dp" />
+            android:layout_margin="16dp"
+            style="?android:attr/buttonBarButtonStyle" />
 
         <Button
             android:id="@+id/eraserButton"
@@ -35,7 +36,8 @@
             android:text="Eraser\nmode"
             android:fontFamily="@font/viga"
             android:layout_margin="16dp"
-            android:layout_toRightOf="@+id/colorButton" />
+            android:layout_toRightOf="@+id/colorButton"
+            style="?android:attr/buttonBarButtonStyle" />
 
     </LinearLayout>
 
@@ -77,7 +79,8 @@
             android:fontFamily="@font/viga"
             android:textSize="20sp"
             android:text="Cancel"
-            android:layout_margin="16dp" />
+            android:layout_margin="16dp"
+            style="?android:attr/buttonBarButtonStyle" />
 
         <Button
             android:id="@+id/saveButton"
@@ -89,7 +92,8 @@
             android:textSize="20sp"
             android:text="Save"
             android:fontFamily="@font/viga"
-            android:layout_margin="16dp" />
+            android:layout_margin="16dp"
+            style="?android:attr/buttonBarButtonStyle" />
 
     </LinearLayout>
 

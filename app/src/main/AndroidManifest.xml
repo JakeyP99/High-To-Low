@@ -31,8 +31,7 @@
 
         <activity android:name=".mainActivity.MainActivityGame" />
 
-        <activity android:name=".settings.WildCardSettings" />
-
+        <activity android:name=".mainActivity.SettingsMenu" />
 
         <activity android:name=".mainActivity.PlayerNumberChoice" />
 
@@ -42,21 +41,10 @@
 
         <activity android:name=".instructions.InstructionsToPlay" />
 
-        <activity android:name=".settings.SettingsContainer" />
+        <activity android:name=".mainActivity.DrawingPlayerModels" />
 
         <activity
-            android:name=".wildCards.WildCardChoice"
-            android:windowSoftInputMode="adjustNothing" />
-
-        <activity android:name=".settings.GeneralSettings" />
-
-        <activity android:name=".mainActivity.MainActivitySplitScreen" />
-
-        <activity
-            android:name=".createPlayer.DrawingPlayerModels" />
-
-        <activity
-            android:name=".createPlayer.PlayerChoice"
+            android:name=".mainActivity.PlayerChoice"
             android:windowSoftInputMode="adjustNothing" />
 
         <meta-data

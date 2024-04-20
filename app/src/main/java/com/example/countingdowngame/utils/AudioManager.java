@@ -1,8 +1,11 @@
 package com.example.countingdowngame.utils;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.util.Log;
+import android.view.View;
 
 import com.example.countingdowngame.R;
 
@@ -10,15 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import pl.droidsonroids.gif.GifImageView;
+
 public class AudioManager {
-    private static AudioManager instance;
+    private static AudioManager audioManager;
+    private final List<Integer> backgroundMusicList;
+    public boolean isPlaying = false;
     private MediaPlayer mediaPlayer;
     private int currentPosition = 0;
-    public boolean isPlaying = false;
     private int currentSongIndex = -1;
-    private Context context;
-
-    private final List<Integer> backgroundMusicList;
+    private static Context context;
 
     private AudioManager() {
         backgroundMusicList = new ArrayList<>();
@@ -28,17 +32,16 @@ public class AudioManager {
         backgroundMusicList.add(R.raw.backgroundmusic4);
     }
 
-    public void setContext(Context context) {
-        this.context = context;
+    public static AudioManager getInstance() {
+        if (audioManager == null) {
+            audioManager = new AudioManager();
+        }
+        return audioManager;
     }
 
-    private final MediaPlayer.OnCompletionListener onCompletionListener = mp -> playNextSong();
-
-    public static AudioManager getInstance() {
-        if (instance == null) {
-            instance = new AudioManager();
-        }
-        return instance;
+    // Set the context
+    public void setContext(Context context) {
+        this.context = context;
     }
 
     public void initialize(Context context, int soundResourceId) {
@@ -73,6 +76,8 @@ public class AudioManager {
         }
     }
 
+    private final MediaPlayer.OnCompletionListener onCompletionListener = mp -> playNextSong();
+
     public void playNextSong() {
         if (context != null) {
             if (mediaPlayer != null) {
@@ -99,17 +104,19 @@ public class AudioManager {
         }
     }
 
-
     public void playSound() {
         if (mediaPlayer != null && !isPlaying) {
             if (currentPosition == 0) {
                 mediaPlayer.start();
+                Log.d(TAG, "playSound: Started playing sound");
             } else {
                 mediaPlayer.seekTo(currentPosition);
                 mediaPlayer.start();
+                Log.d(TAG, "playSound: Resumed playing sound");
             }
             isPlaying = true;
         }
+
     }
 
     public void stopSound() {
@@ -117,11 +124,28 @@ public class AudioManager {
             mediaPlayer.pause();
             currentPosition = mediaPlayer.getCurrentPosition();
             isPlaying = false;
+            Log.d(TAG, "stopSound: Paused sound");
         }
     }
 
-    public boolean isPlaying() {
-        return isPlaying;
+    public static void updateMuteSoundButtonsForBackgroundMusic(boolean isMuted, GifImageView muteGif, GifImageView soundGif) {
+        if (isMuted) {
+            Log.d(TAG, "updateMuteSoundButtonsForBackgroundMusic: mute gif should be visible");
+            audioManager.stopSound();
+            muteGif.setVisibility(View.VISIBLE);
+            soundGif.setVisibility(View.INVISIBLE);
+        } else {
+            Log.d(TAG, "updateMuteSoundButtonsForBackgroundMusic: sound gif should be visible");
+            if (audioManager.isNotPlaying()) {
+                audioManager.playRandomBackgroundMusic(context);
+            }
+            muteGif.setVisibility(View.INVISIBLE);
+            soundGif.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public boolean isNotPlaying() {
+        return !isPlaying;
     }
 
 }
