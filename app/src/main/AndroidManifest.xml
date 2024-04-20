@@ -31,7 +31,7 @@
 
         <activity android:name=".mainActivity.MainActivityGame" />
 
-        <activity android:name=".mainActivity.inGameSettings" />
+        <activity android:name=".mainActivity.SettingsMenu" />
 
         <activity android:name=".mainActivity.PlayerNumberChoice" />
 
