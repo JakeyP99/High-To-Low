@@ -21,9 +21,7 @@ public class Game {
     private int currentPlayerId = 0;
     private int startingNumber = 0;
     int currentNumber = 0;
-    // Add this variable to track the Soldier class ability
     private final Map<Player, Integer> repeatingTurnsMap = new HashMap<>();
-
     private boolean gameStarted = false;
 
     private final ArrayList<Integer> updatedNumbers = new ArrayList<>();
