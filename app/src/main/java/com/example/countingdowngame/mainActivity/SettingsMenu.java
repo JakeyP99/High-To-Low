@@ -31,7 +31,7 @@ import com.example.countingdowngame.wildCards.wildCardTypes.WildCardsAdapter;
 
 import io.github.muddz.styleabletoast.StyleableToast;
 
-public class inGameSettings extends ButtonUtilsActivity implements View.OnClickListener {
+public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickListener {
 
     //-----------------------------------------------------Initialize---------------------------------------------------//
     private EditText wildcardPerPlayerEditText;
@@ -72,7 +72,7 @@ public class inGameSettings extends ButtonUtilsActivity implements View.OnClickL
         savePreferences();
     }
 
-    public inGameSettings() {
+    public SettingsMenu() {
         // Default constructor with no arguments
     }
     @Override

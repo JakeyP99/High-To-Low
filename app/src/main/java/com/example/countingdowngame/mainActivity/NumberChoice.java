@@ -111,7 +111,7 @@ public class NumberChoice extends ButtonUtilsActivity {
 
 
     private void goToInGameSettings() {
-        Intent i = getIntentForClass(inGameSettings.class);
+        Intent i = getIntentForClass(SettingsMenu.class);
         i.putExtra("startingNumber", startingNumber);
         startActivity(i);
     }
