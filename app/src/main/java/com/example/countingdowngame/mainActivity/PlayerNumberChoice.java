@@ -63,10 +63,11 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
         try {
             int inputNumber = parseInputValue(inputValue);
             if (inputNumber <= 0) {
+                showToast("You have to have some friends to play with!");
                 return;
             }
 
-            if (inputValue.length() > 3 || inputNumber == 1) {
+            if (inputValue.length() > 3) {
                 showToast("That's way too many players.... Unless you're that popular!");
                 return;
             }
