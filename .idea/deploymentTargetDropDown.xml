@@ -5,6 +5,12 @@
       <entry key="CountingDownGame">
         <State />
       </entry>
+      <entry key="PlayerNumberChoice">
+        <State />
+      </entry>
+      <entry key="SharedMainActivity">
+        <State />
+      </entry>
     </value>
   </component>
 </project>
