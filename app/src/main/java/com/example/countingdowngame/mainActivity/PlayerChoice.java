@@ -26,7 +26,6 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.text.Html;
 import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
@@ -280,12 +279,13 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     private void chooseCharacterCreation() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = getLayoutInflater();
-
         View dialogView = inflater.inflate(R.layout.dialog_choose_option, null);
+
         Button capturePhotoButton = dialogView.findViewById(R.id.capturePhotoButton);
         Button drawPhotoButton = dialogView.findViewById(R.id.drawPhotoButton);
+        Button cancelButton = dialogView.findViewById(R.id.cancelButton);
 
-        AlertDialog dialog = builder.setView(dialogView).setNegativeButton(Html.fromHtml("<font color='" + R.color.bluedark + "'>Cancel</font>"), (dialogInterface, which) -> dialogInterface.dismiss()).create();
+        AlertDialog dialog = builder.setView(dialogView).create(); // Create the AlertDialog
 
         capturePhotoButton.setOnClickListener(v -> {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -301,8 +301,12 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
             dialog.dismiss(); // Close the dialog after clicking the button
         });
 
+        // Set onClickListener for the cancel button
+        cancelButton.setOnClickListener(v -> dialog.dismiss()); // Dismiss the dialog when cancel button is clicked
+
         dialog.show();
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
