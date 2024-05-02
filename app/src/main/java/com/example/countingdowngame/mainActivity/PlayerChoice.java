@@ -16,7 +16,6 @@ import static com.example.countingdowngame.createPlayer.CharacterClassDescriptio
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.witchPassiveDescription;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -29,8 +28,6 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Html;
 import android.text.InputType;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -167,7 +164,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     }
 
     private void chooseClass(int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = getLayoutInflater();
 
         View dialogView = inflater.inflate(R.layout.characterclass_selection, null);
@@ -281,7 +278,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     //-----------------------------------------------------Choose the player creation---------------------------------------------------//
 
     private void chooseCharacterCreation() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = getLayoutInflater();
 
         View dialogView = inflater.inflate(R.layout.dialog_choose_option, null);
@@ -395,48 +392,41 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     }
 
     private void showNameInputDialog(Bitmap bitmap) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        String title = "Enter Your Name";
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
 
         View dialogView = getLayoutInflater().inflate(R.layout.player_enter_name, null);
         EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
+        Button okayButton = dialogView.findViewById(R.id.okButton);
+
         nameEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 
         int blueDarkColor = ContextCompat.getColor(this, R.color.bluedark);
         nameEditText.getBackground().mutate().setColorFilter(blueDarkColor, PorterDuff.Mode.SRC_ATOP);
         nameEditText.setHighlightColor(blueDarkColor);
 
-        SpannableString spannableTitle = new SpannableString(title);
-        spannableTitle.setSpan(new ForegroundColorSpan(blueDarkColor), 0, spannableTitle.length(), 0);
-        builder.setTitle(spannableTitle);
+        builder.setView(dialogView);
 
+        AlertDialog dialog = builder.create();
 
-        builder.setView(dialogView).setPositiveButton("OK", (dialogInterface, i) -> {
+        // Set onClickListener for the okayButton
+        okayButton.setOnClickListener(v -> {
             String name = nameEditText.getText().toString();
             if (name.length() < 20) {
-                if (name.length() == 0) {
-                    StyleableToast.makeText(this, "Sorry, you need to enter a name.", R.style.newToast).show();
-
+                if (name.isEmpty()) {
+                    StyleableToast.makeText(PlayerChoice.this, "Sorry, you need to enter a name.", R.style.newToast).show();
                     showNameInputDialog(bitmap);
                 } else {
+                    dialog.dismiss(); // Dismiss the dialog when okayButton is clicked
                     createNewCharacter(bitmap, name);
                 }
             } else {
-                StyleableToast.makeText(this, "Name must be less than 20 characters.", R.style.newToast).show();
+                StyleableToast.makeText(PlayerChoice.this, "Name must be less than 20 characters.", R.style.newToast).show();
                 showNameInputDialog(bitmap);
             }
         });
 
-
-        AlertDialog dialog = builder.create();
         dialog.show();
-
-        Button positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        Button negativeButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-        positiveButton.setTextColor(blueDarkColor);
-        negativeButton.setTextColor(blueDarkColor);
     }
-
 
     private void createNewCharacter(Bitmap bitmap, String name) {
         int size = Math.min(bitmap.getWidth(), bitmap.getHeight());

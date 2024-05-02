@@ -732,7 +732,7 @@ public class MainActivityGame extends SharedMainActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
 
-        View dialogView = inflater.inflate(R.layout.mainactivity_dialog_box, null);
+        View dialogView = inflater.inflate(R.layout.wildcard_dialog_box, null);
         TextView dialogboxtextview = dialogView.findViewById(dialogbox_textview);
         dialogboxtextview.setText(string);
 

@@ -103,7 +103,7 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
 
-        View dialogView = inflater.inflate(R.layout.mainactivity_dialog_box, null);
+        View dialogView = inflater.inflate(R.layout.wildcard_dialog_box, null);
         TextView dialogTextView = dialogView.findViewById(R.id.dialogbox_textview);
 
         // Set the fixed text size

@@ -22,6 +22,13 @@
         <item name="android:activityCloseEnterAnimation">@anim/slide_out_to_left</item>
     </style>
 
+    <style name="CustomAlertDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:windowBackground">@null
+        </item> <!-- Removes default window background -->
+        <item name="android:background">@drawable/rounded_background
+        </item> <!-- Set your desired background -->
+    </style>
+
     <style name="newToast">
         <item name="stColorBackground">#4C4C4C</item>
         <item name="stTextColor">@color/white</item>

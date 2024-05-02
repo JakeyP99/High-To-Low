@@ -20,7 +20,6 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
     public CharacterClassAdapter(List<CharacterClassStore> characterClasses) {
         this.characterClasses = characterClasses;
     }
-
     public interface OnRecyclerViewScrollListener {
         void onScrolled(int dy);
     }
@@ -37,8 +36,6 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
                 scrollListener.onScrolled(scrollY - oldScrollY);
             }
         });
-
-
         // Set the visibility of Active Ability and Passive Ability TextViews based on the class
         if (characterClass.getClassName().equals("No Class")) {
             holder.activeAbilityText.setVisibility(View.GONE);
@@ -74,7 +71,7 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
         TextView classNameTextView;
         TextView activeAbilityTextView;
         TextView passiveAbilityTextView;
-        TextView activeAbilityText; // Declaration of activeAbilityTextView
+        TextView activeAbilityText;
         TextView passiveAbilityText;
 
         public ViewHolder(View itemView) {
@@ -85,7 +82,6 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
             passiveAbilityTextView = itemView.findViewById(R.id.passiveAbilityTextView);
             activeAbilityText = itemView.findViewById(R.id.activeAbilityText); // Initialization of activeAbilityTextView
             passiveAbilityText = itemView.findViewById(R.id.passiveAbilityText);
-
 
         }
     }
