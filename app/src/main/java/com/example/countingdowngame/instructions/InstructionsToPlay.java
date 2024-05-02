@@ -59,6 +59,8 @@ public class InstructionsToPlay extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AudioManager.getInstance().playRandomBackgroundMusic(this);
+
         setLayout();
         setupAudioManagerForMuteButtons(muteGif, soundGif);
         setupButtonControls();
