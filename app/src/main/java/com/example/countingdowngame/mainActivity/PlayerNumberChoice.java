@@ -38,7 +38,7 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
         super.onResume();
         resetOriginalPlayerField();
         boolean isMuted = getMuteSoundState();
-        AudioManager.updateMuteSoundButtonsForBackgroundMusic(isMuted, muteGif, soundGif);
+        AudioManager.updateMuteButton(isMuted, muteGif, soundGif);
     }
 
     private void initializeViews() {

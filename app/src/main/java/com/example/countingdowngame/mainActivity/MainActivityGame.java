@@ -120,7 +120,7 @@ public class MainActivityGame extends SharedMainActivity {
     protected void onResume() {
         super.onResume();
         boolean isMuted = getMuteSoundState();
-        AudioManager.updateMuteSoundButtonsForBackgroundMusic(isMuted, muteGif, soundGif);
+        AudioManager.updateMuteButton(isMuted, muteGif, soundGif);
     }
     @Override
     public void onBackPressed() {

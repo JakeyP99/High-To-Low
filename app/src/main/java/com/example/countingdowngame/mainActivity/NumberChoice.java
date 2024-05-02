@@ -32,7 +32,7 @@ public class NumberChoice extends ButtonUtilsActivity {
         originalNumberField.setFocusable(true);
 
         boolean isMuted = getMuteSoundState();
-        AudioManager.updateMuteSoundButtonsForBackgroundMusic(isMuted, muteGif, soundGif);
+        AudioManager.updateMuteButton(isMuted, muteGif, soundGif);
     }
 
 

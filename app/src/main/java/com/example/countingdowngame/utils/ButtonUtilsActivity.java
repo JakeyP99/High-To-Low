@@ -1,6 +1,6 @@
 package com.example.countingdowngame.utils;
 
-import static com.example.countingdowngame.utils.AudioManager.updateMuteSoundButtonsForBackgroundMusic;
+import static com.example.countingdowngame.utils.AudioManager.updateMuteButton;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -84,19 +84,19 @@ public abstract class ButtonUtilsActivity extends AppCompatActivity {
         audioManager = AudioManager.getInstance();
         audioManager.setContext(getApplicationContext());
         boolean isMuted = getMuteSoundState();
-        AudioManager.updateMuteSoundButtonsForBackgroundMusic(isMuted, muteGif, soundGif);
+        AudioManager.updateMuteButton(isMuted, muteGif, soundGif);
         setupMuteSoundClickListeners(muteGif, soundGif);
         saveMuteSoundState(isMuted);
     }
 
     private void setupMuteSoundClickListeners(GifImageView muteGif, GifImageView soundGif) {
         muteGif.setOnClickListener(view -> {
-            updateMuteSoundButtonsForBackgroundMusic(false, muteGif, soundGif);
+            updateMuteButton(false, muteGif, soundGif);
             saveMuteSoundState(false);
             Log.d("TAG", "setupMuteSoundClickListeners: is muted is false");
         });
         soundGif.setOnClickListener(view -> {
-            updateMuteSoundButtonsForBackgroundMusic(true, muteGif, soundGif);
+            updateMuteButton(true, muteGif, soundGif);
             saveMuteSoundState(true);
             Log.d("TAG", "setupMuteSoundClickListeners: is muted is true");
 

@@ -24,6 +24,8 @@ public class AudioManager {
     private int currentSongIndex = -1;
     private static Context context;
 
+    //-----------------------------------------------------Initialize---------------------------------------------------//
+
     private AudioManager() {
         backgroundMusicList = new ArrayList<>();
         backgroundMusicList.add(R.raw.backgroundmusic1);
@@ -39,23 +41,14 @@ public class AudioManager {
         return audioManager;
     }
 
-    // Set the context
     public void setContext(Context context) {
-        this.context = context;
+        AudioManager.context = context;
     }
 
-    public void initialize(Context context, int soundResourceId) {
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-        }
 
-        mediaPlayer = MediaPlayer.create(context, soundResourceId);
-        if (mediaPlayer != null) {
-            mediaPlayer.setLooping(true);
-        } else {
-            Log.e("AudioManager", "Failed to create MediaPlayer");
-        }
-    }
+    //-----------------------------------------------------Play Functions---------------------------------------------------//
+
+    private final MediaPlayer.OnCompletionListener onCompletionListener = mp -> playNextSong();
 
     public void playRandomBackgroundMusic(Context context) {
         if (mediaPlayer != null) {
@@ -63,9 +56,7 @@ public class AudioManager {
         }
         currentSongIndex = new Random().nextInt(backgroundMusicList.size());
         int soundResourceId = backgroundMusicList.get(currentSongIndex);
-
         mediaPlayer = MediaPlayer.create(context, soundResourceId);
-
         if (mediaPlayer != null) {
             mediaPlayer.setLooping(false);
             mediaPlayer.setOnCompletionListener(onCompletionListener);
@@ -76,73 +67,84 @@ public class AudioManager {
         }
     }
 
-    private final MediaPlayer.OnCompletionListener onCompletionListener = mp -> playNextSong();
-
     public void playNextSong() {
-        if (context != null) {
+        if (mediaPlayer != null && context != null) {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.stop();
+            }
+            currentSongIndex = (currentSongIndex + 1) % backgroundMusicList.size();
+            int soundResourceId = backgroundMusicList.get(currentSongIndex);
+            mediaPlayer = MediaPlayer.create(context, soundResourceId);
             if (mediaPlayer != null) {
-                if (mediaPlayer.isPlaying()) {
-                    mediaPlayer.stop();
-                    mediaPlayer.reset(); // Resetting the MediaPlayer
-                }
-                currentSongIndex = (currentSongIndex + 1) % backgroundMusicList.size();
-
-                int soundResourceId = backgroundMusicList.get(currentSongIndex);
-                mediaPlayer = MediaPlayer.create(context, soundResourceId);
-
-                if (mediaPlayer != null) {
-                    mediaPlayer.setOnCompletionListener(onCompletionListener);
-                    mediaPlayer.start();
-                    Log.d("TAG", "Play NextSong");
-                } else {
-                    Log.e("AudioManager", "Failed to create MediaPlayer");
-                }
+                mediaPlayer.setOnCompletionListener(onCompletionListener);
+                mediaPlayer.start();
+                Log.d("TAG", "Play NextSong");
+            } else {
+                Log.e("AudioManager", "Failed to create MediaPlayer");
             }
         } else {
-            Log.e("AudioManager", "Context is null");
-            // Handle the null context case, perhaps by logging an error or taking appropriate action.
+            Log.e("AudioManager", "Context or MediaPlayer is null");
         }
     }
 
-    public void playSound() {
-        if (mediaPlayer != null && !isPlaying) {
-            if (currentPosition == 0) {
-                mediaPlayer.start();
-                Log.d(TAG, "playSound: Started playing sound");
-            } else {
-                mediaPlayer.seekTo(currentPosition);
-                mediaPlayer.start();
-                Log.d(TAG, "playSound: Resumed playing sound");
-            }
-            isPlaying = true;
-        }
 
-    }
+    //-----------------------------------------------------Pause / Stop Functions---------------------------------------------------//
 
-    public void stopSound() {
+
+    public void pauseSound() {
         if (mediaPlayer != null && isPlaying) {
             mediaPlayer.pause();
             currentPosition = mediaPlayer.getCurrentPosition();
             isPlaying = false;
-            Log.d(TAG, "stopSound: Paused sound");
+            Log.d(TAG, "pauseSound: Paused sound");
         }
     }
 
-    public static void updateMuteSoundButtonsForBackgroundMusic(boolean isMuted, GifImageView muteGif, GifImageView soundGif) {
+
+    public void resumeBackgroundMusic() {
+        if (mediaPlayer != null && !isPlaying) {
+            // Check if there is a current song playing
+            if (currentSongIndex != -1) {
+                // Resume the current song from the last known position
+                mediaPlayer.seekTo(currentPosition);
+                mediaPlayer.start();
+                isPlaying = true;
+                Log.d(TAG, "resumeBackgroundMusic: Resumed background music");
+            } else {
+                // If there is no current song, play a random song
+                playRandomBackgroundMusic(context);
+            }
+        }
+    }
+
+
+    //-----------------------------------------------------Update UI---------------------------------------------------//
+
+
+    public static void updateMuteButton(boolean isMuted, GifImageView muteGif, GifImageView soundGif) {
         if (isMuted) {
-            Log.d(TAG, "updateMuteSoundButtonsForBackgroundMusic: mute gif should be visible");
-            audioManager.stopSound();
+            audioManager.pauseSound();
             muteGif.setVisibility(View.VISIBLE);
             soundGif.setVisibility(View.INVISIBLE);
         } else {
-            Log.d(TAG, "updateMuteSoundButtonsForBackgroundMusic: sound gif should be visible");
             if (audioManager.isNotPlaying()) {
-                audioManager.playRandomBackgroundMusic(context);
+                if (audioManager.getCurrentSongIndex() != -1) {
+                    audioManager.resumeBackgroundMusic();
+                    Log.d(TAG, "updateMuteButton: resume");
+                } else {
+                    audioManager.playRandomBackgroundMusic(context);
+                    Log.d(TAG, "updateMuteButton: no song to resume");
+                }
             }
             muteGif.setVisibility(View.INVISIBLE);
             soundGif.setVisibility(View.VISIBLE);
         }
     }
+
+    public int getCurrentSongIndex() {
+        return currentSongIndex;
+    }
+
 
     public boolean isNotPlaying() {
         return !isPlaying;

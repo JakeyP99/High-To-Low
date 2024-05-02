@@ -6,7 +6,9 @@ import android.widget.ProgressBar;
 
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.countingdowngame.MyApplication;
 import com.example.countingdowngame.R;
+import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.example.countingdowngame.utils.DepthPageTransformer;
 
@@ -20,6 +22,21 @@ public class InstructionsToPlay extends ButtonUtilsActivity {
     GifImageView muteGif;
     GifImageView soundGif;
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        MyApplication myApplication = (MyApplication) getApplication();
+        if (!myApplication.isAppRunning()) {
+            AudioManager.getInstance().pauseSound();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        boolean isMuted = getMuteSoundState();
+        AudioManager.updateMuteButton(isMuted, muteGif, soundGif);
+    }
     private final List<Integer> instructions = Arrays.asList(
             R.string.instruction_welcome,
             R.string.instruction_aim,

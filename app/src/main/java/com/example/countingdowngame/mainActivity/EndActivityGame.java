@@ -30,7 +30,7 @@ public class EndActivityGame extends ButtonUtilsActivity {
     protected void onResume() {
         super.onResume();
         boolean isMuted = getMuteSoundState();
-        AudioManager.updateMuteSoundButtonsForBackgroundMusic(isMuted, muteGif, soundGif);
+        AudioManager.updateMuteButton(isMuted, muteGif, soundGif);
     }
 
     @Override

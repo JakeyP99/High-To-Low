@@ -14,12 +14,23 @@ public class HomeScreen extends ButtonUtilsActivity {
     private GifImageView muteGif;
     private GifImageView soundGif;
     private GifImageView drinkGif;
-
     @Override
     protected void onResume() {
         super.onResume();
         boolean isMuted = getMuteSoundState();
-        AudioManager.updateMuteSoundButtonsForBackgroundMusic(isMuted, muteGif, soundGif);
+        AudioManager.getInstance().resumeBackgroundMusic();
+        AudioManager.updateMuteButton(isMuted, muteGif, soundGif);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        AudioManager.getInstance().pauseSound();
     }
 
     @Override
