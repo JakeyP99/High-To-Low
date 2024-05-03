@@ -1,0 +1,92 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/class_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/viga"
+        android:gravity="center"
+        android:paddingTop="10sp"
+        android:paddingBottom="20sp"
+        android:text="Archer"
+        android:textAlignment="center"
+        android:textColor="@color/bluedark"
+        android:textIsSelectable="true"
+        android:textSize="35sp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/active_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/viga"
+        android:gravity="center"
+        android:text="Active Ability"
+        android:paddingBottom="10sp"
+        android:textAlignment="center"
+        android:textColor="@color/bluedark"
+        android:textIsSelectable="true"
+        android:textSize="25sp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/active_description_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/viga"
+        android:gravity="center"
+        android:text="Active descriptor"
+        android:textAlignment="center"
+        android:textColor="@color/bluedark"
+        android:textIsSelectable="true"
+        android:paddingBottom="10sp"
+
+        android:textSize="17sp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/passive_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/viga"
+        android:gravity="center"
+        android:paddingBottom="10sp"
+        android:text="Passive Ability"
+
+        android:textAlignment="center"
+        android:textColor="@color/bluedark"
+        android:textIsSelectable="true"
+        android:textSize="25sp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/passive_description_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/viga"
+        android:gravity="center"
+        android:text="Passive descriptor"
+        android:textAlignment="center"
+        android:textColor="@color/bluedark"
+        android:textIsSelectable="true"
+        android:paddingBottom="20sp"
+
+        android:textSize="17sp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageButton
+        android:id="@+id/close_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:background="@drawable/circle_background"
+        android:contentDescription="TODO" />
+
+
+</LinearLayout>

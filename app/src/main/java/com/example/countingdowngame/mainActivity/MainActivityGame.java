@@ -236,7 +236,7 @@ public class MainActivityGame extends SharedMainActivity {
             isFirstTurn = false;
         });
 
-        playerImage.setOnClickListener(v -> setupPlayerImageClickListener());
+        playerImage.setOnClickListener(v -> characterClassDescriptions());
         btnUtils.setButton(btnAnswer, this::showAnswer);
         btnUtils.setButton(btnBackWild, this::wildCardContinue);
         btnUtils.setButton(btnClassAbility, this::activateActiveAbility);
@@ -259,22 +259,12 @@ public class MainActivityGame extends SharedMainActivity {
         });
     }
 
-    private void setupPlayerImageClickListener() {
+    private void characterClassDescriptions() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         if (currentPlayer != null) {
             String currentPlayerClassChoice = currentPlayer.getClassChoice();
             if (currentPlayerClassChoice != null) {
-                String classDescription;
-                if (currentPlayerClassChoice.equalsIgnoreCase("Jim")) {
-                    classDescription = currentPlayerClassChoice + "'s Abilities" + "\n\n" + "Passive: " + getClassPassiveDescription(currentPlayerClassChoice);
-                } else {
-                    classDescription = currentPlayerClassChoice + "'s Abilities" + "\n\n" + "Active: " + getClassActiveDescription(currentPlayerClassChoice)
-                            + "\n\n" + "Passive: " + getClassPassiveDescription(currentPlayerClassChoice);
-                }
-                showDialogWithFixedTextSize(classDescription, 18);
-            } else {
-                String loveMessage = "I love you cutie pie hehe. You don't have a class to show any description for.";
-                showDialogWithFixedTextSize(loveMessage, 30);
+                characterClassInformationDialog(currentPlayerClassChoice, getClassActiveDescription(currentPlayerClassChoice), getClassPassiveDescription(currentPlayerClassChoice));
             }
         }
     }
@@ -729,10 +719,10 @@ public class MainActivityGame extends SharedMainActivity {
     //-----------------------------------------------------External Class Effects---------------------------------------------------//
 
     private void showDialog(String string) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = getLayoutInflater();
 
-        View dialogView = inflater.inflate(R.layout.wildcard_dialog_box, null);
+        View dialogView = inflater.inflate(R.layout.character_class_active_dialog_box, null);
         TextView dialogboxtextview = dialogView.findViewById(dialogbox_textview);
         dialogboxtextview.setText(string);
 
@@ -775,8 +765,8 @@ public class MainActivityGame extends SharedMainActivity {
         EditText editCurrentNumberText = dialogView.findViewById(editCurrentNumberTextView);
         Button okButton = dialogView.findViewById(close_button);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setView(dialogView);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
+        builder.setView(dialogView);
 
         AlertDialog dialog = builder.create();
 

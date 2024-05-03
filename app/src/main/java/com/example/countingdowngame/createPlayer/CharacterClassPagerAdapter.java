@@ -11,7 +11,6 @@ import androidx.viewpager.widget.PagerAdapter;
 import java.util.List;
 
 public class CharacterClassPagerAdapter extends PagerAdapter {
-    public static int pageNumber;
 
     private final List<List<CharacterClassStore>> characterClassesPages;
 
@@ -46,10 +45,5 @@ public class CharacterClassPagerAdapter extends PagerAdapter {
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         container.removeView((View) object);
     }
-
-    public int getPageNumber() {
-        return pageNumber;
-    }
-
 
 }
