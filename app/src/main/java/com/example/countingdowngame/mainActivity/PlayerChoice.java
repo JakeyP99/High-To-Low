@@ -106,6 +106,44 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     }
 
     @Override
+    public void onPlayerLongClick(int position) {
+        Player player = playerList.get(position);
+        showEditNameDialog(player);
+    }
+
+    private void showEditNameDialog(Player player) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.player_enter_name, null);
+        EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
+        nameEditText.setText(player.getName());
+        Button okayButton = dialogView.findViewById(R.id.okButton);
+
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+
+        // Set onClickListener for the okayButton
+        okayButton.setOnClickListener(v -> {
+            String name = nameEditText.getText().toString();
+            if (name.length() < 20) {
+                if (name.isEmpty()) {
+                    StyleableToast.makeText(PlayerChoice.this, "Sorry, you need to enter a name.", R.style.newToast).show();
+                } else {
+                    player.setName(name);
+                    playerListAdapter.notifyItemChanged(playerList.indexOf(player));
+                    savePlayerData(); // Update player name in storage
+                    dialog.dismiss(); // Dismiss the dialog after changing the name
+                }
+            } else {
+                StyleableToast.makeText(PlayerChoice.this, "Name must be less than 20 characters.", R.style.newToast).show();
+            }
+        });
+
+        dialog.show();
+    }
+
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.player_choice);

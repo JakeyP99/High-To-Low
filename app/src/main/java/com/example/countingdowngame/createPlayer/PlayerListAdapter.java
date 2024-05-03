@@ -37,10 +37,6 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
         this.clickListener = clickListener; // Initialize the clickListener with the provided parameter
     }
 
-
-    public interface ClickListener {
-        void onPlayerClick(int position);
-    }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -52,6 +48,11 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Player player = players.get(position);
         holder.bind(player);
+
+        holder.playerItemView.setOnLongClickListener(v -> {
+            clickListener.onPlayerLongClick(position); // Notify the activity about the long-click
+            return true; // Consume the long-click event
+        });
     }
 
     @Override
@@ -59,11 +60,18 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
         return players.size();
     }
 
+    public interface ClickListener {
+        void onPlayerClick(int position);
+
+        void onPlayerLongClick(int position); // Add long-click listener method
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView playerPhotoImageView;
         TextView playerNameTextView;
         ImageView deletePlayerImageView;
         View playerItemView;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             playerItemView = itemView;
@@ -88,12 +96,11 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
                 }
             });
 
-            // Set long-click listener for player deletion
             playerItemView.setOnLongClickListener(v -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
-                    context.deletePlayer(position);
-                    return true;
+                    clickListener.onPlayerLongClick(position); // Notify the activity about the long-click
+                    return true; // Consume the long-click event
                 }
                 return false;
             });
