@@ -58,6 +58,7 @@ public class HomeScreen extends ButtonUtilsActivity {
         btnUtils.setButton(btnQuickPlay, this::gotoPlayerNumberChoice);
         btnUtils.setButton(btnInstructions, this::gotoInstructions);
 
+
         drinkGif.setOnClickListener(view -> {
             GeneralSettingsLocalStore settingsStore = GeneralSettingsLocalStore.fromContext(this);
             boolean regularSoundSelected = settingsStore.shouldPlayRegularSound();
