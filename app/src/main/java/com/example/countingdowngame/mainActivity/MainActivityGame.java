@@ -19,8 +19,10 @@ import static com.example.countingdowngame.mainActivity.PlayerChoice.CLASS_SURVI
 import static com.example.countingdowngame.mainActivity.PlayerChoice.CLASS_WITCH;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -29,6 +31,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -145,7 +148,7 @@ public class MainActivityGame extends SharedMainActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a5_game_start);
         initializeViews();
-
+        instructionalOverlay();
         setupAudioManagerForMuteButtons(muteGif, soundGif);
         setupButtons();
         startGame();
@@ -182,6 +185,23 @@ public class MainActivityGame extends SharedMainActivity {
         wildText = findViewById(textView_WildText);
     }
 
+    public void instructionalOverlay() {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(R.layout.instructional_overlay);
+        dialog.setCanceledOnTouchOutside(true);
+        //for dismissing anywhere you touch
+        View masterView = dialog.findViewById(R.id.root);
+        masterView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
 
     private void startGame() {
         Bundle extras = getIntent().getExtras();
