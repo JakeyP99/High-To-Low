@@ -16,7 +16,7 @@
         android:src="@drawable/shots"
         app:layout_constraintBottom_toTopOf="@+id/quickplay"
         app:layout_constraintEnd_toEndOf="parent"
-        app:loopCount="10000"
+        app:loopCount="5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/countingdowntext"
         app:layout_constraintVertical_bias="0.533" />
