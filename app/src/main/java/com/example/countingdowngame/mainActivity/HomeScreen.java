@@ -68,6 +68,7 @@ public class HomeScreen extends ButtonUtilsActivity {
             boolean regularSoundSelected = settingsStore.shouldPlayRegularSound();
             settingsStore.setShouldPlayRegularSound(!regularSoundSelected);
             buttonUtils.playSoundEffects();
+            buttonUtils.vibrateDevice();
         });
     }
 }

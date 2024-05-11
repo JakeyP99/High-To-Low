@@ -159,7 +159,7 @@ public class ButtonUtils {
 
     //-----------------------------------------------------Vibrate Functionality---------------------------------------------------//
 
-    private void vibrateDevice() {
+    public void vibrateDevice() {
         Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.VIBRATE) == PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
