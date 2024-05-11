@@ -6,6 +6,7 @@ import android.widget.Button;
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.AudioManager;
+import com.example.countingdowngame.utils.ButtonUtils;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import pl.droidsonroids.gif.GifImageView;
@@ -14,6 +15,8 @@ public class HomeScreen extends ButtonUtilsActivity {
     private GifImageView muteGif;
     private GifImageView soundGif;
     private GifImageView drinkGif;
+    private ButtonUtils buttonUtils;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -37,6 +40,7 @@ public class HomeScreen extends ButtonUtilsActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a1_home_screen);
+        buttonUtils = new ButtonUtils(this);
 
         initializeViews();
         setupAudioManagerForMuteButtons(muteGif, soundGif);
@@ -63,6 +67,7 @@ public class HomeScreen extends ButtonUtilsActivity {
             GeneralSettingsLocalStore settingsStore = GeneralSettingsLocalStore.fromContext(this);
             boolean regularSoundSelected = settingsStore.shouldPlayRegularSound();
             settingsStore.setShouldPlayRegularSound(!regularSoundSelected);
+            buttonUtils.playSoundEffects();
         });
     }
 }

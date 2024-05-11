@@ -22,7 +22,6 @@ import pl.droidsonroids.gif.GifImageView;
 
 public abstract class ButtonUtilsActivity extends AppCompatActivity {
 
-
     protected ButtonUtils btnUtils;
     protected Drawable buttonHighlightDrawable;
     protected Drawable outlineForButton;

@@ -290,13 +290,14 @@ public class MainActivityGame extends SharedMainActivity {
             btnClassAbility.setEnabled(false);
 
             generatedNumberTextView.setText(String.valueOf(currentNumber));
-            applyPulsingEffect(generatedNumberTextView);
+            animateTextView(generatedNumberTextView);
 
             Handler handler = new Handler();
             handler.postDelayed(() -> {
+                btnUtils.playBurpSound();
                 Game.getInstance().endGame(this);
                 onEnd.run();
-            }, 2000);
+            }, 3300);
         } else {
             generatedNumberTextView.setText(String.valueOf(currentNumber));
             Game.getInstance().nextPlayer();

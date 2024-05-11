@@ -2,8 +2,6 @@ package com.example.countingdowngame.mainActivity;
 
 import static android.service.controls.ControlsProviderService.TAG;
 
-import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
 import android.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +10,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.core.animation.Animator;
+import androidx.core.animation.AnimatorListenerAdapter;
+import androidx.core.animation.AnimatorSet;
+import androidx.core.animation.ObjectAnimator;
 import androidx.core.content.ContextCompat;
 
 import com.example.countingdowngame.R;
@@ -24,8 +27,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class SharedMainActivity extends ButtonUtilsActivity {
-
-    String characterClassTextLength;
 
     public static void setNameSizeBasedOnInt(TextView textView, String text) {
         int textSize;
@@ -106,18 +107,46 @@ public class SharedMainActivity extends ButtonUtilsActivity {
                 currentPlayer.isRemoved());
     }
 
-    void applyPulsingEffect(TextView textView) {
-        // Apply pulsing effect to textView
-        ObjectAnimator pulseAnimation = ObjectAnimator.ofPropertyValuesHolder(
-                textView,
-                PropertyValuesHolder.ofFloat(View.SCALE_X, 1.0f, 1.2f, 1.0f),
-                PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.0f, 1.2f, 1.0f)
-        );
-        pulseAnimation.setDuration(1000); // Adjust the pulsing duration (in milliseconds) as per your preference
-        pulseAnimation.setRepeatCount(ObjectAnimator.INFINITE);
-        pulseAnimation.setRepeatMode(ObjectAnimator.REVERSE);
-        pulseAnimation.start();
+    void animateTextView(final TextView textView) {
+        // Shake animation
+        ObjectAnimator shakeAnimator = ObjectAnimator.ofFloat(textView, "translationX", -5, 5);
+        shakeAnimator.setDuration(100);
+        shakeAnimator.setRepeatCount(7); // Adjust the repeat count as needed
+        shakeAnimator.setRepeatMode(ObjectAnimator.REVERSE);
+
+        // Expand animation
+        ObjectAnimator expandAnimatorX = ObjectAnimator.ofFloat(textView, "scaleX", 1f, 2f);
+        ObjectAnimator expandAnimatorY = ObjectAnimator.ofFloat(textView, "scaleY", 1f, 2f);
+        AnimatorSet expandAnimatorSet = new AnimatorSet();
+        expandAnimatorSet.playTogether(expandAnimatorX, expandAnimatorY);
+        expandAnimatorSet.setDuration(1300); // Adjust the duration as needed for slower expansion
+
+        // Pop animation
+        ObjectAnimator popAnimatorX = ObjectAnimator.ofFloat(textView, "scaleX", 2f, 0f);
+        ObjectAnimator popAnimatorY = ObjectAnimator.ofFloat(textView, "scaleY", 2f, 0f);
+        ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(textView, "alpha", 1f, 0f);
+        AnimatorSet popAnimatorSet = new AnimatorSet();
+        popAnimatorSet.playTogether(popAnimatorX, popAnimatorY, alphaAnimator);
+        popAnimatorSet.setDuration(1300); // Adjust the duration as needed
+        shakeAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(@NonNull Animator animation) {
+                super.onAnimationEnd(animation);
+                expandAnimatorSet.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(@NonNull Animator animation) {
+                        super.onAnimationEnd(animation);
+                        popAnimatorSet.start();
+                    }
+                });
+                expandAnimatorSet.start();
+            }
+        });
+
+        shakeAnimator.start();
     }
+
+
 
     public void disableAllButtons(Button[] buttons) {
         for (Button button : buttons) {

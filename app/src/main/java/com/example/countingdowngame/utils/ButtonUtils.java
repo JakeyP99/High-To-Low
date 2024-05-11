@@ -61,15 +61,21 @@ public class ButtonUtils {
         }
     }
 
+    public void playBurpSound() {
+        if (!isMuted()) {
+            Log.d("TAG", "playBurpSound: bop played");
+            burp[1].start();
+        }
+    }
 
-    private void playSoundEffects() {
+    public void playSoundEffects() {
         if (isMuted()) {
             return;
         }
 
-        boolean soundEffects = GeneralSettingsLocalStore.fromContext(mContext).shouldPlayRegularSound();
+        boolean soundEffectsChoice = GeneralSettingsLocalStore.fromContext(mContext).shouldPlayRegularSound();
 
-        if (soundEffects) {
+        if (soundEffectsChoice) {
             bop.start();
             Log.d("TAG", "playSoundEffects: Bop is playing");
         } else {
