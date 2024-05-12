@@ -13,6 +13,15 @@
         <item name="android:keepScreenOn">true</item>
     </style>
 
+    <style name="WalkthroughTheme" parent="Theme.AppCompat">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+
     <style name="SwitchBlueDarkStyle" parent="Widget.AppCompat.CompoundButton.Switch">
         <item name="android:thumbTint">@color/bluedark</item>
     </style>

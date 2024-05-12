@@ -1,17 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:backgroundTint="#32021457"
     android:id="@+id/root"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnDismiss"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Dismiss"
-        tools:layout_editor_absoluteY="19dp" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/coach_marks_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/img" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            tools:context=".mainActivity.MainActivityGame">
+
+            <Button
+                android:id="@+id/btnPlayerImageInstruction"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:background="@drawable/outlineforbutton"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.025" />
+
+            <TextView
+                android:id="@+id/textview_instructions_playerimage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="20sp"
+                android:fontFamily="@font/viga"
+                android:gravity="center"
+                android:text="player image text"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+                android:textColor="@color/bluedark"
+                android:textSize="30sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.95"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnPlayerImageInstruction"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <Button
+                android:id="@+id/btnNumberCounter"
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/outlineforbutton"
+                android:padding="20sp"
+                android:textColor="@color/bluedark"
+                android:textSize="30sp"
+                app:layout_constraintBottom_toTopOf="@+id/btnGenerateInstruction"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/textview_instructions_drinkcounter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="20sp"
+                android:fontFamily="@font/viga"
+                android:gravity="center"
+                android:text="drink counter text"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+                android:textColor="@color/bluedark"
+                android:textSize="30sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.95"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnNumberCounter"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <Button
+                android:id="@+id/btnWildCard"
+                android:layout_width="185dp"
+                android:layout_height="120dp"
+                android:background="@drawable/outlineforbutton"
+                android:fontFamily="@font/viga"
+                android:textAllCaps="false"
+                android:textColor="@color/bluedark"
+                android:textSize="25sp"
+                app:layout_constraintBottom_toTopOf="@+id/btnClassAbilityInstructions"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnGenerateInstruction"
+                app:layout_constraintVertical_bias="0.495" />
+
+            <TextView
+                android:id="@+id/btnClassAbilityInstructions"
+                android:visibility="invisible"
+                android:layout_width="320dp"
+                android:layout_height="81dp"
+                android:background="@drawable/outlineforbutton"
+                android:fontFamily="@font/viga"
+                android:textAllCaps="false"
+                android:textColor="@color/bluedark"
+                android:textSize="25sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.96" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/btnGenerateInstruction"
+                android:layout_width="310dp"
+                android:layout_height="302dp"
+                android:background="@drawable/outlineforbutton"
+                android:gravity="center"
+                android:textColor="@color/bluedark"
+                android:textSize="60sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.504"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.541" />
+
+
+            <TextView
+                android:id="@+id/textview_instructions_wildcard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="20sp"
+                android:fontFamily="@font/viga"
+                android:gravity="center"
+                android:text="wild card text"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+                android:textColor="@color/bluedark"
+                android:textSize="30sp"
+                app:layout_constraintBottom_toTopOf="@+id/btnWildCard"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textview_instructions_drinkcounter"
+                app:layout_constraintVertical_bias="0.853" />
+
+            <TextView
+                android:id="@+id/textview_instructions_generate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="20sp"
+                android:fontFamily="@font/viga"
+                android:gravity="center"
+                android:text="generate button text"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+                android:textColor="@color/bluedark"
+                android:textSize="25sp"
+                app:layout_constraintBottom_toBottomOf="@+id/btnNumberCounter"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.95"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+</LinearLayout>
+
+
+
