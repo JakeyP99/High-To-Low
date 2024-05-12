@@ -19,10 +19,8 @@ import static com.example.countingdowngame.mainActivity.PlayerChoice.CLASS_SURVI
 import static com.example.countingdowngame.mainActivity.PlayerChoice.CLASS_WITCH;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -31,7 +29,6 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -99,12 +96,13 @@ public class MainActivityGame extends SharedMainActivity {
     private GifImageView confettiImageViewBR;
     private GifImageView confettiImageViewTL;
     private GifImageView confettiImageViewTR;
+    private GifImageView infoGif;
     private GifImageView muteGif;
     private GifImageView soundGif;
     private ImageView playerImage;
     private TextView drinkNumberCounterTextView;
     private TextView nextPlayerText;
-    private TextView numberText;
+    private TextView numberCounterText;
     private TextView wildText;
 
     //-----------------------------------------------------Booleans---------------------------------------------------//
@@ -148,7 +146,6 @@ public class MainActivityGame extends SharedMainActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a5_game_start);
         initializeViews();
-        instructionalOverlay();
         setupAudioManagerForMuteButtons(muteGif, soundGif);
         setupButtons();
         startGame();
@@ -157,10 +154,11 @@ public class MainActivityGame extends SharedMainActivity {
     private void initializeViews() {
         muteGif = findViewById(R.id.muteGif);
         soundGif = findViewById(R.id.soundGif);
+        infoGif = findViewById(R.id.informationGif);
 
 
         playerImage = findViewById(R.id.playerImage);
-        numberText = findViewById(textView_NumberText);
+        numberCounterText = findViewById(textView_NumberText);
         drinkNumberCounterTextView = findViewById(textView_numberCounter);
         nextPlayerText = findViewById(textView_Number_Turn);
         btnWild = findViewById(R.id.btnWild);
@@ -183,24 +181,6 @@ public class MainActivityGame extends SharedMainActivity {
 
         shuffleHandler = new Handler();
         wildText = findViewById(textView_WildText);
-    }
-
-    public void instructionalOverlay() {
-
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.setContentView(R.layout.instructional_overlay);
-        dialog.setCanceledOnTouchOutside(true);
-        //for dismissing anywhere you touch
-        View masterView = dialog.findViewById(R.id.root);
-        masterView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
     }
 
     private void startGame() {
@@ -269,7 +249,7 @@ public class MainActivityGame extends SharedMainActivity {
             btnWild.setVisibility(View.INVISIBLE);
             btnGenerate.setVisibility(View.INVISIBLE);
             nextPlayerText.setVisibility(View.INVISIBLE);
-            numberText.setVisibility(View.INVISIBLE);
+            numberCounterText.setVisibility(View.INVISIBLE);
             isFirstTurn = false;
         });
 
@@ -277,6 +257,9 @@ public class MainActivityGame extends SharedMainActivity {
             Game.getInstance().endGame(this);
             gotoHomeScreen();
         });
+
+        infoGif.setOnClickListener(view -> showInstructionDialog());
+
     }
 
     private void characterClassDescriptions() {
@@ -435,8 +418,8 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void updateNumberText() {
         int currentNumber = Game.getInstance().getCurrentNumber();
-        numberText.setText(String.valueOf(currentNumber));
-        SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(currentNumber));
+        numberCounterText.setText(String.valueOf(currentNumber));
+        SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(currentNumber));
         SharedMainActivity.setNameSizeBasedOnInt(nextPlayerText, nextPlayerText.getText().toString());
     }
 
@@ -462,14 +445,14 @@ public class MainActivityGame extends SharedMainActivity {
             @Override
             public void run() {
                 int randomDigit = random.nextInt(originalNumber + 1);
-                numberText.setText(String.valueOf(randomDigit));
+                numberCounterText.setText(String.valueOf(randomDigit));
 
                 shuffleTime += shuffleInterval;
 
                 if (shuffleTime < shuffleDuration) {
                     shuffleHandler.postDelayed(this, shuffleInterval);
                 } else {
-                    numberText.setText(String.valueOf(randomDigit));
+                    numberCounterText.setText(String.valueOf(randomDigit));
                     int currentNumber = Game.getInstance().nextNumber();
                     Log.d(TAG, "NextNumber = " + currentNumber);
 
@@ -477,7 +460,7 @@ public class MainActivityGame extends SharedMainActivity {
                         handleSurvivorPassive(currentPlayer);
                     }
 
-                    renderCurrentNumber(currentNumber, () -> gotoGameEnd(), numberText);
+                    renderCurrentNumber(currentNumber, () -> gotoGameEnd(), numberCounterText);
 
                     if (currentNumber != 0) {
                         btnGenerate.setEnabled(true);
@@ -803,9 +786,9 @@ public class MainActivityGame extends SharedMainActivity {
                     btnClassAbility.setVisibility(View.VISIBLE);
                 } else {
                     Game.getInstance().setCurrentNumber(newNumber);
-                    SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(newNumber));
-                    numberText.setText(String.valueOf(newNumber));
-                    renderCurrentNumber(newNumber, this::gotoGameEnd, numberText);
+                    SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(newNumber));
+                    numberCounterText.setText(String.valueOf(newNumber));
+                    renderCurrentNumber(newNumber, this::gotoGameEnd, numberCounterText);
                     currentPlayer.setClassAbility(true);
                     updateNumber(newNumber);
 
@@ -1059,8 +1042,8 @@ public class MainActivityGame extends SharedMainActivity {
     private void updateNumber(int updatedNumber) {
         Game.getInstance().setCurrentNumber(updatedNumber);
         Game.getInstance().addUpdatedNumber(updatedNumber);
-        numberText.setText(String.valueOf(updatedNumber));
-        SharedMainActivity.setTextViewSizeBasedOnInt(numberText, String.valueOf(updatedNumber));
+        numberCounterText.setText(String.valueOf(updatedNumber));
+        SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(updatedNumber));
     }
 
     private void gainWildCards() {
@@ -1209,7 +1192,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         btnGenerate.setVisibility(View.VISIBLE);
         drinkNumberCounterTextView.setVisibility(View.VISIBLE);
-        numberText.setVisibility(View.VISIBLE);
+        numberCounterText.setVisibility(View.VISIBLE);
         nextPlayerText.setVisibility(View.VISIBLE);
 
         wildText.setVisibility(View.INVISIBLE);
@@ -1247,7 +1230,7 @@ public class MainActivityGame extends SharedMainActivity {
         btnWild.setVisibility(View.INVISIBLE);
         btnGenerate.setVisibility(View.INVISIBLE);
         nextPlayerText.setVisibility(View.INVISIBLE);
-        numberText.setVisibility(View.INVISIBLE);
+        numberCounterText.setVisibility(View.INVISIBLE);
         wildText.setText(string);
     }
 

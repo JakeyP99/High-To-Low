@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,12 +17,14 @@ import androidx.core.animation.AnimatorListenerAdapter;
 import androidx.core.animation.AnimatorSet;
 import androidx.core.animation.ObjectAnimator;
 import androidx.core.content.ContextCompat;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.Player;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -147,7 +150,6 @@ public class SharedMainActivity extends ButtonUtilsActivity {
     }
 
 
-
     public void disableAllButtons(Button[] buttons) {
         for (Button button : buttons) {
             button.setEnabled(false);
@@ -197,6 +199,64 @@ public class SharedMainActivity extends ButtonUtilsActivity {
 
     }
 
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Instructional overlay ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+    public void showInstructionDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
+        LayoutInflater inflater = getLayoutInflater();
+
+        View dialogView = inflater.inflate(R.layout.instructional_dialog, null);
+        ViewPager viewPager = dialogView.findViewById(R.id.viewpager);
+        ProgressBar progressBar = dialogView.findViewById(R.id.progress_bar);
+        Button btnNext = dialogView.findViewById(R.id.buttonNext);
+
+        // Generate instructional pages
+        List<Integer> layoutResIds = new ArrayList<>();
+        layoutResIds.add(R.layout.instructional_dialog_1); // Replace with your layout resource IDs
+        layoutResIds.add(R.layout.instructional_dialog_2); // Replace with your layout resource IDs
+        layoutResIds.add(R.layout.instructional_dialog_3); // Replace with your layout resource IDs
+        layoutResIds.add(R.layout.instructional_dialog_4); // Replace with your layout resource IDs
+
+        // Create adapter and set it to the ViewPager
+        InstructionalDialogPageAdapter adapter = new InstructionalDialogPageAdapter(layoutResIds);
+        viewPager.setAdapter(adapter);
+
+        // Setup progress bar
+        setupProgress(viewPager, progressBar, layoutResIds);
+
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+        setupButtonControls(btnNext, viewPager, dialog);
+        dialog.show();
+    }
+
+    public void setupProgress(ViewPager viewPager, ProgressBar progressBar, List<Integer> layoutResIds) {
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                progressBar.setMax(layoutResIds.size());
+                progressBar.setProgress(position + 1);
+            }
+        });
+        progressBar.setMax(layoutResIds.size());
+        progressBar.setProgress(1);
+    }
+
+    public void setupButtonControls(Button btnNext, ViewPager viewPager, AlertDialog dialog) {
+        btnUtils.setButtonWithoutEffects(btnNext, () -> {
+            int currentItem = viewPager.getCurrentItem();
+            if (currentItem < Objects.requireNonNull(viewPager.getAdapter()).getCount() - 1) {
+                viewPager.setCurrentItem(currentItem + 1, true);
+            } else {
+                dialog.dismiss();
+            }
+        });
+    }
+
+
+
+
     public static class TextSizeCalculator {
         public static int calculateTextSizeBasedOnCharacterCount(String text) {
             int textSize;
@@ -213,5 +273,6 @@ public class SharedMainActivity extends ButtonUtilsActivity {
             return textSize;
         }
     }
+
 
 }
