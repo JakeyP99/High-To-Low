@@ -24,7 +24,7 @@
             <Button
                 android:id="@+id/btnGenerate"
                 android:layout_width="180dp"
-                android:layout_height="140dp"
+                android:layout_height="110dp"
                 android:background="@drawable/outlineforbutton"
                 android:contentDescription="@string/placeholder_text"
                 android:text="1523"
@@ -51,7 +51,7 @@
                 android:id="@+id/instruction_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="This button changes the number on screen randomly between 0 and your chosen number. Landing on 0 means you lose."
+                android:text="The center button changes the number on screen randomly between 0 and your chosen number. Landing on 0 means you lose."
                 android:textAlignment="center"
                 android:textColor="@color/bluedark"
                 android:textSize="28sp"
@@ -60,7 +60,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
-                app:layout_constraintVertical_bias="0.2" />
+                app:layout_constraintVertical_bias="0.32" />
 
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewpager"
