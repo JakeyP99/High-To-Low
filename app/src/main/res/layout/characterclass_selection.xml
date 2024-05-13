@@ -18,7 +18,7 @@
         android:id="@+id/progress"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:indeterminate="false"
         android:max="100"
         android:padding="20sp"
