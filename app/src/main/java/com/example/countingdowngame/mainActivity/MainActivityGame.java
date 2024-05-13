@@ -1009,7 +1009,7 @@ public class MainActivityGame extends SharedMainActivity {
                 gainWildCards();
                 break;
             case "Lose a couple wildcards :( oh also drink 3 lol!":
-                loseWildCards();
+                player.loseWildCards(2);
                 break;
             default:
                 break;
@@ -1048,10 +1048,6 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void gainWildCards() {
         Game.getInstance().getCurrentPlayer().gainWildCards(3);
-    }
-
-    private void loseWildCards() {
-        Game.getInstance().getCurrentPlayer().loseWildCards(2);
     }
 
     //-----------------------------------------------------Quiz Multi-Choice---------------------------------------------------//
