@@ -844,9 +844,6 @@ public class MainActivityGame extends SharedMainActivity {
         Random random = new Random();
 
         if ("Quiz Magician".equals(currentPlayer.getClassChoice()) && currentPlayer.getJustUsedClassAbility()) {
-            SettingsMenu.toggleQuizWildcard(quizAdapter, true);
-            Log.d(TAG, "wildCardActivate: quiz was toggled on");
-
             selectedType = quizProbabilities;
             wildCardType = "Quiz";
             btnClassAbility.setVisibility(View.INVISIBLE);
@@ -911,6 +908,7 @@ public class MainActivityGame extends SharedMainActivity {
             }
         }
 
+
         if (selectedType == quizProbabilities) {
             if (GeneralSettingsLocalStore.fromContext(this).isMultiChoice()) {
                 btnBackWild.setVisibility(View.INVISIBLE);
@@ -971,8 +969,10 @@ public class MainActivityGame extends SharedMainActivity {
             if (selectedCard.hasAnswer()) {
                 if ("Quiz Magician".equals(currentPlayer.getClassChoice())) {
                     setMultiChoiceRandomizedAnswersForQuizMagician(selectedCard);
+                    btnAnswer.setVisibility(View.INVISIBLE);
                 } else if (GeneralSettingsLocalStore.fromContext(this).isMultiChoice()) {
                     setMultiChoiceRandomizedAnswers(selectedCard);
+                    btnAnswer.setVisibility(View.INVISIBLE);
                 } else {
                     btnAnswer.setVisibility(View.VISIBLE);
                 }
@@ -1189,10 +1189,6 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void wildCardContinue() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        currentPlayer.useSkip();
-        WildCardProperties[] emptyProbabilitiesArray = new WildCardProperties[0];
-        QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.QUIZ);
-
         if ("Quiz Magician".equals(currentPlayer.getClassChoice()) && currentPlayer.getJustUsedClassAbility()) {
             wildCardActivate(currentPlayer);
             currentPlayer.gainWildCards(1);
@@ -1204,8 +1200,8 @@ public class MainActivityGame extends SharedMainActivity {
             numberCounterText.setVisibility(View.INVISIBLE);
             currentPlayer.setUsedClassAbility(true);
             currentPlayer.setJustUsedClassAbility(false);
-            SettingsMenu.toggleQuizWildcard(quizAdapter, false);
         } else {
+            currentPlayer.useSkip();
 
             btnGenerate.setVisibility(View.VISIBLE);
             drinkNumberCounterTextView.setVisibility(View.VISIBLE);
