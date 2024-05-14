@@ -279,7 +279,7 @@ public class MainActivityGame extends SharedMainActivity {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         updateClassAbilityButton(currentPlayer);
         updateTurnCounter();
-        updateSurvivorAbilities(currentPlayer);
+        updateAbilitiesAfterThreeTurns(currentPlayer);
         updatePlayerInfo(currentPlayer);
         updateNumberText();
         logPlayerInformation(currentPlayer);
@@ -556,17 +556,6 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void handleGoblinClass(Player currentPlayer) {
-        Game gameInstance = Game.getInstance();
-        List<Player> players = gameInstance.getPlayers();
-        showDialog("Quiz Magician's Active: \n\n" + "Everyone but " + currentPlayer.getName() + " loses a wildcard!");
-
-        for (Player player : players) {
-            if (player != currentPlayer) {
-                player.loseWildCards(1);
-                currentPlayer.setUsedClassAbility(true);
-                btnClassAbility.setVisibility(View.INVISIBLE);
-            }
-        }
     }
 
     private void handleSurvivorClass(Player currentPlayer) {
@@ -579,8 +568,8 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    private void updateSurvivorAbilities(Player currentPlayer) {
-        if ("Survivor".equals(currentPlayer.getClassChoice()) && currentPlayer.getUsedClassAbility()) {
+    private void updateAbilitiesAfterThreeTurns(Player currentPlayer) {
+        if ("Survivor".equals(currentPlayer.getClassChoice()) || "Witch".equals(currentPlayer.getClassChoice()) && currentPlayer.getUsedClassAbility()) {
             currentPlayer.incrementSpecificTurnCounter();
             if (currentPlayer.getSpecificActiveTurnCounter() == 3) {
                 currentPlayer.setUsedClassAbility(false);
