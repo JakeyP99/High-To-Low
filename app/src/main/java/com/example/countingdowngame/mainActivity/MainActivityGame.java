@@ -11,6 +11,7 @@ import static com.example.countingdowngame.R.id.textView_Number_Turn;
 import static com.example.countingdowngame.R.id.textView_WildText;
 import static com.example.countingdowngame.R.id.textView_numberCounter;
 import static com.example.countingdowngame.mainActivity.PlayerChoice.CLASS_ARCHER;
+import static com.example.countingdowngame.mainActivity.PlayerChoice.CLASS_GOBLIN;
 import static com.example.countingdowngame.mainActivity.PlayerChoice.CLASS_JIM;
 import static com.example.countingdowngame.mainActivity.PlayerChoice.CLASS_QUIZ_MAGICIAN;
 import static com.example.countingdowngame.mainActivity.PlayerChoice.CLASS_SCIENTIST;
@@ -493,6 +494,8 @@ public class MainActivityGame extends SharedMainActivity {
                 return CharacterClassDescriptions.survivorActiveDescription;
             case CLASS_JIM:
                 return CharacterClassDescriptions.angryJimActiveDescription;
+            case CLASS_GOBLIN:
+                return CharacterClassDescriptions.goblinActiveDescription;
             default:
                 return "I love you cutie pie hehe. You don't have a class to show any description for.";
         }
@@ -615,6 +618,8 @@ public class MainActivityGame extends SharedMainActivity {
                 return CharacterClassDescriptions.survivorPassiveDescription;
             case CLASS_JIM:
                 return CharacterClassDescriptions.angryJimPassiveDescription;
+            case CLASS_GOBLIN:
+                return CharacterClassDescriptions.goblinPassiveDescription;
             default:
                 return "";
         }
