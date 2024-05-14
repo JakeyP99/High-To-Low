@@ -40,7 +40,7 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
         if (characterClass.getClassName().equals("No Class")) {
             holder.activeAbilityText.setVisibility(View.GONE);
             holder.passiveAbilityText.setVisibility(View.GONE);
-        } else if (characterClass.getClassName().equals("Jim")) {
+        } else if (characterClass.getClassName().equals("Angry Jim")) {
             holder.activeAbilityText.setVisibility(View.GONE);
             holder.activeAbilityTextView.setVisibility(View.GONE);
         } else {

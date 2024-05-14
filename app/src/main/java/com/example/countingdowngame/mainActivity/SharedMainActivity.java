@@ -105,7 +105,7 @@ public class SharedMainActivity extends ButtonUtilsActivity {
                 " is a " + currentPlayer.getClassChoice() +
                 " with " + currentPlayer.getWildCardAmount() +
                 " Wildcards " +
-                "and " + currentPlayer.usedClassAbility() +
+                "and " + currentPlayer.getUsedClassAbility() +
                 " is the class ability and are they removed ?" +
                 currentPlayer.isRemoved());
     }
@@ -181,7 +181,7 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         TextView activeTextview = dialogView.findViewById(R.id.active_textview);
 
 
-        if (Objects.equals(currentPlayerClassChoice, "Jim")) {
+        if (Objects.equals(currentPlayerClassChoice, "Angry Jim")) {
             activeTextview.setVisibility(View.GONE);
             activeAbilityDescriptionTextView.setVisibility(View.GONE);
         }

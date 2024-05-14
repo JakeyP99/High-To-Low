@@ -2,7 +2,7 @@ package com.example.countingdowngame.mainActivity;
 
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.archerActiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.archerPassiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.jimPassiveDescription;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.angryJimPassiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.noClassDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.quizMagicianActiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.quizMagicianPassiveDescription;
@@ -68,7 +68,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     public static final String CLASS_WITCH = "Witch";
     public static final String CLASS_SCIENTIST = "Scientist";
     public static final String CLASS_SOLDIER = "Soldier";
-    public static final String CLASS_JIM = "Jim";
+    public static final String CLASS_JIM = "Angry Jim";
     public static final String CLASS_QUIZ_MAGICIAN = "Quiz Magician";
     public static final String CLASS_SURVIVOR = "Survivor";
     private static final String CLASS_NONE = "No Class";
@@ -195,7 +195,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         characterClasses.add(new CharacterClassStore(4, CLASS_SOLDIER, soldierActiveDescription, soldierPassiveDescription, R.drawable.helmet));
         characterClasses.add(new CharacterClassStore(5, CLASS_QUIZ_MAGICIAN, quizMagicianActiveDescription, quizMagicianPassiveDescription, R.drawable.books));
         characterClasses.add(new CharacterClassStore(6, CLASS_SURVIVOR, survivorActiveDescription, survivorPassiveDescription, R.drawable.bandaids));
-        characterClasses.add(new CharacterClassStore(7, CLASS_JIM, null, jimPassiveDescription, R.drawable.jim));
+        characterClasses.add(new CharacterClassStore(7, CLASS_JIM, null, angryJimPassiveDescription, R.drawable.angry_jim));
         characterClasses.add(new CharacterClassStore(8, CLASS_NONE, noClassDescription, null, R.drawable.noclass));
         return characterClasses;
     }

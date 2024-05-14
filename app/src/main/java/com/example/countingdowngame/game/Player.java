@@ -18,6 +18,8 @@ public class Player implements Serializable {
     private boolean selected;
     private final int turnCounter;
     private boolean usedClassAbility;
+    private boolean justUsedClassAbility;
+
     private boolean usedWildCard;
     private boolean removed;
     private int specificActiveTurnCounter; // Add a counter for the active turns of the Survivor class
@@ -36,6 +38,7 @@ public class Player implements Serializable {
         this.classChoice = classChoice;
         this.selected = false;
         this.usedClassAbility = false;
+        this.justUsedClassAbility = false;
         this.usedWildCard = false;
         this.removed = false;
         resetWildCardAmount(context);
@@ -65,8 +68,20 @@ public class Player implements Serializable {
         this.removed = removed;
     }
 
-    public boolean usedClassAbility() {
+    public boolean getUsedClassAbility() {
         return usedClassAbility;
+    }
+
+    public void setUsedClassAbility(boolean classAbility) {
+        this.usedClassAbility = classAbility;
+    }
+
+    public void setJustUsedClassAbility(boolean justUsedClassAbility) {
+        this.justUsedClassAbility = justUsedClassAbility;
+    }
+
+    public boolean getJustUsedClassAbility() {
+        return justUsedClassAbility;
     }
 
     public void setJustUsedWildCard(boolean used) {
@@ -77,9 +92,6 @@ public class Player implements Serializable {
         return this.usedWildCard;
     }
 
-    public void setClassAbility(boolean classAbility) {
-        this.usedClassAbility = classAbility;
-    }
 
     public void setInRepeatingTurn() {
     }
