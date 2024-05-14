@@ -6,7 +6,7 @@ public class CharacterClassDescriptions {
     public static final String witchActiveDescription = "Once per game you can skip your turn.";
     public static final String scientistActiveDescription = "You can change the current number to be whatever you want. You have to repeat your turn!";
     public static final String soldierActiveDescription = "If the number less than or equal to 10, add 4 drinks to the counter, but you must generate the number twice.";
-    public static final String quizMagicianActiveDescription = "The next wildcard will be two quiz questions instead of one, and the consequence of winning and losing are doubled.";
+    public static final String quizMagicianActiveDescription = "The next wildcard will be two quiz questions instead of one.";
     public static final String survivorActiveDescription = "Half the current number, and continue your turn. Ability resets after three turns.";
     public static final String angryJimActiveDescription = "You can activate this ability whenever you are handed drinks (other than the ending game drinks). You can hand those drinks out to someone else.";
     public static final String noClassDescription = "Choose this class if you don't want to have any abilities.";

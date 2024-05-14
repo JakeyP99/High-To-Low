@@ -19,6 +19,8 @@ import android.widget.EditText;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.countingdowngame.R;
+import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
+import com.example.countingdowngame.game.Player;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.example.countingdowngame.wildCards.WildCardProperties;
@@ -28,6 +30,8 @@ import com.example.countingdowngame.wildCards.wildCardTypes.QuizWildCardsAdapter
 import com.example.countingdowngame.wildCards.wildCardTypes.TaskWildCardsAdapter;
 import com.example.countingdowngame.wildCards.wildCardTypes.TruthWildCardsAdapter;
 import com.example.countingdowngame.wildCards.wildCardTypes.WildCardsAdapter;
+
+import java.util.List;
 
 import io.github.muddz.styleabletoast.StyleableToast;
 
@@ -57,6 +61,24 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
     //-----------------------------------------------------On Pause---------------------------------------------------//
 
 
+    public SettingsMenu() {
+        // Default constructor with no arguments
+    }
+
+    public static void toggleQuizWildcard(WildCardsAdapter adapter, boolean isSelected) {
+        if (adapter != null) {
+            WildCardProperties[] wildCards = adapter.getWildCards();
+            for (WildCardProperties wildcard : wildCards) {
+                wildcard.setEnabled(isSelected);
+            }
+            adapter.setWildCards(wildCards);
+            adapter.notifyDataSetChanged();
+            adapter.saveWildCardProbabilitiesToStorage(wildCards);
+        } else {
+            Log.e("Adapter", "Adapter is null");
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -72,9 +94,9 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         savePreferences();
     }
 
-    public SettingsMenu() {
-        // Default constructor with no arguments
-    }
+
+    //-----------------------------------------------------On Create---------------------------------------------------//
+
     @Override
     public void onBackPressed() {
         String wildCardAmountInput = wildcardPerPlayerEditText.getText().toString().trim();
@@ -101,10 +123,7 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         super.onBackPressed();
     }
 
-
-
-    //-----------------------------------------------------On Create---------------------------------------------------//
-
+    //-----------------------------------------------------Initialize Views---------------------------------------------------//
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,9 +136,9 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
 
     }
 
-    //-----------------------------------------------------Initialize Views---------------------------------------------------//
-
     private void initializeViews() {
+        List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
+
         // Initialize views
         buttonHighlightDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.buttonhighlight, null);
         outlineForButton = ResourcesCompat.getDrawable(getResources(), R.drawable.outlineforbutton, null);
@@ -144,6 +163,23 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         // Set up TextWatchers for EditTexts
         setupTextWatcher(wildcardPerPlayerEditText, 3, this::isValidWildCardAmount);
         setupTextWatcher(totalDrinksEditText, 2, this::isValidTotalDrinkAmount);
+        button_quiz_toggle.setSelected(true);
+
+
+        // Check if "Quiz Magician" player is selected
+        boolean isQuizMagicianSelected = false;
+        for (Player player : playerList) {
+            if ("Quiz Magician".equals(player.getClassChoice())) {
+                isQuizMagicianSelected = true;
+                break;
+            }
+        }
+
+        if (isQuizMagicianSelected) {
+            button_quiz_toggle.setSelected(true);
+            Log.d(TAG, "initializeViews: Quiz Magician is selected: " + button_quiz_toggle.isSelected());
+        }
+
     }
 
     private void setupTextWatcher(EditText editText, int maxLength, Runnable validationAction) {
@@ -151,9 +187,11 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
+
             @Override
             public void afterTextChanged(Editable s) {
                 validateInput(editText, maxLength);
@@ -187,7 +225,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         }
     }
 
-
     private void isValidTotalDrinkAmount() {
         isValidInput(
                 totalDrinksEditText.getText().toString().trim(),
@@ -206,7 +243,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         );
     }
 
-
     @Override
     public void onClick(View view) {
         int viewId = view.getId(); // Store the view ID in a variable
@@ -223,8 +259,23 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
                 break;
 
             case R.id.button_quiz_toggle:
-                boolean isQuizSelected = !button_quiz_toggle.isSelected();
-                toggleWildCardButton(button_quiz_toggle, quizWildCardsAdapter, isQuizSelected);
+                // Check if Quiz Magician is already selected
+                boolean isQuizMagicianSelected = false;
+                List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
+                for (Player player : playerList) {
+                    if ("Quiz Magician".equals(player.getClassChoice())) {
+                        isQuizMagicianSelected = true;
+                        break;
+                    }
+                }
+                if (isQuizMagicianSelected) {
+                    // Quiz Magician is already selected, show toast and don't toggle off
+                    StyleableToast.makeText(getApplicationContext(), "Someone has selected Quiz Magician, Quizzes need to be toggled on.", R.style.newToast).show();
+                } else {
+                    // No Quiz Magician selected yet, proceed with toggling
+                    boolean isQuizSelected = !button_quiz_toggle.isSelected();
+                    toggleWildCardButton(button_quiz_toggle, quizWildCardsAdapter, isQuizSelected);
+                }
                 break;
 
             case R.id.button_task_toggle:
@@ -247,7 +298,7 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
     }
 
 
-
+    //-----------------------------------------------------Wild Card Choices---------------------------------------------------//
 
     private void setButtonListeners() {
         button_multiChoice.setOnClickListener(this);
@@ -293,10 +344,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         });
     }
 
-
-    //-----------------------------------------------------Wild Card Choices---------------------------------------------------//
-
-
     private void toggleMultipleButtons(Button selectedButton, Button unselectedButton, boolean isSelected) {
         selectedButton.setSelected(isSelected);
         selectedButton.setBackground(isSelected ? buttonHighlightDrawable : outlineForButton);
@@ -308,7 +355,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         selectedButton.setSelected(isSelected);
         selectedButton.setBackground(isSelected ? buttonHighlightDrawable : outlineForButton);
     }
-
 
     private void toggleWildCardButton(Button button, WildCardsAdapter adapter, boolean isSelected) {
         button.setSelected(isSelected);
@@ -364,14 +410,28 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         boolean isMultiChoiceSelected = GeneralSettingsLocalStore.fromContext(this).isMultiChoice();
         toggleMultipleButtons(button_multiChoice, button_nonMultiChoice, isMultiChoiceSelected);
 
+        // Check if "Quiz Magician" player is selected
+        boolean isQuizMagicianSelected = false;
+        List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
+        for (Player player : playerList) {
+            if ("Quiz Magician".equals(player.getClassChoice())) {
+                isQuizMagicianSelected = true;
+                break;
+            }
+        }
+
+        // Set quiz activation status based on whether "Quiz Magician" is selected
+        boolean isQuizActivated = isQuizMagicianSelected;
+        GeneralSettingsLocalStore.fromContext(this).setIsQuizActivated(isQuizActivated);
+
+        // Set quiz toggle button based on whether "Quiz Magician" is selected
+        button_quiz_toggle.setSelected(isQuizMagicianSelected);
 
         // Load activation status for each wild card type and toggle buttons accordingly
-
-        toggleWildCardButton(button_quiz_toggle, quizWildCardsAdapter, GeneralSettingsLocalStore.fromContext(this).isQuizActivated());
+        toggleWildCardButton(button_quiz_toggle, quizWildCardsAdapter, isQuizActivated);
         toggleWildCardButton(button_task_toggle, taskWildCardsAdapter, GeneralSettingsLocalStore.fromContext(this).isTaskActivated());
         toggleWildCardButton(button_truth_toggle, truthWildCardsAdapter, GeneralSettingsLocalStore.fromContext(this).isTruthActivated());
         toggleWildCardButton(button_extras_toggle, extrasWildCardsAdapter, GeneralSettingsLocalStore.fromContext(this).isExtrasActivated());
-
     }
 
 
