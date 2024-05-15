@@ -25,7 +25,8 @@ public class Player implements Serializable {
 
     private boolean usedWildCard;
     private boolean removed;
-    private int specificActiveTurnCounter; // Add a counter for the active turns of the Survivor class
+    private int abilityTurnCounter; // Add a counter for the active turns of the Survivor class
+    private int angryJimTurnCounter;
 
 
     //-----------------------------------------------------Set Game---------------------------------------------------//
@@ -45,19 +46,20 @@ public class Player implements Serializable {
         this.usedWildCard = false;
         this.removed = false;
         resetWildCardAmount(context);
-        this.specificActiveTurnCounter = 0;
+        this.abilityTurnCounter = 0;
     }
 
     //-----------------------------------------------------Survivor Ability---------------------------------------------------//
 
-    public void incrementSpecificTurnCounter() {
-        specificActiveTurnCounter++;
+    public void incrementAbilityTurnCounter() {
+        abilityTurnCounter++;
     }
     public void resetSpecificTurnCounter() {
-        specificActiveTurnCounter = 0;
+        abilityTurnCounter = 0;
     }
-    public int getSpecificActiveTurnCounter() {
-        return specificActiveTurnCounter;
+
+    public int getAbilityTurnCounter() {
+        return abilityTurnCounter;
     }
 
     //--------------------------------------------------------------------------------------------------------//
@@ -125,6 +127,22 @@ public class Player implements Serializable {
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
+
+
+    public void incrementAngryJimTurnCounter() {
+        angryJimTurnCounter++;
+    }
+
+    // Reset Angry Jim's turn counter
+    public void resetAngryJimTurnCounter() {
+        angryJimTurnCounter = 0;
+    }
+
+    // Get Angry Jim's turn counter
+    public int getAngryJimTurnCounter() {
+        return angryJimTurnCounter;
+    }
+
 
     //-----------------------------------------------------Wild Card/Skip---------------------------------------------------//
 

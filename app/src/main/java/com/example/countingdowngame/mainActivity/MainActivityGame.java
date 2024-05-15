@@ -10,9 +10,9 @@ import static com.example.countingdowngame.R.id.textView_NumberText;
 import static com.example.countingdowngame.R.id.textView_Number_Turn;
 import static com.example.countingdowngame.R.id.textView_WildText;
 import static com.example.countingdowngame.R.id.textView_numberCounter;
+import static com.example.countingdowngame.mainActivity.PlayerChoice.CLASS_ANGRY_JIM;
 import static com.example.countingdowngame.mainActivity.PlayerChoice.CLASS_ARCHER;
 import static com.example.countingdowngame.mainActivity.PlayerChoice.CLASS_GOBLIN;
-import static com.example.countingdowngame.mainActivity.PlayerChoice.CLASS_JIM;
 import static com.example.countingdowngame.mainActivity.PlayerChoice.CLASS_QUIZ_MAGICIAN;
 import static com.example.countingdowngame.mainActivity.PlayerChoice.CLASS_SCIENTIST;
 import static com.example.countingdowngame.mainActivity.PlayerChoice.CLASS_SOLDIER;
@@ -497,7 +497,7 @@ public class MainActivityGame extends SharedMainActivity {
                 return CharacterClassDescriptions.quizMagicianActiveDescription;
             case CLASS_SURVIVOR:
                 return CharacterClassDescriptions.survivorActiveDescription;
-            case CLASS_JIM:
+            case CLASS_ANGRY_JIM:
                 return CharacterClassDescriptions.angryJimActiveDescription;
             case CLASS_GOBLIN:
                 return CharacterClassDescriptions.goblinActiveDescription;
@@ -531,6 +531,9 @@ public class MainActivityGame extends SharedMainActivity {
                 break;
             case "Goblin":
                 handleGoblinClass(currentPlayer);
+                break;
+            case "Angry Jim":
+                handleAngryJimClass(currentPlayer);
                 break;
             default:
                 break;
@@ -577,6 +580,11 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
+    private void handleAngryJimClass(Player currentPlayer) {
+        currentPlayer.gainWildCards(1);
+        btnClassAbility.setVisibility(View.INVISIBLE);
+    }
+
 
     private void handleSurvivorClass(Player currentPlayer) {
         if (Game.getInstance().getCurrentNumber() > 1) {
@@ -593,9 +601,9 @@ public class MainActivityGame extends SharedMainActivity {
                 "Witch".equals(currentPlayer.getClassChoice()) ||
                 "Goblin".equals(currentPlayer.getClassChoice())) &&
                 currentPlayer.getUsedClassAbility()) {
-            currentPlayer.incrementSpecificTurnCounter();
-            Log.d(TAG, "increment counter: " + currentPlayer.getSpecificActiveTurnCounter());
-            if (currentPlayer.getSpecificActiveTurnCounter() == 3) {
+            currentPlayer.incrementAbilityTurnCounter();
+            Log.d(TAG, "increment counter: " + currentPlayer.getAbilityTurnCounter());
+            if (currentPlayer.getAbilityTurnCounter() == 3) {
                 Log.d(TAG, "updateAbilitiesAfterThreeTurns: " + currentPlayer.getName());
                 currentPlayer.setUsedClassAbility(false);
                 currentPlayer.resetSpecificTurnCounter();
@@ -639,7 +647,7 @@ public class MainActivityGame extends SharedMainActivity {
                 return CharacterClassDescriptions.quizMagicianPassiveDescription;
             case CLASS_SURVIVOR:
                 return CharacterClassDescriptions.survivorPassiveDescription;
-            case CLASS_JIM:
+            case CLASS_ANGRY_JIM:
                 return CharacterClassDescriptions.angryJimPassiveDescription;
             case CLASS_GOBLIN:
                 return CharacterClassDescriptions.goblinPassiveDescription;
@@ -653,93 +661,134 @@ public class MainActivityGame extends SharedMainActivity {
         if (currentPlayer == null) {
             return;
         }
-        handleSoldierPassive(currentPlayer);
-        handleWitchPassive(currentPlayer);
-        handleScientistPassive(currentPlayer);
-        handleAngryJimPassive(currentPlayer);
-        handleArcherPassive(currentPlayer);
-        handleGoblinPassive(currentPlayer);
+
+        // Check the class choice of the current player
+        String classChoice = currentPlayer.getClassChoice();
+
+        // Handle passive effects based on the player's class choice
+        if ("Soldier".equals(classChoice)) {
+            handleSoldierPassive(currentPlayer);
+        } else if ("Witch".equals(classChoice)) {
+            handleWitchPassive(currentPlayer);
+        } else if ("Scientist".equals(classChoice)) {
+            handleScientistPassive(currentPlayer);
+        } else if ("Angry Jim".equals(classChoice)) {
+            handleAngryJimPassive(currentPlayer);
+        } else if ("Archer".equals(classChoice)) {
+            handleArcherPassive(currentPlayer);
+        } else if ("Goblin".equals(classChoice)) {
+            handleGoblinPassive(currentPlayer);
+        }
     }
+
 
     private void handleSoldierPassive(Player currentPlayer) {
-        if ("Soldier".equals(currentPlayer.getClassChoice())) {
-            new Handler().postDelayed(() -> {
-                if (!currentPlayer.isRemoved()) {
-                    removeCharacterFromGame();
-                } else {
-                    currentPlayer.useSkip();
-                }
-            }, 1);
-        }
+        new Handler().postDelayed(() -> {
+            if (!currentPlayer.isRemoved()) {
+                removeCharacterFromGame();
+            } else {
+                currentPlayer.useSkip();
+            }
+        }, 1);
     }
+
 
     private void handleWitchPassive(Player currentPlayer) {
-        if ("Witch".equals(currentPlayer.getClassChoice()) && !isFirstTurn) {
-            if (Game.getInstance().getCurrentNumber() % 2 == 0) {
-                showDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " hand out two drinks.");
-            } else {
-                showDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " take two drinks.");
-            }
+        // Check if the current player is Angry Jim
+        if (!"Angry Jim".equals(currentPlayer.getClassChoice())) {
+            // Increment the turn counter for non-Angry Jim players
+            currentPlayer.incrementAbilityTurnCounter();
+        }
+        if (Game.getInstance().getCurrentNumber() % 2 == 0) {
+            showDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " hand out two drinks.");
+        } else {
+            showDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " take two drinks.");
         }
     }
 
-    private void handleScientistPassive(Player currentPlayer) {
-        if ("Scientist".equals(currentPlayer.getClassChoice())) {
-            Handler handler = new Handler();
-            int delayMillis = 1;
-            int chance = new Random().nextInt(100);
 
-            handler.postDelayed(() -> {
-                if (chance < 10) {
-                    showDialog("Scientist's Passive: \n\n" + currentPlayer.getName() + " is a scientist and their turn was skipped. ");
-                    currentPlayer.useSkip();
-                }
-            }, delayMillis);
+    private void handleScientistPassive(Player currentPlayer) {
+        // Check if the current player is Angry Jim
+        if (!"Angry Jim".equals(currentPlayer.getClassChoice())) {
+            // Increment the turn counter for non-Angry Jim players
+            currentPlayer.incrementAbilityTurnCounter();
         }
+        Handler handler = new Handler();
+        int delayMillis = 1;
+        int chance = new Random().nextInt(100);
+
+        handler.postDelayed(() -> {
+            if (chance < 10) {
+                showDialog("Scientist's Passive: \n\n" + currentPlayer.getName() + " is a scientist and their turn was skipped. ");
+                currentPlayer.useSkip();
+            }
+        }, delayMillis);
     }
 
     private void handleAngryJimPassive(Player currentPlayer) {
-        if ("Angry Jim".equals(currentPlayer.getClassChoice())) {
-            currentPlayer.incrementSpecificTurnCounter();
-            if (currentPlayer.getSpecificActiveTurnCounter() == 3) {
-                currentPlayer.gainWildCards(1);
-            }
+        // Increment Angry Jim's specific turn counter
+
+        // Check if the current number is below 50
+        if (Game.getInstance().getCurrentNumber() < 50 && currentPlayer.getAngryJimTurnCounter() != 1) {
+            // Execute each player's passive abilities
+            handleWitchPassive(currentPlayer);
+            handleScientistPassive(currentPlayer);
+            handleArcherPassive(currentPlayer);
+            handleGoblinPassive(currentPlayer);
+            handleGoblinPassive(currentPlayer);
+            Game.getInstance().activateRepeatingTurn(currentPlayer, 1);
+
+            currentPlayer.incrementAbilityTurnCounter();
+            currentPlayer.incrementAngryJimTurnCounter();
+
+            Log.d(TAG, "handleAngryJimPassive: is on");
+        } else if (currentPlayer.getAngryJimTurnCounter() == 1) {
+            currentPlayer.resetAngryJimTurnCounter();
         }
     }
 
+
     private void handleGoblinPassive(Player currentPlayer) {
-        if ("Goblin".equals(currentPlayer.getClassChoice())) {
-            if (currentPlayer.getSpecificActiveTurnCounter() == 3) {
-                currentPlayer.gainWildCards(1);
-            }
+        // Check if the current player is Angry Jim
+        if (!"Angry Jim".equals(currentPlayer.getClassChoice())) {
+            // Increment the turn counter for non-Angry Jim players
+            currentPlayer.incrementAbilityTurnCounter();
+        }
+        if (currentPlayer.getAbilityTurnCounter() == 3) {
+            currentPlayer.gainWildCards(1);
         }
     }
 
     private void handleArcherPassive(Player currentPlayer) {
-        if ("Archer".equals(currentPlayer.getClassChoice())) {
-            currentPlayer.incrementSpecificTurnCounter();
+        // Check if the current player is Angry Jim
+        if (!"Angry Jim".equals(currentPlayer.getClassChoice())) {
+            // Increment the turn counter for non-Angry Jim players
+            currentPlayer.incrementAbilityTurnCounter();
+        }
 
-            if (currentPlayer.getSpecificActiveTurnCounter() == 4) {
-                currentPlayer.resetSpecificTurnCounter();
-                Log.d("ArcherClass", "Passive ability triggered");
+        if (currentPlayer.getAbilityTurnCounter() == 3) {
+            currentPlayer.resetSpecificTurnCounter();
+            Log.d("ArcherClass", "Passive ability triggered");
 
-                int chance = new Random().nextInt(100);
-                if (chance < 60) {
-                    updateDrinkNumberCounter(2, true);
-                    updateDrinkNumberCounterTextView();
-                    showDialog("Archer's Passive: \n\nDrinking number increased by 2!");
-                } else {
-                    updateDrinkNumberCounter(-2, true);
-                    if (drinkNumberCounterInt < 0) {
-                        drinkNumberCounterInt = 0;
-                    }
-                    updateDrinkNumberCounterTextView();
-                    showDialog("Archer's Passive: \n\nDrinking number decreased by 2!");
+            int chance = new Random().nextInt(100);
+            if (chance < 60) {
+                updateDrinkNumberCounter(2, true);
+                updateDrinkNumberCounterTextView();
+                showDialog("Archer's Passive: \n\nDrinking number increased by 2!");
+            } else {
+                updateDrinkNumberCounter(-2, true);
+                if (drinkNumberCounterInt < 0) {
+                    drinkNumberCounterInt = 0;
                 }
+                updateDrinkNumberCounterTextView();
+                showDialog("Archer's Passive: \n\nDrinking number decreased by 2!");
             }
         }
     }
 
+    private boolean currentPlayerHasQuizMagicianPassive(Player currentPlayer) {
+        return "Quiz Magician".equals(currentPlayer.getClassChoice()) || ("Angry Jim".equals(currentPlayer.getClassChoice()) && Game.getInstance().getCurrentNumber() < 50);
+    }
 
     private void handleSurvivorPassive(Player currentPlayer) {
         int currentNumber = Game.getInstance().getCurrentNumber();
@@ -943,7 +992,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void setAnswersAndVisibility(WildCardProperties selectedCard, Player currentPlayer) {
         if (selectedCard.hasAnswer()) {
-            if ("Quiz Magician".equals(currentPlayer.getClassChoice())) {
+            if (currentPlayerHasQuizMagicianPassive(currentPlayer)) {
                 setMultiChoiceRandomizedAnswersForQuizMagician(selectedCard);
                 btnAnswer.setVisibility(View.INVISIBLE);
             } else if (GeneralSettingsLocalStore.fromContext(this).isMultiChoice()) {
@@ -957,6 +1006,7 @@ public class MainActivityGame extends SharedMainActivity {
             btnBackWild.setVisibility(View.VISIBLE);
         }
     }
+
 
     private void logSelectedCardInfo(WildCardProperties selectedCard, String wildCardType) {
         Log.d("WildCardInfo", "Type: " + wildCardType + ", " +
@@ -984,7 +1034,7 @@ public class MainActivityGame extends SharedMainActivity {
                 reverseTurnOrder(player);
                 break;
             case "Gain a couple more wildcards to use, I gotchya back!":
-                gainWildCards();
+                Game.getInstance().getCurrentPlayer().gainWildCards(3);
                 break;
             case "Lose a couple wildcards :( oh also drink 3 lol!":
                 player.loseWildCards(2);
@@ -1024,9 +1074,6 @@ public class MainActivityGame extends SharedMainActivity {
         SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(updatedNumber));
     }
 
-    private void gainWildCards() {
-        Game.getInstance().getCurrentPlayer().gainWildCards(3);
-    }
 
     //-----------------------------------------------------Quiz Multi-Choice---------------------------------------------------//
 

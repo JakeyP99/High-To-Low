@@ -71,7 +71,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     public static final String CLASS_WITCH = "Witch";
     public static final String CLASS_SCIENTIST = "Scientist";
     public static final String CLASS_SOLDIER = "Soldier";
-    public static final String CLASS_JIM = "Angry Jim";
+    public static final String CLASS_ANGRY_JIM = "Angry Jim";
     public static final String CLASS_QUIZ_MAGICIAN = "Quiz Magician";
     public static final String CLASS_SURVIVOR = "Survivor";
     public static final String CLASS_GOBLIN = "Goblin";
@@ -199,7 +199,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         characterClasses.add(new CharacterClassStore(4, CLASS_SOLDIER, soldierActiveDescription, soldierPassiveDescription, R.drawable.helmet));
         characterClasses.add(new CharacterClassStore(5, CLASS_QUIZ_MAGICIAN, quizMagicianActiveDescription, quizMagicianPassiveDescription, R.drawable.books));
         characterClasses.add(new CharacterClassStore(6, CLASS_SURVIVOR, survivorActiveDescription, survivorPassiveDescription, R.drawable.bandaids));
-        characterClasses.add(new CharacterClassStore(7, CLASS_JIM, angryJimActiveDescription, angryJimPassiveDescription, R.drawable.angry_jim));
+        characterClasses.add(new CharacterClassStore(7, CLASS_ANGRY_JIM, angryJimActiveDescription, angryJimPassiveDescription, R.drawable.angry_jim));
         characterClasses.add(new CharacterClassStore(8, CLASS_GOBLIN, goblinActiveDescription, goblinPassiveDescription, R.drawable.goblin));
         characterClasses.add(new CharacterClassStore(9, CLASS_NONE, noClassDescription, null, R.drawable.noclass));
         return characterClasses;
