@@ -34,6 +34,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
@@ -345,6 +346,7 @@ public class MainActivityGame extends SharedMainActivity {
                 "Witch".equals(currentPlayer.getClassChoice()) ||
                 "Quiz Magician".equals(currentPlayer.getClassChoice()) ||
                 "Survivor".equals(currentPlayer.getClassChoice()) ||
+                "Goblin".equals(currentPlayer.getClassChoice()) ||
                 "Soldier".equals(currentPlayer.getClassChoice())) &&
                 !currentPlayer.getUsedClassAbility();
 
@@ -506,7 +508,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     public void activateActiveAbility() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        Log.d("activateActiveAbility", "Class Activated" + currentPlayer.getClassChoice());
+        Log.d("activateActiveAbility", "Class Activated: " + currentPlayer.getClassChoice());
         String classChoice = currentPlayer.getClassChoice();
         switch (classChoice) {
             case "Scientist":
@@ -526,6 +528,9 @@ public class MainActivityGame extends SharedMainActivity {
                 break;
             case "Survivor":
                 handleSurvivorClass(currentPlayer);
+                break;
+            case "Goblin":
+                handleGoblinClass(currentPlayer);
                 break;
             default:
                 break;
@@ -562,8 +567,16 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void handleGoblinClass(Player currentPlayer) {
-
+        Player affectedPlayer = currentPlayer.removeRandomWildCard();
+        currentPlayer.setUsedClassAbility(true);
+        if (affectedPlayer != null) {
+            showDialog("Goblin's Active: \n\n" + affectedPlayer.getName() + " lost a wildcard!");
+            btnClassAbility.setVisibility(View.INVISIBLE);
+        } else {
+            Toast.makeText(this, "No other players have wildcards to lose.", Toast.LENGTH_SHORT).show();
+        }
     }
+
 
     private void handleSurvivorClass(Player currentPlayer) {
         if (Game.getInstance().getCurrentNumber() > 1) {

@@ -1,10 +1,14 @@
 package com.example.countingdowngame.game;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 public class Player implements Serializable {
 
@@ -96,10 +100,6 @@ public class Player implements Serializable {
     public void setInRepeatingTurn() {
     }
 
-    public int getTurnCounter() {
-        return turnCounter;
-    }
-
     public String getClassChoice() {
         return classChoice;
     }
@@ -143,6 +143,21 @@ public class Player implements Serializable {
         this.game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.SKIP));
     }
 
+    public Player removeRandomWildCard() {
+        List<Player> players = Game.getInstance().getPlayers();
+        List<Player> otherPlayers = players.stream()
+                .filter(p -> !p.equals(this) && p.getWildCardAmount() > 0)
+                .collect(Collectors.toList());
+        if (!otherPlayers.isEmpty()) {
+            Player randomPlayer = otherPlayers.get(new Random().nextInt(otherPlayers.size()));
+            randomPlayer.loseWildCards(1);
+            Log.d("GoblinAbility", randomPlayer.getName() + " has lost a wildcard due to Goblin's ability.");
+            return randomPlayer;
+        } else {
+            Log.d("GoblinAbility", "No other players have wildcards to lose.");
+            return null;
+        }
+    }
     //-----------------------------------------------------Reset Abilities---------------------------------------------------//
 
     public void resetWildCardAmount(Context context) {
