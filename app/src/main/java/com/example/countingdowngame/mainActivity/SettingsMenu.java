@@ -65,32 +65,16 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         // Default constructor with no arguments
     }
 
-    public static void toggleQuizWildcard(WildCardsAdapter adapter, boolean isSelected) {
-        if (adapter != null) {
-            WildCardProperties[] wildCards = adapter.getWildCards();
-            for (WildCardProperties wildcard : wildCards) {
-                wildcard.setEnabled(isSelected);
-            }
-            adapter.setWildCards(wildCards);
-            adapter.notifyDataSetChanged();
-            adapter.saveWildCardProbabilitiesToStorage(wildCards);
-        } else {
-            Log.e("Adapter", "Adapter is null");
-        }
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
         loadPreferences();
-        Log.d("YourActivity", "onResume called");
 
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d("YourActivity", "onPause called");
         savePreferences();
     }
 
@@ -132,8 +116,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         initializeViews();
         loadPreferences();  // Load preferences here
         setButtonListeners();
-        Log.d("YourActivity", "onCreate called");
-
     }
 
     private void initializeViews() {
@@ -163,7 +145,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         // Set up TextWatchers for EditTexts
         setupTextWatcher(wildcardPerPlayerEditText, 3, this::isValidWildCardAmount);
         setupTextWatcher(totalDrinksEditText, 2, this::isValidTotalDrinkAmount);
-        button_quiz_toggle.setSelected(true);
 
 
         // Check if "Quiz Magician" player is selected
@@ -177,7 +158,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
 
         if (isQuizMagicianSelected) {
             button_quiz_toggle.setSelected(true);
-            Log.d(TAG, "initializeViews: Quiz Magician is selected: " + button_quiz_toggle.isSelected());
         }
 
     }
@@ -270,12 +250,14 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
                 }
                 if (isQuizMagicianSelected) {
                     // Quiz Magician is already selected, show toast and don't toggle off
-                    StyleableToast.makeText(getApplicationContext(), "Someone has selected Quiz Magician, Quizzes need to be toggled on.", R.style.newToast).show();
+                    StyleableToast.makeText(getApplicationContext(), "Someone has selected the Quiz Magician class - Quizzes need to be toggled on.", R.style.newToast).show();
                 } else {
                     // No Quiz Magician selected yet, proceed with toggling
                     boolean isQuizSelected = !button_quiz_toggle.isSelected();
                     toggleWildCardButton(button_quiz_toggle, quizWildCardsAdapter, isQuizSelected);
+
                 }
+
                 break;
 
             case R.id.button_task_toggle:
@@ -368,8 +350,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
             adapter.setWildCards(wildCards);
             adapter.notifyDataSetChanged();
             adapter.saveWildCardProbabilitiesToStorage(wildCards);
-        } else {
-            Log.e("Adapter", "Adapter is null");
         }
     }
 
@@ -399,15 +379,17 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
 
 
     private void loadPreferences() {
+        GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);
+
         // Load wild card and total drink amounts
-        int loadWildCardAmount = GeneralSettingsLocalStore.fromContext(this).playerWildCardCount();
+        int loadWildCardAmount = store.playerWildCardCount();
         wildcardPerPlayerEditText.setText(String.valueOf(loadWildCardAmount));
 
-        int loadTotalDrinkAmount = GeneralSettingsLocalStore.fromContext(this).totalDrinkAmount();
+        int loadTotalDrinkAmount = store.totalDrinkAmount();
         totalDrinksEditText.setText(String.valueOf(loadTotalDrinkAmount));
 
         // Load multi-choice status and toggle buttons accordingly
-        boolean isMultiChoiceSelected = GeneralSettingsLocalStore.fromContext(this).isMultiChoice();
+        boolean isMultiChoiceSelected = store.isMultiChoice();
         toggleMultipleButtons(button_multiChoice, button_nonMultiChoice, isMultiChoiceSelected);
 
         // Check if "Quiz Magician" player is selected
@@ -420,18 +402,18 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
             }
         }
 
-        // Set quiz activation status based on whether "Quiz Magician" is selected
-        boolean isQuizActivated = isQuizMagicianSelected;
-        GeneralSettingsLocalStore.fromContext(this).setIsQuizActivated(isQuizActivated);
+        // Load the saved state of the quiz button
+        boolean savedQuizState = store.isQuizActivated();
+        boolean isQuizActivated = isQuizMagicianSelected || savedQuizState;
 
-        // Set quiz toggle button based on whether "Quiz Magician" is selected
-        button_quiz_toggle.setSelected(isQuizMagicianSelected);
+        // Set quiz toggle button based on whether "Quiz Magician" is selected or saved state
+        button_quiz_toggle.setSelected(isQuizActivated);
 
         // Load activation status for each wild card type and toggle buttons accordingly
         toggleWildCardButton(button_quiz_toggle, quizWildCardsAdapter, isQuizActivated);
-        toggleWildCardButton(button_task_toggle, taskWildCardsAdapter, GeneralSettingsLocalStore.fromContext(this).isTaskActivated());
-        toggleWildCardButton(button_truth_toggle, truthWildCardsAdapter, GeneralSettingsLocalStore.fromContext(this).isTruthActivated());
-        toggleWildCardButton(button_extras_toggle, extrasWildCardsAdapter, GeneralSettingsLocalStore.fromContext(this).isExtrasActivated());
+        toggleWildCardButton(button_task_toggle, taskWildCardsAdapter, store.isTaskActivated());
+        toggleWildCardButton(button_truth_toggle, truthWildCardsAdapter, store.isTruthActivated());
+        toggleWildCardButton(button_extras_toggle, extrasWildCardsAdapter, store.isExtrasActivated());
     }
 
 
