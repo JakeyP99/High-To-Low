@@ -890,7 +890,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     public void handleSelectedCard(WildCardProperties selectedCard, String wildCardType, Player player) {
         if (selectedCard != null) {
-            updateSelectedCard(selectedCard, player);
+            updateSelectedCard(selectedCard);
             setAnswersAndVisibility(selectedCard, player);
             logSelectedCardInfo(selectedCard, wildCardType);
             performWildCardAction(selectedCard.getText(), player);
@@ -899,21 +899,13 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    private void updateSelectedCard(WildCardProperties selectedCard, Player player) {
+    private void updateSelectedCard(WildCardProperties selectedCard) {
         final TextView wildActivityTextView = findViewById(textView_WildText);
 
         String selectedActivity = selectedCard.getText();
         wildActivityTextView.setText(selectedActivity);
-        addUsedCard(selectedCard, player);
         updateTextSize(selectedActivity);
         selectedWildCard = selectedCard;
-    }
-
-    private void addUsedCard(WildCardProperties selectedCard, Player player) {
-        Set<WildCardProperties> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
-        assert usedCards != null;
-        usedCards.add(selectedCard);
-        usedWildCard.put(player, usedCards);
     }
 
     private void updateTextSize(String selectedActivity) {
