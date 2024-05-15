@@ -282,9 +282,9 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void renderPlayer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        updateAbilitiesAfterThreeTurns(currentPlayer);
         updateClassAbilityButton(currentPlayer);
         updateTurnCounter();
-        updateAbilitiesAfterThreeTurns(currentPlayer);
         updatePlayerInfo(currentPlayer);
         updateNumberText();
         logPlayerInformation(currentPlayer);
@@ -589,14 +589,20 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void updateAbilitiesAfterThreeTurns(Player currentPlayer) {
-        if ("Survivor".equals(currentPlayer.getClassChoice()) || "Witch".equals(currentPlayer.getClassChoice()) && currentPlayer.getUsedClassAbility()) {
+        if (("Survivor".equals(currentPlayer.getClassChoice()) ||
+                "Witch".equals(currentPlayer.getClassChoice()) ||
+                "Goblin".equals(currentPlayer.getClassChoice())) &&
+                currentPlayer.getUsedClassAbility()) {
             currentPlayer.incrementSpecificTurnCounter();
+            Log.d(TAG, "increment counter: " + currentPlayer.getSpecificActiveTurnCounter());
             if (currentPlayer.getSpecificActiveTurnCounter() == 3) {
+                Log.d(TAG, "updateAbilitiesAfterThreeTurns: " + currentPlayer.getName());
                 currentPlayer.setUsedClassAbility(false);
                 currentPlayer.resetSpecificTurnCounter();
             }
         }
     }
+
 
     private void handleArcherClass(Player currentPlayer) {
         Log.d("ArcherClass", "handleArcherClass called");
@@ -652,6 +658,7 @@ public class MainActivityGame extends SharedMainActivity {
         handleScientistPassive(currentPlayer);
         handleAngryJimPassive(currentPlayer);
         handleArcherPassive(currentPlayer);
+        handleGoblinPassive(currentPlayer);
     }
 
     private void handleSoldierPassive(Player currentPlayer) {
@@ -694,6 +701,14 @@ public class MainActivityGame extends SharedMainActivity {
     private void handleAngryJimPassive(Player currentPlayer) {
         if ("Angry Jim".equals(currentPlayer.getClassChoice())) {
             currentPlayer.incrementSpecificTurnCounter();
+            if (currentPlayer.getSpecificActiveTurnCounter() == 3) {
+                currentPlayer.gainWildCards(1);
+            }
+        }
+    }
+
+    private void handleGoblinPassive(Player currentPlayer) {
+        if ("Goblin".equals(currentPlayer.getClassChoice())) {
             if (currentPlayer.getSpecificActiveTurnCounter() == 3) {
                 currentPlayer.gainWildCards(1);
             }
