@@ -559,6 +559,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void handleGoblinClass(Player currentPlayer) {
+
     }
 
     private void handleSurvivorClass(Player currentPlayer) {
@@ -809,6 +810,7 @@ public class MainActivityGame extends SharedMainActivity {
     private void wildCardActivate(Player player) {
         Game.getInstance().getCurrentPlayer().useWildCard();
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        final TextView wildActivityTextView = findViewById(textView_WildText);
 
         WildCardProperties[] emptyProbabilitiesArray = new WildCardProperties[0];
         QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.QUIZ);
@@ -821,163 +823,124 @@ public class MainActivityGame extends SharedMainActivity {
         WildCardProperties[] truthProbabilities = truthAdapter.loadWildCardProbabilitiesFromStorage(WildCardData.TRUTH_WILD_CARDS);
         WildCardProperties[] extraProbabilities = extraAdapter.loadWildCardProbabilitiesFromStorage(WildCardData.EXTRA_WILD_CARDS);
 
-        List<WildCardProperties> allProbabilities = new ArrayList<>();
-        allProbabilities.addAll(Arrays.asList(quizProbabilities));
-        allProbabilities.addAll(Arrays.asList(taskProbabilities));
-        allProbabilities.addAll(Arrays.asList(truthProbabilities));
-        allProbabilities.addAll(Arrays.asList(extraProbabilities));
-
-        final TextView wildActivityTextView = findViewById(textView_WildText);
-
-        String selectedActivity = null;
-        Set<WildCardProperties> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
-
-        WildCardProperties[] selectedType = new WildCardProperties[0];
-        String wildCardType = "";
-        boolean foundWildCardType = false;
-        Random random = new Random();
-
-        if ("Quiz Magician".equals(currentPlayer.getClassChoice()) && currentPlayer.getJustUsedClassAbility()) {
-            selectedType = quizProbabilities;
-            wildCardType = "Quiz";
-            btnClassAbility.setVisibility(View.INVISIBLE);
-
-        } else {
-            int quizProbabilitiesCount = (int) Arrays.stream(quizProbabilities)
-                    .filter(WildCardProperties::isEnabled)
-                    .count();
-
-            int taskProbabilitiesCount = (int) Arrays.stream(taskProbabilities)
-                    .filter(WildCardProperties::isEnabled)
-                    .count();
-
-            int truthProbabilitiesCount = (int) Arrays.stream(truthProbabilities)
-                    .filter(WildCardProperties::isEnabled)
-                    .count();
-
-            int extraProbabilitiesCount = (int) Arrays.stream(extraProbabilities)
-                    .filter(WildCardProperties::isEnabled)
-                    .count();
-
-            if (quizProbabilitiesCount == 0 && taskProbabilitiesCount == 0 && truthProbabilitiesCount == 0 && extraProbabilitiesCount == 0) {
-                foundWildCardType = true;
-            }
-            while (!foundWildCardType) {
-                int typeChance = random.nextInt(4); // random selection for others
-
-                switch (typeChance) {
-                    case 0:
-                        if (quizProbabilitiesCount > 0) {
-                            selectedType = quizProbabilities;
-                            wildCardType = "Quiz";
-                            foundWildCardType = true;
-                            btnClassAbility.setVisibility(View.INVISIBLE);
-                        }
-                        break;
-                    case 1:
-                        if (taskProbabilitiesCount > 0) {
-                            selectedType = taskProbabilities;
-                            wildCardType = "Task";
-                            foundWildCardType = true;
-                            btnClassAbility.setVisibility(View.INVISIBLE);
-                        }
-                        break;
-                    case 2:
-                        if (truthProbabilitiesCount > 0) {
-                            selectedType = truthProbabilities;
-                            wildCardType = "Truth";
-                            foundWildCardType = true;
-                            btnClassAbility.setVisibility(View.INVISIBLE);
-                        }
-                        break;
-                    case 3:
-                        if (extraProbabilitiesCount > 0) {
-                            selectedType = extraProbabilities;
-                            wildCardType = "Extras";
-                            foundWildCardType = true;
-                            btnClassAbility.setVisibility(View.INVISIBLE);
-                        }
-                        break;
-                }
-            }
-        }
-
-
-        if (selectedType == quizProbabilities) {
-            if (GeneralSettingsLocalStore.fromContext(this).isMultiChoice()) {
-                btnBackWild.setVisibility(View.INVISIBLE);
-            } else {
-                btnAnswer.setVisibility(View.VISIBLE);
-                btnBackWild.setVisibility(View.INVISIBLE);
-            }
-        } else {
-            btnAnswer.setVisibility(View.INVISIBLE);
-            btnBackWild.setVisibility(View.VISIBLE);
-        }
-
-        int enabledCardsCount = (int) Arrays.stream(selectedType)
-                .filter(WildCardProperties::isEnabled)
-                .count();
-
-        Log.d("SelectedTypeEnabledCount", "SelectedType Enabled Count: " + enabledCardsCount);
-
-        if (enabledCardsCount == 0) {
-            btnAnswer.setVisibility(View.INVISIBLE);
+        WildCardProperties[] selectedType = selectWildCardType(currentPlayer, quizProbabilities, taskProbabilities, truthProbabilities, extraProbabilities);
+        if (selectedType == null) {
             wildActivityTextView.setText("No wild cards available");
             return;
         }
 
+        WildCardProperties selectedCard = selectRandomCard(player, selectedType);
+        handleSelectedCard(selectedCard, getWildCardType(selectedType, quizProbabilities, taskProbabilities, truthProbabilities), player);
+        btnClassAbility.setVisibility(View.INVISIBLE);
+
+    }
+
+    private WildCardProperties[] selectWildCardType(Player currentPlayer, WildCardProperties[] quizProbabilities, WildCardProperties[] taskProbabilities, WildCardProperties[] truthProbabilities, WildCardProperties[] extraProbabilities) {
+        if ("Quiz Magician".equals(currentPlayer.getClassChoice()) && currentPlayer.getJustUsedClassAbility()) {
+            btnClassAbility.setVisibility(View.INVISIBLE);
+            return quizProbabilities;
+        }
+
+        List<WildCardProperties[]> enabledTypes = new ArrayList<>();
+        addIfEnabled(enabledTypes, quizProbabilities);
+        addIfEnabled(enabledTypes, taskProbabilities);
+        addIfEnabled(enabledTypes, truthProbabilities);
+        addIfEnabled(enabledTypes, extraProbabilities);
+
+        if (enabledTypes.isEmpty()) {
+            return null;
+        }
+
+        Random random = new Random();
+        return enabledTypes.get(random.nextInt(enabledTypes.size()));
+    }
+
+    private void addIfEnabled(List<WildCardProperties[]> enabledTypes, WildCardProperties[] probabilities) {
+        if (Arrays.stream(probabilities).anyMatch(WildCardProperties::isEnabled)) {
+            enabledTypes.add(probabilities);
+        }
+    }
+
+    private WildCardProperties selectRandomCard(Player player, WildCardProperties[] selectedType) {
+        Set<WildCardProperties> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
         List<WildCardProperties> unusedCards = Arrays.stream(selectedType)
                 .filter(WildCardProperties::isEnabled)
                 .filter(c -> !usedCards.contains(c))
                 .collect(Collectors.toList());
 
-        int totalTypeProbabilities = unusedCards.stream()
-                .mapToInt(WildCardProperties::getProbability)
-                .sum();
-
-        int selectedIndex = random.nextInt(totalTypeProbabilities);
-        WildCardProperties selectedCard = null;
+        int totalTypeProbabilities = unusedCards.stream().mapToInt(WildCardProperties::getProbability).sum();
+        int selectedIndex = new Random().nextInt(totalTypeProbabilities);
         int cumulativeProbability = 0;
 
         for (WildCardProperties card : unusedCards) {
             cumulativeProbability += card.getProbability();
-
             if (selectedIndex < cumulativeProbability) {
-                selectedCard = card;
-                break;
+                return card;
             }
         }
+        return null;
+    }
 
+    private String getWildCardType(WildCardProperties[] selectedType, WildCardProperties[] quizProbabilities, WildCardProperties[] taskProbabilities, WildCardProperties[] truthProbabilities) {
+        if (selectedType == quizProbabilities) return "Quiz";
+        if (selectedType == taskProbabilities) return "Task";
+        if (selectedType == truthProbabilities) return "Truth";
+        return "Extras";
+    }
+
+    public void handleSelectedCard(WildCardProperties selectedCard, String wildCardType, Player player) {
         if (selectedCard != null) {
-            selectedActivity = selectedCard.getText();
-            wildActivityTextView.setText(selectedActivity);
-            usedCards.add(selectedCard);
-            usedWildCard.put(player, usedCards);
-
-            int textSize = TextSizeCalculator.calculateTextSizeBasedOnCharacterCount(selectedActivity);
-            wildActivityTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
-
-            selectedWildCard = selectedCard; // Update selectedWildCard to the current selected card
-
-            if (selectedCard.hasAnswer()) {
-                if ("Quiz Magician".equals(currentPlayer.getClassChoice())) {
-                    setMultiChoiceRandomizedAnswersForQuizMagician(selectedCard);
-                    btnAnswer.setVisibility(View.INVISIBLE);
-                } else if (GeneralSettingsLocalStore.fromContext(this).isMultiChoice()) {
-                    setMultiChoiceRandomizedAnswers(selectedCard);
-                    btnAnswer.setVisibility(View.INVISIBLE);
-                } else {
-                    btnAnswer.setVisibility(View.VISIBLE);
-                }
-            } else {
-                btnAnswer.setVisibility(View.INVISIBLE);
-            }
+            updateSelectedCard(selectedCard, player);
+            setAnswersAndVisibility(selectedCard, player);
+            logSelectedCardInfo(selectedCard, wildCardType);
+            performWildCardAction(selectedCard.getText(), player);
         } else {
             btnAnswer.setVisibility(View.INVISIBLE);
         }
+    }
 
-        assert selectedCard != null;
+    private void updateSelectedCard(WildCardProperties selectedCard, Player player) {
+        final TextView wildActivityTextView = findViewById(textView_WildText);
+
+        String selectedActivity = selectedCard.getText();
+        wildActivityTextView.setText(selectedActivity);
+        addUsedCard(selectedCard, player);
+        updateTextSize(selectedActivity);
+        selectedWildCard = selectedCard;
+    }
+
+    private void addUsedCard(WildCardProperties selectedCard, Player player) {
+        Set<WildCardProperties> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
+        assert usedCards != null;
+        usedCards.add(selectedCard);
+        usedWildCard.put(player, usedCards);
+    }
+
+    private void updateTextSize(String selectedActivity) {
+        final TextView wildActivityTextView = findViewById(textView_WildText);
+
+        int textSize = TextSizeCalculator.calculateTextSizeBasedOnCharacterCount(selectedActivity);
+        wildActivityTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+    }
+
+    private void setAnswersAndVisibility(WildCardProperties selectedCard, Player currentPlayer) {
+        if (selectedCard.hasAnswer()) {
+            if ("Quiz Magician".equals(currentPlayer.getClassChoice())) {
+                setMultiChoiceRandomizedAnswersForQuizMagician(selectedCard);
+                btnAnswer.setVisibility(View.INVISIBLE);
+            } else if (GeneralSettingsLocalStore.fromContext(this).isMultiChoice()) {
+                setMultiChoiceRandomizedAnswers(selectedCard);
+                btnAnswer.setVisibility(View.INVISIBLE);
+            } else {
+                btnAnswer.setVisibility(View.VISIBLE);
+            }
+        } else {
+            btnAnswer.setVisibility(View.INVISIBLE);
+            btnBackWild.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void logSelectedCardInfo(WildCardProperties selectedCard, String wildCardType) {
         Log.d("WildCardInfo", "Type: " + wildCardType + ", " +
                 "Question: " + selectedCard.getText() + ", " +
                 "Answer: " + selectedCard.getAnswer() + ", " +
@@ -985,8 +948,6 @@ public class MainActivityGame extends SharedMainActivity {
                 "Wrong Answer 2: " + selectedCard.getWrongAnswer2() + ", " +
                 "Wrong Answer 3: " + selectedCard.getWrongAnswer3() + ", " +
                 "Category: " + selectedCard.getCategory());
-
-        performWildCardAction(selectedActivity, player);
     }
 
 
