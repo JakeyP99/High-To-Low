@@ -79,7 +79,6 @@ public class MainActivityGame extends SharedMainActivity {
     public static int drinkNumberCounterInt = 0;
     //-----------------------------------------------------Maps and Sets---------------------------------------------------//
     private final Map<Player, Set<WildCardProperties>> usedWildCard = new HashMap<>();
-    private final Set<WildCardProperties> usedWildCards = new HashSet<>();
     public WildCardProperties selectedWildCard;
     private int turnCounter = 0;
     //-----------------------------------------------------Views---------------------------------------------------//
@@ -103,6 +102,9 @@ public class MainActivityGame extends SharedMainActivity {
     private TextView drinkNumberCounterTextView;
     private TextView nextPlayerText;
     private TextView numberCounterText;
+
+    private TextView wildActivityTextView;
+
     private TextView wildText;
 
     //-----------------------------------------------------Booleans---------------------------------------------------//
@@ -178,6 +180,7 @@ public class MainActivityGame extends SharedMainActivity {
         btnQuizAnswerBR = findViewById(R.id.btnQuizAnswerBR);
         btnQuizAnswerTL = findViewById(R.id.btnQuizAnswerTL);
         btnQuizAnswerTR = findViewById(R.id.btnQuizAnswerTR);
+        wildActivityTextView = findViewById(textView_WildText);
 
 
         shuffleHandler = new Handler();
@@ -810,7 +813,6 @@ public class MainActivityGame extends SharedMainActivity {
     private void wildCardActivate(Player player) {
         Game.getInstance().getCurrentPlayer().useWildCard();
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        final TextView wildActivityTextView = findViewById(textView_WildText);
 
         WildCardProperties[] emptyProbabilitiesArray = new WildCardProperties[0];
         QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.QUIZ);
@@ -900,8 +902,6 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void updateSelectedCard(WildCardProperties selectedCard) {
-        final TextView wildActivityTextView = findViewById(textView_WildText);
-
         String selectedActivity = selectedCard.getText();
         wildActivityTextView.setText(selectedActivity);
         updateTextSize(selectedActivity);
@@ -909,8 +909,6 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void updateTextSize(String selectedActivity) {
-        final TextView wildActivityTextView = findViewById(textView_WildText);
-
         int textSize = TextSizeCalculator.calculateTextSizeBasedOnCharacterCount(selectedActivity);
         wildActivityTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
     }
@@ -1215,7 +1213,6 @@ public class MainActivityGame extends SharedMainActivity {
     private void showAnswer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
 
-        TextView wildActivityTextView = findViewById(textView_WildText);
         btnQuizAnswerBL.setVisibility(View.VISIBLE);
         btnQuizAnswerBR.setVisibility(View.VISIBLE);
 
