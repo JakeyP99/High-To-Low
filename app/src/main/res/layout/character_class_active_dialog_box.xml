@@ -15,8 +15,7 @@
         android:fontFamily="@font/viga"
         android:textColor="@color/bluedark"
         android:textSize="28sp"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textIsSelectable="true" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <ImageButton

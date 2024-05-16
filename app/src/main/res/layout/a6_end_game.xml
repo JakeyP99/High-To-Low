@@ -20,10 +20,10 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.097" />
+        app:layout_constraintVertical_bias="0.119" />
 
     <TextView
-        android:id="@+id/fd"
+        android:id="@+id/numberListString"
         android:layout_width="380dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/viga"
@@ -111,7 +111,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fd"
+        app:layout_constraintTop_toBottomOf="@+id/numberListString"
         app:layout_constraintVertical_bias="0.061" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -123,6 +123,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TextViewlose"
-        app:layout_constraintVertical_bias="0.048" />
+        app:layout_constraintVertical_bias="0.025" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

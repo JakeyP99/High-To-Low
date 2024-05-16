@@ -8,11 +8,12 @@
     card_view:cardElevation="4dp">
 
     <TextView
-        android:id="@+id/tvItem"
+        android:id="@+id/statsItemView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
+        android:layout_height="160dp"
+        android:gravity="center"
+        android:textColor="@color/bluedark"
+        android:textSize="20sp"
+        android:text="Aido used the most wildcards \n\n 20"
         android:singleLine="false" />
 </androidx.cardview.widget.CardView>

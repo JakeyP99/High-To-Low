@@ -45,7 +45,7 @@ public class EndGameListAdapter extends RecyclerView.Adapter<EndGameListAdapter.
 
         PreviousNumbersViewHolder(View itemView) {
             super(itemView);
-            tvItem = itemView.findViewById(R.id.tvItem);
+            tvItem = itemView.findViewById(R.id.statsItemView);
         }
 
         void bind(String item) {

@@ -148,9 +148,19 @@ public class Game {
                 topPlayer = player;
             }
         }
-        return topPlayer != null ? topPlayer.getName() + " used the most wildcards." : "No wildcards used.";
+        return topPlayer != null ? topPlayer.getName() : "No one used any wildcards.";
     }
 
+    public int getMostWildcardsUsed() {
+        int maxWildcards = 0;
+        for (Player player : players) {
+            int usedWildcards = player.getUsedWildcards(); // You need to implement this method in the Player class
+            if (usedWildcards > maxWildcards) {
+                maxWildcards = usedWildcards;
+            }
+        }
+        return maxWildcards;
+    }
 
     //-----------------------------------------------------End Game ---------------------------------------------------//
 

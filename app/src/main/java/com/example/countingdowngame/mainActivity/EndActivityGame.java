@@ -6,6 +6,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.Player;
@@ -49,9 +53,27 @@ public class EndActivityGame extends ButtonUtilsActivity {
         muteGif = findViewById(R.id.muteGif);
         soundGif = findViewById(R.id.soundGif);
 
-        ListView previousNumbersList = findViewById(R.id.previousNumbers);
-        setupPreviousNumbersList(previousNumbersList);
+        RecyclerView statsList = findViewById(R.id.statsList);
+        setupStatsList(statsList);
+        ListView previousNumbers = findViewById(R.id.previousNumbers);
+        setupPreviousNumbersList(previousNumbers);
     }
+
+    private void setupStatsList(RecyclerView statsList) {
+        ArrayList<String> statistics = new ArrayList<>();
+        // Add statistics here
+        statistics.add(Game.getInstance().getPlayerWithMostWildcardsUsed() + " used the most wildcards \n\n" + Game.getInstance().getMostWildcardsUsed());
+
+        // Set up the adapter
+        EndGameListAdapter adapter = new EndGameListAdapter(this, statistics);
+        statsList.setLayoutManager(new LinearLayoutManager(this));
+        statsList.setAdapter(adapter);
+
+        // Add LinearSnapHelper for sliding effect
+        LinearSnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(statsList);
+    }
+
 
     private void setupButtonControls() {
         Button btnPlayAgain = findViewById(R.id.btnplayAgain);
@@ -67,8 +89,8 @@ public class EndActivityGame extends ButtonUtilsActivity {
         int numberCounter = MainActivityGame.drinkNumberCounterInt;
 
         String endGameText = (numberCounter == 1) ?
-                "Drink " + numberCounter + " time " + playerName + " you little baby!!" :
-                "Drink " + numberCounter + " times " + playerName + " you lil baby!!";
+                "Drink " + numberCounter + " time " + playerName + " you little baby!" :
+                "Drink " + numberCounter + " times " + playerName + " you little baby!";
 
         TextView endGameName = findViewById(R.id.TextViewlose);
         endGameName.setText(endGameText);
