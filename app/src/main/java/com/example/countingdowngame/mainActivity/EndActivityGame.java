@@ -4,10 +4,9 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSnapHelper;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.countingdowngame.R;
@@ -46,7 +45,6 @@ public class EndActivityGame extends ButtonUtilsActivity {
         setupAudioManagerForMuteButtons(muteGif, soundGif);
 
         setupButtonControls();
-        setupEndGameText();
     }
 
     private void initializeViews() {
@@ -58,19 +56,28 @@ public class EndActivityGame extends ButtonUtilsActivity {
         ListView previousNumbers = findViewById(R.id.previousNumbers);
         setupPreviousNumbersList(previousNumbers);
     }
-
     private void setupStatsList(RecyclerView statsList) {
         ArrayList<String> statistics = new ArrayList<>();
+        // Add the end game text
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        String playerName = currentPlayer.getName();
+        int numberCounter = MainActivityGame.drinkNumberCounterInt;
+        String endGameText = (numberCounter == 1) ?
+                "Drink " + numberCounter + " time " + playerName + " you little baby!" :
+                "Drink " + numberCounter + " times " + playerName + " you little baby!";
+        statistics.add(endGameText);
+
         // Add statistics here
-        statistics.add(Game.getInstance().getPlayerWithMostWildcardsUsed() + " used the most wildcards \n\n" + Game.getInstance().getMostWildcardsUsed());
+        statistics.add(Game.getInstance().getPlayerWithMostWildcardsUsed() + " used the most wildcards at " + Game.getInstance().getMostWildcardsUsed() + "!");
 
         // Set up the adapter
         EndGameListAdapter adapter = new EndGameListAdapter(this, statistics);
-        statsList.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        statsList.setLayoutManager(layoutManager);
         statsList.setAdapter(adapter);
 
-        // Add LinearSnapHelper for sliding effect
-        LinearSnapHelper snapHelper = new LinearSnapHelper();
+        // Add PagerSnapHelper for snapping effect
+        PagerSnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(statsList);
     }
 
@@ -82,19 +89,6 @@ public class EndActivityGame extends ButtonUtilsActivity {
         setButtonActions(btnPlayAgain, btnNewPlayer);
     }
 
-
-    private void setupEndGameText() {
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        String playerName = currentPlayer.getName();
-        int numberCounter = MainActivityGame.drinkNumberCounterInt;
-
-        String endGameText = (numberCounter == 1) ?
-                "Drink " + numberCounter + " time " + playerName + " you little baby!" :
-                "Drink " + numberCounter + " times " + playerName + " you little baby!";
-
-        TextView endGameName = findViewById(R.id.TextViewlose);
-        endGameName.setText(endGameText);
-    }
 
     private void setupPreviousNumbersList(ListView previousNumbersList) {
         ArrayList<String> previousNumbersFormatted = Game.getInstance().getPreviousNumbersFormatted();
