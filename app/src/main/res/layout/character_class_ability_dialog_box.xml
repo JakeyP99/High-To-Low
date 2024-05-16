@@ -65,6 +65,7 @@
         android:gravity="center"
         android:paddingBottom="10sp"
         android:text="Passive Ability"
+        android:paddingTop="10sp"
 
         android:textAlignment="center"
         android:textColor="@color/bluedark"

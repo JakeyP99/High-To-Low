@@ -67,8 +67,8 @@ public class EndActivityGame extends ButtonUtilsActivity {
         int numberCounter = MainActivityGame.drinkNumberCounterInt;
 
         String endGameText = (numberCounter == 1) ?
-                "Drink " + numberCounter + " time " + playerName + " Ya Lil Baby!!" :
-                "Drink " + numberCounter + " times " + playerName + " Ya Lil Baby!!";
+                "Drink " + numberCounter + " time " + playerName + " you little baby!!" :
+                "Drink " + numberCounter + " times " + playerName + " you lil baby!!";
 
         TextView endGameName = findViewById(R.id.TextViewlose);
         endGameName.setText(endGameText);

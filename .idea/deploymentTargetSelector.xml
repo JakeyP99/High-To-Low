@@ -7,7 +7,7 @@
       </SelectionState>
       <SelectionState runConfigName="CountingDownGame">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-05-14T13:36:37.573049400Z">
+        <DropdownSelection timestamp="2024-05-15T12:11:40.912766800Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="PhysicalDevice" identifier="serial=18281FDF6007KK" />

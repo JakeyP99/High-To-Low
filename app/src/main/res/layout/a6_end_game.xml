@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:background="@android:color/white"
     android:layout_height="match_parent">
 
-
     <TextView
         android:id="@+id/TextViewlose"
-        android:layout_width="374dp"
-        android:layout_height="92dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/viga"
         android:gravity="center"
         android:text="Drink up you little baby you goose!"
@@ -17,9 +17,26 @@
         android:textSize="35sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.232" />
+        app:layout_constraintVertical_bias="0.097" />
+
+    <TextView
+        android:id="@+id/fd"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/viga"
+        android:gravity="center"
+        android:text="Number List"
+        android:textColor="@color/bluedark"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.484" />
 
     <Button
         android:id="@+id/btnplayAgain"
@@ -31,11 +48,11 @@
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/btnNewPlayer"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TextViewlose"
-        app:layout_constraintVertical_bias="0.797" />
+        app:layout_constraintTop_toBottomOf="@+id/previousNumbers"
+        app:layout_constraintVertical_bias="0.136" />
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/soundGif"
@@ -72,31 +89,17 @@
         android:id="@+id/btnNewPlayer"
         android:layout_width="139dp"
         android:layout_height="77dp"
-        android:layout_marginBottom="52dp"
         android:background="@drawable/outlineforbutton"
         android:fontFamily="@font/viga"
         android:text="New Players"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/previousNumbersText"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/previousNumbersText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/viga"
-        android:text="Previous Numbers:"
-        android:textColor="@color/bluedark"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/previousNumbers"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/previousNumbers"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1"
-        app:layout_constraintHorizontal_bias="0" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnplayAgain"
+        app:layout_constraintVertical_bias="0.323" />
 
     <ListView
         android:id="@+id/previousNumbers"
@@ -108,7 +111,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnNewPlayer"
-        app:layout_constraintVertical_bias="0.80" />
+        app:layout_constraintTop_toBottomOf="@+id/fd"
+        app:layout_constraintVertical_bias="0.061" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/statsList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TextViewlose"
+        app:layout_constraintVertical_bias="0.048" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -533,7 +533,7 @@ public class MainActivityGame extends SharedMainActivity {
                 handleGoblinClass(currentPlayer);
                 break;
             case "Angry Jim":
-                handleAngryJimClass(currentPlayer);
+                handleAngryJimClass();
                 break;
             default:
                 break;
@@ -580,8 +580,8 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    private void handleAngryJimClass(Player currentPlayer) {
-        currentPlayer.gainWildCards(1);
+    private void handleAngryJimClass() {
+        doubleCurrentNumber();
         btnClassAbility.setVisibility(View.INVISIBLE);
     }
 
@@ -890,6 +890,7 @@ public class MainActivityGame extends SharedMainActivity {
     private void wildCardActivate(Player player) {
         Game.getInstance().getCurrentPlayer().useWildCard();
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        currentPlayer.incrementUsedWildcards();
 
         WildCardProperties[] emptyProbabilitiesArray = new WildCardProperties[0];
         QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.QUIZ);
@@ -944,7 +945,10 @@ public class MainActivityGame extends SharedMainActivity {
         Set<WildCardProperties> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
         List<WildCardProperties> unusedCards = Arrays.stream(selectedType)
                 .filter(WildCardProperties::isEnabled)
-                .filter(c -> !usedCards.contains(c))
+                .filter(c -> {
+                    assert usedCards != null;
+                    return !usedCards.contains(c);
+                })
                 .collect(Collectors.toList());
 
         int totalTypeProbabilities = unusedCards.stream().mapToInt(WildCardProperties::getProbability).sum();

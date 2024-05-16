@@ -19,6 +19,7 @@ public class Player implements Serializable {
     private String classChoice;
     private Game game;
     private int wildCardAmount;
+    private int usedWildcards;
     private boolean selected;
     private boolean usedClassAbility;
     private boolean justUsedClassAbility;
@@ -174,6 +175,17 @@ public class Player implements Serializable {
             return null;
         }
     }
+
+
+    public int getUsedWildcards() {
+        return usedWildcards;
+    }
+
+    public void incrementUsedWildcards() {
+        this.usedWildcards++;
+    }
+
+
     //-----------------------------------------------------Reset Abilities---------------------------------------------------//
 
     public void resetWildCardAmount(Context context) {

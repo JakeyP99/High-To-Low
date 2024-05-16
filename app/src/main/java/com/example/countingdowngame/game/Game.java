@@ -138,6 +138,20 @@ public class Game {
         players.addAll(playerList);
     }
 
+    public String getPlayerWithMostWildcardsUsed() {
+        Player topPlayer = null;
+        int maxWildcards = 0;
+        for (Player player : players) {
+            int usedWildcards = player.getUsedWildcards(); // You need to implement this method in the Player class
+            if (usedWildcards > maxWildcards) {
+                maxWildcards = usedWildcards;
+                topPlayer = player;
+            }
+        }
+        return topPlayer != null ? topPlayer.getName() + " used the most wildcards." : "No wildcards used.";
+    }
+
+
     //-----------------------------------------------------End Game ---------------------------------------------------//
 
     public void endGame(Context context) {
