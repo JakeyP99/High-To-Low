@@ -694,26 +694,23 @@ public class MainActivityGame extends SharedMainActivity {
 
 
     private void handleWitchPassive(Player currentPlayer) {
+
         if (!"Angry Jim".equals(currentPlayer.getClassChoice())) {
             currentPlayer.incrementAbilityTurnCounter();
         }
-
-        if (Game.getInstance().getCurrentNumber() % 2 == 0) {
-            showDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " hand out two drinks.");
-            currentPlayer.incrementDrinksHandedOutByWitch(2);
-        } else {
-            showDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " take two drinks.");
-            currentPlayer.incrementDrinksTakenByWitch(2);
+        if (!isFirstTurn) {
+            if (Game.getInstance().getCurrentNumber() % 2 == 0) {
+                showDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " hand out two drinks.");
+                currentPlayer.incrementDrinksHandedOutByWitch(2);
+            } else {
+                showDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " take two drinks.");
+                currentPlayer.incrementDrinksTakenByWitch(2);
+            }
         }
     }
 
 
     private void handleScientistPassive(Player currentPlayer) {
-        // Check if the current player is Angry Jim
-        if (!"Angry Jim".equals(currentPlayer.getClassChoice())) {
-            // Increment the turn counter for non-Angry Jim players
-            currentPlayer.incrementAbilityTurnCounter();
-        }
         Handler handler = new Handler();
         int delayMillis = 1;
         int chance = new Random().nextInt(100);

@@ -173,7 +173,7 @@ public class Game {
                 topPlayer = player;
             }
         }
-        return topPlayer != null ? topPlayer.getName() + " handed out the most drinks as a witch \n\n (" + maxDrinks + ")" : "No one handed out any drinks as a witch.";
+        return topPlayer != null ? topPlayer.getName() + " handed out the most drinks as a witch \n\n " + maxDrinks : "No one handed out any drinks as a witch.";
     }
 
     public String getWitchPlayerTotalDrinksTaken() {
@@ -186,7 +186,7 @@ public class Game {
                 topPlayer = player;
             }
         }
-        return topPlayer != null ? topPlayer.getName() + " took the most drinks as a witch \n\n (" + maxDrinks + ")" : "No one took any drinks as a witch.";
+        return topPlayer != null ? topPlayer.getName() + " took the most drinks as a witch \n\n " + maxDrinks : "No one took any drinks as a witch.";
     }
     //-----------------------------------------------------End Game ---------------------------------------------------//
 
