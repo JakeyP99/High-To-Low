@@ -17,11 +17,13 @@ public class Game {
 
     private static final Game gameInstance = new Game();
     private final Map<Player, Integer> repeatingTurnsMap = new HashMap<>();
-    private final ArrayList<Integer> updatedNumbers = new ArrayList<>();
+    private final List<Integer> updatedNumbers = new ArrayList<>();
+    private final List<String> playerNames = new ArrayList<>();
     int currentNumber = 0;
     private GameEventListener gameEventListener;
     private ArrayList<Player> players = new ArrayList<>();
     private int currentPlayerId = 0;
+
     //-----------------------------------------------------Player Functions---------------------------------------------------//
     private final PlayerEventListener playerEventListener = e -> {
         if (e.type == PlayerEventType.SKIP) {
@@ -200,16 +202,33 @@ public class Game {
         updatedNumbers.add(number);
     }
 
+    public void addUpdatedName(String currentPlayerName) {
+        playerNames.add(currentPlayerName);
+    }
+
+
     public ArrayList<String> getPreviousNumbersFormatted() {
         ArrayList<String> previousNumbersFormatted = new ArrayList<>();
 
+        if (playerNames.isEmpty()) {
+            Log.e(TAG, "No player names available.");
+            return previousNumbersFormatted;
+        }
+
+        if (updatedNumbers.isEmpty()) {
+            Log.e(TAG, "No previous numbers available.");
+            return previousNumbersFormatted;
+        }
+
         for (int i = updatedNumbers.size() - 1; i >= 0; i--) {
-            int number = updatedNumbers.get(i);
-            previousNumbersFormatted.add(String.valueOf(number));
+            String playerName = playerNames.get(i);
+            String number = String.valueOf(updatedNumbers.get(i));
+            previousNumbersFormatted.add(playerName + ": " + number);
         }
         previousNumbersFormatted.add(startingNumber + " (Starting Number)");
         return previousNumbersFormatted;
     }
+
 
     public void resetPlayers(Context context) {
         for (Player player : players) {

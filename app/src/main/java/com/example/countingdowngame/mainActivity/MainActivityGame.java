@@ -362,6 +362,7 @@ public class MainActivityGame extends SharedMainActivity {
     private void updatePlayerInfo(Player currentPlayer) {
         String playerName = currentPlayer.getName();
         String playerImageString = currentPlayer.getPhoto();
+        Game.getInstance().addUpdatedName(playerName);
 
         nextPlayerText.setText(playerName + "'s Turn");
         btnWild.setText((currentPlayer.getWildCardAmount() + "\n" + "Wild Cards"));
@@ -871,7 +872,7 @@ public class MainActivityGame extends SharedMainActivity {
                     renderCurrentNumber(newNumber, this::gotoGameEnd, numberCounterText);
                     currentPlayer.setUsedClassAbility(true);
                     updateNumber(newNumber);
-
+                    updatePlayerInfo(currentPlayer);
 
                     btnClassAbility.setVisibility(View.INVISIBLE);
                     dialog.dismiss(); // Close the dialog on success
