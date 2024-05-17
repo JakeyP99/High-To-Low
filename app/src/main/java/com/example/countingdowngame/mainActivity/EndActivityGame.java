@@ -58,6 +58,7 @@ public class EndActivityGame extends ButtonUtilsActivity {
         setupPreviousNumbersList(previousNumbers);
     }
 
+
     private void setupStatsList(RecyclerView statsList) {
         ArrayList<String> statistics = new ArrayList<>();
 
@@ -73,8 +74,12 @@ public class EndActivityGame extends ButtonUtilsActivity {
         // Create a list of possible statistics
         ArrayList<String> possibleStatistics = new ArrayList<>();
         possibleStatistics.add(Game.getInstance().getPlayerWithMostWildcardsUsed());
-        possibleStatistics.add(Game.getInstance().getWitchPlayerTotalDrinksHandedOut());
-        possibleStatistics.add(Game.getInstance().getWitchPlayerTotalDrinksTaken());
+
+        // Check if there are any witch players before adding witch-related statistics
+        if (Game.getInstance().hasWitchClass()) {
+            possibleStatistics.add(Game.getInstance().getWitchPlayerTotalDrinksHandedOut());
+            possibleStatistics.add(Game.getInstance().getWitchPlayerTotalDrinksTaken());
+        }
 
         // Shuffle the list to randomize the order
         Collections.shuffle(possibleStatistics);

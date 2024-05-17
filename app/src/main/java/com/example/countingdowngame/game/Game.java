@@ -153,7 +153,15 @@ public class Game {
     }
 
 
-    //-----------------------------------------------------End Game ---------------------------------------------------//
+    //-----------------------------------------------------Stats ---------------------------------------------------//
+    public boolean hasWitchClass() {
+        for (Player player : players) {
+            if ("Witch".equals(player.getClassChoice())) { // Assuming you have a method isWitch() in Player class
+                return true;
+            }
+        }
+        return false;
+    }
 
     public String getWitchPlayerTotalDrinksHandedOut() {
         Player topPlayer = null;
@@ -178,8 +186,9 @@ public class Game {
                 topPlayer = player;
             }
         }
-        return topPlayer != null ? topPlayer.getName() + " handed out the most drinks as a witch \n\n (" + maxDrinks + ")" : "No one handed out any drinks as a witch.";
+        return topPlayer != null ? topPlayer.getName() + " took the most drinks as a witch \n\n (" + maxDrinks + ")" : "No one took any drinks as a witch.";
     }
+    //-----------------------------------------------------End Game ---------------------------------------------------//
 
 
     public void endGame(Context context) {

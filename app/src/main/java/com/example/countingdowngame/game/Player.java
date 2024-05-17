@@ -56,12 +56,13 @@ public class Player implements Serializable {
 
     //-----------------------------------------------------Stats---------------------------------------------------//
 
+
     public int getDrinksHandedOutByWitch() {
         return drinksHandedOutByWitch;
     }
 
     public int getDrinksTakenByWitch() {
-        return drinksHandedOutByWitch;
+        return drinksTakenByWitch;
     }
 
     public void incrementDrinksHandedOutByWitch(int drinks) {
