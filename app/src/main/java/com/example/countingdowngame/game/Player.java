@@ -28,6 +28,9 @@ public class Player implements Serializable {
     private boolean removed;
     private int abilityTurnCounter; // Add a counter for the active turns of the Survivor class
     private int angryJimTurnCounter;
+    private int drinksHandedOutByWitch;
+
+    private int drinksTakenByWitch;
 
 
     //-----------------------------------------------------Set Game---------------------------------------------------//
@@ -37,6 +40,7 @@ public class Player implements Serializable {
     }
 
     //-----------------------------------------------------Player---------------------------------------------------//
+
     public Player(Context context, String photo, String name, String classChoice) {
         this.photo = photo;
         this.name = name;
@@ -49,6 +53,25 @@ public class Player implements Serializable {
         resetWildCardAmount(context);
         this.abilityTurnCounter = 0;
     }
+
+    //-----------------------------------------------------Stats---------------------------------------------------//
+
+    public int getDrinksHandedOutByWitch() {
+        return drinksHandedOutByWitch;
+    }
+
+    public int getDrinksTakenByWitch() {
+        return drinksHandedOutByWitch;
+    }
+
+    public void incrementDrinksHandedOutByWitch(int drinks) {
+        this.drinksHandedOutByWitch += drinks;
+    }
+
+    public void incrementDrinksTakenByWitch(int drinks) {
+        this.drinksTakenByWitch += drinks;
+    }
+
 
     //-----------------------------------------------------Survivor Ability---------------------------------------------------//
 

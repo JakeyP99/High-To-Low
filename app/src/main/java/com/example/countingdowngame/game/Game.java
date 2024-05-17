@@ -16,16 +16,20 @@ public class Game {
     //-----------------------------------------------------Start Game Functions---------------------------------------------------//
 
     private static final Game gameInstance = new Game();
+    private final Map<Player, Integer> repeatingTurnsMap = new HashMap<>();
+    private final ArrayList<Integer> updatedNumbers = new ArrayList<>();
+    int currentNumber = 0;
     private GameEventListener gameEventListener;
     private ArrayList<Player> players = new ArrayList<>();
     private int currentPlayerId = 0;
+    //-----------------------------------------------------Player Functions---------------------------------------------------//
+    private final PlayerEventListener playerEventListener = e -> {
+        if (e.type == PlayerEventType.SKIP) {
+            nextPlayer();
+        }
+    };
     private int startingNumber = 0;
-    int currentNumber = 0;
-    private final Map<Player, Integer> repeatingTurnsMap = new HashMap<>();
     private boolean gameStarted = false;
-
-    private final ArrayList<Integer> updatedNumbers = new ArrayList<>();
-
 
     public static Game getInstance() {
         return gameInstance;
@@ -50,6 +54,8 @@ public class Game {
         currentPlayerId = playerId;
     }
 
+    //-----------------------------------------------------In Game---------------------------------------------------//
+
     public void startGame(int startNum, GameEventListener listener) {
         if (gameStarted)
             return;
@@ -65,10 +71,12 @@ public class Game {
         updatedNumbers.clear();
     }
 
-    //-----------------------------------------------------In Game---------------------------------------------------//
-
     public int getCurrentNumber() {
         return currentNumber;
+    }
+
+    public void setCurrentNumber(int number) {
+        currentNumber = number;
     }
 
     public Player getCurrentPlayer() {
@@ -78,6 +86,7 @@ public class Game {
             return null;
         }
     }
+
     public int nextNumber() {
         Random random = new Random();
         int nextNumber = random.nextInt(currentNumber + 1);
@@ -107,7 +116,6 @@ public class Game {
         }
     }
 
-
     public void activateRepeatingTurn(Player currentPlayer, int numberOfTurns) {
         repeatingTurnsMap.put(currentPlayer, numberOfTurns);
         currentPlayer.setInRepeatingTurn();
@@ -115,18 +123,11 @@ public class Game {
                 currentPlayer.getName() + ". Turns to go: " + numberOfTurns);
     }
 
-
-    //-----------------------------------------------------Player Functions---------------------------------------------------//
-    private final PlayerEventListener playerEventListener = e -> {
-        if (e.type == PlayerEventType.SKIP) {
-            nextPlayer();
-        }
-    };
-
     public void triggerPlayerEvent(PlayerEvent event) {
         playerEventListener.onPlayerEvent(event);
     }
-    public int getPlayerAmount(){
+
+    public int getPlayerAmount() {
         return players.size();
     }
 
@@ -142,33 +143,49 @@ public class Game {
         Player topPlayer = null;
         int maxWildcards = 0;
         for (Player player : players) {
-            int usedWildcards = player.getUsedWildcards(); // You need to implement this method in the Player class
+            int usedWildcards = player.getUsedWildcards(); // Ensure this method is implemented in the Player class
             if (usedWildcards > maxWildcards) {
                 maxWildcards = usedWildcards;
                 topPlayer = player;
             }
         }
-        return topPlayer != null ? topPlayer.getName() : "No one used any wildcards.";
+        return topPlayer != null ? topPlayer.getName() + " used the most wildcards in the game \n\n (" + maxWildcards + ")" : "No one used any wildcards.";
     }
 
-    public int getMostWildcardsUsed() {
-        int maxWildcards = 0;
-        for (Player player : players) {
-            int usedWildcards = player.getUsedWildcards(); // You need to implement this method in the Player class
-            if (usedWildcards > maxWildcards) {
-                maxWildcards = usedWildcards;
-            }
-        }
-        return maxWildcards;
-    }
 
     //-----------------------------------------------------End Game ---------------------------------------------------//
+
+    public String getWitchPlayerTotalDrinksHandedOut() {
+        Player topPlayer = null;
+        int maxDrinks = 0;
+        for (Player player : players) {
+            int totalDrinks = player.getDrinksHandedOutByWitch();
+            if (totalDrinks > maxDrinks) {
+                maxDrinks = totalDrinks;
+                topPlayer = player;
+            }
+        }
+        return topPlayer != null ? topPlayer.getName() + " handed out the most drinks as a witch \n\n (" + maxDrinks + ")" : "No one handed out any drinks as a witch.";
+    }
+
+    public String getWitchPlayerTotalDrinksTaken() {
+        Player topPlayer = null;
+        int maxDrinks = 0;
+        for (Player player : players) {
+            int totalDrinks = player.getDrinksTakenByWitch();
+            if (totalDrinks > maxDrinks) {
+                maxDrinks = totalDrinks;
+                topPlayer = player;
+            }
+        }
+        return topPlayer != null ? topPlayer.getName() + " handed out the most drinks as a witch \n\n (" + maxDrinks + ")" : "No one handed out any drinks as a witch.";
+    }
+
 
     public void endGame(Context context) {
         gameStarted = false;
         resetPlayers(context);
     }
-
 
     public void addUpdatedNumber(int number) {
         updatedNumbers.add(number);
@@ -185,10 +202,6 @@ public class Game {
         return previousNumbersFormatted;
     }
 
-    public void setCurrentNumber(int number) {
-        currentNumber = number;
-    }
-
     public void resetPlayers(Context context) {
         for (Player player : players) {
             if (player != null) {
@@ -196,6 +209,7 @@ public class Game {
             }
         }
     }
+
 
 }
 

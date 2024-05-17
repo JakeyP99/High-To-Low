@@ -16,6 +16,7 @@ import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -56,8 +57,10 @@ public class EndActivityGame extends ButtonUtilsActivity {
         ListView previousNumbers = findViewById(R.id.previousNumbers);
         setupPreviousNumbersList(previousNumbers);
     }
+
     private void setupStatsList(RecyclerView statsList) {
         ArrayList<String> statistics = new ArrayList<>();
+
         // Add the end game text
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         String playerName = currentPlayer.getName();
@@ -67,8 +70,19 @@ public class EndActivityGame extends ButtonUtilsActivity {
                 "Drink " + numberCounter + " times " + playerName + " you little baby!";
         statistics.add(endGameText);
 
-        // Add statistics here
-        statistics.add(Game.getInstance().getPlayerWithMostWildcardsUsed() + " used the most wildcards at " + Game.getInstance().getMostWildcardsUsed() + "!");
+        // Create a list of possible statistics
+        ArrayList<String> possibleStatistics = new ArrayList<>();
+        possibleStatistics.add(Game.getInstance().getPlayerWithMostWildcardsUsed());
+        possibleStatistics.add(Game.getInstance().getWitchPlayerTotalDrinksHandedOut());
+        possibleStatistics.add(Game.getInstance().getWitchPlayerTotalDrinksTaken());
+
+        // Shuffle the list to randomize the order
+        Collections.shuffle(possibleStatistics);
+
+        // Add the first two items from the shuffled list to the statistics list
+        for (int i = 0; i < 2 && i < possibleStatistics.size(); i++) {
+            statistics.add(possibleStatistics.get(i));
+        }
 
         // Set up the adapter
         EndGameListAdapter adapter = new EndGameListAdapter(this, statistics);

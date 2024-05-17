@@ -10,7 +10,7 @@
     <TextView
         android:id="@+id/statsItemView"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="170dp"
         android:gravity="center"
         android:textColor="@color/bluedark"
         android:textSize="25sp"
