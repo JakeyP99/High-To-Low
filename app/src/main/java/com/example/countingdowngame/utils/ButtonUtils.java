@@ -61,13 +61,6 @@ public class ButtonUtils {
         }
     }
 
-    public void playBurpSound() {
-        if (!isMuted()) {
-            Log.d("TAG", "playBurpSound: bop played");
-            burp[1].start();
-        }
-    }
-
     public void playSoundEffects() {
         if (isMuted()) {
             return;

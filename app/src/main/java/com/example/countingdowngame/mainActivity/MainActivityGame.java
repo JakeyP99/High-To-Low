@@ -302,7 +302,7 @@ public class MainActivityGame extends SharedMainActivity {
 
             Handler handler = new Handler();
             handler.postDelayed(() -> {
-                btnUtils.playBurpSound();
+                btnUtils.playSoundEffects();
                 Game.getInstance().endGame(this);
                 onEnd.run();
             }, 3300);
@@ -357,7 +357,6 @@ public class MainActivityGame extends SharedMainActivity {
             btnClassAbility.setVisibility(View.INVISIBLE);
         }
     }
-
 
     private void updatePlayerInfo(Player currentPlayer) {
         String playerName = currentPlayer.getName();

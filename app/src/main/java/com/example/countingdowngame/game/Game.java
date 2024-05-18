@@ -23,6 +23,7 @@ public class Game {
     private GameEventListener gameEventListener;
     private ArrayList<Player> players = new ArrayList<>();
     private int currentPlayerId = 0;
+    private Boolean playerUsedWildcards = false;
 
     //-----------------------------------------------------Player Functions---------------------------------------------------//
     private final PlayerEventListener playerEventListener = e -> {
@@ -71,6 +72,15 @@ public class Game {
         startingNumber = startNum;
         currentPlayerId = 0;
         updatedNumbers.clear();
+    }
+
+
+    public boolean getPlayerUsedWildcards() {
+        return playerUsedWildcards;
+    }
+
+    public void setPlayerUsedWildcards(boolean didPlayerUseWildcard) {
+        playerUsedWildcards = didPlayerUseWildcard;
     }
 
     public int getCurrentNumber() {
@@ -143,15 +153,16 @@ public class Game {
 
     public String getPlayerWithMostWildcardsUsed() {
         Player topPlayer = null;
-        int maxWildcards = 0;
+        int minWildCards = 0;
         for (Player player : players) {
             int usedWildcards = player.getUsedWildcards(); // Ensure this method is implemented in the Player class
-            if (usedWildcards > maxWildcards) {
-                maxWildcards = usedWildcards;
+            if (usedWildcards > minWildCards) {
+                setPlayerUsedWildcards(true);
+                minWildCards = usedWildcards;
                 topPlayer = player;
             }
         }
-        return topPlayer != null ? topPlayer.getName() + " used the most wildcards in the game \n\n (" + maxWildcards + ")" : "No one used any wildcards.";
+        return topPlayer != null ? topPlayer.getName() + " used the most wildcards in the game \n\n (" + minWildCards + ")" : "No one used any wildcards.";
     }
 
 

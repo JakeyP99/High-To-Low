@@ -73,7 +73,12 @@ public class EndActivityGame extends ButtonUtilsActivity {
 
         // Create a list of possible statistics
         ArrayList<String> possibleStatistics = new ArrayList<>();
-        possibleStatistics.add(Game.getInstance().getPlayerWithMostWildcardsUsed());
+
+        if (Game.getInstance().getPlayerUsedWildcards()) {
+            possibleStatistics.add(Game.getInstance().getPlayerWithMostWildcardsUsed());
+        }
+
+
 
         // Check if there are any witch players before adding witch-related statistics
         if (Game.getInstance().hasWitchClass()) {
