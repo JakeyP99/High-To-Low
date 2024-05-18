@@ -128,11 +128,26 @@ public class Game {
         }
     }
 
-    public void activateRepeatingTurn(Player currentPlayer, int numberOfTurns) {
-        repeatingTurnsMap.put(currentPlayer, numberOfTurns);
-        currentPlayer.setInRepeatingTurn();
+    public Player getRandomPlayerExcludingCurrent() {
+        Player currentPlayer = getCurrentPlayer();
+        List<Player> playersExcludingCurrent = new ArrayList<>(players);
+        playersExcludingCurrent.remove(currentPlayer);
+
+        Random random = new Random();
+        if (!playersExcludingCurrent.isEmpty()) {
+            int randomIndex = random.nextInt(playersExcludingCurrent.size());
+            return playersExcludingCurrent.get(randomIndex);
+        } else {
+            return null;
+        }
+
+    }
+
+    public void activateRepeatingTurn(Player player, int numberOfTurns) {
+        repeatingTurnsMap.put(player, numberOfTurns);
+        player.setInRepeatingTurn();
         Log.d(TAG, "activateRepeatingTurn: Repeating turn was activated for Player " +
-                currentPlayer.getName() + ". Turns to go: " + numberOfTurns);
+                player.getName() + ". Turns to go: " + numberOfTurns);
     }
 
     public void triggerPlayerEvent(PlayerEvent event) {

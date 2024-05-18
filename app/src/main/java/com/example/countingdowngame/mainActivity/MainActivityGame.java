@@ -34,7 +34,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
@@ -347,13 +346,14 @@ public class MainActivityGame extends SharedMainActivity {
                 "Quiz Magician".equals(currentPlayer.getClassChoice()) ||
                 "Survivor".equals(currentPlayer.getClassChoice()) ||
                 "Goblin".equals(currentPlayer.getClassChoice()) ||
+                "Angry Jim".equals(currentPlayer.getClassChoice()) ||
                 "Soldier".equals(currentPlayer.getClassChoice())) &&
                 !currentPlayer.getUsedClassAbility();
 
         Log.d(TAG, "updateClassAbilityButton: " + currentPlayer.getUsedClassAbility());
 
         btnClassAbility.setVisibility(showClassAbilityButton ? View.VISIBLE : View.INVISIBLE);
-        if ("Angry Jim".equals(currentPlayer.getClassChoice()) || "No Class".equals(currentPlayer.getClassChoice())) {
+        if ("No Class".equals(currentPlayer.getClassChoice())) {
             btnClassAbility.setVisibility(View.INVISIBLE);
         }
     }
@@ -533,7 +533,7 @@ public class MainActivityGame extends SharedMainActivity {
                 handleGoblinClass(currentPlayer);
                 break;
             case "Angry Jim":
-                handleAngryJimClass();
+                handleAngryJimClass(currentPlayer);
                 break;
             default:
                 break;
@@ -570,19 +570,25 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void handleGoblinClass(Player currentPlayer) {
-        Player affectedPlayer = currentPlayer.removeRandomWildCard();
+        Game game = Game.getInstance();
+        Player randomPlayer = game.getRandomPlayerExcludingCurrent();
+        randomPlayer.removeWildCard(randomPlayer, 1);
         currentPlayer.setUsedClassAbility(true);
-        if (affectedPlayer != null) {
-            showDialog("Goblin's Active: \n\n" + affectedPlayer.getName() + " lost a wildcard!");
-            btnClassAbility.setVisibility(View.INVISIBLE);
-        } else {
-            Toast.makeText(this, "No other players have wildcards to lose.", Toast.LENGTH_SHORT).show();
-        }
+        showDialog("Goblin's Active: \n\n" + randomPlayer.getName() + " lost a wildcard!");
+        btnClassAbility.setVisibility(View.INVISIBLE);
     }
 
-    private void handleAngryJimClass() {
-        doubleCurrentNumber();
-        btnClassAbility.setVisibility(View.INVISIBLE);
+    private void handleAngryJimClass(Player currentPlayer) {
+        Game game = Game.getInstance();
+        Player randomPlayer = game.getRandomPlayerExcludingCurrent();
+        if (randomPlayer != null) {
+            game.activateRepeatingTurn(randomPlayer, 1); // Assuming 1 turn for repeating
+            showDialog("Angry Jim's Active: \n\n" + randomPlayer.getName() + " must repeat their turn.");
+            btnClassAbility.setVisibility(View.INVISIBLE);
+            currentPlayer.setUsedClassAbility(true);
+        } else {
+            Log.e(TAG, "No players available to select for repeating turn.");
+        }
     }
 
 

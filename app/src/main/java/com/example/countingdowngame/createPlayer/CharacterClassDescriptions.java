@@ -8,7 +8,7 @@ public class CharacterClassDescriptions {
     public static final String soldierActiveDescription = "If the number less than or equal to 10, add 4 drinks to the counter, but you must generate the number twice.";
     public static final String quizMagicianActiveDescription = "The next wildcard will be two quiz questions (double the fun).";
     public static final String survivorActiveDescription = "Half the current number, and continue your turn. Ability resets after three turns.";
-    public static final String angryJimActiveDescription = "Double the current number.";
+    public static final String angryJimActiveDescription = "Randomly make another player repeat their turn.";
     public static final String goblinActiveDescription = "Remove one wildcard from a random player. Ability resets after three turns.";
     public static final String noClassDescription = "Choose this class if you don't want to have any abilities.";
 

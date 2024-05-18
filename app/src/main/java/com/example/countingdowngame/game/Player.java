@@ -6,9 +6,6 @@ import android.util.Log;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 public class Player implements Serializable {
 
@@ -35,12 +32,6 @@ public class Player implements Serializable {
 
     //-----------------------------------------------------Set Game---------------------------------------------------//
 
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
-    //-----------------------------------------------------Player---------------------------------------------------//
-
     public Player(Context context, String photo, String name, String classChoice) {
         this.photo = photo;
         this.name = name;
@@ -54,8 +45,13 @@ public class Player implements Serializable {
         this.abilityTurnCounter = 0;
     }
 
-    //-----------------------------------------------------Stats---------------------------------------------------//
+    //-----------------------------------------------------Player---------------------------------------------------//
 
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    //-----------------------------------------------------Stats---------------------------------------------------//
 
     public int getDrinksHandedOutByWitch() {
         return drinksHandedOutByWitch;
@@ -79,6 +75,7 @@ public class Player implements Serializable {
     public void incrementAbilityTurnCounter() {
         abilityTurnCounter++;
     }
+
     public void resetSpecificTurnCounter() {
         abilityTurnCounter = 0;
     }
@@ -105,22 +102,21 @@ public class Player implements Serializable {
         this.usedClassAbility = classAbility;
     }
 
-    public void setJustUsedClassAbility(boolean justUsedClassAbility) {
-        this.justUsedClassAbility = justUsedClassAbility;
-    }
-
     public boolean getJustUsedClassAbility() {
         return justUsedClassAbility;
     }
 
-    public void setJustUsedWildCard(boolean used) {
-        this.usedWildCard = used;
+    public void setJustUsedClassAbility(boolean justUsedClassAbility) {
+        this.justUsedClassAbility = justUsedClassAbility;
     }
 
     public boolean getJustUsedWildCard() {
         return this.usedWildCard;
     }
 
+    public void setJustUsedWildCard(boolean used) {
+        this.usedWildCard = used;
+    }
 
     public void setInRepeatingTurn() {
     }
@@ -174,30 +170,22 @@ public class Player implements Serializable {
     public int getWildCardAmount() {
         return wildCardAmount;
     }
+
     public void useWildCard() {
         if (game != null) {
             game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.WILD_CARD));
         }
         wildCardAmount--; // Decrease the wildcard amount
     }
+
     public void useSkip() {
         this.game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.SKIP));
     }
 
-    public Player removeRandomWildCard() {
-        List<Player> players = Game.getInstance().getPlayers();
-        List<Player> otherPlayers = players.stream()
-                .filter(p -> !p.equals(this) && p.getWildCardAmount() > 0)
-                .collect(Collectors.toList());
-        if (!otherPlayers.isEmpty()) {
-            Player randomPlayer = otherPlayers.get(new Random().nextInt(otherPlayers.size()));
-            randomPlayer.loseWildCards(1);
-            Log.d("GoblinAbility", randomPlayer.getName() + " has lost a wildcard due to Goblin's ability.");
-            return randomPlayer;
-        } else {
-            Log.d("GoblinAbility", "No other players have wildcards to lose.");
-            return null;
-        }
+    public void removeWildCard(Player player, int numberOfWildCardsToLose) {
+        player.loseWildCards(numberOfWildCardsToLose);
+        Log.d("GoblinAbility", player.getName() + " has lost a wildcard due to Goblin's ability.");
+
     }
 
 
@@ -215,9 +203,11 @@ public class Player implements Serializable {
     public void resetWildCardAmount(Context context) {
         wildCardAmount = GeneralSettingsLocalStore.fromContext(context).playerWildCardCount();
     }
+
     public void gainWildCards(int numberOfCardsToGain) {
         wildCardAmount += numberOfCardsToGain;
     }
+
     public void loseWildCards(int numberOfWildCardsToLose) {
         wildCardAmount = Math.max(wildCardAmount - numberOfWildCardsToLose, 0);
     }
