@@ -253,10 +253,6 @@ public class SharedMainActivity extends ButtonUtilsActivity {
             }
         });
     }
-
-
-
-
     public static class TextSizeCalculator {
         public static int calculateTextSizeBasedOnCharacterCount(String text) {
             int textSize;

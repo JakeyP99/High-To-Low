@@ -83,7 +83,7 @@ public class MainActivityGame extends SharedMainActivity {
     private int turnCounter = 0;
     //-----------------------------------------------------Views---------------------------------------------------//
     private Button btnAnswer;
-    private Button btnBackWild;
+    private Button btnWildContinue;
     private Button btnClassAbility;
     private Button btnGenerate;
     private Button btnQuizAnswerBL;
@@ -173,7 +173,7 @@ public class MainActivityGame extends SharedMainActivity {
         btnAnswer = findViewById(R.id.btnAnswer);
         btnClassAbility = findViewById(R.id.btnClassAbility);
         btnGenerate = findViewById(R.id.btnGenerate);
-        btnBackWild = findViewById(btnBackWildCard);
+        btnWildContinue = findViewById(btnBackWildCard);
 
 
         btnQuizAnswerBL = findViewById(R.id.btnQuizAnswerBL);
@@ -230,7 +230,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         ImageButton imageButtonExit = findViewById(btnExitGame);
 
-        btnBackWild.setVisibility(View.INVISIBLE);
+        btnWildContinue.setVisibility(View.INVISIBLE);
         btnAnswer.setVisibility(View.INVISIBLE);
         btnQuizAnswerBL.setVisibility(View.INVISIBLE);
         btnQuizAnswerBR.setVisibility(View.INVISIBLE);
@@ -242,7 +242,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         playerImage.setOnClickListener(v -> characterClassDescriptions());
         btnUtils.setButton(btnAnswer, this::showAnswer);
-        btnUtils.setButton(btnBackWild, this::wildCardContinue);
+        btnUtils.setButton(btnWildContinue, this::wildCardContinue);
         btnUtils.setButton(btnClassAbility, this::activateActiveAbility);
 
 
@@ -1011,7 +1011,7 @@ public class MainActivityGame extends SharedMainActivity {
             }
         } else {
             btnAnswer.setVisibility(View.INVISIBLE);
-            btnBackWild.setVisibility(View.VISIBLE);
+            btnWildContinue.setVisibility(View.VISIBLE);
         }
     }
 
@@ -1167,9 +1167,11 @@ public class MainActivityGame extends SharedMainActivity {
 
 
     private void handleCorrectAnswer(Button selectedButton, String correctAnswer) {
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        Game.getInstance().incrementPlayerQuizCorrectAnswers(currentPlayer);
+
         selectedButton.setBackgroundResource(R.drawable.buttonhighlightgreen);
         displayConfetti(Objects.requireNonNull(getConfettiView(selectedButton.getId())));
-
         new Handler().postDelayed(() -> {
             resetButtonBackgrounds(answerButtons);
             handleAnswerOutcome(selectedWildCard.getAnswer().equals(correctAnswer));
@@ -1180,6 +1182,7 @@ public class MainActivityGame extends SharedMainActivity {
     private void handleIncorrectAnswer(Button selectedButton, String correctAnswer) {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         Game.getInstance().activateRepeatingTurn(currentPlayer, 1);
+        Game.getInstance().incrementPlayerQuizIncorrectAnswers(currentPlayer);
 
 
         selectedButton.setBackgroundResource(R.drawable.buttonhighlightred);
@@ -1211,7 +1214,7 @@ public class MainActivityGame extends SharedMainActivity {
         }
 
         hideQuizButtons();
-        btnBackWild.setVisibility(View.VISIBLE);
+        btnWildContinue.setVisibility(View.VISIBLE);
     }
 
 
@@ -1226,6 +1229,7 @@ public class MainActivityGame extends SharedMainActivity {
             btnGenerate.setVisibility(View.INVISIBLE);
             nextPlayerText.setVisibility(View.INVISIBLE);
             numberCounterText.setVisibility(View.INVISIBLE);
+            btnWildContinue.setVisibility(View.INVISIBLE);
             currentPlayer.setUsedClassAbility(true);
             currentPlayer.setJustUsedClassAbility(false);
         } else {
@@ -1237,7 +1241,7 @@ public class MainActivityGame extends SharedMainActivity {
             nextPlayerText.setVisibility(View.VISIBLE);
 
             wildText.setVisibility(View.INVISIBLE);
-            btnBackWild.setVisibility(View.INVISIBLE);
+            btnWildContinue.setVisibility(View.INVISIBLE);
             btnAnswer.setVisibility(View.INVISIBLE);
             btnQuizAnswerBL.setVisibility(View.INVISIBLE);
             btnQuizAnswerBR.setVisibility(View.INVISIBLE);
@@ -1268,7 +1272,7 @@ public class MainActivityGame extends SharedMainActivity {
     //-----------------------------------------------------Quiz---------------------------------------------------//
 
     private void quizAnswerView(String string) {
-        btnBackWild.setVisibility(View.VISIBLE);
+        btnWildContinue.setVisibility(View.VISIBLE);
         wildText.setVisibility(View.VISIBLE);
         btnWild.setVisibility(View.INVISIBLE);
         btnGenerate.setVisibility(View.INVISIBLE);
@@ -1308,18 +1312,20 @@ public class MainActivityGame extends SharedMainActivity {
                 wildActivityTextView.setText(answer);
                 Log.d("Answer", "Quiz WildCard: " + answer);
 
-                btnBackWild.setVisibility(View.INVISIBLE);
+                btnWildContinue.setVisibility(View.INVISIBLE);
 
                 btnUtils.setButton(btnQuizAnswerBL, () -> {
                     btnQuizAnswerBL.setVisibility(View.INVISIBLE);
                     btnQuizAnswerBR.setVisibility(View.INVISIBLE);
                     quizAnswerView(currentPlayer.getName() + " since you got it right, give out a drink!");
+                    Game.getInstance().incrementPlayerQuizCorrectAnswers(currentPlayer);
                 });
 
                 btnUtils.setButton(btnQuizAnswerBR, () -> {
                     btnQuizAnswerBL.setVisibility(View.INVISIBLE);
                     btnQuizAnswerBR.setVisibility(View.INVISIBLE);
                     quizAnswerView(currentPlayer.getName() + " since you got it wrong, take a drink! \n\n P.S. Maybe read a book once in a while.");
+                    Game.getInstance().incrementPlayerQuizIncorrectAnswers(currentPlayer);
                 });
 
             } else {

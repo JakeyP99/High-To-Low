@@ -281,7 +281,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
 
 
     //-----------------------------------------------------Wild Card Choices---------------------------------------------------//
-
     private void setButtonListeners() {
         button_multiChoice.setOnClickListener(this);
         button_nonMultiChoice.setOnClickListener(this);

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.Player;
+import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
@@ -78,6 +79,13 @@ public class EndActivityGame extends ButtonUtilsActivity {
             possibleStatistics.add(Game.getInstance().getPlayerWithMostWildcardsUsed());
         }
 
+        if (GeneralSettingsLocalStore.fromContext(this).isQuizActivated() && Game.getInstance().getQuizWasTriggered()) {
+            possibleStatistics.add(Game.getInstance().getPlayerWithMostQuizCorrectAnswers());
+            String mostIncorrectAnswers = Game.getInstance().getPlayerWithMostQuizIncorrectAnswers();
+            if (!mostIncorrectAnswers.isEmpty()) {
+                possibleStatistics.add(mostIncorrectAnswers);
+            }
+        }
 
 
         // Check if there are any witch players before adding witch-related statistics
@@ -89,10 +97,11 @@ public class EndActivityGame extends ButtonUtilsActivity {
         // Shuffle the list to randomize the order
         Collections.shuffle(possibleStatistics);
 
-        // Add the first two items from the shuffled list to the statistics list
-        for (int i = 0; i < 2 && i < possibleStatistics.size(); i++) {
+        int maxSize = Math.min(3, possibleStatistics.size());
+        for (int i = 0; i < maxSize; i++) {
             statistics.add(possibleStatistics.get(i));
         }
+
 
         // Set up the adapter
         EndGameListAdapter adapter = new EndGameListAdapter(this, statistics);

@@ -23,14 +23,14 @@ public class Game {
     private GameEventListener gameEventListener;
     private ArrayList<Player> players = new ArrayList<>();
     private int currentPlayerId = 0;
-    private Boolean playerUsedWildcards = false;
-
     //-----------------------------------------------------Player Functions---------------------------------------------------//
     private final PlayerEventListener playerEventListener = e -> {
         if (e.type == PlayerEventType.SKIP) {
             nextPlayer();
         }
     };
+    private Boolean playerUsedWildcards = false;
+    private Boolean quizWasTriggered = false;
     private int startingNumber = 0;
     private boolean gameStarted = false;
 
@@ -166,6 +166,8 @@ public class Game {
         players.addAll(playerList);
     }
 
+
+    //-----------------------------------------------------Stats ---------------------------------------------------//
     public String getPlayerWithMostWildcardsUsed() {
         Player topPlayer = null;
         int minWildCards = 0;
@@ -177,11 +179,60 @@ public class Game {
                 topPlayer = player;
             }
         }
-        return topPlayer != null ? topPlayer.getName() + " used the most wildcards in the game \n\n (" + minWildCards + ")" : "No one used any wildcards.";
+        return topPlayer != null ? topPlayer.getName() + " used " + minWildCards + " wildcards." : "No one used any wildcards.";
     }
 
 
-    //-----------------------------------------------------Stats ---------------------------------------------------//
+    public void setQuizWasTriggered(Boolean wasQuizTriggered) {
+        quizWasTriggered = wasQuizTriggered;
+    }
+
+    public Boolean getQuizWasTriggered() {
+        return quizWasTriggered;
+    }
+
+    public void incrementPlayerQuizCorrectAnswers(Player player) {
+        if (player != null) {
+            setQuizWasTriggered(true);
+            player.incrementCorrectQuizAnswers();
+            Log.d(TAG, "incrementPlayerQuizCorrectAnswers: " + player.getCorrectQuizAnswers());
+        }
+    }
+
+    public String getPlayerWithMostQuizCorrectAnswers() {
+        Player topPlayer = null;
+        int minCorrectAnswers = 0;
+        for (Player player : players) {
+            int correctAnswers = player.getCorrectQuizAnswers();
+            if (correctAnswers > minCorrectAnswers) {
+                minCorrectAnswers = correctAnswers;
+                topPlayer = player;
+            }
+        }
+        return topPlayer != null ? topPlayer.getName() + " got the most quiz questions right with " + minCorrectAnswers + " correct answers." : "No one answered any quiz questions correctly.";
+    }
+
+    public void incrementPlayerQuizIncorrectAnswers(Player player) {
+        if (player != null) {
+            player.incrementIncorrectQuizAnswers();
+            Log.d(TAG, "incrementPlayerQuizIncorrectAnswers: " + player.getIncorrectQuizAnswers());
+        }
+    }
+
+    public String getPlayerWithMostQuizIncorrectAnswers() {
+        Player topPlayer = null;
+        int minIncorrectAnswers = 0;
+        for (Player player : players) {
+            int correctAnswers = player.getIncorrectQuizAnswers();
+            if (correctAnswers > minIncorrectAnswers) {
+                minIncorrectAnswers = correctAnswers;
+                topPlayer = player;
+            }
+        }
+        return topPlayer != null ? topPlayer.getName() + " got the most quiz questions wrong with " + minIncorrectAnswers + " incorrect answers." : "";
+    }
+
+
     public boolean hasWitchClass() {
         for (Player player : players) {
             if ("Witch".equals(player.getClassChoice())) { // Assuming you have a method isWitch() in Player class
@@ -201,7 +252,7 @@ public class Game {
                 topPlayer = player;
             }
         }
-        return topPlayer != null ? topPlayer.getName() + " handed out the most drinks as a witch \n\n " + maxDrinks : "No one handed out any drinks as a witch.";
+        return topPlayer != null ? topPlayer.getName() + " handed out " + maxDrinks + " as a witch!" : "No one handed out any drinks as a witch.";
     }
 
     public String getWitchPlayerTotalDrinksTaken() {
@@ -214,7 +265,7 @@ public class Game {
                 topPlayer = player;
             }
         }
-        return topPlayer != null ? topPlayer.getName() + " took the most drinks as a witch \n\n " + maxDrinks : "No one took any drinks as a witch.";
+        return topPlayer != null ? topPlayer.getName() + " took " + maxDrinks + " drinks as a witch!" : "No one took any drinks as a witch.";
     }
     //-----------------------------------------------------End Game ---------------------------------------------------//
 
