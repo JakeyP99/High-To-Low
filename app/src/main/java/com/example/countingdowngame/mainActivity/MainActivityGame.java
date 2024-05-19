@@ -759,6 +759,7 @@ public class MainActivityGame extends SharedMainActivity {
             currentPlayer.incrementAbilityTurnCounter();
         }
         if (currentPlayer.getAbilityTurnCounter() == 3) {
+            currentPlayer.resetSpecificTurnCounter();
             currentPlayer.gainWildCards(1);
         }
     }
