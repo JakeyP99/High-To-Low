@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Random;
 
 public class MainActivityCatastrophes {
+    private final Catastrophe[] allCatastrophes;
+    private List<Catastrophe> unusedCatastrophes;
 
     public static class Catastrophe {
         private final String message;
@@ -25,12 +27,6 @@ public class MainActivityCatastrophes {
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-
-    private final Catastrophe[] allCatastrophes;
-    private List<Catastrophe> unusedCatastrophes;
-
-    // Default constructor with predefined catastrophes
     public MainActivityCatastrophes() {
         this.allCatastrophes = new Catastrophe[]{
                 new Catastrophe("Two drinks have been added!", 1),
@@ -45,16 +41,11 @@ public class MainActivityCatastrophes {
     }
 
     public Catastrophe deployCatastrophe() {
-        // Check if there are any unused catastrophes left
         if (unusedCatastrophes.isEmpty()) {
-            // If all catastrophes have been used, reset the list
             unusedCatastrophes = new ArrayList<>(Arrays.asList(allCatastrophes));
         }
-
-        // Randomly select an unused catastrophe to deploy
         Random random = new Random();
         int index = random.nextInt(unusedCatastrophes.size());
-
         return unusedCatastrophes.remove(index);
     }
 

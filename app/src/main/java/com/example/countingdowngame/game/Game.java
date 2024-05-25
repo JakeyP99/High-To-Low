@@ -290,12 +290,12 @@ public class Game {
     public ArrayList<String> getPreviousNumbersFormatted() {
         ArrayList<String> previousNumbersFormatted = new ArrayList<>();
         int nameSize = playerNames.size();
+        previousNumbersFormatted.add("Starting Number: " + startingNumber);
         for (int i = 0; i < updatedNumbers.size(); i++) {
             String playerName = i < nameSize ? playerNames.get(i) : "Game";
             String number = String.valueOf(updatedNumbers.get(i));
             previousNumbersFormatted.add(playerName + ": " + number);
         }
-        previousNumbersFormatted.add("Starting Number: " + startingNumber);
         return previousNumbersFormatted;
     }
 
