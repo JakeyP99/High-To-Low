@@ -102,7 +102,7 @@ public class MainActivityGame extends SharedMainActivity {
     private GifImageView muteGif;
     private GifImageView soundGif;
     private ImageView playerImage;
-    private TextView drinkNumberCounterTextView;
+    private TextView drinkNumberTextView;
     private TextView nextPlayerText;
     private TextView numberCounterText;
 
@@ -167,7 +167,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         playerImage = findViewById(R.id.playerImage);
         numberCounterText = findViewById(textView_NumberText);
-        drinkNumberCounterTextView = findViewById(textView_numberCounter);
+        drinkNumberTextView = findViewById(textView_numberCounter);
         nextPlayerText = findViewById(textView_Number_Turn);
         btnWild = findViewById(R.id.btnWild);
         confettiImageViewBL = findViewById(R.id.confettiImageViewBL);
@@ -258,7 +258,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         btnUtils.setButton(btnWild, () -> {
             wildCardActivate(Game.getInstance().getCurrentPlayer());
-            drinkNumberCounterTextView.setVisibility(View.INVISIBLE);
+            drinkNumberTextView.setVisibility(View.INVISIBLE);
             wildText.setVisibility(View.VISIBLE);
             btnWild.setVisibility(View.INVISIBLE);
             btnGenerate.setVisibility(View.INVISIBLE);
@@ -342,45 +342,46 @@ public class MainActivityGame extends SharedMainActivity {
         catastropheTurnCounter++;
         Log.d(TAG, "updateCatastropheTurnCounter: " + catastropheTurnCounter);
 
-//        if (catastropheTurnCounter == catastropheLimit) {
-        switch (catastrophe.getEffect()) {
-            case 1:
-                multiplyDrinkNumberCounter();
-                break;
-            case 2:
-                divideDrinkNumberCounter();
-                break;
-            case 3:
-                doubleCurrentNumber();
-                break;
-            case 4:
-                halveCurrentNumber();
-                break;
-            case 5:
-                reverseTurnOrder(currentPlayer);
-                break;
-            case 6:
-                for (Player player : Game.getInstance().getPlayers()) {
-                    player.gainWildCards(2);
-                }
-                break;
-            case 7:
-                for (Player player : Game.getInstance().getPlayers()) {
-                    player.loseWildCards(2);
-                }
-                break;
-            default:
-                break;
+        Log.d("Before switch", "drinkNumberCounterInt: " + drinkNumberCounterInt);
+
+        if (catastropheTurnCounter == catastropheLimit) {
+            switch (catastrophe.getEffect()) {
+                case 1:
+                    drinkNumberCounterInt += 2;
+                    updateDrinkNumberCounterTextView();
+                    break;
+                case 2:
+                    drinkNumberCounterInt -= 2;
+                    updateDrinkNumberCounterTextView();
+                case 3:
+                    doubleCurrentNumber();
+                    break;
+                case 4:
+                    halveCurrentNumber();
+                    break;
+                case 5:
+                    reverseTurnOrder(currentPlayer);
+                    break;
+                case 6:
+                    for (Player player : Game.getInstance().getPlayers()) {
+                        player.gainWildCards(2);
+                    }
+                    break;
+                case 7:
+                    for (Player player : Game.getInstance().getPlayers()) {
+                        player.loseWildCards(2);
+                    }
+                    break;
+                default:
+                    break;
+            }
+            showDialog(catastrophe.getMessage());
+            catastropheTurnCounter = 0; // Reset the turn counter after reaching the limit
+
+            // Generate a new random catastrophe limit
+            Random random = new Random();
+            catastropheLimit = random.nextInt(4) + 4; // Generates a number between 4 and 7 (inclusive)
         }
-
-        Log.d(TAG, "updateCatastropheTurnCounter: " + catastrophe.getMessage());
-//        showDialog(catastrophe.getMessage());
-        catastropheTurnCounter = 0; // Reset the turn counter after reaching the limit
-
-        // Generate a new random catastrophe limit
-        Random random = new Random();
-        catastropheLimit = random.nextInt(4) + 4; // Generates a number between 4 and 7 (inclusive)
-//        }
     }
 
     private void setCatastropheLimit() {
@@ -471,17 +472,6 @@ public class MainActivityGame extends SharedMainActivity {
         updateDrinkNumberCounterTextView();
     }
 
-    private void multiplyDrinkNumberCounter() {
-        drinkNumberCounterInt *= 2;
-        updateDrinkNumberCounterTextView();
-    }
-
-    private void divideDrinkNumberCounter() {
-        // Check if divisor is not zero to avoid division by zero error
-        drinkNumberCounterInt /= 2;
-        updateDrinkNumberCounterTextView();
-    }
-
 
     private void updateDrinkNumberCounterTextView() {
         int maxTotalDrinkAmount = GeneralSettingsLocalStore.fromContext(this).totalDrinkAmount();
@@ -497,7 +487,7 @@ public class MainActivityGame extends SharedMainActivity {
             drinkNumberText = maxTotalDrinkAmount + " (+" + (drinkNumberCounterInt - maxTotalDrinkAmount) + ") Drinks";
         }
 
-        drinkNumberCounterTextView.setText(drinkNumberText);
+        drinkNumberTextView.setText(drinkNumberText);
     }
 
 
@@ -619,7 +609,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void handleScientistClass(Player currentPlayer) {
-        changeCurrentNumber();
+        scientistChangeCurrentNumber();
         Game.getInstance().activateRepeatingTurn(currentPlayer, 1);
     }
 
@@ -925,7 +915,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
 
-    private void changeCurrentNumber() {
+    private void scientistChangeCurrentNumber() {
 
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.character_class_change_number, null);
@@ -1137,7 +1127,7 @@ public class MainActivityGame extends SharedMainActivity {
         Game game = Game.getInstance();
         int currentNumber = game.getCurrentNumber();
         int updatedNumber = Math.min(currentNumber * 2, 999999999);
-        game.setCurrentNumber(updatedNumber);
+        updateNumber(updatedNumber);
     }
 
 
@@ -1158,8 +1148,6 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void updateNumber(int updatedNumber) {
-        Game.getInstance().setCurrentNumber(updatedNumber);
-        Game.getInstance().addUpdatedNumber(updatedNumber);
         numberCounterText.setText(String.valueOf(updatedNumber));
         SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(updatedNumber));
     }
@@ -1304,7 +1292,7 @@ public class MainActivityGame extends SharedMainActivity {
         if ("Quiz Magician".equals(currentPlayer.getClassChoice()) && currentPlayer.getJustUsedClassAbility()) {
             wildCardActivate(currentPlayer);
             currentPlayer.gainWildCards(1);
-            drinkNumberCounterTextView.setVisibility(View.INVISIBLE);
+            drinkNumberTextView.setVisibility(View.INVISIBLE);
             wildText.setVisibility(View.VISIBLE);
             btnWild.setVisibility(View.INVISIBLE);
             btnGenerate.setVisibility(View.INVISIBLE);
@@ -1317,7 +1305,7 @@ public class MainActivityGame extends SharedMainActivity {
             currentPlayer.useSkip();
 
             btnGenerate.setVisibility(View.VISIBLE);
-            drinkNumberCounterTextView.setVisibility(View.VISIBLE);
+            drinkNumberTextView.setVisibility(View.VISIBLE);
             numberCounterText.setVisibility(View.VISIBLE);
             nextPlayerText.setVisibility(View.VISIBLE);
 
