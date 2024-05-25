@@ -60,7 +60,6 @@ public class EndActivityGame extends ButtonUtilsActivity {
         setupPreviousNumbersList(previousNumbers);
     }
 
-
     private void setupStatsList(RecyclerView statsList) {
         ArrayList<String> statistics = new ArrayList<>();
 
@@ -88,7 +87,6 @@ public class EndActivityGame extends ButtonUtilsActivity {
             }
         }
 
-
         // Check if there are any witch players before adding witch-related statistics
         if (Game.getInstance().hasWitchClass()) {
             possibleStatistics.add(Game.getInstance().getWitchPlayerTotalDrinksHandedOut());
@@ -103,7 +101,6 @@ public class EndActivityGame extends ButtonUtilsActivity {
             statistics.add(possibleStatistics.get(i));
         }
 
-
         // Set up the adapter
         EndGameListAdapter adapter = new EndGameListAdapter(this, statistics);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -115,7 +112,6 @@ public class EndActivityGame extends ButtonUtilsActivity {
         snapHelper.attachToRecyclerView(statsList);
     }
 
-
     private void setupButtonControls() {
         Button btnPlayAgain = findViewById(R.id.btnplayAgain);
         Button btnNewPlayer = findViewById(R.id.btnNewPlayer);
@@ -123,12 +119,18 @@ public class EndActivityGame extends ButtonUtilsActivity {
         setButtonActions(btnPlayAgain, btnNewPlayer);
     }
 
-
     private void setupPreviousNumbersList(ListView previousNumbersList) {
         ArrayList<String> previousNumbersFormatted = Game.getInstance().getPreviousNumbersFormatted();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(EndActivityGame.this,
-                R.layout.list_view_end_game, R.id.previousNumbers, previousNumbersFormatted);
-        previousNumbersList.setAdapter(adapter);
+
+        // Check if the list is not null and has valid indices
+        if (previousNumbersFormatted != null && !previousNumbersFormatted.isEmpty()) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(EndActivityGame.this,
+                    R.layout.list_view_end_game, R.id.previousNumbers, previousNumbersFormatted);
+            previousNumbersList.setAdapter(adapter);
+        } else {
+            // Handle the case where the list is null or empty
+            System.err.println("Error: previousNumbersFormatted is null or empty");
+        }
     }
 
     private void setButtonActions(Button btnPlayAgain, Button btnNewPlayer) {

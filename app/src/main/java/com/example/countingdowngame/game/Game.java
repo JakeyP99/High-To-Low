@@ -171,7 +171,6 @@ public class Game {
         players.addAll(playerList);
     }
 
-
     //-----------------------------------------------------Stats ---------------------------------------------------//
     public String getPlayerWithMostWildcardsUsed() {
         Player topPlayer = null;
@@ -291,26 +290,23 @@ public class Game {
 
     public ArrayList<String> getPreviousNumbersFormatted() {
         ArrayList<String> previousNumbersFormatted = new ArrayList<>();
+        int nameSize = playerNames.size();
+        Log.d("GameInfo", "Name Size: " + nameSize); // Log name size
+        previousNumbersFormatted.add("Starting Number: " + startingNumber);
 
-        if (playerNames.isEmpty()) {
-            Log.e(TAG, "No player names available.");
-            return previousNumbersFormatted;
-        }
+        // Log playerNames size
+        Log.d("GameInfo", "PlayerNames Size: " + playerNames.size());
 
-        if (updatedNumbers.isEmpty()) {
-            Log.e(TAG, "No previous numbers available.");
-            return previousNumbersFormatted;
-        }
-
-        for (int i = updatedNumbers.size() - 1; i >= 0; i--) {
-            String playerName = playerNames.get(i);
+        for (int i = 0; i < updatedNumbers.size(); i++) {
+            Log.d("GameInfo", "Loop Index i: " + i); // Log the loop index
+            String playerName = i < nameSize ? playerNames.get(i) : "Game";
             String number = String.valueOf(updatedNumbers.get(i));
+            Log.d("GameInfo", "Player Name: " + playerName + ", Number: " + number); // Log playerName and number
             previousNumbersFormatted.add(playerName + ": " + number);
         }
-        previousNumbersFormatted.add(startingNumber + " (Starting Number)");
+
         return previousNumbersFormatted;
     }
-
 
     public void resetPlayers(Context context) {
         for (Player player : players) {

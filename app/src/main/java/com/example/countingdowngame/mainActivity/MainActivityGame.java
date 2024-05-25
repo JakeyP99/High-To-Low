@@ -81,6 +81,9 @@ public class MainActivityGame extends SharedMainActivity {
     private final Map<Player, Set<WildCardProperties>> usedWildCard = new HashMap<>();
     public WildCardProperties selectedWildCard;
     private int turnCounter = 0;
+    private int catastropheTurnCounter = 0;
+    private int catastropheLimit;
+
     //-----------------------------------------------------Views---------------------------------------------------//
     private Button btnAnswer;
     private Button btnWildContinue;
@@ -117,6 +120,7 @@ public class MainActivityGame extends SharedMainActivity {
     //-----------------------------------------------------Array---------------------------------------------------//
     private Button[] answerButtons; // Array to hold the answer buttons
     private Handler shuffleHandler;
+    private MainActivityCatastrophes catastrophesManager;
 
     //-----------------------------------------------------Lifecycle Methods---------------------------------------------------//
     @Override
@@ -151,6 +155,7 @@ public class MainActivityGame extends SharedMainActivity {
         initializeViews();
         setupAudioManagerForMuteButtons(muteGif, soundGif);
         setupButtons();
+        initializeCatastrophe();
         startGame();
     }
 
@@ -222,6 +227,11 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
 
+    public void initializeCatastrophe() {
+        // Initialize the catastrophes manager using the default constructor
+        catastrophesManager = new MainActivityCatastrophes();
+    }
+
     //-----------------------------------------------------Buttons---------------------------------------------------//
 
     private void setupButtons() {
@@ -283,11 +293,14 @@ public class MainActivityGame extends SharedMainActivity {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         updateAbilitiesAfterThreeTurns(currentPlayer);
         updateClassAbilityButton(currentPlayer);
-        updateTurnCounter();
         updatePlayerInfo(currentPlayer);
         updateNumberText();
+        updateTurnCounter();
         logPlayerInformation(currentPlayer);
         updateWildCardVisibilityIfNeeded(currentPlayer);
+        setCatastropheLimit();
+        updateCatastropheTurnCounter();
+
     }
 
     public void renderCurrentNumber(int currentNumber, final Runnable onEnd, TextView generatedNumberTextView) {
@@ -319,6 +332,61 @@ public class MainActivityGame extends SharedMainActivity {
             updateDrinkNumberCounter(1, false);
             turnCounter = 0;
         }
+    }
+
+
+    private void updateCatastropheTurnCounter() {
+        MainActivityCatastrophes.Catastrophe catastrophe = catastrophesManager.deployCatastrophe();
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+
+        catastropheTurnCounter++;
+        Log.d(TAG, "updateCatastropheTurnCounter: " + catastropheTurnCounter);
+
+//        if (catastropheTurnCounter == catastropheLimit) {
+        switch (catastrophe.getEffect()) {
+            case 1:
+                multiplyDrinkNumberCounter();
+                break;
+            case 2:
+                divideDrinkNumberCounter();
+                break;
+            case 3:
+                doubleCurrentNumber();
+                break;
+            case 4:
+                halveCurrentNumber();
+                break;
+            case 5:
+                reverseTurnOrder(currentPlayer);
+                break;
+            case 6:
+                for (Player player : Game.getInstance().getPlayers()) {
+                    player.gainWildCards(2);
+                }
+                break;
+            case 7:
+                for (Player player : Game.getInstance().getPlayers()) {
+                    player.loseWildCards(2);
+                }
+                break;
+            default:
+                break;
+        }
+
+        Log.d(TAG, "updateCatastropheTurnCounter: " + catastrophe.getMessage());
+//        showDialog(catastrophe.getMessage());
+        catastropheTurnCounter = 0; // Reset the turn counter after reaching the limit
+
+        // Generate a new random catastrophe limit
+        Random random = new Random();
+        catastropheLimit = random.nextInt(4) + 4; // Generates a number between 4 and 7 (inclusive)
+//        }
+    }
+
+    private void setCatastropheLimit() {
+        // Generate a random number between 4 and 10 for the catastrophe limit
+        Random random = new Random();
+        catastropheLimit = random.nextInt(4) + 4; // Generates a number between 4 and 7 (inclusive)
     }
 
     private void updateWildCardVisibilityIfNeeded(Player currentPlayer) {
@@ -382,7 +450,6 @@ public class MainActivityGame extends SharedMainActivity {
     private void updateDrinkNumberCounter(int drinkNumberCounterInput, boolean activatedByAbility) {
         int maxTotalDrinkAmount = GeneralSettingsLocalStore.fromContext(this).totalDrinkAmount();
         int potentialNewValue = drinkNumberCounterInt + drinkNumberCounterInput;
-
         // Increment the counter
         if (drinkNumberCounterInput > 0) {
             if (!activatedByAbility & potentialNewValue <= maxTotalDrinkAmount) {
@@ -401,6 +468,17 @@ public class MainActivityGame extends SharedMainActivity {
             }
         }
 
+        updateDrinkNumberCounterTextView();
+    }
+
+    private void multiplyDrinkNumberCounter() {
+        drinkNumberCounterInt *= 2;
+        updateDrinkNumberCounterTextView();
+    }
+
+    private void divideDrinkNumberCounter() {
+        // Check if divisor is not zero to avoid division by zero error
+        drinkNumberCounterInt /= 2;
         updateDrinkNumberCounterTextView();
     }
 
@@ -438,8 +516,8 @@ public class MainActivityGame extends SharedMainActivity {
         btnWild.setEnabled(false);
         btnClassAbility.setEnabled(false);
         playerImage.setEnabled(false);
-
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
+
         int originalNumber = Game.getInstance().getCurrentNumber(); // Store the original number
         final int shuffleDuration = 1500;
 
@@ -826,8 +904,8 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void removeCharacterFromGame() {
-        int currentNumber = Game.getInstance().getCurrentNumber();
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        int currentNumber = Game.getInstance().getCurrentNumber();
 
         int minRange = 10;
         int maxRange = 15;
@@ -848,7 +926,6 @@ public class MainActivityGame extends SharedMainActivity {
 
 
     private void changeCurrentNumber() {
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
 
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.character_class_change_number, null);
@@ -872,6 +949,7 @@ public class MainActivityGame extends SharedMainActivity {
                     displayToastMessage("You cannot choose 0 as your number.");
                     btnClassAbility.setVisibility(View.VISIBLE);
                 } else {
+                    Player currentPlayer = Game.getInstance().getCurrentPlayer();
                     Game.getInstance().setCurrentNumber(newNumber);
                     SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(newNumber));
                     numberCounterText.setText(String.valueOf(newNumber));
@@ -893,8 +971,8 @@ public class MainActivityGame extends SharedMainActivity {
 
     //-----------------------------------------------------Wild Card Functionality---------------------------------------------------//
     private void wildCardActivate(Player player) {
-        Game.getInstance().getCurrentPlayer().useWildCard();
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        Game.getInstance().getCurrentPlayer().useWildCard();
         currentPlayer.incrementUsedWildcards();
 
         WildCardProperties[] emptyProbabilitiesArray = new WildCardProperties[0];
@@ -1056,13 +1134,16 @@ public class MainActivityGame extends SharedMainActivity {
     //-----------------------------------------------------Specific WildCard Functions---------------------------------------------------//
 
     private void doubleCurrentNumber() {
-        int currentNumber = Game.getInstance().getCurrentNumber();
+        Game game = Game.getInstance();
+        int currentNumber = game.getCurrentNumber();
         int updatedNumber = Math.min(currentNumber * 2, 999999999);
-        updateNumber(updatedNumber);
+        game.setCurrentNumber(updatedNumber);
     }
 
+
     private void halveCurrentNumber() {
-        int currentNumber = Game.getInstance().getCurrentNumber();
+        Game game = Game.getInstance();
+        int currentNumber = game.getCurrentNumber();
         int updatedNumber = Math.max(currentNumber / 2, 1);
         updateNumber(updatedNumber);
     }
@@ -1207,7 +1288,6 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void handleAnswerOutcome(boolean isCorrect) {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-
         if (isCorrect) {
             quizAnswerView(currentPlayer.getName() + " that's right! The answer was " + selectedWildCard.getAnswer() + "\n\n P.S. You get to give out a drink");
         } else {
