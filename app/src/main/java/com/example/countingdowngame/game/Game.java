@@ -63,7 +63,6 @@ public class Game {
     }
 
     //-----------------------------------------------------In Game---------------------------------------------------//
-
     public void startGame(int startNum, GameEventListener listener) {
         if (gameStarted)
             return;
@@ -79,22 +78,15 @@ public class Game {
         updatedNumbers.clear();
     }
 
-
-    public boolean getPlayerUsedWildcards() {
-        return playerUsedWildcards;
+    public void addUpdatedNumber(int number) {
+        updatedNumbers.add(number);
     }
 
-    public void setPlayerUsedWildcards(boolean didPlayerUseWildcard) {
-        playerUsedWildcards = didPlayerUseWildcard;
+    public void addUpdatedName(String currentPlayerName) {
+        playerNames.add(currentPlayerName);
     }
 
-    public int getCurrentNumber() {
-        return currentNumber;
-    }
-
-    public void setCurrentNumber(int number) {
-        currentNumber = number;
-    }
+    //-----------------------------------------------------Player---------------------------------------------------//
 
     public Player getCurrentPlayer() {
         if (!players.isEmpty() && currentPlayerId >= 0 && currentPlayerId < players.size()) {
@@ -104,12 +96,12 @@ public class Game {
         }
     }
 
-    public int nextNumber() {
-        Random random = new Random();
-        int nextNumber = random.nextInt(currentNumber + 1);
-        currentNumber = nextNumber;
-        updatedNumbers.add(nextNumber); // Add the updated number
-        return nextNumber;
+    public boolean getPlayerUsedWildcards() {
+        return playerUsedWildcards;
+    }
+
+    public void setPlayerUsedWildcards(boolean didPlayerUseWildcard) {
+        playerUsedWildcards = didPlayerUseWildcard;
     }
 
     public void nextPlayer() {
@@ -170,7 +162,23 @@ public class Game {
         players.clear();
         players.addAll(playerList);
     }
+    //-----------------------------------------------------Game Number---------------------------------------------------//
 
+    public int getCurrentNumber() {
+        return currentNumber;
+    }
+
+    public void setCurrentNumber(int number) {
+        currentNumber = number;
+    }
+
+    public int nextNumber() {
+        Random random = new Random();
+        int nextNumber = random.nextInt(currentNumber + 1);
+        currentNumber = nextNumber;
+        updatedNumbers.add(nextNumber); // Add the updated number
+        return nextNumber;
+    }
     //-----------------------------------------------------Stats ---------------------------------------------------//
     public String getPlayerWithMostWildcardsUsed() {
         Player topPlayer = null;
@@ -185,7 +193,6 @@ public class Game {
         }
         return topPlayer != null ? topPlayer.getName() + " used " + minWildCards + " wildcards." : "No one used any wildcards.";
     }
-
 
     public void setQuizWasTriggered(Boolean wasQuizTriggered) {
         quizWasTriggered = wasQuizTriggered;
@@ -236,7 +243,6 @@ public class Game {
         return topPlayer != null ? topPlayer.getName() + " got the most quiz questions wrong with " + minIncorrectAnswers + " incorrect answers." : "";
     }
 
-
     public boolean hasWitchClass() {
         for (Player player : players) {
             if ("Witch".equals(player.getClassChoice())) { // Assuming you have a method isWitch() in Player class
@@ -279,13 +285,6 @@ public class Game {
         resetPlayers(context);
     }
 
-    public void addUpdatedNumber(int number) {
-        updatedNumbers.add(number);
-    }
-
-    public void addUpdatedName(String currentPlayerName) {
-        playerNames.add(currentPlayerName);
-    }
 
 
     public ArrayList<String> getPreviousNumbersFormatted() {
