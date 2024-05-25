@@ -1,4 +1,4 @@
-package com.example.countingdowngame.mainActivity;
+package com.example.countingdowngame.endGame;
 
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.game.Player;
+import com.example.countingdowngame.mainActivity.MainActivityGame;
+import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;

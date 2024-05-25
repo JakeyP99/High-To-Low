@@ -22,7 +22,7 @@
         android:theme="@style/AppTheme.NoActionBar">
 
         <activity
-            android:name=".mainActivity.HomeScreen"
+            android:name=".home.HomeScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,20 +32,20 @@
 
         <activity android:name=".mainActivity.MainActivityGame" />
 
-        <activity android:name=".mainActivity.SettingsMenu" />
+        <activity android:name=".settings.SettingsMenu" />
 
-        <activity android:name=".mainActivity.PlayerNumberChoice" />
+        <activity android:name=".numberChoice.PlayerNumberChoice" />
 
-        <activity android:name=".mainActivity.EndActivityGame" />
+        <activity android:name=".endGame.EndActivityGame" />
 
-        <activity android:name=".mainActivity.NumberChoice" />
+        <activity android:name=".numberChoice.NumberChoice" />
 
         <activity android:name=".instructions.InstructionsToPlay" />
 
-        <activity android:name=".mainActivity.DrawingPlayerModels" />
+        <activity android:name=".drawing.DrawingPlayerModels" />
 
         <activity
-            android:name=".mainActivity.PlayerChoice"
+            android:name=".createPlayer.PlayerChoice"
             android:windowSoftInputMode="adjustNothing" />
 
         <meta-data

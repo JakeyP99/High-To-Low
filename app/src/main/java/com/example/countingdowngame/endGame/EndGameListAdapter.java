@@ -1,4 +1,4 @@
-package com.example.countingdowngame.mainActivity;
+package com.example.countingdowngame.endGame;
 
 import android.content.Context;
 import android.view.LayoutInflater;

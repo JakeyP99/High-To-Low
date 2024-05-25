@@ -1,4 +1,4 @@
-package com.example.countingdowngame.mainActivity;
+package com.example.countingdowngame.settings;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import static com.example.countingdowngame.wildCards.wildCardTypes.WildCardData.EXTRA_WILD_CARDS;
@@ -20,7 +20,8 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
-import com.example.countingdowngame.game.Player;
+import com.example.countingdowngame.mainActivity.MainActivityGame;
+import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.example.countingdowngame.wildCards.WildCardProperties;

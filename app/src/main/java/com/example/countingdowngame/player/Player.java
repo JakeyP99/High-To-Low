@@ -1,8 +1,9 @@
-package com.example.countingdowngame.game;
+package com.example.countingdowngame.player;
 
 import android.content.Context;
 import android.util.Log;
 
+import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 
 import java.io.Serializable;

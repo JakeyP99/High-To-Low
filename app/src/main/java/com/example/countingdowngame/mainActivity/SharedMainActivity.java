@@ -21,7 +21,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.game.Player;
+import com.example.countingdowngame.instructions.InstructionalDialogPageAdapter;
+import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.ArrayList;
@@ -99,7 +100,7 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         game.setPlayerList(players);
     }
 
-    static void logPlayerInformation(Player currentPlayer) {
+    protected static void logPlayerInformation(Player currentPlayer) {
         Log.d("renderPlayer", "Current number is " + Game.getInstance().getCurrentNumber() +
                 " - Player was rendered " + currentPlayer.getName() +
                 " is a " + currentPlayer.getClassChoice() +
@@ -110,7 +111,7 @@ public class SharedMainActivity extends ButtonUtilsActivity {
                 currentPlayer.isRemoved());
     }
 
-    void animateTextView(final TextView textView) {
+    protected void animateTextView(final TextView textView) {
         // Shake animation
         ObjectAnimator shakeAnimator = ObjectAnimator.ofFloat(textView, "translationX", -5, 5);
         shakeAnimator.setDuration(100);

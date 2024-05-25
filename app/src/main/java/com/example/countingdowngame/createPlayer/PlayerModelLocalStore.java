@@ -3,7 +3,7 @@ package com.example.countingdowngame.createPlayer;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.countingdowngame.game.Player;
+import com.example.countingdowngame.player.Player;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

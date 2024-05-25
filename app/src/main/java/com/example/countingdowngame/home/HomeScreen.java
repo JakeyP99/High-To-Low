@@ -1,4 +1,4 @@
-package com.example.countingdowngame.mainActivity;
+package com.example.countingdowngame.home;
 
 import android.os.Bundle;
 import android.widget.Button;

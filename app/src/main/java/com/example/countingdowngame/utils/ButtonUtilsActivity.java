@@ -13,10 +13,10 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.countingdowngame.instructions.InstructionsToPlay;
-import com.example.countingdowngame.mainActivity.EndActivityGame;
-import com.example.countingdowngame.mainActivity.HomeScreen;
-import com.example.countingdowngame.mainActivity.NumberChoice;
-import com.example.countingdowngame.mainActivity.PlayerNumberChoice;
+import com.example.countingdowngame.endGame.EndActivityGame;
+import com.example.countingdowngame.home.HomeScreen;
+import com.example.countingdowngame.numberChoice.NumberChoice;
+import com.example.countingdowngame.numberChoice.PlayerNumberChoice;
 
 import pl.droidsonroids.gif.GifImageView;
 
