@@ -300,7 +300,6 @@ public class MainActivityGame extends SharedMainActivity {
         updateWildCardVisibilityIfNeeded(currentPlayer);
         setCatastropheLimit();
         updateCatastropheTurnCounter();
-
     }
 
     public void renderCurrentNumber(int currentNumber, final Runnable onEnd, TextView generatedNumberTextView) {
@@ -371,6 +370,12 @@ public class MainActivityGame extends SharedMainActivity {
                     for (Player player : Game.getInstance().getPlayers()) {
                         player.loseWildCards(2);
                     }
+                    break;
+                case 8:
+                    break;
+                case 9:
+                    Game.getInstance().activateRepeatingTurnForAllPlayers(2);
+                case 10:
                     break;
                 default:
                     break;
@@ -677,7 +682,7 @@ public class MainActivityGame extends SharedMainActivity {
                 currentPlayer.getUsedClassAbility()) {
             currentPlayer.incrementAbilityTurnCounter();
             Log.d(TAG, "increment counter: " + currentPlayer.getAbilityTurnCounter());
-            if (currentPlayer.getAbilityTurnCounter() == 3) {
+            if (currentPlayer.getAbilityTurnCounter() == 4) {
                 Log.d(TAG, "updateAbilitiesAfterThreeTurns: " + currentPlayer.getName());
                 currentPlayer.setUsedClassAbility(false);
                 currentPlayer.resetSpecificTurnCounter();
@@ -702,8 +707,8 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void handleWitchClass(Player currentPlayer) {
         Log.d("WitchClass", "handleWitchClass called");
-        currentPlayer.useSkip();
         currentPlayer.setUsedClassAbility(true);
+        currentPlayer.useSkip();
     }
 
     //-----------------------------------------------------Passive Effects---------------------------------------------------//
@@ -768,10 +773,6 @@ public class MainActivityGame extends SharedMainActivity {
 
 
     private void handleWitchPassive(Player currentPlayer) {
-
-        if (!"Angry Jim".equals(currentPlayer.getClassChoice())) {
-            currentPlayer.incrementAbilityTurnCounter();
-        }
         if (!isFirstTurn) {
             if (Game.getInstance().getCurrentNumber() % 2 == 0) {
                 showDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " hand out two drinks.");

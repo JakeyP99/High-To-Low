@@ -86,6 +86,16 @@ public class Game {
         playerNames.add(currentPlayerName);
     }
 
+    //-----------------------------------------------------Game Event---------------------------------------------------//
+    public void activateRepeatingTurnForAllPlayers(int numberOfTurns) {
+        for (Player player : players) {
+            repeatingTurnsMap.put(player, numberOfTurns);
+            player.setInRepeatingTurn();
+            Log.d(TAG, "activateRepeatingTurnForAllPlayers: Repeating turn was activated for Player " +
+                    player.getName() + ". Turns to go: " + numberOfTurns);
+        }
+    }
+
     //-----------------------------------------------------Player---------------------------------------------------//
 
     public Player getCurrentPlayer() {
