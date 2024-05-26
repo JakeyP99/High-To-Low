@@ -1,9 +1,9 @@
 package com.example.countingdowngame.createPlayer;
 
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.angryJimActiveDescription;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.angryJimPassiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.archerActiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.archerPassiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.angryJimPassiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.goblinActiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.goblinPassiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.noClassDescription;
@@ -57,6 +57,7 @@ import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -100,7 +101,8 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     public void onPlayerClick(int position) {
         Player player = playerList.get(position);
         if (!player.isSelected()) {
-            player.setSelected(false);
+            player.setSelected(false); // Change this to true
+            player.setSelectionOrder(++selectedPlayerCount); // Track the order of selection
             playerListAdapter.notifyItemChanged(position);
             updatePlayerCounter();
             chooseClass(position);
@@ -365,17 +367,8 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     }
 
     private void setupProceedButton() {
-
         btnUtils.setButton(proceedButton, () -> {
-            ArrayList<String> selectedPlayerNames = new ArrayList<>();
-            for (Player player : playerList) {
-                if (player.isSelected()) {
-                    selectedPlayerNames.add(player.getName());
-                }
-            }
-
-            int remainingPlayers = totalPlayerCount - selectedPlayerNames.size();
-            if (remainingPlayers == 0) {
+            if (selectedPlayerCount == totalPlayerCount) {
                 List<Player> selectedPlayers = new ArrayList<>();
                 for (Player player : playerList) {
                     if (player.isSelected()) {
@@ -383,15 +376,24 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
                     }
                 }
 
+                // Sort the players by their selection order
+                selectedPlayers.sort(Comparator.comparingInt(Player::getSelectionOrder));
+
                 proceedButton.setEnabled(false);
                 final long delayMillis = 3000;
                 new Handler().postDelayed(() -> proceedButton.setEnabled(true), delayMillis);
+
                 PlayerModelLocalStore.fromContext(this).saveSelectedPlayers(selectedPlayers);
+                ArrayList<String> selectedPlayerNames = new ArrayList<>();
+                for (Player player : selectedPlayers) {
+                    selectedPlayerNames.add(player.getName());
+                }
                 Intent intent = new Intent(this, NumberChoice.class);
                 intent.putStringArrayListExtra("playerNames", selectedPlayerNames);
                 startActivity(intent);
+            } else {
+                StyleableToast.makeText(this, "Please select all players.", R.style.newToast).show();
             }
-
         });
     }
 

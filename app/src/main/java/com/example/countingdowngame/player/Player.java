@@ -21,7 +21,7 @@ public class Player implements Serializable {
     private boolean selected;
     private boolean usedClassAbility;
     private boolean justUsedClassAbility;
-
+    private int selectionOrder;
     private boolean usedWildCard;
     private boolean removed;
     private int abilityTurnCounter; // Add a counter for the active turns of the Survivor class
@@ -53,6 +53,13 @@ public class Player implements Serializable {
         this.game = game;
     }
 
+    public int getSelectionOrder() {
+        return selectionOrder;
+    }
+
+    public void setSelectionOrder(int selectionOrder) {
+        this.selectionOrder = selectionOrder;
+    }
     public String getClassChoice() {
         return classChoice;
     }
