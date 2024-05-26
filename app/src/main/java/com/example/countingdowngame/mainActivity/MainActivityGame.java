@@ -228,6 +228,7 @@ public class MainActivityGame extends SharedMainActivity {
     public void initializeCatastrophe() {
         // Initialize the catastrophes manager using the default constructor
         catastrophesManager = new MainActivityCatastrophes();
+        setCatastropheLimit();
     }
 
     //-----------------------------------------------------Buttons---------------------------------------------------//
@@ -296,7 +297,6 @@ public class MainActivityGame extends SharedMainActivity {
         updateTurnCounter();
         logPlayerInformation(currentPlayer);
         updateWildCardVisibilityIfNeeded(currentPlayer);
-        setCatastropheLimit();
         updateCatastropheTurnCounter();
     }
 
@@ -382,8 +382,7 @@ public class MainActivityGame extends SharedMainActivity {
             catastropheTurnCounter = 0; // Reset the turn counter after reaching the limit
 
             // Generate a new random catastrophe limit
-            Random random = new Random();
-            catastropheLimit = random.nextInt(4) + 4; // Generates a number between 4 and 7 (inclusive)
+            setCatastropheLimit();
         }
     }
 
@@ -391,6 +390,7 @@ public class MainActivityGame extends SharedMainActivity {
         // Generate a random number between 4 and 10 for the catastrophe limit
         Random random = new Random();
         catastropheLimit = random.nextInt(4) + 4; // Generates a number between 4 and 7 (inclusive)
+        Log.d(TAG, "catastropheLimit: " + catastropheLimit);
     }
 
     private void updateWildCardVisibilityIfNeeded(Player currentPlayer) {
