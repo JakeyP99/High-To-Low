@@ -5,6 +5,7 @@
     <color name="white">#FFFFFF</color>
     <color name="bluedark">#021457</color>
     <color name="bluedarktransparent">#39021457</color>
+    <color name="reddark">#B71C1C</color>
 
 
 </resources>

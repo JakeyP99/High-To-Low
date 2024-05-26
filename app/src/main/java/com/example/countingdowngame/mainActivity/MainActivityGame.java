@@ -4,7 +4,6 @@ import static android.content.ContentValues.TAG;
 import static com.example.countingdowngame.R.id.btnBackWildCard;
 import static com.example.countingdowngame.R.id.btnExitGame;
 import static com.example.countingdowngame.R.id.close_button;
-import static com.example.countingdowngame.R.id.dialogbox_textview;
 import static com.example.countingdowngame.R.id.editCurrentNumberTextView;
 import static com.example.countingdowngame.R.id.textView_NumberText;
 import static com.example.countingdowngame.R.id.textView_Number_Turn;
@@ -375,12 +374,14 @@ public class MainActivityGame extends SharedMainActivity {
                     break;
                 case 9:
                     Game.getInstance().activateRepeatingTurnForAllPlayers(2);
+                    drinkNumberCounterInt -= 2;
+                    updateDrinkNumberCounterTextView();
                 case 10:
                     break;
                 default:
                     break;
             }
-            showDialog(catastrophe.getMessage());
+            showCatastropheDialog(catastrophe.getMessage());
             catastropheTurnCounter = 0; // Reset the turn counter after reaching the limit
 
             // Generate a new random catastrophe limit
@@ -647,7 +648,7 @@ public class MainActivityGame extends SharedMainActivity {
         Player randomPlayer = game.getRandomPlayerExcludingCurrent();
         randomPlayer.removeWildCard(randomPlayer, 1);
         currentPlayer.setUsedClassAbility(true);
-        showDialog("Goblin's Active: \n\n" + randomPlayer.getName() + " lost a wildcard!");
+        showGameDialog("Goblin's Active: \n\n" + randomPlayer.getName() + " lost a wildcard!");
         btnClassAbility.setVisibility(View.INVISIBLE);
     }
 
@@ -656,7 +657,7 @@ public class MainActivityGame extends SharedMainActivity {
         Player randomPlayer = game.getRandomPlayerExcludingCurrent();
         if (randomPlayer != null) {
             game.activateRepeatingTurn(randomPlayer, 1); // Assuming 1 turn for repeating
-            showDialog("Angry Jim's Active: \n\n" + randomPlayer.getName() + " must repeat their turn.");
+            showGameDialog("Angry Jim's Active: \n\n" + randomPlayer.getName() + " must repeat their turn.");
             btnClassAbility.setVisibility(View.INVISIBLE);
             currentPlayer.setUsedClassAbility(true);
         } else {
@@ -695,7 +696,7 @@ public class MainActivityGame extends SharedMainActivity {
         Log.d("ArcherClass", "handleArcherClass called");
 
         if (drinkNumberCounterInt >= 2) {
-            showDialog("Archer's Active: \n\n" + currentPlayer.getName() + " hand out two drinks!");
+            showGameDialog("Archer's Active: \n\n" + currentPlayer.getName() + " hand out two drinks!");
             currentPlayer.setUsedClassAbility(true);
             updateDrinkNumberCounter(-2, true);
             updateDrinkNumberCounterTextView();
@@ -775,10 +776,10 @@ public class MainActivityGame extends SharedMainActivity {
     private void handleWitchPassive(Player currentPlayer) {
         if (!isFirstTurn) {
             if (Game.getInstance().getCurrentNumber() % 2 == 0) {
-                showDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " hand out two drinks.");
+                showGameDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " hand out two drinks.");
                 currentPlayer.incrementDrinksHandedOutByWitch(2);
             } else {
-                showDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " take two drinks.");
+                showGameDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " take two drinks.");
                 currentPlayer.incrementDrinksTakenByWitch(2);
             }
         }
@@ -792,7 +793,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         handler.postDelayed(() -> {
             if (chance < 10) {
-                showDialog("Scientist's Passive: \n\n" + currentPlayer.getName() + " is a scientist and their turn was skipped. ");
+                showGameDialog("Scientist's Passive: \n\n" + currentPlayer.getName() + " is a scientist and their turn was skipped. ");
                 currentPlayer.useSkip();
             }
         }, delayMillis);
@@ -848,14 +849,14 @@ public class MainActivityGame extends SharedMainActivity {
             if (chance < 60) {
                 updateDrinkNumberCounter(2, true);
                 updateDrinkNumberCounterTextView();
-                showDialog("Archer's Passive: \n\nDrinking number increased by 2!");
+                showGameDialog("Archer's Passive: \n\nDrinking number increased by 2!");
             } else {
                 updateDrinkNumberCounter(-2, true);
                 if (drinkNumberCounterInt < 0) {
                     drinkNumberCounterInt = 0;
                 }
                 updateDrinkNumberCounterTextView();
-                showDialog("Archer's Passive: \n\nDrinking number decreased by 2!");
+                showGameDialog("Archer's Passive: \n\nDrinking number decreased by 2!");
             }
         }
     }
@@ -871,27 +872,35 @@ public class MainActivityGame extends SharedMainActivity {
         String drinksText = (drinkNumberCounterInt == 1) ? "drink" : "drinks";
 
         if ("Survivor".equals(currentPlayer.getClassChoice()) && currentNumber == 1) {
-            showDialog("Survivor's Passive: \n\n" + currentPlayer.getName() + " survived a 1, hand out " + drinkNumberCounterInt + " " + drinksText);
+            showGameDialog("Survivor's Passive: \n\n" + currentPlayer.getName() + " survived a 1, hand out " + drinkNumberCounterInt + " " + drinksText);
         }
     }
 
 
     //-----------------------------------------------------External Class Effects---------------------------------------------------//
 
-    private void showDialog(String string) {
+    private void showDialog(String message, int layoutId, int textViewId, int closeButtonId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = getLayoutInflater();
 
-        View dialogView = inflater.inflate(R.layout.character_class_active_dialog_box, null);
-        TextView dialogboxtextview = dialogView.findViewById(dialogbox_textview);
-        dialogboxtextview.setText(string);
+        View dialogView = inflater.inflate(layoutId, null);
+        TextView dialogBoxTextView = dialogView.findViewById(textViewId);
+        dialogBoxTextView.setText(message);
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        ImageButton closeButton = dialogView.findViewById(close_button);
+        ImageButton closeButton = dialogView.findViewById(closeButtonId);
         closeButton.setOnClickListener(v -> dialog.dismiss());
+    }
+
+    private void showGameDialog(String message) {
+        showDialog(message, R.layout.game_dialog_box, R.id.dialogbox_textview, R.id.close_button);
+    }
+
+    private void showCatastropheDialog(String message) {
+        showDialog(message, R.layout.catastrophe_dialog_box, R.id.dialogbox_textview, R.id.close_button);
     }
 
     private void removeCharacterFromGame() {
@@ -905,12 +914,12 @@ public class MainActivityGame extends SharedMainActivity {
             if (!soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {
                 soldierRemoval = true;
                 currentPlayer.setRemoved(true);
-                showDialog(currentPlayer.getName() + " has escaped the game as the soldier.");
+                showGameDialog(currentPlayer.getName() + " has escaped the game as the soldier.");
                 Handler handler = new Handler();
                 int delayMillis = 1;
                 handler.postDelayed(currentPlayer::useSkip, delayMillis);
             } else if (soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {
-                showDialog("Sorry " + currentPlayer.getName() + ", a soldier has already escaped the game.");
+                showGameDialog("Sorry " + currentPlayer.getName() + ", a soldier has already escaped the game.");
             }
         }
     }

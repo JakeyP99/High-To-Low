@@ -1,0 +1,44 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#08B71C1C"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/catastrophe_dialogbox_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/viga"
+        android:layout_gravity="center"
+        android:paddingTop="10dp"
+        android:text="Catastrophe!"
+        android:textAlignment="center"
+        android:textColor="@color/bluedark"
+        android:textSize="45sp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/dialogbox_textview"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:text="Test"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:fontFamily="@font/viga"
+        android:textColor="@color/bluedark"
+        android:textSize="28sp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageButton
+        android:id="@+id/close_button"
+        android:layout_width="48dp"
+        android:layout_gravity="center"
+        android:layout_height="48dp"
+        android:background="@drawable/circle_background"
+        android:contentDescription="TODO" />
+
+
+</LinearLayout>
