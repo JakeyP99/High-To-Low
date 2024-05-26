@@ -1,7 +1,6 @@
 package com.example.countingdowngame.settings;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-import static com.example.countingdowngame.wildCards.wildCardTypes.WildCardData.EXTRA_WILD_CARDS;
 import static com.example.countingdowngame.wildCards.wildCardTypes.WildCardData.QUIZ_WILD_CARDS;
 import static com.example.countingdowngame.wildCards.wildCardTypes.WildCardData.TASK_WILD_CARDS;
 import static com.example.countingdowngame.wildCards.wildCardTypes.WildCardData.TRUTH_WILD_CARDS;
@@ -22,11 +21,9 @@ import com.example.countingdowngame.R;
 import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.mainActivity.MainActivityGame;
 import com.example.countingdowngame.player.Player;
-import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.example.countingdowngame.wildCards.WildCardProperties;
 import com.example.countingdowngame.wildCards.WildCardType;
-import com.example.countingdowngame.wildCards.wildCardTypes.ExtrasWildCardsAdapter;
 import com.example.countingdowngame.wildCards.wildCardTypes.QuizWildCardsAdapter;
 import com.example.countingdowngame.wildCards.wildCardTypes.TaskWildCardsAdapter;
 import com.example.countingdowngame.wildCards.wildCardTypes.TruthWildCardsAdapter;
@@ -56,7 +53,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
     private QuizWildCardsAdapter quizWildCardsAdapter;
     private TaskWildCardsAdapter taskWildCardsAdapter;
     private TruthWildCardsAdapter truthWildCardsAdapter;
-    private ExtrasWildCardsAdapter extrasWildCardsAdapter;
 
 
     //-----------------------------------------------------On Pause---------------------------------------------------//
@@ -132,12 +128,10 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         quizWildCardsAdapter = new QuizWildCardsAdapter(QUIZ_WILD_CARDS, this, WildCardType.QUIZ);
         taskWildCardsAdapter = new TaskWildCardsAdapter(TASK_WILD_CARDS, this, WildCardType.TASK);
         truthWildCardsAdapter = new TruthWildCardsAdapter(TRUTH_WILD_CARDS, this, WildCardType.TRUTH);
-        extrasWildCardsAdapter = new ExtrasWildCardsAdapter(EXTRA_WILD_CARDS, this, WildCardType.EXTRAS);
 
         button_quiz_toggle = findViewById(R.id.button_quiz_toggle);
         button_truth_toggle = findViewById(R.id.button_truth_toggle);
         button_task_toggle = findViewById(R.id.button_task_toggle);
-        button_extras_toggle = findViewById(R.id.button_extras_toggle);
 
         // Find and set up EditTexts
         wildcardPerPlayerEditText = findViewById(R.id.edittext_wildcard_amount);
@@ -270,11 +264,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
                 boolean isTruthSelected = !button_truth_toggle.isSelected();
                 toggleWildCardButton(button_truth_toggle, truthWildCardsAdapter, isTruthSelected);
                 break;
-
-            case R.id.button_extras_toggle:
-                boolean isExtrasSelected = !button_extras_toggle.isSelected();
-                toggleWildCardButton(button_extras_toggle, extrasWildCardsAdapter, isExtrasSelected);
-                break;
         }
 
         savePreferences();
@@ -289,7 +278,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         button_quiz_toggle.setOnClickListener(this);
         button_task_toggle.setOnClickListener(this);
         button_truth_toggle.setOnClickListener(this);
-        button_extras_toggle.setOnClickListener(this);
 
         btnUtils.setButton(btnProgressToGame, () -> {
 
@@ -413,7 +401,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         toggleWildCardButton(button_quiz_toggle, quizWildCardsAdapter, isQuizActivated);
         toggleWildCardButton(button_task_toggle, taskWildCardsAdapter, store.isTaskActivated());
         toggleWildCardButton(button_truth_toggle, truthWildCardsAdapter, store.isTruthActivated());
-        toggleWildCardButton(button_extras_toggle, extrasWildCardsAdapter, store.isExtrasActivated());
     }
 
 
@@ -432,7 +419,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         store.setIsQuizActivated(button_quiz_toggle.isSelected());
         store.setIsTaskActivated(button_task_toggle.isSelected());
         store.setIsTruthActivated(button_truth_toggle.isSelected());
-        store.setIsExtrasActivated(button_extras_toggle.isSelected());
     }
 
 }

@@ -3,6 +3,7 @@ package com.example.countingdowngame.numberChoice;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,7 +37,6 @@ public class NumberChoice extends ButtonUtilsActivity {
         AudioManager.updateMuteButton(isMuted, muteGif, soundGif);
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +52,9 @@ public class NumberChoice extends ButtonUtilsActivity {
         muteGif = findViewById(R.id.muteGif);
         soundGif = findViewById(R.id.soundGif);
         originalNumberField = findViewById(R.id.EditTextView_numberchoice);
+
+        // Set input filter to restrict to a maximum of 9 characters
+        originalNumberField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(9)});
     }
 
     private void setupButtonControls() {
@@ -71,24 +74,29 @@ public class NumberChoice extends ButtonUtilsActivity {
 
         String inputValue = originalNumberField.getText().toString();
 
-        int length = inputValue.length(); // Store the length of the string
-        if (length > 9) {
-            StyleableToast.makeText(getApplicationContext(), "That's a lot of numbers, unfortunately too many :(", R.style.newToast).show();
-            return;
-        }
-
-
         if (inputValue.isEmpty()) {
             StyleableToast.makeText(getApplicationContext(), "Please choose a number!", R.style.newToast).show();
             return;
         }
 
-        int inputNumber = Integer.parseInt(inputValue);
+        if (inputValue.length() > 9) {
+            StyleableToast.makeText(getApplicationContext(), "That's a lot of numbers, unfortunately too many :(", R.style.newToast).show();
+            return;
+        }
+
+        int inputNumber;
+        try {
+            inputNumber = Integer.parseInt(inputValue);
+        } catch (NumberFormatException e) {
+            StyleableToast.makeText(getApplicationContext(), "Invalid number!", R.style.newToast).show();
+            return;
+        }
 
         if (inputNumber <= 0) {
             StyleableToast.makeText(getApplicationContext(), "Please choose a number greater than zero!", R.style.newToast).show();
             return;
         }
+
         startingNumber = inputNumber;
         YoYo.with(Techniques.RubberBand)
                 .duration(300)
@@ -99,7 +107,6 @@ public class NumberChoice extends ButtonUtilsActivity {
                 .playOn(originalNumberField);
 
         originalNumberField.setFocusable(false);
-
     }
 
     private void onRandomClicked() {
@@ -110,18 +117,15 @@ public class NumberChoice extends ButtonUtilsActivity {
         goToInGameSettings();
     }
 
-
     private void goToInGameSettings() {
         Intent i = getIntentForClass(SettingsMenu.class);
         i.putExtra("startingNumber", startingNumber);
         startActivity(i);
     }
 
-   public void resetStartingNumber() {
+    public void resetStartingNumber() {
         final EditText originalNumberField = findViewById(R.id.EditTextView_numberchoice);
         originalNumberField.setText(""); // Clear the input field
         originalNumberField.setFocusableInTouchMode(true); // Enable editing of the field
     }
-
-
 }

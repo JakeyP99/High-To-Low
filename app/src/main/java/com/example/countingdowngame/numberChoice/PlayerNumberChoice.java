@@ -3,6 +3,7 @@ package com.example.countingdowngame.numberChoice;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,6 +47,9 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
         muteGif = findViewById(R.id.muteGif);
         soundGif = findViewById(R.id.soundGif);
         originalPlayerField = findViewById(R.id.EditTextViewplayernumber);
+
+        // Set input filter to restrict to a maximum of 3 characters
+        originalPlayerField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(2)});
     }
 
     private void setupButtonControls() {
@@ -65,11 +69,6 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
             int inputNumber = parseInputValue(inputValue);
             if (inputNumber <= 0) {
                 showToast("You have to have some friends to play with!");
-                return;
-            }
-
-            if (inputValue.length() > 3) {
-                showToast("That's way too many players.... Unless you're that popular!");
                 return;
             }
 

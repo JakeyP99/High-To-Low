@@ -673,16 +673,6 @@ public class WildCardData {
 
     };
 
-
-    public static final WildCardProperties[] EXTRA_WILD_CARDS = {
-            new WildCardProperties("Double the current number!", 10, true, false),
-            new WildCardProperties("Half the current number!", 10, true, false),
-            new WildCardProperties("Reset the number!", 10, true, false),
-            new WildCardProperties("Reverse the turn order!", 10, true, false),
-            new WildCardProperties("Gain a couple more wildcards to use, I gotchya back!", 10, true, false),
-            new WildCardProperties("Lose a couple wildcards\n\n:( oh also drink 3 lol!", 10, true, false),
-    };
-
     public static final WildCardProperties[] TASK_WILD_CARDS = {
             new WildCardProperties("Task! Take 1 drink.", 10, true, true),
             new WildCardProperties("Task! Take 2 drinks.", 10, true, true),

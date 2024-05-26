@@ -44,7 +44,6 @@ import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.wildCards.WildCardProperties;
 import com.example.countingdowngame.wildCards.WildCardType;
-import com.example.countingdowngame.wildCards.wildCardTypes.ExtrasWildCardsAdapter;
 import com.example.countingdowngame.wildCards.wildCardTypes.QuizWildCardsAdapter;
 import com.example.countingdowngame.wildCards.wildCardTypes.TaskWildCardsAdapter;
 import com.example.countingdowngame.wildCards.wildCardTypes.TruthWildCardsAdapter;
@@ -979,14 +978,12 @@ public class MainActivityGame extends SharedMainActivity {
         QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.QUIZ);
         TaskWildCardsAdapter taskAdapter = new TaskWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.TASK);
         TruthWildCardsAdapter truthAdapter = new TruthWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.TRUTH);
-        ExtrasWildCardsAdapter extraAdapter = new ExtrasWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.EXTRAS);
 
         WildCardProperties[] quizProbabilities = quizAdapter.loadWildCardProbabilitiesFromStorage(WildCardData.QUIZ_WILD_CARDS);
         WildCardProperties[] taskProbabilities = taskAdapter.loadWildCardProbabilitiesFromStorage(WildCardData.TASK_WILD_CARDS);
         WildCardProperties[] truthProbabilities = truthAdapter.loadWildCardProbabilitiesFromStorage(WildCardData.TRUTH_WILD_CARDS);
-        WildCardProperties[] extraProbabilities = extraAdapter.loadWildCardProbabilitiesFromStorage(WildCardData.EXTRA_WILD_CARDS);
 
-        WildCardProperties[] selectedType = selectWildCardType(currentPlayer, quizProbabilities, taskProbabilities, truthProbabilities, extraProbabilities);
+        WildCardProperties[] selectedType = selectWildCardType(currentPlayer, quizProbabilities, taskProbabilities, truthProbabilities);
         if (selectedType == null) {
             wildActivityTextView.setText("No wild cards available");
             return;
@@ -998,7 +995,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     }
 
-    private WildCardProperties[] selectWildCardType(Player currentPlayer, WildCardProperties[] quizProbabilities, WildCardProperties[] taskProbabilities, WildCardProperties[] truthProbabilities, WildCardProperties[] extraProbabilities) {
+    private WildCardProperties[] selectWildCardType(Player currentPlayer, WildCardProperties[] quizProbabilities, WildCardProperties[] taskProbabilities, WildCardProperties[] truthProbabilities) {
         if ("Quiz Magician".equals(currentPlayer.getClassChoice()) && currentPlayer.getJustUsedClassAbility()) {
             btnClassAbility.setVisibility(View.INVISIBLE);
             return quizProbabilities;
@@ -1008,7 +1005,6 @@ public class MainActivityGame extends SharedMainActivity {
         addIfEnabled(enabledTypes, quizProbabilities);
         addIfEnabled(enabledTypes, taskProbabilities);
         addIfEnabled(enabledTypes, truthProbabilities);
-        addIfEnabled(enabledTypes, extraProbabilities);
 
         if (enabledTypes.isEmpty()) {
             return null;
