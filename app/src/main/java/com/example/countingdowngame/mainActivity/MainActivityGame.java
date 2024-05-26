@@ -341,7 +341,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         Log.d("Before switch", "drinkNumberCounterInt: " + drinkNumberCounterInt);
 
-        if (catastropheTurnCounter == catastropheLimit) {
+        if (catastropheTurnCounter == 2) {
             switch (catastrophe.getEffect()) {
                 case 1:
                     drinkNumberCounterInt += 2;
@@ -351,10 +351,10 @@ public class MainActivityGame extends SharedMainActivity {
                     drinkNumberCounterInt -= 2;
                     updateDrinkNumberCounterTextView();
                 case 3:
-                    doubleCurrentNumber();
+                    increaseNumberByRandom();
                     break;
                 case 4:
-                    halveCurrentNumber();
+                    decreaseNumberByRandom();
                     break;
                 case 5:
                     reverseTurnOrder(currentPlayer);
@@ -614,6 +614,7 @@ public class MainActivityGame extends SharedMainActivity {
     private void handleScientistClass(Player currentPlayer) {
         scientistChangeCurrentNumber();
         Game.getInstance().activateRepeatingTurn(currentPlayer, 1);
+        repeatedTurn = true;
     }
 
     private void handleSoldierClass(Player currentPlayer) {
@@ -784,16 +785,18 @@ public class MainActivityGame extends SharedMainActivity {
 
 
     private void handleScientistPassive(Player currentPlayer) {
-        Handler handler = new Handler();
-        int delayMillis = 1;
-        int chance = new Random().nextInt(100);
+        if (!repeatedTurn && !isFirstTurn) {
+            Handler handler = new Handler();
+            int delayMillis = 1;
+            int chance = new Random().nextInt(100);
 
-        handler.postDelayed(() -> {
-            if (chance < 10) {
-                showGameDialog("Scientist's Passive: \n\n" + currentPlayer.getName() + " is a scientist and their turn was skipped. ");
-                currentPlayer.useSkip();
-            }
-        }, delayMillis);
+            handler.postDelayed(() -> {
+                if (chance < 10) {
+                    showGameDialog("Scientist's Passive: \n\n" + currentPlayer.getName() + " is a scientist and their turn was skipped. ");
+                    currentPlayer.useSkip();
+                }
+            }, delayMillis);
+        }
     }
 
     private void handleAngryJimPassive(Player currentPlayer) {
@@ -1127,6 +1130,39 @@ public class MainActivityGame extends SharedMainActivity {
 
     //-----------------------------------------------------Specific WildCard Functions---------------------------------------------------//
 
+    private void increaseNumberByRandom() {
+        Game game = Game.getInstance();
+        int currentNumber = game.getCurrentNumber();
+        Random random = new Random();
+        int randomIncrease;
+        if (currentNumber >= 0 && currentNumber <= 100) {
+            randomIncrease = random.nextInt(11); // Random number between 0 and 10
+        } else if (currentNumber > 100 && currentNumber <= 1000) {
+            randomIncrease = random.nextInt(901) + 100; // Random number between 100 and 1000
+        } else {
+            randomIncrease = random.nextInt(9001) + 1000; // Random number between 1000 and 10000
+        }
+        int updatedNumber = Math.min(currentNumber + randomIncrease, 999999999);
+        updateNumber(updatedNumber);
+    }
+
+    private void decreaseNumberByRandom() {
+        Game game = Game.getInstance();
+        int currentNumber = game.getCurrentNumber();
+        Random random = new Random();
+        int randomDecrease;
+        if (currentNumber >= 0 && currentNumber <= 100) {
+            randomDecrease = random.nextInt(11); // Random number between 0 and 10
+        } else if (currentNumber > 100 && currentNumber <= 1000) {
+            randomDecrease = random.nextInt(901) + 100; // Random number between 100 and 1000
+        } else {
+            randomDecrease = random.nextInt(9001) + 1000; // Random number between 1000 and 10000
+        }
+        int updatedNumber = Math.max(currentNumber - randomDecrease, 1); // Ensure the number does not go below 1
+        updateNumber(updatedNumber);
+    }
+
+
     private void doubleCurrentNumber() {
         Game game = Game.getInstance();
         int currentNumber = game.getCurrentNumber();
@@ -1152,6 +1188,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void updateNumber(int updatedNumber) {
+        Game.getInstance().setCurrentNumber(updatedNumber);
         numberCounterText.setText(String.valueOf(updatedNumber));
         SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(updatedNumber));
     }
