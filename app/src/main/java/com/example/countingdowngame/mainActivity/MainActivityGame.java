@@ -363,20 +363,18 @@ public class MainActivityGame extends SharedMainActivity {
                     for (Player player : Game.getInstance().getPlayers()) {
                         player.gainWildCards(2);
                     }
+                    renderPlayer();
                     break;
                 case 7:
                     for (Player player : Game.getInstance().getPlayers()) {
                         player.loseWildCards(2);
                     }
-                    break;
-                case 8:
+                    renderPlayer();
                     break;
                 case 9:
                     Game.getInstance().activateRepeatingTurnForAllPlayers(2);
                     drinkNumberCounterInt -= 2;
                     updateDrinkNumberCounterTextView();
-                case 10:
-                    break;
                 default:
                     break;
             }
