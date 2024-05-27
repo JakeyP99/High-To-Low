@@ -215,7 +215,7 @@ public class MainActivityGame extends SharedMainActivity {
     private void setupButtons() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         initializeButtonsVisibility();
-        setupButtonActions(currentPlayer, imageButtonExit);
+        setupButtonActions(imageButtonExit);
     }
 
     private void initializeButtonsVisibility() {
@@ -225,7 +225,7 @@ public class MainActivityGame extends SharedMainActivity {
         btnQuizAnswerBR.setVisibility(View.INVISIBLE);
     }
 
-    private void setupButtonActions(Player currentPlayer, ImageButton imageButtonExit) {
+    private void setupButtonActions(ImageButton imageButtonExit) {
         btnUtils.setButton(btnGenerate, () -> {
             disableButtons();
             startNumberShuffleAnimation();
@@ -331,7 +331,10 @@ public class MainActivityGame extends SharedMainActivity {
                     break;
                 case 2:
                     drinkNumberCounterInt -= 2;
-                    updateDrinkNumberCounterTextView();
+                    if (drinkNumberCounterInt < 0) {
+                        drinkNumberCounterInt = 0; // Ensure the counter doesn't go below 0
+                    }
+                    break;
                 case 3:
                     increaseNumberByRandom();
                     break;
