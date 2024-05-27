@@ -100,17 +100,6 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         game.setPlayerList(players);
     }
 
-    protected static void logPlayerInformation(Player currentPlayer) {
-        Log.d("renderPlayer", "Current number is " + Game.getInstance().getCurrentNumber() +
-                " - Player was rendered " + currentPlayer.getName() +
-                " is a " + currentPlayer.getClassChoice() +
-                " with " + currentPlayer.getWildCardAmount() +
-                " Wildcards " +
-                "and " + currentPlayer.getUsedClassAbility() +
-                " is the class ability and are they removed ?" +
-                currentPlayer.isRemoved());
-    }
-
     protected void animateTextView(final TextView textView) {
         // Shake animation
         ObjectAnimator shakeAnimator = ObjectAnimator.ofFloat(textView, "translationX", -5, 5);

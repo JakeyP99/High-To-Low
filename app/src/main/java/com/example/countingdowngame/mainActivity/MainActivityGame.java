@@ -11,6 +11,8 @@ import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_SCIEN
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_SOLDIER;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_SURVIVOR;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_WITCH;
+import static com.example.countingdowngame.mainActivity.Logging.logPlayerInformation;
+import static com.example.countingdowngame.mainActivity.Logging.logSelectedCardInfo;
 import static com.example.countingdowngame.mainActivity.MainActivityCatastrophes.decreaseNumberByRandom;
 import static com.example.countingdowngame.mainActivity.MainActivityCatastrophes.increaseNumberByRandom;
 import static com.example.countingdowngame.mainActivity.MainActivityCatastrophes.setCatastropheLimit;
@@ -236,7 +238,7 @@ public class MainActivityGame extends SharedMainActivity {
         btnUtils.setButton(btnClassAbility, this::activateActiveAbility);
 
         btnUtils.setButton(btnWild, () -> {
-            wildCardActivate(currentPlayer);
+            wildCardActivate();
             manageWildCardVisibility();
             isFirstTurn = false;
         });
@@ -338,6 +340,7 @@ public class MainActivityGame extends SharedMainActivity {
                     break;
                 case 5:
                     reverseTurnOrder(currentPlayer);
+                    currentPlayer.useSkip();
                     break;
                 case 6:
                     for (Player player : Game.getInstance().getPlayers()) {
@@ -857,7 +860,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private boolean currentPlayerHasQuizMagicianPassive(Player currentPlayer) {
-        return "Quiz Magician".equals(currentPlayer.getClassChoice()) || ("Angry Jim".equals(currentPlayer.getClassChoice()) && Game.getInstance().getCurrentNumber() < 50);
+        return CLASS_QUIZ_MAGICIAN.equals(currentPlayer.getClassChoice()) || (CLASS_ANGRY_JIM.equals(currentPlayer.getClassChoice()) && Game.getInstance().getCurrentNumber() < 50);
     }
 
     private void handleSurvivorPassive(Player currentPlayer) {
@@ -965,7 +968,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     //-----------------------------------------------------Wild Card Functionality---------------------------------------------------//
-    private void wildCardActivate(Player player) {
+    private void wildCardActivate() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         Game.getInstance().getCurrentPlayer().useWildCard();
         currentPlayer.incrementUsedWildcards();
@@ -985,8 +988,8 @@ public class MainActivityGame extends SharedMainActivity {
             return;
         }
 
-        WildCardProperties selectedCard = selectRandomCard(player, selectedType);
-        handleSelectedCard(selectedCard, getWildCardType(selectedType, quizProbabilities, taskProbabilities, truthProbabilities), player);
+        WildCardProperties selectedCard = selectRandomCard(currentPlayer, selectedType);
+        handleSelectedCard(selectedCard, getWildCardType(selectedType, quizProbabilities, taskProbabilities, truthProbabilities), currentPlayer);
         btnClassAbility.setVisibility(View.INVISIBLE);
 
     }
@@ -1051,7 +1054,6 @@ public class MainActivityGame extends SharedMainActivity {
             updateSelectedCard(selectedCard);
             setAnswersAndVisibility(selectedCard, player);
             logSelectedCardInfo(selectedCard, wildCardType);
-            performWildCardAction(selectedCard.getText(), player);
         } else {
             btnAnswer.setVisibility(View.INVISIBLE);
         }
@@ -1086,42 +1088,6 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-
-    private void logSelectedCardInfo(WildCardProperties selectedCard, String wildCardType) {
-        Log.d("WildCardInfo", "Type: " + wildCardType + ", " +
-                "Question: " + selectedCard.getText() + ", " +
-                "Answer: " + selectedCard.getAnswer() + ", " +
-                "Wrong Answer 1: " + selectedCard.getWrongAnswer1() + ", " +
-                "Wrong Answer 2: " + selectedCard.getWrongAnswer2() + ", " +
-                "Wrong Answer 3: " + selectedCard.getWrongAnswer3() + ", " +
-                "Category: " + selectedCard.getCategory());
-    }
-
-
-    private void performWildCardAction(String selectedActivity, Player player) {
-        switch (selectedActivity) {
-            case "Double the current number!":
-                doubleCurrentNumber();
-                break;
-            case "Half the current number!":
-                halveCurrentNumber();
-                break;
-            case "Reset the number!":
-                resetNumber();
-                break;
-            case "Reverse the turn order!":
-                reverseTurnOrder(player);
-                break;
-            case "Gain a couple more wildcards to use, I gotchya back!":
-                Game.getInstance().getCurrentPlayer().gainWildCards(3);
-                break;
-            case "Lose a couple wildcards :( oh also drink 3 lol!":
-                player.loseWildCards(2);
-                break;
-            default:
-                break;
-        }
-    }
 
     //-----------------------------------------------------Specific WildCard Functions---------------------------------------------------//
 
@@ -1298,7 +1264,7 @@ public class MainActivityGame extends SharedMainActivity {
     private void wildCardContinue() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         if ("Quiz Magician".equals(currentPlayer.getClassChoice()) && currentPlayer.getJustUsedClassAbility()) {
-            wildCardActivate(currentPlayer);
+            wildCardActivate();
             currentPlayer.gainWildCards(1);
             drinkNumberTextView.setVisibility(View.INVISIBLE);
             wildText.setVisibility(View.VISIBLE);
@@ -1363,7 +1329,6 @@ public class MainActivityGame extends SharedMainActivity {
         btnQuizAnswerBR.setVisibility(View.VISIBLE);
         btnQuizAnswerTL.setVisibility(View.VISIBLE);
         btnQuizAnswerTR.setVisibility(View.VISIBLE);
-
     }
 
     private void hideQuizButtons() {
