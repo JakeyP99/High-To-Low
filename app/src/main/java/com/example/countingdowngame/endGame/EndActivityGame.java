@@ -14,7 +14,7 @@ import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.mainActivity.MainActivityGame;
 import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
-import com.example.countingdowngame.utils.AudioManager;
+import com.example.countingdowngame.audio.AudioManager;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.ArrayList;

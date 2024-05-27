@@ -13,7 +13,7 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.createPlayer.PlayerChoice;
 import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.utils.AudioManager;
+import com.example.countingdowngame.audio.AudioManager;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import io.github.muddz.styleabletoast.StyleableToast;

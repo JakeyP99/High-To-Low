@@ -151,13 +151,13 @@ public class SharedMainActivity extends ButtonUtilsActivity {
     }
 
 
-    public void disableAllButtons(Button[] buttons) {
+    public void disableAnswerButtons(Button[] buttons) {
         for (Button button : buttons) {
             button.setEnabled(false);
         }
     }
 
-    public void enableAllButtons(Button[] buttons) {
+    public void enableAnswerButtons(Button[] buttons) {
         for (Button button : buttons) {
             button.setEnabled(true);
         }

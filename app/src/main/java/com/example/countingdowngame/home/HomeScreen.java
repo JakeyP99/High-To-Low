@@ -5,7 +5,7 @@ import android.widget.Button;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
-import com.example.countingdowngame.utils.AudioManager;
+import com.example.countingdowngame.audio.AudioManager;
 import com.example.countingdowngame.utils.ButtonUtils;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 

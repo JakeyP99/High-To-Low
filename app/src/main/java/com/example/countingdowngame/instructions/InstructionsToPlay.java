@@ -6,9 +6,8 @@ import android.widget.ProgressBar;
 
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.countingdowngame.MyApplication;
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.utils.AudioManager;
+import com.example.countingdowngame.audio.AudioManager;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.example.countingdowngame.utils.DepthPageTransformer;
 
@@ -25,10 +24,7 @@ public class InstructionsToPlay extends ButtonUtilsActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        MyApplication myApplication = (MyApplication) getApplication();
-        if (!myApplication.isAppRunning()) {
-            AudioManager.getInstance().pauseSound();
-        }
+        AudioManager.getInstance().pauseSound();
     }
 
     @Override
@@ -48,7 +44,7 @@ public class InstructionsToPlay extends ButtonUtilsActivity {
             R.string.instruction_wildcard_choices_quiz,
             R.string.instruction_wildcard_choices_task,
             R.string.instruction_wildcard_choices_truth,
-            R.string.instruction_wildcard_choices_extras,
+            R.string.instruction_catastrophe,
             R.string.instruction_the_end,
             R.string.instruction_hurray,
             R.string.instruction_settings,

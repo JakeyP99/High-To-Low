@@ -68,10 +68,10 @@
         Like truth or dare, but bewared, some of these are quite challenging!
     </string>
 
-    <string name="instruction_wildcard_choices_extras">
-        <b><big>Wildcard Choices: Extras!</big></b>
+    <string name="instruction_catastrophe">
+        <b><big>Catastrophes!</big></b>
         \n\n
-        These wildcards change the game. For example, it might grant you more wildcards, or it might reset the number back to the starting number.
+        Catastrophes change the game for better or for worse (mostly for worse hehe). For example, it might increase the drinking number, or it may remove wildcards. Who knows..
     </string>
 
     <string name="instruction_the_end">

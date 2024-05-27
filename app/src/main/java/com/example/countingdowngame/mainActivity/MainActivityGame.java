@@ -1,14 +1,8 @@
 package com.example.countingdowngame.mainActivity;
 
 import static android.content.ContentValues.TAG;
-import static com.example.countingdowngame.R.id.btnBackWildCard;
-import static com.example.countingdowngame.R.id.btnExitGame;
 import static com.example.countingdowngame.R.id.close_button;
 import static com.example.countingdowngame.R.id.editCurrentNumberTextView;
-import static com.example.countingdowngame.R.id.textView_NumberText;
-import static com.example.countingdowngame.R.id.textView_Number_Turn;
-import static com.example.countingdowngame.R.id.textView_WildText;
-import static com.example.countingdowngame.R.id.textView_numberCounter;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_ANGRY_JIM;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_ARCHER;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_GOBLIN;
@@ -17,6 +11,9 @@ import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_SCIEN
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_SOLDIER;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_SURVIVOR;
 import static com.example.countingdowngame.createPlayer.PlayerChoice.CLASS_WITCH;
+import static com.example.countingdowngame.mainActivity.MainActivityCatastrophes.decreaseNumberByRandom;
+import static com.example.countingdowngame.mainActivity.MainActivityCatastrophes.increaseNumberByRandom;
+import static com.example.countingdowngame.mainActivity.MainActivityCatastrophes.setCatastropheLimit;
 
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
@@ -35,13 +32,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.countingdowngame.R;
+import com.example.countingdowngame.audio.AudioManager;
 import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
 import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.GameEventType;
 import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
-import com.example.countingdowngame.utils.AudioManager;
 import com.example.countingdowngame.wildCards.WildCardProperties;
 import com.example.countingdowngame.wildCards.WildCardType;
 import com.example.countingdowngame.wildCards.wildCardTypes.QuizWildCardsAdapter;
@@ -80,33 +77,15 @@ public class MainActivityGame extends SharedMainActivity {
     public WildCardProperties selectedWildCard;
     private int turnCounter = 0;
     private int catastropheTurnCounter = 0;
-    private int catastropheLimit;
+    public static int catastropheLimit;
 
     //-----------------------------------------------------Views---------------------------------------------------//
-    private Button btnAnswer;
-    private Button btnWildContinue;
-    private Button btnClassAbility;
-    private Button btnGenerate;
-    private Button btnQuizAnswerBL;
-    private Button btnQuizAnswerBR;
-    private Button btnQuizAnswerTL;
-    private Button btnQuizAnswerTR;
-    private Button btnWild;
-    private GifImageView confettiImageViewBL;
-    private GifImageView confettiImageViewBR;
-    private GifImageView confettiImageViewTL;
-    private GifImageView confettiImageViewTR;
-    private GifImageView infoGif;
-    private GifImageView muteGif;
-    private GifImageView soundGif;
+    private Button btnAnswer, btnWildContinue, btnClassAbility, btnGenerate, btnQuizAnswerBL, btnQuizAnswerBR, btnQuizAnswerTL, btnQuizAnswerTR, btnWild;
+    private GifImageView confettiImageViewBL, confettiImageViewBR, confettiImageViewTL, confettiImageViewTR, infoGif, muteGif, soundGif;
     private ImageView playerImage;
-    private TextView drinkNumberTextView;
-    private TextView nextPlayerText;
-    private TextView numberCounterText;
-
-    private TextView wildActivityTextView;
-
-    private TextView wildText;
+    private TextView drinkNumberTextView, nextPlayerText, wildActivityTextView, wildText;
+    private static TextView numberCounterText;
+    private ImageButton imageButtonExit;
 
     //-----------------------------------------------------Booleans---------------------------------------------------//
     private boolean doubleBackToExitPressedOnce = false;
@@ -161,33 +140,34 @@ public class MainActivityGame extends SharedMainActivity {
         muteGif = findViewById(R.id.muteGif);
         soundGif = findViewById(R.id.soundGif);
         infoGif = findViewById(R.id.informationGif);
-
-
         playerImage = findViewById(R.id.playerImage);
-        numberCounterText = findViewById(textView_NumberText);
-        drinkNumberTextView = findViewById(textView_numberCounter);
-        nextPlayerText = findViewById(textView_Number_Turn);
+        numberCounterText = findViewById(R.id.textView_NumberText);
+        drinkNumberTextView = findViewById(R.id.textView_numberCounter);
+        nextPlayerText = findViewById(R.id.textView_Number_Turn);
         btnWild = findViewById(R.id.btnWild);
         confettiImageViewBL = findViewById(R.id.confettiImageViewBL);
         confettiImageViewTL = findViewById(R.id.confettiImageViewTL);
         confettiImageViewBR = findViewById(R.id.confettiImageViewBR);
         confettiImageViewTR = findViewById(R.id.confettiImageViewTR);
-
         btnAnswer = findViewById(R.id.btnAnswer);
         btnClassAbility = findViewById(R.id.btnClassAbility);
         btnGenerate = findViewById(R.id.btnGenerate);
-        btnWildContinue = findViewById(btnBackWildCard);
-
-
+        btnWildContinue = findViewById(R.id.btnBackWildCard);
         btnQuizAnswerBL = findViewById(R.id.btnQuizAnswerBL);
         btnQuizAnswerBR = findViewById(R.id.btnQuizAnswerBR);
         btnQuizAnswerTL = findViewById(R.id.btnQuizAnswerTL);
         btnQuizAnswerTR = findViewById(R.id.btnQuizAnswerTR);
-        wildActivityTextView = findViewById(textView_WildText);
-
-
+        wildActivityTextView = findViewById(R.id.textView_WildText);
+        imageButtonExit = findViewById(R.id.btnExitGame);
         shuffleHandler = new Handler();
-        wildText = findViewById(textView_WildText);
+        wildText = findViewById(R.id.textView_WildText);
+
+        answerButtons = new Button[]{
+                btnQuizAnswerBL,
+                btnQuizAnswerBR,
+                btnQuizAnswerTL,
+                btnQuizAnswerTR
+        };
     }
 
     private void startGame() {
@@ -198,18 +178,15 @@ public class MainActivityGame extends SharedMainActivity {
 
         int startingNumber = extras.getInt("startingNumber");
 
-        // Load player data from PlayerModel
         List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
         if (!playerList.isEmpty()) {
-            // Set the player list in Game class
             Game.getInstance().setPlayers(this, playerList.size());
             Game.getInstance().setPlayerList(playerList);
 
-            // Set the game object for each player
             for (Player player : playerList) {
-                player.resetWildCardAmount(this); // Reset wild card count using GeneralSettingsLocalStore
+                player.resetWildCardAmount(this);
                 player.setGame(Game.getInstance());
-                player.setUsedClassAbility(false); // Initialize class ability to false
+                player.setUsedClassAbility(false);
             }
 
         }
@@ -235,16 +212,20 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void setupButtons() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        Log.d("setupButtons", " " + currentPlayer.getClassChoice());
+        initializeButtonsVisibility();
+        setupButtonActions(currentPlayer, imageButtonExit);
+    }
 
-        ImageButton imageButtonExit = findViewById(btnExitGame);
-
+    private void initializeButtonsVisibility() {
         btnWildContinue.setVisibility(View.INVISIBLE);
         btnAnswer.setVisibility(View.INVISIBLE);
         btnQuizAnswerBL.setVisibility(View.INVISIBLE);
         btnQuizAnswerBR.setVisibility(View.INVISIBLE);
+    }
 
+    private void setupButtonActions(Player currentPlayer, ImageButton imageButtonExit) {
         btnUtils.setButton(btnGenerate, () -> {
+            disableButtons();
             startNumberShuffleAnimation();
             isFirstTurn = false;
         });
@@ -254,15 +235,9 @@ public class MainActivityGame extends SharedMainActivity {
         btnUtils.setButton(btnWildContinue, this::wildCardContinue);
         btnUtils.setButton(btnClassAbility, this::activateActiveAbility);
 
-
         btnUtils.setButton(btnWild, () -> {
-            wildCardActivate(Game.getInstance().getCurrentPlayer());
-            drinkNumberTextView.setVisibility(View.INVISIBLE);
-            wildText.setVisibility(View.VISIBLE);
-            btnWild.setVisibility(View.INVISIBLE);
-            btnGenerate.setVisibility(View.INVISIBLE);
-            nextPlayerText.setVisibility(View.INVISIBLE);
-            numberCounterText.setVisibility(View.INVISIBLE);
+            wildCardActivate(currentPlayer);
+            manageWildCardVisibility();
             isFirstTurn = false;
         });
 
@@ -272,7 +247,15 @@ public class MainActivityGame extends SharedMainActivity {
         });
 
         infoGif.setOnClickListener(view -> showInstructionDialog());
+    }
 
+    private void manageWildCardVisibility() {
+        drinkNumberTextView.setVisibility(View.INVISIBLE);
+        wildText.setVisibility(View.VISIBLE);
+        btnWild.setVisibility(View.INVISIBLE);
+        btnGenerate.setVisibility(View.INVISIBLE);
+        nextPlayerText.setVisibility(View.INVISIBLE);
+        numberCounterText.setVisibility(View.INVISIBLE);
     }
 
     private void characterClassDescriptions() {
@@ -302,10 +285,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     public void renderCurrentNumber(int currentNumber, final Runnable onEnd, TextView generatedNumberTextView) {
         if (currentNumber == 0) {
-            btnGenerate.setEnabled(false);
-            btnWild.setEnabled(false);
-            btnClassAbility.setEnabled(false);
-
+            disableButtons();
             generatedNumberTextView.setText(String.valueOf(currentNumber));
             animateTextView(generatedNumberTextView);
 
@@ -386,12 +366,6 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    private void setCatastropheLimit() {
-        // Generate a random number between 4 and 10 for the catastrophe limit
-        Random random = new Random();
-        catastropheLimit = random.nextInt(4) + 4; // Generates a number between 4 and 7 (inclusive)
-        Log.d(TAG, "catastropheLimit: " + catastropheLimit);
-    }
 
     private void updateWildCardVisibilityIfNeeded(Player currentPlayer) {
         if (repeatedTurn) {
@@ -505,53 +479,74 @@ public class MainActivityGame extends SharedMainActivity {
     //-----------------------------------------------------Shuffler---------------------------------------------------//
 
     private void startNumberShuffleAnimation() {
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        int originalNumber = Game.getInstance().getCurrentNumber(); // Store the original number
+        final int shuffleDuration = 1500;
+        int shuffleInterval = originalNumber >= 1000 ? 50 : 100;
+        final Random random = new Random();
+
+        shuffleHandler.postDelayed(new ShuffleRunnable(random, originalNumber, shuffleDuration, shuffleInterval, currentPlayer), shuffleInterval);
+    }
+
+    private void disableButtons() {
         btnGenerate.setEnabled(false);
         btnWild.setEnabled(false);
         btnClassAbility.setEnabled(false);
         playerImage.setEnabled(false);
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
-
-        int originalNumber = Game.getInstance().getCurrentNumber(); // Store the original number
-        final int shuffleDuration = 1500;
-
-        int shuffleInterval = originalNumber >= 1000 ? 50 : 100;
-
-        final Random random = new Random();
-        shuffleHandler.postDelayed(new Runnable() {
-            int shuffleTime = 0;
-
-            @Override
-            public void run() {
-                int randomDigit = random.nextInt(originalNumber + 1);
-                numberCounterText.setText(String.valueOf(randomDigit));
-
-                shuffleTime += shuffleInterval;
-
-                if (shuffleTime < shuffleDuration) {
-                    shuffleHandler.postDelayed(this, shuffleInterval);
-                } else {
-                    numberCounterText.setText(String.valueOf(randomDigit));
-                    int currentNumber = Game.getInstance().nextNumber();
-                    Log.d(TAG, "NextNumber = " + currentNumber);
-
-                    if ("Survivor".equals(currentPlayer.getClassChoice()) && originalNumber == 1 && currentNumber == 1) {
-                        handleSurvivorPassive(currentPlayer);
-                    }
-
-                    renderCurrentNumber(currentNumber, () -> gotoGameEnd(), numberCounterText);
-
-                    if (currentNumber != 0) {
-                        btnGenerate.setEnabled(true);
-                        btnWild.setEnabled(true);
-                        btnClassAbility.setEnabled(true);
-                        playerImage.setEnabled(true);
-                    }
-                    Log.d("startNumberShuffleAnimation", "Next players turn");
-
-                }
-            }
-        }, shuffleInterval);
+        disableAnswerButtons(answerButtons);
     }
+
+    private void enableButtons() {
+        btnGenerate.setEnabled(true);
+        btnWild.setEnabled(true);
+        btnClassAbility.setEnabled(true);
+        playerImage.setEnabled(true);
+        enableAnswerButtons(answerButtons);
+    }
+
+    private class ShuffleRunnable implements Runnable {
+        private final Random random;
+        private final int originalNumber;
+        private final int shuffleDuration;
+        private final int shuffleInterval;
+        private final Player currentPlayer;
+        private int shuffleTime = 0;
+
+        ShuffleRunnable(Random random, int originalNumber, int shuffleDuration, int shuffleInterval, Player currentPlayer) {
+            this.random = random;
+            this.originalNumber = originalNumber;
+            this.shuffleDuration = shuffleDuration;
+            this.shuffleInterval = shuffleInterval;
+            this.currentPlayer = currentPlayer;
+        }
+
+        @Override
+        public void run() {
+            int randomDigit = random.nextInt(originalNumber + 1);
+            numberCounterText.setText(String.valueOf(randomDigit));
+
+            shuffleTime += shuffleInterval;
+
+            if (shuffleTime < shuffleDuration) {
+                shuffleHandler.postDelayed(this, shuffleInterval);
+            } else {
+                int currentNumber = Game.getInstance().nextNumber();
+                Log.d(TAG, "NextNumber = " + currentNumber);
+
+                if ("Survivor".equals(currentPlayer.getClassChoice()) && originalNumber == 1 && currentNumber == 1) {
+                    handleSurvivorPassive(currentPlayer);
+                }
+
+                renderCurrentNumber(currentNumber, () -> gotoGameEnd(), numberCounterText);
+
+                if (currentNumber != 0) {
+                    enableButtons();
+                }
+                Log.d("startNumberShuffleAnimation", "Next player's turn");
+            }
+        }
+    }
+
 
     //-----------------------------------------------------Active Effects---------------------------------------------------//
     private String getClassActiveDescription(String classChoice) {
@@ -1130,37 +1125,9 @@ public class MainActivityGame extends SharedMainActivity {
 
     //-----------------------------------------------------Specific WildCard Functions---------------------------------------------------//
 
-    private void increaseNumberByRandom() {
-        Game game = Game.getInstance();
-        int currentNumber = game.getCurrentNumber();
-        Random random = new Random();
-        int randomIncrease;
-        if (currentNumber >= 0 && currentNumber <= 100) {
-            randomIncrease = random.nextInt(11); // Random number between 0 and 10
-        } else if (currentNumber > 100 && currentNumber <= 1000) {
-            randomIncrease = random.nextInt(901) + 100; // Random number between 100 and 1000
-        } else {
-            randomIncrease = random.nextInt(9001) + 1000; // Random number between 1000 and 10000
-        }
-        int updatedNumber = Math.min(currentNumber + randomIncrease, 999999999);
-        updateNumber(updatedNumber);
-    }
 
-    private void decreaseNumberByRandom() {
-        Game game = Game.getInstance();
-        int currentNumber = game.getCurrentNumber();
-        Random random = new Random();
-        int randomDecrease;
-        if (currentNumber >= 0 && currentNumber <= 100) {
-            randomDecrease = random.nextInt(11); // Random number between 0 and 10
-        } else if (currentNumber > 100 && currentNumber <= 1000) {
-            randomDecrease = random.nextInt(901) + 100; // Random number between 100 and 1000
-        } else {
-            randomDecrease = random.nextInt(9001) + 1000; // Random number between 1000 and 10000
-        }
-        int updatedNumber = Math.max(currentNumber - randomDecrease, 1); // Ensure the number does not go below 1
-        updateNumber(updatedNumber);
-    }
+
+
 
 
     private void doubleCurrentNumber() {
@@ -1187,7 +1154,7 @@ public class MainActivityGame extends SharedMainActivity {
         updateNumber(startingNumber);
     }
 
-    private void updateNumber(int updatedNumber) {
+    static void updateNumber(int updatedNumber) {
         Game.getInstance().setCurrentNumber(updatedNumber);
         numberCounterText.setText(String.valueOf(updatedNumber));
         SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(updatedNumber));
@@ -1264,7 +1231,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void handleAnswerSelection(Button selectedButton, String selectedAnswer) {
-        disableAllButtons(answerButtons);
+        disableAnswerButtons(answerButtons);
 
         String correctAnswer = selectedWildCard.getAnswer();
         boolean isCorrect = selectedAnswer.equals(correctAnswer);
@@ -1286,7 +1253,7 @@ public class MainActivityGame extends SharedMainActivity {
         new Handler().postDelayed(() -> {
             resetButtonBackgrounds(answerButtons);
             handleAnswerOutcome(selectedWildCard.getAnswer().equals(correctAnswer));
-            enableAllButtons(answerButtons);
+            enableAnswerButtons(answerButtons);
         }, DELAY_MILLIS);
     }
 
@@ -1310,7 +1277,7 @@ public class MainActivityGame extends SharedMainActivity {
         new Handler().postDelayed(() -> {
             resetButtonBackgrounds(answerButtons);
             handleAnswerOutcome(false);
-            enableAllButtons(answerButtons);
+            enableAnswerButtons(answerButtons);
         }, DELAY_MILLIS);
     }
 

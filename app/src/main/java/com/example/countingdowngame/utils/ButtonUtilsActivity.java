@@ -1,6 +1,6 @@
 package com.example.countingdowngame.utils;
 
-import static com.example.countingdowngame.utils.AudioManager.updateMuteButton;
+import static com.example.countingdowngame.audio.AudioManager.updateMuteButton;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +12,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.countingdowngame.audio.AudioManager;
 import com.example.countingdowngame.instructions.InstructionsToPlay;
 import com.example.countingdowngame.endGame.EndActivityGame;
 import com.example.countingdowngame.home.HomeScreen;
