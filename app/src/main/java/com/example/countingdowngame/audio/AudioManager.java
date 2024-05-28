@@ -32,6 +32,12 @@ public class AudioManager {
         backgroundMusicList.add(R.raw.backgroundmusic2);
         backgroundMusicList.add(R.raw.backgroundmusic3);
         backgroundMusicList.add(R.raw.backgroundmusic4);
+        backgroundMusicList.add(R.raw.backgroundmusic5);
+        backgroundMusicList.add(R.raw.backgroundmusic6);
+        backgroundMusicList.add(R.raw.backgroundmusic7);
+        backgroundMusicList.add(R.raw.backgroundmusic8);
+        backgroundMusicList.add(R.raw.backgroundmusic9);
+        backgroundMusicList.add(R.raw.backgroundmusic10);
     }
 
     public static AudioManager getInstance() {

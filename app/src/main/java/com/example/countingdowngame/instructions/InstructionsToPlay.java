@@ -22,12 +22,6 @@ public class InstructionsToPlay extends ButtonUtilsActivity {
     GifImageView soundGif;
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        AudioManager.getInstance().pauseSound();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         boolean isMuted = getMuteSoundState();
