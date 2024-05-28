@@ -74,19 +74,18 @@ public class MainActivityGame extends SharedMainActivity {
 
     //-----------------------------------------------------Public ---------------------------------------------------//
     public static int drinkNumberCounterInt = 0;
+    public static int catastropheLimit;
+    private static TextView numberCounterText;
     //-----------------------------------------------------Maps and Sets---------------------------------------------------//
     private final Map<Player, Set<WildCardProperties>> usedWildCard = new HashMap<>();
     public WildCardProperties selectedWildCard;
     private int turnCounter = 0;
     private int catastropheTurnCounter = 0;
-    public static int catastropheLimit;
-
     //-----------------------------------------------------Views---------------------------------------------------//
     private Button btnAnswer, btnWildContinue, btnClassAbility, btnGenerate, btnQuizAnswerBL, btnQuizAnswerBR, btnQuizAnswerTL, btnQuizAnswerTR, btnWild;
     private GifImageView confettiImageViewBL, confettiImageViewBR, confettiImageViewTL, confettiImageViewTR, infoGif, muteGif, soundGif;
     private ImageView playerImage;
     private TextView drinkNumberTextView, nextPlayerText, wildActivityTextView, wildText;
-    private static TextView numberCounterText;
     private ImageButton imageButtonExit;
 
     //-----------------------------------------------------Booleans---------------------------------------------------//
@@ -100,6 +99,12 @@ public class MainActivityGame extends SharedMainActivity {
     private Button[] answerButtons; // Array to hold the answer buttons
     private Handler shuffleHandler;
     private MainActivityCatastrophes catastrophesManager;
+
+    static void updateNumber(int updatedNumber) {
+        Game.getInstance().setCurrentNumber(updatedNumber);
+        numberCounterText.setText(String.valueOf(updatedNumber));
+        SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(updatedNumber));
+    }
 
     //-----------------------------------------------------Lifecycle Methods---------------------------------------------------//
     @Override
@@ -203,14 +208,13 @@ public class MainActivityGame extends SharedMainActivity {
         updateDrinkNumberCounterTextView();
     }
 
+    //-----------------------------------------------------Buttons---------------------------------------------------//
 
     public void initializeCatastrophe() {
         // Initialize the catastrophes manager using the default constructor
         catastrophesManager = new MainActivityCatastrophes();
         setCatastropheLimit();
     }
-
-    //-----------------------------------------------------Buttons---------------------------------------------------//
 
     private void setupButtons() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
@@ -260,6 +264,9 @@ public class MainActivityGame extends SharedMainActivity {
         numberCounterText.setVisibility(View.INVISIBLE);
     }
 
+
+    //-----------------------------------------------------Render Player---------------------------------------------------//
+
     private void characterClassDescriptions() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         if (currentPlayer != null) {
@@ -269,9 +276,6 @@ public class MainActivityGame extends SharedMainActivity {
             }
         }
     }
-
-
-    //-----------------------------------------------------Render Player---------------------------------------------------//
 
     private void renderPlayer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
@@ -284,6 +288,8 @@ public class MainActivityGame extends SharedMainActivity {
         updateWildCardVisibilityIfNeeded(currentPlayer);
         updateCatastropheTurnCounter();
     }
+
+    //-----------------------------------------------------Update Player's Info---------------------------------------------------//
 
     public void renderCurrentNumber(int currentNumber, final Runnable onEnd, TextView generatedNumberTextView) {
         if (currentNumber == 0) {
@@ -303,8 +309,6 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    //-----------------------------------------------------Update Player's Info---------------------------------------------------//
-
     private void updateTurnCounter() {
         turnCounter++;
         if (turnCounter == 4) {
@@ -312,7 +316,6 @@ public class MainActivityGame extends SharedMainActivity {
             turnCounter = 0;
         }
     }
-
 
     private void updateCatastropheTurnCounter() {
         MainActivityCatastrophes.Catastrophe catastrophe = catastrophesManager.deployCatastrophe();
@@ -334,6 +337,7 @@ public class MainActivityGame extends SharedMainActivity {
                     if (drinkNumberCounterInt < 0) {
                         drinkNumberCounterInt = 0; // Ensure the counter doesn't go below 0
                     }
+                    updateDrinkNumberCounterTextView();
                     break;
                 case 3:
                     increaseNumberByRandom();
@@ -360,6 +364,9 @@ public class MainActivityGame extends SharedMainActivity {
                 case 9:
                     Game.getInstance().activateRepeatingTurnForAllPlayers(2);
                     drinkNumberCounterInt -= 2;
+                    if (drinkNumberCounterInt < 0) {
+                        drinkNumberCounterInt = 0; // Ensure the counter doesn't go below 0
+                    }
                     updateDrinkNumberCounterTextView();
                 default:
                     break;
@@ -372,7 +379,6 @@ public class MainActivityGame extends SharedMainActivity {
             setCatastropheLimit();
         }
     }
-
 
     private void updateWildCardVisibilityIfNeeded(Player currentPlayer) {
         if (repeatedTurn) {
@@ -426,11 +432,11 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
+    //-----------------------------------------------------Update Drink Number Counter---------------------------------------------------//
+
     private void updateWildCardVisibility(Player currentPlayer) {
         btnWild.setVisibility(currentPlayer.getWildCardAmount() > 0 ? View.VISIBLE : View.INVISIBLE);
     }
-
-    //-----------------------------------------------------Update Drink Number Counter---------------------------------------------------//
 
     private void updateDrinkNumberCounter(int drinkNumberCounterInput, boolean activatedByAbility) {
         int maxTotalDrinkAmount = GeneralSettingsLocalStore.fromContext(this).totalDrinkAmount();
@@ -456,7 +462,6 @@ public class MainActivityGame extends SharedMainActivity {
         updateDrinkNumberCounterTextView();
     }
 
-
     private void updateDrinkNumberCounterTextView() {
         int maxTotalDrinkAmount = GeneralSettingsLocalStore.fromContext(this).totalDrinkAmount();
 
@@ -475,15 +480,14 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
 
+    //-----------------------------------------------------Shuffler---------------------------------------------------//
+
     private void updateNumberText() {
         int currentNumber = Game.getInstance().getCurrentNumber();
         numberCounterText.setText(String.valueOf(currentNumber));
         SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(currentNumber));
         SharedMainActivity.setNameSizeBasedOnInt(nextPlayerText, nextPlayerText.getText().toString());
     }
-
-
-    //-----------------------------------------------------Shuffler---------------------------------------------------//
 
     private void startNumberShuffleAnimation() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
@@ -500,6 +504,8 @@ public class MainActivityGame extends SharedMainActivity {
         btnWild.setEnabled(false);
         btnClassAbility.setEnabled(false);
         playerImage.setEnabled(false);
+        infoGif.setEnabled(false);
+        imageButtonExit.setEnabled(false);
         disableAnswerButtons(answerButtons);
     }
 
@@ -508,52 +514,10 @@ public class MainActivityGame extends SharedMainActivity {
         btnWild.setEnabled(true);
         btnClassAbility.setEnabled(true);
         playerImage.setEnabled(true);
+        infoGif.setEnabled(false);
+        imageButtonExit.setEnabled(true);
         enableAnswerButtons(answerButtons);
     }
-
-    private class ShuffleRunnable implements Runnable {
-        private final Random random;
-        private final int originalNumber;
-        private final int shuffleDuration;
-        private final int shuffleInterval;
-        private final Player currentPlayer;
-        private int shuffleTime = 0;
-
-        ShuffleRunnable(Random random, int originalNumber, int shuffleDuration, int shuffleInterval, Player currentPlayer) {
-            this.random = random;
-            this.originalNumber = originalNumber;
-            this.shuffleDuration = shuffleDuration;
-            this.shuffleInterval = shuffleInterval;
-            this.currentPlayer = currentPlayer;
-        }
-
-        @Override
-        public void run() {
-            int randomDigit = random.nextInt(originalNumber + 1);
-            numberCounterText.setText(String.valueOf(randomDigit));
-
-            shuffleTime += shuffleInterval;
-
-            if (shuffleTime < shuffleDuration) {
-                shuffleHandler.postDelayed(this, shuffleInterval);
-            } else {
-                int currentNumber = Game.getInstance().nextNumber();
-                Log.d(TAG, "NextNumber = " + currentNumber);
-
-                if ("Survivor".equals(currentPlayer.getClassChoice()) && originalNumber == 1 && currentNumber == 1) {
-                    handleSurvivorPassive(currentPlayer);
-                }
-
-                renderCurrentNumber(currentNumber, () -> gotoGameEnd(), numberCounterText);
-
-                if (currentNumber != 0) {
-                    enableButtons();
-                }
-                Log.d("startNumberShuffleAnimation", "Next player's turn");
-            }
-        }
-    }
-
 
     //-----------------------------------------------------Active Effects---------------------------------------------------//
     private String getClassActiveDescription(String classChoice) {
@@ -1096,10 +1060,6 @@ public class MainActivityGame extends SharedMainActivity {
     //-----------------------------------------------------Specific WildCard Functions---------------------------------------------------//
 
 
-
-
-
-
     private void doubleCurrentNumber() {
         Game game = Game.getInstance();
         int currentNumber = game.getCurrentNumber();
@@ -1124,16 +1084,6 @@ public class MainActivityGame extends SharedMainActivity {
         updateNumber(startingNumber);
     }
 
-    static void updateNumber(int updatedNumber) {
-        Game.getInstance().setCurrentNumber(updatedNumber);
-        numberCounterText.setText(String.valueOf(updatedNumber));
-        SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(updatedNumber));
-    }
-
-
-    //-----------------------------------------------------Quiz Multi-Choice---------------------------------------------------//
-
-
     private void setMultiChoiceRandomizedAnswers(WildCardProperties selectedCard) {
         exposeQuizButtons();
 
@@ -1152,6 +1102,9 @@ public class MainActivityGame extends SharedMainActivity {
 
         setAnswersToFourButtons(answers);
     }
+
+
+    //-----------------------------------------------------Quiz Multi-Choice---------------------------------------------------//
 
     private void setMultiChoiceRandomizedAnswersForQuizMagician(WildCardProperties selectedCard) {
         exposeQuizButtons();
@@ -1213,7 +1166,6 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-
     private void handleCorrectAnswer(Button selectedButton, String correctAnswer) {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         Game.getInstance().incrementPlayerQuizCorrectAnswers(currentPlayer);
@@ -1251,7 +1203,6 @@ public class MainActivityGame extends SharedMainActivity {
         }, DELAY_MILLIS);
     }
 
-
     private void handleAnswerOutcome(boolean isCorrect) {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         if (isCorrect) {
@@ -1263,7 +1214,6 @@ public class MainActivityGame extends SharedMainActivity {
         hideQuizButtons();
         btnWildContinue.setVisibility(View.VISIBLE);
     }
-
 
     private void wildCardContinue() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
@@ -1316,8 +1266,6 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    //-----------------------------------------------------Quiz---------------------------------------------------//
-
     private void quizAnswerView(String string) {
         btnWildContinue.setVisibility(View.VISIBLE);
         wildText.setVisibility(View.VISIBLE);
@@ -1327,6 +1275,8 @@ public class MainActivityGame extends SharedMainActivity {
         numberCounterText.setVisibility(View.INVISIBLE);
         wildText.setText(string);
     }
+
+    //-----------------------------------------------------Quiz---------------------------------------------------//
 
     private void exposeQuizButtons() {
         btnQuizAnswerBL.setVisibility(View.VISIBLE);
@@ -1341,7 +1291,6 @@ public class MainActivityGame extends SharedMainActivity {
         btnQuizAnswerTL.setVisibility(View.INVISIBLE);
         btnQuizAnswerTR.setVisibility(View.INVISIBLE);
     }
-
 
     private void showAnswer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
@@ -1379,6 +1328,49 @@ public class MainActivityGame extends SharedMainActivity {
             }
         }
         btnAnswer.setVisibility(View.INVISIBLE);
+    }
+
+    private class ShuffleRunnable implements Runnable {
+        private final Random random;
+        private final int originalNumber;
+        private final int shuffleDuration;
+        private final int shuffleInterval;
+        private final Player currentPlayer;
+        private int shuffleTime = 0;
+
+        ShuffleRunnable(Random random, int originalNumber, int shuffleDuration, int shuffleInterval, Player currentPlayer) {
+            this.random = random;
+            this.originalNumber = originalNumber;
+            this.shuffleDuration = shuffleDuration;
+            this.shuffleInterval = shuffleInterval;
+            this.currentPlayer = currentPlayer;
+        }
+
+        @Override
+        public void run() {
+            int randomDigit = random.nextInt(originalNumber + 1);
+            numberCounterText.setText(String.valueOf(randomDigit));
+
+            shuffleTime += shuffleInterval;
+
+            if (shuffleTime < shuffleDuration) {
+                shuffleHandler.postDelayed(this, shuffleInterval);
+            } else {
+                int currentNumber = Game.getInstance().nextNumber();
+                Log.d(TAG, "NextNumber = " + currentNumber);
+
+                if ("Survivor".equals(currentPlayer.getClassChoice()) && originalNumber == 1 && currentNumber == 1) {
+                    handleSurvivorPassive(currentPlayer);
+                }
+
+                renderCurrentNumber(currentNumber, () -> gotoGameEnd(), numberCounterText);
+
+                if (currentNumber != 0) {
+                    enableButtons();
+                }
+                Log.d("startNumberShuffleAnimation", "Next player's turn");
+            }
+        }
     }
 
 }

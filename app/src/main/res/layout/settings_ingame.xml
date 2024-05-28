@@ -107,6 +107,19 @@
         android:textColor="@color/bluedark"
         android:textSize="23sp" />
 
+    <Button
+        android:id="@+id/button_task_toggle"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/outlineforbutton"
+        android:fontFamily="@font/viga"
+        android:layout_marginTop="25dp"
+        android:text="Tasks"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="23sp" />
 
     <GridLayout
         android:layout_width="wrap_content"
@@ -115,7 +128,7 @@
         android:background="@android:color/white"
         android:columnCount="1"
         android:orientation="vertical"
-        android:rowCount="2">
+        android:rowCount="1">
 
         <Button
             android:id="@+id/button_quiz_toggle"
@@ -137,20 +150,7 @@
             android:textColor="@color/bluedark"
             android:textSize="23sp" />
 
-        <Button
-            android:id="@+id/button_task_toggle"
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/outlineforbutton"
-            android:fontFamily="@font/viga"
-            android:layout_marginEnd="30dp"
 
-            android:text="Tasks"
-            android:textAlignment="center"
-            android:textAllCaps="false"
-            android:textColor="@color/bluedark"
-            android:textSize="23sp" />
 
         <Button
             android:id="@+id/button_truth_toggle"

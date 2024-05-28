@@ -44,8 +44,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
     private Button button_quiz_toggle;
     private Button button_task_toggle;
     private Button button_truth_toggle;
-    private Button button_extras_toggle;
-
     private Drawable buttonHighlightDrawable;
     private Drawable outlineForButton;
     private Button btnProgressToGame;
@@ -250,7 +248,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
                     // No Quiz Magician selected yet, proceed with toggling
                     boolean isQuizSelected = !button_quiz_toggle.isSelected();
                     toggleWildCardButton(button_quiz_toggle, quizWildCardsAdapter, isQuizSelected);
-
                 }
 
                 break;

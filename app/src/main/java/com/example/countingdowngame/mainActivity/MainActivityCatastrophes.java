@@ -66,7 +66,7 @@ public class MainActivityCatastrophes {
         Random random = new Random();
         int randomIncrease;
         if (currentNumber >= 0 && currentNumber <= 100) {
-            randomIncrease = random.nextInt(11); // Random number between 0 and 10
+            randomIncrease = random.nextInt(51); // Random number between 0 and 51
         } else if (currentNumber > 100 && currentNumber <= 1000) {
             randomIncrease = random.nextInt(901) + 100; // Random number between 100 and 1000
         } else {
@@ -95,7 +95,7 @@ public class MainActivityCatastrophes {
     public static void setCatastropheLimit() {
         // Generate a random number between 4 and 10 for the catastrophe limit
         Random random = new Random();
-        catastropheLimit = random.nextInt(4) + 4; // Generates a number between 4 and 7 (inclusive)
+        catastropheLimit = random.nextInt(6) + 5; // Generates a number between 6 and 11 (inclusive)
         Log.d(TAG, "catastropheLimit: " + catastropheLimit);
     }
 
