@@ -62,46 +62,44 @@ public class EndActivityGame extends ButtonUtilsActivity {
 
     private void setupStatsList(RecyclerView statsList) {
         ArrayList<String> statistics = new ArrayList<>();
-
-        // Add the end game text
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        Game gameInstance = Game.getInstance();
+        Player currentPlayer = gameInstance.getCurrentPlayer();
         String playerName = currentPlayer.getName();
         int numberCounter = MainActivityGame.drinkNumberCounterInt;
-        String endGameText = (numberCounter == 1) ?
-                "Drink " + numberCounter + " time " + playerName + " you little baby!" :
-                "Drink " + numberCounter + " times " + playerName + " you little baby!";
+
+        // Add the end game text
+        String endGameText = String.format("Drink %d time%s %s you little baby!",
+                numberCounter, numberCounter == 1 ? "" : "s", playerName);
         statistics.add(endGameText);
 
-        // Create a list of possible statistics
+        // Generate possible statistics
         ArrayList<String> possibleStatistics = new ArrayList<>();
-
-        if (Game.getInstance().getPlayerUsedWildcards()) {
-            possibleStatistics.add(Game.getInstance().getPlayerWithMostWildcardsUsed());
+        if (gameInstance.getPlayerUsedWildcards()) {
+            possibleStatistics.add(gameInstance.getPlayerWithMostWildcardsUsed());
         }
 
-        if (GeneralSettingsLocalStore.fromContext(this).isQuizActivated() && Game.getInstance().getQuizWasTriggered()) {
-            possibleStatistics.add(Game.getInstance().getPlayerWithMostQuizCorrectAnswers());
-            String mostIncorrectAnswers = Game.getInstance().getPlayerWithMostQuizIncorrectAnswers();
+        GeneralSettingsLocalStore settings = GeneralSettingsLocalStore.fromContext(this);
+        if (settings.isQuizActivated() && gameInstance.getQuizWasTriggered()) {
+            possibleStatistics.add(gameInstance.getPlayerWithMostQuizCorrectAnswers());
+            String mostIncorrectAnswers = gameInstance.getPlayerWithMostQuizIncorrectAnswers();
             if (!mostIncorrectAnswers.isEmpty()) {
                 possibleStatistics.add(mostIncorrectAnswers);
             }
         }
 
-        // Check if there are any witch players before adding witch-related statistics
-        if (Game.getInstance().hasWitchClass()) {
-            possibleStatistics.add(Game.getInstance().getWitchPlayerTotalDrinksHandedOut());
-            possibleStatistics.add(Game.getInstance().getWitchPlayerTotalDrinksTaken());
+        if (gameInstance.hasWitchClass()) {
+            possibleStatistics.add(gameInstance.getWitchPlayerTotalDrinksHandedOut());
+            possibleStatistics.add(gameInstance.getWitchPlayerTotalDrinksTaken());
         }
 
-        // Shuffle the list to randomize the order
+        possibleStatistics.add(gameInstance.getCatastropheQuantityString());
+
+
+        // Shuffle and select up to 3 random statistics
         Collections.shuffle(possibleStatistics);
+        statistics.addAll(possibleStatistics.subList(0, Math.min(4, possibleStatistics.size())));
 
-        int maxSize = Math.min(3, possibleStatistics.size());
-        for (int i = 0; i < maxSize; i++) {
-            statistics.add(possibleStatistics.get(i));
-        }
-
-        // Set up the adapter
+        // Set up the RecyclerView with the adapter
         EndGameListAdapter adapter = new EndGameListAdapter(this, statistics);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         statsList.setLayoutManager(layoutManager);

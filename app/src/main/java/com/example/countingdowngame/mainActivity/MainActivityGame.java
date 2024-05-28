@@ -323,7 +323,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         Log.d("Before switch", "drinkNumberCounterInt: " + drinkNumberCounterInt);
 
-        if (catastropheTurnCounter == 2) {
+        if (catastropheTurnCounter == catastropheLimit) {
             switch (catastrophe.getEffect()) {
                 case 1:
                     drinkNumberCounterInt += 2;
@@ -365,6 +365,7 @@ public class MainActivityGame extends SharedMainActivity {
                     break;
             }
             showCatastropheDialog(catastrophe.getMessage());
+            Game.getInstance().incrementCatastropheQuantity();
             catastropheTurnCounter = 0; // Reset the turn counter after reaching the limit
 
             // Generate a new random catastrophe limit

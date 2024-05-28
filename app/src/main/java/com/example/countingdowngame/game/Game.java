@@ -24,20 +24,22 @@ public class Game {
     private final Map<Player, Integer> repeatingTurnsMap = new HashMap<>();
     private final List<Integer> updatedNumbers = new ArrayList<>();
     private final List<String> playerNames = new ArrayList<>();
-    int currentNumber = 0;
+    private int startingNumber = 0;
+    private int currentNumber = 0;
+    private int currentPlayerId = 0;
+    private int catastropheQuantity = 0;
     private GameEventListener gameEventListener;
     private ArrayList<Player> players = new ArrayList<>();
-    private int currentPlayerId = 0;
+    private Boolean playerUsedWildcards = false;
+    private Boolean quizWasTriggered = false;
+    private Boolean gameStarted = false;
     //-----------------------------------------------------Player Functions---------------------------------------------------//
     private final PlayerEventListener playerEventListener = e -> {
         if (e.type == PlayerEventType.SKIP) {
             nextPlayer();
         }
     };
-    private Boolean playerUsedWildcards = false;
-    private Boolean quizWasTriggered = false;
-    private int startingNumber = 0;
-    private boolean gameStarted = false;
+
 
     public static Game getInstance() {
         return gameInstance;
@@ -76,10 +78,6 @@ public class Game {
         startingNumber = startNum;
         currentPlayerId = 0;
         updatedNumbers.clear();
-    }
-
-    public void addUpdatedNumber(int number) {
-        updatedNumbers.add(number);
     }
 
     public void addUpdatedName(String currentPlayerName) {
@@ -190,6 +188,13 @@ public class Game {
         return nextNumber;
     }
     //-----------------------------------------------------Stats ---------------------------------------------------//
+    public String getCatastropheQuantityString() {
+        return "Catastrophes occurred: " + catastropheQuantity;
+    }
+
+    public void incrementCatastropheQuantity() {
+        catastropheQuantity++;
+    }
     public String getPlayerWithMostWildcardsUsed() {
         Player topPlayer = null;
         int minWildCards = 0;
@@ -216,7 +221,6 @@ public class Game {
         if (player != null) {
             setQuizWasTriggered(true);
             player.incrementCorrectQuizAnswers();
-            Log.d(TAG, "incrementPlayerQuizCorrectAnswers: " + player.getCorrectQuizAnswers());
         }
     }
 
@@ -272,7 +276,7 @@ public class Game {
                 topPlayer = player;
             }
         }
-        return topPlayer != null ? topPlayer.getName() + " handed out " + maxDrinks + " as a witch!" : "No one handed out any drinks as a witch.";
+        return topPlayer != null ? topPlayer.getName() + " handed out " + maxDrinks + " drinks as a witch!" : "No one handed out any drinks as a witch.";
     }
 
     public String getWitchPlayerTotalDrinksTaken() {
