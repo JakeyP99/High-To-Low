@@ -546,28 +546,28 @@ public class MainActivityGame extends SharedMainActivity {
         Log.d("activateActiveAbility", "Class Activated: " + currentPlayer.getClassChoice());
         String classChoice = currentPlayer.getClassChoice();
         switch (classChoice) {
-            case "Scientist":
+            case CLASS_SCIENTIST:
                 handleScientistClass(currentPlayer);
                 break;
-            case "Archer":
+            case CLASS_ARCHER:
                 handleArcherClass(currentPlayer);
                 break;
-            case "Witch":
+            case CLASS_WITCH:
                 handleWitchClass(currentPlayer);
                 break;
-            case "Soldier":
+            case CLASS_SOLDIER:
                 handleSoldierClass(currentPlayer);
                 break;
-            case "Quiz Magician":
+            case CLASS_QUIZ_MAGICIAN:
                 handleQuizMagicianClass(currentPlayer);
                 break;
-            case "Survivor":
+            case CLASS_SURVIVOR:
                 handleSurvivorClass(currentPlayer);
                 break;
-            case "Goblin":
+            case CLASS_GOBLIN:
                 handleGoblinClass(currentPlayer);
                 break;
-            case "Angry Jim":
+            case CLASS_ANGRY_JIM:
                 handleAngryJimClass(currentPlayer);
                 break;
             default:
@@ -610,7 +610,7 @@ public class MainActivityGame extends SharedMainActivity {
         Player randomPlayer = game.getRandomPlayerExcludingCurrent();
         randomPlayer.removeWildCard(randomPlayer, 1);
         currentPlayer.setUsedClassAbility(true);
-        showGameDialog("Goblin's Active: \n\n" + randomPlayer.getName() + " lost a wildcard!");
+        showGameDialog(CLASS_GOBLIN + "'s Active: \n\n" + randomPlayer.getName() + " lost a wildcard!");
         btnClassAbility.setVisibility(View.INVISIBLE);
     }
 
@@ -619,7 +619,7 @@ public class MainActivityGame extends SharedMainActivity {
         Player randomPlayer = game.getRandomPlayerExcludingCurrent();
         if (randomPlayer != null) {
             game.activateRepeatingTurn(randomPlayer, 1); // Assuming 1 turn for repeating
-            showGameDialog("Angry Jim's Active: \n\n" + randomPlayer.getName() + " must repeat their turn.");
+            showGameDialog(CLASS_ANGRY_JIM + "'s Active: \n\n" + randomPlayer.getName() + " must repeat their turn.");
             btnClassAbility.setVisibility(View.INVISIBLE);
             currentPlayer.setUsedClassAbility(true);
         } else {
@@ -639,9 +639,9 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void updateAbilitiesAfterThreeTurns(Player currentPlayer) {
-        if (("Survivor".equals(currentPlayer.getClassChoice()) ||
-                "Witch".equals(currentPlayer.getClassChoice()) ||
-                "Goblin".equals(currentPlayer.getClassChoice())) &&
+        if ((CLASS_SURVIVOR.equals(currentPlayer.getClassChoice()) ||
+                CLASS_WITCH.equals(currentPlayer.getClassChoice()) ||
+                CLASS_GOBLIN.equals(currentPlayer.getClassChoice())) &&
                 currentPlayer.getUsedClassAbility()) {
             currentPlayer.incrementAbilityTurnCounter();
             Log.d(TAG, "increment counter: " + currentPlayer.getAbilityTurnCounter());
@@ -658,7 +658,7 @@ public class MainActivityGame extends SharedMainActivity {
         Log.d("ArcherClass", "handleArcherClass called");
 
         if (drinkNumberCounterInt >= 2) {
-            showGameDialog("Archer's Active: \n\n" + currentPlayer.getName() + " hand out two drinks!");
+            showGameDialog(CLASS_ARCHER + "'s Active: \n\n" + currentPlayer.getName() + " hand out two drinks!");
             currentPlayer.setUsedClassAbility(true);
             updateDrinkNumberCounter(-2, true);
             updateDrinkNumberCounterTextView();
@@ -708,17 +708,17 @@ public class MainActivityGame extends SharedMainActivity {
         String classChoice = currentPlayer.getClassChoice();
 
         // Handle passive effects based on the player's class choice
-        if ("Soldier".equals(classChoice)) {
+        if (CLASS_SOLDIER.equals(classChoice)) {
             handleSoldierPassive(currentPlayer);
-        } else if ("Witch".equals(classChoice)) {
+        } else if (CLASS_WITCH.equals(classChoice)) {
             handleWitchPassive(currentPlayer);
-        } else if ("Scientist".equals(classChoice)) {
+        } else if (CLASS_SCIENTIST.equals(classChoice)) {
             handleScientistPassive(currentPlayer);
-        } else if ("Angry Jim".equals(classChoice)) {
+        } else if (CLASS_ANGRY_JIM.equals(classChoice)) {
             handleAngryJimPassive(currentPlayer);
-        } else if ("Archer".equals(classChoice)) {
+        } else if (CLASS_ARCHER.equals(classChoice)) {
             handleArcherPassive(currentPlayer);
-        } else if ("Goblin".equals(classChoice)) {
+        } else if (CLASS_GOBLIN.equals(classChoice)) {
             handleGoblinPassive(currentPlayer);
         }
     }
@@ -738,10 +738,10 @@ public class MainActivityGame extends SharedMainActivity {
     private void handleWitchPassive(Player currentPlayer) {
         if (!isFirstTurn) {
             if (Game.getInstance().getCurrentNumber() % 2 == 0) {
-                showGameDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " hand out two drinks.");
+                showGameDialog(CLASS_WITCH + "'s Passive: \n\n" + currentPlayer.getName() + " hand out two drinks.");
                 currentPlayer.incrementDrinksHandedOutByWitch(2);
             } else {
-                showGameDialog("Witch's Passive: \n\n" + currentPlayer.getName() + " take two drinks.");
+                showGameDialog(CLASS_WITCH + "'s Passive: \n\n" + currentPlayer.getName() + " take two drinks.");
                 currentPlayer.incrementDrinksTakenByWitch(2);
             }
         }
@@ -756,7 +756,7 @@ public class MainActivityGame extends SharedMainActivity {
 
             handler.postDelayed(() -> {
                 if (chance < 10) {
-                    showGameDialog("Scientist's Passive: \n\n" + currentPlayer.getName() + " is a scientist and their turn was skipped. ");
+                    showGameDialog(CLASS_SCIENTIST + "'s Passive: \n\n" + currentPlayer.getName() + " is a scientist and their turn was skipped. ");
                     currentPlayer.useSkip();
                 }
             }, delayMillis);
@@ -788,7 +788,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void handleGoblinPassive(Player currentPlayer) {
         // Check if the current player is Angry Jim
-        if (!"Angry Jim".equals(currentPlayer.getClassChoice())) {
+        if (!CLASS_ANGRY_JIM.equals(currentPlayer.getClassChoice())) {
             // Increment the turn counter for non-Angry Jim players
             currentPlayer.incrementAbilityTurnCounter();
         }
@@ -800,7 +800,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void handleArcherPassive(Player currentPlayer) {
         // Check if the current player is Angry Jim
-        if (!"Angry Jim".equals(currentPlayer.getClassChoice())) {
+        if (!CLASS_ANGRY_JIM.equals(currentPlayer.getClassChoice())) {
             // Increment the turn counter for non-Angry Jim players
             currentPlayer.incrementAbilityTurnCounter();
         }
@@ -813,14 +813,14 @@ public class MainActivityGame extends SharedMainActivity {
             if (chance < 60) {
                 updateDrinkNumberCounter(2, true);
                 updateDrinkNumberCounterTextView();
-                showGameDialog("Archer's Passive: \n\nDrinking number increased by 2!");
+                showGameDialog(CLASS_ARCHER + "'s Passive: \n\nDrinking number increased by 2!");
             } else {
                 updateDrinkNumberCounter(-2, true);
                 if (drinkNumberCounterInt < 0) {
                     drinkNumberCounterInt = 0;
                 }
                 updateDrinkNumberCounterTextView();
-                showGameDialog("Archer's Passive: \n\nDrinking number decreased by 2!");
+                showGameDialog(CLASS_ARCHER + "'s Passive: \n\nDrinking number decreased by 2!");
             }
         }
     }
@@ -835,8 +835,8 @@ public class MainActivityGame extends SharedMainActivity {
 
         String drinksText = (drinkNumberCounterInt == 1) ? "drink" : "drinks";
 
-        if ("Survivor".equals(currentPlayer.getClassChoice()) && currentNumber == 1) {
-            showGameDialog("Survivor's Passive: \n\n" + currentPlayer.getName() + " survived a 1, hand out " + drinkNumberCounterInt + " " + drinksText);
+        if (CLASS_SURVIVOR.equals(currentPlayer.getClassChoice()) && currentNumber == 1) {
+            showGameDialog(CLASS_SURVIVOR + "'s Passive: \n\n" + currentPlayer.getName() + " survived a 1, hand out " + drinkNumberCounterInt + " " + drinksText);
         }
     }
 
@@ -961,7 +961,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private WildCardProperties[] selectWildCardType(Player currentPlayer, WildCardProperties[] quizProbabilities, WildCardProperties[] taskProbabilities, WildCardProperties[] truthProbabilities) {
-        if ("Quiz Magician".equals(currentPlayer.getClassChoice()) && currentPlayer.getJustUsedClassAbility()) {
+        if (CLASS_QUIZ_MAGICIAN.equals(currentPlayer.getClassChoice()) && currentPlayer.getJustUsedClassAbility()) {
             btnClassAbility.setVisibility(View.INVISIBLE);
             return quizProbabilities;
         }
@@ -1011,8 +1011,7 @@ public class MainActivityGame extends SharedMainActivity {
     private String getWildCardType(WildCardProperties[] selectedType, WildCardProperties[] quizProbabilities, WildCardProperties[] taskProbabilities, WildCardProperties[] truthProbabilities) {
         if (selectedType == quizProbabilities) return "Quiz";
         if (selectedType == taskProbabilities) return "Task";
-        if (selectedType == truthProbabilities) return "Truth";
-        return "Extras";
+        return "Truth";
     }
 
     public void handleSelectedCard(WildCardProperties selectedCard, String wildCardType, Player player) {
@@ -1056,30 +1055,11 @@ public class MainActivityGame extends SharedMainActivity {
 
 
     //-----------------------------------------------------Specific WildCard Functions---------------------------------------------------//
-
-
-    private void doubleCurrentNumber() {
-        Game game = Game.getInstance();
-        int currentNumber = game.getCurrentNumber();
-        int updatedNumber = Math.min(currentNumber * 2, 999999999);
-        updateNumber(updatedNumber);
-    }
-
-
     private void halveCurrentNumber() {
         Game game = Game.getInstance();
         int currentNumber = game.getCurrentNumber();
         int updatedNumber = Math.max(currentNumber / 2, 1);
         updateNumber(updatedNumber);
-    }
-
-    private void resetNumber() {
-        Bundle extras = getIntent().getExtras();
-        if (extras == null) {
-            throw new RuntimeException("Missing extras");
-        }
-        int startingNumber = extras.getInt("startingNumber");
-        updateNumber(startingNumber);
     }
 
     private void setMultiChoiceRandomizedAnswers(WildCardProperties selectedCard) {
@@ -1215,7 +1195,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void wildCardContinue() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        if ("Quiz Magician".equals(currentPlayer.getClassChoice()) && currentPlayer.getJustUsedClassAbility()) {
+        if (CLASS_QUIZ_MAGICIAN.equals(currentPlayer.getClassChoice()) && currentPlayer.getJustUsedClassAbility()) {
             wildCardActivate();
             currentPlayer.gainWildCards(1);
             drinkNumberTextView.setVisibility(View.INVISIBLE);
@@ -1357,7 +1337,7 @@ public class MainActivityGame extends SharedMainActivity {
                 int currentNumber = Game.getInstance().nextNumber();
                 Log.d(TAG, "NextNumber = " + currentNumber);
 
-                if ("Survivor".equals(currentPlayer.getClassChoice()) && originalNumber == 1 && currentNumber == 1) {
+                if (CLASS_SURVIVOR.equals(currentPlayer.getClassChoice()) && originalNumber == 1 && currentNumber == 1) {
                     handleSurvivorPassive(currentPlayer);
                 }
 

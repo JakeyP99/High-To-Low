@@ -74,7 +74,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     public static final String CLASS_QUIZ_MAGICIAN = "Quiz Magician";
     public static final String CLASS_SURVIVOR = "Survivor";
     public static final String CLASS_GOBLIN = "Goblin";
-    private static final String CLASS_NONE = "No Class";
+    public static final String CLASS_NONE = "No Class";
     private static final int REQUEST_IMAGE_PICK = 1;
     private static final int REQUEST_DRAW = 2;
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;
