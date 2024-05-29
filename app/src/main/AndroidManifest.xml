@@ -42,9 +42,10 @@
         <activity android:name=".instructions.InstructionsToPlay" />
 
         <activity android:name=".drawing.DrawingPlayerModels" />
+        <activity android:name=".playerChoice.PlayerChoiceComplimentary" />
 
         <activity
-            android:name=".createPlayer.PlayerChoice"
+            android:name=".playerChoice.PlayerChoice"
             android:windowSoftInputMode="adjustNothing" />
 
         <meta-data

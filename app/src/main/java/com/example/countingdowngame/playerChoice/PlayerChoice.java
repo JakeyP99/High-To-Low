@@ -1,22 +1,4 @@
-package com.example.countingdowngame.createPlayer;
-
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.angryJimActiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.angryJimPassiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.archerActiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.archerPassiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.goblinActiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.goblinPassiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.noClassDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.quizMagicianActiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.quizMagicianPassiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.scientistActiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.scientistPassiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.soldierActiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.soldierPassiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.survivorActiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.survivorPassiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.witchActiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.witchPassiveDescription;
+package com.example.countingdowngame.playerChoice;
 
 import android.Manifest;
 import android.content.Intent;
@@ -48,11 +30,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.countingdowngame.R;
+import com.example.countingdowngame.createPlayer.CharacterClassPagerAdapter;
+import com.example.countingdowngame.createPlayer.CharacterClassStore;
+import com.example.countingdowngame.createPlayer.PlayerListAdapter;
+import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.drawing.DrawingPlayerModels;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.numberChoice.NumberChoice;
 import com.example.countingdowngame.player.Player;
-import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
@@ -64,7 +49,7 @@ import java.util.Objects;
 import io.github.muddz.styleabletoast.StyleableToast;
 
 
-public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapter.ClickListener {
+public class PlayerChoice extends playerChoiceComplimentary implements PlayerListAdapter.ClickListener {
 
     public static final String CLASS_ARCHER = "Archer";
     public static final String CLASS_WITCH = "Witch";
@@ -85,6 +70,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     private RecyclerView playerRecyclerView;
     private int selectedPlayerCount;
     private Button proceedButton;
+    private Button createPlayerButton;
 
     @Override
     protected void onResume() {
@@ -97,6 +83,36 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         updatePlayerCounter();
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.player_choice);
+        initializeViews();
+        setupPlayerRecyclerView();
+        setupButtons();
+        setupProceedButton();
+        updatePlayerCounter();
+        clearPlayerSelection();
+        loadPlayerData();
+    }
+
+    private void initializeViews() {
+        playerRecyclerView = findViewById(R.id.playerRecyclerView);
+        playerCountTextView = findViewById(R.id.text_view_counter);
+        createPlayerButton = findViewById(R.id.createPlayerBtn);
+        totalPlayerCount = Game.getInstance().getPlayerAmount();
+        playerList = new ArrayList<>();
+        playerListAdapter = new PlayerListAdapter(this, playerList, this);
+        proceedButton = findViewById(R.id.button_done);
+        selectedPlayerCount = 0;
+    }
+    //-----------------------------------------------------Buttons---------------------------------------------------//
+
+    private void setupButtons() {
+        btnUtils.setButton(createPlayerButton, this::chooseCharacterCreation);
+    }
+
+    //-----------------------------------------------------Clicking a player---------------------------------------------------//
 
     public void onPlayerClick(int position) {
         Player player = playerList.get(position);
@@ -116,50 +132,42 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     }
 
     private void showEditNameDialog(Player player) {
+        AlertDialog dialog = buildEditNameDialog(player);
+        setupEditNameDialogActions(dialog, player);
+        dialog.show();
+    }
+
+    private AlertDialog buildEditNameDialog(Player player) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View dialogView = LayoutInflater.from(this).inflate(R.layout.player_enter_name, null);
         EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
         nameEditText.setText(player.getName());
-        Button okayButton = dialogView.findViewById(R.id.okButton);
-
+        dialogView.findViewById(R.id.okButton);
         builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
+        return builder.create();
+    }
 
-        // Set onClickListener for the okayButton
+    private void setupEditNameDialogActions(AlertDialog dialog, Player player) {
+        EditText nameEditText = dialog.findViewById(R.id.nameEditText);
+        Button okayButton = dialog.findViewById(R.id.okButton);
+
         okayButton.setOnClickListener(v -> {
-            String name = nameEditText.getText().toString();
-            if (name.length() < 20) {
-                if (name.isEmpty()) {
-                    StyleableToast.makeText(PlayerChoice.this, "Sorry, you need to enter a name.", R.style.newToast).show();
-                } else {
-                    player.setName(name);
-                    playerListAdapter.notifyItemChanged(playerList.indexOf(player));
-                    savePlayerData(); // Update player name in storage
-                    dialog.dismiss(); // Dismiss the dialog after changing the name
-                }
+            String name = nameEditText.getText().toString().trim();
+            if (isValidName(name)) {
+                updatePlayerName(player, name);
+                dismissDialog(dialog);
             } else {
-                StyleableToast.makeText(PlayerChoice.this, "Name must be less than 20 characters.", R.style.newToast).show();
+                showInvalidNameToast();
             }
         });
-
-        dialog.show();
     }
 
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.player_choice);
-
-        initializeViews();
-        setupPlayerRecyclerView();
-        setupDrawButton();
-        setupProceedButton();
-        updatePlayerCounter();
-        clearPlayerSelection();
-        loadPlayerData();
+    public void updatePlayerName(Player player, String name) {
+        player.setName(name);
+        playerListAdapter.notifyItemChanged(playerList.indexOf(player));
+        savePlayerData(); // Update player name in storage
     }
+
 
     private void clearPlayerSelection() {
         for (Player player : playerList) {
@@ -168,43 +176,10 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         playerListAdapter.notifyDataSetChanged();
     }
 
-    private void initializeViews() {
-        playerRecyclerView = findViewById(R.id.playerRecyclerView);
-        playerCountTextView = findViewById(R.id.text_view_counter);
 
 
-        totalPlayerCount = Game.getInstance().getPlayerAmount();
-        playerList = new ArrayList<>();
-        playerListAdapter = new PlayerListAdapter(this, playerList, this);
-        proceedButton = findViewById(R.id.button_done);
-        selectedPlayerCount = 0;
-
-
-    }
-
-    //-----------------------------------------------------Buttons---------------------------------------------------//
-
-    private void setupDrawButton() {
-        Button drawButton = findViewById(R.id.createPlayerBtn);
-        btnUtils.setButton(drawButton, this::chooseCharacterCreation);
-    }
 
     //-----------------------------------------------------Choose the player class---------------------------------------------------//
-
-    private List<CharacterClassStore> generateCharacterClasses() {
-        List<CharacterClassStore> characterClasses = new ArrayList<>();
-        characterClasses.add(new CharacterClassStore(1, CLASS_ARCHER, archerActiveDescription, archerPassiveDescription, R.drawable.archer));
-        characterClasses.add(new CharacterClassStore(2, CLASS_WITCH, witchActiveDescription, witchPassiveDescription, R.drawable.witch));
-        characterClasses.add(new CharacterClassStore(3, CLASS_SCIENTIST, scientistActiveDescription, scientistPassiveDescription, R.drawable.scientist));
-        characterClasses.add(new CharacterClassStore(4, CLASS_SOLDIER, soldierActiveDescription, soldierPassiveDescription, R.drawable.helmet));
-        characterClasses.add(new CharacterClassStore(5, CLASS_QUIZ_MAGICIAN, quizMagicianActiveDescription, quizMagicianPassiveDescription, R.drawable.books));
-        characterClasses.add(new CharacterClassStore(6, CLASS_SURVIVOR, survivorActiveDescription, survivorPassiveDescription, R.drawable.bandaids));
-        characterClasses.add(new CharacterClassStore(7, CLASS_ANGRY_JIM, angryJimActiveDescription, angryJimPassiveDescription, R.drawable.angry_jim));
-        characterClasses.add(new CharacterClassStore(8, CLASS_GOBLIN, goblinActiveDescription, goblinPassiveDescription, R.drawable.goblin));
-        characterClasses.add(new CharacterClassStore(9, CLASS_NONE, noClassDescription, null, R.drawable.noclass));
-        return characterClasses;
-    }
-
     private void chooseClass(int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = getLayoutInflater();

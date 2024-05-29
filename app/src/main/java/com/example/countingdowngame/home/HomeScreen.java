@@ -4,11 +4,12 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.audio.AudioManager;
+import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.ButtonUtils;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
+import io.github.muddz.styleabletoast.StyleableToast;
 import pl.droidsonroids.gif.GifImageView;
 
 public class HomeScreen extends ButtonUtilsActivity {
@@ -63,15 +64,19 @@ public class HomeScreen extends ButtonUtilsActivity {
         btnUtils.setButton(btnQuickPlay, this::gotoPlayerNumberChoice);
         btnUtils.setButton(btnInstructions, this::gotoInstructions);
 
-        drinkGif.setOnClickListener(view -> {
+        drinkGif.setOnLongClickListener(view -> {
             GeneralSettingsLocalStore settingsStore = GeneralSettingsLocalStore.fromContext(this);
             boolean regularSoundSelected = settingsStore.shouldPlayRegularSound();
             settingsStore.setShouldPlayRegularSound(!regularSoundSelected);
             buttonUtils.playSoundEffects();
             buttonUtils.vibrateDevice();
+
+            // Show toast message for burp or bop activation
+            String message = regularSoundSelected ? "Burp activated!" : "Bop activated!";
+            StyleableToast.makeText(this, message, R.style.newToast).show();
+
+            return true; // Return true to indicate that the long click event has been consumed
         });
     }
-
-
 
 }
