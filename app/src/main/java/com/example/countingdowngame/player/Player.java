@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class Player implements Serializable {
 
     //-----------------------------------------------------Initialize---------------------------------------------------//
-
+    private String id; // Unique identifier for the player
     private final String photo;
     private String name;
     private String classChoice;
@@ -34,7 +34,9 @@ public class Player implements Serializable {
 
     //-----------------------------------------------------Set Game---------------------------------------------------//
 
-    public Player(Context context, String photo, String name, String classChoice) {
+    public Player(Context context, String id, String photo, String name, String classChoice) {
+        this.id = id;
+
         this.photo = photo;
         this.name = name;
         this.classChoice = classChoice;
@@ -48,7 +50,9 @@ public class Player implements Serializable {
     }
 
     //-----------------------------------------------------Player---------------------------------------------------//
-
+    public String getId() {
+        return id;
+    }
     public void setGame(Game game) {
         this.game = game;
     }

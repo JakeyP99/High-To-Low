@@ -60,6 +60,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 import io.github.muddz.styleabletoast.StyleableToast;
 
@@ -89,12 +90,31 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     @Override
     protected void onResume() {
         super.onResume();
-        playerList.clear();
-        List<Player> loadedPlayerList = PlayerModelLocalStore.fromContext(this).loadPlayerData();
-        playerList.addAll(loadedPlayerList);
+        for (Player existingPlayer : playerList) {
+            if (existingPlayer != null && existingPlayer.getId() != null) {
+                existingPlayer.setName(existingPlayer.getName());
+                existingPlayer.setClassChoice(existingPlayer.getClassChoice());
+                existingPlayer.setSelected(existingPlayer.isSelected());
+            }
+        }
         selectedPlayerCount = 0;
         playerListAdapter.notifyDataSetChanged();
         updatePlayerCounter();
+    }
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.player_choice);
+
+        initializeViews();
+        setupPlayerRecyclerView();
+        setupDrawButton();
+        setupProceedButton();
+        updatePlayerCounter();
+        clearPlayerSelection();
+        loadPlayerData();
     }
 
 
@@ -143,22 +163,6 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         });
 
         dialog.show();
-    }
-
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.player_choice);
-
-        initializeViews();
-        setupPlayerRecyclerView();
-        setupDrawButton();
-        setupProceedButton();
-        updatePlayerCounter();
-        clearPlayerSelection();
-        loadPlayerData();
     }
 
     private void clearPlayerSelection() {
@@ -486,12 +490,17 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
         Bitmap zoomedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
         String photoString = convertBitmapToString(zoomedBitmap);
-        Player newPlayer = new Player(this, photoString, name, null);
+
+        // Generate a UUID for the player
+        String playerId = UUID.randomUUID().toString();
+
+        Player newPlayer = new Player(this, playerId, photoString, name, null); // Pass the generated ID
         newPlayer.setSelected(false); // Set isSelected to false initially
         playerList.add(newPlayer);
         playerListAdapter.notifyItemInserted(playerList.size() - 1);
         savePlayerData();
     }
+
 
     public void deletePlayer(int position) {
         playerList.remove(position);
@@ -510,6 +519,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     }
 
     private void loadPlayerData() {
+        playerList.clear();
         // Load player data from local store
         List<Player> loadedPlayerList = PlayerModelLocalStore.fromContext(this).loadPlayerData();
         int startPosition = playerList.size();
