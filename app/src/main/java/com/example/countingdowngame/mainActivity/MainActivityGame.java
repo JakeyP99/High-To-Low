@@ -269,11 +269,9 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void characterClassDescriptions() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        if (currentPlayer != null) {
-            String currentPlayerClassChoice = currentPlayer.getClassChoice();
-            if (currentPlayerClassChoice != null) {
-                characterClassInformationDialog(currentPlayerClassChoice, getClassActiveDescription(currentPlayerClassChoice), getClassPassiveDescription(currentPlayerClassChoice));
-            }
+        String currentPlayerClassChoice = currentPlayer.getClassChoice();
+        if (currentPlayerClassChoice != null) {
+            characterClassInformationDialog(currentPlayerClassChoice, getClassActiveDescription(currentPlayerClassChoice), getClassPassiveDescription(currentPlayerClassChoice));
         }
     }
 

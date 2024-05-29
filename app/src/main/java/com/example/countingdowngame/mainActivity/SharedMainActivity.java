@@ -169,11 +169,13 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         TextView passiveAbilityDescriptionTextView = dialogView.findViewById(R.id.passive_description_textview);
         TextView currentPlayerClassTextView = dialogView.findViewById(R.id.class_textview);
         TextView activeTextview = dialogView.findViewById(R.id.active_textview);
+        TextView passiveTextView = dialogView.findViewById(R.id.passive_textview);
 
 
-        if (Objects.equals(currentPlayerClassChoice, "Angry Jim")) {
+        if (Objects.equals(currentPlayerClassChoice, "No Class")) {
+            passiveAbilityDescriptionTextView.setVisibility(View.GONE);
             activeTextview.setVisibility(View.GONE);
-            activeAbilityDescriptionTextView.setVisibility(View.GONE);
+            passiveTextView.setVisibility(View.GONE);
         }
         // Set text and text size separately
         activeAbilityDescriptionTextView.setText(activeDescription);
