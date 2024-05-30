@@ -1,22 +1,4 @@
-package com.example.countingdowngame.createPlayer;
-
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.angryJimActiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.angryJimPassiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.archerActiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.archerPassiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.goblinActiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.goblinPassiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.noClassDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.quizMagicianActiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.quizMagicianPassiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.scientistActiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.scientistPassiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.soldierActiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.soldierPassiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.survivorActiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.survivorPassiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.witchActiveDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.witchPassiveDescription;
+package com.example.countingdowngame.playerChoice;
 
 import android.Manifest;
 import android.content.Intent;
@@ -48,11 +30,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.countingdowngame.R;
+import com.example.countingdowngame.createPlayer.CharacterClassPagerAdapter;
+import com.example.countingdowngame.createPlayer.CharacterClassStore;
+import com.example.countingdowngame.createPlayer.PlayerListAdapter;
+import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.drawing.DrawingPlayerModels;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.numberChoice.NumberChoice;
 import com.example.countingdowngame.player.Player;
-import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
@@ -65,7 +50,7 @@ import java.util.UUID;
 import io.github.muddz.styleabletoast.StyleableToast;
 
 
-public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapter.ClickListener {
+public class PlayerChoice extends playerChoiceComplimentary implements PlayerListAdapter.ClickListener {
 
     public static final String CLASS_ARCHER = "Archer";
     public static final String CLASS_WITCH = "Witch";
@@ -194,20 +179,6 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     }
 
     //-----------------------------------------------------Choose the player class---------------------------------------------------//
-
-    private List<CharacterClassStore> generateCharacterClasses() {
-        List<CharacterClassStore> characterClasses = new ArrayList<>();
-        characterClasses.add(new CharacterClassStore(1, CLASS_ARCHER, archerActiveDescription, archerPassiveDescription, R.drawable.archer));
-        characterClasses.add(new CharacterClassStore(2, CLASS_WITCH, witchActiveDescription, witchPassiveDescription, R.drawable.witch));
-        characterClasses.add(new CharacterClassStore(3, CLASS_SCIENTIST, scientistActiveDescription, scientistPassiveDescription, R.drawable.scientist));
-        characterClasses.add(new CharacterClassStore(4, CLASS_SOLDIER, soldierActiveDescription, soldierPassiveDescription, R.drawable.helmet));
-        characterClasses.add(new CharacterClassStore(5, CLASS_QUIZ_MAGICIAN, quizMagicianActiveDescription, quizMagicianPassiveDescription, R.drawable.books));
-        characterClasses.add(new CharacterClassStore(6, CLASS_SURVIVOR, survivorActiveDescription, survivorPassiveDescription, R.drawable.bandaids));
-        characterClasses.add(new CharacterClassStore(7, CLASS_ANGRY_JIM, angryJimActiveDescription, angryJimPassiveDescription, R.drawable.angry_jim));
-        characterClasses.add(new CharacterClassStore(8, CLASS_GOBLIN, goblinActiveDescription, goblinPassiveDescription, R.drawable.goblin));
-        characterClasses.add(new CharacterClassStore(9, CLASS_NONE, noClassDescription, null, R.drawable.noclass));
-        return characterClasses;
-    }
 
     private void chooseClass(int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);

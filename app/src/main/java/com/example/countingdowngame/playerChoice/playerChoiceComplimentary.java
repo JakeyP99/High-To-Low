@@ -27,16 +27,12 @@ import static com.example.countingdowngame.playerChoice.PlayerChoice.CLASS_SOLDI
 import static com.example.countingdowngame.playerChoice.PlayerChoice.CLASS_SURVIVOR;
 import static com.example.countingdowngame.playerChoice.PlayerChoice.CLASS_WITCH;
 
-import android.app.Dialog;
-
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.createPlayer.CharacterClassStore;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.github.muddz.styleabletoast.StyleableToast;
 
 public class playerChoiceComplimentary extends ButtonUtilsActivity {
     public List<CharacterClassStore> generateCharacterClasses() {
@@ -52,31 +48,4 @@ public class playerChoiceComplimentary extends ButtonUtilsActivity {
         characterClasses.add(new CharacterClassStore(9, CLASS_NONE, noClassDescription, null, R.drawable.noclass));
         return characterClasses;
     }
-
-    public boolean isValidName(String name) {
-        return !name.isEmpty() && name.length() < 20;
-    }
-
-
-    public void dismissDialog(Dialog dialog) {
-        if (dialog != null && dialog.isShowing()) {
-            dialog.dismiss();
-        }
-    }
-
-    public void showInvalidNameToast() {
-        StyleableToast.makeText(this, "Name must be less than 20 characters.", R.style.newToast).show();
-    }
-
-    public List<List<CharacterClassStore>> generateCharacterClassPages() {
-        List<CharacterClassStore> characterClasses = generateCharacterClasses();
-        int itemsPerPage = 1;
-        List<List<CharacterClassStore>> pages = new ArrayList<>();
-        for (int i = 0; i < characterClasses.size(); i += itemsPerPage) {
-            int endIndex = Math.min(i + itemsPerPage, characterClasses.size());
-            pages.add(characterClasses.subList(i, endIndex));
-        }
-        return pages;
-    }
-
 }
