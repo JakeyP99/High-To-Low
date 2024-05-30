@@ -87,6 +87,7 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     private int selectedPlayerCount;
     private Button proceedButton;
 
+
     @Override
     protected void onResume() {
         super.onResume();
