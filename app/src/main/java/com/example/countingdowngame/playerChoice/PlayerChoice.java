@@ -76,7 +76,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
     protected void onResume() {
         super.onResume();
         for (Player existingPlayer : playerList) {
-            if (existingPlayer != null && existingPlayer.getId() != null) {
+            if (existingPlayer != null) {
                 existingPlayer.setName(existingPlayer.getName());
                 existingPlayer.setClassChoice(existingPlayer.getClassChoice());
                 existingPlayer.setSelected(existingPlayer.isSelected());
@@ -490,6 +490,8 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
     }
 
     private void loadPlayerData() {
+        playerList.clear();
+
         // Load player data from local store
         List<Player> loadedPlayerList = PlayerModelLocalStore.fromContext(this).loadPlayerData();
         int startPosition = playerList.size();
