@@ -68,10 +68,14 @@ public class EndActivityGame extends ButtonUtilsActivity {
         int numberCounter = MainActivityGame.drinkNumberCounterInt;
 
         // Add the end game text
-        String endGameText = String.format("Drink %d time%s %s you little baby!",
-                numberCounter, numberCounter == 1 ? "" : "s", playerName);
+        String endGameText;
+        if (numberCounter == 0) {
+            endGameText = String.format("Drink up %s you litt..... Oh.. The number was 0? Well damn, lucky you I guess", playerName);
+        } else {
+            endGameText = String.format("Drink %d time%s %s you little baby!",
+                    numberCounter, numberCounter == 1 ? "" : "s", playerName);
+        }
         statistics.add(endGameText);
-
         // Generate possible statistics
         ArrayList<String> possibleStatistics = new ArrayList<>();
         if (gameInstance.getPlayerUsedWildcards()) {

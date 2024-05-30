@@ -45,7 +45,7 @@ public class MainActivityCatastrophes {
                 new Catastrophe("Everyone gains a couple more wildcards to use!", 6),
                 new Catastrophe("Everyone loses a couple of wildcards!", 7),
                 new Catastrophe("Everyone must each make a rule, and this will last until the end of the game!", 8),
-                new Catastrophe("All players must have three turns, but the drinking number is reduced!", 9),
+                new Catastrophe("All players must have three turns, and the drinking number is altered!", 9),
         };
         this.unusedCatastrophes = new ArrayList<>(Arrays.asList(allCatastrophes)); // Initialize unusedCatastrophes
     }

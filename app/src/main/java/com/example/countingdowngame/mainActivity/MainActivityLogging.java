@@ -6,7 +6,7 @@ import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.wildCards.WildCardProperties;
 
-public class Logging {
+public class MainActivityLogging {
 
     protected static void logPlayerInformation(Player currentPlayer) {
         Log.d("renderPlayer", "Current number is " + Game.getInstance().getCurrentNumber() +

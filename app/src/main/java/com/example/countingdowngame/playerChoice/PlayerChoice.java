@@ -52,15 +52,15 @@ import io.github.muddz.styleabletoast.StyleableToast;
 
 public class PlayerChoice extends playerChoiceComplimentary implements PlayerListAdapter.ClickListener {
 
-    public static final String CLASS_ARCHER = "Archer";
-    public static final String CLASS_WITCH = "Witch";
-    public static final String CLASS_SCIENTIST = "Scientist";
-    public static final String CLASS_SOLDIER = "Soldier";
-    public static final String CLASS_ANGRY_JIM = "Angry Jim";
-    public static final String CLASS_QUIZ_MAGICIAN = "Quiz Magician";
-    public static final String CLASS_SURVIVOR = "Survivor";
-    public static final String CLASS_GOBLIN = "Goblin";
-    public static final String CLASS_NONE = "No Class";
+    public static final String ARCHER = "Archer";
+    public static final String WITCH = "Witch";
+    public static final String SCIENTIST = "Scientist";
+    public static final String SOLDIER = "Soldier";
+    public static final String ANGRY_JIM = "Angry Jim";
+    public static final String QUIZ_MAGICIAN = "Quiz Magician";
+    public static final String SURVIVOR = "Survivor";
+    public static final String GOBLIN = "Goblin";
+    public static final String NO_CLASS = "No Class";
     private static final int REQUEST_IMAGE_PICK = 1;
     private static final int REQUEST_DRAW = 2;
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;

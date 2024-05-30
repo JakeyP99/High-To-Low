@@ -30,7 +30,7 @@ public class ButtonUtils {
     private static final int NUM_SOUNDS = 4; // Number of sounds in the rotation
     private static int currentSoundIndex = 0; // Current index of the sound being played
     private final MediaPlayer[] burp = new MediaPlayer[NUM_SOUNDS];
-    private final MediaPlayer bop;
+    private MediaPlayer bop;
     private final AppCompatActivity mContext;
     private final Drawable buttonHighlight;
     private boolean isMuted = false;
@@ -48,13 +48,17 @@ public class ButtonUtils {
     //-----------------------------------------------------Sound Functionality---------------------------------------------------//
     public void toggleMute() {
         isMuted = !isMuted;
+        saveMuteState(isMuted);
     }
 
-    private void stopAllSounds() throws IOException {
-        bop.pause();  // Pause the regular sound effect
+    private void stopAllSounds() {
+        if (bop != null && bop.isPlaying()) {
+            bop.pause();  // Pause the regular sound effect
+            bop.seekTo(0);
+        }
 
         for (MediaPlayer mediaPlayer : burp) {
-            if (mediaPlayer.isPlaying()) {
+            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
                 mediaPlayer.pause();
                 mediaPlayer.seekTo(0);  // Reset the sound to the beginning
             }
@@ -69,33 +73,59 @@ public class ButtonUtils {
         boolean soundEffectsChoice = GeneralSettingsLocalStore.fromContext(mContext).shouldPlayRegularSound();
 
         if (soundEffectsChoice) {
-            bop.start();
+            playMediaPlayer(bop);
             Log.d("TAG", "playSoundEffects: Bop is playing");
         } else {
             currentSoundIndex = (currentSoundIndex + 1) % NUM_SOUNDS;
             Log.d("TAG", "playSoundEffects: Burp is playing");
+            stopAllSounds();
+            playMediaPlayer(burp[currentSoundIndex]);
+        }
+    }
+
+    private void playMediaPlayer(MediaPlayer mediaPlayer) {
+        if (mediaPlayer == null) {
+            return;
+        }
+
+        try {
+            if (!mediaPlayer.isPlaying()) {
+                mediaPlayer.start();
+            }
+        } catch (IllegalStateException e) {
+            mediaPlayer.reset();
             try {
-                stopAllSounds();
-                burp[currentSoundIndex].start();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
             }
         }
     }
 
-
     public void onDestroy() {
         for (MediaPlayer b : burp) {
-            b.release();
+            if (b != null) {
+                b.release();
+            }
         }
-        bop.release();
+        if (bop != null) {
+            bop.release();
+        }
     }
-
 
     private boolean isMuted() {
         SharedPreferences sharedPreferences = mContext.getSharedPreferences("MyPrefs", MODE_PRIVATE);
         return sharedPreferences.getBoolean("isMuted", false); // Default to false if not found
     }
+
+    private void saveMuteState(boolean isMuted) {
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("isMuted", isMuted);
+        editor.apply();
+    }
+
     //-----------------------------------------------------Onclick Functionality---------------------------------------------------//
 
     @SuppressLint("ClickableViewAccessibility")
@@ -135,7 +165,6 @@ public class ButtonUtils {
         });
     }
 
-
     @SuppressLint("ClickableViewAccessibility")
     public void setButtonWithoutEffects(final Button button, final Runnable buttonAction) {
         if (button == null) {
@@ -148,7 +177,6 @@ public class ButtonUtils {
             vibrateDevice();
         });
     }
-
 
     //-----------------------------------------------------Vibrate Functionality---------------------------------------------------//
 
@@ -163,4 +191,3 @@ public class ButtonUtils {
         }
     }
 }
-
