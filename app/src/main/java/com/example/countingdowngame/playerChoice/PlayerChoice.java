@@ -87,7 +87,6 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     private int selectedPlayerCount;
     private Button proceedButton;
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -520,7 +519,6 @@ public class PlayerChoice extends ButtonUtilsActivity implements PlayerListAdapt
     }
 
     private void loadPlayerData() {
-        playerList.clear();
         // Load player data from local store
         List<Player> loadedPlayerList = PlayerModelLocalStore.fromContext(this).loadPlayerData();
         int startPosition = playerList.size();
