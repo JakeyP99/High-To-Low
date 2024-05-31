@@ -315,6 +315,8 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
+    //-----------------------------------------------------Catastrophes---------------------------------------------------//
+
     private void updateCatastropheTurnCounter() {
         MainActivityCatastrophes.Catastrophe catastrophe = catastrophesManager.deployCatastrophe();
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
@@ -514,7 +516,7 @@ public class MainActivityGame extends SharedMainActivity {
         btnWild.setEnabled(true);
         btnClassAbility.setEnabled(true);
         playerImage.setEnabled(true);
-        infoGif.setEnabled(false);
+        infoGif.setEnabled(true);
         imageButtonExit.setEnabled(true);
         enableAnswerButtons(answerButtons);
     }
@@ -936,10 +938,10 @@ public class MainActivityGame extends SharedMainActivity {
         Game.getInstance().getCurrentPlayer().useWildCard();
         currentPlayer.incrementUsedWildcards();
 
-        WildCardProperties[] emptyProbabilitiesArray = new WildCardProperties[0];
-        QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.QUIZ);
-        TaskWildCardsAdapter taskAdapter = new TaskWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.TASK);
-        TruthWildCardsAdapter truthAdapter = new TruthWildCardsAdapter(emptyProbabilitiesArray, this, WildCardType.TRUTH);
+        WildCardProperties[] wildCardArray = new WildCardProperties[0];
+        QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(wildCardArray, this, WildCardType.QUIZ);
+        TaskWildCardsAdapter taskAdapter = new TaskWildCardsAdapter(wildCardArray, this, WildCardType.TASK);
+        TruthWildCardsAdapter truthAdapter = new TruthWildCardsAdapter(wildCardArray, this, WildCardType.TRUTH);
 
         WildCardProperties[] quizProbabilities = quizAdapter.loadWildCardProbabilitiesFromStorage(WildCardData.QUIZ_WILD_CARDS);
         WildCardProperties[] taskProbabilities = taskAdapter.loadWildCardProbabilitiesFromStorage(WildCardData.TASK_WILD_CARDS);
