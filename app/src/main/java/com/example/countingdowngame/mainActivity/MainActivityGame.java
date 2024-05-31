@@ -321,7 +321,7 @@ public class MainActivityGame extends SharedMainActivity {
         MainActivityCatastrophes.Catastrophe catastrophe = catastrophesManager.deployCatastrophe();
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         catastropheTurnCounter++;
-        if (catastropheTurnCounter == 3) {
+        if (catastropheTurnCounter == catastropheLimit) {
             switch (catastrophe.getEffect()) {
                 case 1:
                     drinkNumberCounterInt += 2;

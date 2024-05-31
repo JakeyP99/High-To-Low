@@ -13,10 +13,7 @@ import io.github.muddz.styleabletoast.StyleableToast;
 import pl.droidsonroids.gif.GifImageView;
 
 public class HomeScreen extends ButtonUtilsActivity {
-    private GifImageView muteGif;
-    private GifImageView soundGif;
-    private GifImageView drinkGif;
-
+    private GifImageView muteGif, soundGif, drinkGif;
     private ButtonUtils buttonUtils;
 
     @Override
@@ -63,6 +60,15 @@ public class HomeScreen extends ButtonUtilsActivity {
         // Set onClickListener for buttons
         btnUtils.setButton(btnQuickPlay, this::gotoPlayerNumberChoice);
         btnUtils.setButton(btnInstructions, this::gotoInstructions);
+        drinkGifFunctionality();
+
+    }
+
+    public void drinkGifFunctionality() {
+        drinkGif.setOnClickListener(view -> {
+            AudioManager audioManager = AudioManager.getInstance();
+            audioManager.playNextSong();
+        });
 
         drinkGif.setOnLongClickListener(view -> {
             GeneralSettingsLocalStore settingsStore = GeneralSettingsLocalStore.fromContext(this);
@@ -71,11 +77,10 @@ public class HomeScreen extends ButtonUtilsActivity {
             buttonUtils.playSoundEffects();
             buttonUtils.vibrateDevice();
 
-            // Show toast message for burp or bop activation
             String message = regularSoundSelected ? "Burp sound effects activated!" : "Bop sound effects activated!";
             StyleableToast.makeText(this, message, R.style.newToast).show();
 
-            return true; // Return true to indicate that the long click event has been consumed
+            return true;
         });
     }
 
