@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.countingdowngame.R;
+import com.example.countingdowngame.audio.AudioManager;
 import com.example.countingdowngame.createPlayer.CharacterClassPagerAdapter;
 import com.example.countingdowngame.createPlayer.CharacterClassStore;
 import com.example.countingdowngame.createPlayer.PlayerListAdapter;
@@ -75,6 +76,8 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
     @Override
     protected void onResume() {
         super.onResume();
+        AudioManager.getInstance().resumeBackgroundMusic();
+
         for (Player existingPlayer : playerList) {
             if (existingPlayer != null) {
                 existingPlayer.setName(existingPlayer.getName());
@@ -86,7 +89,6 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         playerListAdapter.notifyDataSetChanged();
         updatePlayerCounter();
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

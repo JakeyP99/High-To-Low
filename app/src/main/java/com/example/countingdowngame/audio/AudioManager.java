@@ -123,6 +123,15 @@ public class AudioManager {
         }
     }
 
+    public void playConfettiSound(Context context) {
+        MediaPlayer confettiMediaPlayer = MediaPlayer.create(context, R.raw.party);
+        if (confettiMediaPlayer != null) {
+            confettiMediaPlayer.start();
+            confettiMediaPlayer.setOnCompletionListener(MediaPlayer::release);
+        } else {
+            Log.e("AudioManager", "Failed to create MediaPlayer for confetti sound");
+        }
+    }
 
     //-----------------------------------------------------Update UI---------------------------------------------------//
 

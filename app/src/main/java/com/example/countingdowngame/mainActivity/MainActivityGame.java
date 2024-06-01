@@ -1224,6 +1224,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void displayConfetti(View confettiView) {
+        AudioManager.getInstance().playConfettiSound(this);
         confettiView.setVisibility(View.VISIBLE);
         new Handler().postDelayed(() -> confettiView.setVisibility(View.INVISIBLE), 1500);
     }
