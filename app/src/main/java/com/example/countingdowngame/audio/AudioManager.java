@@ -2,6 +2,15 @@ package com.example.countingdowngame.audio;
 
 import static android.content.ContentValues.TAG;
 
+import static com.example.countingdowngame.playerChoice.PlayerChoice.ANGRY_JIM;
+import static com.example.countingdowngame.playerChoice.PlayerChoice.ARCHER;
+import static com.example.countingdowngame.playerChoice.PlayerChoice.GOBLIN;
+import static com.example.countingdowngame.playerChoice.PlayerChoice.QUIZ_MAGICIAN;
+import static com.example.countingdowngame.playerChoice.PlayerChoice.SCIENTIST;
+import static com.example.countingdowngame.playerChoice.PlayerChoice.SOLDIER;
+import static com.example.countingdowngame.playerChoice.PlayerChoice.SURVIVOR;
+import static com.example.countingdowngame.playerChoice.PlayerChoice.WITCH;
+
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.util.Log;
@@ -10,7 +19,9 @@ import android.view.View;
 import com.example.countingdowngame.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import pl.droidsonroids.gif.GifImageView;
@@ -130,6 +141,38 @@ public class AudioManager {
             confettiMediaPlayer.setOnCompletionListener(MediaPlayer::release);
         } else {
             Log.e("AudioManager", "Failed to create MediaPlayer for confetti sound");
+        }
+    }
+
+    private static final Map<String, Integer> soundEffectsMap = new HashMap<>();
+
+    static {
+        soundEffectsMap.put(ARCHER, R.raw.archersound);
+        soundEffectsMap.put(WITCH, R.raw.witchsound);
+        soundEffectsMap.put(QUIZ_MAGICIAN, R.raw.quizmagsound);
+        soundEffectsMap.put(SOLDIER, R.raw.soldiersound);
+        soundEffectsMap.put(GOBLIN, R.raw.goblinsound);
+        soundEffectsMap.put(SCIENTIST, R.raw.sciencesound);
+        soundEffectsMap.put(ANGRY_JIM, R.raw.angryjimsound);
+        soundEffectsMap.put(SURVIVOR, R.raw.survivorsound);
+
+
+        // Add more mappings as needed
+    }
+
+    public void playSoundEffects(Context context, String className) {
+        Integer soundResourceId = soundEffectsMap.get(className);
+
+        if (soundResourceId != null) {
+            MediaPlayer soundEffectsMediaPlayer = MediaPlayer.create(context, soundResourceId);
+            if (soundEffectsMediaPlayer != null) {
+                soundEffectsMediaPlayer.start();
+                soundEffectsMediaPlayer.setOnCompletionListener(MediaPlayer::release);
+            } else {
+                Log.e("AudioManager", "Failed to create MediaPlayer for sound effects");
+            }
+        } else {
+            Log.e("AudioManager", "No sound effect found for class name: " + className);
         }
     }
 

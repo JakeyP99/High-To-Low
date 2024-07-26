@@ -2,9 +2,6 @@
 <project version="4">
   <component name="deploymentTargetSelector">
     <selectionStates>
-      <SelectionState runConfigName="PlayerNumberChoice">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="CountingDownGame">
         <option name="selectionMode" value="DROPDOWN" />
         <DropdownSelection timestamp="2024-05-25T07:48:02.880196800Z">
@@ -17,6 +14,9 @@
         <DialogSelection />
       </SelectionState>
       <SelectionState runConfigName="MainActivityGame">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="PlayerChoice">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

@@ -10,8 +10,8 @@ import static com.example.countingdowngame.mainActivity.MainActivityLogging.logP
 import static com.example.countingdowngame.mainActivity.MainActivityLogging.logSelectedCardInfo;
 import static com.example.countingdowngame.playerChoice.PlayerChoice.ANGRY_JIM;
 import static com.example.countingdowngame.playerChoice.PlayerChoice.ARCHER;
-import static com.example.countingdowngame.playerChoice.PlayerChoice.NO_CLASS;
 import static com.example.countingdowngame.playerChoice.PlayerChoice.GOBLIN;
+import static com.example.countingdowngame.playerChoice.PlayerChoice.NO_CLASS;
 import static com.example.countingdowngame.playerChoice.PlayerChoice.QUIZ_MAGICIAN;
 import static com.example.countingdowngame.playerChoice.PlayerChoice.SCIENTIST;
 import static com.example.countingdowngame.playerChoice.PlayerChoice.SOLDIER;
@@ -551,7 +551,7 @@ public class MainActivityGame extends SharedMainActivity {
         String classChoice = currentPlayer.getClassChoice();
         switch (classChoice) {
             case SCIENTIST:
-                handleScientistClass(currentPlayer);
+                handleScientistClass();
                 break;
             case ARCHER:
                 handleArcherClass(currentPlayer);
@@ -579,10 +579,8 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    private void handleScientistClass(Player currentPlayer) {
+    private void handleScientistClass() {
         scientistChangeCurrentNumber();
-        Game.getInstance().activateRepeatingTurn(currentPlayer, 1);
-        repeatedTurn = true;
     }
 
     private void handleSoldierClass(Player currentPlayer) {
@@ -595,6 +593,7 @@ public class MainActivityGame extends SharedMainActivity {
                 updateDrinkNumberCounterTextView();
                 btnWild.setVisibility(View.INVISIBLE);
                 btnClassAbility.setVisibility(View.INVISIBLE);
+                AudioManager.getInstance().playSoundEffects(this, SOLDIER);
             } else {
                 displayToastMessage("The +4 ability can only be activated when the number is below 10.");
             }
@@ -607,6 +606,7 @@ public class MainActivityGame extends SharedMainActivity {
         currentPlayer.setUsedClassAbility(true);
         currentPlayer.setJustUsedClassAbility(true);
         btnClassAbility.setVisibility(View.INVISIBLE);
+        AudioManager.getInstance().playSoundEffects(this, QUIZ_MAGICIAN);
     }
 
     private void handleGoblinClass(Player currentPlayer) {
@@ -616,6 +616,7 @@ public class MainActivityGame extends SharedMainActivity {
         currentPlayer.setUsedClassAbility(true);
         showGameDialog(GOBLIN + "'s Active: \n\n" + randomPlayer.getName() + " lost a wildcard!");
         btnClassAbility.setVisibility(View.INVISIBLE);
+        AudioManager.getInstance().playSoundEffects(this, GOBLIN);
     }
 
     private void handleAngryJimClass(Player currentPlayer) {
@@ -626,6 +627,7 @@ public class MainActivityGame extends SharedMainActivity {
             showGameDialog(ANGRY_JIM + "'s Active: \n\n" + randomPlayer.getName() + " must repeat their turn.");
             btnClassAbility.setVisibility(View.INVISIBLE);
             currentPlayer.setUsedClassAbility(true);
+            AudioManager.getInstance().playSoundEffects(this, ANGRY_JIM);
         }
     }
 
@@ -635,9 +637,29 @@ public class MainActivityGame extends SharedMainActivity {
             halveCurrentNumber();
             currentPlayer.setUsedClassAbility(true);
             btnClassAbility.setVisibility(View.INVISIBLE);
+            AudioManager.getInstance().playSoundEffects(this, SURVIVOR);
         } else {
             displayToastMessage("You can only halve the number when it is greater than 1.");
         }
+    }
+
+    private void handleArcherClass(Player currentPlayer) {
+        if (drinkNumberCounterInt >= 2) {
+            showGameDialog(ARCHER + "'s Active: \n\n" + currentPlayer.getName() + " hand out two drinks!");
+            currentPlayer.setUsedClassAbility(true);
+            updateDrinkNumberCounter(-2, true);
+            updateDrinkNumberCounterTextView();
+            btnClassAbility.setVisibility(View.INVISIBLE);
+            AudioManager.getInstance().playSoundEffects(this, ARCHER);
+        } else {
+            displayToastMessage("There must be more than two total drinks.");
+        }
+    }
+
+    private void handleWitchClass(Player currentPlayer) {
+        currentPlayer.setUsedClassAbility(true);
+        currentPlayer.useSkip();
+        AudioManager.getInstance().playSoundEffects(this, WITCH);
     }
 
     private void updateAbilitiesAfterThreeTurns(Player currentPlayer) {
@@ -653,24 +675,6 @@ public class MainActivityGame extends SharedMainActivity {
                 currentPlayer.resetSpecificTurnCounter();
             }
         }
-    }
-
-
-    private void handleArcherClass(Player currentPlayer) {
-        if (drinkNumberCounterInt >= 2) {
-            showGameDialog(ARCHER + "'s Active: \n\n" + currentPlayer.getName() + " hand out two drinks!");
-            currentPlayer.setUsedClassAbility(true);
-            updateDrinkNumberCounter(-2, true);
-            updateDrinkNumberCounterTextView();
-            btnClassAbility.setVisibility(View.INVISIBLE);
-        } else {
-            displayToastMessage("There must be more than two total drinks.");
-        }
-    }
-
-    private void handleWitchClass(Player currentPlayer) {
-        currentPlayer.setUsedClassAbility(true);
-        currentPlayer.useSkip();
     }
 
     //-----------------------------------------------------Passive Effects---------------------------------------------------//
@@ -913,14 +917,14 @@ public class MainActivityGame extends SharedMainActivity {
                     btnClassAbility.setVisibility(View.VISIBLE);
                 } else {
                     Player currentPlayer = Game.getInstance().getCurrentPlayer();
+                    Game.getInstance().activateRepeatingTurn(currentPlayer, 1);
                     Game.getInstance().setCurrentNumber(newNumber);
                     SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(newNumber));
                     numberCounterText.setText(String.valueOf(newNumber));
                     renderCurrentNumber(newNumber, this::gotoGameEnd, numberCounterText);
                     currentPlayer.setUsedClassAbility(true);
                     updateNumber(newNumber);
-                    updatePlayerInfo(currentPlayer);
-
+                    AudioManager.getInstance().playSoundEffects(this, SCIENTIST);
                     btnClassAbility.setVisibility(View.INVISIBLE);
                     dialog.dismiss(); // Close the dialog on success
                 }
