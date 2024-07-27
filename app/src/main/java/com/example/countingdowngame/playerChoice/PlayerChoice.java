@@ -53,15 +53,7 @@ import io.github.muddz.styleabletoast.StyleableToast;
 
 public class PlayerChoice extends playerChoiceComplimentary implements PlayerListAdapter.ClickListener {
 
-    public static final String ARCHER = "Archer";
-    public static final String WITCH = "Witch";
-    public static final String SCIENTIST = "Scientist";
-    public static final String SOLDIER = "Soldier";
-    public static final String ANGRY_JIM = "Angry Jim";
-    public static final String QUIZ_MAGICIAN = "Quiz Magician";
-    public static final String SURVIVOR = "Survivor";
-    public static final String GOBLIN = "Goblin";
-    public static final String NO_CLASS = "No Class";
+
     private static final int REQUEST_IMAGE_PICK = 1;
     private static final int REQUEST_DRAW = 2;
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;
@@ -76,7 +68,9 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
     @Override
     protected void onResume() {
         super.onResume();
+        boolean isMuted = getMuteSoundState();
         AudioManager.getInstance().resumeBackgroundMusic();
+        AudioManager.updateMuteStateWithoutButtons(isMuted);
 
         for (Player existingPlayer : playerList) {
             if (existingPlayer != null) {
@@ -88,6 +82,11 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         selectedPlayerCount = 0;
         playerListAdapter.notifyDataSetChanged();
         updatePlayerCounter();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override
@@ -520,9 +519,9 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
 
         String counterText;
         if (remainingPlayers == 0) {
-            counterText = "❤️ All Players Selected ❤️";
+            counterText = "All Players Selected!";
         } else if (remainingPlayers == 1) {
-            counterText = "Select 1 More Player ❤️";
+            counterText = "Select 1 More Player!";
         } else if (remainingPlayers < 0) {
             int excessPlayers = Math.abs(remainingPlayers);
             if (excessPlayers == 1) {
@@ -531,7 +530,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
                 counterText = "Please Remove " + excessPlayers + " Players \uD83E\uDD13";
             }
         } else {
-            counterText = "Select " + remainingPlayers + " More Players ❤️";
+            counterText = "Select " + remainingPlayers + " More Players!";
         }
         playerCountTextView.setText(counterText);
     }

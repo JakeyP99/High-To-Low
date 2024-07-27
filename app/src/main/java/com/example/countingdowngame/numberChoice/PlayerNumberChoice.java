@@ -31,8 +31,8 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
         setContentView(R.layout.a2_player_number_choice);
 
         initializeViews();
-        setupButtonControls();
         setupAudioManagerForMuteButtons(muteGif, soundGif);
+        setupButtonControls();
     }
 
     @Override
@@ -40,6 +40,7 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
         super.onResume();
         resetOriginalPlayerField();
         boolean isMuted = getMuteSoundState();
+        AudioManager.getInstance().resumeBackgroundMusic();
         AudioManager.updateMuteButton(isMuted, muteGif, soundGif);
     }
 

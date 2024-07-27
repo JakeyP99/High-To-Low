@@ -1,5 +1,14 @@
 package com.example.countingdowngame.playerChoice;
 
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ARCHER;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GOBLIN;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.NO_CLASS;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.QUIZ_MAGICIAN;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SCIENTIST;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SOLDIER;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.angryJimActiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.angryJimPassiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.archerActiveDescription;
@@ -17,15 +26,7 @@ import static com.example.countingdowngame.createPlayer.CharacterClassDescriptio
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.survivorPassiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.witchActiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.witchPassiveDescription;
-import static com.example.countingdowngame.playerChoice.PlayerChoice.ANGRY_JIM;
-import static com.example.countingdowngame.playerChoice.PlayerChoice.ARCHER;
-import static com.example.countingdowngame.playerChoice.PlayerChoice.GOBLIN;
-import static com.example.countingdowngame.playerChoice.PlayerChoice.NO_CLASS;
-import static com.example.countingdowngame.playerChoice.PlayerChoice.QUIZ_MAGICIAN;
-import static com.example.countingdowngame.playerChoice.PlayerChoice.SCIENTIST;
-import static com.example.countingdowngame.playerChoice.PlayerChoice.SOLDIER;
-import static com.example.countingdowngame.playerChoice.PlayerChoice.SURVIVOR;
-import static com.example.countingdowngame.playerChoice.PlayerChoice.WITCH;
+
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.createPlayer.CharacterClassStore;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class playerChoiceComplimentary extends ButtonUtilsActivity {
+
     public List<CharacterClassStore> generateCharacterClasses() {
         List<CharacterClassStore> characterClasses = new ArrayList<>();
         characterClasses.add(new CharacterClassStore(1, ARCHER, archerActiveDescription, archerPassiveDescription, R.drawable.archer));

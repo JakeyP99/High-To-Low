@@ -1,6 +1,15 @@
 package com.example.countingdowngame.createPlayer;
 
 public class CharacterClassDescriptions {
+    public static final String ARCHER = "Archer";
+    public static final String WITCH = "Witch";
+    public static final String SCIENTIST = "Scientist";
+    public static final String SOLDIER = "Soldier";
+    public static final String ANGRY_JIM = "Angry Jim";
+    public static final String QUIZ_MAGICIAN = "Quiz Magician";
+    public static final String SURVIVOR = "Survivor";
+    public static final String GOBLIN = "Goblin";
+    public static final String NO_CLASS = "No Class";
     // Active Ability Descriptions
     public static final String archerActiveDescription = "You can take two drinks off the total amount, and hand them out to players. You have to repeat your turn!";
     public static final String witchActiveDescription = "You can skip your turn. Ability resets after three turns.";
