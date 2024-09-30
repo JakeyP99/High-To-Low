@@ -797,6 +797,7 @@ public class MainActivityGame extends SharedMainActivity {
         }
         if (currentPlayer.getAbilityTurnCounter() == 3) {
             currentPlayer.resetSpecificTurnCounter();
+            Log.d(TAG, "handleGoblinPassive: reset turn");
             currentPlayer.gainWildCards(1);
         }
     }
