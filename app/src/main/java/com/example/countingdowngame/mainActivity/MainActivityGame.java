@@ -948,32 +948,32 @@ public class MainActivityGame extends SharedMainActivity {
         TaskWildCardsAdapter taskAdapter = new TaskWildCardsAdapter(wildCardArray, this, WildCardType.TASK);
         TruthWildCardsAdapter truthAdapter = new TruthWildCardsAdapter(wildCardArray, this, WildCardType.TRUTH);
 
-        WildCardProperties[] quizProbabilities = quizAdapter.loadWildCardProbabilitiesFromStorage(WildCardData.QUIZ_WILD_CARDS);
-        WildCardProperties[] taskProbabilities = taskAdapter.loadWildCardProbabilitiesFromStorage(WildCardData.TASK_WILD_CARDS);
-        WildCardProperties[] truthProbabilities = truthAdapter.loadWildCardProbabilitiesFromStorage(WildCardData.TRUTH_WILD_CARDS);
+        WildCardProperties[] quizWildCards = quizAdapter.loadWildCardsFromAdapter(WildCardData.QUIZ_WILD_CARDS);
+        WildCardProperties[] taskWildCards = taskAdapter.loadWildCardsFromAdapter(WildCardData.TASK_WILD_CARDS);
+        WildCardProperties[] truthWildCards = truthAdapter.loadWildCardsFromAdapter(WildCardData.TRUTH_WILD_CARDS);
 
-        WildCardProperties[] selectedType = selectWildCardType(currentPlayer, quizProbabilities, taskProbabilities, truthProbabilities);
+        WildCardProperties[] selectedType = selectWildCardType(currentPlayer, quizWildCards, taskWildCards, truthWildCards);
         if (selectedType == null) {
             wildActivityTextView.setText("No wild cards available");
             return;
         }
 
         WildCardProperties selectedCard = selectRandomCard(currentPlayer, selectedType);
-        handleSelectedCard(selectedCard, getWildCardType(selectedType, quizProbabilities, taskProbabilities, truthProbabilities), currentPlayer);
+        handleSelectedCard(selectedCard, getWildCardType(selectedType, quizWildCards, taskWildCards, truthWildCards), currentPlayer);
         btnClassAbility.setVisibility(View.INVISIBLE);
 
     }
 
-    private WildCardProperties[] selectWildCardType(Player currentPlayer, WildCardProperties[] quizProbabilities, WildCardProperties[] taskProbabilities, WildCardProperties[] truthProbabilities) {
+    private WildCardProperties[] selectWildCardType(Player currentPlayer, WildCardProperties[] quizWildCards, WildCardProperties[] taskWildCards, WildCardProperties[] truthWildCards) {
         if (QUIZ_MAGICIAN.equals(currentPlayer.getClassChoice()) && currentPlayer.getJustUsedClassAbility()) {
             btnClassAbility.setVisibility(View.INVISIBLE);
-            return quizProbabilities;
+            return quizWildCards;
         }
 
         List<WildCardProperties[]> enabledTypes = new ArrayList<>();
-        addIfEnabled(enabledTypes, quizProbabilities);
-        addIfEnabled(enabledTypes, taskProbabilities);
-        addIfEnabled(enabledTypes, truthProbabilities);
+        addIfEnabled(enabledTypes, quizWildCards);
+        addIfEnabled(enabledTypes, taskWildCards);
+        addIfEnabled(enabledTypes, truthWildCards);
 
         if (enabledTypes.isEmpty()) {
             return null;
@@ -983,9 +983,9 @@ public class MainActivityGame extends SharedMainActivity {
         return enabledTypes.get(random.nextInt(enabledTypes.size()));
     }
 
-    private void addIfEnabled(List<WildCardProperties[]> enabledTypes, WildCardProperties[] probabilities) {
-        if (Arrays.stream(probabilities).anyMatch(WildCardProperties::isEnabled)) {
-            enabledTypes.add(probabilities);
+    private void addIfEnabled(List<WildCardProperties[]> enabledTypes, WildCardProperties[] enabled) {
+        if (Arrays.stream(enabled).anyMatch(WildCardProperties::isEnabled)) {
+            enabledTypes.add(enabled);
         }
     }
 
