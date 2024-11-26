@@ -3,7 +3,6 @@ package com.example.countingdowngame.wildCards;
 import java.util.Objects;
 
 public class WildCardProperties {
-    private final int probability;
     private final String answer;
     private final String category;
     private final String activity;
@@ -13,9 +12,8 @@ public class WildCardProperties {
     private String wrongAnswer2;
     private String wrongAnswer3;
 
-    public WildCardProperties(String activity, int probability, boolean enabled, boolean usedWildCard, String answer, String wrongAnswer1, String wrongAnswer2, String wrongAnswer3, String category) {
+    public WildCardProperties(String activity, boolean enabled, boolean usedWildCard, String answer, String wrongAnswer1, String wrongAnswer2, String wrongAnswer3, String category) {
         this.activity = activity;
-        this.probability = probability;
         this.enabled = enabled;
         this.usedWildCard = usedWildCard;
         this.answer = answer;
@@ -25,9 +23,8 @@ public class WildCardProperties {
         this.category = category;
     }
 
-    public WildCardProperties(String activity, int probability, boolean enabled) {
+    public WildCardProperties(String activity, boolean enabled) {
         this.activity = activity;
-        this.probability = probability;
         this.enabled = enabled;
         this.answer = null;
         this.category = null;
@@ -67,10 +64,6 @@ public class WildCardProperties {
 
     public boolean isUsedWildCard() {
         return usedWildCard;
-    }
-
-    public int getProbability() {
-        return probability;
     }
 
     public boolean hasAnswer() {

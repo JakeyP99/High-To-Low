@@ -56,7 +56,6 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
             if (card != null) {
                 enabled = prefs.isWildcardEnabled(i, card.isEnabled());
                 activity = prefs.getWildcardActivityText(i, card.getWildCard());
-                probability = prefs.getWildcardProbability(i, card.getProbability());
                 deletable = prefs.getWildCardDeletable(i, card.isUsedWildCard());
                 answer = prefs.getWildcardAnswer(i, card.getAnswer());
                 wrongAnswer1 = prefs.getWildcardWrongAnswer(i, card.getWrongAnswer1());
@@ -81,7 +80,7 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
 
             }
 
-            loadedWildCards[i] = new WildCardProperties(activity, probability, enabled, deletable, answer, wrongAnswer1, wrongAnswer2, wrongAnswer3, category);
+            loadedWildCards[i] = new WildCardProperties(activity, enabled, deletable, answer, wrongAnswer1, wrongAnswer2, wrongAnswer3, category);
         }
 
         wildCards = loadedWildCards;
@@ -98,19 +97,19 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
         this.wildCards = wildCards;
     }
 
-    public void saveWildCardProbabilitiesToStorage(WildCardProperties[] probabilities) {
-        wildCards = probabilities;
+    public void saveWildCardProbabilitiesToStorage(WildCardProperties[] wildcard) {
+        wildCards = wildcard;
 
         var prefs = WildCardSettingsLocalStore.fromContext(mContext, mSaveKey);
-        prefs.setWildCardQuantity(probabilities.length);
+        prefs.setWildCardQuantity(wildcard.length);
 
-        for (int i = 0; i < probabilities.length; i++) {
-            WildCardProperties probability = probabilities[i];
+        for (int i = 0; i < wildcard.length; i++) {
+            WildCardProperties wildCard = wildcard[i];
 
-            if (probability.hasAnswer()) {
-                prefs.setWildcardState(i, probability.isEnabled(), probability.getWildCard(), probability.getProbability(), probability.getAnswer(), probability.getWrongAnswer1(), probability.getWrongAnswer2(), probability.getWrongAnswer3(), probability.getCategory());
+            if (wildCard.hasAnswer()) {
+                prefs.setWildcardState(i, wildCard.isEnabled(), wildCard.getWildCard(), wildCard.getAnswer(), wildCard.getWrongAnswer1(), wildCard.getWrongAnswer2(), wildCard.getWrongAnswer3(), wildCard.getCategory());
             } else {
-                prefs.setWildcardState(i, probability.isEnabled(), probability.getWildCard(), probability.getProbability());
+                prefs.setWildcardState(i, wildCard.isEnabled(), wildCard.getWildCard());
             }
 
         }
