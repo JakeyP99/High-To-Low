@@ -1,21 +1,23 @@
 package com.example.countingdowngame.wildCards;
 
+import java.util.Objects;
+
 public class WildCardProperties {
-    private String activity;
     private final int probability;
-    private boolean enabled;
-    private final boolean deletable;
     private final String answer;
+    private final String category;
+    private final String activity;
+    private boolean enabled;
+    private boolean usedWildCard;
     private String wrongAnswer1;
     private String wrongAnswer2;
     private String wrongAnswer3;
-    private final String category;
 
-    public WildCardProperties(String activity, int probability, boolean enabled, boolean deletable, String answer, String wrongAnswer1, String wrongAnswer2, String wrongAnswer3, String category) {
+    public WildCardProperties(String activity, int probability, boolean enabled, boolean usedWildCard, String answer, String wrongAnswer1, String wrongAnswer2, String wrongAnswer3, String category) {
         this.activity = activity;
         this.probability = probability;
         this.enabled = enabled;
-        this.deletable = deletable;
+        this.usedWildCard = usedWildCard;
         this.answer = answer;
         this.wrongAnswer1 = wrongAnswer1;
         this.wrongAnswer2 = wrongAnswer2;
@@ -23,20 +25,15 @@ public class WildCardProperties {
         this.category = category;
     }
 
-    public WildCardProperties(String activity, int probability, boolean enabled, boolean deletable) {
+    public WildCardProperties(String activity, int probability, boolean enabled) {
         this.activity = activity;
         this.probability = probability;
         this.enabled = enabled;
-        this.deletable = deletable;
         this.answer = null;
         this.category = null;
     }
 
-    public void setText(String text) {
-        this.activity = text;
-    }
-
-    public String getText() {
+    public String getWildCard() {
         return activity;
     }
 
@@ -68,15 +65,29 @@ public class WildCardProperties {
         this.enabled = enabled;
     }
 
-    public int getProbability() {
-        return probability;
+    public boolean isUsedWildCard() {
+        return usedWildCard;
     }
 
-    public boolean isDeletable() {
-        return deletable;
+    public int getProbability() {
+        return probability;
     }
 
     public boolean hasAnswer() {
         return answer != null && !answer.isEmpty();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        WildCardProperties that = (WildCardProperties) obj;
+        return Objects.equals(activity, that.activity); // Compare unique identifier
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(activity); // Use unique identifier for hashCode
+    }
+
 }

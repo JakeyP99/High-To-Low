@@ -21,7 +21,7 @@ public class MainActivityLogging {
 
     protected static void logSelectedCardInfo(WildCardProperties selectedCard, String wildCardType) {
         Log.d("WildCardInfo", "Type: " + wildCardType + ", " +
-                "Question: " + selectedCard.getText() + ", " +
+                "Question: " + selectedCard.getWildCard() + ", " +
                 "Answer: " + selectedCard.getAnswer() + ", " +
                 "Wrong Answer 1: " + selectedCard.getWrongAnswer1() + ", " +
                 "Wrong Answer 2: " + selectedCard.getWrongAnswer2() + ", " +

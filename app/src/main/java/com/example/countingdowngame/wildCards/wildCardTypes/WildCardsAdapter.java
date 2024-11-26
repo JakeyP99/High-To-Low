@@ -55,9 +55,9 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
 
             if (card != null) {
                 enabled = prefs.isWildcardEnabled(i, card.isEnabled());
-                activity = prefs.getWildcardActivityText(i, card.getText());
+                activity = prefs.getWildcardActivityText(i, card.getWildCard());
                 probability = prefs.getWildcardProbability(i, card.getProbability());
-                deletable = prefs.getWildCardDeletable(i, card.isDeletable());
+                deletable = prefs.getWildCardDeletable(i, card.isUsedWildCard());
                 answer = prefs.getWildcardAnswer(i, card.getAnswer());
                 wrongAnswer1 = prefs.getWildcardWrongAnswer(i, card.getWrongAnswer1());
                 wrongAnswer2 = prefs.getWildcardWrongAnswer2(i, card.getWrongAnswer2());
@@ -108,9 +108,9 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
             WildCardProperties probability = probabilities[i];
 
             if (probability.hasAnswer()) {
-                prefs.setWildcardState(i, probability.isEnabled(), probability.getText(), probability.getProbability(), probability.getAnswer(), probability.getWrongAnswer1(), probability.getWrongAnswer2(), probability.getWrongAnswer3(), probability.getCategory());
+                prefs.setWildcardState(i, probability.isEnabled(), probability.getWildCard(), probability.getProbability(), probability.getAnswer(), probability.getWrongAnswer1(), probability.getWrongAnswer2(), probability.getWrongAnswer3(), probability.getCategory());
             } else {
-                prefs.setWildcardState(i, probability.isEnabled(), probability.getText(), probability.getProbability());
+                prefs.setWildcardState(i, probability.isEnabled(), probability.getWildCard(), probability.getProbability());
             }
 
         }

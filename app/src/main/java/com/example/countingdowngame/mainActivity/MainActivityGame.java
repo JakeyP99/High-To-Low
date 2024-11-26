@@ -52,10 +52,8 @@ import com.example.countingdowngame.wildCards.wildCardTypes.WildCardData;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
@@ -71,14 +69,12 @@ public class MainActivityGame extends SharedMainActivity {
     private static final int BUTTON_COUNT = 4;
     private static final int BUTTON_COUNT_2 = 2;
     private static final int DELAY_MILLIS = 1500;
-
-
     //-----------------------------------------------------Public ---------------------------------------------------//
     public static int drinkNumberCounterInt = 0;
     public static int catastropheLimit;
     private static TextView numberCounterText;
     //-----------------------------------------------------Maps and Sets---------------------------------------------------//
-    private final Map<Player, Set<WildCardProperties>> usedWildCard = new HashMap<>();
+    private final List<WildCardProperties> usedCards = new ArrayList<>();  // Class-level variable to track used cards
     public WildCardProperties selectedWildCard;
     private int turnCounter = 0;
     private int catastropheTurnCounter = 0;
@@ -954,12 +950,14 @@ public class MainActivityGame extends SharedMainActivity {
 
         WildCardProperties[] selectedType = selectWildCardType(currentPlayer, quizWildCards, taskWildCards, truthWildCards);
         if (selectedType == null) {
-            wildActivityTextView.setText("No wild cards available");
+            wildActivityTextView.setText("No wild cards available, your turn is skipped!");
+            btnWildContinue.setVisibility(View.VISIBLE);
+            btnClassAbility.setVisibility(View.INVISIBLE);
             return;
         }
 
-        WildCardProperties selectedCard = selectRandomCard(currentPlayer, selectedType);
-        handleSelectedCard(selectedCard, getWildCardType(selectedType, quizWildCards, taskWildCards, truthWildCards), currentPlayer);
+        WildCardProperties selectedCard = selectRandomCard(selectedType);
+        handleSelectedCard(selectedCard, getWildCardType(selectedType, quizWildCards, taskWildCards), currentPlayer);
         btnClassAbility.setVisibility(View.INVISIBLE);
 
     }
@@ -989,32 +987,43 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    private WildCardProperties selectRandomCard(Player player, WildCardProperties[] selectedType) {
-        Set<WildCardProperties> usedCards = usedWildCard.getOrDefault(player, new HashSet<>());
-        List<WildCardProperties> unusedCards = Arrays.stream(selectedType)
-                .filter(WildCardProperties::isEnabled)
-                .filter(c -> {
-                    assert usedCards != null;
-                    return !usedCards.contains(c);
-                })
+
+
+    private WildCardProperties selectRandomCard(WildCardProperties[] WildCards) {
+        // Filter out cards already used
+        List<WildCardProperties> unusedCards = Arrays.stream(WildCards)
+                .filter(wildcard -> !usedCards.contains(wildcard))
                 .collect(Collectors.toList());
 
-        int totalTypeProbabilities = unusedCards.stream().mapToInt(WildCardProperties::getProbability).sum();
-        int selectedIndex = new Random().nextInt(totalTypeProbabilities);
-        int cumulativeProbability = 0;
-
-        for (WildCardProperties card : unusedCards) {
-            cumulativeProbability += card.getProbability();
-            if (selectedIndex < cumulativeProbability) {
-                return card;
-            }
+        // Reset logic: If no unused cards remain, reset usedCards
+        if (unusedCards.isEmpty()) {
+            System.out.println("All cards have been used. Resetting used cards.");
+            usedCards.clear();
+            unusedCards = new ArrayList<>(Arrays.asList(WildCards)); // Recreate unusedCards with all wildcards
         }
-        return null;
+
+        // Select a random card from unused cards
+        Random rand = new Random();
+        WildCardProperties selectedCard = unusedCards.get(rand.nextInt(unusedCards.size()));
+
+        // Update the lists
+        usedCards.add(selectedCard);
+        unusedCards.remove(selectedCard);
+
+        // Log the count of cards in each list
+        System.out.println("Number of Used Cards: " + usedCards.size());
+        System.out.println("Number of Unused Cards: " + unusedCards.size());
+
+        return selectedCard;
     }
 
-    private String getWildCardType(WildCardProperties[] selectedType, WildCardProperties[] quizProbabilities, WildCardProperties[] taskProbabilities, WildCardProperties[] truthProbabilities) {
-        if (selectedType == quizProbabilities) return "Quiz";
-        if (selectedType == taskProbabilities) return "Task";
+
+
+
+
+    private String getWildCardType(WildCardProperties[] selectedType, WildCardProperties[] quizWildCards, WildCardProperties[] taskWildCards) {
+        if (selectedType == quizWildCards) return "Quiz";
+        if (selectedType == taskWildCards) return "Task";
         return "Truth";
     }
 
@@ -1029,7 +1038,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void updateSelectedCard(WildCardProperties selectedCard) {
-        String selectedActivity = selectedCard.getText();
+        String selectedActivity = selectedCard.getWildCard();
         wildActivityTextView.setText(selectedActivity);
         updateTextSize(selectedActivity);
         selectedWildCard = selectedCard;
