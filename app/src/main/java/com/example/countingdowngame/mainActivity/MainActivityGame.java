@@ -52,11 +52,9 @@ import com.example.countingdowngame.wildCards.wildCardTypes.WildCardData;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import io.github.muddz.styleabletoast.StyleableToast;
@@ -608,9 +606,13 @@ public class MainActivityGame extends SharedMainActivity {
     private void handleGoblinClass(Player currentPlayer) {
         Game game = Game.getInstance();
         Player randomPlayer = game.getRandomPlayerExcludingCurrent();
-        randomPlayer.removeWildCard(randomPlayer, 1);
+        if (randomPlayer == null) {
+            displayToastMessage("Well since you're by yourself, nothing happens :D");
+        } else {
+            randomPlayer.removeWildCard(randomPlayer, 2);
+            showGameDialog(GOBLIN + "'s Active: \n\n" + randomPlayer.getName() + " lost a wildcard!");
+        }
         currentPlayer.setUsedClassAbility(true);
-        showGameDialog(GOBLIN + "'s Active: \n\n" + randomPlayer.getName() + " lost a wildcard!");
         btnClassAbility.setVisibility(View.INVISIBLE);
         AudioManager.getInstance().playSoundEffects(this, GOBLIN);
     }
@@ -624,6 +626,9 @@ public class MainActivityGame extends SharedMainActivity {
             btnClassAbility.setVisibility(View.INVISIBLE);
             currentPlayer.setUsedClassAbility(true);
             AudioManager.getInstance().playSoundEffects(this, ANGRY_JIM);
+        }
+        else{
+            displayToastMessage("Well since you're by yourself, nothing happens :D");
         }
     }
 
@@ -660,8 +665,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void updateAbilitiesAfterThreeTurns(Player currentPlayer) {
         if ((SURVIVOR.equals(currentPlayer.getClassChoice()) ||
-                WITCH.equals(currentPlayer.getClassChoice()) ||
-                GOBLIN.equals(currentPlayer.getClassChoice())) &&
+                WITCH.equals(currentPlayer.getClassChoice())) &&
                 currentPlayer.getUsedClassAbility()) {
             currentPlayer.incrementAbilityTurnCounter();
             Log.d(TAG, "increment counter: " + currentPlayer.getAbilityTurnCounter());
@@ -763,9 +767,6 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void handleAngryJimPassive(Player currentPlayer) {
-        // Increment Angry Jim's specific turn counter
-
-        // Check if the current number is below 50
         if (Game.getInstance().getCurrentNumber() < 50 && currentPlayer.getAngryJimTurnCounter() != 1) {
             // Execute each player's passive abilities
             handleWitchPassive(currentPlayer);
@@ -786,9 +787,7 @@ public class MainActivityGame extends SharedMainActivity {
 
 
     private void handleGoblinPassive(Player currentPlayer) {
-        // Check if the current player is Angry Jim
         if (!ANGRY_JIM.equals(currentPlayer.getClassChoice())) {
-            // Increment the turn counter for non-Angry Jim players
             currentPlayer.incrementAbilityTurnCounter();
         }
         if (currentPlayer.getAbilityTurnCounter() == 3) {
@@ -988,7 +987,6 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
 
-
     private WildCardProperties selectRandomCard(WildCardProperties[] WildCards) {
         // Filter out cards already used
         List<WildCardProperties> unusedCards = Arrays.stream(WildCards)
@@ -1016,9 +1014,6 @@ public class MainActivityGame extends SharedMainActivity {
 
         return selectedCard;
     }
-
-
-
 
 
     private String getWildCardType(WildCardProperties[] selectedType, WildCardProperties[] quizWildCards, WildCardProperties[] taskWildCards) {

@@ -18,7 +18,7 @@ public class CharacterClassDescriptions {
     public static final String quizMagicianActiveDescription = "The next wildcard will be two quiz questions (double the fun).";
     public static final String survivorActiveDescription = "Half the current number, and continue your turn. Ability resets after three turns.";
     public static final String angryJimActiveDescription = "Randomly make another player repeat their turn.";
-    public static final String goblinActiveDescription = "Remove one wildcard from a random player. Ability resets after three turns.";
+    public static final String goblinActiveDescription = "Remove two wildcards from a random player.";
     public static final String noClassDescription = "Choose this class if you don't want to have any abilities.";
 
 
