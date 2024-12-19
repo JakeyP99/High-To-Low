@@ -206,10 +206,24 @@ public class MainActivityGame extends SharedMainActivity {
     //-----------------------------------------------------Buttons---------------------------------------------------//
 
     public void initializeCatastrophe() {
-        // Initialize the catastrophes manager using the default constructor
         catastrophesManager = new MainActivityCatastrophes();
-        setCatastropheLimit();
+        List<Player> playerCharacterList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
+            boolean allNoClass = true;
+            for (Player player : playerCharacterList) {
+                if (!player.getClassChoice().equals(NO_CLASS)) {
+                    allNoClass = false;
+                    break;
+                }
+            }
+            if (!allNoClass) {
+                setCatastropheLimit();
+                Log.d(TAG, "Catastrophe limit set for selected players.");
+            } else {
+                Log.d(TAG, "All players are NO_CLASS. Catastrophes will not be initialized.");
+            }
     }
+
+
 
     private void setupButtons() {
         initializeButtonsVisibility();

@@ -64,6 +64,7 @@ public class Player implements Serializable {
     public void setSelectionOrder(int selectionOrder) {
         this.selectionOrder = selectionOrder;
     }
+
     public String getClassChoice() {
         return classChoice;
     }
