@@ -77,7 +77,7 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/outlineforbutton"
         android:fontFamily="@font/viga"
-        android:text="Play Cards"
+        android:text="Play Roulette"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
         android:textSize="20sp"

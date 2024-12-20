@@ -183,12 +183,6 @@ public class Game {
         Log.d(TAG, "setPlayerList: " +playerList);
     }
 
-    public void updatePlayerList(List<Player> playerList) {
-
-        players.clear();
-        players.addAll(playerList);
-    }
-
 
     //-----------------------------------------------------Game Number---------------------------------------------------//
 

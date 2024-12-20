@@ -14,6 +14,7 @@
         android:id="@+id/TextView_GameTitle"
         android:text="Choose your number!"
         android:textColor="@color/bluedark"
+        android:gravity="center"
         android:fontFamily="@font/viga"
         android:textSize="35sp"
         app:layout_constraintBottom_toBottomOf="parent"

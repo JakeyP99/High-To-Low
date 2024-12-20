@@ -63,7 +63,7 @@ import pl.droidsonroids.gif.GifImageView;
 public class MainActivityGame extends SharedMainActivity {
 
     //-----------------------------------------------------Constants---------------------------------------------------//
-    private static final int BACK_PRESS_DELAY = 3000; // 3 seconds
+    static final int BACK_PRESS_DELAY = 3000; // 3 seconds
     private static final int BUTTON_COUNT = 4;
     private static final int BUTTON_COUNT_2 = 2;
     private static final int DELAY_MILLIS = 1500;

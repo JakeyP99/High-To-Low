@@ -48,8 +48,6 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
         muteGif = findViewById(R.id.muteGif);
         soundGif = findViewById(R.id.soundGif);
         originalPlayerField = findViewById(R.id.EditTextViewplayernumber);
-
-        // Set input filter to restrict to a maximum of 3 characters
         originalPlayerField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(2)});
     }
 
@@ -68,7 +66,7 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
 
         try {
             int inputNumber = parseInputValue(inputValue);
-            if (inputNumber <= 0) {
+            if (inputNumber <= 1) {
                 showToast("You have to have some friends to play with!");
                 return;
             }

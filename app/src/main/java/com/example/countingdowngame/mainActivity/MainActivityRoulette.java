@@ -2,15 +2,22 @@ package com.example.countingdowngame.mainActivity;
 
 import static android.content.ContentValues.TAG;
 
+import static com.example.countingdowngame.mainActivity.MainActivityGame.BACK_PRESS_DELAY;
+
+import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.countingdowngame.R;
@@ -25,18 +32,32 @@ import java.util.List;
 import io.github.muddz.styleabletoast.StyleableToast;
 import pl.droidsonroids.gif.GifImageView;
 
-public class MainActivityCardGame extends ButtonUtilsActivity {
+public class MainActivityRoulette extends ButtonUtilsActivity {
     int removedPlayerCount = 0;
     private GifImageView muteGif, soundGif;
     private Button btnBullshit;
-    private TextView chamberCount;
-
+    private ImageButton imageButtonExit;
+    private ScrollView playerScrollView;
+    private LinearLayout playerContainer;
+    private boolean doubleBackToExitPressedOnce = false;
     @Override
     protected void onResume() {
         super.onResume();
         boolean isMuted = getMuteSoundState();
-        AudioManager.getInstance().resumeBackgroundMusic();
         AudioManager.updateMuteButton(isMuted, muteGif, soundGif);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            Game.getInstance().endGame(this);
+            gotoHomeScreen();
+            return;
+        }
+        this.doubleBackToExitPressedOnce = true;
+        StyleableToast.makeText(this, "Press back again to go to the home screen", R.style.newToast).show();
+        new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, BACK_PRESS_DELAY);
     }
 
     @Override
@@ -53,7 +74,7 @@ public class MainActivityCardGame extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity_card_game);
+        setContentView(R.layout.main_activity_roulette);
 
         initializeViews();
         setupAudioManagerForMuteButtons(muteGif, soundGif);
@@ -65,7 +86,9 @@ public class MainActivityCardGame extends ButtonUtilsActivity {
         muteGif = findViewById(R.id.muteGif);
         soundGif = findViewById(R.id.soundGif);
         btnBullshit = findViewById(R.id.btnBullshit);
-        chamberCount = findViewById(R.id.textView_chamberCounter);
+        imageButtonExit = findViewById(R.id.btnExitRouletteGame);
+        playerContainer = findViewById(R.id.playerContainer);
+        playerScrollView = findViewById(R.id.playerScrollView);
     }
 
 
@@ -86,7 +109,6 @@ public class MainActivityCardGame extends ButtonUtilsActivity {
                 player.setChamberList();
             }
         }
-        chamberCount.setText(String.valueOf(chamberNumberCount));
     }
 
 
@@ -94,12 +116,18 @@ public class MainActivityCardGame extends ButtonUtilsActivity {
 
     private void setupButtonControls() {
         btnUtils.setButton(btnBullshit, this::bullshitActivity);
+        imageButtonExit.setOnClickListener(view -> {
+            Log.d(TAG, "Exit button clicked");
+            Game.getInstance().endGame(this);
+            gotoHomeScreen();
+        });
     }
-
 
     private void bullshitActivity() {
         btnBullshit.setVisibility(View.INVISIBLE);
-        chamberCount.setVisibility(View.INVISIBLE);
+        playerScrollView.setVisibility(View.VISIBLE);
+        playerContainer.setVisibility(View.VISIBLE);
+        imageButtonExit.setVisibility(View.INVISIBLE);
 
         List<Player> playerList = Game.getInstance().getPlayers();
         if (playerList == null || playerList.isEmpty()) {
@@ -116,7 +144,6 @@ public class MainActivityCardGame extends ButtonUtilsActivity {
             if (player.isRemoved()) {
                 Log.d(TAG, "Removed player: " + player.getName());
             } else {
-                Log.d(TAG, "Active player: " + player.getName());
                 // Check if the player is already displayed
                 boolean isAlreadyAdded = false;
                 for (int i = 0; i < playerContainer.getChildCount(); i++) {
@@ -139,7 +166,7 @@ public class MainActivityCardGame extends ButtonUtilsActivity {
     private View createPlayerView(Player player) {
         LinearLayout playerContainer = findViewById(R.id.playerContainer);
         // Inflate the player view layout
-        View playerView = getLayoutInflater().inflate(R.layout.character_view, playerContainer, false);
+        View playerView = getLayoutInflater().inflate(R.layout.player_view_roulette, playerContainer, false);
 
         // Set up the player information and click listener
         setupPlayerView(player, playerView);
@@ -150,9 +177,6 @@ public class MainActivityCardGame extends ButtonUtilsActivity {
     private void setupPlayerView(Player player, View playerView) {
         ImageView playerImageView = playerView.findViewById(R.id.playerPhotoImageView);
         TextView playerNameTextView = playerView.findViewById(R.id.playerNameTextView);
-        ImageView deletePlayerImage = playerView.findViewById(R.id.deletePlayerImageView);
-
-        deletePlayerImage.setVisibility(View.INVISIBLE); // Hide delete button initially
 
         // Set player name and image
         playerNameTextView.setText(player.getName());
@@ -198,14 +222,10 @@ public class MainActivityCardGame extends ButtonUtilsActivity {
 
         if (isBulletInChamber(player)) {
             handleBulletShot(player);
-
-            showToast(player.getName() + " shot the bullet! Game Over!");
         } else {
-            handleSurvival(player);
+            showGameDialog(player.getName() + " dodged a bullet... Literally!");
         }
-
         updateChamber(player);
-        updateUI();
     }
 
 
@@ -241,30 +261,11 @@ public class MainActivityCardGame extends ButtonUtilsActivity {
 
     // Handles the scenario where the bullet is in the chamber
     private void handleBulletShot(Player player) {
-        // Set the player as removed (assuming setRemoved() is a method in Player)
         player.setRemoved(true);
-        removedPlayerCount++;  // Increment the removed player count
+        AudioManager.getInstance().playGunshot(this);
+        removedPlayerCount++;
+        showCatastropheDialog(player.getName() + " died! Whoopsie :(");
 
-        Log.d(TAG, "Game Over! Player: " + player.getName() + " has been removed.");
-
-        // Get the total active players by subtracting the removed count from the total player count
-        int activePlayerCount = Game.getInstance().getPlayerAmount() - removedPlayerCount;
-
-        // Log the total count of removed and active players
-        Log.d(TAG, "Total players: " + Game.getInstance().getPlayerAmount());
-        Log.d(TAG, "Removed players: " + removedPlayerCount);
-        Log.d(TAG, "Active players: " + activePlayerCount);
-
-        // Check if only one active player remains
-        if (activePlayerCount == 1) {
-            gotoGameEnd();
-        }
-    }
-
-
-    private void handleSurvival(Player player) {
-        showToast(player.getName() + " survived the shot!");
-        Log.d(TAG, "Player survived: " + player.getName());
     }
 
     // Updates the chamber list and index
@@ -274,7 +275,6 @@ public class MainActivityCardGame extends ButtonUtilsActivity {
 
         // Remove the current chamber element
         chamberList.remove(currentChamberIndex);
-        Log.d(TAG, "Updated bullets in chamber list: " + chamberList);
 
         // Update the chamber index
         if (!chamberList.isEmpty()) {
@@ -283,9 +283,6 @@ public class MainActivityCardGame extends ButtonUtilsActivity {
                 currentChamberIndex = 0; // Loop back to the start
             }
             player.setChamberIndex(currentChamberIndex);
-            Log.d(TAG, "Next chamber index: " + currentChamberIndex);
-        } else {
-            Log.d(TAG, "Chamber is empty. Game over or reload required.");
         }
     }
 
@@ -293,13 +290,64 @@ public class MainActivityCardGame extends ButtonUtilsActivity {
     // Updates the UI elements after the shot
     private void updateUI() {
         btnBullshit.setVisibility(View.VISIBLE);
-        chamberCount.setVisibility(View.VISIBLE);
+        imageButtonExit.setVisibility(View.VISIBLE);
+        playerScrollView.setVisibility(View.INVISIBLE);
+        playerContainer.setVisibility(View.INVISIBLE);
+
     }
 
     // Displays a styled toast message
     private void showToast(String message) {
         StyleableToast.makeText(this, message, R.style.newToast).show();
     }
+
+    private void showGameDialog(String message) {
+        showDialog(message, R.layout.game_dialog_box, R.id.dialogbox_textview, R.id.close_button);
+    }
+
+    private void showDialog(String message, int layoutId, int textViewId, int closeButtonId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
+        LayoutInflater inflater = getLayoutInflater();
+
+        View dialogView = inflater.inflate(layoutId, null);
+        TextView dialogBoxTextView = dialogView.findViewById(textViewId);
+        dialogBoxTextView.setText(message);
+
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        ImageButton closeButton = dialogView.findViewById(closeButtonId);
+        closeButton.setOnClickListener(v -> {
+            dialog.dismiss();
+
+            List<Player> playerList = Game.getInstance().getPlayers();
+            int activePlayerCount = Game.getInstance().getPlayerAmount() - removedPlayerCount;
+
+            if (activePlayerCount == 1) {
+                Player activePlayer = null;
+                for (Player player : playerList) {
+                    if (!player.isRemoved()) {
+                        activePlayer = player;
+                        break;
+                    }
+                }
+
+                if (activePlayer != null) {
+                    gotoGameEndRoulette(activePlayer);
+                } else {
+                    Log.e(TAG, "No active player found, but count indicates one should exist.");
+                }
+            } else {
+                updateUI();
+            }
+        });
+    }
+
+    private void showCatastropheDialog(String message) {
+        showDialog(message, R.layout.death_dialog_box, R.id.dialogbox_textview, R.id.close_button);
+    }
+
 
 }
 

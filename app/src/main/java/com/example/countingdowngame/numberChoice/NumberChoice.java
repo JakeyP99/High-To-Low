@@ -1,12 +1,9 @@
 package com.example.countingdowngame.numberChoice;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputFilter;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,10 +14,8 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
 import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.mainActivity.MainActivityCardGame;
-import com.example.countingdowngame.mainActivity.MainActivityGame;
+import com.example.countingdowngame.mainActivity.MainActivityRoulette;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
-import com.example.countingdowngame.settings.SettingsMenu;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.Random;
@@ -64,7 +59,7 @@ public class NumberChoice extends ButtonUtilsActivity {
 
 
         if (Game.getInstance().isPlayCards()) {
-            gameTitle.setText("Russian Roulette Chamber!");
+            gameTitle.setText("How many bullets do you want?");
             originalNumberField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(1)});
         } else {
             originalNumberField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(9)});
@@ -170,7 +165,7 @@ public class NumberChoice extends ButtonUtilsActivity {
         savePreferences();
 
         // Create an Intent to start the main game activity
-        Intent intent = new Intent(this, MainActivityCardGame.class);
+        Intent intent = new Intent(this, MainActivityRoulette.class);
 
         // Pass the extras to the main game activity
         intent.putExtra("chamberNumberCount", chamberNumberCount);

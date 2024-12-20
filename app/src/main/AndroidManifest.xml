@@ -42,7 +42,8 @@
         <activity android:name=".instructions.InstructionsToPlay" />
 
         <activity android:name=".drawing.DrawingPlayerModels" />
-        <activity android:name=".mainActivity.MainActivityCardGame" />
+        <activity android:name=".mainActivity.MainActivityRoulette" />
+        <activity android:name=".endGame.EndRouletteGame" />
 
         <activity
             android:name=".playerChoice.PlayerChoice"

@@ -7,18 +7,17 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.countingdowngame.audio.AudioManager;
+import com.example.countingdowngame.endGame.EndRouletteGame;
 import com.example.countingdowngame.instructions.InstructionsToPlay;
 import com.example.countingdowngame.endGame.EndActivityGame;
 import com.example.countingdowngame.home.HomeScreen;
-import com.example.countingdowngame.mainActivity.MainActivityCardGame;
 import com.example.countingdowngame.numberChoice.NumberChoice;
 import com.example.countingdowngame.numberChoice.PlayerNumberChoice;
+import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.settings.SettingsMenu;
 
 import pl.droidsonroids.gif.GifImageView;
@@ -58,6 +57,12 @@ public abstract class ButtonUtilsActivity extends AppCompatActivity {
         startActivity(getIntentForClass(EndActivityGame.class));
     }
 
+    protected void gotoGameEndRoulette(Player activePlayer) {
+        Intent intent = new Intent(this, EndRouletteGame.class);
+        intent.putExtra("VICTOR_NAME", activePlayer.getName());
+        startActivity(intent);
+    }
+
     protected void gotoNumberChoice() {
         startActivity(getIntentForClass(NumberChoice.class));
     }
@@ -78,15 +83,6 @@ public abstract class ButtonUtilsActivity extends AppCompatActivity {
 
 
     //-----------------------------------------------------Sound Functionality---------------------------------------------------//
-
-    public void onMuteClicked(View view) {
-        Button btnMute = (Button) view;
-        boolean isMuted = !btnMute.isSelected();
-        btnMute.setSelected(isMuted);
-        Drawable selectedDrawable = isMuted ? buttonHighlightDrawable : outlineForButton;
-        btnMute.setBackground(selectedDrawable);
-        btnUtils.toggleMute();
-    }
 
     public void setupAudioManagerForMuteButtons(GifImageView muteGif, GifImageView soundGif) {
         audioManager = AudioManager.getInstance();

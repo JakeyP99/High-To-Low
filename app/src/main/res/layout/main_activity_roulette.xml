@@ -46,22 +46,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.01" />
 
-
-    <TextView
-        android:id="@+id/textView_chamberCounter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="188dp"
-        android:text="6 Chambers"
-        android:textColor="@color/bluedark"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/btnBullshit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
     <Button
         android:id="@+id/btnBullshit"
         android:layout_width="290dp"
@@ -69,7 +53,8 @@
         android:background="@drawable/outlineforbutton"
         android:contentDescription="@string/placeholder_text"
         android:textColor="@color/bluedark"
-        android:text="BullShit"
+        android:text="Bullshit"
+        android:textAllCaps="false"
         android:textSize="50sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -79,9 +64,8 @@
         app:layout_constraintVertical_bias="0.541" />
 
 
-
     <ImageButton
-        android:id="@+id/btnExitGame"
+        android:id="@+id/btnExitRouletteGame"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@color/transparent"
@@ -96,24 +80,25 @@
 
     <ScrollView
         android:id="@+id/playerScrollView"
-        android:layout_width="match_parent"
+        android:layout_width="360dp"
         android:layout_height="match_parent"
+        android:layout_marginBottom="16dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@+id/textView_chamberCounter"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/btnBullshit"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp">
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:id="@+id/playerContainer"
-            android:layout_width="match_parent"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="8dp" />
-    </ScrollView>
 
+            android:padding="8dp"
+            android:visibility="invisible" />
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

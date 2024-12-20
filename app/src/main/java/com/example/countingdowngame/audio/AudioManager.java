@@ -212,6 +212,19 @@ public class AudioManager {
         }
     }
 
+    public void playGunshot(Context context) {
+        if (isMuted) return;
+
+        MediaPlayer confettiMediaPlayer = MediaPlayer.create(context, R.raw.gunshot);
+        if (confettiMediaPlayer != null) {
+            confettiMediaPlayer.start();
+            confettiMediaPlayer.setOnCompletionListener(MediaPlayer::release);
+        } else {
+            Log.e("AudioManager", "Failed to create MediaPlayer for confetti sound");
+        }
+    }
+
+
 
     //-----------------------------------------------------Update UI---------------------------------------------------//
 
