@@ -79,10 +79,10 @@ public class EndRouletteGame extends ButtonUtilsActivity {
         // Retrieve victor's name from the Intent
         String victorName = getIntent().getStringExtra("VICTOR_NAME");
         if (victorName != null) {
-            String victorText = "The victor is " + victorName + "!";
+            String victorText = "The winner is " + victorName + "!";
             textViewLose.setText(victorText);
         } else {
-            textViewLose.setText("No victor found.");
+            textViewLose.setText("No winner found.");
         }
     }
 

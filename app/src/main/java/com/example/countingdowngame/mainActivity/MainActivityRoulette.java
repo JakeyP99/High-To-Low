@@ -1,12 +1,13 @@
 package com.example.countingdowngame.mainActivity;
 
 import static android.content.ContentValues.TAG;
-
 import static com.example.countingdowngame.mainActivity.MainActivityGame.BACK_PRESS_DELAY;
 
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
@@ -28,6 +29,7 @@ import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.List;
+import java.util.Objects;
 
 import io.github.muddz.styleabletoast.StyleableToast;
 import pl.droidsonroids.gif.GifImageView;
@@ -40,6 +42,7 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
     private ScrollView playerScrollView;
     private LinearLayout playerContainer;
     private boolean doubleBackToExitPressedOnce = false;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -94,6 +97,7 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
 
     private void startGame() {
         Bundle extras = getIntent().getExtras();
+        assert extras != null;
         int chamberNumberCount = extras.getInt("chamberNumberCount");
 
         Log.d(TAG, "startGame: " + chamberNumberCount);
@@ -112,7 +116,7 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
     }
 
 
-    //-----------------------------------------------------Bullshit Button---------------------------------------------------//
+    //-----------------------------------------------------Button Controls---------------------------------------------------//
 
     private void setupButtonControls() {
         btnUtils.setButton(btnBullshit, this::bullshitActivity);
@@ -123,18 +127,11 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
         });
     }
 
+    //-----------------------------------------------------Bullshit Button---------------------------------------------------//
+
     private void bullshitActivity() {
-        btnBullshit.setVisibility(View.INVISIBLE);
-        playerScrollView.setVisibility(View.VISIBLE);
-        playerContainer.setVisibility(View.VISIBLE);
-        imageButtonExit.setVisibility(View.INVISIBLE);
-
+        setPlayerChoiceVisibility();
         List<Player> playerList = Game.getInstance().getPlayers();
-        if (playerList == null || playerList.isEmpty()) {
-            StyleableToast.makeText(this, "No players available.", R.style.newToast).show();
-            return;
-        }
-
         LinearLayout playerContainer = findViewById(R.id.playerContainer);
         playerContainer.removeAllViews(); // Clear any existing player views
         playerContainer.setVisibility(View.VISIBLE);
@@ -162,6 +159,9 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
             }
         }
     }
+
+
+    //-----------------------------------------------------Roulette Player Menu---------------------------------------------------//
 
     private View createPlayerView(Player player) {
         LinearLayout playerContainer = findViewById(R.id.playerContainer);
@@ -197,33 +197,21 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
     }
 
     private void onPlayerViewClicked(Player player) {
-        Log.d("Player Clicked", "Player clicked: " + player.getName());
         LinearLayout playerContainer = findViewById(R.id.playerContainer);
         playerContainer.setVisibility(View.INVISIBLE); // Hide the container after selection
-
-        if (player.isRemoved()) {
-            showToast(player.getName() + " is already dead!!!");
-        } else {
-            russianRouletteActivity(player); // Trigger the game activity
-
-        }
-
+        russianRouletteActivity(player); // Trigger the game activity
     }
 
     //-----------------------------------------------------Roulette Activity---------------------------------------------------//
 
     private void russianRouletteActivity(Player player) {
-        Log.d(TAG, "Player: " + player.getName());
         logPlayerDetails(player);
-
-        if (!isValidChamber(player)) {
-            return;
-        }
-
         if (isBulletInChamber(player)) {
-            handleBulletShot(player);
+            handleDeath(player);
         } else {
-            showGameDialog(player.getName() + " dodged a bullet... Literally!");
+            int bulletsLeft = player.getBulletsInChamberList().size() - 1;
+            String bulletsText = (bulletsLeft == 1) ? "bullet" : "bullets";
+            showGameDialog(player.getName() + " dodged a bullet... Literally!\n\nYou have " + bulletsLeft + " " + bulletsText + " left!");
         }
         updateChamber(player);
     }
@@ -236,23 +224,6 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
         Log.d(TAG, "Chamber Index: " + player.getChamberIndex());
     }
 
-    // Validates the chamber list and index
-    private boolean isValidChamber(Player player) {
-        if (player.getBulletsInChamberList() == null || player.getBulletsInChamberList().isEmpty()) {
-            Log.e(TAG, "Chamber is not initialized for player: " + player.getName());
-            showToast("Chamber is not initialized properly for " + player.getName());
-            return false;
-        }
-
-        if (player.getChamberIndex() < 0 || player.getChamberIndex() >= player.getBulletsInChamberList().size()) {
-            Log.e(TAG, "Invalid chamber index for player: " + player.getName());
-            showToast("Invalid chamber index for " + player.getName());
-            return false;
-        }
-
-        return true;
-    }
-
     // Checks if there is a bullet in the current chamber
     private boolean isBulletInChamber(Player player) {
         int currentChamberValue = player.getBulletsInChamberList().get(player.getChamberIndex());
@@ -260,7 +231,7 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
     }
 
     // Handles the scenario where the bullet is in the chamber
-    private void handleBulletShot(Player player) {
+    private void handleDeath(Player player) {
         player.setRemoved(true);
         AudioManager.getInstance().playGunshot(this);
         removedPlayerCount++;
@@ -286,20 +257,7 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
         }
     }
 
-
-    // Updates the UI elements after the shot
-    private void updateUI() {
-        btnBullshit.setVisibility(View.VISIBLE);
-        imageButtonExit.setVisibility(View.VISIBLE);
-        playerScrollView.setVisibility(View.INVISIBLE);
-        playerContainer.setVisibility(View.INVISIBLE);
-
-    }
-
-    // Displays a styled toast message
-    private void showToast(String message) {
-        StyleableToast.makeText(this, message, R.style.newToast).show();
-    }
+    //-----------------------------------------------------Dialogs---------------------------------------------------//
 
     private void showGameDialog(String message) {
         showDialog(message, R.layout.game_dialog_box, R.id.dialogbox_textview, R.id.close_button);
@@ -320,32 +278,63 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
         ImageButton closeButton = dialogView.findViewById(closeButtonId);
         closeButton.setOnClickListener(v -> {
             dialog.dismiss();
-
-            List<Player> playerList = Game.getInstance().getPlayers();
-            int activePlayerCount = Game.getInstance().getPlayerAmount() - removedPlayerCount;
-
-            if (activePlayerCount == 1) {
-                Player activePlayer = null;
-                for (Player player : playerList) {
-                    if (!player.isRemoved()) {
-                        activePlayer = player;
-                        break;
-                    }
-                }
-
-                if (activePlayer != null) {
-                    gotoGameEndRoulette(activePlayer);
-                } else {
-                    Log.e(TAG, "No active player found, but count indicates one should exist.");
-                }
-            } else {
-                updateUI();
-            }
+            handlePostDialogActions();
         });
+
+        // Handle clicks outside the dialog (if needed)
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getDecorView().setOnTouchListener((v, event) -> {
+            dialog.dismiss();
+            handlePostDialogActions();
+            return true;
+        });
+
+    }
+
+
+    private void handlePostDialogActions() {
+        Log.d(TAG, "handlePostDialogActions: occurred");
+        List<Player> playerList = Game.getInstance().getPlayers();
+        int activePlayerCount = Game.getInstance().getPlayerAmount() - removedPlayerCount;
+
+        if (activePlayerCount == 1) {
+            Player activePlayer = null;
+            for (Player player : playerList) {
+                if (!player.isRemoved()) {
+                    activePlayer = player;
+                    break;
+                }
+            }
+
+            if (activePlayer != null) {
+                gotoGameEndRoulette(activePlayer);
+            } else {
+                Log.e(TAG, "No active player found, but count indicates one should exist.");
+            }
+        } else {
+            setMainScreenVisibility();
+        }
     }
 
     private void showCatastropheDialog(String message) {
         showDialog(message, R.layout.death_dialog_box, R.id.dialogbox_textview, R.id.close_button);
+    }
+
+    //-----------------------------------------------------Set Visibilities---------------------------------------------------//
+
+    // Updates the UI elements after the shot
+    private void setMainScreenVisibility() {
+        btnBullshit.setVisibility(View.VISIBLE);
+        imageButtonExit.setVisibility(View.VISIBLE);
+        playerScrollView.setVisibility(View.INVISIBLE);
+        playerContainer.setVisibility(View.INVISIBLE);
+    }
+
+    private void setPlayerChoiceVisibility() {
+        btnBullshit.setVisibility(View.INVISIBLE);
+        playerScrollView.setVisibility(View.VISIBLE);
+        playerContainer.setVisibility(View.VISIBLE);
+        imageButtonExit.setVisibility(View.INVISIBLE);
     }
 
 
