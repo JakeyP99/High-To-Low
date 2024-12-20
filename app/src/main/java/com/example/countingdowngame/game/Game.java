@@ -2,6 +2,7 @@ package com.example.countingdowngame.game;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.util.Log;
 
@@ -33,6 +34,19 @@ public class Game {
     private Boolean playerUsedWildcards = false;
     private Boolean quizWasTriggered = false;
     private Boolean gameStarted = false;
+    private boolean playCards;
+
+    //-----------------------------------------------------Game Modes---------------------------------------------------//
+
+    public boolean isPlayCards() {
+        return playCards;
+    }
+
+    public void setPlayCards(boolean playCards) {
+        this.playCards = playCards;
+    }
+
+
     //-----------------------------------------------------Player Functions---------------------------------------------------//
     private final PlayerEventListener playerEventListener = e -> {
         if (e.type == PlayerEventType.SKIP) {
@@ -164,12 +178,18 @@ public class Game {
     }
 
     public void setPlayerList(List<Player> playerList) {
-        if (gameStarted) {
-            return;
-        }
+        players.clear();
+        players.addAll(playerList);
+        Log.d(TAG, "setPlayerList: " +playerList);
+    }
+
+    public void updatePlayerList(List<Player> playerList) {
+
         players.clear();
         players.addAll(playerList);
     }
+
+
     //-----------------------------------------------------Game Number---------------------------------------------------//
 
     public int getCurrentNumber() {

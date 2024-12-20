@@ -7,6 +7,10 @@ import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 public class Player implements Serializable {
 
@@ -26,6 +30,13 @@ public class Player implements Serializable {
     private boolean removed;
     private int abilityTurnCounter; // Add a counter for the active turns of the Survivor class
     private int angryJimTurnCounter;
+
+    //-----------------------------------------------------Card Game---------------------------------------------------//
+
+    private List<Integer> bulletsInChamberList; // List representing the chambers, 0 = blank, 1 = bullet
+    private int chamberTotalNumberCount; // Index to track where in the chamber rotation they are
+
+    private int chamberIndex;
     //-----------------------------------------------------Stats Setup---------------------------------------------------//
     private int drinksHandedOutByWitch;
     private int drinksTakenByWitch;
@@ -36,7 +47,6 @@ public class Player implements Serializable {
 
     public Player(Context context, String id, String photo, String name, String classChoice) {
         this.id = id;
-
         this.photo = photo;
         this.name = name;
         this.classChoice = classChoice;
@@ -47,7 +57,10 @@ public class Player implements Serializable {
         this.removed = false;
         resetWildCardAmount(context);
         this.abilityTurnCounter = 0;
+        this.bulletsInChamberList = new ArrayList<>();
+        this.chamberTotalNumberCount = 0;
     }
+
 
     //-----------------------------------------------------Player---------------------------------------------------//
     public String getId() {
@@ -196,6 +209,52 @@ public class Player implements Serializable {
         return angryJimTurnCounter;
     }
 
+    //-----------------------------------------------------Chamber Setup---------------------------------------------------//
+
+    // Get the player's chamber as a list of integers, where 1 is the bullet and 0 is a blank.
+    public List<Integer> getBulletsInChamberList() {
+        return bulletsInChamberList;
+    }
+
+    public void setChamberList() {
+        if (bulletsInChamberList == null) {
+            bulletsInChamberList = new ArrayList<>();
+        }
+        bulletsInChamberList.clear();
+
+        // Proceed with adding blanks and bullets
+        int numberOfBlanks = getTotalChamberNumberCount() - 1;
+        int numberOfBullets = getTotalChamberNumberCount() - numberOfBlanks;
+
+        for (int i = 0; i < numberOfBlanks; i++) {
+            bulletsInChamberList.add(0);
+        }
+        for (int i = 0; i < numberOfBullets; i++) {
+            bulletsInChamberList.add(1);
+        }
+
+        Collections.shuffle(bulletsInChamberList);
+        Log.d("Player", "Chamber list set: " + bulletsInChamberList);
+    }
+
+
+    public int getChamberIndex() {
+        return chamberIndex;
+    }
+    // Set the current chamber index (this represents the chamber the player is about to fire)
+    public void setChamberIndex(int chamberIndex) {
+        this.chamberIndex = chamberIndex;
+    }
+    // Get the current chamber index (which chamber the player is at)
+    public int getTotalChamberNumberCount() {
+        return chamberTotalNumberCount;
+    }
+
+    // Set the current chamber index (this represents the chamber the player is about to fire)
+    public void setTotalChamberNumberCount(int chamberTotalNumberCount) {
+        this.chamberTotalNumberCount = chamberTotalNumberCount;
+    }
+
     //-----------------------------------------------------Wild Card/Skip---------------------------------------------------//
 
     public int getWildCardAmount() {
@@ -215,10 +274,7 @@ public class Player implements Serializable {
 
     public void removeWildCard(Player player, int numberOfWildCardsToLose) {
         player.loseWildCards(numberOfWildCardsToLose);
-        Log.d("GoblinAbility", player.getName() + " has lost a wildcard due to Goblin's ability.");
-
     }
-
 
     public int getUsedWildcards() {
         return usedWildcards;
@@ -228,13 +284,9 @@ public class Player implements Serializable {
         this.usedWildcards++;
     }
 
-
-    //-----------------------------------------------------Reset Abilities---------------------------------------------------//
-
     public void resetWildCardAmount(Context context) {
         wildCardAmount = GeneralSettingsLocalStore.fromContext(context).playerWildCardCount();
     }
-
     public void gainWildCards(int numberOfCardsToGain) {
         wildCardAmount += numberOfCardsToGain;
     }
@@ -242,6 +294,25 @@ public class Player implements Serializable {
     public void loseWildCards(int numberOfWildCardsToLose) {
         wildCardAmount = Math.max(wildCardAmount - numberOfWildCardsToLose, 0);
     }
+
+
+    //-----------------------------------------------------Russian Roulette---------------------------------------------------//
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Player player = (Player) obj;
+        return Objects.equals(name, player.name);  // Compare based on name or another unique field
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);  // Use a unique identifier, like name
+    }
+
+
+
+
 
 
 }

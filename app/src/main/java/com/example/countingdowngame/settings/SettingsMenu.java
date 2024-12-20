@@ -286,13 +286,13 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
 
             if (isWildCardAmountValid && isTotalDrinkAmountValid) {
                 savePreferences();
-                goToMainGameWithExtra(Integer.parseInt(totalDrinkAmountInput));
+                goToClassicGameWithExtras(Integer.parseInt(totalDrinkAmountInput));
             } else {
                 if (!isWildCardAmountValid) {
                     if (wildCardAmountInput.isEmpty()) {
                         wildcardPerPlayerEditText.setText("0");
                         savePreferences();
-                        goToMainGameWithExtra(Integer.parseInt(totalDrinkAmountInput));
+                        goToClassicGameWithExtras(Integer.parseInt(totalDrinkAmountInput));
                     } else {
                         StyleableToast.makeText(getApplicationContext(), "Please enter a wildcard quantity between 0 and 100", R.style.newToast).show();
                     }
@@ -302,7 +302,7 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
                     if (totalDrinkAmountInput.isEmpty()) {
                         totalDrinksEditText.setText("0");
                         savePreferences();
-                        goToMainGameWithExtra(Integer.parseInt(totalDrinkAmountInput));
+                        goToClassicGameWithExtras(Integer.parseInt(totalDrinkAmountInput));
                     } else {
                         StyleableToast.makeText(getApplicationContext(), "Please enter a total drink limit between 1 and 20", R.style.newToast).show();
                     }
@@ -342,7 +342,7 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
     //-----------------------------------------------------Load and Save Preferences---------------------------------------------------//
 
     // Inside WildCardSettings or any other settings activity
-    private void goToMainGameWithExtra(int totalDrinkNumber) {
+    private void goToClassicGameWithExtras(int totalDrinkNumber) {
         savePreferences();
         GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);
         int wildCardCount = store.playerWildCardCount();

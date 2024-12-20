@@ -42,7 +42,7 @@
         <activity android:name=".instructions.InstructionsToPlay" />
 
         <activity android:name=".drawing.DrawingPlayerModels" />
-        <activity android:name=".playerChoice.PlayerChoiceComplimentary" />
+        <activity android:name=".mainActivity.MainActivityCardGame" />
 
         <activity
             android:name=".playerChoice.PlayerChoice"

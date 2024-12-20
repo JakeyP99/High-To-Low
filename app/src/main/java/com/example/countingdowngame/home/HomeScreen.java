@@ -5,6 +5,7 @@ import android.widget.Button;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
+import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.ButtonUtils;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
@@ -55,14 +56,19 @@ public class HomeScreen extends ButtonUtilsActivity {
 
     private void setupButtonControls() {
         Button btnQuickPlay = findViewById(R.id.quickplay);
+        Button btnPlayCards = findViewById(R.id.playCards);
         Button btnInstructions = findViewById(R.id.button_Instructions);
 
         // Set onClickListener for buttons
         btnUtils.setButton(btnQuickPlay, this::gotoPlayerNumberChoice);
+        btnUtils.setButton(btnPlayCards, () -> {
+            Game.getInstance().setPlayCards(true);
+            gotoPlayerNumberChoice();
+        });
         btnUtils.setButton(btnInstructions, this::gotoInstructions);
         drinkGifFunctionality();
-
     }
+
 
     public void drinkGifFunctionality() {
         drinkGif.setOnClickListener(view -> {

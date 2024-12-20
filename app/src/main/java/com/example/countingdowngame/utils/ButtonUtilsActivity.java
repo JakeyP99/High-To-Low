@@ -16,8 +16,10 @@ import com.example.countingdowngame.audio.AudioManager;
 import com.example.countingdowngame.instructions.InstructionsToPlay;
 import com.example.countingdowngame.endGame.EndActivityGame;
 import com.example.countingdowngame.home.HomeScreen;
+import com.example.countingdowngame.mainActivity.MainActivityCardGame;
 import com.example.countingdowngame.numberChoice.NumberChoice;
 import com.example.countingdowngame.numberChoice.PlayerNumberChoice;
+import com.example.countingdowngame.settings.SettingsMenu;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -66,6 +68,12 @@ public abstract class ButtonUtilsActivity extends AppCompatActivity {
 
     protected void gotoInstructions() {
         startActivity(getIntentForClass(InstructionsToPlay.class));
+    }
+
+    protected void goToInGameSettings(int startingNumber) {
+        Intent i = getIntentForClass(SettingsMenu.class);
+        i.putExtra("startingNumber", startingNumber);
+        startActivity(i);
     }
 
 

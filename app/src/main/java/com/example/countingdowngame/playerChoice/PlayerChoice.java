@@ -111,7 +111,9 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
             player.setSelectionOrder(++selectedPlayerCount); // Track the order of selection
             playerListAdapter.notifyItemChanged(position);
             updatePlayerCounter();
-            chooseClass(position);
+            if (!Game.getInstance().isPlayCards()){
+                chooseClass(position);
+            }
         }
     }
 
@@ -203,7 +205,6 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         CharacterClassPagerAdapter pagerAdapter = new CharacterClassPagerAdapter(pages);
         viewPager.setAdapter(pagerAdapter);
 
-// Add a scroll listener to the ViewPager to update the progress bar
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

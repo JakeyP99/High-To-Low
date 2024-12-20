@@ -59,14 +59,6 @@ public class GeneralSettingsLocalStore {
         return getBooleanPreference("isTruthActive");
     }
 
-    public void setIsExtrasActivated(boolean value) {
-        setBooleanPreference("isExtrasActive", value);
-    }
-
-    public boolean isExtrasActivated() {
-        return getBooleanPreference("isExtrasActive");
-    }
-
     public boolean shouldPlayRegularSound() {
         return mPref.getBoolean("shouldPlayRegularSound", true);
     }
@@ -98,6 +90,16 @@ public class GeneralSettingsLocalStore {
     public void setTotalDrinkAmount(int value) {
         setIntPreference("totalDrinkAmount", value);
     }
+
+
+    public int playerChamberCount() {
+        return getIntPreference("playerChamberCount", 1);
+    }
+    public void setChamberCount(int value) {
+        setIntPreference("playerChamberCount", value);
+    }
+
+
 
 
 }
