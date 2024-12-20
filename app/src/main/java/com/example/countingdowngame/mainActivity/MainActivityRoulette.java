@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -51,17 +53,15 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            Game.getInstance().endGame(this);
-            gotoHomeScreen();
-            return;
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        // Intercept back press event and do nothing
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            return true;  // This consumes the back press event, effectively disabling it
         }
-        this.doubleBackToExitPressedOnce = true;
-        StyleableToast.makeText(this, "Press back again to go to the home screen", R.style.newToast).show();
-        new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, BACK_PRESS_DELAY);
+        return super.dispatchKeyEvent(event);
     }
+
+
 
     @Override
     protected void onStart() {
@@ -178,13 +178,29 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
         ImageView playerImageView = playerView.findViewById(R.id.playerPhotoImageView);
         TextView playerNameTextView = playerView.findViewById(R.id.playerNameTextView);
 
-        // Set player name and image
-        playerNameTextView.setText(player.getName());
+        // Set player name
+        String playerName = player.getName();
+        playerNameTextView.setText(playerName);
+
+        // Adjust text size based on the length of the name
+        if (playerName.length() > 20) {
+            playerNameTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        } else if (playerName.length() > 13) {
+            playerNameTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        } else if (playerName.length() > 7) {
+            playerNameTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        } else {
+            playerNameTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24); // Default size
+        }
+
+        // Set player image
         setPlayerImage(player.getPhoto(), playerImageView);
 
         // Set the click listener for the player view
         playerView.setOnClickListener(v -> onPlayerViewClicked(player));
     }
+
+
 
     private void setPlayerImage(String playerImageString, ImageView playerImageView) {
         if (playerImageString != null) {
@@ -209,6 +225,7 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
         if (isBulletInChamber(player)) {
             handleDeath(player);
         } else {
+            AudioManager.getInstance().playBlank(this);
             int bulletsLeft = player.getBulletsInChamberList().size() - 1;
             String bulletsText = (bulletsLeft == 1) ? "bullet" : "bullets";
             showGameDialog(player.getName() + " dodged a bullet... Literally!\n\nYou have " + bulletsLeft + " " + bulletsText + " left!");

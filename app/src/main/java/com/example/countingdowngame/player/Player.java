@@ -237,6 +237,13 @@ public class Player implements Serializable {
         Log.d("Player", "Chamber list set: " + bulletsInChamberList);
     }
 
+    public List<Integer> getChamberList() {
+        if (bulletsInChamberList == null) {
+            bulletsInChamberList = new ArrayList<>();
+        }
+        return new ArrayList<>(bulletsInChamberList); // Return a copy to preserve encapsulation
+    }
+
 
     public int getChamberIndex() {
         return chamberIndex;

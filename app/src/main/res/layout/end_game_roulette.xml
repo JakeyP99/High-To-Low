@@ -11,50 +11,66 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="176dp"
-        android:layout_marginTop="146dp"
         android:layout_marginEnd="178dp"
-        android:layout_marginBottom="566dp"
-        android:gravity="center"
         android:fontFamily="@font/viga"
+        android:padding="10dp"
+        android:gravity="center"
         android:text="Drink up!"
         android:textColor="@color/bluedark"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.485"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.13" />
 
     <Button
         android:id="@+id/btnplayAgain"
         android:layout_width="139dp"
         android:layout_height="77dp"
         android:background="@drawable/outlineforbutton"
-        android:text="Play Again"
-        android:textColor="@color/bluedark"
         android:fontFamily="@font/viga"
-        android:textSize="20sp"
+        android:text="Play Again"
         android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TextViewWinner"
-        app:layout_constraintVertical_bias="0.13" />
+        app:layout_constraintVertical_bias="0.51" />
 
     <Button
         android:id="@+id/btnNewPlayer"
         android:layout_width="139dp"
         android:layout_height="77dp"
         android:background="@drawable/outlineforbutton"
-        android:text="New Players"
-        android:textColor="@color/bluedark"
         android:fontFamily="@font/viga"
-        android:textSize="20sp"
+        android:text="New Players"
         android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnplayAgain"
-        app:layout_constraintVertical_bias="0.13999999" />
+        app:layout_constraintVertical_bias="0.25" />
+
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/gunGif"
+        android:layout_width="247dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/transparent"
+        android:src="@drawable/gun"
+        app:layout_constraintBottom_toTopOf="@+id/btnplayAgain"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TextViewWinner"
+        app:layout_constraintVertical_bias="0.533"
+        app:loopCount="5" />
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/soundGif"
@@ -85,4 +101,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.01" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

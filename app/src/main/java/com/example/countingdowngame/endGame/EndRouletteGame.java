@@ -1,26 +1,26 @@
 package com.example.countingdowngame.endGame;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.PagerSnapHelper;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
 import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.mainActivity.MainActivityGame;
 import com.example.countingdowngame.player.Player;
-import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -63,7 +63,6 @@ public class EndRouletteGame extends ButtonUtilsActivity {
     private void setupButtonControls() {
         Button btnPlayAgain = findViewById(R.id.btnplayAgain);
         Button btnNewPlayer = findViewById(R.id.btnNewPlayer);
-
         setButtonActions(btnPlayAgain, btnNewPlayer);
     }
 
@@ -78,13 +77,38 @@ public class EndRouletteGame extends ButtonUtilsActivity {
     private void displayVictor() {
         // Retrieve victor's name from the Intent
         String victorName = getIntent().getStringExtra("VICTOR_NAME");
-        if (victorName != null) {
-            String victorText = "The winner is " + victorName + "!";
-            textViewLose.setText(victorText);
-        } else {
-            textViewLose.setText("No winner found.");
+            // Get the victor's chamber data
+            Player victor = findPlayerByName(victorName);
+                List<Integer> chamberData = victor.getChamberList();
+                int shotCount = 0;
+                boolean bulletFound = false;
+
+                // Find when the first bullet appears
+                for (int i = 0; i < chamberData.size(); i++) {
+                    shotCount++;
+                    if (chamberData.get(i) == 1) {  // Bullet found
+                        bulletFound = true;
+                        break;
+                    }
+                }
+
+                // Construct the message
+                String victorText = "The winner is " + victorName + ", they would have died in " + shotCount + " shot" + (shotCount > 1 ? "s" : "") + ".";
+                textViewLose.setText(victorText);
         }
+
+
+    // Helper method to find the Player object by name
+    private Player findPlayerByName(String name) {
+        List<Player> players = Game.getInstance().getPlayers();
+        for (Player player : players) {
+            if (player.getName().equals(name)) {
+                return player;
+            }
+        }
+        return null;
     }
+
 
 
 }
