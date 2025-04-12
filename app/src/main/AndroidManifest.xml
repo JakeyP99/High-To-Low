@@ -18,7 +18,8 @@
         android:label="High To Low"
         android:roundIcon="@drawable/wine"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/AppTheme.NoActionBar"
+        android:usesCleartextTraffic="true">
 
         <activity
             android:name=".home.HomeScreen"
@@ -30,6 +31,8 @@
         </activity>
 
         <activity android:name=".mainActivity.MainActivityGame" />
+        <activity android:name=".home.ServerFind" />
+        <activity android:name=".home.GameModeChoice" />
 
         <activity android:name=".settings.SettingsMenu" />
 
