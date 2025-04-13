@@ -20,11 +20,15 @@ public class ServerFind extends ButtonUtilsActivity {
     private static final String SERVER_URL = "http://192.168.0.148:3000"; // your server IP
     Button connectionStatus;
     boolean isConnected = false; // add this at the top of the class
-    private Socket mSocket;
+    private static Socket mSocket;
     private Handler handler = new Handler();
     private int dotCount = 0;
     private boolean stopDotAnimation = false;
     TextView hostText;
+
+    public static Socket getSocket() {
+        return mSocket;
+    }
 
     @Override
     protected void onResume() {
@@ -94,6 +98,12 @@ public class ServerFind extends ButtonUtilsActivity {
             } else {
                 hostText.setText("Waiting for host to start!");
             }
+        }));
+
+        mSocket.on("playerCountUpdate", args -> runOnUiThread(() -> {
+            int currentPlayers = (int) args[0];
+            int totalPlayers = (int) args[1];
+            hostText.setText("Waiting for " + (totalPlayers - currentPlayers) + " more players...");
         }));
     }
 
