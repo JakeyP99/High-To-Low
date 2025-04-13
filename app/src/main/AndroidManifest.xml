@@ -31,7 +31,7 @@
         </activity>
 
         <activity android:name=".mainActivity.MainActivityGame" />
-        <activity android:name=".home.ServerFind" />
+        <activity android:name=".onlinePlay.ServerFind" />
         <activity android:name=".home.GameModeChoice" />
 
         <activity android:name=".settings.SettingsMenu" />
