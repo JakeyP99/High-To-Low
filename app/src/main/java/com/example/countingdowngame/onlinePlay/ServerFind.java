@@ -1,10 +1,10 @@
 package com.example.countingdowngame.onlinePlay;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
@@ -14,17 +14,18 @@ import java.net.URISyntaxException;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
-import android.os.Handler;
 
 public class ServerFind extends ButtonUtilsActivity {
     private static final String SERVER_URL = "http://192.168.0.148:3000"; // your server IP
+    private static Socket mSocket;
+    private final Handler handler = new Handler();
     Button connectionStatus;
     boolean isConnected = false; // add this at the top of the class
-    private static Socket mSocket;
-    private Handler handler = new Handler();
+    TextView hostText;
     private int dotCount = 0;
     private boolean stopDotAnimation = false;
-    TextView hostText;
+    private int retryCount = 0;
+    private static final int MAX_RETRIES = 3;
 
     public static Socket getSocket() {
         return mSocket;
@@ -42,12 +43,10 @@ public class ServerFind extends ButtonUtilsActivity {
         AudioManager.getInstance().pauseSound();
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.server_find);
-
         connectionStatus = findViewById(R.id.connectionStatus);
         hostText = findViewById(R.id.hostText); // <-- Make sure this is initialized
 
@@ -57,38 +56,63 @@ public class ServerFind extends ButtonUtilsActivity {
             mSocket = IO.socket(SERVER_URL);
         } catch (URISyntaxException e) {
             Log.e("SocketIO", "Socket URI error", e);
+            handleConnectionFailure();
         }
 
         if (mSocket != null) {
-            connectionLogic(); // Set up listeners BEFORE connecting
-            mSocket.connect(); // Only call this once!
-
-            // Connecting animation
+            connectionLogic();
+            mSocket.connect();
             startConnectingAnimation();
-
         }
 
         connectionStatus.setOnClickListener(v -> {
             if (isConnected) {
                 btnUtils.setButton(connectionStatus, this::gotoPlayerNumberChoice);
             } else {
-                Toast.makeText(this, "Still connecting...", Toast.LENGTH_SHORT).show();
+                retryConnection();
             }
+        });
+    }
+
+    private void retryConnection() {
+        if (retryCount < MAX_RETRIES) {
+            retryCount++;
+            stopDotAnimation = false;
+            startConnectingAnimation();
+            
+            try {
+                mSocket = IO.socket(SERVER_URL);
+                connectionLogic();
+                mSocket.connect();
+            } catch (URISyntaxException e) {
+                Log.e("SocketIO", "Socket URI error", e);
+                handleConnectionFailure();
+            }
+        } else {
+            connectionStatus.setText("Connection failed ❌");
+            retryCount = 0; // Reset retry count for next attempt
+        }
+    }
+
+    private void handleConnectionFailure() {
+        runOnUiThread(() -> {
+            isConnected = false;
+            stopDotAnimation = true;
+            connectionStatus.setText("Connection failed ❌");
         });
     }
 
     private void connectionLogic() {
         mSocket.on(Socket.EVENT_CONNECT, args -> runOnUiThread(() -> {
             isConnected = true;
-            stopDotAnimation = true; // Stop the animation
+            stopDotAnimation = true;
             connectionStatus.setText("Connected!");
             hostText.setText("Waiting for host to start!");
+            retryCount = 0; // Reset retry count on successful connection
         }));
 
         mSocket.on(Socket.EVENT_CONNECT_ERROR, args -> runOnUiThread(() -> {
-            isConnected = false;
-            stopDotAnimation = true; // Stop the animation
-            connectionStatus.setText("Connection failed ❌");
+            handleConnectionFailure();
         }));
 
         mSocket.on("hostAssigned", args -> runOnUiThread(() -> {
@@ -107,7 +131,6 @@ public class ServerFind extends ButtonUtilsActivity {
         }));
     }
 
-
     private void startConnectingAnimation() {
         handler.postDelayed(new Runnable() {
             @Override
@@ -118,9 +141,8 @@ public class ServerFind extends ButtonUtilsActivity {
                 String dots = new String(new char[dotCount]).replace("\0", ".");
                 connectionStatus.setText("Connecting to server" + dots);
 
-                handler.postDelayed(this, 500); // update every 500ms
+                handler.postDelayed(this, 700); // update every 500ms
             }
         }, 500);
     }
-
 }
