@@ -113,5 +113,4 @@ public class ServerFind extends ButtonUtilsActivity {
         }, 500);
     }
 
-
 }
