@@ -38,6 +38,7 @@ import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.drawing.DrawingPlayerModels;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.numberChoice.NumberChoice;
+import com.example.countingdowngame.onlinePlay.ServerFind;
 import com.example.countingdowngame.player.Player;
 import com.google.gson.Gson;
 
@@ -49,6 +50,9 @@ import java.util.Objects;
 import java.util.UUID;
 
 import io.github.muddz.styleabletoast.StyleableToast;
+import io.socket.client.Socket;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class PlayerChoice extends playerChoiceComplimentary implements PlayerListAdapter.ClickListener {
@@ -268,8 +272,24 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
                 String message = selectedCharacterClass.getClassName().equals("No Class") ? selectedPlayer.getName() + " chose no class!" : selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
                 StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
                 Log.d("Confirm Button", "Confirm Button Clicked - Page Number: " + selectedPageNumber + ", Character ID: " + selectedCharacterClass.getId());
+                
+                // Send player information to server
+                Socket mSocket = ServerFind.getSocket();
+                if (mSocket != null && mSocket.connected()) {
+                    Log.d("PlayerChoice", "Emitting join with player: " + selectedPlayer.getName() + ", class: " + selectedPlayer.getClassChoice());
+                    JSONObject playerData = new JSONObject();
+                    try {
+                        playerData.put("name", selectedPlayer.getName());
+                        playerData.put("classChoice", selectedPlayer.getClassChoice());
+                        mSocket.emit("join", playerData);
+                    } catch (JSONException e) {
+                        Log.e("PlayerChoice", "Error creating JSON object", e);
+                    }
+                } else {
+                    Log.e("PlayerChoice", "Socket is null or not connected");
+                }
+                
                 dialog.dismiss();
-
             } else {
                 selectedPlayer.setClassChoice(null);
                 StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
