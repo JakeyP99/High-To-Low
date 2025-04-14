@@ -12,6 +12,7 @@ import android.widget.EditText;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.countingdowngame.R;
+import com.example.countingdowngame.home.GameModeChoice;
 import com.example.countingdowngame.playerChoice.PlayerChoice;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.audio.AudioManager;
@@ -69,7 +70,7 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
 
         try {
             int inputNumber = parseInputValue(inputValue);
-            if (inputNumber <= 1) {
+            if (inputNumber <= 1 && !GameModeChoice.isOnlineGame()) {
                 showToast("You have to have some friends to play with!");
                 return;
             }

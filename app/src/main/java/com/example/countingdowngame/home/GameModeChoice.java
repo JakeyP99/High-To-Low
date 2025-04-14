@@ -1,20 +1,22 @@
 package com.example.countingdowngame.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
-import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
-import com.example.countingdowngame.utils.ButtonUtils;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
-import io.github.muddz.styleabletoast.StyleableToast;
 import pl.droidsonroids.gif.GifImageView;
 
 public class GameModeChoice extends ButtonUtilsActivity {
     private GifImageView muteGif, soundGif;
+    private static boolean isOnlineGame = false;
+
+    public static boolean isOnlineGame() {
+        return isOnlineGame;
+    }
 
     @Override
     protected void onResume() {
@@ -44,16 +46,22 @@ public class GameModeChoice extends ButtonUtilsActivity {
         soundGif = findViewById(R.id.soundGif);
     }
 
-
     private void setupButtonControls() {
         Button btnOfflinePlay = findViewById(R.id.button_offlineGame);
         Button btnOnlinePlay = findViewById(R.id.button_onlineGame);
 
         // Set onClickListener for buttons
-        btnUtils.setButton(btnOfflinePlay, this::gotoPlayerNumberChoice);
+        btnUtils.setButton(btnOfflinePlay, () -> {
+            isOnlineGame = false;
+            Log.d("PlayerChoice", "isOnlineGame: " + isOnlineGame);
+            gotoPlayerNumberChoice();
+        });
 
-        btnUtils.setButton(btnOnlinePlay, this::goToServerFindClass);
-
+        btnUtils.setButton(btnOnlinePlay, () -> {
+            isOnlineGame = true;
+            Log.d("PlayerChoice", "isOnlineGame: " + isOnlineGame);
+            goToServerFindClass();
+        });
     }
 
 

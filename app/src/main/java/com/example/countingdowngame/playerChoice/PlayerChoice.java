@@ -37,6 +37,7 @@ import com.example.countingdowngame.createPlayer.PlayerListAdapter;
 import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.drawing.DrawingPlayerModels;
 import com.example.countingdowngame.game.Game;
+import com.example.countingdowngame.home.GameModeChoice;
 import com.example.countingdowngame.numberChoice.NumberChoice;
 import com.example.countingdowngame.onlinePlay.ServerFind;
 import com.example.countingdowngame.player.Player;
@@ -362,37 +363,49 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         Intent intent = new Intent(this, DrawingPlayerModels.class);
         startActivityForResult(intent, REQUEST_DRAW);
     }
-
     private void setupProceedButton() {
         btnUtils.setButton(proceedButton, () -> {
-            if (selectedPlayerCount == totalPlayerCount) {
-                List<Player> selectedPlayers = new ArrayList<>();
-                for (Player player : playerList) {
-                    if (player.isSelected()) {
-                        selectedPlayers.add(player);
-                    }
-                }
+            Log.d("PlayerChoice", "selectedPlayerCount: " + selectedPlayerCount);
+            Log.d("PlayerChoice", "totalPlayerCount: " + totalPlayerCount);
 
-                // Sort the players by their selection order
-                selectedPlayers.sort(Comparator.comparingInt(Player::getSelectionOrder));
+            if (!GameModeChoice.isOnlineGame() && selectedPlayerCount == totalPlayerCount) {
+                handleSelectedPlayers();
+                Log.d("PlayerChoice", "online: " + totalPlayerCount);
 
-                proceedButton.setEnabled(false);
-                final long delayMillis = 3000;
-                new Handler().postDelayed(() -> proceedButton.setEnabled(true), delayMillis);
-
-                PlayerModelLocalStore.fromContext(this).saveSelectedPlayers(selectedPlayers);
-                ArrayList<String> selectedPlayerNames = new ArrayList<>();
-                for (Player player : selectedPlayers) {
-                    selectedPlayerNames.add(player.getName());
-                }
-                Intent intent = new Intent(this, NumberChoice.class);
-                intent.putStringArrayListExtra("playerNames", selectedPlayerNames);
-                startActivity(intent);
+            } else if (GameModeChoice.isOnlineGame() && selectedPlayerCount == 1) {
+                handleSelectedPlayers();
             } else {
                 StyleableToast.makeText(this, "Please select all players.", R.style.newToast).show();
             }
         });
     }
+
+    private void handleSelectedPlayers() {
+        List<Player> selectedPlayers = new ArrayList<>();
+        for (Player player : playerList) {
+            if (player.isSelected()) {
+                selectedPlayers.add(player);
+            }
+        }
+
+        // Sort the players by their selection order
+        selectedPlayers.sort(Comparator.comparingInt(Player::getSelectionOrder));
+
+        proceedButton.setEnabled(false);
+        final long delayMillis = 3000;
+        new Handler().postDelayed(() -> proceedButton.setEnabled(true), delayMillis);
+
+        PlayerModelLocalStore.fromContext(this).saveSelectedPlayers(selectedPlayers);
+        ArrayList<String> selectedPlayerNames = new ArrayList<>();
+        for (Player player : selectedPlayers) {
+            selectedPlayerNames.add(player.getName());
+        }
+        Intent intent = new Intent(this, NumberChoice.class);
+        intent.putStringArrayListExtra("playerNames", selectedPlayerNames);
+        startActivity(intent);
+    }
+
+
 
     //-----------------------------------------------------Image and player creation functionality---------------------------------------------------//
     private void captureImage() {
@@ -536,22 +549,32 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
             }
         }
 
-        int remainingPlayers = totalPlayerCount - selectedPlayerCount;
-
         String counterText;
-        if (remainingPlayers == 0) {
-            counterText = "All Players Selected!";
-        } else if (remainingPlayers == 1) {
-            counterText = "Select 1 More Player!";
-        } else if (remainingPlayers < 0) {
-            int excessPlayers = Math.abs(remainingPlayers);
-            if (excessPlayers == 1) {
-                counterText = "Please Remove 1 Player \uD83E\uDD13";
+        if (GameModeChoice.isOnlineGame()) {
+            if (selectedPlayerCount == 0) {
+                counterText = "Please choose your character";
+            } else if (selectedPlayerCount == 1) {
+                counterText = "Character selected!";
             } else {
-                counterText = "Please Remove " + excessPlayers + " Players \uD83E\uDD13";
+                counterText = "Please select only one character";
             }
         } else {
-            counterText = "Select " + remainingPlayers + " More Players!";
+            int remainingPlayers = totalPlayerCount - selectedPlayerCount;
+
+            if (remainingPlayers == 0) {
+                counterText = "All Players Selected!";
+            } else if (remainingPlayers == 1) {
+                counterText = "Select 1 More Player!";
+            } else if (remainingPlayers < 0) {
+                int excessPlayers = Math.abs(remainingPlayers);
+                if (excessPlayers == 1) {
+                    counterText = "Please Remove 1 Player \uD83E\uDD13";
+                } else {
+                    counterText = "Please Remove " + excessPlayers + " Players \uD83E\uDD13";
+                }
+            } else {
+                counterText = "Select " + remainingPlayers + " More Players!";
+            }
         }
         playerCountTextView.setText(counterText);
     }
