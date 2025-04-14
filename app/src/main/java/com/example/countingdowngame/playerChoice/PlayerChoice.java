@@ -400,12 +400,15 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         for (Player player : selectedPlayers) {
             selectedPlayerNames.add(player.getName());
         }
-        Intent intent = new Intent(this, NumberChoice.class);
-        intent.putStringArrayListExtra("playerNames", selectedPlayerNames);
-        startActivity(intent);
+
+        if (GameModeChoice.isOnlineGame()) {
+            gotoPlayerNumberChoice();
+        } else {
+            Intent intent = new Intent(this, NumberChoice.class);
+            intent.putStringArrayListExtra("playerNames", selectedPlayerNames);
+            startActivity(intent);
+        }
     }
-
-
 
     //-----------------------------------------------------Image and player creation functionality---------------------------------------------------//
     private void captureImage() {

@@ -1,5 +1,6 @@
 package com.example.countingdowngame.onlinePlay;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
+import com.example.countingdowngame.playerChoice.PlayerChoice;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.net.URISyntaxException;
@@ -21,7 +23,6 @@ public class ServerFind extends ButtonUtilsActivity {
     private final Handler handler = new Handler();
     Button connectionStatus;
     boolean isConnected = false; // add this at the top of the class
-    TextView hostText;
     private int dotCount = 0;
     private boolean stopDotAnimation = false;
     private int retryCount = 0;
@@ -48,7 +49,6 @@ public class ServerFind extends ButtonUtilsActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.server_find);
         connectionStatus = findViewById(R.id.connectionStatus);
-        hostText = findViewById(R.id.hostText); // <-- Make sure this is initialized
 
         connectionStatus.setText("Connecting to server");
 
@@ -67,7 +67,11 @@ public class ServerFind extends ButtonUtilsActivity {
 
         connectionStatus.setOnClickListener(v -> {
             if (isConnected) {
-                btnUtils.setButton(connectionStatus, this::gotoPlayerNumberChoice);
+                btnUtils.setButton(connectionStatus, () -> {
+                    Intent intent = new Intent(this, PlayerChoice.class);
+                    intent.putExtra("resetPlayers", true);
+                    startActivity(intent);
+                });
             } else {
                 retryConnection();
             }
@@ -107,28 +111,12 @@ public class ServerFind extends ButtonUtilsActivity {
             isConnected = true;
             stopDotAnimation = true;
             connectionStatus.setText("Connected!");
-            hostText.setText("Waiting for host to start!");
             retryCount = 0; // Reset retry count on successful connection
         }));
 
-        mSocket.on(Socket.EVENT_CONNECT_ERROR, args -> runOnUiThread(() -> {
-            handleConnectionFailure();
-        }));
+        mSocket.on(Socket.EVENT_CONNECT_ERROR, args -> runOnUiThread(this::handleConnectionFailure));
 
-        mSocket.on("hostAssigned", args -> runOnUiThread(() -> {
-            boolean isHost = (boolean) args[0];
-            if (isHost) {
-                hostText.setText("You are the host!");
-            } else {
-                hostText.setText("Waiting for host to start!");
-            }
-        }));
 
-        mSocket.on("playerCountUpdate", args -> runOnUiThread(() -> {
-            int currentPlayers = (int) args[0];
-            int totalPlayers = (int) args[1];
-            hostText.setText("Waiting for " + (totalPlayers - currentPlayers) + " more players...");
-        }));
     }
 
     private void startConnectingAnimation() {

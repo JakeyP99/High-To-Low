@@ -6,12 +6,11 @@
     android:padding="24dp"
     android:fitsSystemWindows="false">
     <TextView
-        android:id="@+id/hostText"
         android:layout_width="358dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/viga"
         android:gravity="center"
-        android:text="You are the host!"
+        android:text="High To Low: TV Edition"
         android:textColor="@color/bluedark"
         android:textSize="35sp"
         app:layout_constraintBottom_toBottomOf="parent"
