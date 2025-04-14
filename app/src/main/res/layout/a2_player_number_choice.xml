@@ -69,7 +69,7 @@
 
     <Button
         android:id="@+id/btnSubmitPlayers"
-        android:text="Submit Players"
+        android:text="Submit\nPlayer Count"
         android:textColor="@color/bluedark"
         android:textSize="20sp"
         android:textAllCaps="false"
