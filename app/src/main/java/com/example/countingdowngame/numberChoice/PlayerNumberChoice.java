@@ -3,6 +3,7 @@ package com.example.countingdowngame.numberChoice;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputFilter;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +22,8 @@ import com.example.countingdowngame.onlinePlay.ServerFind;
 
 import io.github.muddz.styleabletoast.StyleableToast;
 import io.socket.client.Socket;
+import org.json.JSONException;
+import org.json.JSONObject;
 import pl.droidsonroids.gif.GifImageView;
 
 public class PlayerNumberChoice extends ButtonUtilsActivity {
@@ -113,9 +116,11 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
         Socket mSocket = ServerFind.getSocket();
         if (mSocket != null && mSocket.connected()) {
             Log.d("PlayerNumberChoice", "Emitting setPlayerCount with value: " + inputNumber);
+            mSocket.emit("playerCountSet");
             mSocket.emit("setPlayerCount", inputNumber);
         } else {
             Log.e("PlayerNumberChoice", "Socket is null or not connected");
+            StyleableToast.makeText(this, "Not connected to server. Please try again.", R.style.newToast).show();
         }
     }
 

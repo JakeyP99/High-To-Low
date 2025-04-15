@@ -273,22 +273,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
                 String message = selectedCharacterClass.getClassName().equals("No Class") ? selectedPlayer.getName() + " chose no class!" : selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
                 StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
                 Log.d("Confirm Button", "Confirm Button Clicked - Page Number: " + selectedPageNumber + ", Character ID: " + selectedCharacterClass.getId());
-                
-                // Send player information to server
-                Socket mSocket = ServerFind.getSocket();
-                if (mSocket != null && mSocket.connected()) {
-                    Log.d("PlayerChoice", "Emitting join with player: " + selectedPlayer.getName() + ", class: " + selectedPlayer.getClassChoice());
-                    JSONObject playerData = new JSONObject();
-                    try {
-                        playerData.put("name", selectedPlayer.getName());
-                        playerData.put("classChoice", selectedPlayer.getClassChoice());
-                        mSocket.emit("join", playerData);
-                    } catch (JSONException e) {
-                        Log.e("PlayerChoice", "Error creating JSON object", e);
-                    }
-                } else {
-                    Log.e("PlayerChoice", "Socket is null or not connected");
-                }
+ 
                 
                 dialog.dismiss();
             } else {
@@ -370,10 +355,36 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
 
             if (!GameModeChoice.isOnlineGame() && selectedPlayerCount == totalPlayerCount) {
                 handleSelectedPlayers();
-                Log.d("PlayerChoice", "online: " + totalPlayerCount);
-
             } else if (GameModeChoice.isOnlineGame() && selectedPlayerCount == 1) {
-                handleSelectedPlayers();
+                // Get the selected player
+                Player selectedPlayer = null;
+                for (Player player : playerList) {
+                    if (player.isSelected()) {
+                        selectedPlayer = player;
+                        break;
+                    }
+                }
+
+                if (selectedPlayer != null) {
+                    // Send player information to server
+                    Socket mSocket = ServerFind.getSocket();
+                    if (mSocket != null && mSocket.connected()) {
+                        Log.d("PlayerChoice", "Emitting join with player: " + selectedPlayer.getName() + ", class: " + selectedPlayer.getClassChoice());
+                        JSONObject playerData = new JSONObject();
+                        try {
+                            playerData.put("name", selectedPlayer.getName());
+                            playerData.put("classChoice", selectedPlayer.getClassChoice());
+                            mSocket.emit("join", playerData);
+                            handleSelectedPlayers();
+                        } catch (JSONException e) {
+                            Log.e("PlayerChoice", "Error creating JSON object", e);
+                            StyleableToast.makeText(this, "Error connecting to server. Please try again.", R.style.newToast).show();
+                        }
+                    } else {
+                        Log.e("PlayerChoice", "Socket is null or not connected");
+                        StyleableToast.makeText(this, "Not connected to server. Please try again.", R.style.newToast).show();
+                    }
+                }
             } else {
                 StyleableToast.makeText(this, "Please select all players.", R.style.newToast).show();
             }
