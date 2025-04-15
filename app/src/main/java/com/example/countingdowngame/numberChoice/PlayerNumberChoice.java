@@ -95,7 +95,7 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
         return originalPlayerField.getText().toString();
     }
 
-    private int parseInputValue(String inputValue) throws NumberFormatException {
+    public int parseInputValue(String inputValue) throws NumberFormatException {
         return Integer.parseInt(inputValue);
     }
 

@@ -20,6 +20,7 @@ import com.example.countingdowngame.home.HomeScreen;
 import com.example.countingdowngame.numberChoice.NumberChoice;
 import com.example.countingdowngame.numberChoice.PlayerNumberChoice;
 import com.example.countingdowngame.player.Player;
+import com.example.countingdowngame.playerChoice.PlayerChoice;
 import com.example.countingdowngame.settings.SettingsMenu;
 
 import pl.droidsonroids.gif.GifImageView;
@@ -72,6 +73,7 @@ public abstract class ButtonUtilsActivity extends AppCompatActivity {
     protected void gotoPlayerNumberChoice() {
         startActivity(getIntentForClass(PlayerNumberChoice.class));
     }
+
 
     protected void goToGameModeChoice() {
         startActivity(getIntentForClass(GameModeChoice.class));

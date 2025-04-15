@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:padding="24dp"
     android:fitsSystemWindows="false">
     <TextView
         android:layout_width="358dp"
@@ -34,5 +33,44 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5" />
+
+
+    <Button
+        android:id="@+id/hostButton"
+        android:layout_width="139dp"
+        android:layout_height="77dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/outlineforbutton"
+        android:fontFamily="@font/viga"
+        android:text="Host Game"
+        android:alpha="0.5"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.701" />
+    <Button
+        android:id="@+id/joinButton"
+        android:layout_width="139dp"
+        android:layout_height="77dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/outlineforbutton"
+        android:fontFamily="@font/viga"
+        android:text="Join Game"
+        android:alpha="0.5"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.701" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
