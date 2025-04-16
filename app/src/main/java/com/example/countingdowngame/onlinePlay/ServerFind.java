@@ -63,6 +63,7 @@ public class ServerFind extends ButtonUtilsActivity {
 
         hostButton = findViewById(R.id.hostButton);
         joinButton = findViewById(R.id.joinButton);
+        startConnectingAnimation();
 
         try {
             mSocket = IO.socket(SERVER_URL);
@@ -77,7 +78,6 @@ public class ServerFind extends ButtonUtilsActivity {
                 // After socket is connected, start listening for events
                 listenForHostAssignment();
                 listenForPlayerCountUpdate();
-                startConnectingAnimation();
             });
         }
     }
@@ -160,7 +160,7 @@ public class ServerFind extends ButtonUtilsActivity {
                         intent.putExtra("resetPlayers", true);
                         startActivity(intent);
                     });
-                     
+
                     // Game is in pre-start phase
                     if (!isHost) {
                         hostButton.setAlpha(0.5f);

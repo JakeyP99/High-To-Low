@@ -413,7 +413,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         }
 
         if (GameModeChoice.isOnlineGame()) {
-            gotoPlayerNumberChoice();
+            gotoNumberChoice();
         } else {
             Intent intent = new Intent(this, NumberChoice.class);
             intent.putStringArrayListExtra("playerNames", selectedPlayerNames);
