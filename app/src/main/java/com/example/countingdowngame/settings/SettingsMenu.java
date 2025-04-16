@@ -20,7 +20,9 @@ import androidx.core.content.res.ResourcesCompat;
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.mainActivity.MainActivityGame;
+import com.example.countingdowngame.onlinePlay.ServerFind;
 import com.example.countingdowngame.player.Player;
+import com.example.countingdowngame.playerChoice.PlayerChoice;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.example.countingdowngame.wildCards.WildCardProperties;
 import com.example.countingdowngame.wildCards.WildCardType;
@@ -32,6 +34,7 @@ import com.example.countingdowngame.wildCards.wildCardTypes.WildCardsAdapter;
 import java.util.List;
 
 import io.github.muddz.styleabletoast.StyleableToast;
+import io.socket.client.Socket;
 
 public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickListener {
 
@@ -53,12 +56,8 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
     private TruthWildCardsAdapter truthWildCardsAdapter;
 
 
+
     //-----------------------------------------------------On Pause---------------------------------------------------//
-
-
-    public SettingsMenu() {
-        // Default constructor with no arguments
-    }
 
     @Override
     protected void onResume() {
@@ -111,6 +110,8 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         initializeViews();
         loadPreferences();  // Load preferences here
         setButtonListeners();
+        connectionLogic();
+
     }
 
     private void initializeViews() {
@@ -310,6 +311,34 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
             }
         });
     }
+
+
+
+    private void connectionLogic() {
+        Socket mSocket = ServerFind.getSocket();
+
+        // Check if the socket is connected
+        if (mSocket != null && mSocket.connected()) {
+            Log.d("SocketConnection", "Socket is connected");
+            mSocket.on("allPlayersReady", args -> runOnUiThread(() -> {
+                btnProgressToGame.setText("Let's Play!");
+                btnProgressToGame.setEnabled(true);
+
+            }));
+
+        } else {
+            Log.d("SocketConnection", "Socket is NOT connected");
+        }
+
+        // Set default state
+        btnProgressToGame.setText("Not Ready!");
+        btnProgressToGame.setEnabled(false);
+
+        // Listen for 'allPlayersReady' from server
+
+
+    }
+
 
     private void toggleMultipleButtons(Button selectedButton, Button unselectedButton, boolean isSelected) {
         selectedButton.setSelected(isSelected);
