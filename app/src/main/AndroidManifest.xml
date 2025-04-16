@@ -31,6 +31,8 @@
         </activity>
 
         <activity android:name=".mainActivity.MainActivityGame" />
+        <activity android:name=".mainActivity.MainActivityGameOnline" />
+
         <activity android:name=".onlinePlay.ServerFind" />
         <activity android:name=".home.GameModeChoice" />
 

@@ -19,10 +19,11 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
+import com.example.countingdowngame.home.GameModeChoice;
 import com.example.countingdowngame.mainActivity.MainActivityGame;
+import com.example.countingdowngame.mainActivity.MainActivityGameOnline;
 import com.example.countingdowngame.onlinePlay.ServerFind;
 import com.example.countingdowngame.player.Player;
-import com.example.countingdowngame.playerChoice.PlayerChoice;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.example.countingdowngame.wildCards.WildCardProperties;
 import com.example.countingdowngame.wildCards.WildCardType;
@@ -38,7 +39,7 @@ import io.socket.client.Socket;
 
 public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickListener {
 
-    //-----------------------------------------------------Initialize---------------------------------------------------//
+    // -----------------------------------------------------Initialize---------------------------------------------------//
     private EditText wildcardPerPlayerEditText;
     private EditText totalDrinksEditText;
     private Button button_multiChoice;
@@ -55,9 +56,8 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
     private TaskWildCardsAdapter taskWildCardsAdapter;
     private TruthWildCardsAdapter truthWildCardsAdapter;
 
-
-
-    //-----------------------------------------------------On Pause---------------------------------------------------//
+    // -----------------------------------------------------On
+    // Pause---------------------------------------------------//
 
     @Override
     protected void onResume() {
@@ -72,8 +72,8 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         savePreferences();
     }
 
-
-    //-----------------------------------------------------On Create---------------------------------------------------//
+    // -----------------------------------------------------On
+    // Create---------------------------------------------------//
 
     @Override
     public void onBackPressed() {
@@ -88,7 +88,8 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
                 if (wildCardAmountInput.isEmpty()) {
                     wildcardPerPlayerEditText.setText("1");
                 } else {
-                    StyleableToast.makeText(getApplicationContext(), "Please enter a number between 0 and 100", R.style.newToast).show();
+                    StyleableToast.makeText(getApplicationContext(), "Please enter a number between 0 and 100",
+                            R.style.newToast).show();
                 }
             }
 
@@ -101,14 +102,15 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         super.onBackPressed();
     }
 
-    //-----------------------------------------------------Initialize Views---------------------------------------------------//
+    // -----------------------------------------------------Initialize
+    // Views---------------------------------------------------//
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_ingame);
         initializeViews();
-        loadPreferences();  // Load preferences here
+        loadPreferences(); // Load preferences here
         setButtonListeners();
         connectionLogic();
 
@@ -139,7 +141,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         // Set up TextWatchers for EditTexts
         setupTextWatcher(wildcardPerPlayerEditText, 3, this::isValidWildCardAmount);
         setupTextWatcher(totalDrinksEditText, 2, this::isValidTotalDrinkAmount);
-
 
         // Check if "Quiz Magician" player is selected
         boolean isQuizMagicianSelected = false;
@@ -200,21 +201,11 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
     }
 
     private void isValidTotalDrinkAmount() {
-        isValidInput(
-                totalDrinksEditText.getText().toString().trim(),
-                2,
-                1,
-                20
-        );
+        isValidInput(totalDrinksEditText.getText().toString().trim(), 2, 1, 20);
     }
 
     private void isValidWildCardAmount() {
-        isValidInput(
-                wildcardPerPlayerEditText.getText().toString().trim(),
-                3,
-                0,
-                100
-        );
+        isValidInput(wildcardPerPlayerEditText.getText().toString().trim(), 3, 0, 100);
     }
 
     @Override
@@ -244,7 +235,9 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
                 }
                 if (isQuizMagicianSelected) {
                     // Quiz Magician is already selected, show toast and don't toggle off
-                    StyleableToast.makeText(getApplicationContext(), "Someone has selected the Quiz Magician class - Quizzes need to be toggled on.", R.style.newToast).show();
+                    StyleableToast.makeText(getApplicationContext(),
+                            "Someone has selected the Quiz Magician class - Quizzes need to be toggled on.",
+                            R.style.newToast).show();
                 } else {
                     // No Quiz Magician selected yet, proceed with toggling
                     boolean isQuizSelected = !button_quiz_toggle.isSelected();
@@ -267,8 +260,8 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         savePreferences();
     }
 
-
-    //-----------------------------------------------------Wild Card Choices---------------------------------------------------//
+    // -----------------------------------------------------Wild Card
+    // Choices---------------------------------------------------//
     private void setButtonListeners() {
         button_multiChoice.setOnClickListener(this);
         button_nonMultiChoice.setOnClickListener(this);
@@ -287,15 +280,28 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
 
             if (isWildCardAmountValid && isTotalDrinkAmountValid) {
                 savePreferences();
-                goToClassicGameWithExtras(Integer.parseInt(totalDrinkAmountInput));
+
+                if (GameModeChoice.isOnlineGame()) {
+                    goToOnlineGame(Integer.parseInt(totalDrinkAmountInput));
+                } else {
+                    goToClassicGameWithExtras(Integer.parseInt(totalDrinkAmountInput));
+                }
+
             } else {
                 if (!isWildCardAmountValid) {
                     if (wildCardAmountInput.isEmpty()) {
                         wildcardPerPlayerEditText.setText("0");
                         savePreferences();
-                        goToClassicGameWithExtras(Integer.parseInt(totalDrinkAmountInput));
+
+                        if (GameModeChoice.isOnlineGame()) {
+                            goToOnlineGame(Integer.parseInt(totalDrinkAmountInput));
+                        } else {
+                            goToClassicGameWithExtras(Integer.parseInt(totalDrinkAmountInput));
+                        }
+
                     } else {
-                        StyleableToast.makeText(getApplicationContext(), "Please enter a wildcard quantity between 0 and 100", R.style.newToast).show();
+                        StyleableToast.makeText(getApplicationContext(),
+                                "Please enter a wildcard quantity between 0 and 100", R.style.newToast).show();
                     }
                 }
 
@@ -303,42 +309,46 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
                     if (totalDrinkAmountInput.isEmpty()) {
                         totalDrinksEditText.setText("0");
                         savePreferences();
-                        goToClassicGameWithExtras(Integer.parseInt(totalDrinkAmountInput));
+
+                        if (GameModeChoice.isOnlineGame()) {
+                            goToOnlineGame(Integer.parseInt(totalDrinkAmountInput));
+                        } else {
+                            goToClassicGameWithExtras(Integer.parseInt(totalDrinkAmountInput));
+                        }
+
                     } else {
-                        StyleableToast.makeText(getApplicationContext(), "Please enter a total drink limit between 1 and 20", R.style.newToast).show();
+                        StyleableToast.makeText(getApplicationContext(),
+                                "Please enter a total drink limit between 1 and 20", R.style.newToast).show();
                     }
                 }
             }
         });
     }
 
-
-
     private void connectionLogic() {
-        Socket mSocket = ServerFind.getSocket();
 
-        // Check if the socket is connected
-        if (mSocket != null && mSocket.connected()) {
-            Log.d("SocketConnection", "Socket is connected");
-            mSocket.on("allPlayersReady", args -> runOnUiThread(() -> {
-                btnProgressToGame.setText("Let's Play!");
-                btnProgressToGame.setEnabled(true);
+        if (GameModeChoice.isOnlineGame()) {
+            Socket mSocket = ServerFind.getSocket();
 
-            }));
+            // Check if the socket is connected
+            if (mSocket != null && mSocket.connected()) {
+                Log.d("SocketConnection", "Socket is connected");
+                mSocket.on("allPlayersReady", args -> runOnUiThread(() -> {
+                    btnProgressToGame.setText("Let's Play!");
+                    btnProgressToGame.setEnabled(true);
 
-        } else {
-            Log.d("SocketConnection", "Socket is NOT connected");
+                }));
+
+            } else {
+                Log.d("SocketConnection", "Socket is NOT connected");
+            }
+
+            // Set default state
+            btnProgressToGame.setText("Not Ready!");
+            btnProgressToGame.setEnabled(false);
+
         }
-
-        // Set default state
-        btnProgressToGame.setText("Not Ready!");
-        btnProgressToGame.setEnabled(false);
-
-        // Listen for 'allPlayersReady' from server
-
-
     }
-
 
     private void toggleMultipleButtons(Button selectedButton, Button unselectedButton, boolean isSelected) {
         selectedButton.setSelected(isSelected);
@@ -367,8 +377,39 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         }
     }
 
+    // -----------------------------------------------------Load and Save
+    // Preferences---------------------------------------------------//
 
-    //-----------------------------------------------------Load and Save Preferences---------------------------------------------------//
+    private void goToOnlineGame(int totalDrinkNumber) {
+        Socket mSocket = ServerFind.getSocket();
+
+        if (mSocket != null && mSocket.connected()) {
+            Log.d("SocketConnection", "Socket is connected");
+
+            // Emit drink and starting number immediately
+            int startingNumber = getIntent().getIntExtra("startingNumber", 0);
+            mSocket.emit("totalDrinkNumber", totalDrinkNumber);
+            mSocket.emit("startingNumber", startingNumber);
+            mSocket.emit("redirectToGame");
+
+            savePreferences();
+            GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);
+            int wildCardCount = store.playerWildCardCount();
+            Log.d(TAG, "Wild Card Count: " + wildCardCount);
+
+            Intent intent = new Intent(this, MainActivityGameOnline.class);
+
+            intent.putExtra("startingNumber", startingNumber);
+            intent.putExtra("totalDrinkNumber", totalDrinkNumber);
+
+            startActivity(intent);
+
+
+        } else {
+            Log.d("SocketConnection", "Socket is NOT connected");
+        }
+    }
+
 
     // Inside WildCardSettings or any other settings activity
     private void goToClassicGameWithExtras(int totalDrinkNumber) {
@@ -377,9 +418,9 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         int wildCardCount = store.playerWildCardCount();
         Log.d(TAG, "Wild Card Count: " + wildCardCount);
 
-
         // Retrieve the extras passed from NumberChoice activity
-        int startingNumber = getIntent().getIntExtra("startingNumber", 0); // 0 is the default value if the extra is not found
+        int startingNumber = getIntent().getIntExtra("startingNumber", 0); // 0 is the default value if the extra is not
+        // found
         // Create an Intent to start the main game activity
         Intent intent = new Intent(this, MainActivityGame.class);
 
@@ -390,7 +431,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         // Start the main game activity
         startActivity(intent);
     }
-
 
     private void loadPreferences() {
         GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);
@@ -420,7 +460,8 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         boolean savedQuizState = store.isQuizActivated();
         boolean isQuizActivated = isQuizMagicianSelected || savedQuizState;
 
-        // Set quiz toggle button based on whether "Quiz Magician" is selected or saved state
+        // Set quiz toggle button based on whether "Quiz Magician" is selected or saved
+        // state
         button_quiz_toggle.setSelected(isQuizActivated);
 
         // Load activation status for each wild card type and toggle buttons accordingly
@@ -428,7 +469,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         toggleWildCardButton(button_task_toggle, taskWildCardsAdapter, store.isTaskActivated());
         toggleWildCardButton(button_truth_toggle, truthWildCardsAdapter, store.isTruthActivated());
     }
-
 
     private void savePreferences() {
         GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);

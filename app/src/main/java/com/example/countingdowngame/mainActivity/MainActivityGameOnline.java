@@ -60,7 +60,7 @@ import java.util.stream.Collectors;
 import io.github.muddz.styleabletoast.StyleableToast;
 import pl.droidsonroids.gif.GifImageView;
 
-public class MainActivityGame extends SharedMainActivity {
+public class MainActivityGameOnline extends SharedMainActivity {
 
     //-----------------------------------------------------Constants---------------------------------------------------//
     static final int BACK_PRESS_DELAY = 3000; // 3 seconds
