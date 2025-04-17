@@ -17,6 +17,7 @@ import static com.example.countingdowngame.mainActivity.MainActivityCatastrophes
 import static com.example.countingdowngame.mainActivity.MainActivityCatastrophes.setCatastropheLimit;
 import static com.example.countingdowngame.mainActivity.MainActivityLogging.logPlayerInformation;
 import static com.example.countingdowngame.mainActivity.MainActivityLogging.logSelectedCardInfo;
+import io.socket.client.Socket;
 
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
@@ -40,6 +41,7 @@ import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
 import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.GameEventType;
+import com.example.countingdowngame.onlinePlay.ServerFind;
 import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.wildCards.WildCardProperties;
@@ -136,6 +138,8 @@ public class MainActivityGameOnline extends SharedMainActivity {
         setupButtons();
         initializeCatastrophe();
         startGame();
+
+        Log.d(TAG, "onCreate: this is the online version");
     }
 
     private void initializeViews() {
@@ -179,6 +183,8 @@ public class MainActivityGameOnline extends SharedMainActivity {
         }
 
         int startingNumber = extras.getInt("startingNumber");
+
+        updateOnlineMainNumberTextView(startingNumber);
 
         List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
         if (!playerList.isEmpty()) {
@@ -310,7 +316,10 @@ public class MainActivityGameOnline extends SharedMainActivity {
                 onEnd.run();
             }, 3300);
         } else {
+            updateOnlineMainNumberTextView(currentNumber);
+            
             generatedNumberTextView.setText(String.valueOf(currentNumber));
+
             Game.getInstance().nextPlayer();
         }
     }
@@ -321,6 +330,12 @@ public class MainActivityGameOnline extends SharedMainActivity {
             updateDrinkNumberCounter(1, false);
             turnCounter = 0;
         }
+    }
+
+    private void updateOnlineMainNumberTextView(int currentNumber) {
+        Log.d("updateOnlineMainNumberTextView", "Current number: " + currentNumber);
+        Socket mSocket = ServerFind.getSocket();
+        mSocket.emit("updateMainNumberCounterFromAndroid", currentNumber);
     }
 
     //-----------------------------------------------------Catastrophes---------------------------------------------------//
