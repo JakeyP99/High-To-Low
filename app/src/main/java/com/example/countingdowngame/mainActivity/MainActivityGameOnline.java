@@ -74,7 +74,6 @@ public class MainActivityGameOnline extends SharedMainActivity {
     //-----------------------------------------------------Public ---------------------------------------------------//
     public static int drinkNumberCounterInt = 0;
     public static int catastropheLimit;
-    private static TextView numberCounterText;
     //-----------------------------------------------------Maps and Sets---------------------------------------------------//
     private final List<WildCardProperties> usedCards = new ArrayList<>();  // Class-level variable to track used cards
     public WildCardProperties selectedWildCard;
@@ -102,8 +101,6 @@ public class MainActivityGameOnline extends SharedMainActivity {
 
     static void updateNumber(int updatedNumber) {
         Game.getInstance().setCurrentNumber(updatedNumber);
-        numberCounterText.setText(String.valueOf(updatedNumber));
-        SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(updatedNumber));
     }
 
     //-----------------------------------------------------Lifecycle Methods---------------------------------------------------//
@@ -135,7 +132,7 @@ public class MainActivityGameOnline extends SharedMainActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a5_game_start);
+        setContentView(R.layout.a5_game_start_online);
         initializeViews();
         setupAudioManagerForMuteButtons(muteGif, soundGif);
         setupButtons();
@@ -148,7 +145,6 @@ public class MainActivityGameOnline extends SharedMainActivity {
         soundGif = findViewById(R.id.soundGif);
         infoGif = findViewById(R.id.informationGif);
         playerImage = findViewById(R.id.playerImage);
-        numberCounterText = findViewById(R.id.textView_NumberText);
         drinkNumberTextView = findViewById(R.id.textView_numberCounter);
         nextPlayerText = findViewById(R.id.textView_Number_Turn);
         btnWild = findViewById(R.id.btnWild);
@@ -301,7 +297,6 @@ public class MainActivityGameOnline extends SharedMainActivity {
         btnWild.setVisibility(View.INVISIBLE);
         btnGenerate.setVisibility(View.INVISIBLE);
         nextPlayerText.setVisibility(View.INVISIBLE);
-        numberCounterText.setVisibility(View.INVISIBLE);
     }
 
 
@@ -321,7 +316,6 @@ public class MainActivityGameOnline extends SharedMainActivity {
         updateAbilitiesAfterThreeTurns(currentPlayer);
         updateClassAbilityButton(currentPlayer);
         updatePlayerInfo(currentPlayer);
-        updateNumberText();
         updateTurnCounter();
         logPlayerInformation(currentPlayer);
         updateWildCardVisibilityIfNeeded(currentPlayer);
@@ -330,12 +324,9 @@ public class MainActivityGameOnline extends SharedMainActivity {
 
     //-----------------------------------------------------Update Player's Info---------------------------------------------------//
 
-    public void renderCurrentNumber(int currentNumber, final Runnable onEnd, TextView generatedNumberTextView) {
+    public void renderCurrentNumber(int currentNumber, final Runnable onEnd) {
         if (currentNumber == 0) {
             disableButtons();
-            generatedNumberTextView.setText(String.valueOf(currentNumber));
-            animateTextView(generatedNumberTextView);
-
             Handler handler = new Handler();
             handler.postDelayed(() -> {
                 btnUtils.playSoundEffects();
@@ -344,9 +335,6 @@ public class MainActivityGameOnline extends SharedMainActivity {
             }, 3300);
         } else {
             updateOnlineMainNumberTextView(currentNumber);
-            
-            generatedNumberTextView.setText(String.valueOf(currentNumber));
-
             Game.getInstance().nextPlayer();
         }
     }
@@ -530,12 +518,6 @@ public class MainActivityGameOnline extends SharedMainActivity {
 
     //-----------------------------------------------------Shuffler---------------------------------------------------//
 
-    private void updateNumberText() {
-        int currentNumber = Game.getInstance().getCurrentNumber();
-        numberCounterText.setText(String.valueOf(currentNumber));
-        SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(currentNumber));
-        SharedMainActivity.setNameSizeBasedOnInt(nextPlayerText, nextPlayerText.getText().toString());
-    }
 
     private void startNumberShuffleAnimation() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
@@ -969,9 +951,6 @@ public class MainActivityGameOnline extends SharedMainActivity {
                     Player currentPlayer = Game.getInstance().getCurrentPlayer();
                     Game.getInstance().activateRepeatingTurn(currentPlayer, 1);
                     Game.getInstance().setCurrentNumber(newNumber);
-                    SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(newNumber));
-                    numberCounterText.setText(String.valueOf(newNumber));
-                    renderCurrentNumber(newNumber, this::gotoGameEnd, numberCounterText);
                     currentPlayer.setUsedClassAbility(true);
                     updateNumber(newNumber);
                     AudioManager.getInstance().playSoundEffects(this, SCIENTIST);
@@ -1265,7 +1244,6 @@ public class MainActivityGameOnline extends SharedMainActivity {
             btnWild.setVisibility(View.INVISIBLE);
             btnGenerate.setVisibility(View.INVISIBLE);
             nextPlayerText.setVisibility(View.INVISIBLE);
-            numberCounterText.setVisibility(View.INVISIBLE);
             btnWildContinue.setVisibility(View.INVISIBLE);
             currentPlayer.setUsedClassAbility(true);
             currentPlayer.setJustUsedClassAbility(false);
@@ -1274,7 +1252,6 @@ public class MainActivityGameOnline extends SharedMainActivity {
 
             btnGenerate.setVisibility(View.VISIBLE);
             drinkNumberTextView.setVisibility(View.VISIBLE);
-            numberCounterText.setVisibility(View.VISIBLE);
             nextPlayerText.setVisibility(View.VISIBLE);
 
             wildText.setVisibility(View.INVISIBLE);
@@ -1313,7 +1290,6 @@ public class MainActivityGameOnline extends SharedMainActivity {
         btnWild.setVisibility(View.INVISIBLE);
         btnGenerate.setVisibility(View.INVISIBLE);
         nextPlayerText.setVisibility(View.INVISIBLE);
-        numberCounterText.setVisibility(View.INVISIBLE);
         wildText.setText(string);
     }
 
@@ -1391,7 +1367,6 @@ public class MainActivityGameOnline extends SharedMainActivity {
         @Override
         public void run() {
             int randomDigit = random.nextInt(originalNumber + 1);
-            numberCounterText.setText(String.valueOf(randomDigit));
 
             shuffleTime += shuffleInterval;
 
@@ -1408,7 +1383,7 @@ public class MainActivityGameOnline extends SharedMainActivity {
                     handleSurvivorPassive(currentPlayer);
                 }
 
-                renderCurrentNumber(currentNumber, () -> gotoGameEnd(), numberCounterText);
+                renderCurrentNumber(currentNumber, () -> gotoGameEnd());
 
                 if (currentNumber != 0) {
                     enableButtons();
