@@ -10,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Base64;
@@ -55,9 +56,7 @@ import io.socket.client.Socket;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 public class PlayerChoice extends playerChoiceComplimentary implements PlayerListAdapter.ClickListener {
-
 
     private static final int REQUEST_IMAGE_PICK = 1;
     private static final int REQUEST_DRAW = 2;
@@ -108,7 +107,6 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         loadPlayerData();
     }
 
-
     public void onPlayerClick(int position) {
         Player player = playerList.get(position);
         if (!player.isSelected()) {
@@ -116,7 +114,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
             player.setSelectionOrder(++selectedPlayerCount); // Track the order of selection
             playerListAdapter.notifyItemChanged(position);
             updatePlayerCounter();
-            if (!Game.getInstance().isPlayCards()){
+            if (!Game.getInstance().isPlayCards()) {
                 chooseClass(position);
             }
         }
@@ -143,7 +141,8 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
             String name = nameEditText.getText().toString();
             if (name.length() < 20) {
                 if (name.isEmpty()) {
-                    StyleableToast.makeText(PlayerChoice.this, "Sorry, you need to enter a name.", R.style.newToast).show();
+                    StyleableToast.makeText(PlayerChoice.this, "Sorry, you need to enter a name.", R.style.newToast)
+                            .show();
                 } else {
                     player.setName(name);
                     playerListAdapter.notifyItemChanged(playerList.indexOf(player));
@@ -151,7 +150,8 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
                     dialog.dismiss(); // Dismiss the dialog after changing the name
                 }
             } else {
-                StyleableToast.makeText(PlayerChoice.this, "Name must be less than 20 characters.", R.style.newToast).show();
+                StyleableToast.makeText(PlayerChoice.this, "Name must be less than 20 characters.", R.style.newToast)
+                        .show();
             }
         });
 
@@ -169,24 +169,23 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         playerRecyclerView = findViewById(R.id.playerRecyclerView);
         playerCountTextView = findViewById(R.id.text_view_counter);
 
-
         totalPlayerCount = Game.getInstance().getPlayerAmount();
         playerList = new ArrayList<>();
         playerListAdapter = new PlayerListAdapter(this, playerList, this);
         proceedButton = findViewById(R.id.button_done);
         selectedPlayerCount = 0;
 
-
     }
 
-    //-----------------------------------------------------Buttons---------------------------------------------------//
+    // -----------------------------------------------------Buttons---------------------------------------------------//
 
     private void setupDrawButton() {
         Button drawButton = findViewById(R.id.createPlayerBtn);
         btnUtils.setButton(drawButton, this::chooseCharacterCreation);
     }
 
-    //-----------------------------------------------------Choose the player class---------------------------------------------------//
+    // -----------------------------------------------------Choose the player
+    // class---------------------------------------------------//
 
     private void chooseClass(int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
@@ -270,11 +269,13 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
 
             if (selectedCharacterClass != null) {
                 selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
-                String message = selectedCharacterClass.getClassName().equals("No Class") ? selectedPlayer.getName() + " chose no class!" : selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
+                String message = selectedCharacterClass.getClassName().equals("No Class")
+                        ? selectedPlayer.getName() + " chose no class!"
+                        : selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
                 StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
-                Log.d("Confirm Button", "Confirm Button Clicked - Page Number: " + selectedPageNumber + ", Character ID: " + selectedCharacterClass.getId());
- 
-                
+                Log.d("Confirm Button", "Confirm Button Clicked - Page Number: " + selectedPageNumber
+                        + ", Character ID: " + selectedCharacterClass.getId());
+
                 dialog.dismiss();
             } else {
                 selectedPlayer.setClassChoice(null);
@@ -288,7 +289,6 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         }
     }
 
-
     private CharacterClassStore findCharacterClassById(int id) {
         List<CharacterClassStore> characterClasses = generateCharacterClasses();
         for (CharacterClassStore characterClass : characterClasses) {
@@ -299,8 +299,8 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         return null; // If ID is not found, return null
     }
 
-
-    //-----------------------------------------------------Choose the player creation---------------------------------------------------//
+    // -----------------------------------------------------Choose the player
+    // creation---------------------------------------------------//
 
     private void chooseCharacterCreation() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
@@ -314,8 +314,10 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         AlertDialog dialog = builder.setView(dialogView).create(); // Create the AlertDialog
 
         capturePhotoButton.setOnClickListener(v -> {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.CAMERA },
+                        CAMERA_PERMISSION_REQUEST_CODE);
             } else {
                 captureImage();
             }
@@ -333,9 +335,9 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         dialog.show();
     }
 
-
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -348,6 +350,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         Intent intent = new Intent(this, DrawingPlayerModels.class);
         startActivityForResult(intent, REQUEST_DRAW);
     }
+
     private void setupProceedButton() {
         btnUtils.setButton(proceedButton, () -> {
             Log.d("PlayerChoice", "selectedPlayerCount: " + selectedPlayerCount);
@@ -355,36 +358,44 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
 
             if (!GameModeChoice.isOnlineGame() && selectedPlayerCount == totalPlayerCount) {
                 handleSelectedPlayers();
-            } else if (GameModeChoice.isOnlineGame() && selectedPlayerCount == 1) {
-                // Get the selected player
-                Player selectedPlayer = null;
+            } else if (GameModeChoice.isOnlineGame()) {
+                // Collect selected players
+                List<Player> selectedPlayers = new ArrayList<>();
                 for (Player player : playerList) {
                     if (player.isSelected()) {
-                        selectedPlayer = player;
-                        break;
+                        selectedPlayers.add(player);
                     }
                 }
 
-                if (selectedPlayer != null) {
-                    // Send player information to server
-                    Socket mSocket = ServerFind.getSocket();
-                    if (mSocket != null && mSocket.connected()) {
-                        Log.d("PlayerChoice", "Emitting join with player: " + selectedPlayer.getName() + ", class: " + selectedPlayer.getClassChoice());
-                        JSONObject playerData = new JSONObject();
-                        try {
-                            playerData.put("name", selectedPlayer.getName());
-                            playerData.put("classChoice", selectedPlayer.getClassChoice());
-                            mSocket.emit("join", playerData);
-                            handleSelectedPlayers();
-                        } catch (JSONException e) {
-                            Log.e("PlayerChoice", "Error creating JSON object", e);
-                            StyleableToast.makeText(this, "Error connecting to server. Please try again.", R.style.newToast).show();
-                        }
-                    } else {
-                        Log.e("PlayerChoice", "Socket is null or not connected");
-                        StyleableToast.makeText(this, "Not connected to server. Please try again.", R.style.newToast).show();
+                Socket mSocket = ServerFind.getSocket();
+                if (mSocket != null && mSocket.connected()) {
+                    for (int i = 0; i < selectedPlayers.size(); i++) {
+                        final Player p = selectedPlayers.get(i);
+                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                            Log.d("PlayerChoice",
+                                    "Emitting join with player: " + p.getName() + ", class: " + p.getClassChoice());
+                            JSONObject playerData = new JSONObject();
+                            try {
+                                playerData.put("id", UUID.randomUUID().toString()); // or generate some unique player ID
+                                playerData.put("name", p.getName());
+                                playerData.put("classChoice", p.getClassChoice());
+                                mSocket.emit("join", playerData);
+                                // Optional: move this outside the loop if you want to handle all players
+                                // together
+                                handleSelectedPlayers();
+                            } catch (JSONException e) {
+                                Log.e("PlayerChoice", "Error creating JSON object", e);
+                                StyleableToast.makeText(this, "Error connecting to server. Please try again.",
+                                        R.style.newToast).show();
+                            }
+                        }, i * 1000); // Delay each emit
                     }
+                } else {
+                    Log.e("PlayerChoice", "Socket is null or not connected");
+                    StyleableToast.makeText(this, "Not connected to server. Please try again.", R.style.newToast)
+                            .show();
                 }
+
             } else {
                 StyleableToast.makeText(this, "Please select all players.", R.style.newToast).show();
             }
@@ -421,7 +432,8 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         }
     }
 
-    //-----------------------------------------------------Image and player creation functionality---------------------------------------------------//
+    // -----------------------------------------------------Image and player
+    // creation functionality---------------------------------------------------//
     private void captureImage() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, REQUEST_IMAGE_PICK);
@@ -484,14 +496,16 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
             String name = nameEditText.getText().toString();
             if (name.length() < 20) {
                 if (name.isEmpty()) {
-                    StyleableToast.makeText(PlayerChoice.this, "Sorry, you need to enter a name.", R.style.newToast).show();
+                    StyleableToast.makeText(PlayerChoice.this, "Sorry, you need to enter a name.", R.style.newToast)
+                            .show();
                     showNameInputDialog(bitmap);
                 } else {
                     dialog.dismiss(); // Dismiss the dialog when okayButton is clicked
                     createNewCharacter(bitmap, name);
                 }
             } else {
-                StyleableToast.makeText(PlayerChoice.this, "Name must be less than 20 characters.", R.style.newToast).show();
+                StyleableToast.makeText(PlayerChoice.this, "Name must be less than 20 characters.", R.style.newToast)
+                        .show();
                 showNameInputDialog(bitmap);
             }
         });
@@ -521,7 +535,6 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         savePlayerData();
     }
 
-
     public void deletePlayer(int position) {
         playerList.remove(position);
         playerListAdapter.notifyItemRemoved(position);
@@ -529,7 +542,8 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         updatePlayerCounter();
     }
 
-    //-----------------------------------------------------Save and load functionality---------------------------------------------------//
+    // -----------------------------------------------------Save and load
+    // functionality---------------------------------------------------//
 
     // Save player data to SharedPreferences
     private void savePlayerData() {
@@ -553,7 +567,8 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         }
     }
 
-    //-----------------------------------------------------Player Counter Functionality---------------------------------------------------//
+    // -----------------------------------------------------Player Counter
+    // Functionality---------------------------------------------------//
     public void updatePlayerCounter() {
         selectedPlayerCount = 0;
 
@@ -593,8 +608,8 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         playerCountTextView.setText(counterText);
     }
 
-
-    //-----------------------------------------------------UI Decoration---------------------------------------------------//
+    // -----------------------------------------------------UI
+    // Decoration---------------------------------------------------//
     private void setupPlayerRecyclerView() {
         playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
         playerListAdapter = new PlayerListAdapter(this, playerList, this);
@@ -616,7 +631,8 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         }
 
         @Override
-        public void getItemOffsets(Rect outRect, @NonNull View view, RecyclerView parent, @NonNull RecyclerView.State state) {
+        public void getItemOffsets(Rect outRect, @NonNull View view, RecyclerView parent,
+                @NonNull RecyclerView.State state) {
             outRect.left = spacing;
             outRect.right = spacing;
             outRect.bottom = spacing;
@@ -630,6 +646,5 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
             }
         }
     }
-
 
 }

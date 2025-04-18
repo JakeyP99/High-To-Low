@@ -192,11 +192,7 @@ public class MainActivityGameOnline extends SharedMainActivity {
         Log.d("updateOnlinePlayerInformationTextView", "Current currentPlayer: " + currentPlayer);
         Log.d("updateOnlinePlayerInformationTextView", "Current currentPlayerClass: " + currentPlayerClass);
 
-        mSocket.emit("updatePlayerNameFromAndroid", currentPlayer);
-        mSocket.emit("updatePlayerClassFromAndroid", currentPlayerClass);
-
-        mSocket.emit("updatePlayerListFromAndroid", currentPlayer);
-
+        mSocket.emit("updatePlayerDetailsFromAndroid", currentPlayer, currentPlayerClass);
     }
 
     
