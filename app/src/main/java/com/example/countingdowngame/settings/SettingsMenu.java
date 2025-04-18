@@ -390,7 +390,7 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
             int startingNumber = getIntent().getIntExtra("startingNumber", 0);
             mSocket.emit("totalDrinkNumber", totalDrinkNumber);
             mSocket.emit("startingNumber", startingNumber);
-            mSocket.emit("redirectToGame");
+
 
             savePreferences();
             GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);

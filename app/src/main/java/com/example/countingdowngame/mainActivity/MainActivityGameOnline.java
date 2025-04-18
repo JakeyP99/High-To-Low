@@ -51,6 +51,8 @@ import com.example.countingdowngame.wildCards.wildCardTypes.TaskWildCardsAdapter
 import com.example.countingdowngame.wildCards.wildCardTypes.TruthWildCardsAdapter;
 import com.example.countingdowngame.wildCards.wildCardTypes.WildCardData;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -96,6 +98,7 @@ public class MainActivityGameOnline extends SharedMainActivity {
     private Button[] answerButtons; // Array to hold the answer buttons
     private Handler shuffleHandler;
     private MainActivityCatastrophes catastrophesManager;
+    Socket mSocket = ServerFind.getSocket();
 
     static void updateNumber(int updatedNumber) {
         Game.getInstance().setCurrentNumber(updatedNumber);
@@ -138,8 +141,6 @@ public class MainActivityGameOnline extends SharedMainActivity {
         setupButtons();
         initializeCatastrophe();
         startGame();
-
-        Log.d(TAG, "onCreate: this is the online version");
     }
 
     private void initializeViews() {
@@ -191,11 +192,14 @@ public class MainActivityGameOnline extends SharedMainActivity {
         Log.d("updateOnlinePlayerInformationTextView", "Current currentPlayer: " + currentPlayer);
         Log.d("updateOnlinePlayerInformationTextView", "Current currentPlayerClass: " + currentPlayerClass);
 
-        Socket mSocket = ServerFind.getSocket();
         mSocket.emit("updatePlayerNameFromAndroid", currentPlayer);
         mSocket.emit("updatePlayerClassFromAndroid", currentPlayerClass);
+
+        mSocket.emit("updatePlayerListFromAndroid", currentPlayer);
+
     }
 
+    
 
     //-----------------------------------------------------Start Game---------------------------------------------------//
 
@@ -214,7 +218,7 @@ public class MainActivityGameOnline extends SharedMainActivity {
         if (!playerList.isEmpty()) {
             Game.getInstance().setPlayers(this, playerList.size());
             Game.getInstance().setPlayerList(playerList);
-
+            
             for (Player player : playerList) {
                 player.resetWildCardAmount(this);
                 player.setGame(Game.getInstance());
@@ -230,6 +234,8 @@ public class MainActivityGameOnline extends SharedMainActivity {
         });
         renderPlayer();
         drinkNumberCounterInt = 1;
+        mSocket.emit("updateDrinkingCounternumberFromAndroid", drinkNumberCounterInt);
+        mSocket.emit("startGame");
         updateDrinkNumberCounterTextView();
     }
 
@@ -504,7 +510,7 @@ public class MainActivityGameOnline extends SharedMainActivity {
                 drinkNumberCounterInt = Math.max(drinkNumberCounterInt + drinkNumberCounterInput, 1);
             }
         }
-
+        mSocket.emit("updateDrinkingCounternumberFromAndroid", drinkNumberCounterInt);
         updateDrinkNumberCounterTextView();
     }
 
@@ -541,6 +547,8 @@ public class MainActivityGameOnline extends SharedMainActivity {
         final int shuffleDuration = 1500;
         int shuffleInterval = originalNumber >= 1000 ? 50 : 100;
         final Random random = new Random();
+
+        mSocket.emit("startShuffleFromAndroid"); // Emit the event
 
         shuffleHandler.postDelayed(new ShuffleRunnable(random, originalNumber, shuffleDuration, shuffleInterval, currentPlayer), shuffleInterval);
     }
@@ -1368,6 +1376,7 @@ public class MainActivityGameOnline extends SharedMainActivity {
     }
 
     private class ShuffleRunnable implements Runnable {
+
         private final Random random;
         private final int originalNumber;
         private final int shuffleDuration;
@@ -1396,6 +1405,9 @@ public class MainActivityGameOnline extends SharedMainActivity {
                 int currentNumber = Game.getInstance().nextNumber();
                 Log.d(TAG, "NextNumber = " + currentNumber);
 
+                mSocket.emit("stopShuffleFromAndroid", currentNumber); // Emit the event
+
+
                 if (SURVIVOR.equals(currentPlayer.getClassChoice()) && originalNumber == 1 && currentNumber == 1) {
                     handleSurvivorPassive(currentPlayer);
                 }
@@ -1409,5 +1421,7 @@ public class MainActivityGameOnline extends SharedMainActivity {
             }
         }
     }
+
+
 
 }
