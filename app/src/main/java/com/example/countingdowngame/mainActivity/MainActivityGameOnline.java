@@ -176,6 +176,30 @@ public class MainActivityGameOnline extends SharedMainActivity {
         };
     }
 
+
+    //-----------------------------------------------------Online Text View---------------------------------------------------//
+
+
+    private void updateOnlineMainNumberTextView(int currentNumber) {
+        Log.d("updateOnlineMainNumberTextView", "Current number: " + currentNumber);
+        Socket mSocket = ServerFind.getSocket();
+        mSocket.emit("updateMainNumberCounterFromAndroid", currentNumber);
+    }
+
+    private void updateOnlinePlayerInformationTextView(String currentPlayer, String currentPlayerClass) {
+
+        Log.d("updateOnlinePlayerInformationTextView", "Current currentPlayer: " + currentPlayer);
+        Log.d("updateOnlinePlayerInformationTextView", "Current currentPlayerClass: " + currentPlayerClass);
+
+        Socket mSocket = ServerFind.getSocket();
+        mSocket.emit("updatePlayerNameFromAndroid", currentPlayer);
+        mSocket.emit("updatePlayerClassFromAndroid", currentPlayerClass);
+    }
+
+
+    //-----------------------------------------------------Start Game---------------------------------------------------//
+
+
     private void startGame() {
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
@@ -291,6 +315,7 @@ public class MainActivityGameOnline extends SharedMainActivity {
 
     private void renderPlayer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        updateOnlinePlayerInformationTextView(currentPlayer.getName(), currentPlayer.getClassChoice());
         updateAbilitiesAfterThreeTurns(currentPlayer);
         updateClassAbilityButton(currentPlayer);
         updatePlayerInfo(currentPlayer);
@@ -332,11 +357,7 @@ public class MainActivityGameOnline extends SharedMainActivity {
         }
     }
 
-    private void updateOnlineMainNumberTextView(int currentNumber) {
-        Log.d("updateOnlineMainNumberTextView", "Current number: " + currentNumber);
-        Socket mSocket = ServerFind.getSocket();
-        mSocket.emit("updateMainNumberCounterFromAndroid", currentNumber);
-    }
+
 
     //-----------------------------------------------------Catastrophes---------------------------------------------------//
 
