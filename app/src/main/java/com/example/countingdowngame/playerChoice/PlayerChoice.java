@@ -351,56 +351,71 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         startActivityForResult(intent, REQUEST_DRAW);
     }
 
-    private void setupProceedButton() {
-        btnUtils.setButton(proceedButton, () -> {
-            Log.d("PlayerChoice", "selectedPlayerCount: " + selectedPlayerCount);
-            Log.d("PlayerChoice", "totalPlayerCount: " + totalPlayerCount);
+private void setupProceedButton() {
+    btnUtils.setButton(proceedButton, () -> {
+        Log.d("PlayerChoice", "selectedPlayerCount: " + selectedPlayerCount);
+        Log.d("PlayerChoice", "totalPlayerCount: " + totalPlayerCount);
 
-            if (!GameModeChoice.isOnlineGame() && selectedPlayerCount == totalPlayerCount) {
-                handleSelectedPlayers();
-            } else if (GameModeChoice.isOnlineGame()) {
-                // Collect selected players
-                List<Player> selectedPlayers = new ArrayList<>();
-                for (Player player : playerList) {
-                    if (player.isSelected()) {
-                        selectedPlayers.add(player);
-                    }
-                }
+        if (GameModeChoice.isOnlineGame()) {
+            handleOnlineMode();
+        } else if (selectedPlayerCount == totalPlayerCount) {
+            handleSelectedPlayers();
+        } else {
+            showToast("Please select all players.");
+        }
+    });
+}
 
-                Socket mSocket = ServerFind.getSocket();
-                if (mSocket != null && mSocket.connected()) {
-                    for (int i = 0; i < selectedPlayers.size(); i++) {
-                        final Player p = selectedPlayers.get(i);
-                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                            Log.d("PlayerChoice",
-                                    "Emitting join with player: " + p.getName() + ", class: " + p.getClassChoice());
-                            JSONObject playerData = new JSONObject();
-                            try {
-                                playerData.put("id", UUID.randomUUID().toString()); // or generate some unique player ID
-                                playerData.put("name", p.getName());
-                                playerData.put("classChoice", p.getClassChoice());
-                                mSocket.emit("join", playerData);
-                                // Optional: move this outside the loop if you want to handle all players
-                                // together
-                                handleSelectedPlayers();
-                            } catch (JSONException e) {
-                                Log.e("PlayerChoice", "Error creating JSON object", e);
-                                StyleableToast.makeText(this, "Error connecting to server. Please try again.",
-                                        R.style.newToast).show();
-                            }
-                        }, i * 1000); // Delay each emit
-                    }
-                } else {
-                    Log.e("PlayerChoice", "Socket is null or not connected");
-                    StyleableToast.makeText(this, "Not connected to server. Please try again.", R.style.newToast)
-                            .show();
-                }
+private void handleOnlineMode() {
+    List<Player> selectedPlayers = getSelectedPlayers();
 
-            } else {
-                StyleableToast.makeText(this, "Please select all players.", R.style.newToast).show();
-            }
-        });
+    if (selectedPlayers.isEmpty()) {
+        showToast("No players selected.");
+        return;
     }
+
+    Socket mSocket = ServerFind.getSocket();
+    if (mSocket != null && mSocket.connected()) {
+        emitPlayersToServer(selectedPlayers, mSocket);
+        handleSelectedPlayers(); 
+    } else {
+        Log.e("PlayerChoice", "Socket is null or not connected");
+        showToast("Not connected to server. Please try again.");
+    }
+}
+
+private List<Player> getSelectedPlayers() {
+    List<Player> selectedPlayers = new ArrayList<>();
+    for (Player player : playerList) {
+        if (player.isSelected()) {
+            selectedPlayers.add(player);
+        }
+    }
+    return selectedPlayers;
+}
+
+private void emitPlayersToServer(List<Player> players, Socket mSocket) {
+    for (Player p : players) {
+        Log.d("PlayerChoice", "Emitting join with player: " + p.getName() + ", class: " + p.getClassChoice());
+
+        try {
+            JSONObject playerData = new JSONObject();
+            playerData.put("id", UUID.randomUUID().toString());
+            playerData.put("name", p.getName());
+            playerData.put("classChoice", p.getClassChoice());
+
+            mSocket.emit("join", playerData);
+        } catch (JSONException e) {
+            Log.e("PlayerChoice", "Error creating JSON object", e);
+            showToast("Error connecting to server. Please try again.");
+        }
+    }
+}
+
+private void showToast(String message) {
+    StyleableToast.makeText(this, message, R.style.newToast).show();
+}
+    
 
     private void handleSelectedPlayers() {
         List<Player> selectedPlayers = new ArrayList<>();

@@ -226,7 +226,6 @@ public class MainActivityGameOnline extends SharedMainActivity {
         });
         renderPlayer();
         drinkNumberCounterInt = 1;
-        mSocket.emit("updateDrinkingCounternumberFromAndroid", drinkNumberCounterInt);
         mSocket.emit("startGame");
         updateDrinkNumberCounterTextView();
     }
@@ -494,7 +493,6 @@ public class MainActivityGameOnline extends SharedMainActivity {
                 drinkNumberCounterInt = Math.max(drinkNumberCounterInt + drinkNumberCounterInput, 1);
             }
         }
-        mSocket.emit("updateDrinkingCounternumberFromAndroid", drinkNumberCounterInt);
         updateDrinkNumberCounterTextView();
     }
 
