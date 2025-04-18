@@ -466,12 +466,12 @@ public class MainActivityGameOnline extends SharedMainActivity {
             playerImage.setImageBitmap(decodedBitmap);
         }
     }
-
-    //-----------------------------------------------------Update Drink Number Counter---------------------------------------------------//
-
     private void updateWildCardVisibility(Player currentPlayer) {
         btnWild.setVisibility(currentPlayer.getWildCardAmount() > 0 ? View.VISIBLE : View.INVISIBLE);
     }
+    //-----------------------------------------------------Update Drink Number Counter---------------------------------------------------//
+
+
 
     private void updateDrinkNumberCounter(int drinkNumberCounterInput, boolean activatedByAbility) {
         int maxTotalDrinkAmount = GeneralSettingsLocalStore.fromContext(this).totalDrinkAmount();

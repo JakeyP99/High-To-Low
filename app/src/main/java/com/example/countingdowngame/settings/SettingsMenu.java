@@ -388,7 +388,7 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
 
             // Emit drink and starting number immediately
             int startingNumber = getIntent().getIntExtra("startingNumber", 0);
-            mSocket.emit("totalDrinkNumber", totalDrinkNumber);
+            mSocket.emit("updateTotalDrinkNumberFromAndroid", totalDrinkNumber);
             mSocket.emit("startingNumber", startingNumber);
 
 
@@ -400,7 +400,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
             Intent intent = new Intent(this, MainActivityGameOnline.class);
 
             intent.putExtra("startingNumber", startingNumber);
-            intent.putExtra("totalDrinkNumber", totalDrinkNumber);
 
             startActivity(intent);
 
