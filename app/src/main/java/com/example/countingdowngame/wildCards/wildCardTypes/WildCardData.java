@@ -846,7 +846,7 @@ public class WildCardData {
             new WildCardProperties("Truth! Give out a drink if you have ever had sex/masturbated at work.", true),
             new WildCardProperties("Truth! Give out a drink if you have ever had sex during a festival.", true),
             new WildCardProperties("Truth! Give out a drink if you have ever had sex/masturbated at school.", true),
-            new WildCardProperties("Truth! Give out a drink if you have ever had a provocative photoshoot.", true),
+            new WildCardProperties("Truth! Give out a drink if you have ever had a sexual photoshoot.", true),
             new WildCardProperties("Truth! Give out a drink if you have ever had sex in an elevator.", true),
 
     };
