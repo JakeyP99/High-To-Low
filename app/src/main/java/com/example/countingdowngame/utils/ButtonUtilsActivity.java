@@ -12,8 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.countingdowngame.audio.AudioManager;
 import com.example.countingdowngame.endGame.EndRouletteGame;
-import com.example.countingdowngame.home.GameModeChoice;
-import com.example.countingdowngame.onlinePlay.ServerFind;
 import com.example.countingdowngame.instructions.InstructionsToPlay;
 import com.example.countingdowngame.endGame.EndActivityGame;
 import com.example.countingdowngame.home.HomeScreen;
@@ -72,15 +70,6 @@ public abstract class ButtonUtilsActivity extends AppCompatActivity {
     protected void gotoPlayerNumberChoice() {
         startActivity(getIntentForClass(PlayerNumberChoice.class));
     }
-
-    protected void goToGameModeChoice() {
-        startActivity(getIntentForClass(GameModeChoice.class));
-    }
-
-    protected void goToServerFindClass() {
-        startActivity(getIntentForClass(ServerFind.class));
-    }
-
 
     protected void gotoInstructions() {
         startActivity(getIntentForClass(InstructionsToPlay.class));

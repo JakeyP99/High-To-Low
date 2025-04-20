@@ -16,7 +16,6 @@ import com.example.countingdowngame.playerChoice.PlayerChoice;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.audio.AudioManager;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
-import com.example.countingdowngame.onlinePlay.ServerFind;
 
 import io.github.muddz.styleabletoast.StyleableToast;
 import io.socket.client.Socket;
@@ -107,15 +106,6 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
 
         originalPlayerField.setFocusable(false);
         Game.getInstance().setPlayers(this, inputNumber);
-        
-        // Emit player count to server
-        Socket mSocket = ServerFind.getSocket();
-        if (mSocket != null && mSocket.connected()) {
-            Log.d("PlayerNumberChoice", "Emitting setPlayerCount with value: " + inputNumber);
-            mSocket.emit("setPlayerCount", inputNumber);
-        } else {
-            Log.e("PlayerNumberChoice", "Socket is null or not connected");
-        }
     }
 
     private void resetOriginalPlayerField() {
