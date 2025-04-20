@@ -57,7 +57,7 @@ public class HomeScreen extends ButtonUtilsActivity {
         // Set onClickListener for buttons
         btnUtils.setButton(btnQuickPlay, () -> {
             Game.getInstance().setPlayCards(false);
-            gotoPlayerNumberChoice();
+            goToGameModeChoice();
         });
 
         btnUtils.setButton(btnPlayCards, () -> {
