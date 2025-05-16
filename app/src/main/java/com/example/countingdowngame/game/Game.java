@@ -35,7 +35,6 @@ public class Game {
     private Boolean quizWasTriggered = false;
     private Boolean gameStarted = false;
     private boolean playCards;
-    private List<Integer> bulletsInChamberList;
 
     //-----------------------------------------------------Game Modes---------------------------------------------------//
 
@@ -103,7 +102,6 @@ public class Game {
     public void activateRepeatingTurnForAllPlayers(int numberOfTurns) {
         for (Player player : players) {
             repeatingTurnsMap.put(player, numberOfTurns);
-            player.setInRepeatingTurn();
             Log.d(TAG, "activateRepeatingTurnForAllPlayers: Repeating turn was activated for Player " +
                     player.getName() + ". Turns to go: " + numberOfTurns);
         }
@@ -312,13 +310,6 @@ public class Game {
     public void endGame(Context context) {
         gameStarted = false;
         resetPlayers(context);
-    }
-
-    public List<Integer> getChamberList() {
-        if (bulletsInChamberList == null) {
-            bulletsInChamberList = new ArrayList<>();
-        }
-        return new ArrayList<>(bulletsInChamberList); // Return a copy for encapsulation
     }
 
 

@@ -4,10 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:fitsSystemWindows="false">
+    android:fitsSystemWindows="true">
 
 
-    <pl.droidsonroids.gif.GifImageView
+
+<pl.droidsonroids.gif.GifImageView
         android:id="@+id/soundGif"
         android:layout_width="40dp"
         android:layout_height="40dp"

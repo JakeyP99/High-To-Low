@@ -1364,7 +1364,7 @@ public class MainActivityGame extends SharedMainActivity {
                     handleSurvivorPassive(currentPlayer);
                 }
 
-                renderCurrentNumber(currentNumber, () -> gotoGameEnd(), numberCounterText);
+                    renderCurrentNumber(currentNumber, MainActivityGame.this::gotoGameEnd, numberCounterText);
 
                 if (currentNumber != 0) {
                     enableButtons();

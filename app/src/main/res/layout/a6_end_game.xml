@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:background="@android:color/white"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-    <Button
+
+<Button
         android:id="@+id/btnplayAgain"
         android:layout_width="139dp"
         android:layout_height="77dp"
