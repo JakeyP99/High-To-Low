@@ -93,9 +93,8 @@ public class MainActivityCatastrophes {
     }
 
     public static void setCatastropheLimit() {
-        // Generate a random number between 4 and 10 for the catastrophe limit
         Random random = new Random();
-        catastropheLimit = random.nextInt(6) + 5; // Generates a number between 6 and 11 (inclusive)
+        catastropheLimit = random.nextInt(4) + 12;
         Log.d(TAG, "catastropheLimit: " + catastropheLimit);
     }
 

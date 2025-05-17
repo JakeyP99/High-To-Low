@@ -624,7 +624,7 @@ public class MainActivityGame extends SharedMainActivity {
             displayToastMessage("Well since you're by yourself, nothing happens :D");
         } else {
             randomPlayer.removeWildCard(randomPlayer, 2);
-            showGameDialog(GOBLIN + "'s Active: \n\n" + randomPlayer.getName() + " lost a wildcard!");
+            showGameDialog(GOBLIN + "'s Active: \n\n" + randomPlayer.getName() + " lost two wildcards!");
         }
         currentPlayer.setUsedClassAbility(true);
         btnClassAbility.setVisibility(View.INVISIBLE);
