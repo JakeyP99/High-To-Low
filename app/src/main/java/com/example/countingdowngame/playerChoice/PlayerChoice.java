@@ -438,6 +438,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
             if (name.length() < 20) {
                 if (name.isEmpty()) {
                     StyleableToast.makeText(PlayerChoice.this, "Sorry, you need to enter a name.", R.style.newToast).show();
+                    dialog.dismiss(); // Dismiss the dialog when okayButton is clicked
                     showNameInputDialog(bitmap);
                 } else {
                     dialog.dismiss(); // Dismiss the dialog when okayButton is clicked
@@ -445,6 +446,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
                 }
             } else {
                 StyleableToast.makeText(PlayerChoice.this, "Name must be less than 20 characters.", R.style.newToast).show();
+                dialog.dismiss(); // Dismiss the dialog when okayButton is clicked
                 showNameInputDialog(bitmap);
             }
         });
