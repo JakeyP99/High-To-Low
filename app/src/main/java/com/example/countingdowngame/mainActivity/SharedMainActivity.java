@@ -35,13 +35,13 @@ public class SharedMainActivity extends ButtonUtilsActivity {
     public static void setNameSizeBasedOnInt(TextView textView, String text) {
         int textSize;
         if (text.length() > 24) {
-            textSize = 15;
+            textSize = 22;
         } else if (text.length() > 18) {
-            textSize = 20;
+            textSize = 25;
         } else if (text.length() > 14) {
-            textSize = 23;
+            textSize = 30;
         } else if (text.length() > 8) {
-            textSize = 28;
+            textSize = 35;
         } else {
             textSize = 38;
         }

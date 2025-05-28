@@ -722,10 +722,6 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void characterPassiveClassAffects() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        if (currentPlayer == null) {
-            return;
-        }
-
         // Check the class choice of the current player
         String classChoice = currentPlayer.getClassChoice();
 

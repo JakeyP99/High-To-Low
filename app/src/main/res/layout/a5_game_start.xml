@@ -303,11 +303,11 @@
         android:text="Jake"
         android:textColor="@color/bluedark"
         android:textSize="35sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView_WildText"
+        app:layout_constraintBottom_toTopOf="@+id/textView_numberCounter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playerImage"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.82" />
 
     <TextView
         android:id="@+id/textView_numberCounter"
