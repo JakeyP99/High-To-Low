@@ -431,12 +431,14 @@ public class MainActivityGame extends SharedMainActivity {
         String playerImageString = currentPlayer.getPhoto();
         Game.getInstance().addUpdatedName(playerName);
 
-        if (currentPlayer.getPlayerTurnCount() > 1) {
-            nextPlayerText.setText(playerName + " has " + currentPlayer.getPlayerTurnCount() + " Turns");
-        } else {
-            nextPlayerText.setText(playerName + " has " + currentPlayer.getPlayerTurnCount() + " Turn");
-        }
-        btnWild.setText((currentPlayer.getWildCardAmount() + "\n" + "Wild Cards"));
+        int turnCount = currentPlayer.getPlayerTurnCount();
+        int wildCardCount = currentPlayer.getWildCardAmount();
+
+        String turnText = turnCount == 1 ? "Turn" : "Turns";
+        String wildCardText = wildCardCount == 1 ? "Wild Card" : "Wild Cards";
+
+        nextPlayerText.setText(playerName + " has " + turnCount + " " + turnText);
+        btnWild.setText(wildCardCount + "\n" + wildCardText);
 
         if (playerImageString != null) {
             byte[] decodedString = Base64.decode(playerImageString, Base64.DEFAULT);
@@ -928,11 +930,9 @@ public class MainActivityGame extends SharedMainActivity {
                     Game game = Game.getInstance();
                     Player currentPlayer = game.getCurrentPlayer();
 
-                    if (game.getRepeatingTurnsForPlayer(currentPlayer) == 0)
-                    {
+                    if (game.getRepeatingTurnsForPlayer(currentPlayer) == 0) {
                         game.activateRepeatingTurn(currentPlayer, 1);
-                    }
-                    else {
+                    } else {
                         game.updateRepeatingTurns(currentPlayer, 1);
                     }
 
@@ -1214,7 +1214,11 @@ public class MainActivityGame extends SharedMainActivity {
     private void handleAnswerOutcome(boolean isCorrect) {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         if (isCorrect) {
-            quizAnswerView(currentPlayer.getName() + " that's right! The answer was " + selectedWildCard.getAnswer() + "\n\n P.S. You get to give out a drink");
+            if (QUIZ_MAGICIAN.equals(currentPlayer.getClassChoice())) {
+                quizAnswerView(currentPlayer.getName() + " that's right! The answer was " + selectedWildCard.getAnswer() + "\n\n P.S. You get to give out a drink to everyone.");
+            } else {
+                quizAnswerView(currentPlayer.getName() + " that's right! The answer was " + selectedWildCard.getAnswer() + "\n\n P.S. You get to give out a drink.");
+            }
         } else {
             quizAnswerView(currentPlayer.getName() + " big ooooff! The answer actually was " + selectedWildCard.getAnswer() + "\n\n Take a drink and repeat your turn.");
         }

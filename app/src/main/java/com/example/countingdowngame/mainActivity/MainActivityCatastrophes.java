@@ -37,14 +37,14 @@ public class MainActivityCatastrophes {
 
     public MainActivityCatastrophes() {
         this.allCatastrophes = new Catastrophe[]{
-//                new Catastrophe("Two drinks have been added to the counter!", 1),
-//                new Catastrophe("Two drinks have been removed from the counter!", 2),
-//                new Catastrophe("The current number has been increased!", 3),
-//                new Catastrophe("The current number has been reduced!", 4),
-//                new Catastrophe("Reverse the turn order!", 5),
-//                new Catastrophe("Everyone gains a couple more wildcards to use!", 6),
-//                new Catastrophe("Everyone loses a couple of wildcards!", 7),
-//                new Catastrophe("Everyone must each make a rule, and this will last until the end of the game!", 8),
+                new Catastrophe("Two drinks have been added to the counter!", 1),
+                new Catastrophe("Two drinks have been removed from the counter!", 2),
+                new Catastrophe("The current number has been increased!", 3),
+                new Catastrophe("The current number has been reduced!", 4),
+                new Catastrophe("Reverse the turn order!", 5),
+                new Catastrophe("Everyone gains a couple more wildcards to use!", 6),
+                new Catastrophe("Everyone loses a couple of wildcards!", 7),
+                new Catastrophe("Everyone must each make a rule, and this will last until the end of the game!", 8),
                 new Catastrophe("All players must have three turns, and the drinking number is altered!", 9),
         };
         this.unusedCatastrophes = new ArrayList<>(Arrays.asList(allCatastrophes)); // Initialize unusedCatastrophes
@@ -94,7 +94,7 @@ public class MainActivityCatastrophes {
 
     public static void setCatastropheLimit() {
         Random random = new Random();
-        catastropheLimit = random.nextInt(6) + 6;
+        catastropheLimit = random.nextInt(4) + 12;
         Log.d(TAG, "catastropheLimit: " + catastropheLimit);
     }
 
