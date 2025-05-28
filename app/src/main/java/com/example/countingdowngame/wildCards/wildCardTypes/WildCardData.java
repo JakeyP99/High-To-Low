@@ -323,7 +323,6 @@ public class WildCardData {
             new WildCardProperties("Quiz! Who released the album 'Reputation' in 2017?", true, true, "Taylor Swift", "Adele", "Beyoncé", "Rihanna", "Art/Music"),
             new WildCardProperties("Quiz! Who is the lead vocalist of the band Fall Out Boy?", true, true, "Patrick Stump", "Pete Wentz", "Joe Trohman", "Andy Hurley", "Art/Music"),
             new WildCardProperties("Quiz! Who sang the song 'Bad Guy'?", true, true, "Billie Eilish", "Ariana Grande", "Lorde", "Halsey", "Art/Music"),
-            new WildCardProperties("Quiz! Who is the lead vocalist of the band One Direction?", true, true, "Harry Styles", "Niall Horan", "Liam Payne", "Louis Tomlinson", "Art/Music"),
             new WildCardProperties("Quiz! Who performed the song 'Havana'?", true, true, "Camila Cabello", "Selena Gomez", "Dua Lipa", "Ariana Grande", "Art/Music"),
             new WildCardProperties("Quiz! Which artist released the album 'Future Nostalgia'?", true, true, "Dua Lipa", "Selena Gomez", "Ariana Grande", "Taylor Swift", "Art/Music"),
             new WildCardProperties("Quiz! Who is the lead singer of the band The Weeknd?", true, true, "Abel Tesfaye", "Josephine Skriver", "Bella Hadid", "Hailey Bieber", "Art/Music"),
