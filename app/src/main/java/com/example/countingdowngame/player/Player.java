@@ -15,7 +15,7 @@ import java.util.Objects;
 public class Player implements Serializable {
 
     //-----------------------------------------------------Initialize---------------------------------------------------//
-    private String id; // Unique identifier for the player
+    private final String id; // Unique identifier for the player
     private final String photo;
     private String name;
     private String classChoice;
@@ -66,6 +66,7 @@ public class Player implements Serializable {
     public String getId() {
         return id;
     }
+
     public void setGame(Game game) {
         this.game = game;
     }
@@ -106,7 +107,17 @@ public class Player implements Serializable {
         this.selected = selected;
     }
 
+    public int getRepeatingTurnsForPlayer() {
+        if (Game.getInstance().getRepeatingTurnsForPlayer(this) == 0) {
+            return 0;
+        } else {
+            return Game.getInstance().getRepeatingTurnsForPlayer(this);
+        }
+    }
 
+    public int getPlayerTurnCount() {
+        return getRepeatingTurnsForPlayer() + 1;
+    }
 
     //-----------------------------------------------------Stats---------------------------------------------------//
 
@@ -193,8 +204,7 @@ public class Player implements Serializable {
         this.removed = removed;
     }
 
-    public void setInRepeatingTurn() {
-    }
+
     public void incrementAngryJimTurnCounter() {
         angryJimTurnCounter++;
     }
@@ -248,10 +258,12 @@ public class Player implements Serializable {
     public int getChamberIndex() {
         return chamberIndex;
     }
+
     // Set the current chamber index (this represents the chamber the player is about to fire)
     public void setChamberIndex(int chamberIndex) {
         this.chamberIndex = chamberIndex;
     }
+
     // Get the current chamber index (which chamber the player is at)
     public int getTotalChamberNumberCount() {
         return chamberTotalNumberCount;
@@ -294,6 +306,7 @@ public class Player implements Serializable {
     public void resetWildCardAmount(Context context) {
         wildCardAmount = GeneralSettingsLocalStore.fromContext(context).playerWildCardCount();
     }
+
     public void gainWildCards(int numberOfCardsToGain) {
         wildCardAmount += numberOfCardsToGain;
     }
@@ -316,10 +329,6 @@ public class Player implements Serializable {
     public int hashCode() {
         return Objects.hash(name);  // Use a unique identifier, like name
     }
-
-
-
-
 
 
 }

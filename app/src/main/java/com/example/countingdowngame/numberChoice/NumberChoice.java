@@ -146,7 +146,7 @@ public class NumberChoice extends ButtonUtilsActivity {
 
     private void onRandomClicked() {
         Random random = new Random();
-        startingNumber = random.nextInt(5000) + 1;
+        startingNumber = random.nextInt(99999999) + 1;
         final EditText originalNumberField = findViewById(R.id.EditTextView_numberchoice);
         originalNumberField.setFocusable(false);
         goToInGameSettings(startingNumber);

@@ -208,21 +208,20 @@ public class MainActivityGame extends SharedMainActivity {
     public void initializeCatastrophe() {
         catastrophesManager = new MainActivityCatastrophes();
         List<Player> playerCharacterList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
-            boolean allNoClass = true;
-            for (Player player : playerCharacterList) {
-                if (!player.getClassChoice().equals(NO_CLASS)) {
-                    allNoClass = false;
-                    break;
-                }
+        boolean allNoClass = true;
+        for (Player player : playerCharacterList) {
+            if (!player.getClassChoice().equals(NO_CLASS)) {
+                allNoClass = false;
+                break;
             }
-            if (!allNoClass) {
-                setCatastropheLimit();
-                Log.d(TAG, "Catastrophe limit set for selected players.");
-            } else {
-                Log.d(TAG, "All players are NO_CLASS. Catastrophes will not be initialized.");
-            }
+        }
+        if (!allNoClass) {
+            setCatastropheLimit();
+            Log.d(TAG, "Catastrophe limit set for selected players.");
+        } else {
+            Log.d(TAG, "All players are NO_CLASS. Catastrophes will not be initialized.");
+        }
     }
-
 
 
     private void setupButtons() {
@@ -366,7 +365,7 @@ public class MainActivityGame extends SharedMainActivity {
                     break;
                 case 9:
                     Game.getInstance().activateRepeatingTurnForAllPlayers(2);
-
+                    renderPlayer();
                     // Apply the specified logic to drinkNumberCounterInt
                     if (drinkNumberCounterInt <= 1) {
                         updateDrinkNumberCounter(2, false);
@@ -381,7 +380,7 @@ public class MainActivityGame extends SharedMainActivity {
                 default:
                     break;
             }
-            showCatastropheDialog(catastrophe.getMessage());
+            showDialog(catastrophe.getMessage(), R.layout.catastrophe_dialog_box, R.id.dialogbox_textview, R.id.close_button);
             Game.getInstance().incrementCatastropheQuantity();
             catastropheTurnCounter = 0; // Reset the turn counter after reaching the limit
 
@@ -432,7 +431,11 @@ public class MainActivityGame extends SharedMainActivity {
         String playerImageString = currentPlayer.getPhoto();
         Game.getInstance().addUpdatedName(playerName);
 
-        nextPlayerText.setText(playerName + "'s Turn");
+        if (currentPlayer.getPlayerTurnCount() > 1) {
+            nextPlayerText.setText(playerName + " has " + currentPlayer.getPlayerTurnCount() + " Turns");
+        } else {
+            nextPlayerText.setText(playerName + " has " + currentPlayer.getPlayerTurnCount() + " Turn");
+        }
         btnWild.setText((currentPlayer.getWildCardAmount() + "\n" + "Wild Cards"));
 
         if (playerImageString != null) {
@@ -592,16 +595,19 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void handleSoldierClass(Player currentPlayer) {
+        Game game = Game.getInstance();
         if (!isFirstTurn) {
-            if (Game.getInstance().getCurrentNumber() <= 10) {
+            if (game.getCurrentNumber() <= 10) {
                 currentPlayer.setUsedClassAbility(true);
-                Game.getInstance().activateRepeatingTurn(currentPlayer, 1);
+                SharedMainActivity.repeatingTurnLogic(1);
+                renderPlayer();
                 repeatedTurn = true;
                 updateDrinkNumberCounter(4, true);
                 updateDrinkNumberCounterTextView();
+                AudioManager.getInstance().playSoundEffects(this, SOLDIER);
                 btnWild.setVisibility(View.INVISIBLE);
                 btnClassAbility.setVisibility(View.INVISIBLE);
-                AudioManager.getInstance().playSoundEffects(this, SOLDIER);
+
             } else {
                 displayToastMessage("The +4 ability can only be activated when the number is below 10.");
             }
@@ -635,13 +641,12 @@ public class MainActivityGame extends SharedMainActivity {
         Game game = Game.getInstance();
         Player randomPlayer = game.getRandomPlayerExcludingCurrent();
         if (randomPlayer != null) {
-            game.activateRepeatingTurn(randomPlayer, 1); // Assuming 1 turn for repeating
+            SharedMainActivity.repeatingTurnLogic(1);
             showGameDialog(ANGRY_JIM + "'s Active: \n\n" + randomPlayer.getName() + " must repeat their turn.");
             btnClassAbility.setVisibility(View.INVISIBLE);
             currentPlayer.setUsedClassAbility(true);
             AudioManager.getInstance().playSoundEffects(this, ANGRY_JIM);
-        }
-        else{
+        } else {
             displayToastMessage("Well since you're by yourself, nothing happens :D");
         }
     }
@@ -788,7 +793,8 @@ public class MainActivityGame extends SharedMainActivity {
             handleArcherPassive(currentPlayer);
             handleGoblinPassive(currentPlayer);
             handleGoblinPassive(currentPlayer);
-            Game.getInstance().activateRepeatingTurn(currentPlayer, 1);
+
+            SharedMainActivity.repeatingTurnLogic(1);
 
             currentPlayer.incrementAbilityTurnCounter();
             currentPlayer.incrementAngryJimTurnCounter();
@@ -876,9 +882,6 @@ public class MainActivityGame extends SharedMainActivity {
         showDialog(message, R.layout.game_dialog_box, R.id.dialogbox_textview, R.id.close_button);
     }
 
-    private void showCatastropheDialog(String message) {
-        showDialog(message, R.layout.catastrophe_dialog_box, R.id.dialogbox_textview, R.id.close_button);
-    }
 
     private void removeCharacterFromGame() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
@@ -926,8 +929,17 @@ public class MainActivityGame extends SharedMainActivity {
                     displayToastMessage("You cannot choose 0 as your number.");
                     btnClassAbility.setVisibility(View.VISIBLE);
                 } else {
-                    Player currentPlayer = Game.getInstance().getCurrentPlayer();
-                    Game.getInstance().activateRepeatingTurn(currentPlayer, 1);
+                    Game game = Game.getInstance();
+                    Player currentPlayer = game.getCurrentPlayer();
+
+                    if (game.getRepeatingTurnsForPlayer(currentPlayer) == 0)
+                    {
+                        game.activateRepeatingTurn(currentPlayer, 1);
+                    }
+                    else {
+                        game.updateRepeatingTurns(currentPlayer, 1);
+                    }
+
                     Game.getInstance().setCurrentNumber(newNumber);
                     SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(newNumber));
                     numberCounterText.setText(String.valueOf(newNumber));
@@ -1181,7 +1193,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void handleIncorrectAnswer(Button selectedButton, String correctAnswer) {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        Game.getInstance().activateRepeatingTurn(currentPlayer, 1);
+        SharedMainActivity.repeatingTurnLogic(1);
         Game.getInstance().incrementPlayerQuizIncorrectAnswers(currentPlayer);
 
 
@@ -1364,7 +1376,7 @@ public class MainActivityGame extends SharedMainActivity {
                     handleSurvivorPassive(currentPlayer);
                 }
 
-                    renderCurrentNumber(currentNumber, MainActivityGame.this::gotoGameEnd, numberCounterText);
+                renderCurrentNumber(currentNumber, MainActivityGame.this::gotoGameEnd, numberCounterText);
 
                 if (currentNumber != 0) {
                     enableButtons();

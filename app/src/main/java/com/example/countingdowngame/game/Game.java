@@ -2,7 +2,6 @@ package com.example.countingdowngame.game;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.util.Log;
 
@@ -117,6 +116,21 @@ public class Game {
         }
     }
 
+    public int getRepeatingTurnsForPlayer(Player player) {
+        return repeatingTurnsMap.getOrDefault(player, 0);
+    }
+
+
+    public void activateRepeatingTurn(Player player, int numberOfTurns) {
+        repeatingTurnsMap.put(player, numberOfTurns);
+    }
+
+    public void updateRepeatingTurns(Player player, int numberOfTurnsToAdd) {
+        int currentTurns = repeatingTurnsMap.getOrDefault(player, 0);
+        repeatingTurnsMap.put(player, currentTurns + numberOfTurnsToAdd);
+    }
+
+
     public boolean getPlayerUsedWildcards() {
         return playerUsedWildcards;
     }
@@ -138,7 +152,6 @@ public class Game {
         // Clear the repeating turn for the player after their last extra turn
         if (repeatingTurnsMap.containsKey(currentPlayer) && repeatingTurnsMap.get(currentPlayer) == 0) {
             repeatingTurnsMap.remove(currentPlayer);
-            currentPlayer.setInRepeatingTurn(); // Clear repeating turn state
         }
 
         if (gameEventListener != null) {
@@ -161,12 +174,7 @@ public class Game {
 
     }
 
-    public void activateRepeatingTurn(Player player, int numberOfTurns) {
-        repeatingTurnsMap.put(player, numberOfTurns);
-        player.setInRepeatingTurn();
-        Log.d(TAG, "activateRepeatingTurn: Repeating turn was activated for Player " +
-                player.getName() + ". Turns to go: " + numberOfTurns);
-    }
+
 
     public void triggerPlayerEvent(PlayerEvent event) {
         playerEventListener.onPlayerEvent(event);
@@ -329,6 +337,7 @@ public class Game {
         for (Player player : players) {
             if (player != null) {
                 player.resetWildCardAmount(context);
+                repeatingTurnsMap.clear();
             }
         }
     }
