@@ -205,20 +205,6 @@ public class Player implements Serializable {
     }
 
 
-    public void incrementAngryJimTurnCounter() {
-        angryJimTurnCounter++;
-    }
-
-    // Reset Angry Jim's turn counter
-    public void resetAngryJimTurnCounter() {
-        angryJimTurnCounter = 0;
-    }
-
-    // Get Angry Jim's turn counter
-    public int getAngryJimTurnCounter() {
-        return angryJimTurnCounter;
-    }
-
     //-----------------------------------------------------Chamber Setup---------------------------------------------------//
 
     // Get the player's chamber as a list of integers, where 1 is the bullet and 0 is a blank.

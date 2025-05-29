@@ -108,6 +108,18 @@ public class Game {
 
     //-----------------------------------------------------Player---------------------------------------------------//
 
+    private Player lastTurnPlayer;
+
+    public Player getLastTurnPlayer() {
+        return lastTurnPlayer;
+    }
+
+    public void setLastTurnPlayer(Player player) {
+        this.lastTurnPlayer = player;
+    }
+
+
+
     public Player getCurrentPlayer() {
         if (!players.isEmpty() && currentPlayerId >= 0 && currentPlayerId < players.size()) {
             return players.get(currentPlayerId);

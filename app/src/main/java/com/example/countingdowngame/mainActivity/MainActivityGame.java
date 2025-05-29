@@ -89,7 +89,6 @@ public class MainActivityGame extends SharedMainActivity {
     private boolean soldierRemoval = false;
     private boolean repeatedTurn = false;
 
-
     //-----------------------------------------------------Array---------------------------------------------------//
     private Button[] answerButtons; // Array to hold the answer buttons
     private Handler shuffleHandler;
@@ -164,12 +163,7 @@ public class MainActivityGame extends SharedMainActivity {
         shuffleHandler = new Handler();
         wildText = findViewById(R.id.textView_WildText);
 
-        answerButtons = new Button[]{
-                btnQuizAnswerBL,
-                btnQuizAnswerBR,
-                btnQuizAnswerTL,
-                btnQuizAnswerTR
-        };
+        answerButtons = new Button[]{btnQuizAnswerBL, btnQuizAnswerBR, btnQuizAnswerTL, btnQuizAnswerTR};
     }
 
     private void startGame() {
@@ -225,15 +219,12 @@ public class MainActivityGame extends SharedMainActivity {
 
 
     private void setupButtons() {
-        initializeButtonsVisibility();
-        setupButtonActions(imageButtonExit);
-    }
-
-    private void initializeButtonsVisibility() {
         btnWildContinue.setVisibility(View.INVISIBLE);
         btnAnswer.setVisibility(View.INVISIBLE);
         btnQuizAnswerBL.setVisibility(View.INVISIBLE);
         btnQuizAnswerBR.setVisibility(View.INVISIBLE);
+
+        setupButtonActions(imageButtonExit);
     }
 
     private void setupButtonActions(ImageButton imageButtonExit) {
@@ -250,7 +241,12 @@ public class MainActivityGame extends SharedMainActivity {
 
         btnUtils.setButton(btnWild, () -> {
             wildCardActivate();
-            manageWildCardVisibility();
+            drinkNumberTextView.setVisibility(View.INVISIBLE);
+            wildText.setVisibility(View.VISIBLE);
+            btnWild.setVisibility(View.INVISIBLE);
+            btnGenerate.setVisibility(View.INVISIBLE);
+            nextPlayerText.setVisibility(View.INVISIBLE);
+            numberCounterText.setVisibility(View.INVISIBLE);
             isFirstTurn = false;
         });
 
@@ -260,15 +256,6 @@ public class MainActivityGame extends SharedMainActivity {
         });
 
         infoGif.setOnClickListener(view -> showInstructionDialog());
-    }
-
-    private void manageWildCardVisibility() {
-        drinkNumberTextView.setVisibility(View.INVISIBLE);
-        wildText.setVisibility(View.VISIBLE);
-        btnWild.setVisibility(View.INVISIBLE);
-        btnGenerate.setVisibility(View.INVISIBLE);
-        nextPlayerText.setVisibility(View.INVISIBLE);
-        numberCounterText.setVisibility(View.INVISIBLE);
     }
 
 
@@ -292,6 +279,7 @@ public class MainActivityGame extends SharedMainActivity {
         logPlayerInformation(currentPlayer);
         updateWildCardVisibilityIfNeeded(currentPlayer);
         updateCatastropheTurnCounter();
+        Game.getInstance().setLastTurnPlayer(currentPlayer);
     }
 
     //-----------------------------------------------------Update Player's Info---------------------------------------------------//
@@ -299,6 +287,7 @@ public class MainActivityGame extends SharedMainActivity {
     public void renderCurrentNumber(int currentNumber, final Runnable onEnd, TextView generatedNumberTextView) {
         if (currentNumber == 0) {
             disableButtons();
+            Game.getInstance().setLastTurnPlayer(null);
             generatedNumberTextView.setText(String.valueOf(currentNumber));
             animateTextView(generatedNumberTextView);
 
@@ -364,7 +353,7 @@ public class MainActivityGame extends SharedMainActivity {
                     renderPlayer();
                     break;
                 case 9:
-                    Game.getInstance().activateRepeatingTurnForAllPlayers(2);
+                    SharedMainActivity.repeatingTurnLogic(2);
                     renderPlayer();
                     // Apply the specified logic to drinkNumberCounterInt
                     if (drinkNumberCounterInt <= 1) {
@@ -408,15 +397,7 @@ public class MainActivityGame extends SharedMainActivity {
     private void updateClassAbilityButton(Player currentPlayer) {
         btnClassAbility.setText(String.format("%s's Ability", currentPlayer.getClassChoice()));
 
-        boolean showClassAbilityButton = (SCIENTIST.equals(currentPlayer.getClassChoice()) ||
-                ARCHER.equals(currentPlayer.getClassChoice()) ||
-                WITCH.equals(currentPlayer.getClassChoice()) ||
-                QUIZ_MAGICIAN.equals(currentPlayer.getClassChoice()) ||
-                SURVIVOR.equals(currentPlayer.getClassChoice()) ||
-                GOBLIN.equals(currentPlayer.getClassChoice()) ||
-                ANGRY_JIM.equals(currentPlayer.getClassChoice()) ||
-                SOLDIER.equals(currentPlayer.getClassChoice())) &&
-                !currentPlayer.getUsedClassAbility();
+        boolean showClassAbilityButton = (SCIENTIST.equals(currentPlayer.getClassChoice()) || ARCHER.equals(currentPlayer.getClassChoice()) || WITCH.equals(currentPlayer.getClassChoice()) || QUIZ_MAGICIAN.equals(currentPlayer.getClassChoice()) || SURVIVOR.equals(currentPlayer.getClassChoice()) || GOBLIN.equals(currentPlayer.getClassChoice()) || ANGRY_JIM.equals(currentPlayer.getClassChoice()) || SOLDIER.equals(currentPlayer.getClassChoice())) && !currentPlayer.getUsedClassAbility();
 
         Log.d(TAG, "updateClassAbilityButton: " + currentPlayer.getUsedClassAbility());
 
@@ -643,7 +624,7 @@ public class MainActivityGame extends SharedMainActivity {
         Game game = Game.getInstance();
         Player randomPlayer = game.getRandomPlayerExcludingCurrent();
         if (randomPlayer != null) {
-            SharedMainActivity.repeatingTurnLogic(1);
+            game.activateRepeatingTurn(randomPlayer, 1); // Assuming 1 turn for repeating
             showGameDialog(ANGRY_JIM + "'s Active: \n\n" + randomPlayer.getName() + " must repeat their turn.");
             btnClassAbility.setVisibility(View.INVISIBLE);
             currentPlayer.setUsedClassAbility(true);
@@ -685,9 +666,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void updateAbilitiesAfterThreeTurns(Player currentPlayer) {
-        if ((SURVIVOR.equals(currentPlayer.getClassChoice()) ||
-                WITCH.equals(currentPlayer.getClassChoice())) &&
-                currentPlayer.getUsedClassAbility()) {
+        if ((SURVIVOR.equals(currentPlayer.getClassChoice()) || WITCH.equals(currentPlayer.getClassChoice())) && currentPlayer.getUsedClassAbility()) {
             currentPlayer.incrementAbilityTurnCounter();
             Log.d(TAG, "increment counter: " + currentPlayer.getAbilityTurnCounter());
             if (currentPlayer.getAbilityTurnCounter() == 4) {
@@ -784,24 +763,32 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void handleAngryJimPassive(Player currentPlayer) {
-        if (Game.getInstance().getCurrentNumber() < 50 && currentPlayer.getAngryJimTurnCounter() != 1) {
-            // Execute each player's passive abilities
-            handleWitchPassive(currentPlayer);
-            handleScientistPassive(currentPlayer);
+        Game game = Game.getInstance();
+        boolean numberBelow50 = game.getCurrentNumber() < 50;
+        Player lastPlayer = game.getLastTurnPlayer();
+        boolean isFirstAngryJimTurn = lastPlayer == null || !lastPlayer.equals(currentPlayer);
+
+        if (numberBelow50 && isFirstAngryJimTurn) {
+            SharedMainActivity.repeatingTurnLogic(1);
+            updatePlayerInfo(currentPlayer);
+            currentPlayer.incrementAbilityTurnCounter();
+        }
+
+        if (numberBelow50) {
+            handleSoldierPassive(currentPlayer);
+        }
+
+        if (numberBelow50 && !soldierRemoval) {
             handleArcherPassive(currentPlayer);
             handleGoblinPassive(currentPlayer);
-            handleGoblinPassive(currentPlayer);
-
-            SharedMainActivity.repeatingTurnLogic(1);
-
-            currentPlayer.incrementAbilityTurnCounter();
-            currentPlayer.incrementAngryJimTurnCounter();
-
-            Log.d(TAG, "handleAngryJimPassive: is on");
-        } else if (currentPlayer.getAngryJimTurnCounter() == 1) {
-            currentPlayer.resetAngryJimTurnCounter();
+            handleWitchPassive(currentPlayer);
+            handleScientistPassive(currentPlayer);
+            handleSurvivorPassive(currentPlayer);
         }
     }
+
+
+
 
 
     private void handleGoblinPassive(Player currentPlayer) {
@@ -1011,9 +998,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     private WildCardProperties selectRandomCard(WildCardProperties[] WildCards) {
         // Filter out cards already used
-        List<WildCardProperties> unusedCards = Arrays.stream(WildCards)
-                .filter(wildcard -> !usedCards.contains(wildcard))
-                .collect(Collectors.toList());
+        List<WildCardProperties> unusedCards = Arrays.stream(WildCards).filter(wildcard -> !usedCards.contains(wildcard)).collect(Collectors.toList());
 
         // Reset logic: If no unused cards remain, reset usedCards
         if (unusedCards.isEmpty()) {
@@ -1097,12 +1082,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         Log.d(TAG, "setMultiChoiceRandomizedAnswers: ");
 
-        String[] answers = {
-                selectedCard.getAnswer(),
-                selectedCard.getWrongAnswer1(),
-                selectedCard.getWrongAnswer2(),
-                selectedCard.getWrongAnswer3()
-        };
+        String[] answers = {selectedCard.getAnswer(), selectedCard.getWrongAnswer1(), selectedCard.getWrongAnswer2(), selectedCard.getWrongAnswer3()};
 
         List<String> answerList = Arrays.asList(answers);
         Collections.shuffle(answerList);
@@ -1119,10 +1099,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         // Assign two random answers
         Random random = new Random();
-        String[] answers = {
-                selectedCard.getAnswer(),
-                random.nextBoolean() ? selectedCard.getWrongAnswer1() : (random.nextBoolean() ? selectedCard.getWrongAnswer2() : selectedCard.getWrongAnswer3())
-        };
+        String[] answers = {selectedCard.getAnswer(), random.nextBoolean() ? selectedCard.getWrongAnswer1() : (random.nextBoolean() ? selectedCard.getWrongAnswer2() : selectedCard.getWrongAnswer3())};
 
         List<String> answerList = Arrays.asList(answers);
         Collections.shuffle(answerList);
@@ -1189,7 +1166,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void handleIncorrectAnswer(Button selectedButton, String correctAnswer) {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        SharedMainActivity.repeatingTurnLogic(1);
+//        SharedMainActivity.repeatingTurnLogic(1);
         Game.getInstance().incrementPlayerQuizIncorrectAnswers(currentPlayer);
 
 
