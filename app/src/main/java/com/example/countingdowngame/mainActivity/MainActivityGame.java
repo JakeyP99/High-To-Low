@@ -89,6 +89,10 @@ public class MainActivityGame extends SharedMainActivity {
     private boolean soldierRemoval = false;
     private boolean repeatedTurn = false;
 
+    Player lastPlayer = Game.getInstance().getLastTurnPlayer();
+    boolean ifFirstTurn = lastPlayer == null || !lastPlayer.equals(Game.getInstance().getCurrentPlayer());
+
+
     //-----------------------------------------------------Array---------------------------------------------------//
     private Button[] answerButtons; // Array to hold the answer buttons
     private Handler shuffleHandler;
@@ -788,9 +792,6 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
 
-
-
-
     private void handleGoblinPassive(Player currentPlayer) {
         if (!ANGRY_JIM.equals(currentPlayer.getClassChoice())) {
             currentPlayer.incrementAbilityTurnCounter();
@@ -1170,8 +1171,6 @@ public class MainActivityGame extends SharedMainActivity {
 
 
         selectedButton.setBackgroundResource(R.drawable.buttonhighlightred);
-        currentPlayer.setJustUsedWildCard(true);
-
         // Highlight the correct answer button in green
         for (Button button : answerButtons) {
             if (button.getText().toString().equals(correctAnswer)) {
@@ -1196,7 +1195,7 @@ public class MainActivityGame extends SharedMainActivity {
                 quizAnswerView(currentPlayer.getName() + " that's right! The answer was " + selectedWildCard.getAnswer() + "\n\n P.S. You get to give out a drink.");
             }
         } else {
-            quizAnswerView(currentPlayer.getName() + " big ooooff! The answer actually was " + selectedWildCard.getAnswer() + "\n\n Take a drink and repeat your turn.");
+            quizAnswerView(currentPlayer.getName() + " big ooooff! The answer actually was " + selectedWildCard.getAnswer() + "\n\n Take a drink.");
         }
 
         hideQuizButtons();
