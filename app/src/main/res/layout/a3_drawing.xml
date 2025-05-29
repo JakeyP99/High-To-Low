@@ -61,7 +61,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/linearLayout"
-        android:layout_below="@+id/penSizeSeekBar" />
+        android:layout_below="@+id/penSizeSeekBar"
+        android:background="#FFFFFF"/>
 
     <LinearLayout
         android:id="@+id/linearLayout"

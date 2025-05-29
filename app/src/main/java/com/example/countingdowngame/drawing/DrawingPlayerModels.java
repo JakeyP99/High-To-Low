@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.SeekBar;
 
@@ -57,21 +58,23 @@ public class DrawingPlayerModels extends ButtonUtilsActivity {
         penSizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                float penSize = calculatePenSizeFromProgress(progress);
-                drawingView.setPenSize(penSize);
+                if (drawingView.isEraserMode()) {
+                    float eraserSize = calculateEraserSizeFromProgress(progress);
+                    drawingView.setEraserSize(eraserSize);
+                } else {
+                    float penSize = calculatePenSizeFromProgress(progress);
+                    drawingView.setPenSize(penSize);
+                }
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // Not used
-            }
+            public void onStartTrackingTouch(SeekBar seekBar) {}
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                // Not used
-            }
+            public void onStopTrackingTouch(SeekBar seekBar) {}
         });
     }
+
 
     //-----------------------------------------------------Button Functionality---------------------------------------------------//
 
@@ -107,11 +110,21 @@ public class DrawingPlayerModels extends ButtonUtilsActivity {
             colorPickerDialog.show();
         }
 
-        private void toggleEraserMode () {
-            boolean isEraserMode = !drawingView.isEraserMode();
-            drawingView.setEraserMode(isEraserMode);
-            eraserButton.setText(isEraserMode ? "Draw\nMode" : "Eraser\nMode");
+    private void toggleEraserMode() {
+        boolean isEraserMode = !drawingView.isEraserMode();
+        drawingView.setEraserMode(isEraserMode);
+
+        if (isEraserMode) {
+            float eraserSize = calculateEraserSizeFromProgress(penSizeSeekBar.getProgress());
+            drawingView.setEraserSize(eraserSize);
+            eraserButton.setText("Draw\nMode");
+        } else {
+            float penSize = calculatePenSizeFromProgress(penSizeSeekBar.getProgress());
+            drawingView.setPenSize(penSize);
+            eraserButton.setText("Eraser\nMode");
         }
+    }
+
 
     private void setDefaultPenSize() {
         int maxProgress = penSizeSeekBar.getMax();
@@ -132,6 +145,17 @@ public class DrawingPlayerModels extends ButtonUtilsActivity {
         return calculatedSize;
     }
 
+
+    private float calculateEraserSizeFromProgress(int progress) {
+        float maxEraserSize = 90.0f;
+        float progressRatio = (float) progress / penSizeSeekBar.getMax();
+        float calculatedSize = maxEraserSize * progressRatio;
+
+        Log.d("EraserSizeCalc", "Progress: " + progress + "/" + penSizeSeekBar.getMax() +
+                ", Ratio: " + progressRatio + ", EraserSize: " + calculatedSize);
+
+        return calculatedSize;
+    }
 
 
 

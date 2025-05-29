@@ -6,6 +6,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,6 +23,8 @@ public class DrawingViewPlayerModels extends View {
     private int currentColor;
     private boolean isEraserMode;
     private float penSize;
+    private float startX, startY;
+    private float eraserSize = 90f;
 
     public DrawingViewPlayerModels(Context context) {
         super(context);
@@ -69,13 +73,6 @@ public class DrawingViewPlayerModels extends View {
         canvas.drawPath(drawingPath, drawingPaint);
     }
 
-    public void clearCanvas() {
-        canvasBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
-        drawingCanvas.setBitmap(canvasBitmap);
-        drawingPath.reset();
-        invalidate();
-    }
-
     public void setCurrentColor(int color) {
         currentColor = color;
         if (!isEraserMode) {
@@ -85,12 +82,15 @@ public class DrawingViewPlayerModels extends View {
     public boolean isEraserMode() {
         return isEraserMode;
     }
-    public void setEraserMode(boolean enabled) {
-        isEraserMode = enabled;
-        if (isEraserMode) {
-            drawingPaint.setColor(Color.WHITE);  // Set the color to white for eraser
+
+    public void setEraserMode(boolean eraserMode) {
+        this.isEraserMode = eraserMode;
+        if (eraserMode) {
+            drawingPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+            drawingPaint.setStrokeWidth(eraserSize);
         } else {
-            drawingPaint.setColor(currentColor); // Restore the previous color
+            drawingPaint.setColor(currentColor);
+            drawingPaint.setStrokeWidth(penSize);
         }
     }
 
@@ -98,6 +98,14 @@ public class DrawingViewPlayerModels extends View {
         penSize = size;
         drawingPaint.setStrokeWidth(penSize);
     }
+
+    public void setEraserSize(float size) {
+        this.eraserSize = size;
+        if (isEraserMode) {
+            drawingPaint.setStrokeWidth(size);
+        }
+    }
+
 
     public Bitmap getDrawingBitmap() {
         return canvasBitmap;
@@ -110,13 +118,22 @@ public class DrawingViewPlayerModels extends View {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                startX = touchX;
+                startY = touchY;
                 drawingPath.moveTo(touchX, touchY);
                 break;
+
             case MotionEvent.ACTION_MOVE:
                 drawingPath.lineTo(touchX, touchY);
                 break;
+
             case MotionEvent.ACTION_UP:
-                drawingCanvas.drawPath(drawingPath, drawingPaint);
+                // If movement was very minimal, treat as a dot
+                if (Math.abs(touchX - startX) < 5 && Math.abs(touchY - startY) < 5) {
+                    drawingCanvas.drawCircle(touchX, touchY, penSize / 2, drawingPaint);
+                } else {
+                    drawingCanvas.drawPath(drawingPath, drawingPaint);
+                }
                 drawingPath.reset();
                 break;
             default:
@@ -126,4 +143,5 @@ public class DrawingViewPlayerModels extends View {
         invalidate();
         return true;
     }
+
 }
