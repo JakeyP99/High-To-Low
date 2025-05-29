@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.SeekBar;
 
@@ -53,24 +54,25 @@ public class DrawingPlayerModels extends ButtonUtilsActivity {
     }
     //-----------------------------------------------------Seekbar Functionality---------------------------------------------------//
     private void setupSeekBarListener () {
-            penSizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    float penSize = (float) progress;
-                    drawingView.setPenSize(penSize);
-                }
+        penSizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                float penSize = calculatePenSizeFromProgress(progress);
+                drawingView.setPenSize(penSize);
+            }
 
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                    // Not used in this case
-                }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // Not used
+            }
 
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                    // Not used in this case
-                }
-            });
-        }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // Not used
+            }
+        });
+    }
+
     //-----------------------------------------------------Button Functionality---------------------------------------------------//
 
         private void saveDrawing () {
@@ -113,17 +115,24 @@ public class DrawingPlayerModels extends ButtonUtilsActivity {
 
     private void setDefaultPenSize() {
         int maxProgress = penSizeSeekBar.getMax();
-        int defaultProgress = (int) (maxProgress * 0.8); // Calculate 80% of the maxProgress
+        int defaultProgress = (int) (maxProgress * 0.8); // 40% of max progress
         penSizeSeekBar.setProgress(defaultProgress);
         float penSize = calculatePenSizeFromProgress(defaultProgress);
         drawingView.setPenSize(penSize);
     }
 
     private float calculatePenSizeFromProgress(int progress) {
-        float maxPenSize = 20.0f; // Maximum pen size
+        float maxPenSize = 20.0f;
         float progressRatio = (float) progress / penSizeSeekBar.getMax();
-        return maxPenSize * progressRatio;
+        float calculatedSize = maxPenSize * progressRatio;
+
+        Log.d("PenSizeCalc", "Progress: " + progress + "/" + penSizeSeekBar.getMax() +
+                ", Ratio: " + progressRatio + ", PenSize: " + calculatedSize);
+
+        return calculatedSize;
     }
+
+
 
 
     //-----------------------------------------------------Convert to bitmap Functionality---------------------------------------------------//
