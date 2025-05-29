@@ -40,7 +40,7 @@ import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
 import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.GameEventType;
-import com.example.countingdowngame.game.GameTurns;
+import com.example.countingdowngame.mainActivity.classAbilities.passiveAbilities;
 import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.wildCards.WildCardProperties;
@@ -86,7 +86,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     //-----------------------------------------------------Booleans---------------------------------------------------//
     private boolean doubleBackToExitPressedOnce = false;
-    private boolean isFirstTurn = true;
+    public static boolean isFirstTurn = true;
     private boolean soldierRemoval = false;
     private boolean repeatedTurn = false;
     //-----------------------------------------------------Array---------------------------------------------------//
@@ -715,7 +715,7 @@ public class MainActivityGame extends SharedMainActivity {
         if (SOLDIER.equals(classChoice)) {
             handleSoldierPassive();
         } else if (WITCH.equals(classChoice)) {
-            handleWitchPassive(currentPlayer);
+            passiveAbilities.handleWitchPassive(currentPlayer, this);
         } else if (SCIENTIST.equals(classChoice)) {
             handleScientistPassive(currentPlayer);
         } else if (ANGRY_JIM.equals(classChoice)) {
@@ -751,17 +751,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
 
-    private void handleWitchPassive(Player currentPlayer) {
-        if (!isFirstTurn) {
-            if (Game.getInstance().getCurrentNumber() % 2 == 0) {
-                showGameDialog(WITCH + "'s Passive: \n\n" + currentPlayer.getName() + " hand out two drinks.");
-                currentPlayer.incrementDrinksHandedOutByWitch(2);
-            } else {
-                showGameDialog(WITCH + "'s Passive: \n\n" + currentPlayer.getName() + " take two drinks.");
-                currentPlayer.incrementDrinksTakenByWitch(2);
-            }
-        }
-    }
+
 
 
     private void handleScientistPassive(Player currentPlayer) {
@@ -798,7 +788,7 @@ public class MainActivityGame extends SharedMainActivity {
         if (numberBelow50 && !soldierRemoval) {
             handleArcherPassive(currentPlayer);
             handleGoblinPassive(currentPlayer);
-            handleWitchPassive(currentPlayer);
+            passiveAbilities.handleWitchPassive(currentPlayer, this);
             handleScientistPassive(currentPlayer);
             handleSurvivorPassive(currentPlayer);
         }
@@ -877,15 +867,10 @@ public class MainActivityGame extends SharedMainActivity {
         closeButton.setOnClickListener(v -> dialog.dismiss());
     }
 
-    private void showGameDialog(String message) {
+    public void showGameDialog(String message) {
         showDialog(message, R.layout.game_dialog_box, R.id.dialogbox_textview, R.id.close_button);
     }
 
-
-
-    private void removeCharacterFromGame() {
-
-    }
 
     private void scientistChangeCurrentNumber() {
 
