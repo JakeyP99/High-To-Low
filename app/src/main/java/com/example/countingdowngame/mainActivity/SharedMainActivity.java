@@ -259,18 +259,4 @@ public class SharedMainActivity extends ButtonUtilsActivity {
             return textSize;
         }
     }
-
-    public static void repeatingTurnLogic(int repeatingTurn){
-        Game game = Game.getInstance();
-        Player currentPlayer = game.getCurrentPlayer();
-
-        if (game.getRepeatingTurnsForPlayer(currentPlayer) == 0)
-        {
-            game.activateRepeatingTurn(currentPlayer, repeatingTurn);
-        }
-        else {
-            game.updateRepeatingTurns(currentPlayer, repeatingTurn + 1);
-        }
-
-    }
 }

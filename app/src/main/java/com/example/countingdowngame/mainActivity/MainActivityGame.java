@@ -353,7 +353,7 @@ public class MainActivityGame extends SharedMainActivity {
                     renderPlayer();
                     break;
                 case 9:
-                    SharedMainActivity.repeatingTurnLogic(2);
+                    Game.getInstance().activateRepeatingTurnForAllPlayers(2);
                     renderPlayer();
                     // Apply the specified logic to drinkNumberCounterInt
                     if (drinkNumberCounterInt <= 1) {
@@ -582,7 +582,7 @@ public class MainActivityGame extends SharedMainActivity {
         if (!isFirstTurn) {
             if (game.getCurrentNumber() <= 10) {
                 currentPlayer.setUsedClassAbility(true);
-                SharedMainActivity.repeatingTurnLogic(1);
+                game.updateRepeatingTurns(currentPlayer, 1);
                 renderPlayer();
                 repeatedTurn = true;
                 updateDrinkNumberCounter(4, true);
@@ -624,7 +624,7 @@ public class MainActivityGame extends SharedMainActivity {
         Game game = Game.getInstance();
         Player randomPlayer = game.getRandomPlayerExcludingCurrent();
         if (randomPlayer != null) {
-            game.activateRepeatingTurn(randomPlayer, 1); // Assuming 1 turn for repeating
+            game.updateRepeatingTurns(randomPlayer, 1);
             showGameDialog(ANGRY_JIM + "'s Active: \n\n" + randomPlayer.getName() + " must repeat their turn.");
             btnClassAbility.setVisibility(View.INVISIBLE);
             currentPlayer.setUsedClassAbility(true);
@@ -769,7 +769,7 @@ public class MainActivityGame extends SharedMainActivity {
         boolean isFirstAngryJimTurn = lastPlayer == null || !lastPlayer.equals(currentPlayer);
 
         if (numberBelow50 && isFirstAngryJimTurn) {
-            SharedMainActivity.repeatingTurnLogic(1);
+            game.updateRepeatingTurns(currentPlayer, 1);
             updatePlayerInfo(currentPlayer);
             currentPlayer.incrementAbilityTurnCounter();
         }
@@ -1166,7 +1166,6 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void handleIncorrectAnswer(Button selectedButton, String correctAnswer) {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-//        SharedMainActivity.repeatingTurnLogic(1);
         Game.getInstance().incrementPlayerQuizIncorrectAnswers(currentPlayer);
 
 
