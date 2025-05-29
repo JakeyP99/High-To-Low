@@ -29,7 +29,7 @@ public class Player implements Serializable {
     private boolean usedWildCard;
     private boolean removed;
     private int abilityTurnCounter; // Add a counter for the active turns of the Survivor class
-    private int angryJimTurnCounter;
+    private List<Integer> numbersPlayed = new ArrayList<>();
 
     //-----------------------------------------------------Card Game---------------------------------------------------//
 
@@ -59,6 +59,8 @@ public class Player implements Serializable {
         this.abilityTurnCounter = 0;
         this.bulletsInChamberList = new ArrayList<>();
         this.chamberTotalNumberCount = 0;
+        this.numbersPlayed = new ArrayList<>();
+
     }
 
 
@@ -152,6 +154,21 @@ public class Player implements Serializable {
 
     public void incrementDrinksTakenByWitch(int drinks) {
         this.drinksTakenByWitch += drinks;
+    }
+
+    public void addNumberPlayed(int number) {
+        if (numbersPlayed == null) {
+            numbersPlayed = new ArrayList<>();
+        }
+        numbersPlayed.add(number);
+    }
+
+
+    public List<Integer> getNumbersPlayed() {
+        if (numbersPlayed == null) {
+            numbersPlayed = new ArrayList<>();
+        }
+        return new ArrayList<>(numbersPlayed); // Return a copy to preserve encapsulation
     }
 
 

@@ -107,6 +107,23 @@ public class Game {
     }
 
     //-----------------------------------------------------Player---------------------------------------------------//
+    public void removePlayer(Player player) {
+        int removedIndex = players.indexOf(player);
+
+        players.remove(removedIndex);
+        playerNames.remove(removedIndex);
+        repeatingTurnsMap.remove(player);
+
+        // Ensure index is in range
+        if (currentPlayerId >= players.size()) {
+            currentPlayerId = 0;
+        }
+            gameEventListener.onGameEvent(new GameEvent(this, GameEventType.NEXT_PLAYER));
+
+    }
+
+
+
 
     private Player lastTurnPlayer;
 
@@ -166,9 +183,7 @@ public class Game {
             repeatingTurnsMap.remove(currentPlayer);
         }
 
-        if (gameEventListener != null) {
-            gameEventListener.onGameEvent(new GameEvent(this, GameEventType.NEXT_PLAYER));
-        }
+        gameEventListener.onGameEvent(new GameEvent(this, GameEventType.NEXT_PLAYER));
     }
 
     public Player getRandomPlayerExcludingCurrent() {
@@ -334,15 +349,16 @@ public class Game {
 
 
     public ArrayList<String> getPreviousNumbersFormatted() {
-        ArrayList<String> previousNumbersFormatted = new ArrayList<>();
-        int nameSize = playerNames.size();
-        previousNumbersFormatted.add("Starting Number: " + startingNumber);
-        for (int i = 0; i < updatedNumbers.size(); i++) {
-            String playerName = i < nameSize ? playerNames.get(i) : "Game";
-            String number = String.valueOf(updatedNumbers.get(i));
-            previousNumbersFormatted.add(playerName + ": " + number);
+        ArrayList<String> formatted = new ArrayList<>();
+        formatted.add("Starting Number: " + startingNumber);
+
+        for (Player player : players) { // this should include removed players too
+            for (int num : player.getNumbersPlayed()) {
+                formatted.add(player.getName() + ": " + num);
+            }
         }
-        return previousNumbersFormatted;
+
+        return formatted;
     }
 
     public void resetPlayers(Context context) {

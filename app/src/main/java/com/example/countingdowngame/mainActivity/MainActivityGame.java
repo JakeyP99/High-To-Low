@@ -88,11 +88,6 @@ public class MainActivityGame extends SharedMainActivity {
     private boolean isFirstTurn = true;
     private boolean soldierRemoval = false;
     private boolean repeatedTurn = false;
-
-    Player lastPlayer = Game.getInstance().getLastTurnPlayer();
-    boolean ifFirstTurn = lastPlayer == null || !lastPlayer.equals(Game.getInstance().getCurrentPlayer());
-
-
     //-----------------------------------------------------Array---------------------------------------------------//
     private Button[] answerButtons; // Array to hold the answer buttons
     private Handler shuffleHandler;
@@ -242,6 +237,11 @@ public class MainActivityGame extends SharedMainActivity {
         btnUtils.setButton(btnAnswer, this::showAnswer);
         btnUtils.setButton(btnWildContinue, this::wildCardContinue);
         btnUtils.setButton(btnClassAbility, this::activateActiveAbility);
+
+        btnUtils.setButton(btnWild, () -> {
+            activateActiveAbility(); // call the method
+            isFirstTurn = false;
+        });
 
         btnUtils.setButton(btnWild, () -> {
             wildCardActivate();
@@ -712,7 +712,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         // Handle passive effects based on the player's class choice
         if (SOLDIER.equals(classChoice)) {
-            handleSoldierPassive(currentPlayer);
+            handleSoldierPassive();
         } else if (WITCH.equals(classChoice)) {
             handleWitchPassive(currentPlayer);
         } else if (SCIENTIST.equals(classChoice)) {
@@ -727,14 +727,26 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
 
-    private void handleSoldierPassive(Player currentPlayer) {
-        new Handler().postDelayed(() -> {
-            if (!currentPlayer.isRemoved()) {
-                removeCharacterFromGame();
-            } else {
-                currentPlayer.useSkip();
+    private void handleSoldierPassive() {
+        Game game = Game.getInstance();
+        Player currentPlayer = game.getCurrentPlayer();
+        int currentNumber = game.getCurrentNumber();
+
+        int minRange = 10;
+        int maxRange = 15;
+
+        if (!isFirstTurn) {
+            if (!soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {
+                soldierRemoval = true;
+                showGameDialog(currentPlayer.getName() + " has escaped the game as the soldier.");
+                // Mark player as removed (optional, if you want to log it)
+                currentPlayer.setRemoved(true);
+                // Actually remove the player from the game
+                game.removePlayer(currentPlayer);
+            } else if (soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {
+                showGameDialog("Sorry " + currentPlayer.getName() + ", a soldier has already escaped the game.");
             }
-        }, 1);
+        }
     }
 
 
@@ -779,7 +791,7 @@ public class MainActivityGame extends SharedMainActivity {
         }
 
         if (numberBelow50) {
-            handleSoldierPassive(currentPlayer);
+            handleSoldierPassive();
         }
 
         if (numberBelow50 && !soldierRemoval) {
@@ -869,27 +881,10 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
 
+
     private void removeCharacterFromGame() {
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        int currentNumber = Game.getInstance().getCurrentNumber();
 
-        int minRange = 10;
-        int maxRange = 15;
-
-        if (!isFirstTurn) {
-            if (!soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {
-                soldierRemoval = true;
-                currentPlayer.setRemoved(true);
-                showGameDialog(currentPlayer.getName() + " has escaped the game as the soldier.");
-                Handler handler = new Handler();
-                int delayMillis = 1;
-                handler.postDelayed(currentPlayer::useSkip, delayMillis);
-            } else if (soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {
-                showGameDialog("Sorry " + currentPlayer.getName() + ", a soldier has already escaped the game.");
-            }
-        }
     }
-
 
     private void scientistChangeCurrentNumber() {
 
@@ -1344,7 +1339,9 @@ public class MainActivityGame extends SharedMainActivity {
             if (shuffleTime < shuffleDuration) {
                 shuffleHandler.postDelayed(this, shuffleInterval);
             } else {
+
                 int currentNumber = Game.getInstance().nextNumber();
+                Game.getInstance().getCurrentPlayer().addNumberPlayed(currentNumber);
                 Log.d(TAG, "NextNumber = " + currentNumber);
 
                 if (SURVIVOR.equals(currentPlayer.getClassChoice()) && originalNumber == 1 && currentNumber == 1) {
