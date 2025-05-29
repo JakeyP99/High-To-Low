@@ -192,6 +192,7 @@ public class MainActivityGame extends SharedMainActivity {
                 renderPlayer();
             }
         });
+        isFirstTurn = true;
         renderPlayer();
         drinkNumberCounterInt = 1;
         updateDrinkNumberCounterTextView();
@@ -231,7 +232,6 @@ public class MainActivityGame extends SharedMainActivity {
         btnUtils.setButton(btnGenerate, () -> {
             disableButtons();
             startNumberShuffleAnimation();
-            isFirstTurn = false;
         });
 
         playerImage.setOnClickListener(v -> characterClassDescriptions());
@@ -239,10 +239,8 @@ public class MainActivityGame extends SharedMainActivity {
         btnUtils.setButton(btnWildContinue, this::wildCardContinue);
         btnUtils.setButton(btnClassAbility, this::activateActiveAbility);
 
-        btnUtils.setButton(btnWild, () -> {
-            activateActiveAbility(); // call the method
-            isFirstTurn = false;
-        });
+        // call the method
+        btnUtils.setButton(btnWild, this::activateActiveAbility);
 
         btnUtils.setButton(btnWild, () -> {
             wildCardActivate();
@@ -252,7 +250,6 @@ public class MainActivityGame extends SharedMainActivity {
             btnGenerate.setVisibility(View.INVISIBLE);
             nextPlayerText.setVisibility(View.INVISIBLE);
             numberCounterText.setVisibility(View.INVISIBLE);
-            isFirstTurn = false;
         });
 
         imageButtonExit.setOnClickListener(view -> {
@@ -342,8 +339,7 @@ public class MainActivityGame extends SharedMainActivity {
                     decreaseNumberByRandom();
                     break;
                 case 5:
-                    reverseTurnOrder(currentPlayer);
-                    currentPlayer.useSkip();
+                    reverseTurnOrder();
                     break;
                 case 6:
                     for (Player player : Game.getInstance().getPlayers()) {

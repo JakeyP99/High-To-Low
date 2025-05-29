@@ -5,6 +5,7 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.countingdowngame.mainActivity.MainActivityGame;
 import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.player.PlayerEvent;
 import com.example.countingdowngame.player.PlayerEventListener;
@@ -34,6 +35,8 @@ public class Game {
     private Boolean gameStarted = false;
     private boolean playCards;
     private final List<GameTurns> turns = new ArrayList<>();
+    private boolean reverseOrder = false;
+
 
     //-----------------------------------------------------Game Modes---------------------------------------------------//
 
@@ -97,6 +100,7 @@ public class Game {
         playerNames.add(currentPlayerName);
     }
 
+
     //-----------------------------------------------------Game Event---------------------------------------------------//
     public void activateRepeatingTurnForAllPlayers(int numberOfTurns) {
         for (Player player : players) {
@@ -104,6 +108,14 @@ public class Game {
             Log.d(TAG, "activateRepeatingTurnForAllPlayers: Repeating turn was activated for Player " +
                     player.getName() + ". Turns to go: " + numberOfTurns);
         }
+    }
+
+    public boolean isReverseOrder() {
+        return reverseOrder;
+    }
+
+    public void setReverseOrder(boolean reverseOrder) {
+        this.reverseOrder = reverseOrder;
     }
 
     //-----------------------------------------------------Player---------------------------------------------------//
@@ -174,19 +186,27 @@ public class Game {
     }
 
     public void nextPlayer() {
+
         Player currentPlayer = getCurrentPlayer();
 
         // Check if the current player has repeating turns left
         if (repeatingTurnsMap.containsKey(currentPlayer) && repeatingTurnsMap.get(currentPlayer) > 0) {
             repeatingTurnsMap.put(currentPlayer, repeatingTurnsMap.get(currentPlayer) - 1);
         } else {
-            currentPlayerId = (currentPlayerId + 1) % players.size();
+            if (!players.isEmpty()) {
+                if (reverseOrder) {
+                    currentPlayerId = (currentPlayerId - 1 + players.size()) % players.size();
+                } else {
+                    currentPlayerId = (currentPlayerId + 1) % players.size();
+                }
+            }
         }
 
         // Clear the repeating turn for the player after their last extra turn
         if (repeatingTurnsMap.containsKey(currentPlayer) && repeatingTurnsMap.get(currentPlayer) == 0) {
             repeatingTurnsMap.remove(currentPlayer);
         }
+        MainActivityGame.isFirstTurn = false;
 
         gameEventListener.onGameEvent(new GameEvent(this, GameEventType.NEXT_PLAYER));
     }

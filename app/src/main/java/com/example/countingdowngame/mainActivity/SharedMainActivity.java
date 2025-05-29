@@ -76,29 +76,11 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         return textSize;
     }
 
-    public static void reverseTurnOrder(Player player) {
+    public static void reverseTurnOrder() {
         Game game = Game.getInstance();
-        List<Player> players = game.getPlayers();
-        Collections.reverse(players);
-
-        int currentPlayerIndex = players.indexOf(player);
-
-        if (currentPlayerIndex != -1) {
-            int lastIndex = players.size() - 1;
-            int newIndex = lastIndex - currentPlayerIndex;
-
-            // Move the player to the new index
-            players.remove(currentPlayerIndex);
-            players.add(newIndex, player);
-
-            // Update the current player ID if necessary
-            if (game.getCurrentPlayer() == player) {
-                game.setCurrentPlayerId(newIndex);
-            }
-        }
-
-        game.setPlayerList(players);
+        game.setReverseOrder(!game.isReverseOrder());
     }
+
 
     protected void animateTextView(final TextView textView) {
         // Shake animation
