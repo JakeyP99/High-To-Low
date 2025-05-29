@@ -133,6 +133,8 @@ public class EndActivityGame extends ButtonUtilsActivity {
             // Handle the case where the list is null or empty
             System.err.println("Error: previousNumbersFormatted is null or empty");
         }
+
+
     }
 
     private void setButtonActions(Button btnPlayAgain, Button btnNewPlayer) {

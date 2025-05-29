@@ -22,7 +22,6 @@ public class Game {
 
     private static final Game gameInstance = new Game();
     private final Map<Player, Integer> repeatingTurnsMap = new HashMap<>();
-    private final List<Integer> updatedNumbers = new ArrayList<>();
     private final List<String> playerNames = new ArrayList<>();
     private int startingNumber = 0;
     private int currentNumber = 0;
@@ -34,6 +33,7 @@ public class Game {
     private Boolean quizWasTriggered = false;
     private Boolean gameStarted = false;
     private boolean playCards;
+    private final List<GameTurns> turns = new ArrayList<>();
 
     //-----------------------------------------------------Game Modes---------------------------------------------------//
 
@@ -90,7 +90,7 @@ public class Game {
         currentNumber = startNum;
         startingNumber = startNum;
         currentPlayerId = 0;
-        updatedNumbers.clear();
+        turns.clear();
     }
 
     public void addUpdatedName(String currentPlayerName) {
@@ -122,6 +122,11 @@ public class Game {
 
     }
 
+
+    public void recordTurn(Player player, int number) {
+        turns.add(new GameTurns(player.getName(), number));
+        player.addNumberPlayed(number); // still tracks individual history
+    }
 
 
 
@@ -232,7 +237,6 @@ public class Game {
         Random random = new Random();
         int nextNumber = random.nextInt(currentNumber + 1);
         currentNumber = nextNumber;
-        updatedNumbers.add(nextNumber); // Add the updated number
         return nextNumber;
     }
     //-----------------------------------------------------Stats ---------------------------------------------------//
@@ -352,10 +356,8 @@ public class Game {
         ArrayList<String> formatted = new ArrayList<>();
         formatted.add("Starting Number: " + startingNumber);
 
-        for (Player player : players) { // this should include removed players too
-            for (int num : player.getNumbersPlayed()) {
-                formatted.add(player.getName() + ": " + num);
-            }
+        for (GameTurns turn : turns) {
+            formatted.add(turn.getPlayerName() + ": " + turn.getNumber());
         }
 
         return formatted;

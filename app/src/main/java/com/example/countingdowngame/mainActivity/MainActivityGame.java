@@ -40,6 +40,7 @@ import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
 import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.GameEventType;
+import com.example.countingdowngame.game.GameTurns;
 import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.wildCards.WildCardProperties;
@@ -496,7 +497,7 @@ public class MainActivityGame extends SharedMainActivity {
         int shuffleInterval = originalNumber >= 1000 ? 50 : 100;
         final Random random = new Random();
 
-        shuffleHandler.postDelayed(new ShuffleRunnable(random, originalNumber, shuffleDuration, shuffleInterval, currentPlayer), shuffleInterval);
+        shuffleHandler.postDelayed(new ShuffleRunnable(random, originalNumber, shuffleDuration, shuffleInterval), shuffleInterval);
     }
 
     private void disableButtons() {
@@ -1314,19 +1315,19 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private class ShuffleRunnable implements Runnable {
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+
         private final Random random;
         private final int originalNumber;
         private final int shuffleDuration;
         private final int shuffleInterval;
-        private final Player currentPlayer;
         private int shuffleTime = 0;
 
-        ShuffleRunnable(Random random, int originalNumber, int shuffleDuration, int shuffleInterval, Player currentPlayer) {
+        ShuffleRunnable(Random random, int originalNumber, int shuffleDuration, int shuffleInterval) {
             this.random = random;
             this.originalNumber = originalNumber;
             this.shuffleDuration = shuffleDuration;
             this.shuffleInterval = shuffleInterval;
-            this.currentPlayer = currentPlayer;
         }
 
         @Override
@@ -1341,7 +1342,8 @@ public class MainActivityGame extends SharedMainActivity {
             } else {
 
                 int currentNumber = Game.getInstance().nextNumber();
-                Game.getInstance().getCurrentPlayer().addNumberPlayed(currentNumber);
+
+                Game.getInstance().recordTurn(currentPlayer, currentNumber);
                 Log.d(TAG, "NextNumber = " + currentNumber);
 
                 if (SURVIVOR.equals(currentPlayer.getClassChoice()) && originalNumber == 1 && currentNumber == 1) {
