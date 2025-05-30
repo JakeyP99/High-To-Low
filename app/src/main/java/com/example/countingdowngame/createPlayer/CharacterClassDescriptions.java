@@ -28,7 +28,7 @@ public class CharacterClassDescriptions {
     public static final String scientistPassiveDescription = "There's a 10% chance your turn is skipped.";
     public static final String soldierPassiveDescription = "If you land between 10 and 15, you escape the game. This means you no longer will be playing, and won't have to drink anymore. Only one soldier can be removed from the game.";
     public static final String quizMagicianPassiveDescription = "All multi-choice quizzes now have only 2 answers available, instead of 4. All correctly answered questions cause all players to take 2 drinks.";
-    public static final String survivorPassiveDescription = "If the current number is 1, and you generate another 1, you can distribute the current count of drinks without reducing the drink number.";
+    public static final String survivorPassiveDescription = "If the current number is 3 or less, and you generate a number and survive, you get to distribute the current count of drinks. This does not change the drink counter.";
     public static final String angryJimPassiveDescription = "When the number is below 50, you gain the passive ability of every class. The catch is, you have to have another turn.";
     public static final String goblinPassiveDescription = "For every third turn, you gain one wildcard.";
 }

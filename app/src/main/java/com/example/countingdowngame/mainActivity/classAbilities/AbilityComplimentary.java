@@ -9,9 +9,9 @@ public class AbilityComplimentary {
 
     public static void assignClassAbilityCooldown(Player player) {
         if (player.getClassChoice().equals(ANGRY_JIM)) {
-            player.setClassAbilityCooldown(5);
+            player.setClassAbilityCooldown(6);
         } else {
-            player.setClassAbilityCooldown(3); // fallback
+            player.setClassAbilityCooldown(4); // fallback
         }
     }
 }

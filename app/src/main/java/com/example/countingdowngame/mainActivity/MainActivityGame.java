@@ -74,8 +74,8 @@ public class MainActivityGame extends SharedMainActivity {
     //-----------------------------------------------------Public ---------------------------------------------------//
     public static int drinkNumberCounterInt = 0;
     public static int catastropheLimit;
-    public static boolean isFirstTurn = true;
-    public static boolean soldierRemoval = false;
+    public static boolean isFirstTurn;
+    public static boolean soldierRemoval;
     private static TextView numberCounterText;
     //-----------------------------------------------------Maps and Sets---------------------------------------------------//
     private final List<WildCardProperties> usedCards = new ArrayList<>();  // Class-level variable to track used cards
@@ -172,6 +172,9 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void startGame() {
+        isFirstTurn = true;
+        soldierRemoval = false;
+
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
             throw new RuntimeException("Missing extras");
@@ -197,7 +200,6 @@ public class MainActivityGame extends SharedMainActivity {
                 renderPlayer();
             }
         });
-        isFirstTurn = true;
         renderPlayer();
         drinkNumberCounterInt = 1;
         updateDrinkNumberCounterTextView();
@@ -1287,12 +1289,10 @@ public class MainActivityGame extends SharedMainActivity {
 
                 Log.d(TAG, "Previous Number = " + previousNumber);
 
-                if (currentNumber == 1 && previousNumber == 1 &&
+                if (currentNumber <= 3 && previousNumber == 3 &&
                         (SURVIVOR.equals(currentPlayer.getClassChoice()) || ANGRY_JIM.equals(currentPlayer.getClassChoice()))) {
                     handleSurvivorPassive(currentPlayer);
                 }
-
-
 
                 renderCurrentNumber(currentNumber, MainActivityGame.this::gotoGameEnd, numberCounterText);
 
