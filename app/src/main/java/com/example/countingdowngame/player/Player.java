@@ -30,6 +30,7 @@ public class Player implements Serializable {
     private boolean removed;
     private int abilityTurnCounter; // Add a counter for the active turns of the Survivor class
     private List<Integer> numbersPlayed = new ArrayList<>();
+    private int classAbilityCooldown;
 
     //-----------------------------------------------------Card Game---------------------------------------------------//
 
@@ -119,6 +120,14 @@ public class Player implements Serializable {
 
     public int getPlayerTurnCount() {
         return getRepeatingTurnsForPlayer() + 1;
+    }
+
+    public int getClassAbilityCooldown() {
+        return classAbilityCooldown;
+    }
+
+    public void setClassAbilityCooldown(int cooldown) {
+        this.classAbilityCooldown = cooldown;
     }
 
     //-----------------------------------------------------Stats---------------------------------------------------//

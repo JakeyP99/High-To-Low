@@ -74,10 +74,12 @@ public class MainActivityGame extends SharedMainActivity {
     public static int drinkNumberCounterInt = 0;
     public static int catastropheLimit;
     public static boolean isFirstTurn = true;
+    public static boolean soldierRemoval = false;
     private static TextView numberCounterText;
     //-----------------------------------------------------Maps and Sets---------------------------------------------------//
     private final List<WildCardProperties> usedCards = new ArrayList<>();  // Class-level variable to track used cards
     public WildCardProperties selectedWildCard;
+    Game game = Game.getInstance();
     private int turnCounter = 0;
     private int catastropheTurnCounter = 0;
     //-----------------------------------------------------Views---------------------------------------------------//
@@ -88,7 +90,6 @@ public class MainActivityGame extends SharedMainActivity {
     private ImageButton imageButtonExit;
     //-----------------------------------------------------Booleans---------------------------------------------------//
     private boolean doubleBackToExitPressedOnce = false;
-    public static boolean soldierRemoval = false;
     private boolean repeatedTurn = false;
     //-----------------------------------------------------Array---------------------------------------------------//
     private Button[] answerButtons; // Array to hold the answer buttons
@@ -275,7 +276,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void renderPlayer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        updateAbilitiesAfterThreeTurns(currentPlayer);
+        updateAbilitiesAfterCooldown(currentPlayer);
         updateClassAbilityButton(currentPlayer);
         updatePlayerInfo(currentPlayer);
         updateNumberText();
@@ -489,7 +490,6 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void startNumberShuffleAnimation() {
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
         int originalNumber = Game.getInstance().getCurrentNumber(); // Store the original number
         final int shuffleDuration = 1500;
         int shuffleInterval = originalNumber >= 1000 ? 50 : 100;
@@ -581,7 +581,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void handleSoldierClass(Player currentPlayer) {
-        Game game = Game.getInstance();
+
         if (!isFirstTurn) {
             if (game.getCurrentNumber() <= 10) {
                 currentPlayer.setUsedClassAbility(true);
@@ -610,31 +610,24 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void handleGoblinClass(Player currentPlayer) {
-        Game game = Game.getInstance();
+
         Player randomPlayer = game.getRandomPlayerExcludingCurrent();
-        if (randomPlayer == null) {
-            displayToastMessage("Well since you're by yourself, nothing happens :D");
-        } else {
-            randomPlayer.removeWildCard(randomPlayer, 2);
-            showGameDialog(GOBLIN + "'s Active: \n\n" + randomPlayer.getName() + " lost two wildcards!");
-        }
+        randomPlayer.removeWildCard(randomPlayer, 2);
+        showGameDialog(GOBLIN + "'s Active: \n\n" + randomPlayer.getName() + " lost two wildcards!");
+
         currentPlayer.setUsedClassAbility(true);
         btnClassAbility.setVisibility(View.INVISIBLE);
         AudioManager.getInstance().playSoundEffects(this, GOBLIN);
     }
 
     private void handleAngryJimClass(Player currentPlayer) {
-        Game game = Game.getInstance();
+
         Player randomPlayer = game.getRandomPlayerExcludingCurrent();
-        if (randomPlayer != null) {
-            game.updateRepeatingTurns(randomPlayer, 1);
-            showGameDialog(ANGRY_JIM + "'s Active: \n\n" + randomPlayer.getName() + " must repeat their turn.");
-            btnClassAbility.setVisibility(View.INVISIBLE);
-            currentPlayer.setUsedClassAbility(true);
-            AudioManager.getInstance().playSoundEffects(this, ANGRY_JIM);
-        } else {
-            displayToastMessage("Well since you're by yourself, nothing happens :D");
-        }
+        game.updateRepeatingTurns(randomPlayer, 1);
+        showGameDialog(ANGRY_JIM + "'s Active: \n\n" + randomPlayer.getName() + " must repeat their turn.");
+        btnClassAbility.setVisibility(View.INVISIBLE);
+        currentPlayer.setUsedClassAbility(true);
+        AudioManager.getInstance().playSoundEffects(this, ANGRY_JIM);
     }
 
 
@@ -668,17 +661,19 @@ public class MainActivityGame extends SharedMainActivity {
         AudioManager.getInstance().playSoundEffects(this, WITCH);
     }
 
-    private void updateAbilitiesAfterThreeTurns(Player currentPlayer) {
-        if ((SURVIVOR.equals(currentPlayer.getClassChoice()) || WITCH.equals(currentPlayer.getClassChoice())) && currentPlayer.getUsedClassAbility()) {
+    private void updateAbilitiesAfterCooldown(Player currentPlayer) {
+        if (currentPlayer.getUsedClassAbility()) {
             currentPlayer.incrementAbilityTurnCounter();
-            Log.d(TAG, "increment counter: " + currentPlayer.getAbilityTurnCounter());
-            if (currentPlayer.getAbilityTurnCounter() == 4) {
-                Log.d(TAG, "updateAbilitiesAfterThreeTurns: " + currentPlayer.getName());
+            Log.d(TAG, "Incremented counter for " + currentPlayer.getName() + ": " + currentPlayer.getAbilityTurnCounter());
+
+            if (currentPlayer.getAbilityTurnCounter() >= currentPlayer.getClassAbilityCooldown()) {
+                Log.d(TAG, "Cooldown complete for: " + currentPlayer.getName());
                 currentPlayer.setUsedClassAbility(false);
                 currentPlayer.resetSpecificTurnCounter();
             }
         }
     }
+
 
     //-----------------------------------------------------Passive Effects---------------------------------------------------//
     private String getClassPassiveDescription(String classChoice) {
@@ -726,8 +721,6 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
 
-
-
     private void handleScientistPassive(Player currentPlayer) {
         if (!repeatedTurn && !isFirstTurn) {
             Handler handler = new Handler();
@@ -744,7 +737,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void handleAngryJimPassive(Player currentPlayer) {
-        Game game = Game.getInstance();
+
         boolean numberBelow50 = game.getCurrentNumber() < 50;
         Player lastPlayer = game.getLastTurnPlayer();
         boolean isFirstAngryJimTurn = lastPlayer == null || !lastPlayer.equals(currentPlayer);
@@ -819,7 +812,6 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
 
-
     //-----------------------------------------------------External Class Effects---------------------------------------------------//
 
     private void showDialog(String message, int layoutId, int textViewId, int closeButtonId) {
@@ -867,7 +859,7 @@ public class MainActivityGame extends SharedMainActivity {
                     displayToastMessage("You cannot choose 0 as your number.");
                     btnClassAbility.setVisibility(View.VISIBLE);
                 } else {
-                    Game game = Game.getInstance();
+
                     Player currentPlayer = game.getCurrentPlayer();
 
                     if (game.getRepeatingTurnsForPlayer(currentPlayer) == 0) {
@@ -1024,7 +1016,6 @@ public class MainActivityGame extends SharedMainActivity {
 
     //-----------------------------------------------------Specific WildCard Functions---------------------------------------------------//
     private void halveCurrentNumber() {
-        Game game = Game.getInstance();
         int currentNumber = game.getCurrentNumber();
         int updatedNumber = Math.max(currentNumber / 2, 1);
         updateNumber(updatedNumber);

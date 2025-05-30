@@ -37,6 +37,7 @@ import com.example.countingdowngame.createPlayer.PlayerListAdapter;
 import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.drawing.DrawingPlayerModels;
 import com.example.countingdowngame.game.Game;
+import com.example.countingdowngame.mainActivity.classAbilities.AbilityComplimentary;
 import com.example.countingdowngame.numberChoice.NumberChoice;
 import com.example.countingdowngame.player.Player;
 import com.google.gson.Gson;
@@ -265,7 +266,14 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
 
             if (selectedCharacterClass != null) {
                 selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
-                String message = selectedCharacterClass.getClassName().equals("No Class") ? selectedPlayer.getName() + " chose no class!" : selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
+
+                // 🔽 Assign class ability cooldown here
+                AbilityComplimentary.assignClassAbilityCooldown(selectedPlayer);
+
+                String message = selectedCharacterClass.getClassName().equals("No Class")
+                        ? selectedPlayer.getName() + " chose no class!"
+                        : selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
+
                 StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
                 Log.d("Confirm Button", "Confirm Button Clicked - Page Number: " + selectedPageNumber + ", Character ID: " + selectedCharacterClass.getId());
                 dialog.dismiss();
@@ -281,6 +289,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
             dialog.dismiss();
         }
     }
+
 
 
     private CharacterClassStore findCharacterClassById(int id) {

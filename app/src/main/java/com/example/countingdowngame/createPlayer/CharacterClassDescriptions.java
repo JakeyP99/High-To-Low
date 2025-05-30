@@ -13,11 +13,11 @@ public class CharacterClassDescriptions {
     // Active Ability Descriptions
     public static final String archerActiveDescription = "You can take 2 drinks off the total amount, and hand them out to players.";
     public static final String witchActiveDescription = "You can skip your turn. Ability resets after three turns.";
-    public static final String scientistActiveDescription = "You can change the current number to be whatever you want. You have to repeat your turn!";
-    public static final String soldierActiveDescription = "If the number less than or equal to 10, add 4 drinks to the counter, but you must generate the number twice.";
+    public static final String scientistActiveDescription = "You can change the current number to be whatever you want, this does not skip your turn!";
+    public static final String soldierActiveDescription = "If the number is less than or equal to 10, add 4 drinks to the counter, but you must generate the number twice.";
     public static final String quizMagicianActiveDescription = "The next wildcard will be 2 quiz questions.";
     public static final String survivorActiveDescription = "Half the current number, and continue your turn. Ability resets after 3 turns.";
-    public static final String angryJimActiveDescription = "Randomly make another player repeat their turn.";
+    public static final String angryJimActiveDescription = "Randomly make another player repeat their turn. Ability resets after 5 turns.";
     public static final String goblinActiveDescription = "Remove 2 wildcards from a random player.";
     public static final String noClassDescription = "Choose this class if you don't want to have any abilities.";
 
