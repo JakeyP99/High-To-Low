@@ -17,6 +17,8 @@ import static com.example.countingdowngame.mainActivity.MainActivityCatastrophes
 import static com.example.countingdowngame.mainActivity.MainActivityCatastrophes.setCatastropheLimit;
 import static com.example.countingdowngame.mainActivity.MainActivityLogging.logPlayerInformation;
 import static com.example.countingdowngame.mainActivity.MainActivityLogging.logSelectedCardInfo;
+import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleSoldierPassive;
+import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleWitchPassive;
 
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
@@ -40,7 +42,7 @@ import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
 import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.GameEventType;
-import com.example.countingdowngame.mainActivity.classAbilities.passiveAbilities;
+import com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities;
 import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.wildCards.WildCardProperties;
@@ -71,6 +73,7 @@ public class MainActivityGame extends SharedMainActivity {
     //-----------------------------------------------------Public ---------------------------------------------------//
     public static int drinkNumberCounterInt = 0;
     public static int catastropheLimit;
+    public static boolean isFirstTurn = true;
     private static TextView numberCounterText;
     //-----------------------------------------------------Maps and Sets---------------------------------------------------//
     private final List<WildCardProperties> usedCards = new ArrayList<>();  // Class-level variable to track used cards
@@ -83,11 +86,9 @@ public class MainActivityGame extends SharedMainActivity {
     private ImageView playerImage;
     private TextView drinkNumberTextView, nextPlayerText, wildActivityTextView, wildText;
     private ImageButton imageButtonExit;
-
     //-----------------------------------------------------Booleans---------------------------------------------------//
     private boolean doubleBackToExitPressedOnce = false;
-    public static boolean isFirstTurn = true;
-    private boolean soldierRemoval = false;
+    public static boolean soldierRemoval = false;
     private boolean repeatedTurn = false;
     //-----------------------------------------------------Array---------------------------------------------------//
     private Button[] answerButtons; // Array to hold the answer buttons
@@ -131,6 +132,7 @@ public class MainActivityGame extends SharedMainActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a5_game_start);
         initializeViews();
+        PassiveAbilities.setActivity(this);
         setupAudioManagerForMuteButtons(muteGif, soundGif);
         setupButtons();
         initializeCatastrophe();
@@ -711,7 +713,7 @@ public class MainActivityGame extends SharedMainActivity {
         if (SOLDIER.equals(classChoice)) {
             handleSoldierPassive();
         } else if (WITCH.equals(classChoice)) {
-            passiveAbilities.handleWitchPassive(currentPlayer, this);
+            handleWitchPassive(currentPlayer);
         } else if (SCIENTIST.equals(classChoice)) {
             handleScientistPassive(currentPlayer);
         } else if (ANGRY_JIM.equals(classChoice)) {
@@ -722,30 +724,6 @@ public class MainActivityGame extends SharedMainActivity {
             handleGoblinPassive(currentPlayer);
         }
     }
-
-
-    private void handleSoldierPassive() {
-        Game game = Game.getInstance();
-        Player currentPlayer = game.getCurrentPlayer();
-        int currentNumber = game.getCurrentNumber();
-
-        int minRange = 10;
-        int maxRange = 15;
-
-        if (!isFirstTurn) {
-            if (!soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {
-                soldierRemoval = true;
-                showGameDialog(currentPlayer.getName() + " has escaped the game as the soldier.");
-                // Mark player as removed (optional, if you want to log it)
-                currentPlayer.setRemoved(true);
-                // Actually remove the player from the game
-                game.removePlayer(currentPlayer);
-            } else if (soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {
-                showGameDialog("Sorry " + currentPlayer.getName() + ", a soldier has already escaped the game.");
-            }
-        }
-    }
-
 
 
 
@@ -776,17 +754,12 @@ public class MainActivityGame extends SharedMainActivity {
             updatePlayerInfo(currentPlayer);
             currentPlayer.incrementAbilityTurnCounter();
         }
-
         if (numberBelow50) {
             handleSoldierPassive();
-        }
-
-        if (numberBelow50 && !soldierRemoval) {
             handleArcherPassive(currentPlayer);
             handleGoblinPassive(currentPlayer);
-            passiveAbilities.handleWitchPassive(currentPlayer, this);
+            handleWitchPassive(currentPlayer);
             handleScientistPassive(currentPlayer);
-            handleSurvivorPassive(currentPlayer);
         }
     }
 
@@ -835,14 +808,16 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void handleSurvivorPassive(Player currentPlayer) {
         int currentNumber = Game.getInstance().getCurrentNumber();
-        Log.d(TAG, "handleSurvivorPassive: current number = " + currentNumber);
+        String classChoice = currentPlayer.getClassChoice();
 
-        String drinksText = (drinkNumberCounterInt == 1) ? "drink" : "drinks";
-
-        if (SURVIVOR.equals(currentPlayer.getClassChoice()) && currentNumber == 1) {
-            showGameDialog(SURVIVOR + "'s Passive: \n\n" + currentPlayer.getName() + " survived a 1, hand out " + drinkNumberCounterInt + " " + drinksText);
+        if ((SURVIVOR.equals(classChoice) || ANGRY_JIM.equals(classChoice)) && currentNumber == 1) {
+            Log.d(TAG, "handleSurvivorPassive: current number = " + currentNumber);
+            String drinksText = (drinkNumberCounterInt == 1) ? "drink" : "drinks";
+            showGameDialog(SURVIVOR + "'s Passive: \n\n" + currentPlayer.getName()
+                    + " survived a 1, hand out " + drinkNumberCounterInt + " " + drinksText);
         }
     }
+
 
 
     //-----------------------------------------------------External Class Effects---------------------------------------------------//
@@ -1296,12 +1271,11 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private class ShuffleRunnable implements Runnable {
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
-
         private final Random random;
         private final int originalNumber;
         private final int shuffleDuration;
         private final int shuffleInterval;
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
         private int shuffleTime = 0;
 
         ShuffleRunnable(Random random, int originalNumber, int shuffleDuration, int shuffleInterval) {
@@ -1327,9 +1301,8 @@ public class MainActivityGame extends SharedMainActivity {
                 Game.getInstance().recordTurn(currentPlayer, currentNumber);
                 Log.d(TAG, "NextNumber = " + currentNumber);
 
-                if (SURVIVOR.equals(currentPlayer.getClassChoice()) && originalNumber == 1 && currentNumber == 1) {
-                    handleSurvivorPassive(currentPlayer);
-                }
+                handleSurvivorPassive(currentPlayer);
+
 
                 renderCurrentNumber(currentNumber, MainActivityGame.this::gotoGameEnd, numberCounterText);
 
