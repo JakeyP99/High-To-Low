@@ -1,10 +1,12 @@
 package com.example.countingdowngame.mainActivity.classAbilities;
 
-import static com.airbnb.lottie.L.TAG;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
+import static com.example.countingdowngame.mainActivity.MainActivityGame.drinkNumberCounterInt;
 import static com.example.countingdowngame.mainActivity.MainActivityGame.isFirstTurn;
 import static com.example.countingdowngame.mainActivity.MainActivityGame.soldierRemoval;
 
+import android.content.ContentValues;
 import android.util.Log;
 
 import com.example.countingdowngame.game.Game;
@@ -12,8 +14,8 @@ import com.example.countingdowngame.mainActivity.MainActivityGame;
 import com.example.countingdowngame.player.Player;
 
 public class PassiveAbilities {
-    private static MainActivityGame activity;
     static Game game = Game.getInstance();
+    private static MainActivityGame activity;
 
     public static void setActivity(MainActivityGame activityInstance) {
         activity = activityInstance;
@@ -37,7 +39,7 @@ public class PassiveAbilities {
         Player currentPlayer = game.getCurrentPlayer();
         int currentNumber = game.getCurrentNumber();
 
-        Log.d("TAG", "Current number: " + currentNumber );
+        Log.d("TAG", "Current number: " + currentNumber);
         int minRange = 10;
         int maxRange = 15;
 
@@ -54,5 +56,15 @@ public class PassiveAbilities {
                 activity.showGameDialog("Sorry " + currentPlayer.getName() + ", a soldier has already escaped the game.");
             }
         }
+    }
+
+
+    public static void handleSurvivorPassive(Player currentPlayer) {
+        int currentNumber = Game.getInstance().getCurrentNumber();
+        Log.d(ContentValues.TAG, "handleSurvivorPassive: current number = " + currentNumber);
+        String drinksText = (drinkNumberCounterInt == 1) ? "drink" : "drinks";
+        activity.showGameDialog(SURVIVOR + "'s Passive: \n\n" + currentPlayer.getName()
+                + " survived a 1, hand out " + drinkNumberCounterInt + " " + drinksText);
+
     }
 }

@@ -26,6 +26,7 @@ public class Game {
     private final List<String> playerNames = new ArrayList<>();
     private int startingNumber = 0;
     private int currentNumber = 0;
+    private int previousNumber = 0;
     private int currentPlayerId = 0;
     private int catastropheQuantity = 0;
     private GameEventListener gameEventListener;
@@ -91,6 +92,7 @@ public class Game {
         gameStarted = true;
         gameEventListener = listener;
         currentNumber = startNum;
+        previousNumber = startNum;
         startingNumber = startNum;
         currentPlayerId = 0;
         turns.clear();
@@ -255,9 +257,15 @@ public class Game {
 
     public int nextNumber() {
         Random random = new Random();
+        previousNumber = currentNumber; // Save current as previous before changing it
         int nextNumber = random.nextInt(currentNumber + 1);
         currentNumber = nextNumber;
         return nextNumber;
+    }
+
+
+    public int getPreviousNumber() {
+        return previousNumber;
     }
     //-----------------------------------------------------Stats ---------------------------------------------------//
     public String getCatastropheQuantityString() {
@@ -370,7 +378,6 @@ public class Game {
         gameStarted = false;
         resetPlayers(context);
     }
-
 
     public ArrayList<String> getPreviousNumbersFormatted() {
         ArrayList<String> formatted = new ArrayList<>();

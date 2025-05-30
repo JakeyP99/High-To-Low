@@ -18,6 +18,7 @@ import static com.example.countingdowngame.mainActivity.MainActivityCatastrophes
 import static com.example.countingdowngame.mainActivity.MainActivityLogging.logPlayerInformation;
 import static com.example.countingdowngame.mainActivity.MainActivityLogging.logSelectedCardInfo;
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleSoldierPassive;
+import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleSurvivorPassive;
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleWitchPassive;
 
 import android.app.AlertDialog;
@@ -82,6 +83,7 @@ public class MainActivityGame extends SharedMainActivity {
     Game game = Game.getInstance();
     private int turnCounter = 0;
     private int catastropheTurnCounter = 0;
+
     //-----------------------------------------------------Views---------------------------------------------------//
     private Button btnAnswer, btnWildContinue, btnClassAbility, btnGenerate, btnQuizAnswerBL, btnQuizAnswerBR, btnQuizAnswerTL, btnQuizAnswerTR, btnWild;
     private GifImageView confettiImageViewBL, confettiImageViewBR, confettiImageViewTL, confettiImageViewTR, infoGif, muteGif, soundGif;
@@ -799,17 +801,7 @@ public class MainActivityGame extends SharedMainActivity {
         return QUIZ_MAGICIAN.equals(currentPlayer.getClassChoice()) || (ANGRY_JIM.equals(currentPlayer.getClassChoice()) && Game.getInstance().getCurrentNumber() < 50);
     }
 
-    private void handleSurvivorPassive(Player currentPlayer) {
-        int currentNumber = Game.getInstance().getCurrentNumber();
-        String classChoice = currentPlayer.getClassChoice();
 
-        if ((SURVIVOR.equals(classChoice) || ANGRY_JIM.equals(classChoice)) && currentNumber == 1) {
-            Log.d(TAG, "handleSurvivorPassive: current number = " + currentNumber);
-            String drinksText = (drinkNumberCounterInt == 1) ? "drink" : "drinks";
-            showGameDialog(SURVIVOR + "'s Passive: \n\n" + currentPlayer.getName()
-                    + " survived a 1, hand out " + drinkNumberCounterInt + " " + drinksText);
-        }
-    }
 
 
     //-----------------------------------------------------External Class Effects---------------------------------------------------//
@@ -1288,11 +1280,18 @@ public class MainActivityGame extends SharedMainActivity {
             } else {
 
                 int currentNumber = Game.getInstance().nextNumber();
+                int previousNumber = Game.getInstance().getPreviousNumber(); // Assume you store it
 
                 Game.getInstance().recordTurn(currentPlayer, currentNumber);
                 Log.d(TAG, "NextNumber = " + currentNumber);
 
-                handleSurvivorPassive(currentPlayer);
+                Log.d(TAG, "Previous Number = " + previousNumber);
+
+                if (currentNumber == 1 && previousNumber == 1 &&
+                        (SURVIVOR.equals(currentPlayer.getClassChoice()) || ANGRY_JIM.equals(currentPlayer.getClassChoice()))) {
+                    handleSurvivorPassive(currentPlayer);
+                }
+
 
 
                 renderCurrentNumber(currentNumber, MainActivityGame.this::gotoGameEnd, numberCounterText);
