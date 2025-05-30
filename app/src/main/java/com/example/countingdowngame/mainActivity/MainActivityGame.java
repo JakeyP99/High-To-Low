@@ -406,7 +406,10 @@ public class MainActivityGame extends SharedMainActivity {
     private void updateClassAbilityButton(Player currentPlayer) {
         btnClassAbility.setText(String.format("%s's Ability", currentPlayer.getClassChoice()));
 
-        boolean showClassAbilityButton = (SCIENTIST.equals(currentPlayer.getClassChoice()) || ARCHER.equals(currentPlayer.getClassChoice()) || WITCH.equals(currentPlayer.getClassChoice()) || QUIZ_MAGICIAN.equals(currentPlayer.getClassChoice()) || SURVIVOR.equals(currentPlayer.getClassChoice()) || GOBLIN.equals(currentPlayer.getClassChoice()) || ANGRY_JIM.equals(currentPlayer.getClassChoice()) || SOLDIER.equals(currentPlayer.getClassChoice())) && !currentPlayer.getUsedClassAbility();
+        boolean showClassAbilityButton = (SCIENTIST.equals(currentPlayer.getClassChoice()) || ARCHER.equals(currentPlayer.getClassChoice())
+                || WITCH.equals(currentPlayer.getClassChoice()) || QUIZ_MAGICIAN.equals(currentPlayer.getClassChoice())
+                || SURVIVOR.equals(currentPlayer.getClassChoice()) || GOBLIN.equals(currentPlayer.getClassChoice())
+                || ANGRY_JIM.equals(currentPlayer.getClassChoice()) || SOLDIER.equals(currentPlayer.getClassChoice())) && !currentPlayer.getUsedClassAbility();
 
         Log.d(TAG, "updateClassAbilityButton: " + currentPlayer.getUsedClassAbility());
 
@@ -699,17 +702,19 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void updateAbilitiesAfterCooldown(Player currentPlayer) {
-        if (currentPlayer.getUsedClassAbility()) {
+        if (currentPlayer.getUsedClassAbility() && WITCH.equals(currentPlayer.getClassChoice()) ||
+                        SURVIVOR.equals(currentPlayer.getClassChoice()) ||
+                        ANGRY_JIM.equals(currentPlayer.getClassChoice())) {
+
             currentPlayer.incrementAbilityTurnCounter();
-            Log.d(TAG, "Incremented counter for " + currentPlayer.getName() + ": " + currentPlayer.getAbilityTurnCounter());
 
             if (currentPlayer.getAbilityTurnCounter() >= currentPlayer.getClassAbilityCooldown()) {
-                Log.d(TAG, "Cooldown complete for: " + currentPlayer.getName());
                 currentPlayer.setUsedClassAbility(false);
-                currentPlayer.resetSpecificTurnCounter();
+                currentPlayer.resetAbilityTurnCounter();
             }
         }
     }
+
 
 
     //-----------------------------------------------------Passive Effects---------------------------------------------------//
@@ -799,7 +804,7 @@ public class MainActivityGame extends SharedMainActivity {
             currentPlayer.incrementAbilityTurnCounter();
         }
         if (currentPlayer.getAbilityTurnCounter() == 3) {
-            currentPlayer.resetSpecificTurnCounter();
+            currentPlayer.resetAbilityTurnCounter();
             Log.d(TAG, "handleGoblinPassive: reset turn");
             currentPlayer.gainWildCards(1);
         }
@@ -813,7 +818,7 @@ public class MainActivityGame extends SharedMainActivity {
         }
 
         if (currentPlayer.getAbilityTurnCounter() == 3) {
-            currentPlayer.resetSpecificTurnCounter();
+            currentPlayer.resetAbilityTurnCounter();
             Log.d("ArcherClass", "Passive ability triggered");
 
             int chance = new Random().nextInt(100);

@@ -187,7 +187,7 @@ public class Player implements Serializable {
         abilityTurnCounter++;
     }
 
-    public void resetSpecificTurnCounter() {
+    public void resetAbilityTurnCounter() {
         abilityTurnCounter = 0;
     }
 
