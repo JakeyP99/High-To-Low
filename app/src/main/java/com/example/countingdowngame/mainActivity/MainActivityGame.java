@@ -36,6 +36,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
@@ -614,15 +615,47 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void handleGoblinClass(Player currentPlayer) {
+        // Get all players except the current one
+        List<Player> eligiblePlayers = new ArrayList<>();
+        for (Player player : game.getPlayers()) {
+            if (!player.equals(currentPlayer) && player.getWildCardAmount() > 0) {
+                eligiblePlayers.add(player);
+            }
+        }
 
-        Player randomPlayer = game.getRandomPlayerExcludingCurrent();
+        // If no one has wildcards, show a toast and exit
+        if (eligiblePlayers.isEmpty()) {
+            Toast.makeText(this, "All players have no wildcards", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Pick a random eligible player
+        Player randomPlayer = eligiblePlayers.get(new Random().nextInt(eligiblePlayers.size()));
+
+        // Remove 2 wildcards
         randomPlayer.removeWildCard(randomPlayer, 2);
-        showGameDialog(GOBLIN + "'s Active: \n\n" + randomPlayer.getName() + " lost two wildcards!");
+
+        int wildcardsLeft = randomPlayer.getWildCardAmount();
+        String wildcardText;
+
+        if (wildcardsLeft == 0) {
+            wildcardText = "no more wildcards";
+        } else if (wildcardsLeft == 1) {
+            wildcardText = "1 wildcard left";
+        } else {
+            wildcardText = wildcardsLeft + " wildcards left";
+        }
+
+        showGameDialog(GOBLIN + "'s Active: \n\n" +
+                randomPlayer.getName() + " lost two wildcards.\n\n" +
+                randomPlayer.getName() + " now has " + wildcardText + ".");
 
         currentPlayer.setUsedClassAbility(true);
         btnClassAbility.setVisibility(View.INVISIBLE);
         AudioManager.getInstance().playSoundEffects(this, GOBLIN);
     }
+
+
 
     private void handleAngryJimClass(Player currentPlayer) {
 
