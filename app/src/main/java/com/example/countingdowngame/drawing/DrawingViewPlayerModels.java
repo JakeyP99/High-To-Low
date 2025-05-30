@@ -86,13 +86,14 @@ public class DrawingViewPlayerModels extends View {
     public void setEraserMode(boolean eraserMode) {
         this.isEraserMode = eraserMode;
         if (eraserMode) {
-            drawingPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+            drawingPaint.setColor(Color.WHITE);  // Set the color to white for eraser
             drawingPaint.setStrokeWidth(eraserSize);
         } else {
             drawingPaint.setColor(currentColor);
             drawingPaint.setStrokeWidth(penSize);
         }
     }
+
 
     public void setPenSize(float size) {
         penSize = size;

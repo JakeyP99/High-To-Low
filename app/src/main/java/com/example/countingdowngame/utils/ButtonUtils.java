@@ -30,7 +30,7 @@ public class ButtonUtils {
     private static final int NUM_SOUNDS = 4; // Number of sounds in the rotation
     private static int currentSoundIndex = 0; // Current index of the sound being played
     private final MediaPlayer[] burp = new MediaPlayer[NUM_SOUNDS];
-    private MediaPlayer bop;
+    private final MediaPlayer bop;
     private final AppCompatActivity mContext;
     private final Drawable buttonHighlight;
     private boolean isMuted = false;
