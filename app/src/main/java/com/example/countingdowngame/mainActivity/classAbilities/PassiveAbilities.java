@@ -91,14 +91,27 @@ public class PassiveAbilities {
         if (!repeatedTurn && !isFirstTurn) {
             Handler handler = new Handler();
             int delayMillis = 1;
-            int chance = new Random().nextInt(100);
+
+            int currentNumber = Game.getInstance().getCurrentNumber();
+            int skipChance;
+
+            if (currentNumber < 10) {
+                skipChance = 20; // 20% chance
+            } else if (currentNumber < 100) {
+                skipChance = 15; // 15% chance
+            } else {
+                skipChance = 10; // Default 10% chance
+            }
+
+            int chance = new Random().nextInt(100); // 0–99
 
             handler.postDelayed(() -> {
-                if (chance < 10) {
-                    activity.showGameDialog(SCIENTIST + "'s Passive: \n\n" + currentPlayer.getName() + " is a scientist and their turn was skipped. ");
+                if (chance < skipChance) {
+                    activity.showGameDialog(SCIENTIST + "'s Passive: \n\n" + currentPlayer.getName() + " is a scientist and their turn was skipped.");
                     currentPlayer.useSkip();
                 }
             }, delayMillis);
         }
     }
+
 }

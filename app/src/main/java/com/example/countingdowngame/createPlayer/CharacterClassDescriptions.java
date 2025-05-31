@@ -25,7 +25,7 @@ public class CharacterClassDescriptions {
     // Passive Ability Descriptions
     public static final String archerPassiveDescription = "For every third turn, there is a 60% chance the drinking number will increase by 2 and a 40% chance it will decrease by 2.";
     public static final String witchPassiveDescription = "Whenever it is your turn, for every even number, you can hand out a drink, but for every odd number you have to take a drink.";
-    public static final String scientistPassiveDescription = "There's a 10% chance your turn is skipped.";
+    public static final String scientistPassiveDescription = "The lower the current number, the more chance your turn will be skipped.";
     public static final String soldierPassiveDescription = "If you land between 10 and 15, you escape the game. This means you no longer will be playing, and won't have to drink anymore. Only one soldier can be removed from the game.";
     public static final String quizMagicianPassiveDescription = "All multi-choice quizzes now have only 2 answers available, instead of 4. All correctly answered questions cause all players to take 2 drinks.";
     public static final String survivorPassiveDescription = "If the current number is 2 or less, and you generate a number and survive, you get to distribute the current count of drinks. This does not change the drink counter.";
