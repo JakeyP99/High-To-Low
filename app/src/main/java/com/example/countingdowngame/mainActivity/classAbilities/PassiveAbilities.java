@@ -88,7 +88,7 @@ public class PassiveAbilities {
     }
 
     public static void handleScientistPassive(Player currentPlayer) {
-        if (!repeatedTurn && !isFirstTurn) {
+        if (!isFirstTurn) {
             Handler handler = new Handler();
             int delayMillis = 1;
 

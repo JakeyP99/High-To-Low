@@ -326,7 +326,6 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void updateCatastropheTurnCounter() {
         MainActivityCatastrophes.Catastrophe catastrophe = catastrophesManager.deployCatastrophe();
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
         catastropheTurnCounter++;
         if (catastropheTurnCounter == catastropheLimit) {
             switch (catastrophe.getEffect()) {
@@ -875,16 +874,9 @@ public class MainActivityGame extends SharedMainActivity {
 
                     Player currentPlayer = game.getCurrentPlayer();
 
-                    if (game.getRepeatingTurnsForPlayer(currentPlayer) == 0) {
-                        game.activateRepeatingTurn(currentPlayer, 1);
-                    } else {
-                        game.updateRepeatingTurns(currentPlayer, 1);
-                    }
-
                     Game.getInstance().setCurrentNumber(newNumber);
                     SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(newNumber));
                     numberCounterText.setText(String.valueOf(newNumber));
-                    renderCurrentNumber(newNumber, this::gotoGameEnd, numberCounterText);
                     currentPlayer.setUsedActiveAbility(true);
                     updateNumber(newNumber);
                     AudioManager.getInstance().playSoundEffects(this, SCIENTIST);
