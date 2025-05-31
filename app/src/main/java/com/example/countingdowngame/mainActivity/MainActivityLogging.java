@@ -14,7 +14,7 @@ public class MainActivityLogging {
                 " is a " + currentPlayer.getClassChoice() +
                 " with " + currentPlayer.getWildCardAmount() +
                 " Wildcards " +
-                "and " + currentPlayer.getUsedClassAbility() +
+                "and " + currentPlayer.getUsedActiveAbility() +
                 " is the class ability and are they removed ?" +
                 currentPlayer.isRemoved());
     }

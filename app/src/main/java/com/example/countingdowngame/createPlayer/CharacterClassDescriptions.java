@@ -30,5 +30,5 @@ public class CharacterClassDescriptions {
     public static final String quizMagicianPassiveDescription = "All multi-choice quizzes now have only 2 answers available, instead of 4. All correctly answered questions cause all players to take 2 drinks.";
     public static final String survivorPassiveDescription = "If the current number is 2 or less, and you generate a number and survive, you get to distribute the current count of drinks. This does not change the drink counter.";
     public static final String angryJimPassiveDescription = "When the number is below 50, you gain the passive ability of every class. The catch is, you have to have another turn.";
-    public static final String goblinPassiveDescription = "For every third turn, you gain one wildcard.";
+    public static final String goblinPassiveDescription = "After your third turn, you gain one wildcard.";
 }

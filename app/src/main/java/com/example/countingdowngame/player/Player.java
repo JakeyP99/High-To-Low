@@ -23,12 +23,13 @@ public class Player implements Serializable {
     private int wildCardAmount;
     private int usedWildcards;
     private boolean selected;
-    private boolean usedClassAbility;
+    private boolean usedActiveAbility;
     private boolean justUsedClassAbility;
     private int selectionOrder;
     private boolean usedWildCard;
     private boolean removed;
-    private int abilityTurnCounter; // Add a counter for the active turns of the Survivor class
+    private int passiveAbilityTurnCounter;
+    private int activeAbilityTurnCounter;
     private List<Integer> numbersPlayed = new ArrayList<>();
     private int classAbilityCooldown;
 
@@ -52,12 +53,13 @@ public class Player implements Serializable {
         this.name = name;
         this.classChoice = classChoice;
         this.selected = false;
-        this.usedClassAbility = false;
+        this.usedActiveAbility = false;
         this.justUsedClassAbility = false;
         this.usedWildCard = false;
         this.removed = false;
         resetWildCardAmount(context);
-        this.abilityTurnCounter = 0;
+        this.passiveAbilityTurnCounter = 0;
+        this.activeAbilityTurnCounter = 0;
         this.bulletsInChamberList = new ArrayList<>();
         this.chamberTotalNumberCount = 0;
         this.numbersPlayed = new ArrayList<>();
@@ -122,11 +124,11 @@ public class Player implements Serializable {
         return getRepeatingTurnsForPlayer() + 1;
     }
 
-    public int getClassAbilityCooldown() {
+    public int getActiveAbilityCooldown() {
         return classAbilityCooldown;
     }
 
-    public void setClassAbilityCooldown(int cooldown) {
+    public void setActiveAbilityCooldown(int cooldown) {
         this.classAbilityCooldown = cooldown;
     }
 
@@ -173,44 +175,51 @@ public class Player implements Serializable {
     }
 
 
-    public List<Integer> getNumbersPlayed() {
-        if (numbersPlayed == null) {
-            numbersPlayed = new ArrayList<>();
-        }
-        return new ArrayList<>(numbersPlayed); // Return a copy to preserve encapsulation
+    //-----------------------------------------------------Passive Abilities---------------------------------------------------//
+
+    public void incrementPassiveAbilityTurnCounter() {
+        passiveAbilityTurnCounter++;
     }
 
-
-    //-----------------------------------------------------Survivor Ability---------------------------------------------------//
-
-    public void incrementAbilityTurnCounter() {
-        abilityTurnCounter++;
+    public void resetPassiveAbilityTurnCounter() {
+        passiveAbilityTurnCounter = 0;
     }
 
-    public void resetAbilityTurnCounter() {
-        abilityTurnCounter = 0;
+    public int getPassiveAbilityTurnCounter() {
+        return passiveAbilityTurnCounter;
     }
 
-    public int getAbilityTurnCounter() {
-        return abilityTurnCounter;
+    //-----------------------------------------------------Active Abilities---------------------------------------------------//
+
+    public void incrementActiveAbilityTurnCounter() {
+        activeAbilityTurnCounter++;
     }
 
-    //-----------------------------------------------------Class Ability---------------------------------------------------//
-    public boolean getUsedClassAbility() {
-        return usedClassAbility;
+    public void resetActiveAbilityTurnCounter() {
+        activeAbilityTurnCounter = 0;
     }
 
-    public void setUsedClassAbility(boolean classAbility) {
-        this.usedClassAbility = classAbility;
+    public int getActiveAbilityTurnCounter() {
+        return activeAbilityTurnCounter;
     }
 
-    public boolean getJustUsedClassAbility() {
+    public boolean getUsedActiveAbility() {
+        return usedActiveAbility;
+    }
+
+    public void setUsedActiveAbility(boolean usedActiveAbility) {
+        this.usedActiveAbility = usedActiveAbility;
+    }
+
+    public boolean getJustUsedActiveAbility() {
         return justUsedClassAbility;
     }
 
-    public void setJustUsedClassAbility(boolean justUsedClassAbility) {
-        this.justUsedClassAbility = justUsedClassAbility;
+    public void setJustUsedActiveAbility(boolean justUsedActiveAbility) {
+        this.justUsedClassAbility = justUsedActiveAbility;
     }
+
+    //-----------------------------------------------------Wildcards---------------------------------------------------//
 
     public boolean getJustUsedWildCard() {
         return this.usedWildCard;

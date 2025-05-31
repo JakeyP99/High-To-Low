@@ -7,11 +7,11 @@ import com.example.countingdowngame.player.Player;
 
 public class AbilityComplimentary {
 
-    public static void assignClassAbilityCooldown(Player player) {
+    public static void assignActiveAbilityCooldown(Player player) {
         if (player.getClassChoice().equals(ANGRY_JIM)) {
-            player.setClassAbilityCooldown(7);
+            player.setActiveAbilityCooldown(6);
         } else {
-            player.setClassAbilityCooldown(5); // fallback
+            player.setActiveAbilityCooldown(4); // fallback
         }
     }
 }

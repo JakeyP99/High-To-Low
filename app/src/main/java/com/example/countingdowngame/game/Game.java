@@ -376,6 +376,7 @@ public class Game {
 
     public void endGame(Context context) {
         gameStarted = false;
+        setLastTurnPlayer(null);
         resetPlayers(context);
     }
 
@@ -395,6 +396,7 @@ public class Game {
             if (player != null) {
                 player.resetWildCardAmount(context);
                 repeatingTurnsMap.clear();
+                player.resetPassiveAbilityTurnCounter();
             }
         }
     }

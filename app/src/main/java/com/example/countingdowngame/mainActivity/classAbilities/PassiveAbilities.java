@@ -1,17 +1,24 @@
 package com.example.countingdowngame.mainActivity.classAbilities;
 
+import static android.content.ContentValues.TAG;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SCIENTIST;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
 import static com.example.countingdowngame.mainActivity.MainActivityGame.drinkNumberCounterInt;
 import static com.example.countingdowngame.mainActivity.MainActivityGame.isFirstTurn;
+import static com.example.countingdowngame.mainActivity.MainActivityGame.repeatedTurn;
 import static com.example.countingdowngame.mainActivity.MainActivityGame.soldierRemoval;
 
 import android.content.ContentValues;
+import android.os.Handler;
 import android.util.Log;
 
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.mainActivity.MainActivityGame;
 import com.example.countingdowngame.player.Player;
+
+import java.util.Random;
 
 public class PassiveAbilities {
     static Game game = Game.getInstance();
@@ -66,5 +73,32 @@ public class PassiveAbilities {
         activity.showGameDialog(SURVIVOR + "'s Passive: \n\n" + currentPlayer.getName()
                 + " survived, hand out " + drinkNumberCounterInt + " " + drinksText);
 
+    }
+
+
+    public static void handleGoblinPassive(Player currentPlayer) {
+        if (!ANGRY_JIM.equals(currentPlayer.getClassChoice())) {
+            currentPlayer.incrementPassiveAbilityTurnCounter();
+        }
+        if (currentPlayer.getPassiveAbilityTurnCounter() == 3) {
+            currentPlayer.resetPassiveAbilityTurnCounter();
+            Log.d(TAG, "handleGoblinPassive: reset turn");
+            currentPlayer.gainWildCards(1);
+        }
+    }
+
+    public static void handleScientistPassive(Player currentPlayer) {
+        if (!repeatedTurn && !isFirstTurn) {
+            Handler handler = new Handler();
+            int delayMillis = 1;
+            int chance = new Random().nextInt(100);
+
+            handler.postDelayed(() -> {
+                if (chance < 10) {
+                    activity.showGameDialog(SCIENTIST + "'s Passive: \n\n" + currentPlayer.getName() + " is a scientist and their turn was skipped. ");
+                    currentPlayer.useSkip();
+                }
+            }, delayMillis);
+        }
     }
 }

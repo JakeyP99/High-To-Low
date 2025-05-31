@@ -268,7 +268,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
                 selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
 
                 // 🔽 Assign class ability cooldown here
-                AbilityComplimentary.assignClassAbilityCooldown(selectedPlayer);
+                AbilityComplimentary.assignActiveAbilityCooldown(selectedPlayer);
 
                 String message = selectedCharacterClass.getClassName().equals("No Class")
                         ? selectedPlayer.getName() + " chose no class!"
