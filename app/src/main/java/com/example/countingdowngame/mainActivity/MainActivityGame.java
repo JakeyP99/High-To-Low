@@ -1327,10 +1327,14 @@ public class MainActivityGame extends SharedMainActivity {
 
                 Log.d(TAG, "Previous Number = " + previousNumber);
 
-                if (currentNumber <= 3 && previousNumber == 3 &&
-                        (SURVIVOR.equals(currentPlayer.getClassChoice()) || ANGRY_JIM.equals(currentPlayer.getClassChoice()))) {
+                if ((currentNumber <= 2 && currentNumber > 0 &&
+                        previousNumber <= 2) &&
+                        (SURVIVOR.equals(currentPlayer.getClassChoice()) ||
+                                ANGRY_JIM.equals(currentPlayer.getClassChoice()))) {
+
                     handleSurvivorPassive(currentPlayer);
                 }
+
 
                 renderCurrentNumber(currentNumber, MainActivityGame.this::gotoGameEnd, numberCounterText);
 

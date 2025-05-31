@@ -64,7 +64,7 @@ public class PassiveAbilities {
         Log.d(ContentValues.TAG, "handleSurvivorPassive: current number = " + currentNumber);
         String drinksText = (drinkNumberCounterInt == 1) ? "drink" : "drinks";
         activity.showGameDialog(SURVIVOR + "'s Passive: \n\n" + currentPlayer.getName()
-                + " survived a 1, hand out " + drinkNumberCounterInt + " " + drinksText);
+                + " survived, hand out " + drinkNumberCounterInt + " " + drinksText);
 
     }
 }
