@@ -117,8 +117,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
 
         // Initialize views
-        buttonHighlightDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.buttonhighlight, null);
-        outlineForButton = ResourcesCompat.getDrawable(getResources(), R.drawable.outlineforbutton, null);
         btnProgressToGame = findViewById(R.id.btnContinueToGame);
         button_multiChoice = findViewById(R.id.button_multiChoice);
         button_nonMultiChoice = findViewById(R.id.button_nonMultiChoice);
@@ -218,21 +216,20 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        int viewId = view.getId(); // Store the view ID in a variable
+        int viewId = view.getId();
 
         switch (viewId) {
             case R.id.button_multiChoice:
                 boolean isMultiChoiceSelected = !button_multiChoice.isSelected();
-                toggleMultipleButtons(button_multiChoice, button_nonMultiChoice, isMultiChoiceSelected);
+                toggleQuizSettingsButtons(button_multiChoice, button_nonMultiChoice, isMultiChoiceSelected);
                 break;
 
             case R.id.button_nonMultiChoice:
                 boolean isNonMultiChoiceSelected = !button_nonMultiChoice.isSelected();
-                toggleMultipleButtons(button_multiChoice, button_nonMultiChoice, !isNonMultiChoiceSelected);
+                toggleQuizSettingsButtons(button_nonMultiChoice, button_multiChoice, isNonMultiChoiceSelected);
                 break;
 
             case R.id.button_quiz_toggle:
-                // Check if Quiz Magician is already selected
                 boolean isQuizMagicianSelected = false;
                 List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
                 for (Player player : playerList) {
@@ -242,14 +239,13 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
                     }
                 }
                 if (isQuizMagicianSelected) {
-                    // Quiz Magician is already selected, show toast and don't toggle off
-                    StyleableToast.makeText(getApplicationContext(), "Someone has selected the Quiz Magician class - Quizzes need to be toggled on.", R.style.newToast).show();
+                    StyleableToast.makeText(getApplicationContext(),
+                            "Someone has selected the Quiz Magician class - Quizzes need to be toggled on.",
+                            R.style.newToast).show();
                 } else {
-                    // No Quiz Magician selected yet, proceed with toggling
                     boolean isQuizSelected = !button_quiz_toggle.isSelected();
                     toggleWildCardButton(button_quiz_toggle, quizWildCardsAdapter, isQuizSelected);
                 }
-
                 break;
 
             case R.id.button_task_toggle:
@@ -265,6 +261,7 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
 
         savePreferences();
     }
+
 
 
     //-----------------------------------------------------Wild Card Choices---------------------------------------------------//
@@ -311,21 +308,15 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         });
     }
 
-    private void toggleMultipleButtons(Button selectedButton, Button unselectedButton, boolean isSelected) {
+    private void toggleQuizSettingsButtons(Button selectedButton, Button unselectedButton, boolean isSelected) {
         selectedButton.setSelected(isSelected);
-        selectedButton.setBackground(isSelected ? buttonHighlightDrawable : outlineForButton);
-
         unselectedButton.setSelected(!isSelected);
-        unselectedButton.setBackground(!isSelected ? buttonHighlightDrawable : outlineForButton);
-
-        // Set the toggle state for the selected button
-        selectedButton.setSelected(isSelected);
-        selectedButton.setBackground(isSelected ? buttonHighlightDrawable : outlineForButton);
     }
+
+
 
     private void toggleWildCardButton(Button button, WildCardsAdapter adapter, boolean isSelected) {
         button.setSelected(isSelected);
-        button.setBackground(isSelected ? buttonHighlightDrawable : outlineForButton);
 
         if (adapter != null) {
             WildCardProperties[] wildCards = adapter.getWildCards();
@@ -337,6 +328,7 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
             adapter.saveWildCardProbabilitiesToStorage(wildCards);
         }
     }
+
 
 
     //-----------------------------------------------------Load and Save Preferences---------------------------------------------------//
@@ -375,7 +367,7 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
 
         // Load multi-choice status and toggle buttons accordingly
         boolean isMultiChoiceSelected = store.isMultiChoice();
-        toggleMultipleButtons(button_multiChoice, button_nonMultiChoice, isMultiChoiceSelected);
+        toggleQuizSettingsButtons(button_multiChoice, button_nonMultiChoice, isMultiChoiceSelected);
 
         // Check if "Quiz Magician" player is selected
         boolean isQuizMagicianSelected = false;

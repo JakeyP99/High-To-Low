@@ -10,6 +10,7 @@ public class CharacterClassDescriptions {
     public static final String SURVIVOR = "Survivor";
     public static final String GOBLIN = "Goblin";
     public static final String NO_CLASS = "No Class";
+
     // Active Ability Descriptions
     public static final String archerActiveDescription = "You can take 2 drinks off the total amount, and hand them out to players.";
     public static final String witchActiveDescription = "You can skip your turn. Ability resets after three turns.";
