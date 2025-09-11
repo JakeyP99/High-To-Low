@@ -2,7 +2,11 @@ package com.example.countingdowngame.statistics;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.countingdowngame.R;
@@ -20,18 +24,12 @@ public class Statistics extends ButtonUtilsActivity {
 
     private GifImageView muteGif, soundGif;
     private ListView listViewPlayerGlobalStatistics;
+    private ImageView playerImage;
     @Override
     protected void onResume() {
         super.onResume();
         boolean isMuted = getMuteSoundState();
-        AudioManager.getInstance().resumeBackgroundMusic();
         AudioManager.updateMuteButton(isMuted, muteGif, soundGif);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        AudioManager.getInstance().pauseSound();
     }
 
     @Override
@@ -53,15 +51,14 @@ public class Statistics extends ButtonUtilsActivity {
         List<PlayerStatistic> stats = new ArrayList<>();
         SharedPreferences prefs = getSharedPreferences("PlayerStats", MODE_PRIVATE);
 
-        List<String> knownPlayers = Player.getSavedPlayerNames(this);
-        for (String playerName : knownPlayers) {
+        List<String> knownPlayerNames = Player.getSavedPlayerNames(this);
+
+        for (String playerName : knownPlayerNames) {
             String keyPrefix = playerName.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
             int totalDrinks = prefs.getInt(keyPrefix + "_drinks", 0);  // read global saved stats
             int totalGamesLost = prefs.getInt(keyPrefix + "_gameslost", 0);  // read global saved stats
-
             stats.add(new PlayerStatistic(playerName, totalDrinks, totalGamesLost));
         }
-
         StatisticsAdapter adapter = new StatisticsAdapter(this, stats);
         listViewPlayerGlobalStatistics.setAdapter(adapter);
     }
@@ -93,6 +90,14 @@ public class Statistics extends ButtonUtilsActivity {
     }
 
 
+    public static void savePlayerPhoto(Context context, String playerName, String photoString) {
+        SharedPreferences prefs = context.getSharedPreferences("PlayerStats", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        String keyPrefix = playerName.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
+        editor.putString(keyPrefix + "_photo", photoString);
+        editor.apply();
+    }
 
 }
 

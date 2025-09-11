@@ -1,43 +1,69 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="8dp"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/playerImage"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/wine"
+        app:civ_border_color="@color/bluedarktransparent"
+        app:civ_border_width="3dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/statPlayerName"
-        android:text="Jakey"
-        android:textStyle="bold"
-        android:textColor="@color/bluedark"
-        android:textSize="25sp"
-        android:fontFamily="@font/viga"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <View
-        android:id="@+id/horizontal_line"
-        android:layout_width="170dp"
-        android:layout_height="3dp"
-        android:background="@color/bluedark"
-        android:layout_gravity="left" />
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/viga"
+        android:text="Jakey"
+        android:textColor="@color/bluedark"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.07"
+        app:layout_constraintStart_toEndOf="@+id/playerImage"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1
+" />
 
     <TextView
         android:id="@+id/statTotalDrinks"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:fontFamily="@font/viga"
         android:text="Drinks: 0"
         android:textColor="@color/bluedark"
-        android:textSize="17sp"
-        android:fontFamily="@font/viga"
-        android:layout_marginTop="4dp" />
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.07"
+        app:layout_constraintStart_toEndOf="@+id/playerImage"
+        app:layout_constraintTop_toBottomOf="@+id/statPlayerName"
+        app:layout_constraintVertical_bias="0.1" />
 
     <TextView
         android:id="@+id/statGamesLost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/viga"
         android:text="Games Lost: 0"
         android:textColor="@color/bluedark"
-        android:textSize="17sp"
-        android:fontFamily="@font/viga"
-        android:layout_marginTop="4dp" />
-</LinearLayout>
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/statTotalDrinks"
+        app:layout_constraintTop_toBottomOf="@+id/statTotalDrinks"
+        app:layout_constraintVertical_bias="1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

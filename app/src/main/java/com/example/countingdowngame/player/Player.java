@@ -48,9 +48,6 @@ public class Player implements Serializable {
     private int correctQuizAnswers;
     private int incorrectQuizAnswers;
 
-    private int totalDrinksConsumed;
-    private int totalDrinksGlobal;
-
     //-----------------------------------------------------Set Game---------------------------------------------------//
 
     public Player(Context context, String id, String photo, String name, String classChoice) {
@@ -70,7 +67,6 @@ public class Player implements Serializable {
         this.chamberTotalNumberCount = 0;
         this.numbersPlayed = new ArrayList<>();
 
-        this.totalDrinksConsumed = 0;
     }
 
 
@@ -201,6 +197,16 @@ public class Player implements Serializable {
         }
         return playerNames;
     }
+
+
+    public static List<String> getSavedPlayerImageString(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences("PlayerStats", Context.MODE_PRIVATE);
+        Map<String, ?> allEntries = prefs.getAll();
+        List<String> playerImageString = new ArrayList<>();
+
+        return playerImageString;
+    }
+
 
 
     //-----------------------------------------------------Passive Abilities---------------------------------------------------//

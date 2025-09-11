@@ -478,12 +478,14 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         String playerId = UUID.randomUUID().toString();
 
         Player newPlayer = new Player(this, playerId, photoString, name, null);
+
         newPlayer.setSelected(false);
         playerList.add(newPlayer);
         playerListAdapter.notifyItemInserted(playerList.size() - 1);
 
         // Save initial global stats (0 drinks)
         Statistics.saveGlobalTotalDrinkStat(this, 0, name);
+        Statistics.savePlayerPhoto(this, name, photoString);
 
         savePlayerData();
 
