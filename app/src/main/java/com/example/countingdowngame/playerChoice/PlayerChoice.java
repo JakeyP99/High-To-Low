@@ -40,6 +40,7 @@ import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.mainActivity.classAbilities.AbilityComplimentary;
 import com.example.countingdowngame.numberChoice.NumberChoice;
 import com.example.countingdowngame.player.Player;
+import com.example.countingdowngame.statistics.Statistics;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
@@ -451,7 +452,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
                     showNameInputDialog(bitmap);
                 } else {
                     dialog.dismiss(); // Dismiss the dialog when okayButton is clicked
-                    createNewCharacter(bitmap, name);
+                    createNewPlayer(bitmap, name);
                 }
             } else {
                 StyleableToast.makeText(PlayerChoice.this, "Name must be less than 20 characters.", R.style.newToast).show();
@@ -463,26 +464,29 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         dialog.show();
     }
 
-    private void createNewCharacter(Bitmap bitmap, String name) {
+    private void createNewPlayer(Bitmap bitmap, String name) {
         int size = Math.min(bitmap.getWidth(), bitmap.getHeight());
-
         float scale = (float) size / size;
 
         Matrix matrix = new Matrix();
         matrix.postScale(scale, scale);
 
         Bitmap zoomedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-
         String photoString = convertBitmapToString(zoomedBitmap);
 
         // Generate a UUID for the player
         String playerId = UUID.randomUUID().toString();
 
-        Player newPlayer = new Player(this, playerId, photoString, name, null); // Pass the generated ID
-        newPlayer.setSelected(false); // Set isSelected to false initially
+        Player newPlayer = new Player(this, playerId, photoString, name, null);
+        newPlayer.setSelected(false);
         playerList.add(newPlayer);
         playerListAdapter.notifyItemInserted(playerList.size() - 1);
+
+        // Save initial global stats (0 drinks)
+        Statistics.saveGlobalStats(this, 0, name);
+
         savePlayerData();
+
     }
 
 

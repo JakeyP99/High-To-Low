@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 public class Player implements Serializable {
@@ -48,6 +49,7 @@ public class Player implements Serializable {
     private int incorrectQuizAnswers;
 
     private int totalDrinksConsumed;
+    private int totalDrinksGlobal;
 
     //-----------------------------------------------------Set Game---------------------------------------------------//
 
@@ -178,30 +180,22 @@ public class Player implements Serializable {
         numbersPlayed.add(number);
     }
 
-    public int getTotalDrinksConsumed() {
-        return totalDrinksConsumed;
-    }
-
     //-----------------------------------------------------Global Stats---------------------------------------------------//
 
-
-    public void saveGlobalStats(Context context) {
+    public static List<String> getSavedPlayerNames(Context context) {
         SharedPreferences prefs = context.getSharedPreferences("PlayerStats", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
+        Map<String, ?> allEntries = prefs.getAll();
+        List<String> playerNames = new ArrayList<>();
 
-        // normalize player name to lowercase to avoid case issues
-        String keyPrefix = getName().toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
+        for (String key : allEntries.keySet()) {
+            if (key.endsWith("_drinks")) {
+                String playerName = key.substring(0, key.length() - "_drinks".length());
+                playerName = playerName.replace("_", " "); // optional formatting
+                playerNames.add(playerName);
+            }
+        }
 
-        // Get existing totals (so we add, not overwrite)
-        int savedDrinks = prefs.getInt(keyPrefix + "_drinks", 0);
-
-        // Add current session totals
-        int newTotalDrinks = savedDrinks + getTotalDrinksConsumed();
-
-        // Save back
-        editor.putInt(keyPrefix + "_drinks", newTotalDrinks);
-
-        editor.apply();
+        return playerNames;
     }
 
 

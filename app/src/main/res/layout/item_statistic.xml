@@ -6,18 +6,29 @@
 
     <TextView
         android:id="@+id/statPlayerName"
-        android:textSize="18sp"
+        android:text="Jakey"
         android:textStyle="bold"
+        android:textColor="@color/bluedark"
+        android:textSize="25sp"
+        android:fontFamily="@font/viga"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+
+    <View
+        android:id="@+id/horizontal_line"
+        android:layout_width="170dp"
+        android:layout_height="3dp"
+        android:background="@color/bluedark"
+        android:layout_gravity="left" />
 
     <TextView
         android:id="@+id/statTotalDrinks"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="Drinks: 0"
+        android:textColor="@color/bluedark"
+        android:textSize="17sp"
+        android:fontFamily="@font/viga"
+        android:layout_marginTop="4dp" />
 
-    <TextView
-        android:id="@+id/statTotalTurns"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
 </LinearLayout>

@@ -17,6 +17,7 @@ import com.example.countingdowngame.mainActivity.MainActivityGame;
 import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.audio.AudioManager;
+import com.example.countingdowngame.statistics.Statistics;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.ArrayList;
@@ -56,7 +57,6 @@ public class EndActivityGame extends ButtonUtilsActivity {
         setupAudioManagerForMuteButtons(muteGif, soundGif);
 
         setupButtonControls();
-        saveGlobalStats(this);
     }
 
     private void initializeViews() {
@@ -67,19 +67,6 @@ public class EndActivityGame extends ButtonUtilsActivity {
         setupStatsList(statsList);
         ListView previousNumbers = findViewById(R.id.previousNumbers);
         setupPreviousNumbersList(previousNumbers);
-    }
-
-    public void saveGlobalStats(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences("PlayerStats", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-
-        String keyPrefix = gameInstance.getCurrentPlayer().getName().toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
-
-        int savedDrinks = prefs.getInt(keyPrefix + "_drinks", 0);
-        int newTotalDrinks = savedDrinks + drinkNumberCounter;
-
-        editor.putInt(keyPrefix + "_drinks", newTotalDrinks);
-        editor.apply();
     }
 
     private void setupStatsList(RecyclerView statsList) {
