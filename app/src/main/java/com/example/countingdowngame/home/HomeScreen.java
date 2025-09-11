@@ -53,6 +53,7 @@ public class HomeScreen extends ButtonUtilsActivity {
         Button btnQuickPlay = findViewById(R.id.quickplay);
         Button btnPlayCards = findViewById(R.id.playCards);
         Button btnInstructions = findViewById(R.id.button_Instructions);
+        Button btnStatistics = findViewById(R.id.button_Statistics);
 
         // Set onClickListener for buttons
         btnUtils.setButton(btnQuickPlay, () -> {
@@ -65,6 +66,8 @@ public class HomeScreen extends ButtonUtilsActivity {
             gotoPlayerNumberChoice();
         });
         btnUtils.setButton(btnInstructions, this::gotoInstructions);
+        btnUtils.setButton(btnStatistics, this::gotoStatistics);
+
         drinkGifFunctionality();
     }
 

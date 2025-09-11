@@ -69,7 +69,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-
+    <ListView
+        android:id="@+id/previousNumbers"
+        android:layout_width="372dp"
+        android:layout_height="237dp"
+        android:layout_marginTop="12dp"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:textColor="@color/bluedark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/numberList" />
 
     <TextView
         android:id="@+id/numberList"
@@ -85,19 +96,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/statsList" />
-
-    <ListView
-        android:id="@+id/previousNumbers"
-        android:layout_width="372dp"
-        android:layout_height="237dp"
-        android:layout_marginTop="12dp"
-        android:divider="@null"
-        android:dividerHeight="0dp"
-        android:textColor="@color/bluedark"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.487"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/numberList" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/statsList"

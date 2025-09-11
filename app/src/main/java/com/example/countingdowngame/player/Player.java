@@ -1,6 +1,7 @@
 package com.example.countingdowngame.player;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.countingdowngame.game.Game;
@@ -10,6 +11,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class Player implements Serializable {
@@ -45,6 +47,8 @@ public class Player implements Serializable {
     private int correctQuizAnswers;
     private int incorrectQuizAnswers;
 
+    private int totalDrinksConsumed;
+
     //-----------------------------------------------------Set Game---------------------------------------------------//
 
     public Player(Context context, String id, String photo, String name, String classChoice) {
@@ -64,6 +68,7 @@ public class Player implements Serializable {
         this.chamberTotalNumberCount = 0;
         this.numbersPlayed = new ArrayList<>();
 
+        this.totalDrinksConsumed = 0;
     }
 
 
@@ -150,7 +155,6 @@ public class Player implements Serializable {
         this.incorrectQuizAnswers++;
     }
 
-
     public int getDrinksHandedOutByWitch() {
         return drinksHandedOutByWitch;
     }
@@ -172,6 +176,32 @@ public class Player implements Serializable {
             numbersPlayed = new ArrayList<>();
         }
         numbersPlayed.add(number);
+    }
+
+    public int getTotalDrinksConsumed() {
+        return totalDrinksConsumed;
+    }
+
+    //-----------------------------------------------------Global Stats---------------------------------------------------//
+
+
+    public void saveGlobalStats(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences("PlayerStats", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        // normalize player name to lowercase to avoid case issues
+        String keyPrefix = getName().toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
+
+        // Get existing totals (so we add, not overwrite)
+        int savedDrinks = prefs.getInt(keyPrefix + "_drinks", 0);
+
+        // Add current session totals
+        int newTotalDrinks = savedDrinks + getTotalDrinksConsumed();
+
+        // Save back
+        editor.putInt(keyPrefix + "_drinks", newTotalDrinks);
+
+        editor.apply();
     }
 
 

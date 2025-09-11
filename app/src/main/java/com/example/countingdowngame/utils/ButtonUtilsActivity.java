@@ -19,14 +19,13 @@ import com.example.countingdowngame.numberChoice.NumberChoice;
 import com.example.countingdowngame.numberChoice.PlayerNumberChoice;
 import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.settings.SettingsMenu;
+import com.example.countingdowngame.statistics.Statistics;
 
 import pl.droidsonroids.gif.GifImageView;
 
 public abstract class ButtonUtilsActivity extends AppCompatActivity {
 
     protected ButtonUtils btnUtils;
-    protected Drawable buttonHighlightDrawable;
-    protected Drawable outlineForButton;
     private AudioManager audioManager;
 
     @Override
@@ -73,6 +72,10 @@ public abstract class ButtonUtilsActivity extends AppCompatActivity {
 
     protected void gotoInstructions() {
         startActivity(getIntentForClass(InstructionsToPlay.class));
+    }
+
+    protected void gotoStatistics() {
+        startActivity(getIntentForClass(Statistics.class));
     }
 
     protected void goToInGameSettings(int startingNumber) {

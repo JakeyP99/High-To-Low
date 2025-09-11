@@ -1,5 +1,7 @@
 package com.example.countingdowngame.endGame;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -19,12 +21,17 @@ import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Locale;
 
 import pl.droidsonroids.gif.GifImageView;
 
 public class EndActivityGame extends ButtonUtilsActivity {
     private GifImageView muteGif;
     private GifImageView soundGif;
+    Game gameInstance = Game.getInstance();
+    Player currentPlayer = gameInstance.getCurrentPlayer();
+    String playerName = currentPlayer.getName();
+    int drinkNumberCounter = MainActivityGame.drinkNumberCounterInt;
 
     @Override
     public void onBackPressed() {
@@ -45,9 +52,11 @@ public class EndActivityGame extends ButtonUtilsActivity {
         setContentView(R.layout.a6_end_game);
 
         initializeViews();
+
         setupAudioManagerForMuteButtons(muteGif, soundGif);
 
         setupButtonControls();
+        saveGlobalStats(this);
     }
 
     private void initializeViews() {
@@ -60,20 +69,29 @@ public class EndActivityGame extends ButtonUtilsActivity {
         setupPreviousNumbersList(previousNumbers);
     }
 
+    public void saveGlobalStats(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences("PlayerStats", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        String keyPrefix = gameInstance.getCurrentPlayer().getName().toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
+
+        int savedDrinks = prefs.getInt(keyPrefix + "_drinks", 0);
+        int newTotalDrinks = savedDrinks + drinkNumberCounter;
+
+        editor.putInt(keyPrefix + "_drinks", newTotalDrinks);
+        editor.apply();
+    }
+
     private void setupStatsList(RecyclerView statsList) {
         ArrayList<String> statistics = new ArrayList<>();
-        Game gameInstance = Game.getInstance();
-        Player currentPlayer = gameInstance.getCurrentPlayer();
-        String playerName = currentPlayer.getName();
-        int numberCounter = MainActivityGame.drinkNumberCounterInt;
 
         // Add the end game text
         String endGameText;
-        if (numberCounter == 0) {
+        if (drinkNumberCounter == 0) {
             endGameText = String.format("Drink up %s you litt..... Oh.. The number was 0? Well damn, lucky you I guess", playerName);
         } else {
             endGameText = String.format("Drink %d time%s %s you little baby!",
-                    numberCounter, numberCounter == 1 ? "" : "s", playerName);
+                    drinkNumberCounter, drinkNumberCounter == 1 ? "" : "s", playerName);
         }
         statistics.add(endGameText);
         // Generate possible statistics
@@ -97,7 +115,6 @@ public class EndActivityGame extends ButtonUtilsActivity {
         }
 
         possibleStatistics.add(gameInstance.getCatastropheQuantityString());
-
 
         // Shuffle and select up to 3 random statistics
         Collections.shuffle(possibleStatistics);

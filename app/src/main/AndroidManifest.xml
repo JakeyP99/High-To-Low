@@ -41,6 +41,7 @@
         <activity android:name=".numberChoice.NumberChoice" />
 
         <activity android:name=".instructions.InstructionsToPlay" />
+        <activity android:name=".statistics.Statistics" />
 
         <activity android:name=".drawing.DrawingPlayerModels" />
         <activity android:name=".mainActivity.MainActivityRoulette" />

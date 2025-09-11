@@ -77,10 +77,6 @@ public class Game {
         return players;
     }
 
-    public void setCurrentPlayerId(int playerId) {
-        currentPlayerId = playerId;
-    }
-
     //-----------------------------------------------------In Game---------------------------------------------------//
     public void startGame(int startNum, GameEventListener listener) {
         if (gameStarted)
@@ -139,10 +135,8 @@ public class Game {
 
     public void recordTurn(Player player, int number) {
         turns.add(new GameTurns(player.getName(), number));
-        player.addNumberPlayed(number); // still tracks individual history
+        player.addNumberPlayed(number);
     }
-
-
 
     private Player lastTurnPlayer;
 
