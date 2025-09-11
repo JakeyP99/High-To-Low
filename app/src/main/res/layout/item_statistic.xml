@@ -13,57 +13,46 @@
         android:src="@drawable/wine"
         app:civ_border_color="@color/bluedarktransparent"
         app:civ_border_width="3dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/statPlayerName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
         android:fontFamily="@font/viga"
-        android:text="Jakey"
+        android:text="Jakeyfddfasdffdasf"
         android:textColor="@color/bluedark"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.07"
-        app:layout_constraintStart_toEndOf="@+id/playerImage"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1
-" />
+        app:layout_constraintStart_toEndOf="@id/playerImage"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/statTotalDrinks"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:fontFamily="@font/viga"
         android:text="Drinks: 0"
         android:textColor="@color/bluedark"
         android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.07"
-        app:layout_constraintStart_toEndOf="@+id/playerImage"
-        app:layout_constraintTop_toBottomOf="@+id/statPlayerName"
-        app:layout_constraintVertical_bias="0.1" />
+        android:fontFamily="@font/viga"
+        app:layout_constraintStart_toStartOf="@id/statPlayerName"
+        app:layout_constraintTop_toBottomOf="@id/statPlayerName"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/statGamesLost"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/viga"
         android:text="Games Lost: 0"
         android:textColor="@color/bluedark"
         android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/statTotalDrinks"
-        app:layout_constraintTop_toBottomOf="@+id/statTotalDrinks"
-        app:layout_constraintVertical_bias="1" />
+        android:fontFamily="@font/viga"
+        app:layout_constraintStart_toStartOf="@id/statPlayerName"
+        app:layout_constraintTop_toBottomOf="@id/statTotalDrinks"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -135,25 +135,43 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
 
-        // Set onClickListener for the okayButton
         okayButton.setOnClickListener(v -> {
-            String name = nameEditText.getText().toString();
-            if (name.length() < 20) {
-                if (name.isEmpty()) {
-                    StyleableToast.makeText(PlayerChoice.this, "Sorry, you need to enter a name.", R.style.newToast).show();
-                } else {
-                    player.setName(name);
-                    playerListAdapter.notifyItemChanged(playerList.indexOf(player));
-                    savePlayerData(); // Update player name in storage
-                    dialog.dismiss(); // Dismiss the dialog after changing the name
-                }
-            } else {
-                StyleableToast.makeText(PlayerChoice.this, "Name must be less than 20 characters.", R.style.newToast).show();
+            String name = nameEditText.getText().toString().trim();
+
+            if (name.isEmpty()) {
+                StyleableToast.makeText(PlayerChoice.this, "Please enter a name.", R.style.newToast).show();
+                return;
             }
+
+            if (name.length() >= 20) {
+                StyleableToast.makeText(PlayerChoice.this, "Name must be less than 20 characters.", R.style.newToast).show();
+                return;
+            }
+
+            // Check if the name already exists in the current player list (ignoring the current player)
+            boolean nameExists = false;
+            for (Player p : playerList) {
+                if (p != player && p.getName().equalsIgnoreCase(name)) {
+                    nameExists = true;
+                    break;
+                }
+            }
+
+            if (nameExists) {
+                StyleableToast.makeText(PlayerChoice.this, "Name already exists, please choose a unique name.", R.style.newToast).show();
+                return;
+            }
+
+            // Name is unique → update the player's name
+            player.setName(name);
+            playerListAdapter.notifyItemChanged(playerList.indexOf(player));
+            savePlayerData();
+            dialog.dismiss();
         });
 
         dialog.show();
     }
+
 
     private void clearPlayerSelection() {
         for (Player player : playerList) {
@@ -427,7 +445,6 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
 
     private void showNameInputDialog(Bitmap bitmap) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
-
         View dialogView = getLayoutInflater().inflate(R.layout.player_enter_name, null);
         EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
         Button okayButton = dialogView.findViewById(R.id.okButton);
@@ -439,30 +456,43 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         nameEditText.setHighlightColor(blueDarkColor);
 
         builder.setView(dialogView);
-
         AlertDialog dialog = builder.create();
 
-        // Set onClickListener for the okayButton
         okayButton.setOnClickListener(v -> {
-            String name = nameEditText.getText().toString();
-            if (name.length() < 20) {
-                if (name.isEmpty()) {
-                    StyleableToast.makeText(PlayerChoice.this, "Sorry, you need to enter a name.", R.style.newToast).show();
-                    dialog.dismiss(); // Dismiss the dialog when okayButton is clicked
-                    showNameInputDialog(bitmap);
-                } else {
-                    dialog.dismiss(); // Dismiss the dialog when okayButton is clicked
-                    createNewPlayer(bitmap, name);
-                }
-            } else {
-                StyleableToast.makeText(PlayerChoice.this, "Name must be less than 20 characters.", R.style.newToast).show();
-                dialog.dismiss(); // Dismiss the dialog when okayButton is clicked
-                showNameInputDialog(bitmap);
+            String name = nameEditText.getText().toString().trim();
+
+            if (name.isEmpty()) {
+                StyleableToast.makeText(PlayerChoice.this, "Please enter a name.", R.style.newToast).show();
+                return;
             }
+
+            if (name.length() >= 20) {
+                StyleableToast.makeText(PlayerChoice.this, "Name must be less than 20 characters.", R.style.newToast).show();
+                return;
+            }
+
+            // Check if the name already exists in the current player list
+            boolean nameExists = false;
+            for (Player player : playerList) {
+                if (player.getName().equalsIgnoreCase(name)) {
+                    nameExists = true;
+                    break;
+                }
+            }
+
+            if (nameExists) {
+                StyleableToast.makeText(PlayerChoice.this, "Name already exists, please choose a unique name.", R.style.newToast).show();
+                return;
+            }
+
+            // Name is unique → create new player
+            dialog.dismiss();
+            createNewPlayer(bitmap, name);
         });
 
         dialog.show();
     }
+
 
     private void createNewPlayer(Bitmap bitmap, String name) {
         int size = Math.min(bitmap.getWidth(), bitmap.getHeight());
@@ -478,17 +508,17 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         String playerId = UUID.randomUUID().toString();
 
         Player newPlayer = new Player(this, playerId, photoString, name, null);
-
         newPlayer.setSelected(false);
         playerList.add(newPlayer);
         playerListAdapter.notifyItemInserted(playerList.size() - 1);
 
         // Save initial global stats (0 drinks)
         Statistics.saveGlobalTotalDrinkStat(this, 0, name);
+
+        // Save or update player photo
         Statistics.savePlayerPhoto(this, name, photoString);
 
         savePlayerData();
-
     }
 
 
