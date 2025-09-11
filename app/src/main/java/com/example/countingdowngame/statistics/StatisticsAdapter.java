@@ -31,9 +31,11 @@ public class StatisticsAdapter extends ArrayAdapter<PlayerStatistic> {
 
         TextView nameView = convertView.findViewById(R.id.statPlayerName);
         TextView drinksView = convertView.findViewById(R.id.statTotalDrinks);
+        TextView gamesLostView = convertView.findViewById(R.id.statGamesLost);
 
         nameView.setText(stat.getPlayerName());
         drinksView.setText("End Game Drinks: " + stat.getTotalDrinks());
+        gamesLostView.setText("Games Lost: " + stat.getTotalGamesLost());
 
         return convertView;
     }

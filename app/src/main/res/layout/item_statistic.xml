@@ -31,4 +31,13 @@
         android:fontFamily="@font/viga"
         android:layout_marginTop="4dp" />
 
+    <TextView
+        android:id="@+id/statGamesLost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Games Lost: 0"
+        android:textColor="@color/bluedark"
+        android:textSize="17sp"
+        android:fontFamily="@font/viga"
+        android:layout_marginTop="4dp" />
 </LinearLayout>

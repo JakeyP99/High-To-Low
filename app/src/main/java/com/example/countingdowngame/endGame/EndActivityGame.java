@@ -53,6 +53,7 @@ public class EndActivityGame extends ButtonUtilsActivity {
         setupButtonControls();
 
         Statistics.saveGlobalTotalDrinkStat(this, drinkNumberCounter, playerName);
+        Statistics.saveGlobalGamesLostStat(this, playerName);
     }
 
     private void initializeViews() {
