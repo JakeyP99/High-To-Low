@@ -3,23 +3,17 @@ package com.example.countingdowngame.statistics;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
-import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.player.Player;
-import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
-import com.example.countingdowngame.utils.ButtonUtils;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
-import io.github.muddz.styleabletoast.StyleableToast;
 import pl.droidsonroids.gif.GifImageView;
 
 public class Statistics extends ButtonUtilsActivity {
@@ -70,7 +64,7 @@ public class Statistics extends ButtonUtilsActivity {
         listViewPlayerGlobalStatistics.setAdapter(adapter);
     }
 
-    public static void saveGlobalStats(Context context, int drinkNumberCounter, String playerName) {
+    public static void saveGlobalTotalDrinkStat(Context context, int drinkNumberCounter, String playerName) {
         SharedPreferences prefs = context.getSharedPreferences("PlayerStats", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 

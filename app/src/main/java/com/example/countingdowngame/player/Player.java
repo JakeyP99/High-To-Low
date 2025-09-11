@@ -190,11 +190,15 @@ public class Player implements Serializable {
         for (String key : allEntries.keySet()) {
             if (key.endsWith("_drinks")) {
                 String playerName = key.substring(0, key.length() - "_drinks".length());
-                playerName = playerName.replace("_", " "); // optional formatting
+                // Replace underscores with spaces (just in case)
+                playerName = playerName.replace("_", " ");
+                // Capitalize only the first letter
+                if (!playerName.isEmpty()) {
+                    playerName = Character.toUpperCase(playerName.charAt(0)) + playerName.substring(1);
+                }
                 playerNames.add(playerName);
             }
         }
-
         return playerNames;
     }
 

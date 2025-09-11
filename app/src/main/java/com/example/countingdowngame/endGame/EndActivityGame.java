@@ -1,7 +1,5 @@
 package com.example.countingdowngame.endGame;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,7 +20,6 @@ import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Locale;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -51,12 +48,11 @@ public class EndActivityGame extends ButtonUtilsActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a6_end_game);
-
         initializeViews();
-
         setupAudioManagerForMuteButtons(muteGif, soundGif);
-
         setupButtonControls();
+
+        Statistics.saveGlobalTotalDrinkStat(this, drinkNumberCounter, playerName);
     }
 
     private void initializeViews() {

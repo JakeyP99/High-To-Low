@@ -483,7 +483,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         playerListAdapter.notifyItemInserted(playerList.size() - 1);
 
         // Save initial global stats (0 drinks)
-        Statistics.saveGlobalStats(this, 0, name);
+        Statistics.saveGlobalTotalDrinkStat(this, 0, name);
 
         savePlayerData();
 
