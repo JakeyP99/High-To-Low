@@ -52,8 +52,13 @@ public class EndActivityGame extends ButtonUtilsActivity {
         setupAudioManagerForMuteButtons(muteGif, soundGif);
         setupButtonControls();
 
+        // Drinks + Lost only for the losing player
         Statistics.saveGlobalTotalDrinkStat(this, drinkNumberCounter, playerName);
         Statistics.saveGlobalGamesLostStat(this, playerName);
+
+        for (Player p : gameInstance.getPlayers()) {
+            Statistics.saveGlobalGamesPlayed(this, p.getName());
+        }
     }
 
     private void initializeViews() {

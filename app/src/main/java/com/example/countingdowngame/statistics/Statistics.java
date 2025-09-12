@@ -57,7 +57,9 @@ public class Statistics extends ButtonUtilsActivity {
             String keyPrefix = playerName.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
             int totalDrinks = prefs.getInt(keyPrefix + "_drinks", 0);  // read global saved stats
             int totalGamesLost = prefs.getInt(keyPrefix + "_gameslost", 0);  // read global saved stats
-            stats.add(new PlayerStatistic(playerName, totalDrinks, totalGamesLost));
+            int totalGamesPlayed = prefs.getInt(keyPrefix + "_gamesplayed", 0);  // read global saved stats
+
+            stats.add(new PlayerStatistic(playerName, totalDrinks, totalGamesLost, totalGamesPlayed));
         }
         StatisticsAdapter adapter = new StatisticsAdapter(this, stats);
         listViewPlayerGlobalStatistics.setAdapter(adapter);
@@ -86,6 +88,20 @@ public class Statistics extends ButtonUtilsActivity {
         int newLostGames = lostGames + 1;
 
         editor.putInt(keyPrefix + "_gameslost", newLostGames);
+        editor.apply();
+    }
+
+
+    public static void saveGlobalGamesPlayed(Context context, String playerName) {
+        SharedPreferences prefs = context.getSharedPreferences("PlayerStats", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        String keyPrefix = playerName.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
+
+        int gamesPlayed = prefs.getInt(keyPrefix + "_gamesplayed", 0);
+        int newGamesPlayed = gamesPlayed + 1;
+
+        editor.putInt(keyPrefix + "_gamesplayed", newGamesPlayed);
         editor.apply();
     }
 

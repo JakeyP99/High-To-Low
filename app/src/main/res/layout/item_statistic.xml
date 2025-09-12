@@ -8,8 +8,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/playerImage"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:src="@drawable/wine"
         app:civ_border_color="@color/bluedarktransparent"
         app:civ_border_width="3dp"
@@ -21,7 +21,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
         android:fontFamily="@font/viga"
         android:text="Jakeyfddfasdffdasf"
         android:textColor="@color/bluedark"
@@ -42,7 +41,17 @@
         app:layout_constraintStart_toStartOf="@id/statPlayerName"
         app:layout_constraintTop_toBottomOf="@id/statPlayerName"
         app:layout_constraintEnd_toEndOf="parent" />
-
+    <TextView
+        android:id="@+id/statGamesPlayed"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Games Played: 0"
+        android:textColor="@color/bluedark"
+        android:textSize="15sp"
+        android:fontFamily="@font/viga"
+        app:layout_constraintStart_toStartOf="@id/statPlayerName"
+        app:layout_constraintTop_toBottomOf="@id/statTotalDrinks"
+        app:layout_constraintEnd_toEndOf="parent" />
     <TextView
         android:id="@+id/statGamesLost"
         android:layout_width="0dp"
@@ -52,7 +61,7 @@
         android:textSize="15sp"
         android:fontFamily="@font/viga"
         app:layout_constraintStart_toStartOf="@id/statPlayerName"
-        app:layout_constraintTop_toBottomOf="@id/statTotalDrinks"
+        app:layout_constraintTop_toBottomOf="@id/statGamesPlayed"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -33,11 +33,14 @@ public class StatisticsAdapter extends ArrayAdapter<PlayerStatistic> {
         TextView nameView = convertView.findViewById(R.id.statPlayerName);
         TextView drinksView = convertView.findViewById(R.id.statTotalDrinks);
         TextView gamesLostView = convertView.findViewById(R.id.statGamesLost);
+        TextView gamesPlayedView = convertView.findViewById(R.id.statGamesPlayed);
+
         de.hdodenhof.circleimageview.CircleImageView playerImageView = convertView.findViewById(R.id.playerImage);
 
         nameView.setText(stat.getPlayerName());
         drinksView.setText("End Game Drinks: " + stat.getTotalDrinks());
         gamesLostView.setText("Games Lost: " + stat.getTotalGamesLost());
+        gamesPlayedView.setText("Games Played: " + stat.getTotalGamesPlayed());
 
         // Load photo
         SharedPreferences prefs = getContext().getSharedPreferences("PlayerStats", Context.MODE_PRIVATE);

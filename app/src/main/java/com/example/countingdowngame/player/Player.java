@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -66,7 +65,6 @@ public class Player implements Serializable {
         this.bulletsInChamberList = new ArrayList<>();
         this.chamberTotalNumberCount = 0;
         this.numbersPlayed = new ArrayList<>();
-
     }
 
 
@@ -197,16 +195,6 @@ public class Player implements Serializable {
         }
         return playerNames;
     }
-
-
-    public static List<String> getSavedPlayerImageString(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences("PlayerStats", Context.MODE_PRIVATE);
-        Map<String, ?> allEntries = prefs.getAll();
-        List<String> playerImageString = new ArrayList<>();
-
-        return playerImageString;
-    }
-
 
 
     //-----------------------------------------------------Passive Abilities---------------------------------------------------//
