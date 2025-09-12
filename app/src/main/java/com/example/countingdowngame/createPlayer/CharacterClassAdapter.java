@@ -53,7 +53,7 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflate the layout for each item of the RecyclerView
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.character_class_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.player_choice_character_class_item, parent, false);
         return new ViewHolder(view); // Return a ViewHolder instance for each item
     }
 

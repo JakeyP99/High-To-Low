@@ -22,11 +22,9 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.instructions.InstructionalDialogPageAdapter;
-import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -146,7 +144,7 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         int characterClassTextLength = activeDescription.length() + passiveDescription.length();
         Log.d(TAG, "characterClassInformationDialog: CharacterClassTextLength: " + characterClassTextLength);
 
-        View dialogView = inflater.inflate(R.layout.character_class_ability_dialog_box, null);
+        View dialogView = inflater.inflate(R.layout.game_character_ability_dialog_box, null);
         TextView activeAbilityDescriptionTextView = dialogView.findViewById(R.id.active_description_textview);
         TextView passiveAbilityDescriptionTextView = dialogView.findViewById(R.id.passive_description_textview);
         TextView currentPlayerClassTextView = dialogView.findViewById(R.id.class_textview);
@@ -180,17 +178,17 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = getLayoutInflater();
 
-        View dialogView = inflater.inflate(R.layout.instructional_dialog, null);
+        View dialogView = inflater.inflate(R.layout.instruction_dialog, null);
         ViewPager viewPager = dialogView.findViewById(R.id.viewpager);
         ProgressBar progressBar = dialogView.findViewById(R.id.progress_bar);
         Button btnNext = dialogView.findViewById(R.id.buttonNext);
 
         // Generate instructional pages
         List<Integer> layoutResIds = new ArrayList<>();
-        layoutResIds.add(R.layout.instructional_dialog_1); // Replace with your layout resource IDs
-        layoutResIds.add(R.layout.instructional_dialog_2); // Replace with your layout resource IDs
-        layoutResIds.add(R.layout.instructional_dialog_3); // Replace with your layout resource IDs
-        layoutResIds.add(R.layout.instructional_dialog_4); // Replace with your layout resource IDs
+        layoutResIds.add(R.layout.instruction_dialog_1); // Replace with your layout resource IDs
+        layoutResIds.add(R.layout.instruction_dialog_2); // Replace with your layout resource IDs
+        layoutResIds.add(R.layout.instruction_dialog_3); // Replace with your layout resource IDs
+        layoutResIds.add(R.layout.instruction_dialog_4); // Replace with your layout resource IDs
 
         // Create adapter and set it to the ViewPager
         InstructionalDialogPageAdapter adapter = new InstructionalDialogPageAdapter(layoutResIds);

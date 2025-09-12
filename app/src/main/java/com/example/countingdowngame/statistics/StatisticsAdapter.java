@@ -37,7 +37,7 @@ public class StatisticsAdapter extends ArrayAdapter<PlayerStatistic> {
         ViewHolder holder;
 
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_statistic, parent, false);
+            convertView = inflater.inflate(R.layout.statistic_main_item, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {

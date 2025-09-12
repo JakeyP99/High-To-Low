@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.SeekBar;
 
@@ -28,7 +27,7 @@ public class DrawingPlayerModels extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a3_drawing);
+        setContentView(R.layout.player_choice_drawing_activity);
         initializeViews();
         setupButtonListeners();
         setupSeekBarListener();

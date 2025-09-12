@@ -35,7 +35,7 @@ public class Statistics extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.statistics);
+        setContentView(R.layout.statistics_main_activity);
         initializeViews();
         setupAudioManagerForMuteButtons(muteGif, soundGif);
         setPlayerStatistics();

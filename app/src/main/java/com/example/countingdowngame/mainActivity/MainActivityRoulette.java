@@ -1,7 +1,6 @@
 package com.example.countingdowngame.mainActivity;
 
 import static android.content.ContentValues.TAG;
-import static com.example.countingdowngame.mainActivity.MainActivityGame.BACK_PRESS_DELAY;
 
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
@@ -9,7 +8,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
@@ -33,7 +31,6 @@ import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import java.util.List;
 import java.util.Objects;
 
-import io.github.muddz.styleabletoast.StyleableToast;
 import pl.droidsonroids.gif.GifImageView;
 
 public class MainActivityRoulette extends ButtonUtilsActivity {
@@ -77,7 +74,7 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity_roulette);
+        setContentView(R.layout.game_roulette_main_activity);
 
         initializeViews();
         setupAudioManagerForMuteButtons(muteGif, soundGif);
@@ -166,7 +163,7 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
     private View createPlayerView(Player player) {
         LinearLayout playerContainer = findViewById(R.id.playerContainer);
         // Inflate the player view layout
-        View playerView = getLayoutInflater().inflate(R.layout.player_view_roulette, playerContainer, false);
+        View playerView = getLayoutInflater().inflate(R.layout.game_roulette_player_view, playerContainer, false);
 
         // Set up the player information and click listener
         setupPlayerView(player, playerView);
@@ -277,7 +274,7 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
     //-----------------------------------------------------Dialogs---------------------------------------------------//
 
     private void showGameDialog(String message) {
-        showDialog(message, R.layout.game_dialog_box, R.id.dialogbox_textview, R.id.close_button);
+        showDialog(message, R.layout.game_main_dialog_box, R.id.dialogbox_textview, R.id.close_button);
     }
 
     private void showDialog(String message, int layoutId, int textViewId, int closeButtonId) {
@@ -334,7 +331,7 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
     }
 
     private void showCatastropheDialog(String message) {
-        showDialog(message, R.layout.death_dialog_box, R.id.dialogbox_textview, R.id.close_button);
+        showDialog(message, R.layout.game_roulette_death_dialog_box, R.id.dialogbox_textview, R.id.close_button);
     }
 
     //-----------------------------------------------------Set Visibilities---------------------------------------------------//

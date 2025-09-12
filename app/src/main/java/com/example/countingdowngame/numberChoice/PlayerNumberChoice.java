@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputFilter;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,7 +17,6 @@ import com.example.countingdowngame.audio.AudioManager;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import io.github.muddz.styleabletoast.StyleableToast;
-import io.socket.client.Socket;
 import pl.droidsonroids.gif.GifImageView;
 
 public class PlayerNumberChoice extends ButtonUtilsActivity {
@@ -30,7 +28,7 @@ public class PlayerNumberChoice extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a2_player_number_choice);
+        setContentView(R.layout.player_number_choice_main_activity);
 
         initializeViews();
         setupAudioManagerForMuteButtons(muteGif, soundGif);

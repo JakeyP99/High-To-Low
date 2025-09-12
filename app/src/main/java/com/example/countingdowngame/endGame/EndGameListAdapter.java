@@ -24,7 +24,7 @@ public class EndGameListAdapter extends RecyclerView.Adapter<EndGameListAdapter.
     @Override
     public PreviousNumbersViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item_card, parent, false);
+                .inflate(R.layout.game_end_stat_item_card, parent, false);
         return new PreviousNumbersViewHolder(view);
     }
 

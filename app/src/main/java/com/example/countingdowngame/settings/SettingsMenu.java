@@ -15,8 +15,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.core.content.res.ResourcesCompat;
-
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.mainActivity.MainActivityGame;
@@ -107,7 +105,7 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_ingame);
+        setContentView(R.layout.settings_main_activity);
         initializeViews();
         loadPreferences();  // Load preferences here
         setButtonListeners();

@@ -56,7 +56,7 @@ public class InstructionsToPlay extends ButtonUtilsActivity {
 
 
     public void setLayout() {
-        setContentView(R.layout.c1_instructions_layout);
+        setContentView(R.layout.instruction_main_activity);
         Button btnNext = findViewById(R.id.buttonNext);
         ViewPager viewPager = findViewById(R.id.viewpager);
         ProgressBar progressBar = findViewById(R.id.progress_bar);

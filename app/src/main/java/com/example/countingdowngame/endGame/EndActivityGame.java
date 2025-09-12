@@ -6,9 +6,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.PagerSnapHelper;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.countingdowngame.R;
@@ -52,7 +49,7 @@ public class EndActivityGame extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a6_end_game);
+        setContentView(R.layout.game_end_main_activity);
 
         initializeViews();
         setupAudioManagerForMuteButtons(muteGif, soundGif);
@@ -141,7 +138,7 @@ public class EndActivityGame extends ButtonUtilsActivity {
         if (previousNumbersFormatted != null && !previousNumbersFormatted.isEmpty()) {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     this,
-                    R.layout.list_view_end_game,
+                    R.layout.game_end_previous_number_list,
                     R.id.previousNumbers,
                     previousNumbersFormatted
             );

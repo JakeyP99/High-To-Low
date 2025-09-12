@@ -94,7 +94,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.player_choice);
+        setContentView(R.layout.player_choice_main_activity);
 
         initializeViews();
         setupPlayerRecyclerView();
@@ -127,7 +127,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
 
     private void showEditNameDialog(Player player) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.player_enter_name, null);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.player_choice_enter_name_item, null);
         EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
         nameEditText.setText(player.getName());
         Button okayButton = dialogView.findViewById(R.id.okButton);
@@ -207,7 +207,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = getLayoutInflater();
 
-        View dialogView = inflater.inflate(R.layout.characterclass_selection, null);
+        View dialogView = inflater.inflate(R.layout.player_choice_characterclass_selection, null);
         Button confirmClass = dialogView.findViewById(R.id.btnConfirmClass);
 
         List<CharacterClassStore> characterClasses = generateCharacterClasses();
@@ -327,7 +327,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
     private void chooseCharacterCreation() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_choose_option, null);
+        View dialogView = inflater.inflate(R.layout.player_choice_camera_draw_dialog, null);
 
         Button capturePhotoButton = dialogView.findViewById(R.id.capturePhotoButton);
         Button drawPhotoButton = dialogView.findViewById(R.id.drawPhotoButton);
@@ -445,7 +445,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
 
     private void showNameInputDialog(Bitmap bitmap) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
-        View dialogView = getLayoutInflater().inflate(R.layout.player_enter_name, null);
+        View dialogView = getLayoutInflater().inflate(R.layout.player_choice_enter_name_item, null);
         EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
         Button okayButton = dialogView.findViewById(R.id.okButton);
 

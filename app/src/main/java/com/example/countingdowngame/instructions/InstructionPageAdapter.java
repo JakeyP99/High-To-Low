@@ -28,7 +28,7 @@ public class InstructionPageAdapter extends PagerAdapter {
   @Override
   public Object instantiateItem(ViewGroup container, int position) {
     LayoutInflater inflater = LayoutInflater.from(container.getContext());
-    View view = inflater.inflate(R.layout.c1_instructions_layout, container, false);
+    View view = inflater.inflate(R.layout.instruction_main_activity, container, false);
     TextView textView = view.findViewById(R.id.info_text);
     textView.setText(instructions.get(position));
     container.addView(view);

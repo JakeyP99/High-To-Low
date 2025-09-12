@@ -43,7 +43,7 @@ public class NumberChoice extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a4_number_choice);
+        setContentView(R.layout.number_choice_main_activity);
 
         initializeViews();
         setupAudioManagerForMuteButtons(muteGif, soundGif);

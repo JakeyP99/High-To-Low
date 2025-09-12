@@ -1,15 +1,7 @@
 package com.example.countingdowngame.endGame;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
-import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.countingdowngame.R;
@@ -18,8 +10,6 @@ import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import pl.droidsonroids.gif.GifImageView;
@@ -45,7 +35,7 @@ public class EndRouletteGame extends ButtonUtilsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.end_game_roulette);
+        setContentView(R.layout.game_roulette_end_main_activity);
 
         initializeViews();
         setupAudioManagerForMuteButtons(muteGif, soundGif);

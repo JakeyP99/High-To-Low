@@ -136,7 +136,7 @@ public class MainActivityGame extends SharedMainActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a5_game_start);
+        setContentView(R.layout.game_main_activity);
         initializeViews();
         PassiveAbilities.setActivity(this);
         setupAudioManagerForMuteButtons(muteGif, soundGif);
@@ -378,7 +378,7 @@ public class MainActivityGame extends SharedMainActivity {
                 default:
                     break;
             }
-            showDialog(catastrophe.getMessage(), R.layout.catastrophe_dialog_box, R.id.dialogbox_textview, R.id.close_button);
+            showDialog(catastrophe.getMessage(), R.layout.game_catastrophe_dialog_box, R.id.dialogbox_textview, R.id.close_button);
             Game.getInstance().incrementCatastropheQuantity();
             catastropheTurnCounter = 0; // Reset the turn counter after reaching the limit
 
@@ -843,14 +843,14 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     public void showGameDialog(String message) {
-        showDialog(message, R.layout.game_dialog_box, R.id.dialogbox_textview, R.id.close_button);
+        showDialog(message, R.layout.game_main_dialog_box, R.id.dialogbox_textview, R.id.close_button);
     }
 
 
     private void scientistChangeCurrentNumber() {
 
         LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.character_class_change_number, null);
+        View dialogView = inflater.inflate(R.layout.game_scientist_change_number, null);
 
         EditText editCurrentNumberText = dialogView.findViewById(editCurrentNumberTextView);
         Button okButton = dialogView.findViewById(close_button);
