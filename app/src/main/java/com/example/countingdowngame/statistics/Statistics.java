@@ -2,10 +2,7 @@ package com.example.countingdowngame.statistics;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Base64;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -25,6 +22,9 @@ public class Statistics extends ButtonUtilsActivity {
     private GifImageView muteGif, soundGif;
     private ListView listViewPlayerGlobalStatistics;
     private ImageView playerImage;
+
+    private static final String PREF_NAME = "PlayerStats";
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -49,71 +49,58 @@ public class Statistics extends ButtonUtilsActivity {
 
     private void setPlayerStatistics() {
         List<PlayerStatistic> stats = new ArrayList<>();
-        SharedPreferences prefs = getSharedPreferences("PlayerStats", MODE_PRIVATE);
+        SharedPreferences prefs = getPrefs(this);
 
         List<String> knownPlayerNames = Player.getSavedPlayerNames(this);
 
         for (String playerName : knownPlayerNames) {
-            String keyPrefix = playerName.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
-            int totalDrinks = prefs.getInt(keyPrefix + "_drinks", 0);  // read global saved stats
-            int totalGamesLost = prefs.getInt(keyPrefix + "_gameslost", 0);  // read global saved stats
-            int totalGamesPlayed = prefs.getInt(keyPrefix + "_gamesplayed", 0);  // read global saved stats
+            String keyPrefix = getKeyPrefix(playerName);
+
+            int totalDrinks = prefs.getInt(keyPrefix + "_drinks", 0);
+            int totalGamesLost = prefs.getInt(keyPrefix + "_gameslost", 0);
+            int totalGamesPlayed = prefs.getInt(keyPrefix + "_gamesplayed", 0);
 
             stats.add(new PlayerStatistic(playerName, totalDrinks, totalGamesLost, totalGamesPlayed));
         }
-        StatisticsAdapter adapter = new StatisticsAdapter(this, stats);
-        listViewPlayerGlobalStatistics.setAdapter(adapter);
+
+        listViewPlayerGlobalStatistics.setAdapter(new StatisticsAdapter(this, stats));
     }
 
-    public static void saveGlobalTotalDrinkStat(Context context, int drinkNumberCounter, String playerName) {
-        SharedPreferences prefs = context.getSharedPreferences("PlayerStats", Context.MODE_PRIVATE);
+    // ====== Helpers for SharedPreferences ======
+    private static SharedPreferences getPrefs(Context context) {
+        return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+    }
+
+    private static String getKeyPrefix(String playerName) {
+        return playerName.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
+    }
+
+    private static void updateStat(Context context, String playerName, String suffix, int increment) {
+        SharedPreferences prefs = getPrefs(context);
         SharedPreferences.Editor editor = prefs.edit();
 
-        String keyPrefix = playerName.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
-
-        int savedDrinks = prefs.getInt(keyPrefix + "_drinks", 0);
-        int newTotalDrinks = savedDrinks + drinkNumberCounter;
-
-        editor.putInt(keyPrefix + "_drinks", newTotalDrinks);
+        String key = getKeyPrefix(playerName) + suffix;
+        int current = prefs.getInt(key, 0);
+        editor.putInt(key, current + increment);
         editor.apply();
+    }
+
+    // ====== Public Save Methods ======
+    public static void saveGlobalTotalDrinkStat(Context context, int drinkNumberCounter, String playerName) {
+        updateStat(context, playerName, "_drinks", drinkNumberCounter);
     }
 
     public static void saveGlobalGamesLostStat(Context context, String playerName) {
-        SharedPreferences prefs = context.getSharedPreferences("PlayerStats", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-
-        String keyPrefix = playerName.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
-
-        int lostGames = prefs.getInt(keyPrefix + "_gameslost", 0);
-        int newLostGames = lostGames + 1;
-
-        editor.putInt(keyPrefix + "_gameslost", newLostGames);
-        editor.apply();
+        updateStat(context, playerName, "_gameslost", 1);
     }
-
 
     public static void saveGlobalGamesPlayed(Context context, String playerName) {
-        SharedPreferences prefs = context.getSharedPreferences("PlayerStats", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-
-        String keyPrefix = playerName.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
-
-        int gamesPlayed = prefs.getInt(keyPrefix + "_gamesplayed", 0);
-        int newGamesPlayed = gamesPlayed + 1;
-
-        editor.putInt(keyPrefix + "_gamesplayed", newGamesPlayed);
-        editor.apply();
+        updateStat(context, playerName, "_gamesplayed", 1);
     }
-
 
     public static void savePlayerPhoto(Context context, String playerName, String photoString) {
-        SharedPreferences prefs = context.getSharedPreferences("PlayerStats", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-
-        String keyPrefix = playerName.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
-        editor.putString(keyPrefix + "_photo", photoString);
+        SharedPreferences.Editor editor = getPrefs(context).edit();
+        editor.putString(getKeyPrefix(playerName) + "_photo", photoString);
         editor.apply();
     }
-
 }
-

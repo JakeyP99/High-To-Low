@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="drink_times">
+        <item quantity="one">%2$s, you need to drink %1$d time!</item>
+        <item quantity="other">%2$s, you need to drink %1$d times!</item>
+    </plurals>
+</resources>

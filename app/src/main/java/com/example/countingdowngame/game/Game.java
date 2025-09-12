@@ -363,7 +363,7 @@ public class Game {
                 topPlayer = player;
             }
         }
-        return topPlayer != null ? topPlayer.getName() + " took " + maxDrinks + " drinks as a witch!" : "No one took any drinks as a witch.";
+        return topPlayer != null ? topPlayer.getName() + " took " + maxDrinks + " drinks as a witch!" : "The witch did not take any drinks from her spell.";
     }
     //-----------------------------------------------------End Game ---------------------------------------------------//
 

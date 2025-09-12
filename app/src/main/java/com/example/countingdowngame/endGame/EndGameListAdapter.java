@@ -1,6 +1,5 @@
 package com.example.countingdowngame.endGame;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,18 +14,17 @@ import java.util.List;
 
 public class EndGameListAdapter extends RecyclerView.Adapter<EndGameListAdapter.PreviousNumbersViewHolder> {
 
-    private final List<String> items;
-    private final Context context;
+    private List<String> items;
 
-    public EndGameListAdapter(Context context, List<String> items) {
-        this.context = context;
+    public EndGameListAdapter(List<String> items) {
         this.items = items;
     }
 
     @NonNull
     @Override
     public PreviousNumbersViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.list_item_card, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.list_item_card, parent, false);
         return new PreviousNumbersViewHolder(view);
     }
 
@@ -37,11 +35,11 @@ public class EndGameListAdapter extends RecyclerView.Adapter<EndGameListAdapter.
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return items == null ? 0 : items.size();
     }
 
     static class PreviousNumbersViewHolder extends RecyclerView.ViewHolder {
-        TextView tvItem;
+        private final TextView tvItem;
 
         PreviousNumbersViewHolder(View itemView) {
             super(itemView);

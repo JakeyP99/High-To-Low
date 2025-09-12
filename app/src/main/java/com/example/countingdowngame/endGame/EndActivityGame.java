@@ -1,6 +1,7 @@
 package com.example.countingdowngame.endGame;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -8,28 +9,32 @@ import android.widget.ListView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.countingdowngame.R;
+import com.example.countingdowngame.audio.AudioManager;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.mainActivity.MainActivityGame;
 import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
-import com.example.countingdowngame.audio.AudioManager;
 import com.example.countingdowngame.statistics.Statistics;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
+import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import pl.droidsonroids.gif.GifImageView;
 
 public class EndActivityGame extends ButtonUtilsActivity {
-    private GifImageView muteGif;
-    private GifImageView soundGif;
-    Game gameInstance = Game.getInstance();
-    Player currentPlayer = gameInstance.getCurrentPlayer();
-    String playerName = currentPlayer.getName();
-    int drinkNumberCounter = MainActivityGame.drinkNumberCounterInt;
+    private static final String TAG = "EndActivityGame";
+
+    private GifImageView muteGif, soundGif;
+    private final Game gameInstance = Game.getInstance();
+    private final Player currentPlayer = gameInstance.getCurrentPlayer();
+    private final String playerName = currentPlayer.getName();
+    private final int drinkNumberCounter = MainActivityGame.drinkNumberCounterInt;
 
     @Override
     public void onBackPressed() {
@@ -48,14 +53,14 @@ public class EndActivityGame extends ButtonUtilsActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a6_end_game);
+
         initializeViews();
         setupAudioManagerForMuteButtons(muteGif, soundGif);
         setupButtonControls();
 
-        // Drinks + Lost only for the losing player
+        // Save end-game stats
         Statistics.saveGlobalTotalDrinkStat(this, drinkNumberCounter, playerName);
         Statistics.saveGlobalGamesLostStat(this, playerName);
-
         for (Player p : gameInstance.getPlayers()) {
             Statistics.saveGlobalGamesPlayed(this, p.getName());
         }
@@ -65,59 +70,62 @@ public class EndActivityGame extends ButtonUtilsActivity {
         muteGif = findViewById(R.id.muteGif);
         soundGif = findViewById(R.id.soundGif);
 
-        RecyclerView statsList = findViewById(R.id.statsList);
-        setupStatsList(statsList);
-        ListView previousNumbers = findViewById(R.id.previousNumbers);
-        setupPreviousNumbersList(previousNumbers);
+        setupStatsList(); // <-- updated
+        setupPreviousNumbers(findViewById(R.id.previousNumbers));
     }
 
-    private void setupStatsList(RecyclerView statsList) {
-        ArrayList<String> statistics = new ArrayList<>();
 
-        // Add the end game text
-        String endGameText;
-        if (drinkNumberCounter == 0) {
-            endGameText = String.format("Drink up %s you litt..... Oh.. The number was 0? Well damn, lucky you I guess", playerName);
-        } else {
-            endGameText = String.format("Drink %d time%s %s you little baby!",
-                    drinkNumberCounter, drinkNumberCounter == 1 ? "" : "s", playerName);
-        }
+    private void setupStatsList() {
+        ViewPager2 statsViewPager = findViewById(R.id.statsViewPager);
+        DotsIndicator dotsIndicator = findViewById(R.id.dotsIndicator);
+
+        List<String> statistics = buildStatistics();
+        EndGameListAdapter adapter = new EndGameListAdapter(statistics);
+
+        statsViewPager.setAdapter(adapter);
+        dotsIndicator.setViewPager2(statsViewPager);
+    }
+
+    private List<String> buildStatistics() {
+        List<String> statistics = new ArrayList<>();
+
+        // End game text
+        String endGameText = (drinkNumberCounter == 0)
+                ? String.format("Drink up %s you litt..... Oh.. The number was 0? Well damn, lucky you I guess", playerName)
+                : getResources().getQuantityString(
+                R.plurals.drink_times,
+                drinkNumberCounter,
+                drinkNumberCounter,
+                playerName
+        );
         statistics.add(endGameText);
-        // Generate possible statistics
-        ArrayList<String> possibleStatistics = new ArrayList<>();
+
+        // Additional possible stats
+        List<String> possibleStats = new ArrayList<>();
         if (gameInstance.getPlayerUsedWildcards()) {
-            possibleStatistics.add(gameInstance.getPlayerWithMostWildcardsUsed());
+            possibleStats.add(gameInstance.getPlayerWithMostWildcardsUsed());
         }
 
         GeneralSettingsLocalStore settings = GeneralSettingsLocalStore.fromContext(this);
         if (settings.isQuizActivated() && gameInstance.getQuizWasTriggered()) {
-            possibleStatistics.add(gameInstance.getPlayerWithMostQuizCorrectAnswers());
+            possibleStats.add(gameInstance.getPlayerWithMostQuizCorrectAnswers());
             String mostIncorrectAnswers = gameInstance.getPlayerWithMostQuizIncorrectAnswers();
             if (!mostIncorrectAnswers.isEmpty()) {
-                possibleStatistics.add(mostIncorrectAnswers);
+                possibleStats.add(mostIncorrectAnswers);
             }
         }
 
         if (gameInstance.hasWitchClass()) {
-            possibleStatistics.add(gameInstance.getWitchPlayerTotalDrinksHandedOut());
-            possibleStatistics.add(gameInstance.getWitchPlayerTotalDrinksTaken());
+            possibleStats.add(gameInstance.getWitchPlayerTotalDrinksHandedOut());
+            possibleStats.add(gameInstance.getWitchPlayerTotalDrinksTaken());
         }
 
-        possibleStatistics.add(gameInstance.getCatastropheQuantityString());
+        possibleStats.add(gameInstance.getCatastropheQuantityString());
 
-        // Shuffle and select up to 3 random statistics
-        Collections.shuffle(possibleStatistics);
-        statistics.addAll(possibleStatistics.subList(0, Math.min(4, possibleStatistics.size())));
+        Collections.shuffle(possibleStats);
+        statistics.addAll(possibleStats.subList(0, Math.min(4, possibleStats.size())));
 
-        // Set up the RecyclerView with the adapter
-        EndGameListAdapter adapter = new EndGameListAdapter(this, statistics);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        statsList.setLayoutManager(layoutManager);
-        statsList.setAdapter(adapter);
-
-        // Add PagerSnapHelper for snapping effect
-        PagerSnapHelper snapHelper = new PagerSnapHelper();
-        snapHelper.attachToRecyclerView(statsList);
+        return statistics;
     }
 
     private void setupButtonControls() {
@@ -127,20 +135,20 @@ public class EndActivityGame extends ButtonUtilsActivity {
         setButtonActions(btnPlayAgain, btnNewPlayer);
     }
 
-    private void setupPreviousNumbersList(ListView previousNumbersList) {
+    private void setupPreviousNumbers(ListView previousNumbersList) {
         ArrayList<String> previousNumbersFormatted = Game.getInstance().getPreviousNumbersFormatted();
 
-        // Check if the list is not null and has valid indices
         if (previousNumbersFormatted != null && !previousNumbersFormatted.isEmpty()) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(EndActivityGame.this,
-                    R.layout.list_view_end_game, R.id.previousNumbers, previousNumbersFormatted);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                    this,
+                    R.layout.list_view_end_game,
+                    R.id.previousNumbers,
+                    previousNumbersFormatted
+            );
             previousNumbersList.setAdapter(adapter);
         } else {
-            // Handle the case where the list is null or empty
-            System.err.println("Error: previousNumbersFormatted is null or empty");
+            Log.e(TAG, "previousNumbersFormatted is null or empty");
         }
-
-
     }
 
     private void setButtonActions(Button btnPlayAgain, Button btnNewPlayer) {
