@@ -12,6 +12,8 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    ndkVersion "26.1.10909125"  // ✅ NDK r26b (supports 16 KB)
+
     buildTypes {
         release {
             minifyEnabled false
