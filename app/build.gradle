@@ -12,7 +12,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    ndkVersion "26.1.10909125"  // ✅ NDK r26b (supports 16 KB)
+    ndkVersion "26.1.10909125"
 
     buildTypes {
         release {
@@ -21,6 +21,13 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = false
+        }
+    }
+
     namespace 'com.example.countingdowngame'
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
@@ -44,7 +51,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
     implementation 'com.mobsandgeeks:adapter-kit:0.5.3'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.29'
-    implementation "androidx.cardview:cardview:1.0.0"
     implementation 'com.github.bumptech.glide:glide:5.0.5'
     annotationProcessor 'com.github.bumptech.glide:compiler:5.0.5'
     implementation 'com.google.code.gson:gson:2.13.2'
@@ -54,7 +60,5 @@ dependencies {
     implementation 'jp.wasabeef:recyclerview-animators:4.0.2'
     implementation 'com.airbnb.android:lottie:6.6.7'
     implementation 'io.github.muddz:styleabletoast:2.4.0'
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.29'
     implementation 'io.socket:socket.io-client:2.1.2'
-
 }
