@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
+
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
 import com.example.countingdowngame.game.Game;
@@ -18,12 +20,6 @@ public class EndRouletteGame extends ButtonUtilsActivity {
     private GifImageView muteGif;
     private GifImageView soundGif;
     private TextView textViewLose;
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        gotoHomeScreen();
-    }
 
     @Override
     protected void onResume() {
@@ -42,6 +38,13 @@ public class EndRouletteGame extends ButtonUtilsActivity {
 
         setupButtonControls();
         displayVictor(); // Display the winner's name
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                gotoHomeScreen();
+            }
+        });
     }
 
     private void initializeViews() {
@@ -98,7 +101,4 @@ public class EndRouletteGame extends ButtonUtilsActivity {
         }
         return null;
     }
-
-
-
 }

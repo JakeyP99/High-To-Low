@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.activity.OnBackPressedCallback;
+
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.mainActivity.MainActivityGame;
@@ -74,32 +76,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
 
     //-----------------------------------------------------On Create---------------------------------------------------//
 
-    @Override
-    public void onBackPressed() {
-        String wildCardAmountInput = wildcardPerPlayerEditText.getText().toString().trim();
-        String totalDrinkAmountInput = totalDrinksEditText.getText().toString().trim();
-
-        boolean isWildCardValid = isValidInput(wildCardAmountInput, 3, 0, 100);
-        boolean isTotalDrinkValid = isValidInput(totalDrinkAmountInput, 2, 1, 20);
-
-        if (!isWildCardValid || !isTotalDrinkValid) {
-            if (!isWildCardValid) {
-                if (wildCardAmountInput.isEmpty()) {
-                    wildcardPerPlayerEditText.setText("1");
-                } else {
-                    StyleableToast.makeText(getApplicationContext(), "Please enter a number between 0 and 100", R.style.newToast).show();
-                }
-            }
-
-            if (!isTotalDrinkValid) {
-                totalDrinksEditText.setText("1");
-            }
-
-        }
-        savePreferences();
-        super.onBackPressed();
-    }
-
     //-----------------------------------------------------Initialize Views---------------------------------------------------//
 
     @Override
@@ -109,6 +85,34 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         initializeViews();
         loadPreferences();  // Load preferences here
         setButtonListeners();
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                String wildCardAmountInput = wildcardPerPlayerEditText.getText().toString().trim();
+                String totalDrinkAmountInput = totalDrinksEditText.getText().toString().trim();
+
+                boolean isWildCardValid = isValidInput(wildCardAmountInput, 3, 0, 100);
+                boolean isTotalDrinkValid = isValidInput(totalDrinkAmountInput, 2, 1, 20);
+
+                if (!isWildCardValid || !isTotalDrinkValid) {
+                    if (!isWildCardValid) {
+                        if (wildCardAmountInput.isEmpty()) {
+                            wildcardPerPlayerEditText.setText("1");
+                        } else {
+                            StyleableToast.makeText(getApplicationContext(), "Please enter a number between 0 and 100", R.style.newToast).show();
+                        }
+                    }
+
+                    if (!isTotalDrinkValid) {
+                        totalDrinksEditText.setText("1");
+                    }
+                }
+                savePreferences();
+                setEnabled(false);
+                getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
     }
 
     private void initializeViews() {

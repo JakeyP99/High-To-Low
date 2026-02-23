@@ -40,6 +40,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
+
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
 import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
@@ -115,19 +117,6 @@ public class MainActivityGame extends SharedMainActivity {
         AudioManager.updateMuteButton(isMuted, muteGif, soundGif);
     }
 
-    @Override
-    public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            Game.getInstance().endGame(this);
-            gotoHomeScreen();
-            return;
-        }
-        this.doubleBackToExitPressedOnce = true;
-        displayToastMessage("Press back again to go to the home screen");
-        new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, BACK_PRESS_DELAY);
-    }
-
     public void displayToastMessage(String message) {
         StyleableToast.makeText(this, message, R.style.newToast).show();
     }
@@ -143,6 +132,20 @@ public class MainActivityGame extends SharedMainActivity {
         setupButtons();
         initializeCatastrophe();
         startGame();
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (doubleBackToExitPressedOnce) {
+                    Game.getInstance().endGame(MainActivityGame.this);
+                    gotoHomeScreen();
+                    return;
+                }
+                doubleBackToExitPressedOnce = true;
+                displayToastMessage("Press back again to go to the home screen");
+                new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, BACK_PRESS_DELAY);
+            }
+        });
     }
 
     private void initializeViews() {

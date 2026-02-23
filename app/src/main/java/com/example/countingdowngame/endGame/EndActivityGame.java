@@ -6,6 +6,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.countingdowngame.R;
@@ -34,12 +35,6 @@ public class EndActivityGame extends ButtonUtilsActivity {
     private final int drinkNumberCounter = MainActivityGame.drinkNumberCounterInt;
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        gotoHomeScreen();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         boolean isMuted = getMuteSoundState();
@@ -61,6 +56,13 @@ public class EndActivityGame extends ButtonUtilsActivity {
         for (Player p : gameInstance.getPlayers()) {
             Statistics.saveGlobalGamesPlayed(this, p.getName());
         }
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                gotoHomeScreen();
+            }
+        });
     }
 
     private void initializeViews() {
