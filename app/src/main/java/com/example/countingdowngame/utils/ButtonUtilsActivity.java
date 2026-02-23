@@ -4,20 +4,20 @@ import static com.example.countingdowngame.audio.AudioManager.updateMuteButton;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
 import com.example.countingdowngame.endGame.EndRouletteGame;
 import com.example.countingdowngame.instructions.InstructionsToPlay;
 import com.example.countingdowngame.endGame.EndActivityGame;
 import com.example.countingdowngame.home.HomeScreen;
 import com.example.countingdowngame.numberChoice.NumberChoice;
-import com.example.countingdowngame.numberChoice.PlayerNumberChoice;
 import com.example.countingdowngame.player.Player;
+import com.example.countingdowngame.playerChoice.PlayerChoice;
 import com.example.countingdowngame.settings.SettingsMenu;
 import com.example.countingdowngame.statistics.Statistics;
 
@@ -48,43 +48,46 @@ public abstract class ButtonUtilsActivity extends AppCompatActivity {
         return i;
     }
 
+    protected void startActivityWithAnimation(Intent intent) {
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+    }
+
     protected void gotoHomeScreen() {
-        startActivity(getIntentForClass(HomeScreen.class));
+        startActivityWithAnimation(getIntentForClass(HomeScreen.class));
     }
 
     protected void gotoGameEnd() {
-        startActivity(getIntentForClass(EndActivityGame.class));
+        startActivityWithAnimation(getIntentForClass(EndActivityGame.class));
     }
 
     protected void gotoGameEndRoulette(Player activePlayer) {
         Intent intent = new Intent(this, EndRouletteGame.class);
         intent.putExtra("VICTOR_NAME", activePlayer.getName());
-        startActivity(intent);
+        startActivityWithAnimation(intent);
     }
 
     protected void gotoNumberChoice() {
-        startActivity(getIntentForClass(NumberChoice.class));
-    }
-
-    protected void gotoPlayerNumberChoice() {
-        startActivity(getIntentForClass(PlayerNumberChoice.class));
+        startActivityWithAnimation(getIntentForClass(NumberChoice.class));
     }
 
     protected void gotoInstructions() {
-        startActivity(getIntentForClass(InstructionsToPlay.class));
+        startActivityWithAnimation(getIntentForClass(InstructionsToPlay.class));
     }
 
     protected void gotoStatistics() {
-        startActivity(getIntentForClass(Statistics.class));
+        startActivityWithAnimation(getIntentForClass(Statistics.class));
     }
 
     protected void goToInGameSettings(int startingNumber) {
         Intent i = getIntentForClass(SettingsMenu.class);
         i.putExtra("startingNumber", startingNumber);
-        startActivity(i);
+        startActivityWithAnimation(i);
     }
 
-
+    protected void gotoPlayerChoice() {
+        startActivityWithAnimation(getIntentForClass(PlayerChoice.class));
+    }
     //-----------------------------------------------------Sound Functionality---------------------------------------------------//
 
     public void setupAudioManagerForMuteButtons(GifImageView muteGif, GifImageView soundGif) {

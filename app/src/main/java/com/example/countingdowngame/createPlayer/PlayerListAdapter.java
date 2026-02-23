@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Shader;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
     public PlayerListAdapter(PlayerChoice context, List<Player> players, ClickListener clickListener) {
         this.context = context;
         this.players = players;
-        this.clickListener = clickListener; // Initialize the clickListener with the provided parameter
+        this.clickListener = clickListener;
     }
 
     @NonNull
@@ -50,8 +49,8 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
         holder.bind(player);
 
         holder.playerItemView.setOnLongClickListener(v -> {
-            clickListener.onPlayerLongClick(position); // Notify the activity about the long-click
-            return true; // Consume the long-click event
+            clickListener.onPlayerLongClick(position);
+            return true;
         });
     }
 
@@ -62,8 +61,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
 
     public interface ClickListener {
         void onPlayerClick(int position);
-
-        void onPlayerLongClick(int position); // Add long-click listener method
+        void onPlayerLongClick(int position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -84,25 +82,14 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
                     clickListener.onPlayerClick(position);
-                    togglePlayerSelection(position);
                 }
             });
-
 
             deletePlayerImageView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
                     context.deletePlayer(position);
                 }
-            });
-
-            playerItemView.setOnLongClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    clickListener.onPlayerLongClick(position); // Notify the activity about the long-click
-                    return true; // Consume the long-click event
-                }
-                return false;
             });
         }
 
@@ -111,18 +98,8 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
             byte[] decodedBytes = Base64.decode(photoString, Base64.DEFAULT);
             Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
 
-            // Create a circular bitmap
-            Bitmap circleBitmap = Bitmap.createBitmap(decodedBitmap.getWidth(), decodedBitmap.getHeight(), Bitmap.Config.ARGB_8888);
-            BitmapShader shader = new BitmapShader(decodedBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-            Paint paint = new Paint();
-            paint.setShader(shader);
-            paint.setAntiAlias(true);
-            Canvas canvas = new Canvas(circleBitmap);
-            float radius = decodedBitmap.getWidth() / 2f;
-            canvas.drawCircle(radius, radius, radius, paint);
-
             Glide.with(context)
-                    .load(Base64.decode(photoString, Base64.DEFAULT))
+                    .load(decodedBytes)
                     .apply(RequestOptions.circleCropTransform())
                     .into(playerPhotoImageView);
 
@@ -130,26 +107,13 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
             playerNameTextView.setText(player.getName());
             playerNameTextView.setPadding(20, 20, 20, 30);
 
-            // Highlight the selected player
             if (player.isSelected()) {
                 playerItemView.setBackgroundResource(R.drawable.selectedplayer);
-                playerItemView.setPadding(20, 20, 20, 30);
                 deletePlayerImageView.setVisibility(View.INVISIBLE);
-
             } else {
                 playerItemView.setBackgroundResource(0);
                 deletePlayerImageView.setVisibility(View.VISIBLE);
-
             }
-        }
-
-        private void togglePlayerSelection(int position) {
-            Player player = players.get(position);
-            player.setSelected(!player.isSelected());
-            notifyItemChanged(position);
-            context.updatePlayerCounter();
-            Log.d("user", "setSelected: " + player.isSelected());
-
         }
     }
 }

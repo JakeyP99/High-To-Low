@@ -101,7 +101,7 @@ public class InstructionsToPlay extends ButtonUtilsActivity {
     private void setupButtonControls() {
         Button btnQuickPlay = findViewById(R.id.quickplay);
         Button btnInstructions = findViewById(R.id.button_Instructions);
-        btnUtils.setButton(btnQuickPlay, this::gotoPlayerNumberChoice);
+        btnUtils.setButton(btnQuickPlay, this::gotoPlayerChoice);
         btnUtils.setButton(btnInstructions, this::gotoInstructions);
     }
 }

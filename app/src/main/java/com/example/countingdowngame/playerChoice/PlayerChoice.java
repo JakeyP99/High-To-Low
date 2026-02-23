@@ -62,7 +62,6 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
     private List<Player> playerList;
     private PlayerListAdapter playerListAdapter;
     private TextView playerCountTextView;
-    private int totalPlayerCount;
     private RecyclerView playerRecyclerView;
     private int selectedPlayerCount;
     private Button proceedButton;
@@ -81,14 +80,8 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
                 existingPlayer.setSelected(existingPlayer.isSelected());
             }
         }
-        selectedPlayerCount = 0;
-        playerListAdapter.notifyDataSetChanged();
         updatePlayerCounter();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
+        playerListAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -100,23 +93,26 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         setupPlayerRecyclerView();
         setupDrawButton();
         setupProceedButton();
-        updatePlayerCounter();
-        clearPlayerSelection();
         loadPlayerData();
+        updatePlayerCounter();
     }
 
 
     public void onPlayerClick(int position) {
         Player player = playerList.get(position);
-        if (!player.isSelected()) {
-            player.setSelected(false); // Change this to true
-            player.setSelectionOrder(++selectedPlayerCount); // Track the order of selection
-            playerListAdapter.notifyItemChanged(position);
-            updatePlayerCounter();
+        player.setSelected(!player.isSelected());
+        
+        if (player.isSelected()) {
+            player.setSelectionOrder(++selectedPlayerCount);
             if (!Game.getInstance().isPlayCards()){
                 chooseClass(position);
             }
+        } else {
+            selectedPlayerCount--;
         }
+        
+        playerListAdapter.notifyItemChanged(position);
+        updatePlayerCounter();
     }
 
     @Override
@@ -148,7 +144,6 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
                 return;
             }
 
-            // Check if the name already exists in the current player list (ignoring the current player)
             boolean nameExists = false;
             for (Player p : playerList) {
                 if (p != player && p.getName().equalsIgnoreCase(name)) {
@@ -162,7 +157,6 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
                 return;
             }
 
-            // Name is unique → update the player's name
             player.setName(name);
             playerListAdapter.notifyItemChanged(playerList.indexOf(player));
             savePlayerData();
@@ -172,36 +166,19 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         dialog.show();
     }
 
-
-    private void clearPlayerSelection() {
-        for (Player player : playerList) {
-            player.setSelected(false);
-        }
-        playerListAdapter.notifyDataSetChanged();
-    }
-
     private void initializeViews() {
         playerRecyclerView = findViewById(R.id.playerRecyclerView);
         playerCountTextView = findViewById(R.id.text_view_counter);
-
-
-        totalPlayerCount = Game.getInstance().getPlayerAmount();
         playerList = new ArrayList<>();
         playerListAdapter = new PlayerListAdapter(this, playerList, this);
         proceedButton = findViewById(R.id.button_done);
         selectedPlayerCount = 0;
-
-
     }
-
-    //-----------------------------------------------------Buttons---------------------------------------------------//
 
     private void setupDrawButton() {
         Button drawButton = findViewById(R.id.createPlayerBtn);
         btnUtils.setButton(drawButton, this::chooseCharacterCreation);
     }
-
-    //-----------------------------------------------------Choose the player class---------------------------------------------------//
 
     private void chooseClass(int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
@@ -228,50 +205,36 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                // Calculate the progress based on the ViewPager's scroll position
                 int maxProgress = pagerAdapter.getCount() - 1;
                 int currentProgress = calculateProgress(position, maxProgress);
                 progressBar.setProgress(currentProgress);
             }
 
-            @Override
-            public void onPageSelected(int position) {
-                // Unused method
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                // Unused method
-            }
+            @Override public void onPageSelected(int position) {}
+            @Override public void onPageScrollStateChanged(int state) {}
         });
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
-
         dialog.setOnCancelListener(dialogInterface -> handleCancelClick(position, dialog));
-
         dialog.show();
-
         confirmClass.setOnClickListener(v -> handleConfirmClick(position, dialog));
     }
 
     private int calculateProgress(int position, int maxProgress) {
-        // Calculate progress based on the position and the maximum progress value
+        if (maxProgress <= 0) return 100;
         return (position * 100) / maxProgress;
     }
 
     private void handleCancelClick(int position, AlertDialog dialog) {
         Player player = playerList.get(position);
         dialog.dismiss();
-
         if (player.isSelected()) {
             player.setSelected(false);
+            selectedPlayerCount--;
             playerListAdapter.notifyItemChanged(position);
             updatePlayerCounter();
-            Log.d("Confirm Button", "Player selection was cancelled");
-
         }
-
     }
 
     private void handleConfirmClick(int position, AlertDialog dialog) {
@@ -280,36 +243,27 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
 
         if (viewPager != null) {
             int selectedPage = viewPager.getCurrentItem();
-            int selectedPageNumber = selectedPage + 1; // Add 1 since ViewPager starts counting from 0
+            int selectedPageNumber = selectedPage + 1;
             CharacterClassStore selectedCharacterClass = findCharacterClassById(selectedPageNumber);
 
             if (selectedCharacterClass != null) {
                 selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
-
-                // 🔽 Assign class ability cooldown here
                 AbilityComplimentary.assignActiveAbilityCooldown(selectedPlayer);
-
                 String message = selectedCharacterClass.getClassName().equals("No Class")
                         ? selectedPlayer.getName() + " chose no class!"
                         : selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
 
                 StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
-                Log.d("Confirm Button", "Confirm Button Clicked - Page Number: " + selectedPageNumber + ", Character ID: " + selectedCharacterClass.getId());
                 dialog.dismiss();
-
             } else {
                 selectedPlayer.setClassChoice(null);
                 StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
-                Log.d("Confirm Button", "No class chosen");
                 dialog.dismiss();
             }
         } else {
-            Log.e("Confirm Button", "ViewPager not found");
             dialog.dismiss();
         }
     }
-
-
 
     private CharacterClassStore findCharacterClassById(int id) {
         List<CharacterClassStore> characterClasses = generateCharacterClasses();
@@ -318,11 +272,8 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
                 return characterClass;
             }
         }
-        return null; // If ID is not found, return null
+        return null;
     }
-
-
-    //-----------------------------------------------------Choose the player creation---------------------------------------------------//
 
     private void chooseCharacterCreation() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
@@ -333,7 +284,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         Button drawPhotoButton = dialogView.findViewById(R.id.drawPhotoButton);
         Button cancelButton = dialogView.findViewById(R.id.cancelButton);
 
-        AlertDialog dialog = builder.setView(dialogView).create(); // Create the AlertDialog
+        AlertDialog dialog = builder.setView(dialogView).create();
 
         capturePhotoButton.setOnClickListener(v -> {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -341,20 +292,17 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
             } else {
                 captureImage();
             }
-            dialog.dismiss(); // Close the dialog after clicking the button
+            dialog.dismiss();
         });
 
         drawPhotoButton.setOnClickListener(v -> {
             startDrawingActivity();
-            dialog.dismiss(); // Close the dialog after clicking the button
+            dialog.dismiss();
         });
 
-        // Set onClickListener for the cancel button
-        cancelButton.setOnClickListener(v -> dialog.dismiss()); // Dismiss the dialog when cancel button is clicked
-
+        cancelButton.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -373,36 +321,40 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
 
     private void setupProceedButton() {
         btnUtils.setButton(proceedButton, () -> {
-            if (selectedPlayerCount == totalPlayerCount) {
-                List<Player> selectedPlayers = new ArrayList<>();
-                for (Player player : playerList) {
-                    if (player.isSelected()) {
-                        selectedPlayers.add(player);
-                    }
-                }
-
-                // Sort the players by their selection order
-                selectedPlayers.sort(Comparator.comparingInt(Player::getSelectionOrder));
-
-                proceedButton.setEnabled(false);
-                final long delayMillis = 3000;
-                new Handler().postDelayed(() -> proceedButton.setEnabled(true), delayMillis);
-
-                PlayerModelLocalStore.fromContext(this).saveSelectedPlayers(selectedPlayers);
-                ArrayList<String> selectedPlayerNames = new ArrayList<>();
-                for (Player player : selectedPlayers) {
-                    selectedPlayerNames.add(player.getName());
-                }
-                Intent intent = new Intent(this, NumberChoice.class);
-                intent.putStringArrayListExtra("playerNames", selectedPlayerNames);
-                startActivity(intent);
-            } else {
-                StyleableToast.makeText(this, "Please select all players.", R.style.newToast).show();
+            if (selectedPlayerCount < 2) {
+                StyleableToast.makeText(this, "Please select at least 2 players.", R.style.newToast).show();
+                return;
             }
+            
+            if (selectedPlayerCount >= 100) {
+                StyleableToast.makeText(this, "Too many players! Max 99.", R.style.newToast).show();
+                return;
+            }
+
+            List<Player> selectedPlayers = new ArrayList<>();
+            for (Player player : playerList) {
+                if (player.isSelected()) {
+                    selectedPlayers.add(player);
+                }
+            }
+            selectedPlayers.sort(Comparator.comparingInt(Player::getSelectionOrder));
+
+            proceedButton.setEnabled(false);
+            new Handler().postDelayed(() -> proceedButton.setEnabled(true), 3000);
+
+            Game.getInstance().setPlayerList(selectedPlayers);
+            PlayerModelLocalStore.fromContext(this).saveSelectedPlayers(selectedPlayers);
+            
+            ArrayList<String> selectedPlayerNames = new ArrayList<>();
+            for (Player player : selectedPlayers) {
+                selectedPlayerNames.add(player.getName());
+            }
+            Intent intent = new Intent(this, NumberChoice.class);
+            intent.putStringArrayListExtra("playerNames", selectedPlayerNames);
+            startActivityWithAnimation(intent);
         });
     }
 
-    //-----------------------------------------------------Image and player creation functionality---------------------------------------------------//
     private void captureImage() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, REQUEST_IMAGE_PICK);
@@ -411,7 +363,6 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
     private Bitmap flipBitmap(Bitmap bitmap) {
         Matrix matrix = new Matrix();
         matrix.setScale(-1, 1);
-
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
 
@@ -430,11 +381,9 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK && data != null) {
             Bitmap bitmap = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
-            Bitmap rotatedBitmap = flipBitmap(bitmap); // Rotate the bitmap
-
+            Bitmap rotatedBitmap = flipBitmap(bitmap);
             showNameInputDialog(rotatedBitmap);
         } else if (requestCode == REQUEST_DRAW && resultCode == RESULT_OK && data != null) {
             String drawnBitmapString = data.getStringExtra("drawnBitmap");
@@ -450,28 +399,22 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         Button okayButton = dialogView.findViewById(R.id.okButton);
 
         nameEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-
         int blueDarkColor = ContextCompat.getColor(this, R.color.bluedark);
         nameEditText.getBackground().mutate().setColorFilter(blueDarkColor, PorterDuff.Mode.SRC_ATOP);
-        nameEditText.setHighlightColor(blueDarkColor);
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
 
         okayButton.setOnClickListener(v -> {
             String name = nameEditText.getText().toString().trim();
-
             if (name.isEmpty()) {
                 StyleableToast.makeText(PlayerChoice.this, "Please enter a name.", R.style.newToast).show();
                 return;
             }
-
             if (name.length() >= 20) {
                 StyleableToast.makeText(PlayerChoice.this, "Name must be less than 20 characters.", R.style.newToast).show();
                 return;
             }
-
-            // Check if the name already exists in the current player list
             boolean nameExists = false;
             for (Player player : playerList) {
                 if (player.getName().equalsIgnoreCase(name)) {
@@ -479,59 +422,39 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
                     break;
                 }
             }
-
             if (nameExists) {
                 StyleableToast.makeText(PlayerChoice.this, "Name already exists, please choose a unique name.", R.style.newToast).show();
                 return;
             }
-
-            // Name is unique → create new player
             dialog.dismiss();
             createNewPlayer(bitmap, name);
         });
-
         dialog.show();
     }
 
-
     private void createNewPlayer(Bitmap bitmap, String name) {
-        int size = Math.min(bitmap.getWidth(), bitmap.getHeight());
-        float scale = (float) size / size;
-
-        Matrix matrix = new Matrix();
-        matrix.postScale(scale, scale);
-
-        Bitmap zoomedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-        String photoString = convertBitmapToString(zoomedBitmap);
-
-        // Generate a UUID for the player
+        String photoString = convertBitmapToString(bitmap);
         String playerId = UUID.randomUUID().toString();
-
         Player newPlayer = new Player(this, playerId, photoString, name, null);
         newPlayer.setSelected(false);
         playerList.add(newPlayer);
         playerListAdapter.notifyItemInserted(playerList.size() - 1);
-
-        // Save initial global stats (0 drinks)
         Statistics.saveGlobalTotalDrinkStat(this, 0, name);
-
-        // Save or update player photo
         Statistics.savePlayerPhoto(this, name, photoString);
-
         savePlayerData();
     }
 
-
     public void deletePlayer(int position) {
+        Player player = playerList.get(position);
+        if (player.isSelected()) {
+            selectedPlayerCount--;
+        }
         playerList.remove(position);
         playerListAdapter.notifyItemRemoved(position);
         savePlayerData();
         updatePlayerCounter();
     }
 
-    //-----------------------------------------------------Save and load functionality---------------------------------------------------//
-
-    // Save player data to SharedPreferences
     private void savePlayerData() {
         Gson gson = new Gson();
         String json = gson.toJson(playerList);
@@ -540,86 +463,44 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
 
     private void loadPlayerData() {
         playerList.clear();
-
-        // Load player data from local store
         List<Player> loadedPlayerList = PlayerModelLocalStore.fromContext(this).loadPlayerData();
-        int startPosition = playerList.size();
         playerList.addAll(loadedPlayerList);
-        int newItemCount = playerList.size() - startPosition;
-
-        // Notify adapter for any new items added
-        if (newItemCount > 0) {
-            playerListAdapter.notifyItemRangeInserted(startPosition, newItemCount);
+        selectedPlayerCount = 0;
+        for (Player p : playerList) {
+            if (p.isSelected()) selectedPlayerCount++;
         }
+        playerListAdapter.notifyDataSetChanged();
     }
 
-    //-----------------------------------------------------Player Counter Functionality---------------------------------------------------//
     public void updatePlayerCounter() {
-        selectedPlayerCount = 0;
-
-        for (Player player : playerList) {
-            if (player.isSelected()) {
-                selectedPlayerCount++;
-            }
-        }
-
-        int remainingPlayers = totalPlayerCount - selectedPlayerCount;
-
         String counterText;
-        if (remainingPlayers == 0) {
-            counterText = "All Players Selected!";
-        } else if (remainingPlayers == 1) {
+        if (selectedPlayerCount == 0) {
+            counterText = "Select Players!";
+        } else if (selectedPlayerCount == 1) {
             counterText = "Select 1 More Player!";
-        } else if (remainingPlayers < 0) {
-            int excessPlayers = Math.abs(remainingPlayers);
-            if (excessPlayers == 1) {
-                counterText = "Please Remove 1 Player \uD83E\uDD13";
-            } else {
-                counterText = "Please Remove " + excessPlayers + " Players \uD83E\uDD13";
-            }
         } else {
-            counterText = "Select " + remainingPlayers + " More Players!";
+            counterText = selectedPlayerCount + " Players Selected!";
         }
         playerCountTextView.setText(counterText);
     }
 
-
-    //-----------------------------------------------------UI Decoration---------------------------------------------------//
     private void setupPlayerRecyclerView() {
-        playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
-        playerListAdapter = new PlayerListAdapter(this, playerList, this);
-
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
         int spacing = getResources().getDimensionPixelSize(R.dimen.grid_spacing);
-
         playerRecyclerView.setLayoutManager(layoutManager);
         playerRecyclerView.addItemDecoration(new SpaceItemDecoration(spacing));
         playerRecyclerView.setAdapter(playerListAdapter);
     }
 
-    // RecyclerView item decoration for spacing
     public static class SpaceItemDecoration extends RecyclerView.ItemDecoration {
         private final int spacing;
-
-        public SpaceItemDecoration(int spacing) {
-            this.spacing = spacing;
-        }
-
+        public SpaceItemDecoration(int spacing) { this.spacing = spacing; }
         @Override
         public void getItemOffsets(Rect outRect, @NonNull View view, RecyclerView parent, @NonNull RecyclerView.State state) {
             outRect.left = spacing;
             outRect.right = spacing;
             outRect.bottom = spacing;
-
-            GridLayoutManager layoutManager = (GridLayoutManager) parent.getLayoutManager();
-            assert layoutManager != null;
-            if (parent.getChildAdapterPosition(view) < layoutManager.getSpanCount()) {
-                outRect.top = spacing;
-            } else {
-                outRect.top = 0;
-            }
+            outRect.top = (parent.getChildAdapterPosition(view) < 3) ? spacing : 0;
         }
     }
-
-
 }
