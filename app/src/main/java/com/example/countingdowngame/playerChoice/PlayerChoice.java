@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
@@ -82,6 +83,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         }
         updatePlayerCounter();
         playerListAdapter.notifyDataSetChanged();
+        proceedButton.setEnabled(true);
     }
 
     @Override
@@ -95,22 +97,29 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         setupProceedButton();
         loadPlayerData();
         updatePlayerCounter();
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                finish();
+            }
+        });
     }
 
 
     public void onPlayerClick(int position) {
         Player player = playerList.get(position);
         player.setSelected(!player.isSelected());
-        
+
         if (player.isSelected()) {
             player.setSelectionOrder(++selectedPlayerCount);
-            if (!Game.getInstance().isPlayCards()){
+            if (!Game.getInstance().isPlayCards()) {
                 chooseClass(position);
             }
         } else {
             selectedPlayerCount--;
         }
-        
+
         playerListAdapter.notifyItemChanged(position);
         updatePlayerCounter();
     }
@@ -325,7 +334,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
                 StyleableToast.makeText(this, "Please select at least 2 players.", R.style.newToast).show();
                 return;
             }
-            
+
             if (selectedPlayerCount >= 100) {
                 StyleableToast.makeText(this, "Too many players! Max 99.", R.style.newToast).show();
                 return;
@@ -339,19 +348,16 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
             }
             selectedPlayers.sort(Comparator.comparingInt(Player::getSelectionOrder));
 
-            proceedButton.setEnabled(false);
-            new Handler().postDelayed(() -> proceedButton.setEnabled(true), 3000);
-
             Game.getInstance().setPlayerList(selectedPlayers);
             PlayerModelLocalStore.fromContext(this).saveSelectedPlayers(selectedPlayers);
-            
+
             ArrayList<String> selectedPlayerNames = new ArrayList<>();
             for (Player player : selectedPlayers) {
                 selectedPlayerNames.add(player.getName());
             }
             Intent intent = new Intent(this, NumberChoice.class);
             intent.putStringArrayListExtra("playerNames", selectedPlayerNames);
-            startActivityWithAnimation(intent);
+            startActivity(intent);
         });
     }
 

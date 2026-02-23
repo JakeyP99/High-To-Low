@@ -43,50 +43,45 @@ public abstract class ButtonUtilsActivity extends AppCompatActivity {
     }
 
     protected Intent getIntentForClass(Class<?> targetClass) {
-        Intent i = new Intent(this, targetClass);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        return i;
-    }
-
-    protected void startActivityWithAnimation(Intent intent) {
-        startActivity(intent);
-        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+        return new Intent(this, targetClass);
     }
 
     protected void gotoHomeScreen() {
-        startActivityWithAnimation(getIntentForClass(HomeScreen.class));
+        Intent i = getIntentForClass(HomeScreen.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
     }
 
     protected void gotoGameEnd() {
-        startActivityWithAnimation(getIntentForClass(EndActivityGame.class));
+        startActivity(getIntentForClass(EndActivityGame.class));
     }
 
     protected void gotoGameEndRoulette(Player activePlayer) {
         Intent intent = new Intent(this, EndRouletteGame.class);
         intent.putExtra("VICTOR_NAME", activePlayer.getName());
-        startActivityWithAnimation(intent);
+        startActivity(intent);
     }
 
     protected void gotoNumberChoice() {
-        startActivityWithAnimation(getIntentForClass(NumberChoice.class));
+        startActivity(getIntentForClass(NumberChoice.class));
     }
 
     protected void gotoInstructions() {
-        startActivityWithAnimation(getIntentForClass(InstructionsToPlay.class));
+        startActivity(getIntentForClass(InstructionsToPlay.class));
     }
 
     protected void gotoStatistics() {
-        startActivityWithAnimation(getIntentForClass(Statistics.class));
+        startActivity(getIntentForClass(Statistics.class));
     }
 
     protected void goToInGameSettings(int startingNumber) {
         Intent i = getIntentForClass(SettingsMenu.class);
         i.putExtra("startingNumber", startingNumber);
-        startActivityWithAnimation(i);
+        startActivity(i);
     }
 
     protected void gotoPlayerChoice() {
-        startActivityWithAnimation(getIntentForClass(PlayerChoice.class));
+        startActivity(getIntentForClass(PlayerChoice.class));
     }
     //-----------------------------------------------------Sound Functionality---------------------------------------------------//
 

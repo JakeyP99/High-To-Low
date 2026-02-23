@@ -80,10 +80,6 @@ public class WildCardSettingsLocalStore {
         return mPref.getInt("wild_card_probability_" + index, 0);
     }
 
-    public int getWildcardProbability(int index, int defValue) {
-        return mPref.getInt("wild_card_probability_" + index, defValue);
-    }
-
     public void setWildcardState(int index, Boolean enabled, String activity, String answer, String wrongAnswer1, String wrongAnswer2, String wrongAnswer3, String category) {
         SharedPreferences.Editor editor = mPref.edit();
         editor.putString("wild_card_activity_" + index, activity);

@@ -91,10 +91,6 @@ public class GeneralSettingsLocalStore {
         setIntPreference("totalDrinkAmount", value);
     }
 
-
-    public int playerChamberCount() {
-        return getIntPreference("playerChamberCount", 1);
-    }
     public void setChamberCount(int value) {
         setIntPreference("playerChamberCount", value);
     }

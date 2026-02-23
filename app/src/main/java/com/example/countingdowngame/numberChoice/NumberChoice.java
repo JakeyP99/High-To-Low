@@ -21,13 +21,12 @@ import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import java.util.Random;
 
 import io.github.muddz.styleabletoast.StyleableToast;
-import pl.droidsonroids.gif.GifImageView;
 
 public class NumberChoice extends ButtonUtilsActivity {
     private int startingNumber;
     private EditText originalNumberField;
-    private GifImageView muteGif;
-    private GifImageView soundGif;
+    private pl.droidsonroids.gif.GifImageView muteGif;
+    private pl.droidsonroids.gif.GifImageView soundGif;
 
     @Override
     protected void onResume() {
@@ -82,7 +81,6 @@ public class NumberChoice extends ButtonUtilsActivity {
     }
 
     private void onSubmitClicked() {
-        final EditText originalNumberField = findViewById(R.id.EditTextView_numberchoice);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             originalNumberField.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO);
         }
@@ -147,14 +145,12 @@ public class NumberChoice extends ButtonUtilsActivity {
     private void onRandomClicked() {
         Random random = new Random();
         startingNumber = random.nextInt(99999999) + 1;
-        final EditText originalNumberField = findViewById(R.id.EditTextView_numberchoice);
         originalNumberField.setFocusable(false);
         goToInGameSettings(startingNumber);
     }
 
 
     public void resetStartingNumber() {
-        final EditText originalNumberField = findViewById(R.id.EditTextView_numberchoice);
         originalNumberField.setText(""); // Clear the input field
         originalNumberField.setFocusableInTouchMode(true); // Enable editing of the field
     }
@@ -174,12 +170,12 @@ public class NumberChoice extends ButtonUtilsActivity {
     }
 
     private void savePreferences() {
-        int playerChamberCount = Integer.parseInt(originalNumberField.getText().toString());
-        GeneralSettingsLocalStore.fromContext(this).setChamberCount(playerChamberCount);
+        try {
+            int playerChamberCount = Integer.parseInt(originalNumberField.getText().toString());
+            GeneralSettingsLocalStore.fromContext(this).setChamberCount(playerChamberCount);
+        } catch (NumberFormatException e) {
+            // If empty or invalid, we don't save
+        }
     }
-
-
-
-
 
 }

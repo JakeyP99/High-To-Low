@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -7,8 +6,6 @@
         <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowAnimationStyle">@style/ActivityTransitionAnimation</item>
         <item name="android:keepScreenOn">true</item>
     </style>
@@ -28,24 +25,21 @@
 
     <style name="ActivityTransitionAnimation">
         <item name="android:activityOpenEnterAnimation">@anim/slide_in_from_right</item>
-        <item name="android:activityCloseEnterAnimation">@anim/slide_out_to_left</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_to_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_from_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_to_right</item>
     </style>
 
     <style name="CustomAlertDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
-        <item name="android:windowBackground">@null
-        </item> <!-- Removes default window background -->
-        <item name="android:background">@drawable/rounded_background
-        </item> <!-- Set your desired background -->
+        <item name="android:windowBackground">@null</item>
+        <item name="android:background">@drawable/rounded_background</item>
     </style>
 
     <style name="newToast">
         <item name="stColorBackground">#4C4C4C</item>
         <item name="stTextColor">@color/white</item>
         <item name="stLength">SHORT</item>
-        LONG or SHORT
         <item name="stRadius">40dp</item>
-
     </style>
-
 
 </resources>

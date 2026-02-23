@@ -12,24 +12,54 @@ public class CharacterClassDescriptions {
     public static final String NO_CLASS = "No Class";
 
     // Active Ability Descriptions
-    public static final String archerActiveDescription = "You can take 2 drinks off the total amount, and hand them out to players.";
-    public static final String witchActiveDescription = "You can skip your turn. Ability resets after three turns.";
-    public static final String scientistActiveDescription = "You can change the current number to be whatever you want, this does not skip your turn!";
-    public static final String soldierActiveDescription = "If the number is less than or equal to 10, add 4 drinks to the counter, but you must generate the number twice.";
-    public static final String quizMagicianActiveDescription = "The next wildcard will be 2 quiz questions.";
-    public static final String survivorActiveDescription = "Half the current number, and continue your turn. Ability resets after 3 turns.";
-    public static final String angryJimActiveDescription = "Randomly make another player repeat their turn. Ability resets after 5 turns.";
-    public static final String goblinActiveDescription = "Remove 2 wildcards from a random player.";
-    public static final String noClassDescription = "Choose this class if you don't want to have any abilities.";
+    public static final String archerActiveDescription =
+            "You may remove 2 drinks from the total and give them to any players.";
 
+    public static final String witchActiveDescription =
+            "Skip your turn. Resets after 3 turns.";
+
+    public static final String scientistActiveDescription =
+            "Change the current number to any number. Your turn continues.";
+
+    public static final String soldierActiveDescription =
+            "If the number is 10 or less, add 4 drinks. You must generate twice.";
+
+    public static final String quizMagicianActiveDescription =
+            "The next wildcard becomes 2 quiz questions.";
+
+    public static final String survivorActiveDescription =
+            "Halve the current number and continue your turn. Resets after 3 turns.";
+
+    public static final String angryJimActiveDescription =
+            "Force a random player to repeat their turn. Resets after 5 turns.";
+
+    public static final String goblinActiveDescription =
+            "Remove 2 wildcards from a random player.";
+
+    public static final String noClassDescription =
+            "No abilities.";
 
     // Passive Ability Descriptions
-    public static final String archerPassiveDescription = "For every third turn, there is a 60% chance the drinking number will increase by 2 and a 40% chance it will decrease by 2.";
-    public static final String witchPassiveDescription = "Whenever it is your turn, for every even number, you can hand out a drink, but for every odd number you have to take a drink.";
-    public static final String scientistPassiveDescription = "The lower the current number, the more chance your turn will be skipped.";
-    public static final String soldierPassiveDescription = "If you land between 10 and 15, you escape the game. This means you no longer will be playing, and won't have to drink anymore. Only one soldier can be removed from the game.";
-    public static final String quizMagicianPassiveDescription = "All multi-choice quizzes now have only 2 answers available, instead of 4. All correctly answered questions cause all players to take 2 drinks.";
-    public static final String survivorPassiveDescription = "If the current number is 2 or less, and you generate a number and survive, you get to distribute the current count of drinks. This does not change the drink counter.";
-    public static final String angryJimPassiveDescription = "When the number is below 50, you gain the passive ability of every class. The catch is, you have to have another turn.";
-    public static final String goblinPassiveDescription = "After your third turn, you gain one wildcard.";
-}
+    public static final String archerPassiveDescription =
+            "Every third turn: 60% chance +2 drinks, 40% chance -2 drinks.";
+
+    public static final String witchPassiveDescription =
+            "On your turn: Even number = give 1 drink. Odd number = take 1 drink.";
+
+    public static final String scientistPassiveDescription =
+            "The lower the number, the higher the chance your turn is skipped.";
+
+    public static final String soldierPassiveDescription =
+            "If you land between 10–15, you leave the game, and no more drinking. Only one Soldier can escape.";
+
+    public static final String quizMagicianPassiveDescription =
+            "Multiple-choice quizzes have 2 answers. Correct answers: everyone drinks 2.";
+
+    public static final String survivorPassiveDescription =
+            "If the number is 1 and you survive a roll, you may distribute the current drinks (counter stays the same).";
+
+    public static final String angryJimPassiveDescription =
+            "When the number is below 50, you gain all other passives, but must take another turn.";
+
+    public static final String goblinPassiveDescription =
+            "After your third turn, gain 1 wildcard.";}
