@@ -1,103 +1,99 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="20dp">
+    app:cardCornerRadius="20dp"
+    app:cardElevation="12dp">
 
-    <TextView
-        android:id="@+id/class_textview"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/viga"
-        android:gravity="center"
-        android:paddingTop="10sp"
-        android:text="Archer"
-        android:paddingBottom="10sp"
-        android:textAlignment="center"
-        android:textColor="@color/bluedark"
-        android:textIsSelectable="true"
-        android:textSize="35sp"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="vertical"
+        android:padding="20dp">
 
-    <View
-        android:id="@+id/horizontal_line"
-        android:layout_width="300dp"
-        android:layout_height="3dp"
-        android:background="@color/bluedark"
-        android:layout_gravity="center" />
+        <TextView
+            android:id="@+id/class_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="Archer"
+            android:textColor="@color/bluedark"
+            android:textSize="32sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/active_textview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/viga"
-        android:gravity="center"
-        android:text="Active Ability"
-        android:paddingBottom="10sp"
-        android:paddingTop="10sp"
-        android:textAlignment="center"
-        android:textColor="@color/bluedark"
-        android:textIsSelectable="true"
-        android:textSize="25sp"
-        app:layout_constraintTop_toTopOf="parent" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/bluedark"
+            android:alpha="0.2" />
 
-    <TextView
-        android:id="@+id/active_description_textview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/viga"
-        android:gravity="center"
-        android:text="Active descriptor"
-        android:textAlignment="center"
-        android:textColor="@color/bluedark"
-        android:textIsSelectable="true"
-        android:paddingBottom="10sp"
-        android:paddingTop="5dp"
+        <TextView
+            android:id="@+id/active_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:gravity="center"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp"
+            android:text="Active Ability"
+            android:textColor="@color/bluedark"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-        android:textSize="17sp"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/active_description_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:gravity="center"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="16dp"
+            android:text="Active descriptor"
+            android:textColor="@color/bluedark"
+            android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/passive_textview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/viga"
-        android:gravity="center"
-        android:paddingBottom="5sp"
-        android:text="Passive Ability"
-        android:paddingTop="10sp"
+        <TextView
+            android:id="@+id/passive_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:paddingBottom="8dp"
+            android:text="Passive Ability"
+            android:textColor="@color/bluedark"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-        android:textAlignment="center"
-        android:textColor="@color/bluedark"
-        android:textIsSelectable="true"
-        android:textSize="25sp"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/passive_description_textview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/viga"
-        android:gravity="center"
-        android:text="Passive descriptor"
-        android:textAlignment="center"
-        android:paddingTop="5dp"
-        android:textColor="@color/bluedark"
-        android:textIsSelectable="true"
-        android:paddingBottom="20sp"
-
-        android:textSize="17sp"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/passive_description_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:gravity="center"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="20dp"
+            android:text="Passive descriptor"
+            android:textColor="@color/bluedark"
+            android:textSize="16sp" />
 
 
-    <ImageButton
-        android:id="@+id/close_button"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="center"
-        android:background="@drawable/circle_background"
-        android:contentDescription="TODO" />
+        <ImageButton
+            android:id="@+id/close_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:background="@drawable/circle_background"
+            android:contentDescription="Close dialog" />
 
 
-</LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
