@@ -1,15 +1,12 @@
-<!-- res/layout/item_character_class.xml -->
-
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
-
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:orientation="vertical"
         android:padding="8dp">
 
@@ -20,7 +17,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="4dp"
             android:fontFamily="@font/viga"
-            android:gravity="start"
+            android:gravity="center"
             android:text="Quiz Magician"
             android:textColor="@color/bluedark"
             android:textSize="30sp"
@@ -39,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="start"
+            android:gravity="center"
             android:text="Active Ability"
             android:textStyle="bold"
             android:textColor="@color/bluedark"
@@ -50,10 +47,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="start"
+            android:gravity="center"
             android:text="This is a sample description."
             android:textColor="@color/bluedark"
-            android:textSize="16sp" />
+            android:textSize="19sp" />
 
         <TextView
             android:id="@+id/passiveAbilityText"
@@ -61,7 +58,7 @@
             android:paddingTop="20dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="start"
+            android:gravity="center"
             android:text="Passive Ability"
             android:textColor="@color/bluedark"
             android:textSize="23sp"
@@ -72,15 +69,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="start"
-
-
+            android:gravity="center"
             android:text="This is a sample description."
             android:textColor="@color/bluedark"
-            android:textSize="16sp" />
+            android:textSize="19sp" />
 
     </LinearLayout>
 
-
 </LinearLayout>
-
