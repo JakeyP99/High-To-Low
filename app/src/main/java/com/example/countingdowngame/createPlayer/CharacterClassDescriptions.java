@@ -39,6 +39,16 @@ public class CharacterClassDescriptions {
     public static final String noClassDescription =
             "No abilities.";
 
+    // Active Ability Button Text (Shortened versions)
+    public static final String archerActiveButtonText = "Hand out 2 drinks";
+    public static final String witchActiveButtonText = "Skip your turn";
+    public static final String scientistActiveButtonText = "Change current number";
+    public static final String soldierActiveButtonText = "Add 4 drinks & continue";
+    public static final String quizMagicianActiveButtonText = "Next wildcard is 2 quizzes";
+    public static final String survivorActiveButtonText = "Halve current number";
+    public static final String angryJimActiveButtonText = "Force turn repeat";
+    public static final String goblinActiveButtonText = "Destroy 2 wildcards";
+
     // Passive Ability Descriptions
     public static final String archerPassiveDescription =
             "Every third turn: 60% chance +2 drinks, 40% chance -2 drinks.";
@@ -62,4 +72,5 @@ public class CharacterClassDescriptions {
             "When the number is below 50, you gain all other passives, but must take another turn.";
 
     public static final String goblinPassiveDescription =
-            "After every third turn, gain 1 wildcard.";}
+            "After every third turn, gain 1 wildcard.";
+}

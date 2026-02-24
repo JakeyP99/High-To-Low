@@ -423,18 +423,47 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void updateClassAbilityButton(Player currentPlayer) {
-        btnClassAbility.setText(String.format("%s's Ability", currentPlayer.getClassChoice()));
+        String classChoice = currentPlayer.getClassChoice();
+        btnClassAbility.setText(getClassActiveButtonText(classChoice));
 
-        boolean showClassAbilityButton = (SCIENTIST.equals(currentPlayer.getClassChoice()) || ARCHER.equals(currentPlayer.getClassChoice())
-                || WITCH.equals(currentPlayer.getClassChoice()) || QUIZ_MAGICIAN.equals(currentPlayer.getClassChoice())
-                || SURVIVOR.equals(currentPlayer.getClassChoice()) || GOBLIN.equals(currentPlayer.getClassChoice())
-                || ANGRY_JIM.equals(currentPlayer.getClassChoice()) || SOLDIER.equals(currentPlayer.getClassChoice())) && !currentPlayer.getUsedActiveAbility();
+        boolean canShowButton = (SCIENTIST.equals(classChoice) || ARCHER.equals(classChoice)
+                || WITCH.equals(classChoice) || QUIZ_MAGICIAN.equals(classChoice)
+                || SURVIVOR.equals(classChoice) || GOBLIN.equals(classChoice)
+                || ANGRY_JIM.equals(classChoice) || SOLDIER.equals(classChoice)) && !currentPlayer.getUsedActiveAbility();
 
-        Log.d(TAG, "updateClassAbilityButton: " + currentPlayer.getUsedActiveAbility());
+        // Specific rules for dynamic hiding
+        if (ARCHER.equals(classChoice) && drinkNumberCounterInt < 2) {
+            canShowButton = false;
+        }
+        
+        if (NO_CLASS.equals(classChoice)) {
+            canShowButton = false;
+        }
 
-        btnClassAbility.setVisibility(showClassAbilityButton ? View.VISIBLE : View.INVISIBLE);
-        if (NO_CLASS.equals(currentPlayer.getClassChoice())) {
-            btnClassAbility.setVisibility(View.INVISIBLE);
+        btnClassAbility.setVisibility(canShowButton ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    private String getClassActiveButtonText(String classChoice) {
+        if (classChoice == null) return "";
+        switch (classChoice) {
+            case ARCHER:
+                return CharacterClassDescriptions.archerActiveButtonText;
+            case WITCH:
+                return CharacterClassDescriptions.witchActiveButtonText;
+            case SCIENTIST:
+                return CharacterClassDescriptions.scientistActiveButtonText;
+            case SOLDIER:
+                return CharacterClassDescriptions.soldierActiveButtonText;
+            case QUIZ_MAGICIAN:
+                return CharacterClassDescriptions.quizMagicianActiveButtonText;
+            case SURVIVOR:
+                return CharacterClassDescriptions.survivorActiveButtonText;
+            case ANGRY_JIM:
+                return CharacterClassDescriptions.angryJimActiveButtonText;
+            case GOBLIN:
+                return CharacterClassDescriptions.goblinActiveButtonText;
+            default:
+                return "";
         }
     }
 
