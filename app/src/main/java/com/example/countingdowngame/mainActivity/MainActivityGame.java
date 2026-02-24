@@ -17,6 +17,8 @@ import static com.example.countingdowngame.mainActivity.MainActivityCatastrophes
 import static com.example.countingdowngame.mainActivity.MainActivityCatastrophes.setCatastropheLimit;
 import static com.example.countingdowngame.mainActivity.MainActivityLogging.logPlayerInformation;
 import static com.example.countingdowngame.mainActivity.MainActivityLogging.logSelectedCardInfo;
+import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleAngryJimPassive;
+import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleArcherPassive;
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleGoblinPassive;
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleScientistPassive;
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleSoldierPassive;
@@ -650,9 +652,9 @@ public class MainActivityGame extends SharedMainActivity {
         } else if (SCIENTIST.equals(classChoice)) {
             handleScientistPassive(currentPlayer);
         } else if (ANGRY_JIM.equals(classChoice)) {
-            ActiveAbilities.handleAngryJimClass(currentPlayer); // Fixed to use ActiveAbilities
+            handleAngryJimPassive(currentPlayer);
         } else if (ARCHER.equals(classChoice)) {
-            ActiveAbilities.handleArcherClass(currentPlayer); // Fixed to use ActiveAbilities
+            handleArcherPassive(currentPlayer);
         } else if (GOBLIN.equals(classChoice)) {
             handleGoblinPassive(currentPlayer);
         }

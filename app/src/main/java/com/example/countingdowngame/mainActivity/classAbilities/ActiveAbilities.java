@@ -110,8 +110,6 @@ public class ActiveAbilities {
             currentPlayer.setUsedActiveAbility(true);
             activity.updateDrinkNumberCounter(-2, true);
             AudioManager.getInstance().playSoundEffects(activity, ARCHER);
-        } else {
-            activity.displayToastMessage("There must be more than two total drinks.");
         }
     }
 
