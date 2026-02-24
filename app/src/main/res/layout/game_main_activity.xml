@@ -84,7 +84,7 @@
 
     <Button
         android:id="@+id/btnClassAbility"
-        android:layout_width="300dp"
+        android:layout_width="320dp"
         android:layout_height="61dp"
         android:background="@drawable/outlineforbutton"
         android:fontFamily="@font/viga"

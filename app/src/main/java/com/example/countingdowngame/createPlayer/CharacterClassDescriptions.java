@@ -43,7 +43,7 @@ public class CharacterClassDescriptions {
     public static final String archerActiveButtonText = "Hand out 2 drinks";
     public static final String witchActiveButtonText = "Skip your turn";
     public static final String scientistActiveButtonText = "Change current number";
-    public static final String soldierActiveButtonText = "Add 4 drinks & continue";
+    public static final String soldierActiveButtonText = "Add 4 drinks";
     public static final String quizMagicianActiveButtonText = "Next wildcard is 2 quizzes";
     public static final String survivorActiveButtonText = "Halve current number";
     public static final String angryJimActiveButtonText = "Force turn repeat";

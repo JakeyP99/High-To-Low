@@ -258,7 +258,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void setupButtonActions(ImageButton imageButtonExit) {
-        btnUtils.setButton(btnGenerate, () -> {
+        btnGenerate.setOnClickListener(v -> {
             disableButtons();
             numberGenerator.startNumberShuffleAnimation();
         });
@@ -434,6 +434,12 @@ public class MainActivityGame extends SharedMainActivity {
         // Specific rules for dynamic hiding
         if (ARCHER.equals(classChoice) && drinkNumberCounterInt < 2) {
             canShowButton = false;
+        }
+
+        if (SOLDIER.equals(classChoice)) {
+            if (isFirstTurn || Game.getInstance().getCurrentNumber() > 10) {
+                canShowButton = false;
+            }
         }
         
         if (NO_CLASS.equals(classChoice)) {

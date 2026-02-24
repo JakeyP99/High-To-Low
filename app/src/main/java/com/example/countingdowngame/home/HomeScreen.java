@@ -6,7 +6,6 @@ import android.widget.Button;
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
 import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.playerChoice.PlayerChoice;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.ButtonUtils;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
@@ -40,12 +39,6 @@ public class HomeScreen extends ButtonUtilsActivity {
         AudioManager audioManager = AudioManager.getInstance();
         audioManager.resumeBackgroundMusic();
         AudioManager.updateMuteButton(getMuteSoundState(), muteGif, soundGif);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        AudioManager.getInstance().pauseSound();
     }
 
     private void initViews() {
