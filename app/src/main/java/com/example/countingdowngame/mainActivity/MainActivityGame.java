@@ -23,9 +23,11 @@ import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAb
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleSurvivorPassive;
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleWitchPassive;
 
+import android.animation.ArgbEvaluator;
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
@@ -100,13 +102,27 @@ public class MainActivityGame extends SharedMainActivity {
     private boolean doubleBackToExitPressedOnce = false;
     //-----------------------------------------------------Array---------------------------------------------------//
     private Button[] answerButtons; // Array to hold the answer buttons
-    private Handler shuffleHandler;
     private MainActivityCatastrophes catastrophesManager;
+    private MainActivityNumberGenerator numberGenerator;
 
     static void updateNumber(int updatedNumber) {
         Game.getInstance().setCurrentNumber(updatedNumber);
         numberCounterText.setText(String.valueOf(updatedNumber));
         SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(updatedNumber));
+        updateNumberColor(updatedNumber);
+    }
+
+    public static void updateNumberColor(int currentNumber) {
+        if (numberCounterText == null) return;
+        if (currentNumber >= 1000) {
+            numberCounterText.setTextColor(Color.BLACK);
+        } else {
+            ArgbEvaluator colorEvaluator = new ArgbEvaluator();
+            // Scaling: 1000 is Black, 1 is Red
+            float progress = 1.0f - ((float) (Math.max(1, currentNumber) - 1) / 999.0f);
+            int currentColor = (int) colorEvaluator.evaluate(progress, Color.BLACK, Color.RED);
+            numberCounterText.setTextColor(currentColor);
+        }
     }
 
     //-----------------------------------------------------Lifecycle Methods---------------------------------------------------//
@@ -171,10 +187,10 @@ public class MainActivityGame extends SharedMainActivity {
         btnQuizAnswerTR = findViewById(R.id.btnQuizAnswerTR);
         wildActivityTextView = findViewById(R.id.textView_WildText);
         imageButtonExit = findViewById(R.id.btnExitGame);
-        shuffleHandler = new Handler();
         wildText = findViewById(R.id.textView_WildText);
 
         answerButtons = new Button[]{btnQuizAnswerBL, btnQuizAnswerBR, btnQuizAnswerTL, btnQuizAnswerTR};
+        numberGenerator = new MainActivityNumberGenerator(this, numberCounterText);
     }
 
     private void startGame() {
@@ -244,7 +260,7 @@ public class MainActivityGame extends SharedMainActivity {
     private void setupButtonActions(ImageButton imageButtonExit) {
         btnUtils.setButton(btnGenerate, () -> {
             disableButtons();
-            startNumberShuffleAnimation();
+            numberGenerator.startNumberShuffleAnimation();
         });
 
         playerImage.setOnClickListener(v -> characterClassDescriptions());
@@ -498,18 +514,10 @@ public class MainActivityGame extends SharedMainActivity {
         numberCounterText.setText(String.valueOf(currentNumber));
         SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(currentNumber));
         SharedMainActivity.setNameSizeBasedOnInt(nextPlayerText, nextPlayerText.getText().toString());
+        updateNumberColor(currentNumber);
     }
 
-    private void startNumberShuffleAnimation() {
-        int originalNumber = Game.getInstance().getCurrentNumber(); // Store the original number
-        final int shuffleDuration = 1500;
-        int shuffleInterval = originalNumber >= 1000 ? 50 : 100;
-        final Random random = new Random();
-
-        shuffleHandler.postDelayed(new ShuffleRunnable(random, originalNumber, shuffleDuration, shuffleInterval), shuffleInterval);
-    }
-
-    private void disableButtons() {
+    public void disableButtons() {
         btnGenerate.setEnabled(false);
         btnWild.setEnabled(false);
         btnClassAbility.setEnabled(false);
@@ -519,7 +527,7 @@ public class MainActivityGame extends SharedMainActivity {
         disableAnswerButtons(answerButtons);
     }
 
-    private void enableButtons() {
+    public void enableButtons() {
         btnGenerate.setEnabled(true);
         btnWild.setEnabled(true);
         btnClassAbility.setEnabled(true);
@@ -1267,59 +1275,6 @@ public class MainActivityGame extends SharedMainActivity {
             }
         }
         btnAnswer.setVisibility(View.INVISIBLE);
-    }
-
-    private class ShuffleRunnable implements Runnable {
-        private final Random random;
-        private final int originalNumber;
-        private final int shuffleDuration;
-        private final int shuffleInterval;
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        private int shuffleTime = 0;
-
-        ShuffleRunnable(Random random, int originalNumber, int shuffleDuration, int shuffleInterval) {
-            this.random = random;
-            this.originalNumber = originalNumber;
-            this.shuffleDuration = shuffleDuration;
-            this.shuffleInterval = shuffleInterval;
-        }
-
-        @Override
-        public void run() {
-            int randomDigit = random.nextInt(originalNumber + 1);
-            numberCounterText.setText(String.valueOf(randomDigit));
-
-            shuffleTime += shuffleInterval;
-
-            if (shuffleTime < shuffleDuration) {
-                shuffleHandler.postDelayed(this, shuffleInterval);
-            } else {
-
-                int currentNumber = Game.getInstance().nextNumber();
-                int previousNumber = Game.getInstance().getPreviousNumber(); // Assume you store it
-
-                Game.getInstance().recordTurn(currentPlayer, currentNumber);
-                Log.d(TAG, "NextNumber = " + currentNumber);
-
-                Log.d(TAG, "Previous Number = " + previousNumber);
-
-                if ((currentNumber <= 2 && currentNumber > 0 &&
-                        previousNumber <= 2) &&
-                        (SURVIVOR.equals(currentPlayer.getClassChoice()) ||
-                                ANGRY_JIM.equals(currentPlayer.getClassChoice()))) {
-
-                    handleSurvivorPassive(currentPlayer);
-                }
-
-
-                renderCurrentNumber(currentNumber, MainActivityGame.this::gotoGameEnd, numberCounterText);
-
-                if (currentNumber != 0) {
-                    enableButtons();
-                }
-                Log.d("startNumberShuffleAnimation", "Next player's turn");
-            }
-        }
     }
 
 }

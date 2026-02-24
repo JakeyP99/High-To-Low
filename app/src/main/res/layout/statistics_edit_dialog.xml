@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/editDialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/viga"
+        android:text="Edit Statistics"
+        android:textAlignment="center"
+        android:textColor="@color/bluedark"
+        android:textSize="28sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/viga"
+        android:text="End Game Drinks"
+        android:textColor="@color/bluedark"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/editDrinks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:maxLength="4"
+        android:textColor="@color/bluedark"
+        android:fontFamily="@font/viga"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/viga"
+        android:text="Games Played"
+        android:textColor="@color/bluedark"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/editGamesPlayed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:maxLength="4"
+        android:textColor="@color/bluedark"
+        android:fontFamily="@font/viga"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/viga"
+        android:text="Games Lost"
+        android:textColor="@color/bluedark"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/editGamesLost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:maxLength="4"
+        android:textColor="@color/bluedark"
+        android:fontFamily="@font/viga"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSaveStats"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/outlineforbutton"
+        android:fontFamily="@font/viga"
+        android:text="Save"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/btnEditCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="@color/transparent"
+        android:text="Cancel"
+        android:textColor="@color/bluedark"
+        android:textSize="18sp" />
+
+</LinearLayout>

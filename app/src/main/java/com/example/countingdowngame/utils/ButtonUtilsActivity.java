@@ -46,41 +46,41 @@ public abstract class ButtonUtilsActivity extends AppCompatActivity {
         return new Intent(this, targetClass);
     }
 
-    protected void gotoHomeScreen() {
+    public void gotoHomeScreen() {
         Intent i = getIntentForClass(HomeScreen.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
     }
 
-    protected void gotoGameEnd() {
+    public void gotoGameEnd() {
         startActivity(getIntentForClass(EndActivityGame.class));
     }
 
-    protected void gotoGameEndRoulette(Player activePlayer) {
+    public void gotoGameEndRoulette(Player activePlayer) {
         Intent intent = new Intent(this, EndRouletteGame.class);
         intent.putExtra("VICTOR_NAME", activePlayer.getName());
         startActivity(intent);
     }
 
-    protected void gotoNumberChoice() {
+    public void gotoNumberChoice() {
         startActivity(getIntentForClass(NumberChoice.class));
     }
 
-    protected void gotoInstructions() {
+    public void gotoInstructions() {
         startActivity(getIntentForClass(InstructionsToPlay.class));
     }
 
-    protected void gotoStatistics() {
+    public void gotoStatistics() {
         startActivity(getIntentForClass(Statistics.class));
     }
 
-    protected void goToInGameSettings(int startingNumber) {
+    public void goToInGameSettings(int startingNumber) {
         Intent i = getIntentForClass(SettingsMenu.class);
         i.putExtra("startingNumber", startingNumber);
         startActivity(i);
     }
 
-    protected void gotoPlayerChoice() {
+    public void gotoPlayerChoice() {
         startActivity(getIntentForClass(PlayerChoice.class));
     }
     //-----------------------------------------------------Sound Functionality---------------------------------------------------//

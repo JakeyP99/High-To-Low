@@ -1,10 +1,16 @@
 package com.example.countingdowngame.statistics;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
@@ -17,13 +23,14 @@ import java.util.Locale;
 
 import pl.droidsonroids.gif.GifImageView;
 
-public class Statistics extends ButtonUtilsActivity {
+public class Statistics extends ButtonUtilsActivity implements StatisticsAdapter.OnLongClickListener {
 
     private GifImageView muteGif, soundGif;
     private ListView listViewPlayerGlobalStatistics;
     private ImageView playerImage;
 
     private static final String PREF_NAME = "PlayerStats";
+    private int debugClickCount = 0;
 
     @Override
     protected void onResume() {
@@ -63,7 +70,133 @@ public class Statistics extends ButtonUtilsActivity {
             stats.add(new PlayerStatistic(playerName, totalDrinks, totalGamesLost, totalGamesPlayed));
         }
 
-        listViewPlayerGlobalStatistics.setAdapter(new StatisticsAdapter(this, stats));
+        listViewPlayerGlobalStatistics.setAdapter(new StatisticsAdapter(this, stats, this));
+    }
+
+    @Override
+    public void onLongClick(PlayerStatistic stat, int position) {
+        showOptionsDialog(stat);
+    }
+
+    private void showOptionsDialog(PlayerStatistic stat) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.statistics_options_dialog, null);
+
+        TextView dialogTitle = dialogView.findViewById(R.id.dialogTitle);
+        dialogTitle.setText("Options for " + stat.getPlayerName());
+
+        Button btnEditValues = dialogView.findViewById(R.id.btnEditValues);
+        Button btnDeletePlayer = dialogView.findViewById(R.id.btnDeletePlayer);
+        Button btnCancel = dialogView.findViewById(R.id.btnCancel);
+
+        debugClickCount = 0;
+        dialogTitle.setOnClickListener(v -> {
+            debugClickCount++;
+            if (debugClickCount >= 5) {
+                btnEditValues.setEnabled(true);
+                btnEditValues.setAlpha(1.0f);
+            }
+        });
+
+        AlertDialog dialog = builder.setView(dialogView).create();
+
+        btnEditValues.setOnClickListener(v -> {
+            showEditDialog(stat);
+            dialog.dismiss();
+        });
+
+        btnDeletePlayer.setOnClickListener(v -> {
+            showDeleteConfirmationDialog(stat.getPlayerName());
+            dialog.dismiss();
+        });
+
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+    }
+
+    private void showEditDialog(PlayerStatistic stat) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.statistics_edit_dialog, null);
+
+        TextView dialogTitle = dialogView.findViewById(R.id.editDialogTitle);
+        dialogTitle.setText("Edit Stats: " + stat.getPlayerName());
+
+        final EditText editDrinks = dialogView.findViewById(R.id.editDrinks);
+        final EditText editGamesPlayed = dialogView.findViewById(R.id.editGamesPlayed);
+        final EditText editGamesLost = dialogView.findViewById(R.id.editGamesLost);
+
+        editDrinks.setText(String.valueOf(stat.getTotalDrinks()));
+        editGamesPlayed.setText(String.valueOf(stat.getTotalGamesPlayed()));
+        editGamesLost.setText(String.valueOf(stat.getTotalGamesLost()));
+
+        Button btnSave = dialogView.findViewById(R.id.btnSaveStats);
+        Button btnCancel = dialogView.findViewById(R.id.btnEditCancel);
+
+        AlertDialog dialog = builder.setView(dialogView).create();
+
+        btnSave.setOnClickListener(v -> {
+            try {
+                int drinks = Integer.parseInt(editDrinks.getText().toString());
+                int played = Integer.parseInt(editGamesPlayed.getText().toString());
+                int lost = Integer.parseInt(editGamesLost.getText().toString());
+
+                saveManualStats(stat.getPlayerName(), drinks, lost, played);
+                setPlayerStatistics(); // Refresh list
+                dialog.dismiss();
+            } catch (NumberFormatException e) {
+                // Handle invalid input if necessary
+            }
+        });
+
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+    }
+
+    private void showDeleteConfirmationDialog(String playerName) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.statistics_delete_dialog, null);
+
+        TextView dialogMessage = dialogView.findViewById(R.id.deleteDialogMessage);
+        dialogMessage.setText("Are you sure you want to delete all statistics for " + playerName + "?");
+
+        Button btnConfirmDelete = dialogView.findViewById(R.id.btnConfirmDelete);
+        Button btnCancel = dialogView.findViewById(R.id.btnDeleteCancel);
+
+        AlertDialog dialog = builder.setView(dialogView).create();
+
+        btnConfirmDelete.setOnClickListener(v -> {
+            deletePlayerStats(playerName);
+            dialog.dismiss();
+        });
+
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+    }
+
+    private void saveManualStats(String playerName, int drinks, int lost, int played) {
+        SharedPreferences.Editor editor = getPrefs(this).edit();
+        String prefix = getKeyPrefix(playerName);
+        editor.putInt(prefix + "_drinks", drinks);
+        editor.putInt(prefix + "_gameslost", lost);
+        editor.putInt(prefix + "_gamesplayed", played);
+        editor.apply();
+    }
+
+    private void deletePlayerStats(String playerName) {
+        SharedPreferences.Editor editor = getPrefs(this).edit();
+        String prefix = getKeyPrefix(playerName);
+        editor.remove(prefix + "_drinks");
+        editor.remove(prefix + "_gameslost");
+        editor.remove(prefix + "_gamesplayed");
+        editor.remove(prefix + "_photo");
+        editor.apply();
+        setPlayerStatistics(); // Refresh list
     }
 
     // ====== Helpers for SharedPreferences ======

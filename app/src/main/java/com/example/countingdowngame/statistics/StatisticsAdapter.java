@@ -24,11 +24,17 @@ public class StatisticsAdapter extends ArrayAdapter<PlayerStatistic> {
 
     private final LayoutInflater inflater;
     private final SharedPreferences prefs;
+    private final OnLongClickListener longClickListener;
 
-    public StatisticsAdapter(Context context, List<PlayerStatistic> statistics) {
+    public interface OnLongClickListener {
+        void onLongClick(PlayerStatistic stat, int position);
+    }
+
+    public StatisticsAdapter(Context context, List<PlayerStatistic> statistics, OnLongClickListener longClickListener) {
         super(context, 0, statistics);
         this.inflater = LayoutInflater.from(context);
         this.prefs = context.getSharedPreferences("PlayerStats", Context.MODE_PRIVATE);
+        this.longClickListener = longClickListener;
     }
 
     @NonNull
@@ -65,6 +71,14 @@ public class StatisticsAdapter extends ArrayAdapter<PlayerStatistic> {
             } else {
                 holder.playerImageView.setImageResource(R.drawable.wine); // fallback image
             }
+
+            convertView.setOnLongClickListener(v -> {
+                if (longClickListener != null) {
+                    longClickListener.onLongClick(stat, position);
+                    return true;
+                }
+                return false;
+            });
         }
 
         return convertView;

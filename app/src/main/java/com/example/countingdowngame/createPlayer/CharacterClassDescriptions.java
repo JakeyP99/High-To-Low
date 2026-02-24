@@ -62,4 +62,4 @@ public class CharacterClassDescriptions {
             "When the number is below 50, you gain all other passives, but must take another turn.";
 
     public static final String goblinPassiveDescription =
-            "After your third turn, gain 1 wildcard.";}
+            "After every third turn, gain 1 wildcard.";}
