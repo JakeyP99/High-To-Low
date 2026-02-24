@@ -395,6 +395,19 @@ public class Game {
         }
     }
 
+    public void reset() {
+        gameStarted = false;
+        players.clear();
+        playerNames.clear();
+        repeatingTurnsMap.clear();
+        turns.clear();
+        catastropheQuantity = 0;
+        currentPlayerId = 0;
+        playerUsedWildcards = false;
+        quizWasTriggered = false;
+        reverseOrder = false;
+        lastTurnPlayer = null;
+    }
+
 
 }
-

@@ -1,16 +1,14 @@
 package com.example.countingdowngame.mainActivity.classAbilities;
 
-import static android.content.ContentValues.TAG;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ARCHER;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SCIENTIST;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
 import static com.example.countingdowngame.mainActivity.MainActivityGame.drinkNumberCounterInt;
 import static com.example.countingdowngame.mainActivity.MainActivityGame.isFirstTurn;
-import static com.example.countingdowngame.mainActivity.MainActivityGame.repeatedTurn;
 import static com.example.countingdowngame.mainActivity.MainActivityGame.soldierRemoval;
 
-import android.content.ContentValues;
 import android.os.Handler;
 import android.util.Log;
 
@@ -29,7 +27,6 @@ public class PassiveAbilities {
     }
 
     public static void handleWitchPassive(Player currentPlayer) {
-        Log.d("TAG", "First turn: " + isFirstTurn);
         if (!isFirstTurn) {
             if (game.getCurrentNumber() % 2 == 0) {
                 activity.showGameDialog(WITCH + "'s Passive: \n\n" + currentPlayer.getName() + " hand out 1 drink.");
@@ -42,16 +39,10 @@ public class PassiveAbilities {
     }
 
     public static void handleSoldierPassive() {
-
         Player currentPlayer = game.getCurrentPlayer();
         int currentNumber = game.getCurrentNumber();
-
-        Log.d("TAG", "Current number: " + currentNumber);
         int minRange = 10;
         int maxRange = 15;
-
-        Log.d("TAG", "First turn: " + isFirstTurn);
-        Log.d("TAG", "Soldier removal: " + soldierRemoval);
 
         if (!isFirstTurn) {
             if (!soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {
@@ -65,16 +56,11 @@ public class PassiveAbilities {
         }
     }
 
-
     public static void handleSurvivorPassive(Player currentPlayer) {
-        int currentNumber = Game.getInstance().getCurrentNumber();
-        Log.d(ContentValues.TAG, "handleSurvivorPassive: current number = " + currentNumber);
         String drinksText = (drinkNumberCounterInt == 1) ? "drink" : "drinks";
         activity.showGameDialog(SURVIVOR + "'s Passive: \n\n" + currentPlayer.getName()
                 + " survived, hand out " + drinkNumberCounterInt + " " + drinksText);
-
     }
-
 
     public static void handleGoblinPassive(Player currentPlayer) {
         if (!ANGRY_JIM.equals(currentPlayer.getClassChoice())) {
@@ -82,7 +68,6 @@ public class PassiveAbilities {
         }
         if (currentPlayer.getPassiveAbilityTurnCounter() == 3) {
             currentPlayer.resetPassiveAbilityTurnCounter();
-            Log.d(TAG, "handleGoblinPassive: reset turn");
             currentPlayer.gainWildCards(1);
         }
     }
@@ -90,28 +75,52 @@ public class PassiveAbilities {
     public static void handleScientistPassive(Player currentPlayer) {
         if (!isFirstTurn) {
             Handler handler = new Handler();
-            int delayMillis = 1;
-
-            int currentNumber = Game.getInstance().getCurrentNumber();
-            int skipChance;
-
-            if (currentNumber < 10) {
-                skipChance = 20; // 20% chance
-            } else if (currentNumber < 100) {
-                skipChance = 15; // 15% chance
-            } else {
-                skipChance = 10; // Default 10% chance
-            }
-
-            int chance = new Random().nextInt(100); // 0–99
+            int currentNumber = game.getCurrentNumber();
+            int skipChance = (currentNumber < 10) ? 20 : (currentNumber < 100 ? 15 : 10);
+            int chance = new Random().nextInt(100);
 
             handler.postDelayed(() -> {
                 if (chance < skipChance) {
                     activity.showGameDialog(SCIENTIST + "'s Passive: \n\n" + currentPlayer.getName() + " is a scientist and their turn was skipped.");
                     currentPlayer.useSkip();
                 }
-            }, delayMillis);
+            }, 1);
         }
     }
 
+    public static void handleAngryJimPassive(Player currentPlayer) {
+        boolean numberBelow50 = game.getCurrentNumber() < 50;
+        Player lastPlayer = game.getLastTurnPlayer();
+        boolean isFirstAngryJimTurn = lastPlayer == null || !lastPlayer.equals(currentPlayer);
+
+        if (numberBelow50 && isFirstAngryJimTurn) {
+            game.updateRepeatingTurns(currentPlayer, 1);
+        }
+
+        if (numberBelow50) {
+            handleSoldierPassive();
+            handleArcherPassive(currentPlayer);
+            handleGoblinPassive(currentPlayer);
+            handleWitchPassive(currentPlayer);
+            handleScientistPassive(currentPlayer);
+        }
+    }
+
+    public static void handleArcherPassive(Player currentPlayer) {
+        if (!ANGRY_JIM.equals(currentPlayer.getClassChoice())) {
+            currentPlayer.incrementPassiveAbilityTurnCounter();
+        }
+
+        if (currentPlayer.getPassiveAbilityTurnCounter() == 3) {
+            currentPlayer.resetPassiveAbilityTurnCounter();
+            int chance = new Random().nextInt(100);
+            if (chance < 60) {
+                activity.updateDrinkNumberCounter(2, true);
+                activity.showGameDialog(ARCHER + "'s Passive: \n\nDrinking number increased by 2!");
+            } else {
+                activity.updateDrinkNumberCounter(-2, true);
+                activity.showGameDialog(ARCHER + "'s Passive: \n\nDrinking number decreased by 2!");
+            }
+        }
+    }
 }
