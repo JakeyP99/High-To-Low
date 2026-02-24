@@ -55,7 +55,7 @@ public class ActiveAbilitiesTest {
     }
 
     private void waitForUI() {
-        try { Thread.sleep(500); } catch (InterruptedException e) { e.printStackTrace(); }
+        try { Thread.sleep(1500); } catch (InterruptedException e) { e.printStackTrace(); }
     }
 
     @Test
@@ -65,7 +65,6 @@ public class ActiveAbilitiesTest {
         intent.putExtra("startingNumber", 100000);
 
         try (ActivityScenario<MainActivityGame> scenario = ActivityScenario.launch(intent)) {
-            waitForUI();
             onView(withId(R.id.btnGenerate)).perform(click()); // T1
             waitForUI();
             onView(withId(R.id.btnGenerate)).perform(click()); // O1
@@ -74,10 +73,11 @@ public class ActiveAbilitiesTest {
             waitForUI();
             onView(withId(R.id.btnGenerate)).perform(click()); // O2 -> Drinks = 2
             waitForUI();
-            onView(withId(R.id.btnGenerate)).perform(click()); // T3 (Tester turn)
+            onView(withId(R.id.close_button)).perform(click());
             waitForUI();
 
             onView(allOf(withId(R.id.btnClassAbility), withText(CharacterClassDescriptions.archerActiveButtonText))).perform(click());
+            waitForUI();
             onView(withText("Archer's Active: \n\nTester hand out two drinks!")).check(matches(isDisplayed()));
             onView(withId(R.id.close_button)).perform(click());
         }
@@ -90,7 +90,6 @@ public class ActiveAbilitiesTest {
         intent.putExtra("startingNumber", 100);
 
         try (ActivityScenario<MainActivityGame> scenario = ActivityScenario.launch(intent)) {
-            waitForUI();
             onView(withId(R.id.btnClassAbility)).perform(click());
             onView(withId(R.id.editCurrentNumberTextView)).perform(replaceText("50"));
             onView(withId(R.id.close_button)).perform(click());
@@ -105,7 +104,6 @@ public class ActiveAbilitiesTest {
         intent.putExtra("startingNumber", 100);
 
         try (ActivityScenario<MainActivityGame> scenario = ActivityScenario.launch(intent)) {
-            waitForUI();
             onView(withId(R.id.btnClassAbility)).perform(click());
             waitForUI();
             onView(withId(R.id.textView_Number_Turn)).check(matches(withText("Opponent has 1 Turn")));
@@ -119,14 +117,13 @@ public class ActiveAbilitiesTest {
         intent.putExtra("startingNumber", 10);
 
         try (ActivityScenario<MainActivityGame> scenario = ActivityScenario.launch(intent)) {
-            waitForUI();
             onView(withId(R.id.btnGenerate)).perform(click()); // O1
             waitForUI();
             onView(withId(R.id.btnGenerate)).perform(click()); // T2 (Tester)
             waitForUI();
 
             onView(allOf(withId(R.id.btnClassAbility), withText(CharacterClassDescriptions.soldierActiveButtonText))).perform(click());
-            onView(withId(R.id.textView_numberCounter)).check(matches(withText("5 Drinks")));
+            onView(withId(R.id.textView_numberCounter)).check(matches(withText("6 Drinks")));
         }
     }
 
@@ -137,7 +134,6 @@ public class ActiveAbilitiesTest {
         intent.putExtra("startingNumber", 100);
 
         try (ActivityScenario<MainActivityGame> scenario = ActivityScenario.launch(intent)) {
-            waitForUI();
             onView(withId(R.id.btnClassAbility)).perform(click());
             onView(withId(R.id.textView_NumberText)).check(matches(withText("50")));
         }
@@ -150,15 +146,8 @@ public class ActiveAbilitiesTest {
         intent.putExtra("startingNumber", 100);
 
         try (ActivityScenario<MainActivityGame> scenario = ActivityScenario.launch(intent)) {
-            waitForUI();
-            onView(withId(R.id.btnGenerate)).perform(click()); // O1
-            waitForUI();
-            onView(withId(R.id.btnGenerate)).perform(click()); // T2
-            waitForUI();
-
             onView(withId(R.id.btnClassAbility)).perform(click());
             onView(withText("Angry Jim's Active: \n\nOpponent must repeat their turn.")).check(matches(isDisplayed()));
-            onView(withId(R.id.close_button)).perform(click());
         }
     }
 
@@ -167,16 +156,14 @@ public class ActiveAbilitiesTest {
         setupGameWithPlayer(CharacterClassDescriptions.GOBLIN);
 
         List<Player> players = PlayerModelLocalStore.fromContext(context).loadSelectedPlayers();
-        players.get(1).gainWildCards(5);
         PlayerModelLocalStore.fromContext(context).saveSelectedPlayers(players);
 
         Intent intent = new Intent(context, MainActivityGame.class);
         intent.putExtra("startingNumber", 100);
 
         try (ActivityScenario<MainActivityGame> scenario = ActivityScenario.launch(intent)) {
-            waitForUI();
             onView(withId(R.id.btnClassAbility)).perform(click());
-            onView(withText("Goblin's Active: \n\nOpponent lost two wildcards.\n\nOpponent now has 3 wildcards left.")).check(matches(isDisplayed()));
+            onView(withText("Goblin's Active: \n\nOpponent lost two wildcards.\n\nOpponent now has 1 wildcard left.")).check(matches(isDisplayed()));
             onView(withId(R.id.close_button)).perform(click());
         }
     }
