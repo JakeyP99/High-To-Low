@@ -88,6 +88,7 @@ public class MainActivityGame extends SharedMainActivity {
     public static boolean repeatedTurn;
     public static boolean soldierRemoval;
     public static boolean catastrophesEnabled = true;
+    public static boolean passivesEnabled = true;
     private static TextView numberCounterText;
     private static int turnCounter = 0;
     private static int catastropheTurnCounter = 0;
@@ -139,6 +140,7 @@ public class MainActivityGame extends SharedMainActivity {
         catastropheTurnCounter = 0;
         catastropheLimit = 0;
         catastrophesEnabled = true;
+        passivesEnabled = false;
     }
 
     //-----------------------------------------------------Lifecycle Methods---------------------------------------------------//
