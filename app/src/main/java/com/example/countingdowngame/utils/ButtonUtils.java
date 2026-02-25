@@ -33,7 +33,6 @@ public class ButtonUtils {
     private final MediaPlayer bop;
     private final AppCompatActivity mContext;
     private final Drawable buttonHighlight;
-    private boolean isMuted = false;
 
     public ButtonUtils(final AppCompatActivity context) {
         mContext = context;
@@ -46,11 +45,6 @@ public class ButtonUtils {
     }
 
     //-----------------------------------------------------Sound Functionality---------------------------------------------------//
-    public void toggleMute() {
-        isMuted = !isMuted;
-        saveMuteState(isMuted);
-    }
-
     private void stopAllSounds() {
         if (bop != null && bop.isPlaying()) {
             bop.pause();  // Pause the regular sound effect
@@ -117,13 +111,6 @@ public class ButtonUtils {
     private boolean isMuted() {
         SharedPreferences sharedPreferences = mContext.getSharedPreferences("MyPrefs", MODE_PRIVATE);
         return sharedPreferences.getBoolean("isMuted", false); // Default to false if not found
-    }
-
-    private void saveMuteState(boolean isMuted) {
-        SharedPreferences sharedPreferences = mContext.getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("isMuted", isMuted);
-        editor.apply();
     }
 
     //-----------------------------------------------------Onclick Functionality---------------------------------------------------//
