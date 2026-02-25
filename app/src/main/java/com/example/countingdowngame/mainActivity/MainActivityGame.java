@@ -242,7 +242,6 @@ public class MainActivityGame extends SharedMainActivity {
             }
         });
         renderPlayer();
-        drinkNumberCounterInt = 1;
         updateDrinkNumberCounterTextView();
     }
 
@@ -324,16 +323,23 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void renderPlayer() {
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        updateActiveAbilitiesAfterCooldown(currentPlayer);
+        // Logic updates (Passive abilities, turn counters, etc.)
+        characterPassiveClassAffects();
+        updateActiveAbilitiesAfterCooldown(Game.getInstance().getCurrentPlayer());
         updateTurnCounter();
         updateCatastropheTurnCounter();
-        updateWildCardVisibilityIfNeeded(currentPlayer);
-        updateClassAbilityButton(currentPlayer);
-        updatePlayerInfo(currentPlayer);
+        updateWildCardVisibilityIfNeeded(Game.getInstance().getCurrentPlayer());
+
+        // Now that the game state is stable (including potential player removals),
+        // fetch the NEW current player for UI rendering.
+        Player activePlayer = Game.getInstance().getCurrentPlayer();
+        if (activePlayer == null) return;
+
+        updateClassAbilityButton(activePlayer);
+        updatePlayerInfo(activePlayer);
         updateNumberText();
-        logPlayerInformation(currentPlayer);
-        Game.getInstance().setLastTurnPlayer(currentPlayer);
+        logPlayerInformation(activePlayer);
+        Game.getInstance().setLastTurnPlayer(activePlayer);
     }
 
     //-----------------------------------------------------Update Player's Info---------------------------------------------------//
@@ -438,7 +444,6 @@ public class MainActivityGame extends SharedMainActivity {
         } else {
             if (!currentPlayer.getJustUsedWildCard()) {
                 updateWildCardVisibility(currentPlayer);
-                characterPassiveClassAffects();
             }
         }
         if (currentPlayer.getJustUsedWildCard()) {

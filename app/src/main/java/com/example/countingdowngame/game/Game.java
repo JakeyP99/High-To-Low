@@ -90,8 +90,8 @@ public class Game {
         currentNumber = startNum;
         previousNumber = startNum;
         startingNumber = startNum;
-        currentPlayerId = 0;
         turns.clear();
+        currentPlayerId = 0;
     }
 
     public void addUpdatedName(String currentPlayerName) {
@@ -118,18 +118,32 @@ public class Game {
 
     //-----------------------------------------------------Player---------------------------------------------------//
     public void removePlayer(Player player) {
-        int removedIndex = players.indexOf(player);
+        int indexToRemove = players.indexOf(player);
+        if (indexToRemove == -1) return;
 
-        players.remove(removedIndex);
-        playerNames.remove(removedIndex);
+        boolean removingCurrent = (indexToRemove == currentPlayerId);
+
         repeatingTurnsMap.remove(player);
+        players.remove(indexToRemove);
 
-        // Ensure index is in range
-        if (currentPlayerId >= players.size()) {
-            currentPlayerId = 0;
+        if (indexToRemove < playerNames.size()) {
+            playerNames.remove(indexToRemove);
         }
-            gameEventListener.onGameEvent(new GameEvent(this, GameEventType.NEXT_PLAYER));
 
+        if (players.isEmpty()) {
+            currentPlayerId = 0;
+        } else if (removingCurrent) {
+            // Point to the next person. Since the list shifted, the 'next' person 
+            // is now at the same index as the removed person.
+            currentPlayerId = currentPlayerId % players.size();
+        } else if (indexToRemove < currentPlayerId) {
+            // Someone before the current player left, shift index down to keep the same person active
+            currentPlayerId--;
+        }
+
+        if (gameEventListener != null) {
+            gameEventListener.onGameEvent(new GameEvent(this, GameEventType.NEXT_PLAYER));
+        }
     }
 
 
@@ -185,8 +199,7 @@ public class Game {
 
         Player currentPlayer = getCurrentPlayer();
 
-        // Check if the current player has repeating turns left
-        if (repeatingTurnsMap.containsKey(currentPlayer) && repeatingTurnsMap.get(currentPlayer) > 0) {
+        if (currentPlayer != null && repeatingTurnsMap.containsKey(currentPlayer) && repeatingTurnsMap.get(currentPlayer) > 0) {
             repeatingTurnsMap.put(currentPlayer, repeatingTurnsMap.get(currentPlayer) - 1);
         } else {
             if (!players.isEmpty()) {
@@ -198,13 +211,14 @@ public class Game {
             }
         }
 
-        // Clear the repeating turn for the player after their last extra turn
-        if (repeatingTurnsMap.containsKey(currentPlayer) && repeatingTurnsMap.get(currentPlayer) == 0) {
+        if (currentPlayer != null && repeatingTurnsMap.containsKey(currentPlayer) && repeatingTurnsMap.get(currentPlayer) == 0) {
             repeatingTurnsMap.remove(currentPlayer);
         }
         MainActivityGame.isFirstTurn = false;
 
-        gameEventListener.onGameEvent(new GameEvent(this, GameEventType.NEXT_PLAYER));
+        if (gameEventListener != null) {
+            gameEventListener.onGameEvent(new GameEvent(this, GameEventType.NEXT_PLAYER));
+        }
     }
 
     public Player getRandomPlayerExcludingCurrent() {

@@ -40,6 +40,8 @@ public class PassiveAbilities {
 
     public static void handleSoldierPassive() {
         Player currentPlayer = game.getCurrentPlayer();
+        if (currentPlayer == null) return;
+
         int currentNumber = game.getCurrentNumber();
         int minRange = 10;
         int maxRange = 15;
