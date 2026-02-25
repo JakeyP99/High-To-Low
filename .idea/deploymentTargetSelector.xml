@@ -11,10 +11,10 @@
       <SelectionState runConfigName="testGoblinAbility()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testAngryJimAbility()">
+      <SelectionState runConfigName="testArcherAbility()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testArcherAbility()">
+      <SelectionState runConfigName="PassiveAbilitiesTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

@@ -140,7 +140,7 @@ public class MainActivityGame extends SharedMainActivity {
         catastropheTurnCounter = 0;
         catastropheLimit = 0;
         catastrophesEnabled = true;
-        passivesEnabled = false;
+        passivesEnabled = true;
     }
 
     //-----------------------------------------------------Lifecycle Methods---------------------------------------------------//
@@ -213,8 +213,8 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void startGame() {
-        isFirstTurn = true;
-        soldierRemoval = false;
+        resetStaticState();
+        Game.getInstance().reset();
 
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
@@ -326,13 +326,13 @@ public class MainActivityGame extends SharedMainActivity {
     private void renderPlayer() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         updateActiveAbilitiesAfterCooldown(currentPlayer);
+        updateTurnCounter();
+        updateCatastropheTurnCounter();
+        updateWildCardVisibilityIfNeeded(currentPlayer);
         updateClassAbilityButton(currentPlayer);
         updatePlayerInfo(currentPlayer);
         updateNumberText();
-        updateTurnCounter();
         logPlayerInformation(currentPlayer);
-        updateWildCardVisibilityIfNeeded(currentPlayer);
-        updateCatastropheTurnCounter();
         Game.getInstance().setLastTurnPlayer(currentPlayer);
     }
 
@@ -358,6 +358,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void updateTurnCounter() {
         turnCounter++;
+        Log.d(TAG, "updateTurnCounter: " + turnCounter);
         if (turnCounter == 4) {
             updateDrinkNumberCounter(1, false);
             turnCounter = 0;
@@ -546,6 +547,8 @@ public class MainActivityGame extends SharedMainActivity {
         }
 
         updateDrinkNumberCounterTextView();
+        // Update ability button visibility when drink counter changes
+        updateClassAbilityButton(Game.getInstance().getCurrentPlayer());
     }
 
     private void updateDrinkNumberCounterTextView() {
