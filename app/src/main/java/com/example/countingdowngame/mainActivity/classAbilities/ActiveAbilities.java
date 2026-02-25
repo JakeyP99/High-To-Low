@@ -44,6 +44,16 @@ public class ActiveAbilities {
         }
     }
 
+
+    private static void hideWildButton() {
+        if (activity != null) {
+            Button btnClassAbility = activity.findViewById(R.id.btnWild);
+            if (btnClassAbility != null) {
+                btnClassAbility.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
     public static void handleScientistClass() {
         activity.scientistChangeCurrentNumber();
     }
@@ -57,6 +67,7 @@ public class ActiveAbilities {
                 repeatedTurn = true;
                 activity.updateDrinkNumberCounter(4, true);
                 hideAbilityButton();
+                hideWildButton();
                 AudioManager.getInstance().playSoundEffects(activity, SOLDIER);
             } else {
                 activity.displayToastMessage("The +4 ability can only be activated when the number is below 10.");
