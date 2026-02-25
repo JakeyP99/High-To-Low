@@ -450,6 +450,7 @@ public class MainActivityGame extends SharedMainActivity {
     private void updateClassAbilityButton(Player currentPlayer) {
         String classChoice = currentPlayer.getClassChoice();
         btnClassAbility.setText(getClassActiveButtonText(classChoice));
+        int wildCardCount = currentPlayer.getWildCardAmount();
 
         boolean canShowButton = (SCIENTIST.equals(classChoice) || ARCHER.equals(classChoice)
                 || WITCH.equals(classChoice) || QUIZ_MAGICIAN.equals(classChoice)
@@ -466,6 +467,13 @@ public class MainActivityGame extends SharedMainActivity {
                 canShowButton = false;
             }
         }
+
+        if (QUIZ_MAGICIAN.equals(classChoice)) {
+            if (wildCardCount < 1) {
+                canShowButton = false;
+            }
+        }
+
 
         if (NO_CLASS.equals(classChoice)) {
             canShowButton = false;
