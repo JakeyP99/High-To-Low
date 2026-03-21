@@ -2,6 +2,7 @@ package com.example.countingdowngame.game;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.util.Log;
 
@@ -33,6 +34,7 @@ public class Game {
     private ArrayList<Player> players = new ArrayList<>();
     private Boolean playerUsedWildcards = false;
     private Boolean quizWasTriggered = false;
+    private Boolean numberWasGenerated = false;
     private Boolean gameStarted = false;
     private boolean playCards;
     private final List<GameTurns> turns = new ArrayList<>();
@@ -53,7 +55,9 @@ public class Game {
     //-----------------------------------------------------Player Functions---------------------------------------------------//
     private final PlayerEventListener playerEventListener = e -> {
         if (e.type == PlayerEventType.SKIP) {
+            setNumberWasGenerated(false);
             nextPlayer();
+            Log.d(ContentValues.TAG, "Number Was Generated = false");
         }
     };
 
@@ -133,16 +137,15 @@ public class Game {
         if (players.isEmpty()) {
             currentPlayerId = 0;
         } else if (removingCurrent) {
-            // Point to the next person. Since the list shifted, the 'next' person 
-            // is now at the same index as the removed person.
             currentPlayerId = currentPlayerId % players.size();
         } else if (indexToRemove < currentPlayerId) {
-            // Someone before the current player left, shift index down to keep the same person active
             currentPlayerId--;
         }
 
         if (gameEventListener != null) {
             gameEventListener.onGameEvent(new GameEvent(this, GameEventType.NEXT_PLAYER));
+            setNumberWasGenerated(false);
+            Log.d(ContentValues.TAG, "Number Was Generated = false");
         }
     }
 
@@ -176,10 +179,6 @@ public class Game {
         return repeatingTurnsMap.getOrDefault(player, 0);
     }
 
-
-    public void activateRepeatingTurn(Player player, int numberOfTurns) {
-        repeatingTurnsMap.put(player, numberOfTurns);
-    }
 
     public void updateRepeatingTurns(Player player, int numberOfTurnsToAdd) {
         int currentTurns = repeatingTurnsMap.getOrDefault(player, 0);
@@ -237,7 +236,6 @@ public class Game {
     }
 
 
-
     public void triggerPlayerEvent(PlayerEvent event) {
         playerEventListener.onPlayerEvent(event);
     }
@@ -268,13 +266,23 @@ public class Game {
         previousNumber = currentNumber; // Save current as previous before changing it
         int nextNumber = random.nextInt(currentNumber + 1);
         currentNumber = nextNumber;
+        setNumberWasGenerated(true);
+        Log.d(ContentValues.TAG, "Number Was Generated = true");
         return nextNumber;
     }
-
 
     public int getPreviousNumber() {
         return previousNumber;
     }
+
+    public void setNumberWasGenerated(Boolean wasNumberGenerated) {
+        numberWasGenerated = wasNumberGenerated;
+    }
+
+    public Boolean getNumberWasGenerated() {
+        return numberWasGenerated;
+    }
+
     //-----------------------------------------------------Stats ---------------------------------------------------//
     public String getCatastropheQuantityString() {
         return "Catastrophes occurred: " + catastropheQuantity;

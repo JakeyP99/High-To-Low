@@ -666,9 +666,10 @@ public class MainActivityGame extends SharedMainActivity {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         String classChoice = currentPlayer.getClassChoice();
 
+        Log.d(TAG, "Number was generated passive: " + game.getNumberWasGenerated());
         if (SOLDIER.equals(classChoice)) {
             handleSoldierPassive();
-        } else if (WITCH.equals(classChoice)) {
+        } else if (WITCH.equals(classChoice) && game.getNumberWasGenerated() == true) {
             handleWitchPassive(currentPlayer);
         } else if (SCIENTIST.equals(classChoice)) {
             handleScientistPassive(currentPlayer);
