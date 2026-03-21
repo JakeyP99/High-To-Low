@@ -165,8 +165,8 @@ public class MainActivityGame extends SharedMainActivity {
         ActiveAbilities.setActivity(this);
         setupAudioManagerForMuteButtons(muteGif, soundGif);
         setupButtons();
-        initializeCatastrophe();
         startGame();
+        initializeCatastrophe();
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -377,7 +377,10 @@ public class MainActivityGame extends SharedMainActivity {
         if (!catastrophesEnabled || catastrophesManager == null) return;
         MainActivityCatastrophes.Catastrophe catastrophe = catastrophesManager.deployCatastrophe();
         catastropheTurnCounter++;
+        Log.d(TAG, "updateCatastropheTurnCounter: " + catastropheTurnCounter);
+        Log.d(TAG, "catastropheLimit: " + catastropheLimit);
         if (catastropheTurnCounter == catastropheLimit) {
+            Log.d(TAG, "catastropheTurnCounter = " + catastropheLimit);
             switch (catastrophe.getEffect()) {
                 case 1:
                     drinkNumberCounterInt += 2;
