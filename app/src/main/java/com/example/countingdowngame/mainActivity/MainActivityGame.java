@@ -1079,7 +1079,7 @@ public class MainActivityGame extends SharedMainActivity {
             currentPlayer.setJustUsedActiveAbility(false);
         } else {
             currentPlayer.useSkip();
-            getFortune();
+            getPowerUp();
             btnGenerate.setVisibility(View.VISIBLE);
             drinkNumberTextView.setVisibility(View.VISIBLE);
             numberCounterText.setVisibility(View.VISIBLE);
@@ -1180,31 +1180,60 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
 
-    //-----------------------------------------------------Fortune---------------------------------------------------//
+    //-----------------------------------------------------Power-up---------------------------------------------------//
 
-    public void getFortune(){
+    public void getPowerUp(){
 
         //Add view TODO
         View dialogView = showDialog(
-                "Fortune!",
+                "Power Up!",
                 R.layout.game_wheel_of_fortune,
-                R.id.fortune_dialogbox_textview,
+                R.id.powerup_dialogbox_textview,
                 R.id.close_button
         );
-        ArrayList<String> fortune = new ArrayList<>();
+        ArrayList<String> powerUpList = PowerUps.getPowerUps();
+        ListView listView = dialogView.findViewById(R.id.listViewPowerUp);
 
-        ListView fortuneList = dialogView.findViewById(R.id.listViewFortunes);
+        final Handler handler = new Handler();
+        final Random random = new Random();
+        final int shuffleDuration = 3000;
+        final int initialShuffleInterval = 50;
+        
+        final Runnable shuffleRunnable = new Runnable() {
+            int shuffleTime = 0;
+            int currentInterval = initialShuffleInterval;
 
-        fortune.add("Test1");
-        fortune.add("Test2");
-        fortune.add("Test3");
-        fortune.add("Test4");
+            @Override
+            public void run() {
+                int randomIndex = random.nextInt(powerUpList.size());
+                String selectedPowerUp = powerUpList.get(randomIndex);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_list_item_1,
-                fortune
-        );
-        fortuneList.setAdapter(adapter);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                        MainActivityGame.this,
+                        android.R.layout.simple_list_item_1,
+                        new String[]{selectedPowerUp}
+                );
+                listView.setAdapter(adapter);
+
+                float progress = (float) shuffleTime / shuffleDuration;
+                currentInterval = (int) (initialShuffleInterval + (progress * progress * 500));
+                shuffleTime += currentInterval;
+
+                if (shuffleTime < shuffleDuration) {
+                    handler.postDelayed(this, currentInterval);
+                } else {
+                    // Final landing logic
+                    ArrayAdapter<String> finalAdapter = new ArrayAdapter<String>(
+                            MainActivityGame.this,
+                            android.R.layout.simple_list_item_1,
+                            new String[]{selectedPowerUp}
+                    );
+                    listView.setAdapter(finalAdapter);
+                    // You can add a highlight effect or extra "ding" here
+                }
+            }
+        };
+
+        handler.post(shuffleRunnable);
     }
 }

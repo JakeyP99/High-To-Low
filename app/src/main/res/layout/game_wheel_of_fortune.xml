@@ -6,13 +6,13 @@ android:orientation="vertical"
 android:padding="20dp">
 
     <TextView
-        android:id="@+id/fortune_dialogbox_textview"
+        android:id="@+id/powerup_dialogbox_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/viga"
         android:layout_gravity="center"
         android:padding="10dp"
-        android:text="Fortune!"
+        android:text="Power Up!"
         android:textAlignment="center"
         android:textColor="@color/bluedark"
         android:textSize="45sp"
@@ -20,7 +20,7 @@ android:padding="20dp">
 
 
     <ListView
-        android:id="@+id/listViewFortunes"
+        android:id="@+id/listViewPowerUp"
         android:layout_width="372dp"
         android:layout_height="237dp"
         android:divider="@null"
