@@ -34,6 +34,7 @@ public class Player implements Serializable {
     private int activeAbilityTurnCounter;
     private List<Integer> numbersPlayed = new ArrayList<>();
     private int classAbilityCooldown;
+    private List<String> powerUps = new ArrayList<>();
 
     //-----------------------------------------------------Card Game---------------------------------------------------//
 
@@ -65,6 +66,7 @@ public class Player implements Serializable {
         this.bulletsInChamberList = new ArrayList<>();
         this.chamberTotalNumberCount = 0;
         this.numbersPlayed = new ArrayList<>();
+        this.powerUps = new ArrayList<>();
     }
 
 
@@ -373,5 +375,34 @@ public class Player implements Serializable {
         return Objects.hash(name);  // Use a unique identifier, like name
     }
 
+    //-----------------------------------------------------Powerups---------------------------------------------------//
+
+    public List<String> getPowerUps() {
+        if (powerUps == null) {
+            powerUps = new ArrayList<>();
+        }
+        return powerUps;
+    }
+
+    public void gainPowerUp(String powerUpName) {
+        if (getPowerUps().size() < 2) {
+            powerUps.add(powerUpName);
+        } else {
+            // Replace the first one if already full, or just ignore. 
+            // The prompt says "up to 2", so I'll just cap it.
+            Log.d("Player", "Powerups full!");
+        }
+        
+        if (powerUpName.contains("Wildcard Bonus")) {
+            gainWildCards(1);
+        }
+    }
+
+    public void usePowerUp(String powerUpName) {
+        if (game != null) {
+            game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.POWER_UP));
+        }
+        getPowerUps().remove(powerUpName);
+    }
 
 }

@@ -1,7 +1,6 @@
 package com.example.countingdowngame.mainActivity;
 
 import static android.content.ContentValues.TAG;
-import static com.example.countingdowngame.R.id.close_button;
 import static com.example.countingdowngame.R.id.editCurrentNumberTextView;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ARCHER;
@@ -36,12 +35,10 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
@@ -163,6 +160,7 @@ public class MainActivityGame extends SharedMainActivity {
         initializeViews();
         PassiveAbilities.setActivity(this);
         ActiveAbilities.setActivity(this);
+        PowerUps.setActivity(this);
         setupAudioManagerForMuteButtons(muteGif, soundGif);
         setupButtons();
         startGame();
@@ -431,6 +429,7 @@ public class MainActivityGame extends SharedMainActivity {
                 default:
                     break;
             }
+            showDialog(catastrophe.getMessage(), R.layout.game_catastrophe_dialog_box, R.id.dialogbox_textview, R.id.close_button);
             Game.getInstance().incrementCatastropheQuantity();
             catastropheTurnCounter = 0; // Reset the turn counter after reaching the limit
 
@@ -532,6 +531,7 @@ public class MainActivityGame extends SharedMainActivity {
             Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             playerImage.setImageBitmap(decodedBitmap);
         }
+        PowerUps.updatePowerUpIcons(currentPlayer);
     }
 
     //-----------------------------------------------------Update Drink Number Counter---------------------------------------------------//
@@ -761,7 +761,7 @@ public class MainActivityGame extends SharedMainActivity {
         View dialogView = inflater.inflate(R.layout.game_scientist_change_number, null);
 
         EditText editCurrentNumberText = dialogView.findViewById(editCurrentNumberTextView);
-        Button okButton = dialogView.findViewById(close_button);
+        Button okButton = dialogView.findViewById(R.id.close_button);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
         builder.setView(dialogView);
@@ -1078,8 +1078,8 @@ public class MainActivityGame extends SharedMainActivity {
             currentPlayer.setUsedActiveAbility(true);
             currentPlayer.setJustUsedActiveAbility(false);
         } else {
+            PowerUps.getPowerUp();
             currentPlayer.useSkip();
-            getPowerUp();
             btnGenerate.setVisibility(View.VISIBLE);
             drinkNumberTextView.setVisibility(View.VISIBLE);
             numberCounterText.setVisibility(View.VISIBLE);
@@ -1177,63 +1177,5 @@ public class MainActivityGame extends SharedMainActivity {
             }
         }
         btnAnswer.setVisibility(View.INVISIBLE);
-    }
-
-
-    //-----------------------------------------------------Power-up---------------------------------------------------//
-
-    public void getPowerUp(){
-
-        //Add view TODO
-        View dialogView = showDialog(
-                "Power Up!",
-                R.layout.game_wheel_of_fortune,
-                R.id.powerup_dialogbox_textview,
-                R.id.close_button
-        );
-        ArrayList<String> powerUpList = PowerUps.getPowerUps();
-        ListView listView = dialogView.findViewById(R.id.listViewPowerUp);
-
-        final Handler handler = new Handler();
-        final Random random = new Random();
-        final int shuffleDuration = 3000;
-        final int initialShuffleInterval = 50;
-        
-        final Runnable shuffleRunnable = new Runnable() {
-            int shuffleTime = 0;
-            int currentInterval = initialShuffleInterval;
-
-            @Override
-            public void run() {
-                int randomIndex = random.nextInt(powerUpList.size());
-                String selectedPowerUp = powerUpList.get(randomIndex);
-
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                        MainActivityGame.this,
-                        android.R.layout.simple_list_item_1,
-                        new String[]{selectedPowerUp}
-                );
-                listView.setAdapter(adapter);
-
-                float progress = (float) shuffleTime / shuffleDuration;
-                currentInterval = (int) (initialShuffleInterval + (progress * progress * 500));
-                shuffleTime += currentInterval;
-
-                if (shuffleTime < shuffleDuration) {
-                    handler.postDelayed(this, currentInterval);
-                } else {
-                    // Final landing logic
-                    ArrayAdapter<String> finalAdapter = new ArrayAdapter<String>(
-                            MainActivityGame.this,
-                            android.R.layout.simple_list_item_1,
-                            new String[]{selectedPowerUp}
-                    );
-                    listView.setAdapter(finalAdapter);
-                    // You can add a highlight effect or extra "ding" here
-                }
-            }
-        };
-
-        handler.post(shuffleRunnable);
     }
 }

@@ -40,7 +40,6 @@ public class Game {
     private final List<GameTurns> turns = new ArrayList<>();
     private boolean reverseOrder = false;
 
-
     //-----------------------------------------------------Game Modes---------------------------------------------------//
 
     public boolean isPlayCards() {

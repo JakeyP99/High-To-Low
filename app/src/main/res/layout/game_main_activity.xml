@@ -38,8 +38,6 @@
         android:id="@+id/muteGif"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_centerHorizontal="true"
-        android:background="@android:color/transparent"
         android:src="@drawable/mute"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -295,19 +293,44 @@
         app:layout_constraintVertical_bias="0.721" />
 
 
-    <TextView
-        android:id="@+id/textView_Number_Turn"
+    <LinearLayout
+        android:id="@+id/player_name_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/viga"
-        android:text="Jake"
-        android:textColor="@color/bluedark"
-        android:textSize="35sp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/textView_numberCounter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playerImage"
-        app:layout_constraintVertical_bias="0.82" />
+        app:layout_constraintVertical_bias="0.82">
+
+        <ImageView
+            android:id="@+id/powerup_left"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone"
+            android:src="@drawable/helmet" />
+
+        <TextView
+            android:id="@+id/textView_Number_Turn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:text="Jake"
+            android:textColor="@color/bluedark"
+            android:textSize="35sp" />
+
+        <ImageView
+            android:id="@+id/powerup_right"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="8dp"
+            android:visibility="gone"
+            android:src="@drawable/helmet" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textView_numberCounter"
@@ -319,7 +342,7 @@
         app:layout_constraintBottom_toTopOf="@+id/btnGenerate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_Number_Turn"
+        app:layout_constraintTop_toBottomOf="@+id/player_name_layout"
         app:layout_constraintVertical_bias="0.5" />
 
     <TextView
@@ -395,6 +418,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.025" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

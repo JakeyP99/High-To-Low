@@ -1,42 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="500dp"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-android:orientation="vertical"
-android:padding="20dp">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@drawable/rounded_background">
 
     <TextView
         android:id="@+id/powerup_dialogbox_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/viga"
         android:layout_gravity="center"
+        android:fontFamily="@font/viga"
         android:padding="10dp"
         android:text="Power Up!"
         android:textAlignment="center"
         android:textColor="@color/bluedark"
-        android:textSize="45sp"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        android:textSize="40sp" />
 
     <ListView
-        android:id="@+id/listViewPowerUp"
-        android:layout_width="372dp"
-        android:layout_height="237dp"
-        android:divider="@null"
-        android:dividerHeight="0dp"
-        android:textColor="@color/bluedark"
-        android:paddingTop="10dp" />
-
+        android:id="@+id/listViewPowerUps"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="12dp"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        android:scrollbars="none" />
 
     <ImageButton
         android:id="@+id/close_button"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center"
+        android:layout_marginTop="16dp"
         android:background="@drawable/circle_background"
-        android:contentDescription="TODO"
-        android:padding="10dp" />
-
+        android:src="@drawable/cross"
+        android:contentDescription="Close"
+        android:padding="12dp"
+        android:scaleType="fitCenter" />
 
 </LinearLayout>
