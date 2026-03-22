@@ -16,9 +16,9 @@ import com.example.countingdowngame.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class PowerUps {
-    static Game game = Game.getInstance();
     private static MainActivityGame activity;
 
     public static void setActivity(MainActivityGame activityInstance) {
@@ -68,13 +68,16 @@ public class PowerUps {
         listView.setOnTouchListener((v, event) -> true);
 
         final Handler handler = new Handler();
-        final int shuffleDuration = 3000; // total spin time (ms)
+        final Random random = new Random();
+        // Randomize the shuffle duration to ensure different results each time
+        final int shuffleDuration = 3000 + random.nextInt(2000); 
         final int initialInterval = 50;
 
         final Runnable shuffleRunnable = new Runnable() {
             int elapsedTime = 0;
             int currentInterval = initialInterval;
-            int currentIndex = 0;
+            // Start at a random index to further increase randomness
+            int currentIndex = random.nextInt(powerUpList.size());
 
             @Override
             public void run() {
@@ -84,7 +87,7 @@ public class PowerUps {
                 listView.smoothScrollToPosition(currentIndex);
 
                 float progress = (float) elapsedTime / shuffleDuration;
-                currentInterval = (int) (initialInterval + (progress * progress * 400));
+                currentInterval = (int) (initialInterval + (progress * progress * 500));
 
                 elapsedTime += currentInterval;
 
@@ -97,10 +100,10 @@ public class PowerUps {
                     Game.getInstance().getCurrentPlayer().gainPowerUp(selectedPowerUp);
                     updatePowerUpIcons(Game.getInstance().getCurrentPlayer());
 
-                    // Show close button after 5 seconds of "viewing time"
+                    // Show close button after 1 seconds of "viewing time"
                     handler.postDelayed(() -> {
                         closeButton.setVisibility(View.VISIBLE);
-                    }, 2000);
+                    }, 1000);
 
                     // Auto-dismiss after 15 seconds total
                     handler.postDelayed(() -> {
