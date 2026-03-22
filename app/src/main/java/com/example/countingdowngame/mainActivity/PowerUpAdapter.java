@@ -1,6 +1,8 @@
 package com.example.countingdowngame.mainActivity;
 
 import android.content.Context;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,22 @@ public class PowerUpAdapter extends ArrayAdapter<String> {
         if (powerUp != null) {
             text.setText(powerUp);
             icon.setImageResource(PowerUps.getPowerUpIcon(powerUp));
+
+            if (PowerUps.isObtained(powerUp)) {
+                // Apply grayscale filter to icon
+                ColorMatrix matrix = new ColorMatrix();
+                matrix.setSaturation(0);
+                ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+                icon.setColorFilter(filter);
+                icon.setAlpha(0.5f);
+                
+                // Dim the text
+                text.setTextColor(getContext().getResources().getColor(R.color.bluedarktransparent));
+            } else {
+                icon.clearColorFilter();
+                icon.setAlpha(1.0f);
+                text.setTextColor(getContext().getResources().getColor(R.color.bluedark));
+            }
         }
 
         return convertView;

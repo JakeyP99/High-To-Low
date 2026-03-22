@@ -21,6 +21,7 @@ import java.util.Random;
 
 public class PowerUps {
     private static MainActivityGame activity;
+    private static final List<String> obtainedPowerUps = new ArrayList<>();
 
     // Power-Up Type Constants
     private static final String SPLIT_THE_PAIN = "Split the Pain";
@@ -30,6 +31,14 @@ public class PowerUps {
 
     public static void setActivity(MainActivityGame activityInstance) {
         activity = activityInstance;
+    }
+
+    public static void reset() {
+        obtainedPowerUps.clear();
+    }
+
+    public static boolean isObtained(String powerUpName) {
+        return obtainedPowerUps.contains(getPowerUpType(powerUpName));
     }
 
     private static String getPowerUpType(String powerUpName) {
@@ -56,6 +65,9 @@ public class PowerUps {
 
     public static void gainPowerUp(Player player, String powerUpName) {
         if (player == null) return;
+
+        String type = getPowerUpType(powerUpName);
+        obtainedPowerUps.add(type);
 
         List<String> powerUps = player.getPowerUps();
         if (powerUps.size() < 2) {
@@ -88,7 +100,6 @@ public class PowerUps {
                 break;
             case SPLIT_THE_PAIN:
             case ALL_OR_NOTHING:
-                // Passive power-ups are handled automatically via checkLosingPowerUps
                 break;
         }
         updatePowerUpIcons(player);
@@ -321,6 +332,21 @@ public class PowerUps {
     // --- Roulette Logic ---
 
     public static void getPowerUp(Runnable onDismiss) {
+        ArrayList<String> powerUpList = getPowerUps();
+        
+        // Filter out obtained ones to check if we should even run
+        List<String> availableTypes = new ArrayList<>();
+        for (String p : powerUpList) {
+            if (!obtainedPowerUps.contains(getPowerUpType(p))) {
+                availableTypes.add(getPowerUpType(p));
+            }
+        }
+
+        if (availableTypes.isEmpty()) {
+            if (onDismiss != null) onDismiss.run();
+            return;
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = activity.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.game_wheel_of_fortune, null);
@@ -338,7 +364,6 @@ public class PowerUps {
         closeButton.setVisibility(View.GONE);
         closeButton.setOnClickListener(v -> dialog.dismiss());
 
-        ArrayList<String> powerUpList = getPowerUps();
         ListView listView = dialogView.findViewById(R.id.listViewPowerUps);
         PowerUpAdapter adapter = new PowerUpAdapter(activity, powerUpList);
         listView.setAdapter(adapter);
@@ -353,11 +378,17 @@ public class PowerUps {
         final Runnable shuffleRunnable = new Runnable() {
             int elapsedTime = 0;
             int currentInterval = initialInterval;
-            int currentIndex = random.nextInt(powerUpList.size());
+            
+            // Start at a random index that IS available
+            int currentIndex = powerUpList.indexOf(findRandomAvailable(powerUpList));
 
             @Override
             public void run() {
-                currentIndex = (currentIndex + 1) % powerUpList.size();
+                // Find next available sequential index
+                do {
+                    currentIndex = (currentIndex + 1) % powerUpList.size();
+                } while (obtainedPowerUps.contains(getPowerUpType(powerUpList.get(currentIndex))));
+
                 listView.setItemChecked(currentIndex, true);
                 listView.smoothScrollToPosition(currentIndex);
 
@@ -380,6 +411,17 @@ public class PowerUps {
 
         dialog.show();
         handler.post(shuffleRunnable);
+    }
+
+    private static String findRandomAvailable(List<String> list) {
+        List<String> available = new ArrayList<>();
+        for (String s : list) {
+            if (!obtainedPowerUps.contains(getPowerUpType(s))) {
+                available.add(s);
+            }
+        }
+        if (available.isEmpty()) return null;
+        return available.get(new Random().nextInt(available.size()));
     }
 
     public static void updatePowerUpIcons(Player player) {
