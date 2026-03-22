@@ -384,20 +384,6 @@ public class Player implements Serializable {
         return powerUps;
     }
 
-    public void gainPowerUp(String powerUpName) {
-        if (getPowerUps().size() < 2) {
-            powerUps.add(powerUpName);
-        } else {
-            // Replace the first one if already full, or just ignore. 
-            // The prompt says "up to 2", so I'll just cap it.
-            Log.d("Player", "Powerups full!");
-        }
-        
-        if (powerUpName.contains("Wildcard Bonus")) {
-            gainWildCards(1);
-        }
-    }
-
     public void usePowerUp(String powerUpName) {
         if (game != null) {
             game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.POWER_UP));
