@@ -351,8 +351,11 @@ public class MainActivityGame extends SharedMainActivity {
             Handler handler = new Handler();
             handler.postDelayed(() -> {
                 btnUtils.playSoundEffects();
-                Game.getInstance().endGame(this);
-                onEnd.run();
+                Player loser = Game.getInstance().getLastTurnPlayer();
+                PowerUps.checkLosingPowerUps(loser, () -> {
+                    Game.getInstance().endGame(this);
+                    onEnd.run();
+                });
             }, 3300);
         } else {
             generatedNumberTextView.setText(String.valueOf(currentNumber));

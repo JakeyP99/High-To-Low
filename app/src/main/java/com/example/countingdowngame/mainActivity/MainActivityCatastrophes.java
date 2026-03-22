@@ -26,10 +26,6 @@ public class MainActivityCatastrophes {
             this.effect = effect;
         }
 
-        public String getMessage() {
-            return message;
-        }
-
         public int getEffect() {
             return effect;
         }
