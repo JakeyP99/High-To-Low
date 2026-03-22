@@ -42,6 +42,10 @@ public class PowerUps {
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
+        
+        // Prevent closing by clicking outside or back button
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
 
         dialog.setOnDismissListener(d -> {
             if (onDismiss != null) {
@@ -50,6 +54,7 @@ public class PowerUps {
         });
 
         ImageButton closeButton = dialogView.findViewById(R.id.close_button);
+        closeButton.setVisibility(View.GONE); // Hide initially
         closeButton.setOnClickListener(v -> dialog.dismiss());
 
         ArrayList<String> powerUpList = getPowerUps();
@@ -58,6 +63,9 @@ public class PowerUps {
         PowerUpAdapter adapter = new PowerUpAdapter(activity, powerUpList);
         listView.setAdapter(adapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        
+        // Prevent user from clicking items manually
+        listView.setOnTouchListener((v, event) -> true);
 
         final Handler handler = new Handler();
         final int shuffleDuration = 3000; // total spin time (ms)
@@ -89,7 +97,12 @@ public class PowerUps {
                     Game.getInstance().getCurrentPlayer().gainPowerUp(selectedPowerUp);
                     updatePowerUpIcons(Game.getInstance().getCurrentPlayer());
 
-                    // Start 15s timer after landing
+                    // Show close button after 5 seconds of "viewing time"
+                    handler.postDelayed(() -> {
+                        closeButton.setVisibility(View.VISIBLE);
+                    }, 2000);
+
+                    // Auto-dismiss after 15 seconds total
                     handler.postDelayed(() -> {
                         if (dialog.isShowing()) {
                             dialog.dismiss();
