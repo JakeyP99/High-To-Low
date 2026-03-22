@@ -66,9 +66,6 @@ public class PowerUps {
     public static void gainPowerUp(Player player, String powerUpName) {
         if (player == null) return;
 
-        String type = getPowerUpType(powerUpName);
-        obtainedPowerUps.add(type);
-
         List<String> powerUps = player.getPowerUps();
         if (powerUps.size() < 2) {
             powerUps.add(powerUpName);
@@ -203,13 +200,28 @@ public class PowerUps {
         ImageButton closeBtn = dialogView.findViewById(R.id.close_button);
         closeBtn.setVisibility(View.GONE);
 
-        title.setText("Outcome...");
+        title.setText("All or Nothing...");
         
         ArrayList<String> outcomes = new ArrayList<>();
-        outcomes.add("0 Drinks! (SAFE)");
-        outcomes.add("DOUBLE DRINKS! (Ouch)");
+        outcomes.add("0 Drinks (SAFE)");
+        outcomes.add("DOUBLE DRINKS (Ouch)");
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_activated_1, outcomes);
+        // Using custom adapter for consistency
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity, R.layout.game_powerup_list_item, R.id.powerup_text, outcomes) {
+            @Override
+            public View getView(int position, View convertView, android.view.ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                ImageView icon = view.findViewById(R.id.powerup_icon);
+                String item = getItem(position);
+                if (item.contains("0")) {
+                    icon.setImageResource(R.drawable.confetti);
+                } else {
+                    icon.setImageResource(R.drawable.angry_jim);
+                }
+                return view;
+            }
+        };
+        
         listView.setAdapter(adapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setOnTouchListener((v, event) -> true);
@@ -236,7 +248,7 @@ public class PowerUps {
                 listView.smoothScrollToPosition(currentIndex);
 
                 float progress = (float) elapsedTime / shuffleDuration;
-                currentInterval = (int) (initialInterval + (progress * progress * 400));
+                currentInterval = (int) (initialInterval + (progress * progress * 450));
                 elapsedTime += currentInterval;
 
                 if (elapsedTime < shuffleDuration) {
@@ -245,15 +257,15 @@ public class PowerUps {
                     String result = outcomes.get(currentIndex);
                     if (result.contains("0")) {
                         MainActivityGame.drinkNumberCounterInt = 0;
-                        activity.displayToastMessage("PHEW! 0 Drinks!");
+                        activity.displayToastMessage("LUCKY! 0 Drinks!");
                     } else {
                         MainActivityGame.drinkNumberCounterInt *= 2;
-                        activity.displayToastMessage("DOUBLE DRINKS!");
+                        activity.displayToastMessage("UNLUCKY! Double Drinks!");
                     }
                     handler.postDelayed(() -> {
                         dialog.dismiss();
                         onHandled.run();
-                    }, 2000);
+                    }, 2500);
                 }
             }
         });
@@ -282,7 +294,17 @@ public class PowerUps {
             return;
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_activated_1, playerNames);
+        // Use custom adapter for split the pain too
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity, R.layout.game_powerup_list_item, R.id.powerup_text, playerNames) {
+            @Override
+            public View getView(int position, View convertView, android.view.ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                ImageView icon = view.findViewById(R.id.powerup_icon);
+                icon.setImageResource(R.drawable.shots);
+                return view;
+            }
+        };
+
         listView.setAdapter(adapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setOnTouchListener((v, event) -> true);
@@ -318,7 +340,7 @@ public class PowerUps {
                     int drinks = MainActivityGame.drinkNumberCounterInt;
                     int splitAmount = Math.max(drinks / 2, 1);
                     
-                    activity.displayToastMessage("Split! " + targetName + " takes " + splitAmount + " drinks with you!");
+                    activity.displayToastMessage("Split! " + targetName + " takes " + splitAmount + " drinks!");
                     
                     handler.postDelayed(() -> {
                         dialog.dismiss();
@@ -362,7 +384,6 @@ public class PowerUps {
 
         ImageButton closeButton = dialogView.findViewById(R.id.close_button);
         closeButton.setVisibility(View.GONE);
-        closeButton.setOnClickListener(v -> dialog.dismiss());
 
         ListView listView = dialogView.findViewById(R.id.listViewPowerUps);
         PowerUpAdapter adapter = new PowerUpAdapter(activity, powerUpList);
@@ -403,8 +424,12 @@ public class PowerUps {
                     String selectedPowerUp = powerUpList.get(currentIndex);
                     gainPowerUp(Game.getInstance().getCurrentPlayer(), selectedPowerUp);
 
-                    handler.postDelayed(() -> closeButton.setVisibility(View.VISIBLE), 2000);
-                    handler.postDelayed(() -> { if (dialog.isShowing()) dialog.dismiss(); }, 15000);
+                    handler.postDelayed(() -> {
+                        if (dialog.isShowing()) {
+                            obtainedPowerUps.add(getPowerUpType(selectedPowerUp));
+                            dialog.dismiss();
+                        }
+                    }, 3000);
                 }
             }
         };

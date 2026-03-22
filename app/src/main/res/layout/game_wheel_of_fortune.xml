@@ -21,7 +21,7 @@
     <ListView
         android:id="@+id/listViewPowerUps"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="700dp"
         android:divider="@android:color/transparent"
         android:dividerHeight="12dp"
         android:padding="8dp"
@@ -35,7 +35,6 @@
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
         android:background="@drawable/circle_background"
-        android:src="@drawable/cross"
         android:contentDescription="Close"
         android:padding="12dp"
         android:scaleType="fitCenter" />
