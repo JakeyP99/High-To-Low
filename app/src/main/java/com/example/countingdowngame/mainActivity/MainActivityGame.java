@@ -429,7 +429,6 @@ public class MainActivityGame extends SharedMainActivity {
                 default:
                     break;
             }
-            showDialog(catastrophe.getMessage(), R.layout.game_catastrophe_dialog_box, R.id.dialogbox_textview, R.id.close_button);
             Game.getInstance().incrementCatastropheQuantity();
             catastropheTurnCounter = 0; // Reset the turn counter after reaching the limit
 
@@ -1078,19 +1077,19 @@ public class MainActivityGame extends SharedMainActivity {
             currentPlayer.setUsedActiveAbility(true);
             currentPlayer.setJustUsedActiveAbility(false);
         } else {
-            PowerUps.getPowerUp();
-            currentPlayer.useSkip();
-            btnGenerate.setVisibility(View.VISIBLE);
-            drinkNumberTextView.setVisibility(View.VISIBLE);
-            numberCounterText.setVisibility(View.VISIBLE);
-            nextPlayerText.setVisibility(View.VISIBLE);
+            PowerUps.getPowerUp(() -> {
+                currentPlayer.useSkip();
+                btnGenerate.setVisibility(View.VISIBLE);
+                drinkNumberTextView.setVisibility(View.VISIBLE);
+                numberCounterText.setVisibility(View.VISIBLE);
+                nextPlayerText.setVisibility(View.VISIBLE);
 
-            wildText.setVisibility(View.INVISIBLE);
-            btnWildContinue.setVisibility(View.INVISIBLE);
-            btnAnswer.setVisibility(View.INVISIBLE);
-            btnQuizAnswerBL.setVisibility(View.INVISIBLE);
-            btnQuizAnswerBR.setVisibility(View.INVISIBLE);
-
+                wildText.setVisibility(View.INVISIBLE);
+                btnWildContinue.setVisibility(View.INVISIBLE);
+                btnAnswer.setVisibility(View.INVISIBLE);
+                btnQuizAnswerBL.setVisibility(View.INVISIBLE);
+                btnQuizAnswerBR.setVisibility(View.INVISIBLE);
+            });
         }
     }
 

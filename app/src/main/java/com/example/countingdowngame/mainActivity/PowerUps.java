@@ -35,21 +35,27 @@ public class PowerUps {
         return powerUp;
     }
 
-    public static void getPowerUp() {
-        // Show dialog
-        View dialogView = activity.showDialog(
-                "Power Up!",
-                R.layout.game_wheel_of_fortune,
-                R.id.powerup_dialogbox_textview,
-                R.id.close_button
-        );
+    public static void getPowerUp(Runnable onDismiss) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.game_wheel_of_fortune, null);
+
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+
+        dialog.setOnDismissListener(d -> {
+            if (onDismiss != null) {
+                onDismiss.run();
+            }
+        });
+
+        ImageButton closeButton = dialogView.findViewById(R.id.close_button);
+        closeButton.setOnClickListener(v -> dialog.dismiss());
 
         ArrayList<String> powerUpList = getPowerUps();
         ListView listView = dialogView.findViewById(R.id.listViewPowerUps);
 
-        // ✅ Set full list ONCE with custom adapter
         PowerUpAdapter adapter = new PowerUpAdapter(activity, powerUpList);
-
         listView.setAdapter(adapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
@@ -64,15 +70,11 @@ public class PowerUps {
 
             @Override
             public void run() {
-
-                // 👉 Move sequentially (better roulette feel)
                 currentIndex = (currentIndex + 1) % powerUpList.size();
 
-                // Highlight + scroll
                 listView.setItemChecked(currentIndex, true);
                 listView.smoothScrollToPosition(currentIndex);
 
-                // Slow down over time (ease-out effect)
                 float progress = (float) elapsedTime / shuffleDuration;
                 currentInterval = (int) (initialInterval + (progress * progress * 400));
 
@@ -81,19 +83,23 @@ public class PowerUps {
                 if (elapsedTime < shuffleDuration) {
                     handler.postDelayed(this, currentInterval);
                 } else {
-                    // ✅ Final landing
                     listView.setItemChecked(currentIndex, true);
 
-                    // Optional: do something with selected power-up
                     String selectedPowerUp = powerUpList.get(currentIndex);
-
                     Game.getInstance().getCurrentPlayer().gainPowerUp(selectedPowerUp);
                     updatePowerUpIcons(Game.getInstance().getCurrentPlayer());
+
+                    // Start 15s timer after landing
+                    handler.postDelayed(() -> {
+                        if (dialog.isShowing()) {
+                            dialog.dismiss();
+                        }
+                    }, 15000);
                 }
             }
         };
 
-        // Start spinning
+        dialog.show();
         handler.post(shuffleRunnable);
     }
 
@@ -159,13 +165,10 @@ public class PowerUps {
     public static void activatePowerUp(String powerUpName, Player player) {
         activity.displayToastMessage("Activated: " + powerUpName);
         if (powerUpName.contains("Wildcard Bonus")) {
-            // Already applied when gained, but we can use it to "consume" the slot
             player.usePowerUp(powerUpName);
         } else if (powerUpName.contains("Shield")) {
-            // Handle shield logic later
             player.usePowerUp(powerUpName);
         } else if (powerUpName.contains("Double Trouble")) {
-            // Handle double trouble logic later
             player.usePowerUp(powerUpName);
         }
     }
