@@ -39,6 +39,7 @@ public class Game {
     private boolean playCards;
     private final List<GameTurns> turns = new ArrayList<>();
     private boolean reverseOrder = false;
+    private String splitTarget;
 
     //-----------------------------------------------------Game Modes---------------------------------------------------//
 
@@ -95,6 +96,7 @@ public class Game {
         startingNumber = startNum;
         turns.clear();
         currentPlayerId = 0;
+        splitTarget = null;
     }
 
     public void addUpdatedName(String currentPlayerName) {
@@ -386,6 +388,15 @@ public class Game {
         }
         return topPlayer != null ? topPlayer.getName() + " took " + maxDrinks + " drinks as a witch!" : "The witch did not take any drinks from her spell.";
     }
+    
+    public String getSplitTarget() {
+        return splitTarget;
+    }
+
+    public void setSplitTarget(String splitTarget) {
+        this.splitTarget = splitTarget;
+    }
+
     //-----------------------------------------------------End Game ---------------------------------------------------//
 
 
@@ -428,6 +439,7 @@ public class Game {
         quizWasTriggered = false;
         reverseOrder = false;
         lastTurnPlayer = null;
+        splitTarget = null;
     }
 
 

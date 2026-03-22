@@ -138,6 +138,7 @@ public class MainActivityGame extends SharedMainActivity {
         catastropheLimit = 0;
         catastrophesEnabled = true;
         passivesEnabled = true;
+        PowerUps.reset();
     }
 
     //-----------------------------------------------------Lifecycle Methods---------------------------------------------------//
@@ -288,9 +289,6 @@ public class MainActivityGame extends SharedMainActivity {
         btnUtils.setButton(btnWildContinue, this::wildCardContinue);
         btnUtils.setButton(btnClassAbility, this::activateActiveAbility);
 
-        // call the method
-        btnUtils.setButton(btnWild, this::activateActiveAbility);
-
         btnUtils.setButton(btnWild, () -> {
             wildCardActivate();
             drinkNumberTextView.setVisibility(View.INVISIBLE);
@@ -299,6 +297,8 @@ public class MainActivityGame extends SharedMainActivity {
             btnGenerate.setVisibility(View.INVISIBLE);
             nextPlayerText.setVisibility(View.INVISIBLE);
             numberCounterText.setVisibility(View.INVISIBLE);
+            findViewById(R.id.powerup_left).setVisibility(View.INVISIBLE);
+            findViewById(R.id.powerup_right).setVisibility(View.INVISIBLE);
         });
 
         imageButtonExit.setOnClickListener(view -> {
@@ -1080,19 +1080,35 @@ public class MainActivityGame extends SharedMainActivity {
             currentPlayer.setUsedActiveAbility(true);
             currentPlayer.setJustUsedActiveAbility(false);
         } else {
-            PowerUps.getPowerUp(() -> {
+            if (currentPlayer.getPowerUps().size() >= 2) {
+                PowerUps.updatePowerUpIcons(currentPlayer);
+
                 currentPlayer.useSkip();
                 btnGenerate.setVisibility(View.VISIBLE);
                 drinkNumberTextView.setVisibility(View.VISIBLE);
                 numberCounterText.setVisibility(View.VISIBLE);
                 nextPlayerText.setVisibility(View.VISIBLE);
-
                 wildText.setVisibility(View.INVISIBLE);
                 btnWildContinue.setVisibility(View.INVISIBLE);
                 btnAnswer.setVisibility(View.INVISIBLE);
                 btnQuizAnswerBL.setVisibility(View.INVISIBLE);
                 btnQuizAnswerBR.setVisibility(View.INVISIBLE);
-            });
+            } else {
+                PowerUps.getPowerUp(() -> {
+                    PowerUps.updatePowerUpIcons(currentPlayer);
+                    currentPlayer.useSkip();
+                    btnGenerate.setVisibility(View.VISIBLE);
+                    drinkNumberTextView.setVisibility(View.VISIBLE);
+                    numberCounterText.setVisibility(View.VISIBLE);
+                    nextPlayerText.setVisibility(View.VISIBLE);
+
+                    wildText.setVisibility(View.INVISIBLE);
+                    btnWildContinue.setVisibility(View.INVISIBLE);
+                    btnAnswer.setVisibility(View.INVISIBLE);
+                    btnQuizAnswerBL.setVisibility(View.INVISIBLE);
+                    btnQuizAnswerBR.setVisibility(View.INVISIBLE);
+                });
+            }
         }
     }
 

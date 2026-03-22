@@ -100,6 +100,7 @@ public class PowerUps {
                 break;
         }
         updatePowerUpIcons(player);
+        activity.renderPlayerUI(); // Refresh UI to show updated wildcard count immediately
     }
 
     public static int getPowerUpIcon(String powerUpName) {
@@ -257,30 +258,21 @@ public class PowerUps {
                     String result = outcomes.get(currentIndex);
                     if (result.contains("0")) {
                         MainActivityGame.drinkNumberCounterInt = 0;
-                        activity.displayToastMessage("LUCKY! 0 Drinks!");
+                        title.setText("LUCKY! 0 Drinks!");
                     } else {
                         MainActivityGame.drinkNumberCounterInt *= 2;
-                        activity.displayToastMessage("UNLUCKY! Double Drinks!");
+                        title.setText("UNLUCKY! Double Drinks!");
                     }
                     handler.postDelayed(() -> {
                         dialog.dismiss();
                         onHandled.run();
-                    }, 2500);
+                    }, 2000);
                 }
             }
         });
     }
 
     private static void showSplitThePainRoulette(Player player, Runnable onHandled) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
-        View dialogView = activity.getLayoutInflater().inflate(R.layout.game_wheel_of_fortune, null);
-        TextView title = dialogView.findViewById(R.id.powerup_dialogbox_textview);
-        ListView listView = dialogView.findViewById(R.id.listViewPowerUps);
-        ImageButton closeBtn = dialogView.findViewById(R.id.close_button);
-        closeBtn.setVisibility(View.GONE);
-
-        title.setText("Splitting the Pain...");
-
         List<Player> otherPlayers = new ArrayList<>(Game.getInstance().getPlayers());
         otherPlayers.remove(player);
         
@@ -293,6 +285,22 @@ public class PowerUps {
             onHandled.run();
             return;
         }
+
+        // If only 1 other player, skip roulette and auto-assign split target
+        if (playerNames.size() == 1) {
+            Game.getInstance().setSplitTarget(playerNames.get(0));
+            onHandled.run();
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
+        View dialogView = activity.getLayoutInflater().inflate(R.layout.game_wheel_of_fortune, null);
+        TextView title = dialogView.findViewById(R.id.powerup_dialogbox_textview);
+        ListView listView = dialogView.findViewById(R.id.listViewPowerUps);
+        ImageButton closeBtn = dialogView.findViewById(R.id.close_button);
+        closeBtn.setVisibility(View.GONE);
+
+        title.setText("Splitting the Pain...");
 
         // Use custom adapter for split the pain too
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity, R.layout.game_powerup_list_item, R.id.powerup_text, playerNames) {
@@ -337,15 +345,14 @@ public class PowerUps {
                     handler.postDelayed(this, currentInterval);
                 } else {
                     String targetName = playerNames.get(currentIndex);
-                    int drinks = MainActivityGame.drinkNumberCounterInt;
-                    int splitAmount = Math.max(drinks / 2, 1);
+                    Game.getInstance().setSplitTarget(targetName);
                     
-                    activity.displayToastMessage("Split! " + targetName + " takes " + splitAmount + " drinks!");
-                    
+                    title.setText("Split with " + targetName + "!");
+
                     handler.postDelayed(() -> {
                         dialog.dismiss();
                         onHandled.run();
-                    }, 2500);
+                    }, 2000);
                 }
             }
         });
@@ -392,6 +399,31 @@ public class PowerUps {
         listView.setOnTouchListener((v, event) -> true);
 
         final Handler handler = new Handler();
+
+        // If only one power-up remains, skip the shuffle animation.
+        if (availableTypes.size() == 1) {
+            int selectedIndex = -1;
+            for (int i = 0; i < powerUpList.size(); i++) {
+                if (!obtainedPowerUps.contains(getPowerUpType(powerUpList.get(i)))) {
+                    selectedIndex = i;
+                    break;
+                }
+            }
+            listView.setItemChecked(selectedIndex, true);
+            listView.setSelection(selectedIndex);
+            String selectedPowerUp = powerUpList.get(selectedIndex);
+            gainPowerUp(Game.getInstance().getCurrentPlayer(), selectedPowerUp);
+
+            handler.postDelayed(() -> {
+                if (dialog.isShowing()) {
+                    obtainedPowerUps.add(getPowerUpType(selectedPowerUp));
+                    dialog.dismiss();
+                }
+            }, 3000);
+            dialog.show();
+            return;
+        }
+
         final Random random = new Random();
         final int shuffleDuration = 3000 + random.nextInt(2000);
         final int initialInterval = 50;

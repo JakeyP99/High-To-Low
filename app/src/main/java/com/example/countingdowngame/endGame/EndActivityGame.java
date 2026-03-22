@@ -89,14 +89,29 @@ public class EndActivityGame extends ButtonUtilsActivity {
         List<String> statistics = new ArrayList<>();
 
         // End game text
-        String endGameText = (drinkNumberCounter == 0)
-                ? String.format("Drink up %s you litt..... Oh.. The number was 0? Well damn, lucky you I guess", playerName)
-                : getResources().getQuantityString(
-                R.plurals.drink_times,
-                drinkNumberCounter,
-                drinkNumberCounter,
-                playerName
-        );
+        String endGameText;
+        if (drinkNumberCounter == 0) {
+            endGameText = String.format("Drink up %s you litt..... Oh.. The number was 0? Well damn, lucky you I guess", playerName);
+        } else {
+            // Check if Split the Pain was used (we check if it was just used by checking if it's in obtainedPowerUps and was a passive)
+            // But a better way is to see if we have a split result stored or if the game state indicates a split.
+            // For now, we'll check if the current player had Split the Pain and used it.
+            
+            String splitTarget = gameInstance.getSplitTarget(); // I need to add this to Game class or handle it via a static variable
+            if (splitTarget != null && !splitTarget.isEmpty()) {
+                int splitAmount = Math.max(drinkNumberCounter / 2, 1);
+                String p1Text = getResources().getQuantityString(R.plurals.drink_times, splitAmount, splitAmount, splitTarget);
+                String p2Text = getResources().getQuantityString(R.plurals.drink_times, splitAmount, splitAmount, playerName);
+                endGameText = p1Text.replace("!", ",") + " and " + p2Text;
+            } else {
+                endGameText = getResources().getQuantityString(
+                        R.plurals.drink_times,
+                        drinkNumberCounter,
+                        drinkNumberCounter,
+                        playerName
+                );
+            }
+        }
         statistics.add(endGameText);
 
         // Additional possible stats

@@ -21,7 +21,7 @@
     <ListView
         android:id="@+id/listViewPowerUps"
         android:layout_width="match_parent"
-        android:layout_height="700dp"
+        android:layout_height="600dp"
         android:divider="@android:color/transparent"
         android:dividerHeight="12dp"
         android:padding="8dp"
