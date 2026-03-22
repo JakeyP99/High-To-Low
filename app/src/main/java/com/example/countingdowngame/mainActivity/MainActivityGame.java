@@ -22,7 +22,6 @@ import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAb
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleGoblinPassive;
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleScientistPassive;
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleSoldierPassive;
-import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleSurvivorPassive;
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleWitchPassive;
 
 import android.animation.ArgbEvaluator;
@@ -37,12 +36,13 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 
@@ -431,7 +431,6 @@ public class MainActivityGame extends SharedMainActivity {
                 default:
                     break;
             }
-            showDialog(catastrophe.getMessage(), R.layout.game_catastrophe_dialog_box, R.id.dialogbox_textview, R.id.close_button);
             Game.getInstance().incrementCatastropheQuantity();
             catastropheTurnCounter = 0; // Reset the turn counter after reaching the limit
 
@@ -733,22 +732,27 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    public void showDialog(String message, int layoutId, int textViewId, int closeButtonId) {
+    public View showDialog(String message, int layoutId, int textViewId, int closeButtonId) { // Change void to View
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = getLayoutInflater();
 
         View dialogView = inflater.inflate(layoutId, null);
         TextView dialogBoxTextView = dialogView.findViewById(textViewId);
-        dialogBoxTextView.setText(message);
+        if (dialogBoxTextView != null) {
+            dialogBoxTextView.setText(message);
+        }
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
         dialog.show();
 
         ImageButton closeButton = dialogView.findViewById(closeButtonId);
-        closeButton.setOnClickListener(v -> dialog.dismiss());
-    }
+        if (closeButton != null) {
+            closeButton.setOnClickListener(v -> dialog.dismiss());
+        }
 
+        return dialogView; // Return the view so you can find views inside it
+    }
     public void showGameDialog(String message) {
         showDialog(message, R.layout.game_main_dialog_box, R.id.dialogbox_textview, R.id.close_button);
     }
@@ -1077,7 +1081,7 @@ public class MainActivityGame extends SharedMainActivity {
             currentPlayer.setJustUsedActiveAbility(false);
         } else {
             currentPlayer.useSkip();
-
+            getFortune();
             btnGenerate.setVisibility(View.VISIBLE);
             drinkNumberTextView.setVisibility(View.VISIBLE);
             numberCounterText.setVisibility(View.VISIBLE);
@@ -1177,4 +1181,32 @@ public class MainActivityGame extends SharedMainActivity {
         btnAnswer.setVisibility(View.INVISIBLE);
     }
 
+
+    //-----------------------------------------------------Fortune---------------------------------------------------//
+
+    public void getFortune(){
+
+        //Add view TODO
+        View dialogView = showDialog(
+                "Fortune!",
+                R.layout.game_wheel_of_fortune,
+                R.id.fortune_dialogbox_textview,
+                R.id.close_button
+        );        ArrayList<String> fortune = new ArrayList<>();
+
+        ListView fortuneList = dialogView.findViewById(R.id.listViewFortunes);
+
+        fortune.add("Test1");
+        fortune.add("Test2");
+        fortune.add("Test3");
+        fortune.add("Test4");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                R.layout.game_wheel_of_fortune,
+                R.id.listViewFortunes,
+                fortune
+        );
+        fortuneList.setAdapter(adapter);
+    }
 }
