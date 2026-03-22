@@ -747,12 +747,10 @@ public class MainActivityGame extends SharedMainActivity {
         dialog.show();
 
         ImageButton closeButton = dialogView.findViewById(closeButtonId);
-        if (closeButton != null) {
-            closeButton.setOnClickListener(v -> dialog.dismiss());
-        }
-
-        return dialogView; // Return the view so you can find views inside it
+        closeButton.setOnClickListener(v -> dialog.dismiss());
+        return dialogView;
     }
+
     public void showGameDialog(String message) {
         showDialog(message, R.layout.game_main_dialog_box, R.id.dialogbox_textview, R.id.close_button);
     }
@@ -1192,7 +1190,8 @@ public class MainActivityGame extends SharedMainActivity {
                 R.layout.game_wheel_of_fortune,
                 R.id.fortune_dialogbox_textview,
                 R.id.close_button
-        );        ArrayList<String> fortune = new ArrayList<>();
+        );
+        ArrayList<String> fortune = new ArrayList<>();
 
         ListView fortuneList = dialogView.findViewById(R.id.listViewFortunes);
 
@@ -1203,8 +1202,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
-                R.layout.game_wheel_of_fortune,
-                R.id.listViewFortunes,
+                android.R.layout.simple_list_item_1,
                 fortune
         );
         fortuneList.setAdapter(adapter);
