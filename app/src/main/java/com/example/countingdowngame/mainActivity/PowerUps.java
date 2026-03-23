@@ -131,7 +131,7 @@ public class PowerUps {
             case NOTHING:
                 return R.drawable.cross;
             case GET_OUT_OF_JAIL:
-                return R.drawable.bandaids;
+                return R.drawable.jail;
             default:
                 return R.drawable.trading;
         }
@@ -302,7 +302,7 @@ public class PowerUps {
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
-        View dialogView = activity.getLayoutInflater().inflate(R.layout.game_wheel_of_fortune, null);
+        View dialogView = activity.getLayoutInflater().inflate(R.layout.game_powerups, null);
         TextView title = dialogView.findViewById(R.id.powerup_dialogbox_textview);
         ListView listView = dialogView.findViewById(R.id.listViewPowerUps);
         ImageButton closeBtn = dialogView.findViewById(R.id.close_button);
@@ -398,7 +398,7 @@ public class PowerUps {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = activity.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.game_wheel_of_fortune, null);
+        View dialogView = inflater.inflate(R.layout.game_powerups, null);
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
@@ -436,8 +436,8 @@ public class PowerUps {
 
             handler.postDelayed(() -> {
                 if (dialog.isShowing()) {
+                    finalizePowerUpGain(selectedPowerUp);
                     dialog.dismiss();
-                    showPowerUpDetailsAfterRoulette(selectedPowerUp, onDismiss);
                 }
             }, 2500);
             dialog.show();
@@ -484,8 +484,8 @@ public class PowerUps {
 
                     handler.postDelayed(() -> {
                         if (dialog.isShowing()) {
+                            finalizePowerUpGain(selectedPowerUp);
                             dialog.dismiss();
-                            showPowerUpDetailsAfterRoulette(selectedPowerUp, onDismiss);
                         }
                     }, 2500);
                 }
@@ -496,47 +496,12 @@ public class PowerUps {
         handler.post(shuffleRunnable);
     }
 
-    private static void showPowerUpDetailsAfterRoulette(String powerUpName, Runnable onDismiss) {
+    private static void finalizePowerUpGain(String powerUpName) {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        
-        // Show details dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
-        LayoutInflater inflater = activity.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.game_powerup_details, null);
-
-        TextView title = dialogView.findViewById(R.id.powerup_title);
-        TextView description = dialogView.findViewById(R.id.powerup_description);
-        Button activateBtn = dialogView.findViewById(R.id.btn_activate_powerup);
-        ImageButton closeBtn = dialogView.findViewById(R.id.close_button);
-
-        String type = getPowerUpType(powerUpName);
-        title.setText(type);
-
-        String cleanDescription = powerUpName;
-        if (powerUpName.contains(": ")) {
-            cleanDescription = powerUpName.substring(powerUpName.indexOf(": ") + 2);
+        gainPowerUp(currentPlayer, powerUpName);
+        if (!getPowerUpType(powerUpName).equals(NOTHING)) {
+            obtainedPowerUps.add(getPowerUpType(powerUpName));
         }
-        description.setText(cleanDescription);
-
-        // Hide activate button since it's just being gained
-        activateBtn.setVisibility(View.GONE);
-
-        builder.setView(dialogView);
-        AlertDialog detailsDialog = builder.create();
-        detailsDialog.setCancelable(false);
-
-        closeBtn.setOnClickListener(v -> {
-            detailsDialog.dismiss();
-            
-            // Finalize gain after user closes the info dialog
-            gainPowerUp(currentPlayer, powerUpName);
-            if (!getPowerUpType(powerUpName).equals(NOTHING)) {
-                obtainedPowerUps.add(getPowerUpType(powerUpName));
-            }
-            if (onDismiss != null) onDismiss.run();
-        });
-
-        detailsDialog.show();
     }
 
     private static String selectWeightedPowerUp(List<String> powerUpList) {
@@ -594,19 +559,31 @@ public class PowerUps {
         GifImageView powerUpRight = activity.findViewById(R.id.powerup_right);
 
         if (powerUps.size() >= 1) {
+            String pName = powerUps.get(0);
+            String type = getPowerUpType(pName);
             powerUpLeft.setVisibility(View.VISIBLE);
-            powerUpLeft.setImageResource(getPowerUpIcon(powerUps.get(0)));
+            powerUpLeft.setImageResource(getPowerUpIcon(pName));
             stopGifAnimation(powerUpLeft);
-            powerUpLeft.setOnClickListener(v -> showPowerUpDetails(powerUps.get(0), player));
+            if (!isPassive(type)) {
+                powerUpLeft.setOnClickListener(v -> activatePowerUp(pName, player));
+            } else {
+                powerUpLeft.setOnClickListener(null);
+            }
         } else {
             powerUpLeft.setVisibility(View.GONE);
         }
 
         if (powerUps.size() >= 2) {
+            String pName = powerUps.get(1);
+            String type = getPowerUpType(pName);
             powerUpRight.setVisibility(View.VISIBLE);
-            powerUpRight.setImageResource(getPowerUpIcon(powerUps.get(1)));
+            powerUpRight.setImageResource(getPowerUpIcon(pName));
             stopGifAnimation(powerUpRight);
-            powerUpRight.setOnClickListener(v -> showPowerUpDetails(powerUps.get(1), player));
+            if (!isPassive(type)) {
+                powerUpRight.setOnClickListener(v -> activatePowerUp(pName, player));
+            } else {
+                powerUpRight.setOnClickListener(null);
+            }
         } else {
             powerUpRight.setVisibility(View.GONE);
         }
