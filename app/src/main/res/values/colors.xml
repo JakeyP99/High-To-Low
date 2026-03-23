@@ -7,5 +7,10 @@
     <color name="bluedarktransparent">#39021457</color>
     <color name="reddark">#B71C1C</color>
 
-
+    <!-- Mortal Kombat Inspired Colors -->
+    <color name="mk_dark_bg">#0A0A0A</color>
+    <color name="mk_gold">#FFD700</color>
+    <color name="mk_red">#D32F2F</color>
+    <color name="mk_gray">#2C2C2C</color>
+    <color name="mk_selection_glow">#FF8C00</color>
 </resources>

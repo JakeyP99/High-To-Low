@@ -213,8 +213,7 @@ public class PowerUps {
         boolean isDouble = random.nextBoolean();
         
         // Initial rotation is 270 (pointing up at zero)
-        // Pointing Down (Double) is 90 degrees.
-        // spins + offset
+        // Pointing Down (Double) is 90 degrees (or 270 + 180 = 450)
         float currentRotation = 270f;
         float extraSpins = (4 + random.nextInt(3)) * 360f;
         float targetRotation = currentRotation + extraSpins + (isDouble ? 180 : 0);
@@ -229,9 +228,11 @@ public class PowerUps {
                 if (isDouble) {
                     MainActivityGame.drinkNumberCounterInt *= 2;
                     frameDouble.setActivated(true);
+                    frameDouble.setAlpha(0.5f);
                 } else {
                     MainActivityGame.drinkNumberCounterInt = 0;
                     frameZero.setActivated(true);
+                    frameZero.setAlpha(0.5f);
                 }
 
                 new Handler().postDelayed(() -> {
