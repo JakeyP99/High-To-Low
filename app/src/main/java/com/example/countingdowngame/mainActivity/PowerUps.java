@@ -30,10 +30,12 @@ public class PowerUps {
     private static final List<String> obtainedPowerUps = new ArrayList<>();
 
     // Power-Up Type Constants
-    private static final String SPLIT_THE_PAIN = "Split the Pain";
-    private static final String ALL_OR_NOTHING = "All or Nothing";
-    private static final String HIGH_STAKES = "High Stakes";
-    private static final String TRADE_UP = "Trade Up";
+    public static final String SPLIT_THE_PAIN = "Split the Pain";
+    public static final String ALL_OR_NOTHING = "All or Nothing";
+    public static final String HIGH_STAKES = "High Stakes";
+    public static final String TRADE_UP = "Trade Up";
+    public static final String NOTHING = "Nothing";
+    public static final String GET_OUT_OF_JAIL = "Get Out of Jail Free";
 
     public static void setActivity(MainActivityGame activityInstance) {
         activity = activityInstance;
@@ -47,17 +49,19 @@ public class PowerUps {
         return obtainedPowerUps.contains(getPowerUpType(powerUpName));
     }
 
-    private static String getPowerUpType(String powerUpName) {
+    public static String getPowerUpType(String powerUpName) {
         if (powerUpName == null) return "";
         if (powerUpName.contains(SPLIT_THE_PAIN)) return SPLIT_THE_PAIN;
         if (powerUpName.contains(ALL_OR_NOTHING)) return ALL_OR_NOTHING;
         if (powerUpName.contains(HIGH_STAKES)) return HIGH_STAKES;
         if (powerUpName.contains(TRADE_UP)) return TRADE_UP;
+        if (powerUpName.contains(NOTHING)) return NOTHING;
+        if (powerUpName.contains(GET_OUT_OF_JAIL)) return GET_OUT_OF_JAIL;
         return "";
     }
 
     private static boolean isPassive(String type) {
-        return type.equals(SPLIT_THE_PAIN) || type.equals(ALL_OR_NOTHING);
+        return type.equals(SPLIT_THE_PAIN) || type.equals(ALL_OR_NOTHING) || type.equals(GET_OUT_OF_JAIL);
     }
 
     public static ArrayList<String> getPowerUps() {
@@ -66,11 +70,14 @@ public class PowerUps {
         powerUp.add(ALL_OR_NOTHING + ": 50/50 chance: 0 drinks or double drinks if you lose!");
         powerUp.add(HIGH_STAKES + ": +3 drinks to the total, but gain 2 wildcards for your next turn!");
         powerUp.add(TRADE_UP + ": Lose 1 wildcard to reduce drinks by 3!");
+        powerUp.add(NOTHING + ": Better luck next time!");
+        powerUp.add(GET_OUT_OF_JAIL + ": Automatically saves you from a 0 and reverts the number!");
         return powerUp;
     }
 
     public static void gainPowerUp(Player player, String powerUpName) {
         if (player == null) return;
+        if (getPowerUpType(powerUpName).equals(NOTHING)) return;
 
         List<String> powerUps = player.getPowerUps();
         if (powerUps.size() < 2) {
@@ -104,6 +111,8 @@ public class PowerUps {
                 break;
             case SPLIT_THE_PAIN:
             case ALL_OR_NOTHING:
+            case NOTHING:
+            case GET_OUT_OF_JAIL:
                 break;
         }
         updatePowerUpIcons(player);
@@ -119,6 +128,10 @@ public class PowerUps {
                 return R.drawable.toast;
             case TRADE_UP:
                 return R.drawable.trading;
+            case NOTHING:
+                return R.drawable.cross;
+            case GET_OUT_OF_JAIL:
+                return R.drawable.bandaids;
             default:
                 return R.drawable.trading;
         }
@@ -129,6 +142,26 @@ public class PowerUps {
     public static void checkLosingPowerUps(Player player, Runnable onEndGame) {
         List<String> playerPowerUps = new ArrayList<>(player.getPowerUps());
         
+        // 1. Check for Get Out of Jail Free (Highest Priority, automatic)
+        String jailFree = null;
+        for (String p : playerPowerUps) {
+            if (getPowerUpType(p).equals(GET_OUT_OF_JAIL)) {
+                jailFree = p;
+                break;
+            }
+        }
+
+        if (jailFree != null) {
+            player.usePowerUp(jailFree);
+            activity.displayToastMessage("Saved by Get Out of Jail Free!");
+            int prevNum = Game.getInstance().getPreviousNumber();
+            MainActivityGame.updateNumber(prevNum);
+            activity.enableButtons();
+            activity.renderPlayerUI();
+            return; // Don't end game, player is saved
+        }
+
+        // 2. Check for All or Nothing
         String allNothing = null;
         for (String p : playerPowerUps) {
             if (getPowerUpType(p).equals(ALL_OR_NOTHING)) {
@@ -358,7 +391,7 @@ public class PowerUps {
             }
         }
 
-        if (availableTypes.isEmpty()) {
+        if (availableTypes.isEmpty() || (availableTypes.size() == 1 && availableTypes.get(0).equals(NOTHING))) {
             if (onDismiss != null) onDismiss.run();
             return;
         }
@@ -380,7 +413,8 @@ public class PowerUps {
         closeButton.setVisibility(View.GONE);
 
         ListView listView = dialogView.findViewById(R.id.listViewPowerUps);
-        PowerUpAdapter adapter = new PowerUpAdapter(activity, powerUpList);
+        // Pass true to bring back descriptions
+        PowerUpAdapter adapter = new PowerUpAdapter(activity, powerUpList, true);
         listView.setAdapter(adapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setOnTouchListener((v, event) -> true);
@@ -399,12 +433,11 @@ public class PowerUps {
             listView.setItemChecked(selectedIndex, true);
             listView.setSelection(selectedIndex);
             String selectedPowerUp = powerUpList.get(selectedIndex);
-            gainPowerUp(Game.getInstance().getCurrentPlayer(), selectedPowerUp);
 
             handler.postDelayed(() -> {
                 if (dialog.isShowing()) {
-                    obtainedPowerUps.add(getPowerUpType(selectedPowerUp));
                     dialog.dismiss();
+                    showPowerUpDetailsAfterRoulette(selectedPowerUp, onDismiss);
                 }
             }, 2500);
             dialog.show();
@@ -440,13 +473,19 @@ public class PowerUps {
                     handler.postDelayed(this, currentInterval);
                 } else {
                     listView.setItemChecked(currentIndex, true);
-                    String selectedPowerUp = powerUpList.get(currentIndex);
-                    gainPowerUp(Game.getInstance().getCurrentPlayer(), selectedPowerUp);
+                    
+                    // Weighted Random Selection at the end of shuffle
+                    String selectedPowerUp = selectWeightedPowerUp(powerUpList);
+                    
+                    // Update the UI to show the actually selected one
+                    int finalIndex = powerUpList.indexOf(selectedPowerUp);
+                    listView.setItemChecked(finalIndex, true);
+                    listView.smoothScrollToPosition(finalIndex);
 
                     handler.postDelayed(() -> {
                         if (dialog.isShowing()) {
-                            obtainedPowerUps.add(getPowerUpType(selectedPowerUp));
                             dialog.dismiss();
+                            showPowerUpDetailsAfterRoulette(selectedPowerUp, onDismiss);
                         }
                     }, 2500);
                 }
@@ -455,6 +494,85 @@ public class PowerUps {
 
         dialog.show();
         handler.post(shuffleRunnable);
+    }
+
+    private static void showPowerUpDetailsAfterRoulette(String powerUpName, Runnable onDismiss) {
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        
+        // Show details dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.game_powerup_details, null);
+
+        TextView title = dialogView.findViewById(R.id.powerup_title);
+        TextView description = dialogView.findViewById(R.id.powerup_description);
+        Button activateBtn = dialogView.findViewById(R.id.btn_activate_powerup);
+        ImageButton closeBtn = dialogView.findViewById(R.id.close_button);
+
+        String type = getPowerUpType(powerUpName);
+        title.setText(type);
+
+        String cleanDescription = powerUpName;
+        if (powerUpName.contains(": ")) {
+            cleanDescription = powerUpName.substring(powerUpName.indexOf(": ") + 2);
+        }
+        description.setText(cleanDescription);
+
+        // Hide activate button since it's just being gained
+        activateBtn.setVisibility(View.GONE);
+
+        builder.setView(dialogView);
+        AlertDialog detailsDialog = builder.create();
+        detailsDialog.setCancelable(false);
+
+        closeBtn.setOnClickListener(v -> {
+            detailsDialog.dismiss();
+            
+            // Finalize gain after user closes the info dialog
+            gainPowerUp(currentPlayer, powerUpName);
+            if (!getPowerUpType(powerUpName).equals(NOTHING)) {
+                obtainedPowerUps.add(getPowerUpType(powerUpName));
+            }
+            if (onDismiss != null) onDismiss.run();
+        });
+
+        detailsDialog.show();
+    }
+
+    private static String selectWeightedPowerUp(List<String> powerUpList) {
+        List<String> available = new ArrayList<>();
+        for (String s : powerUpList) {
+            if (!obtainedPowerUps.contains(getPowerUpType(s))) {
+                available.add(s);
+            }
+        }
+        
+        if (available.isEmpty()) return null;
+        
+        // Find if Get Out of Jail is available
+        String jailFree = null;
+        for (String s : available) {
+            if (getPowerUpType(s).equals(GET_OUT_OF_JAIL)) {
+                jailFree = s;
+                break;
+            }
+        }
+
+        Random random = new Random();
+        if (jailFree != null) {
+            // 5% chance for Get Out of Jail Free
+            if (random.nextInt(100) < 5) {
+                return jailFree;
+            } else {
+                // 95% chance for others
+                List<String> others = new ArrayList<>(available);
+                others.remove(jailFree);
+                if (others.isEmpty()) return jailFree; // fallback if only jailFree was available
+                return others.get(random.nextInt(others.size()));
+            }
+        }
+
+        return available.get(random.nextInt(available.size()));
     }
 
     private static String findRandomAvailable(List<String> list) {
@@ -518,9 +636,14 @@ public class PowerUps {
 
         String type = getPowerUpType(powerUpName);
         title.setText(type);
-        description.setText(powerUpName);
 
-        if (isPassive(type)) {
+        String cleanDescription = powerUpName;
+        if (powerUpName.contains(": ")) {
+            cleanDescription = powerUpName.substring(powerUpName.indexOf(": ") + 2);
+        }
+        description.setText(cleanDescription);
+
+        if (isPassive(type) || type.equals(NOTHING)) {
             activateBtn.setVisibility(View.GONE);
         }
 

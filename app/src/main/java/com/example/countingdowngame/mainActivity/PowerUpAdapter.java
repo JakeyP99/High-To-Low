@@ -20,8 +20,11 @@ import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
 public class PowerUpAdapter extends ArrayAdapter<String> {
-    public PowerUpAdapter(Context context, List<String> powerUps) {
+    private final boolean showText;
+
+    public PowerUpAdapter(Context context, List<String> powerUps, boolean showText) {
         super(context, 0, powerUps);
+        this.showText = showText;
     }
 
     @NonNull
@@ -34,9 +37,23 @@ public class PowerUpAdapter extends ArrayAdapter<String> {
         String powerUp = getItem(position);
         TextView text = convertView.findViewById(R.id.powerup_text);
         GifImageView icon = convertView.findViewById(R.id.powerup_icon);
+        View itemView = convertView;
 
         if (powerUp != null) {
+            String type = PowerUps.getPowerUpType(powerUp);
             text.setText(powerUp);
+            
+            if (!showText) {
+                text.setVisibility(View.GONE);
+                // Center the icon if text is hidden
+                ViewGroup.LayoutParams params = icon.getLayoutParams();
+                if (params instanceof ViewGroup.MarginLayoutParams) {
+                    ((ViewGroup.MarginLayoutParams) params).setMarginEnd(0);
+                }
+            } else {
+                text.setVisibility(View.VISIBLE);
+            }
+
             icon.setImageResource(PowerUps.getPowerUpIcon(powerUp));
 
             // Stop the gif from animating
@@ -48,6 +65,13 @@ public class PowerUpAdapter extends ArrayAdapter<String> {
                 }
             } catch (ClassCastException e) {
                 // If it's not a gif, ignore
+            }
+
+            // Apply Golden Aura for Get Out of Jail Free
+            if (type.equals(PowerUps.GET_OUT_OF_JAIL)) {
+                itemView.setBackgroundResource(R.drawable.golden_aura);
+            } else {
+                itemView.setBackgroundResource(R.drawable.powerup_item_selector);
             }
 
             if (PowerUps.isObtained(powerUp)) {
