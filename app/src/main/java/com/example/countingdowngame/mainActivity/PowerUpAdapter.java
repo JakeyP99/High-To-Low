@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,6 +15,9 @@ import androidx.annotation.Nullable;
 import com.example.countingdowngame.R;
 
 import java.util.List;
+
+import pl.droidsonroids.gif.GifDrawable;
+import pl.droidsonroids.gif.GifImageView;
 
 public class PowerUpAdapter extends ArrayAdapter<String> {
     public PowerUpAdapter(Context context, List<String> powerUps) {
@@ -31,11 +33,22 @@ public class PowerUpAdapter extends ArrayAdapter<String> {
 
         String powerUp = getItem(position);
         TextView text = convertView.findViewById(R.id.powerup_text);
-        ImageView icon = convertView.findViewById(R.id.powerup_icon);
+        GifImageView icon = convertView.findViewById(R.id.powerup_icon);
 
         if (powerUp != null) {
             text.setText(powerUp);
             icon.setImageResource(PowerUps.getPowerUpIcon(powerUp));
+
+            // Stop the gif from animating
+            try {
+                GifDrawable gifDrawable = (GifDrawable) icon.getDrawable();
+                if (gifDrawable != null) {
+                    gifDrawable.stop();
+                    gifDrawable.seekTo(0);
+                }
+            } catch (ClassCastException e) {
+                // If it's not a gif, ignore
+            }
 
             if (PowerUps.isObtained(powerUp)) {
                 // Apply grayscale filter to icon

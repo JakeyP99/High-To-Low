@@ -103,6 +103,7 @@ public class MainActivityGame extends SharedMainActivity {
     private ImageButton imageButtonExit;
     //-----------------------------------------------------Booleans---------------------------------------------------//
     private boolean doubleBackToExitPressedOnce = false;
+    private boolean wasQuizCorrect = false;
     //-----------------------------------------------------Array---------------------------------------------------//
     private Button[] answerButtons; // Array to hold the answer buttons
     private MainActivityCatastrophes catastrophesManager;
@@ -813,6 +814,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     //-----------------------------------------------------Wild Card Functionality---------------------------------------------------//
     private void wildCardActivate() {
+        wasQuizCorrect = false;
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         Game.getInstance().getCurrentPlayer().useWildCard();
         currentPlayer.incrementUsedWildcards();
@@ -1007,6 +1009,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         String correctAnswer = selectedWildCard.getAnswer();
         boolean isCorrect = selectedAnswer.equals(correctAnswer);
+        wasQuizCorrect = isCorrect;
 
         if (isCorrect) {
             handleCorrectAnswer(selectedButton, correctAnswer);
@@ -1067,6 +1070,8 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void wildCardContinue() {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
+
+        // Special case: Quiz Magician Active Ability allows for another activation
         if (QUIZ_MAGICIAN.equals(currentPlayer.getClassChoice()) && currentPlayer.getJustUsedActiveAbility()) {
             wildCardActivate();
             currentPlayer.gainWildCards(1);
@@ -1079,37 +1084,41 @@ public class MainActivityGame extends SharedMainActivity {
             btnWildContinue.setVisibility(View.INVISIBLE);
             currentPlayer.setUsedActiveAbility(true);
             currentPlayer.setJustUsedActiveAbility(false);
-        } else {
-            if (currentPlayer.getPowerUps().size() >= 2) {
-                PowerUps.updatePowerUpIcons(currentPlayer);
-
-                currentPlayer.useSkip();
-                btnGenerate.setVisibility(View.VISIBLE);
-                drinkNumberTextView.setVisibility(View.VISIBLE);
-                numberCounterText.setVisibility(View.VISIBLE);
-                nextPlayerText.setVisibility(View.VISIBLE);
-                wildText.setVisibility(View.INVISIBLE);
-                btnWildContinue.setVisibility(View.INVISIBLE);
-                btnAnswer.setVisibility(View.INVISIBLE);
-                btnQuizAnswerBL.setVisibility(View.INVISIBLE);
-                btnQuizAnswerBR.setVisibility(View.INVISIBLE);
-            } else {
-                PowerUps.getPowerUp(() -> {
-                    PowerUps.updatePowerUpIcons(currentPlayer);
-                    currentPlayer.useSkip();
-                    btnGenerate.setVisibility(View.VISIBLE);
-                    drinkNumberTextView.setVisibility(View.VISIBLE);
-                    numberCounterText.setVisibility(View.VISIBLE);
-                    nextPlayerText.setVisibility(View.VISIBLE);
-
-                    wildText.setVisibility(View.INVISIBLE);
-                    btnWildContinue.setVisibility(View.INVISIBLE);
-                    btnAnswer.setVisibility(View.INVISIBLE);
-                    btnQuizAnswerBL.setVisibility(View.INVISIBLE);
-                    btnQuizAnswerBR.setVisibility(View.INVISIBLE);
-                });
-            }
+            return;
         }
+
+        // Logic for ending the turn and potentially awarding a power-up
+        boolean isQuiz = selectedWildCard != null && selectedWildCard.hasAnswer();
+        boolean successfulTurn = !isQuiz || wasQuizCorrect;
+        boolean canReceivePowerUp = successfulTurn && currentPlayer.getPowerUps().size() < 2;
+
+        Runnable finishWildCard = () -> {
+            if (successfulTurn) {
+                PowerUps.updatePowerUpIcons(currentPlayer);
+            }
+            currentPlayer.useSkip();
+            resetUIAfterWildCard();
+        };
+
+        if (canReceivePowerUp) {
+            PowerUps.getPowerUp(finishWildCard);
+        } else {
+            finishWildCard.run();
+        }
+    }
+
+    private void resetUIAfterWildCard() {
+        btnGenerate.setVisibility(View.VISIBLE);
+        drinkNumberTextView.setVisibility(View.VISIBLE);
+        numberCounterText.setVisibility(View.VISIBLE);
+        nextPlayerText.setVisibility(View.VISIBLE);
+        wildText.setVisibility(View.INVISIBLE);
+        btnWildContinue.setVisibility(View.INVISIBLE);
+        btnAnswer.setVisibility(View.INVISIBLE);
+        btnQuizAnswerBL.setVisibility(View.INVISIBLE);
+        btnQuizAnswerBR.setVisibility(View.INVISIBLE);
+        btnQuizAnswerTL.setVisibility(View.INVISIBLE);
+        btnQuizAnswerTR.setVisibility(View.INVISIBLE);
     }
 
     private void displayConfetti(View confettiView) {
@@ -1177,6 +1186,7 @@ public class MainActivityGame extends SharedMainActivity {
                 btnWildContinue.setVisibility(View.INVISIBLE);
 
                 btnUtils.setButton(btnQuizAnswerBL, () -> {
+                    wasQuizCorrect = true;
                     btnQuizAnswerBL.setVisibility(View.INVISIBLE);
                     btnQuizAnswerBR.setVisibility(View.INVISIBLE);
                     quizAnswerView(currentPlayer.getName() + " since you got it right, give out a drink!");
@@ -1184,6 +1194,7 @@ public class MainActivityGame extends SharedMainActivity {
                 });
 
                 btnUtils.setButton(btnQuizAnswerBR, () -> {
+                    wasQuizCorrect = false;
                     btnQuizAnswerBL.setVisibility(View.INVISIBLE);
                     btnQuizAnswerBR.setVisibility(View.INVISIBLE);
                     quizAnswerView(currentPlayer.getName() + " since you got it wrong, take a drink! \n\n P.S. Maybe read a book once in a while.");

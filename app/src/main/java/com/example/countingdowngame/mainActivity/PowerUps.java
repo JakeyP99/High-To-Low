@@ -11,7 +11,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,6 +21,9 @@ import com.example.countingdowngame.player.Player;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import pl.droidsonroids.gif.GifDrawable;
+import pl.droidsonroids.gif.GifImageView;
 
 public class PowerUps {
     private static MainActivityGame activity;
@@ -110,15 +112,15 @@ public class PowerUps {
     public static int getPowerUpIcon(String powerUpName) {
         switch (getPowerUpType(powerUpName)) {
             case SPLIT_THE_PAIN:
-                return R.drawable.shots;
+                return R.drawable.division;
             case ALL_OR_NOTHING:
-                return R.drawable.scientist;
+                return R.drawable.dice;
             case HIGH_STAKES:
-                return R.drawable.bandaids;
+                return R.drawable.toast;
             case TRADE_UP:
-                return R.drawable.helmet;
+                return R.drawable.trading;
             default:
-                return R.drawable.helmet;
+                return R.drawable.trading;
         }
     }
 
@@ -200,7 +202,7 @@ public class PowerUps {
     private static void showAllOrNothingGenerator(Runnable onHandled) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
         View dialogView = activity.getLayoutInflater().inflate(R.layout.game_all_or_nothing_box, null);
-        ImageView arrow = dialogView.findViewById(R.id.arrow_spinner);
+        GifImageView arrow = dialogView.findViewById(R.id.arrow_spinner);
         View frameZero = dialogView.findViewById(R.id.card_zero);
         View frameDouble = dialogView.findViewById(R.id.card_double);
 
@@ -280,8 +282,20 @@ public class PowerUps {
             @Override
             public View getView(int position, View convertView, android.view.ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
-                ImageView icon = view.findViewById(R.id.powerup_icon);
+                GifImageView icon = view.findViewById(R.id.powerup_icon);
                 icon.setImageResource(R.drawable.shots);
+                
+                // Stop the gif from animating
+                try {
+                    GifDrawable gifDrawable = (GifDrawable) icon.getDrawable();
+                    if (gifDrawable != null) {
+                        gifDrawable.stop();
+                        gifDrawable.seekTo(0);
+                    }
+                } catch (ClassCastException e) {
+                    // If it's not a gif, ignore
+                }
+
                 return view;
             }
         };
@@ -458,12 +472,13 @@ public class PowerUps {
         if (player == null || activity == null) return;
         List<String> powerUps = player.getPowerUps();
 
-        ImageView powerUpLeft = activity.findViewById(R.id.powerup_left);
-        ImageView powerUpRight = activity.findViewById(R.id.powerup_right);
+        GifImageView powerUpLeft = activity.findViewById(R.id.powerup_left);
+        GifImageView powerUpRight = activity.findViewById(R.id.powerup_right);
 
         if (powerUps.size() >= 1) {
             powerUpLeft.setVisibility(View.VISIBLE);
             powerUpLeft.setImageResource(getPowerUpIcon(powerUps.get(0)));
+            stopGifAnimation(powerUpLeft);
             powerUpLeft.setOnClickListener(v -> showPowerUpDetails(powerUps.get(0), player));
         } else {
             powerUpLeft.setVisibility(View.GONE);
@@ -472,9 +487,22 @@ public class PowerUps {
         if (powerUps.size() >= 2) {
             powerUpRight.setVisibility(View.VISIBLE);
             powerUpRight.setImageResource(getPowerUpIcon(powerUps.get(1)));
+            stopGifAnimation(powerUpRight);
             powerUpRight.setOnClickListener(v -> showPowerUpDetails(powerUps.get(1), player));
         } else {
             powerUpRight.setVisibility(View.GONE);
+        }
+    }
+
+    private static void stopGifAnimation(GifImageView gifImageView) {
+        try {
+            GifDrawable gifDrawable = (GifDrawable) gifImageView.getDrawable();
+            if (gifDrawable != null) {
+                gifDrawable.stop();
+                gifDrawable.seekTo(0);
+            }
+        } catch (ClassCastException e) {
+            // Not a gif
         }
     }
 
