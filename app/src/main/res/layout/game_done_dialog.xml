@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/dialogbox_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="150dp"
+        android:text="Test"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:fontFamily="@font/viga"
+        android:textColor="@color/bluedark"
+        android:textSize="28sp" />
+
+    <Button
+        android:id="@+id/done_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/outlineforbutton"
+        android:fontFamily="@font/viga"
+        android:text="Done"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="20sp" />
+</LinearLayout>

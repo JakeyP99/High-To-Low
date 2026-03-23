@@ -5,7 +5,7 @@
         android:id="@+id/deletePlayerImageView"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:src="@drawable/cross"
+        android:src="@drawable/delete"
         android:contentDescription="TODO" />
 
     <ImageView

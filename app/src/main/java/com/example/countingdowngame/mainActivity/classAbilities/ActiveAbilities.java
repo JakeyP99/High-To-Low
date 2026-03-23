@@ -85,6 +85,11 @@ public class ActiveAbilities {
     }
 
     public static void handleGoblinClass(Player currentPlayer) {
+        if (currentPlayer.getWildCardAmount() <= 0) {
+            Toast.makeText(activity, "You need at least one wildcard to sacrifice!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         List<Player> eligiblePlayers = new ArrayList<>();
         for (Player player : game.getPlayers()) {
             if (!player.equals(currentPlayer) && player.getWildCardAmount() > 0) {
@@ -93,7 +98,7 @@ public class ActiveAbilities {
         }
 
         if (eligiblePlayers.isEmpty()) {
-            Toast.makeText(activity, "All players have no wildcards", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "All other players have no wildcards", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -107,7 +112,9 @@ public class ActiveAbilities {
                 randomPlayer.getName() + " lost two wildcards.\n\n" +
                 randomPlayer.getName() + " now has " + wildcardText + ".");
 
+        currentPlayer.loseWildCards(1);
         currentPlayer.setUsedActiveAbility(true);
+        activity.renderPlayerUI();
         hideAbilityButton();
         AudioManager.getInstance().playSoundEffects(activity, GOBLIN);
     }

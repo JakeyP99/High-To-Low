@@ -2,6 +2,7 @@ package com.example.countingdowngame.mainActivity.classAbilities;
 
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ARCHER;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GOBLIN;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SCIENTIST;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
@@ -10,7 +11,6 @@ import static com.example.countingdowngame.mainActivity.MainActivityGame.isFirst
 import static com.example.countingdowngame.mainActivity.MainActivityGame.soldierRemoval;
 
 import android.os.Handler;
-import android.util.Log;
 
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.mainActivity.MainActivityGame;
@@ -64,13 +64,22 @@ public class PassiveAbilities {
                 + " survived, hand out " + drinkNumberCounterInt + " " + drinksText);
     }
 
-    public static void handleGoblinPassive(Player currentPlayer) {
-        if (!ANGRY_JIM.equals(currentPlayer.getClassChoice())) {
-            currentPlayer.incrementPassiveAbilityTurnCounter();
+    public static void checkGoblinPassive(Player wildcardUser) {
+        boolean wildcardUserHasGoblinPassive = GOBLIN.equals(wildcardUser.getClassChoice()) ||
+                (ANGRY_JIM.equals(wildcardUser.getClassChoice()) && game.getCurrentNumber() < 50);
+
+        if (wildcardUserHasGoblinPassive) {
+            return;
         }
-        if (currentPlayer.getPassiveAbilityTurnCounter() == 3) {
-            currentPlayer.resetPassiveAbilityTurnCounter();
-            currentPlayer.gainWildCards(1);
+
+        for (Player player : game.getPlayers()) {
+            boolean hasGoblinPassive = GOBLIN.equals(player.getClassChoice()) ||
+                    (ANGRY_JIM.equals(player.getClassChoice()) && game.getCurrentNumber() < 50);
+
+            if (hasGoblinPassive && !player.equals(wildcardUser)) {
+                activity.showDoneDialog(GOBLIN + "'s Passive: \n\nDrink twice for using a wildcard!");
+                break;
+            }
         }
     }
 
@@ -99,12 +108,12 @@ public class PassiveAbilities {
             game.updateRepeatingTurns(currentPlayer, 1);
         }
 
-        if (numberBelow50) {
+        if (numberBelow50 && game.getNumberWasGenerated() == true) {
             handleSoldierPassive();
             handleArcherPassive(currentPlayer);
-            handleGoblinPassive(currentPlayer);
             handleWitchPassive(currentPlayer);
             handleScientistPassive(currentPlayer);
+            handleSurvivorPassive(currentPlayer);
         }
     }
 

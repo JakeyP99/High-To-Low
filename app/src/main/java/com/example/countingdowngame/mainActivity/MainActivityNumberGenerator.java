@@ -96,7 +96,7 @@ public class MainActivityNumberGenerator {
 //                    .duration(800)
 //                    .playOn(numberCounterText);
 
-            if ((targetNumber <= 2 && targetNumber > 0 && previousNumber <= 2) &&
+            if ((targetNumber == 1 && previousNumber <= 1) &&
                     (SURVIVOR.equals(currentPlayer.getClassChoice()) || ANGRY_JIM.equals(currentPlayer.getClassChoice()))) {
                 handleSurvivorPassive(currentPlayer);
             }

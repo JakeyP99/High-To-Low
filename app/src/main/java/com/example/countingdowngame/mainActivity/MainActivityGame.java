@@ -18,7 +18,6 @@ import static com.example.countingdowngame.mainActivity.MainActivityLogging.logP
 import static com.example.countingdowngame.mainActivity.MainActivityLogging.logSelectedCardInfo;
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleAngryJimPassive;
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleArcherPassive;
-import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleGoblinPassive;
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleScientistPassive;
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleSoldierPassive;
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleWitchPassive;
@@ -481,6 +480,24 @@ public class MainActivityGame extends SharedMainActivity {
             }
         }
 
+        if (GOBLIN.equals(classChoice)) {
+            boolean otherPlayersHaveWildcards = false;
+            for (Player player : Game.getInstance().getPlayers()) {
+                if (!player.equals(currentPlayer) && player.getWildCardAmount() > 0) {
+                    otherPlayersHaveWildcards = true;
+                    break;
+                }
+            }
+            if (!otherPlayersHaveWildcards || wildCardCount < 1) {
+                canShowButton = false;
+            }
+        }
+
+        if (SURVIVOR.equals(classChoice)) {
+            if (Game.getInstance().getCurrentNumber() == 1) {
+                canShowButton = false;
+            }
+        }
 
         if (NO_CLASS.equals(classChoice)) {
             canShowButton = false;
@@ -678,7 +695,6 @@ public class MainActivityGame extends SharedMainActivity {
         } else if (ARCHER.equals(classChoice)) {
             handleArcherPassive(currentPlayer);
         } else if (GOBLIN.equals(classChoice)) {
-            handleGoblinPassive(currentPlayer);
         }
     }
 
@@ -747,13 +763,19 @@ public class MainActivityGame extends SharedMainActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        ImageButton closeButton = dialogView.findViewById(closeButtonId);
-        closeButton.setOnClickListener(v -> dialog.dismiss());
+        View closeButton = dialogView.findViewById(closeButtonId);
+        if (closeButton != null) {
+            closeButton.setOnClickListener(v -> dialog.dismiss());
+        }
         return dialogView;
     }
 
     public void showGameDialog(String message) {
         showDialog(message, R.layout.game_main_dialog_box, R.id.dialogbox_textview, R.id.close_button);
+    }
+
+    public void showDoneDialog(String message) {
+        showDialog(message, R.layout.game_done_dialog, R.id.dialogbox_textview, R.id.done_button);
     }
 
     public void scientistChangeCurrentNumber() {
@@ -816,6 +838,8 @@ public class MainActivityGame extends SharedMainActivity {
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
         Game.getInstance().getCurrentPlayer().useWildCard();
         currentPlayer.incrementUsedWildcards();
+
+        PassiveAbilities.checkGoblinPassive(currentPlayer);
 
         WildCardProperties[] wildCardArray = new WildCardProperties[0];
         QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(wildCardArray, this, WildCardType.QUIZ);

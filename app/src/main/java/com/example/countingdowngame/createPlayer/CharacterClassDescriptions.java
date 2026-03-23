@@ -34,7 +34,7 @@ public class CharacterClassDescriptions {
             "Force a random player to repeat their turn. Resets after 5 turns.";
 
     public static final String goblinActiveDescription =
-            "Remove 2 wildcards from a random player.";
+            "Sacrifice 1 of your wildcards to remove 2 from a random player.";
 
     public static final String noClassDescription =
             "No abilities.";
@@ -47,7 +47,7 @@ public class CharacterClassDescriptions {
     public static final String quizMagicianActiveButtonText = "Next wildcard is 2 quizzes";
     public static final String survivorActiveButtonText = "Halve current number";
     public static final String angryJimActiveButtonText = "Force turn repeat";
-    public static final String goblinActiveButtonText = "Destroy 2 wildcards";
+    public static final String goblinActiveButtonText = "Sacrifice wildcard";
 
     // Passive Ability Descriptions
     public static final String archerPassiveDescription =
@@ -72,5 +72,5 @@ public class CharacterClassDescriptions {
             "When the number is below 50, you gain all other passives, but must take another turn.";
 
     public static final String goblinPassiveDescription =
-            "After every third turn, gain 1 wildcard.";
+            "Whenever other players use a wild card, they must drink twice.";
 }

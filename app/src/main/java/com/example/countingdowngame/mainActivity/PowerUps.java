@@ -365,8 +365,8 @@ public class PowerUps {
                 listView.setItemChecked(currentIndex, true);
                 listView.smoothScrollToPosition(currentIndex);
 
-                float progress = (float) elapsedTime / shuffleDuration;
-                currentInterval = (int) (initialInterval + (progress * progress * 500));
+                float progress = Math.min(1.0f, (float) elapsedTime / shuffleDuration);
+                currentInterval = (int) (initialInterval + (progress * progress * 350));
                 elapsedTime += currentInterval;
 
                 if (elapsedTime < shuffleDuration) {
@@ -380,7 +380,7 @@ public class PowerUps {
                     handler.postDelayed(() -> {
                         dialog.dismiss();
                         onHandled.run();
-                    }, 2500);
+                    }, 1500);
                 }
             }
         });
@@ -443,7 +443,7 @@ public class PowerUps {
                     finalizePowerUpGain(selectedPowerUpFinal);
                     dialog.dismiss();
                 }
-            }, 2500);
+            }, 1500);
             dialog.show();
             return;
         }
@@ -475,8 +475,8 @@ public class PowerUps {
                 adapter.notifyDataSetChanged(); // Ensure highlight updates in sequential order
                 listView.smoothScrollToPosition(currentIndex);
 
-                float progress = (float) elapsedTime / shuffleDuration;
-                currentInterval = (int) (initialInterval + (progress * progress * 500));
+                float progress = Math.min(1.0f, (float) elapsedTime / shuffleDuration);
+                currentInterval = (int) (initialInterval + (progress * progress * 350));
                 elapsedTime += currentInterval;
 
                 // Continue if duration not reached OR we haven't hit the pre-selected target index yet
@@ -488,7 +488,7 @@ public class PowerUps {
                             finalizePowerUpGain(selectedPowerUpFinal);
                             dialog.dismiss();
                         }
-                    }, 2500);
+                    }, 1500);
                 }
             }
         };
