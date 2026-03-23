@@ -38,7 +38,7 @@
         </androidx.cardview.widget.CardView>
 
         <!-- Arrow Spinner -->
-        <ImageView
+        <pl.droidsonroids.gif.GifImageView
             android:id="@+id/arrow_spinner"
             android:layout_width="120dp"
             android:layout_height="120dp"

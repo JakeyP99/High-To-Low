@@ -347,17 +347,15 @@ public class MainActivityGame extends SharedMainActivity {
         if (currentNumber == 0) {
             disableButtons();
             generatedNumberTextView.setText(String.valueOf(currentNumber));
-            animateTextView(generatedNumberTextView);
-
-            Handler handler = new Handler();
-            handler.postDelayed(() -> {
+            
+            animateTextView(generatedNumberTextView, () -> {
                 btnUtils.playSoundEffects();
                 Player loser = Game.getInstance().getLastTurnPlayer();
                 PowerUps.checkLosingPowerUps(loser, () -> {
                     Game.getInstance().endGame(this);
                     onEnd.run();
-                });
-            }, 3300);
+                }, generatedNumberTextView);
+            });
         } else {
             generatedNumberTextView.setText(String.valueOf(currentNumber));
             Game.getInstance().nextPlayer();

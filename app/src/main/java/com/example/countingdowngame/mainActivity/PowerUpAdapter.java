@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,7 +41,6 @@ public class PowerUpAdapter extends ArrayAdapter<String> {
         View itemView = convertView;
 
         if (powerUp != null) {
-            String type = PowerUps.getPowerUpType(powerUp);
             text.setText(powerUp);
             
             if (!showText) {
@@ -67,11 +67,9 @@ public class PowerUpAdapter extends ArrayAdapter<String> {
                 // If it's not a gif, ignore
             }
 
-            // Apply Golden Aura for Get Out of Jail Free
-            if (type.equals(PowerUps.GET_OUT_OF_JAIL)) {
-                itemView.setBackgroundResource(R.drawable.golden_aura);
-            } else {
-                itemView.setBackgroundResource(R.drawable.powerup_item_selector);
+            // Update activated state for roulette highlight
+            if (parent instanceof ListView) {
+                itemView.setActivated(((ListView) parent).isItemChecked(position));
             }
 
             if (PowerUps.isObtained(powerUp)) {

@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.animation.Animator;
 import androidx.core.animation.AnimatorListenerAdapter;
 import androidx.core.animation.AnimatorSet;
@@ -80,7 +81,7 @@ public class SharedMainActivity extends ButtonUtilsActivity {
     }
 
 
-    protected void animateTextView(final TextView textView) {
+    protected void animateTextView(final TextView textView, @Nullable Runnable onPopEnd) {
         // Shake animation
         ObjectAnimator shakeAnimator = ObjectAnimator.ofFloat(textView, "translationX", -5, 5);
         shakeAnimator.setDuration(100);
@@ -101,6 +102,7 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         AnimatorSet popAnimatorSet = new AnimatorSet();
         popAnimatorSet.playTogether(popAnimatorX, popAnimatorY, alphaAnimator);
         popAnimatorSet.setDuration(1300); // Adjust the duration as needed
+
         shakeAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(@NonNull Animator animation) {
@@ -109,6 +111,15 @@ public class SharedMainActivity extends ButtonUtilsActivity {
                     @Override
                     public void onAnimationEnd(@NonNull Animator animation) {
                         super.onAnimationEnd(animation);
+                        popAnimatorSet.addListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(@NonNull Animator animation) {
+                                super.onAnimationEnd(animation);
+                                if (onPopEnd != null) {
+                                    onPopEnd.run();
+                                }
+                            }
+                        });
                         popAnimatorSet.start();
                     }
                 });
@@ -117,6 +128,49 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         });
 
         shakeAnimator.start();
+    }
+
+    protected void animateTextView(final TextView textView) {
+        animateTextView(textView, null);
+    }
+
+    protected void animateTextViewBackAlive(final TextView textView, @Nullable Runnable onEnd) {
+        // Ensure TextView starts from popped state (scale 0, alpha 0)
+        textView.setScaleX(0f);
+        textView.setScaleY(0f);
+        textView.setAlpha(0f);
+
+        // Reverse Pop animation (from 0 to 2)
+        ObjectAnimator revPopX = ObjectAnimator.ofFloat(textView, "scaleX", 0f, 2f);
+        ObjectAnimator revPopY = ObjectAnimator.ofFloat(textView, "scaleY", 0f, 2f);
+        ObjectAnimator alphaIn = ObjectAnimator.ofFloat(textView, "alpha", 0f, 1f);
+        AnimatorSet revPopSet = new AnimatorSet();
+        revPopSet.playTogether(revPopX, revPopY, alphaIn);
+        revPopSet.setDuration(1000);
+
+        // Shrink back to normal (from 2 to 1)
+        ObjectAnimator shrinkX = ObjectAnimator.ofFloat(textView, "scaleX", 2f, 1f);
+        ObjectAnimator shrinkY = ObjectAnimator.ofFloat(textView, "scaleY", 2f, 1f);
+        AnimatorSet shrinkSet = new AnimatorSet();
+        shrinkSet.playTogether(shrinkX, shrinkY);
+        shrinkSet.setDuration(800);
+
+        revPopSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(@NonNull Animator animation) {
+                super.onAnimationEnd(animation);
+                shrinkSet.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(@NonNull Animator animation) {
+                        super.onAnimationEnd(animation);
+                        if (onEnd != null) onEnd.run();
+                    }
+                });
+                shrinkSet.start();
+            }
+        });
+
+        revPopSet.start();
     }
 
 

@@ -11,6 +11,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -70,8 +71,8 @@ public class PowerUps {
         powerUp.add(ALL_OR_NOTHING + ": 50/50 chance: 0 drinks or double drinks if you lose!");
         powerUp.add(HIGH_STAKES + ": +3 drinks to the total, but gain 2 wildcards for your next turn!");
         powerUp.add(TRADE_UP + ": Lose 1 wildcard to reduce drinks by 3!");
-        powerUp.add(NOTHING + ": Better luck next time!");
         powerUp.add(GET_OUT_OF_JAIL + ": Automatically saves you from a 0 and reverts the number!");
+        powerUp.add(NOTHING + ": Better luck next time!");
         return powerUp;
     }
 
@@ -139,7 +140,7 @@ public class PowerUps {
 
     // --- Losing Power-Up Handling ---
 
-    public static void checkLosingPowerUps(Player player, Runnable onEndGame) {
+    public static void checkLosingPowerUps(Player player, Runnable onEndGame, TextView numberText) {
         List<String> playerPowerUps = new ArrayList<>(player.getPowerUps());
         
         // 1. Check for Get Out of Jail Free (Highest Priority, automatic)
@@ -155,9 +156,16 @@ public class PowerUps {
             player.usePowerUp(jailFree);
             activity.displayToastMessage("Saved by Get Out of Jail Free!");
             int prevNum = Game.getInstance().getPreviousNumber();
+            
+            // Revert number while view is hidden/alpha 0
             MainActivityGame.updateNumber(prevNum);
-            activity.enableButtons();
-            activity.renderPlayerUI();
+            
+            // Animate it back "alive" as requested
+            activity.animateTextViewBackAlive(numberText, () -> {
+                Game.getInstance().nextPlayer(); // Go to next player after saving
+                activity.enableButtons();
+                activity.renderPlayerUI();
+            });
             return; // Don't end game, player is saved
         }
 
@@ -174,14 +182,14 @@ public class PowerUps {
             String finalAllNothing = allNothing;
             showAllOrNothingDialog(player, () -> {
                 player.usePowerUp(finalAllNothing);
-                checkSplitThePain(player, onEndGame);
-            }, () -> checkSplitThePain(player, onEndGame));
+                checkSplitThePain(player, onEndGame, numberText);
+            }, () -> checkSplitThePain(player, onEndGame, numberText));
         } else {
-            checkSplitThePain(player, onEndGame);
+            checkSplitThePain(player, onEndGame, numberText);
         }
     }
 
-    private static void checkSplitThePain(Player player, Runnable onEndGame) {
+    private static void checkSplitThePain(Player player, Runnable onEndGame, TextView numberText) {
         String splitPain = null;
         for (String p : player.getPowerUps()) {
             if (getPowerUpType(p).equals(SPLIT_THE_PAIN)) {
@@ -235,7 +243,7 @@ public class PowerUps {
     private static void showAllOrNothingGenerator(Runnable onHandled) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
         View dialogView = activity.getLayoutInflater().inflate(R.layout.game_all_or_nothing_box, null);
-        GifImageView arrow = dialogView.findViewById(R.id.arrow_spinner);
+        ImageView arrow = dialogView.findViewById(R.id.arrow_spinner);
         View frameZero = dialogView.findViewById(R.id.card_zero);
         View frameDouble = dialogView.findViewById(R.id.card_double);
 
@@ -421,22 +429,18 @@ public class PowerUps {
 
         final Handler handler = new Handler();
 
+        // Pre-select the target for the roulette
+        final String selectedPowerUpFinal = selectWeightedPowerUp(powerUpList);
+        final int targetIndexFinal = powerUpList.indexOf(selectedPowerUpFinal);
+
         // If only one power-up remains, skip the shuffle animation.
         if (availableTypes.size() == 1) {
-            int selectedIndex = -1;
-            for (int i = 0; i < powerUpList.size(); i++) {
-                if (!obtainedPowerUps.contains(getPowerUpType(powerUpList.get(i)))) {
-                    selectedIndex = i;
-                    break;
-                }
-            }
-            listView.setItemChecked(selectedIndex, true);
-            listView.setSelection(selectedIndex);
-            String selectedPowerUp = powerUpList.get(selectedIndex);
+            listView.setItemChecked(targetIndexFinal, true);
+            listView.setSelection(targetIndexFinal);
 
             handler.postDelayed(() -> {
                 if (dialog.isShowing()) {
-                    finalizePowerUpGain(selectedPowerUp);
+                    finalizePowerUpGain(selectedPowerUpFinal);
                     dialog.dismiss();
                 }
             }, 2500);
@@ -452,39 +456,36 @@ public class PowerUps {
             int elapsedTime = 0;
             int currentInterval = initialInterval;
             
-            // Start at a random index that IS available
-            int currentIndex = powerUpList.indexOf(findRandomAvailable(powerUpList));
+            // Start at a valid index
+            int currentIndex = 0;
+            {
+                while (obtainedPowerUps.contains(getPowerUpType(powerUpList.get(currentIndex)))) {
+                    currentIndex = (currentIndex + 1) % powerUpList.size();
+                }
+            }
 
             @Override
             public void run() {
-                // Find next available sequential index
+                // Increment sequentially but skip obtained ones
                 do {
                     currentIndex = (currentIndex + 1) % powerUpList.size();
                 } while (obtainedPowerUps.contains(getPowerUpType(powerUpList.get(currentIndex))));
 
                 listView.setItemChecked(currentIndex, true);
+                adapter.notifyDataSetChanged(); // Ensure highlight updates in sequential order
                 listView.smoothScrollToPosition(currentIndex);
 
                 float progress = (float) elapsedTime / shuffleDuration;
                 currentInterval = (int) (initialInterval + (progress * progress * 500));
                 elapsedTime += currentInterval;
 
-                if (elapsedTime < shuffleDuration) {
+                // Continue if duration not reached OR we haven't hit the pre-selected target index yet
+                if (elapsedTime < shuffleDuration || currentIndex != targetIndexFinal) {
                     handler.postDelayed(this, currentInterval);
                 } else {
-                    listView.setItemChecked(currentIndex, true);
-                    
-                    // Weighted Random Selection at the end of shuffle
-                    String selectedPowerUp = selectWeightedPowerUp(powerUpList);
-                    
-                    // Update the UI to show the actually selected one
-                    int finalIndex = powerUpList.indexOf(selectedPowerUp);
-                    listView.setItemChecked(finalIndex, true);
-                    listView.smoothScrollToPosition(finalIndex);
-
                     handler.postDelayed(() -> {
                         if (dialog.isShowing()) {
-                            finalizePowerUpGain(selectedPowerUp);
+                            finalizePowerUpGain(selectedPowerUpFinal);
                             dialog.dismiss();
                         }
                     }, 2500);
@@ -560,30 +561,22 @@ public class PowerUps {
 
         if (powerUps.size() >= 1) {
             String pName = powerUps.get(0);
-            String type = getPowerUpType(pName);
             powerUpLeft.setVisibility(View.VISIBLE);
             powerUpLeft.setImageResource(getPowerUpIcon(pName));
             stopGifAnimation(powerUpLeft);
-            if (!isPassive(type)) {
-                powerUpLeft.setOnClickListener(v -> activatePowerUp(pName, player));
-            } else {
-                powerUpLeft.setOnClickListener(null);
-            }
+            // Click to show details first
+            powerUpLeft.setOnClickListener(v -> showPowerUpDetails(pName, player));
         } else {
             powerUpLeft.setVisibility(View.GONE);
         }
 
         if (powerUps.size() >= 2) {
             String pName = powerUps.get(1);
-            String type = getPowerUpType(pName);
             powerUpRight.setVisibility(View.VISIBLE);
             powerUpRight.setImageResource(getPowerUpIcon(pName));
             stopGifAnimation(powerUpRight);
-            if (!isPassive(type)) {
-                powerUpRight.setOnClickListener(v -> activatePowerUp(pName, player));
-            } else {
-                powerUpRight.setOnClickListener(null);
-            }
+            // Click to show details first
+            powerUpRight.setOnClickListener(v -> showPowerUpDetails(pName, player));
         } else {
             powerUpRight.setVisibility(View.GONE);
         }
