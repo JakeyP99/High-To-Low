@@ -56,9 +56,9 @@ public class PowerUps {
 
     public static ArrayList<String> getPowerUps() {
         ArrayList<String> powerUp = new ArrayList<>();
-        powerUp.add(SPLIT_THE_PAIN + ": Divide your drinks with a random player if you lose!");
-        powerUp.add(ALL_OR_NOTHING + ": 50/50 chance: 0 drinks or double drinks if you lose!");
-        powerUp.add(HIGH_STAKES + ": +3 drinks to the total, but gain 2 wildcards!");
+//        powerUp.add(SPLIT_THE_PAIN + ": Divide your drinks with a random player if you lose!");
+//        powerUp.add(ALL_OR_NOTHING + ": 50/50 chance: 0 drinks or double drinks if you lose!");
+        powerUp.add(HIGH_STAKES + ": +3 drinks to the total, but gain 2 wildcards for your next turn!");
         powerUp.add(TRADE_UP + ": Lose 1 wildcard to reduce drinks by 3!");
         return powerUp;
     }
@@ -90,6 +90,7 @@ public class PowerUps {
                     player.loseWildCards(1);
                     activity.updateDrinkNumberCounter(-3, true);
                     player.usePowerUp(powerUpName);
+                    activity.renderPlayerUI(); // Refresh UI to show updated wildcard count immediately
                 } else {
                     activity.displayToastMessage("You need at least 1 wildcard to trade up!");
                     return;
@@ -100,7 +101,6 @@ public class PowerUps {
                 break;
         }
         updatePowerUpIcons(player);
-        activity.renderPlayerUI(); // Refresh UI to show updated wildcard count immediately
     }
 
     public static int getPowerUpIcon(String powerUpName) {
@@ -425,7 +425,7 @@ public class PowerUps {
         }
 
         final Random random = new Random();
-        final int shuffleDuration = 3000 + random.nextInt(2000);
+        final int shuffleDuration = 2000 + random.nextInt(2000);
         final int initialInterval = 50;
 
         final Runnable shuffleRunnable = new Runnable() {
@@ -461,7 +461,7 @@ public class PowerUps {
                             obtainedPowerUps.add(getPowerUpType(selectedPowerUp));
                             dialog.dismiss();
                         }
-                    }, 3000);
+                    }, 2000);
                 }
             }
         };
