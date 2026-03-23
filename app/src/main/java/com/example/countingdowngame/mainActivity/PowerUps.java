@@ -1,9 +1,13 @@
 package com.example.countingdowngame.mainActivity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -57,9 +61,9 @@ public class PowerUps {
     public static ArrayList<String> getPowerUps() {
         ArrayList<String> powerUp = new ArrayList<>();
 //        powerUp.add(SPLIT_THE_PAIN + ": Divide your drinks with a random player if you lose!");
-//        powerUp.add(ALL_OR_NOTHING + ": 50/50 chance: 0 drinks or double drinks if you lose!");
-        powerUp.add(HIGH_STAKES + ": +3 drinks to the total, but gain 2 wildcards for your next turn!");
-        powerUp.add(TRADE_UP + ": Lose 1 wildcard to reduce drinks by 3!");
+        powerUp.add(ALL_OR_NOTHING + ": 50/50 chance: 0 drinks or double drinks if you lose!");
+//        powerUp.add(HIGH_STAKES + ": +3 drinks to the total, but gain 2 wildcards for your next turn!");
+//        powerUp.add(TRADE_UP + ": Lose 1 wildcard to reduce drinks by 3!");
         return powerUp;
     }
 
@@ -195,81 +199,49 @@ public class PowerUps {
 
     private static void showAllOrNothingGenerator(Runnable onHandled) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
-        View dialogView = activity.getLayoutInflater().inflate(R.layout.game_wheel_of_fortune, null);
-        TextView title = dialogView.findViewById(R.id.powerup_dialogbox_textview);
-        ListView listView = dialogView.findViewById(R.id.listViewPowerUps);
-        ImageButton closeBtn = dialogView.findViewById(R.id.close_button);
-        closeBtn.setVisibility(View.GONE);
-
-        title.setText("All or Nothing...");
-        
-        ArrayList<String> outcomes = new ArrayList<>();
-        outcomes.add("0 Drinks (SAFE)");
-        outcomes.add("DOUBLE DRINKS (Ouch)");
-
-        // Using custom adapter for consistency
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity, R.layout.game_powerup_list_item, R.id.powerup_text, outcomes) {
-            @Override
-            public View getView(int position, View convertView, android.view.ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                ImageView icon = view.findViewById(R.id.powerup_icon);
-                String item = getItem(position);
-                if (item.contains("0")) {
-                    icon.setImageResource(R.drawable.confetti);
-                } else {
-                    icon.setImageResource(R.drawable.angry_jim);
-                }
-                return view;
-            }
-        };
-        
-        listView.setAdapter(adapter);
-        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        listView.setOnTouchListener((v, event) -> true);
+        View dialogView = activity.getLayoutInflater().inflate(R.layout.game_all_or_nothing_box, null);
+        ImageView arrow = dialogView.findViewById(R.id.arrow_spinner);
+        View frameZero = dialogView.findViewById(R.id.card_zero);
+        View frameDouble = dialogView.findViewById(R.id.card_double);
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
         dialog.setCancelable(false);
         dialog.show();
 
-        final Handler handler = new Handler();
-        final Random random = new Random();
-        final int shuffleDuration = 3000;
-        final int initialInterval = 50;
+        Random random = new Random();
+        boolean isDouble = random.nextBoolean();
+        
+        // Initial rotation is 270 (pointing up at zero)
+        // Pointing Down (Double) is 90 degrees.
+        // spins + offset
+        float currentRotation = 270f;
+        float extraSpins = (4 + random.nextInt(3)) * 360f;
+        float targetRotation = currentRotation + extraSpins + (isDouble ? 180 : 0);
 
-        handler.post(new Runnable() {
-            int elapsedTime = 0;
-            int currentInterval = initialInterval;
-            int currentIndex = 0;
-
+        ObjectAnimator animator = ObjectAnimator.ofFloat(arrow, "rotation", currentRotation, targetRotation);
+        animator.setDuration(4000); 
+        animator.setInterpolator(new DecelerateInterpolator());
+        
+        animator.addListener(new AnimatorListenerAdapter() {
             @Override
-            public void run() {
-                currentIndex = (currentIndex + 1) % outcomes.size();
-                listView.setItemChecked(currentIndex, true);
-                listView.smoothScrollToPosition(currentIndex);
-
-                float progress = (float) elapsedTime / shuffleDuration;
-                currentInterval = (int) (initialInterval + (progress * progress * 450));
-                elapsedTime += currentInterval;
-
-                if (elapsedTime < shuffleDuration) {
-                    handler.postDelayed(this, currentInterval);
+            public void onAnimationEnd(Animator animation) {
+                if (isDouble) {
+                    MainActivityGame.drinkNumberCounterInt *= 2;
+                    frameDouble.setActivated(true);
                 } else {
-                    String result = outcomes.get(currentIndex);
-                    if (result.contains("0")) {
-                        MainActivityGame.drinkNumberCounterInt = 0;
-                        title.setText("LUCKY! 0 Drinks!");
-                    } else {
-                        MainActivityGame.drinkNumberCounterInt *= 2;
-                        title.setText("UNLUCKY! Double Drinks!");
-                    }
-                    handler.postDelayed(() -> {
-                        dialog.dismiss();
-                        onHandled.run();
-                    }, 2000);
+                    MainActivityGame.drinkNumberCounterInt = 0;
+                    frameZero.setActivated(true);
                 }
+
+                new Handler().postDelayed(() -> {
+                    dialog.dismiss();
+                    onHandled.run();
+                }, 3000);
             }
         });
+
+        animator.start();
     }
 
     private static void showSplitThePainRoulette(Player player, Runnable onHandled) {
@@ -323,7 +295,7 @@ public class PowerUps {
         dialog.show();
 
         final Handler handler = new Handler();
-        final int shuffleDuration = 4000;
+        final int shuffleDuration = 2000;
         final int initialInterval = 50;
 
         handler.post(new Runnable() {
@@ -419,13 +391,13 @@ public class PowerUps {
                     obtainedPowerUps.add(getPowerUpType(selectedPowerUp));
                     dialog.dismiss();
                 }
-            }, 3000);
+            }, 2000);
             dialog.show();
             return;
         }
 
         final Random random = new Random();
-        final int shuffleDuration = 2000 + random.nextInt(2000);
+        final int shuffleDuration = 1500 + random.nextInt(1000);
         final int initialInterval = 50;
 
         final Runnable shuffleRunnable = new Runnable() {

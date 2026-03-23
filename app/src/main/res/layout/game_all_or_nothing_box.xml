@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_background"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="32dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="420dp"
+        android:layout_marginTop="24dp">
+
+        <!-- Top Option: 0 -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_zero"
+            android:layout_marginTop="10dp"
+            android:layout_width="180dp"
+            android:layout_height="120dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/text_zero"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/viga"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/bluedark"
+                android:textSize="70sp" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Arrow Spinner -->
+        <ImageView
+            android:id="@+id/arrow_spinner"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:rotation="270"
+            android:src="@drawable/arrow_right"
+            app:layout_constraintBottom_toTopOf="@+id/card_double"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card_zero" />
+
+        <!-- Bottom Option: DOUBLE -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_double"
+            android:layout_width="180dp"
+            android:layout_height="120dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="6dp"
+            android:layout_marginBottom="10dp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/text_double"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/viga"
+                android:gravity="center"
+                android:text="DOUBLE"
+                android:textColor="@color/bluedark"
+                android:textSize="36sp" />
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
