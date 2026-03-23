@@ -51,7 +51,15 @@ public class EndActivityGame extends ButtonUtilsActivity {
         setupButtonControls();
 
         // Save end-game stats
-        Statistics.saveGlobalTotalDrinkStat(this, drinkNumberCounter, playerName);
+        String splitTarget = gameInstance.getSplitTarget();
+        if (splitTarget != null && !splitTarget.isEmpty()) {
+            int splitAmount = Math.max(drinkNumberCounter / 2, 1);
+            Statistics.saveGlobalTotalDrinkStat(this, splitAmount, playerName);
+            Statistics.saveGlobalTotalDrinkStat(this, splitAmount, splitTarget);
+        } else {
+            Statistics.saveGlobalTotalDrinkStat(this, drinkNumberCounter, playerName);
+        }
+
         Statistics.saveGlobalGamesLostStat(this, playerName);
         for (Player p : gameInstance.getPlayers()) {
             Statistics.saveGlobalGamesPlayed(this, p.getName());

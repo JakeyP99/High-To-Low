@@ -60,10 +60,10 @@ public class PowerUps {
 
     public static ArrayList<String> getPowerUps() {
         ArrayList<String> powerUp = new ArrayList<>();
-//        powerUp.add(SPLIT_THE_PAIN + ": Divide your drinks with a random player if you lose!");
+        powerUp.add(SPLIT_THE_PAIN + ": Divide your drinks with a random player if you lose!");
         powerUp.add(ALL_OR_NOTHING + ": 50/50 chance: 0 drinks or double drinks if you lose!");
-//        powerUp.add(HIGH_STAKES + ": +3 drinks to the total, but gain 2 wildcards for your next turn!");
-//        powerUp.add(TRADE_UP + ": Lose 1 wildcard to reduce drinks by 3!");
+        powerUp.add(HIGH_STAKES + ": +3 drinks to the total, but gain 2 wildcards for your next turn!");
+        powerUp.add(TRADE_UP + ": Lose 1 wildcard to reduce drinks by 3!");
         return powerUp;
     }
 
@@ -295,7 +295,7 @@ public class PowerUps {
         dialog.show();
 
         final Handler handler = new Handler();
-        final int shuffleDuration = 2000;
+        final int shuffleDuration = 2500;
         final int initialInterval = 50;
 
         handler.post(new Runnable() {
@@ -324,7 +324,7 @@ public class PowerUps {
                     handler.postDelayed(() -> {
                         dialog.dismiss();
                         onHandled.run();
-                    }, 2000);
+                    }, 2500);
                 }
             }
         });
@@ -391,7 +391,7 @@ public class PowerUps {
                     obtainedPowerUps.add(getPowerUpType(selectedPowerUp));
                     dialog.dismiss();
                 }
-            }, 2000);
+            }, 2500);
             dialog.show();
             return;
         }
@@ -433,7 +433,7 @@ public class PowerUps {
                             obtainedPowerUps.add(getPowerUpType(selectedPowerUp));
                             dialog.dismiss();
                         }
-                    }, 2000);
+                    }, 2500);
                 }
             }
         };
