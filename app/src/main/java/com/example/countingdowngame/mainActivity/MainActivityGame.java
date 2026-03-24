@@ -748,7 +748,7 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    public void showDialog(String message, int layoutId, int textViewId, int closeButtonId) { // Change void to View
+    public void showDialog(String message, int layoutId, int textViewId, int closeButtonId, Runnable onDismiss) { // Change void to View
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = getLayoutInflater();
 
@@ -759,21 +759,28 @@ public class MainActivityGame extends SharedMainActivity {
         }
 
         builder.setView(dialogView);
+        builder.setCancelable(false);
         AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
         View closeButton = dialogView.findViewById(closeButtonId);
         if (closeButton != null) {
-            closeButton.setOnClickListener(v -> dialog.dismiss());
+            closeButton.setOnClickListener(v -> {
+                dialog.dismiss();
+                if (onDismiss != null) {
+                    onDismiss.run();
+                }
+            });
         }
     }
 
     public void showGameDialog(String message) {
-        showDialog(message, R.layout.game_main_dialog_box, R.id.dialogbox_textview, R.id.close_button);
+        showDialog(message, R.layout.game_main_dialog_box, R.id.dialogbox_textview, R.id.close_button, null);
     }
 
-    public void showDoneDialog(String message) {
-        showDialog(message, R.layout.game_done_dialog, R.id.dialogbox_textview, R.id.done_button);
+    public void showDoneDialog(String message, Runnable onDone) {
+        showDialog(message, R.layout.game_done_dialog, R.id.dialogbox_textview, R.id.done_button, onDone);
     }
 
     public void scientistChangeCurrentNumber() {
@@ -837,29 +844,32 @@ public class MainActivityGame extends SharedMainActivity {
         Game.getInstance().getCurrentPlayer().useWildCard();
         currentPlayer.incrementUsedWildcards();
 
-        PassiveAbilities.checkGoblinPassive(currentPlayer);
+        Runnable proceedToWildCard = () -> {
+            WildCardProperties[] wildCardArray = new WildCardProperties[0];
+            QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(wildCardArray, this, WildCardType.QUIZ);
+            TaskWildCardsAdapter taskAdapter = new TaskWildCardsAdapter(wildCardArray, this, WildCardType.TASK);
+            TruthWildCardsAdapter truthAdapter = new TruthWildCardsAdapter(wildCardArray, this, WildCardType.TRUTH);
 
-        WildCardProperties[] wildCardArray = new WildCardProperties[0];
-        QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(wildCardArray, this, WildCardType.QUIZ);
-        TaskWildCardsAdapter taskAdapter = new TaskWildCardsAdapter(wildCardArray, this, WildCardType.TASK);
-        TruthWildCardsAdapter truthAdapter = new TruthWildCardsAdapter(wildCardArray, this, WildCardType.TRUTH);
+            WildCardProperties[] quizWildCards = quizAdapter.loadWildCardsFromAdapter(WildCardData.QUIZ_WILD_CARDS);
+            WildCardProperties[] taskWildCards = taskAdapter.loadWildCardsFromAdapter(WildCardData.TASK_WILD_CARDS);
+            WildCardProperties[] truthWildCards = truthAdapter.loadWildCardsFromAdapter(WildCardData.TRUTH_WILD_CARDS);
 
-        WildCardProperties[] quizWildCards = quizAdapter.loadWildCardsFromAdapter(WildCardData.QUIZ_WILD_CARDS);
-        WildCardProperties[] taskWildCards = taskAdapter.loadWildCardsFromAdapter(WildCardData.TASK_WILD_CARDS);
-        WildCardProperties[] truthWildCards = truthAdapter.loadWildCardsFromAdapter(WildCardData.TRUTH_WILD_CARDS);
+            WildCardProperties[] selectedType = selectWildCardType(currentPlayer, quizWildCards, taskWildCards, truthWildCards);
+            if (selectedType == null) {
+                wildActivityTextView.setText("No wild cards available, your turn is skipped!");
+                btnWildContinue.setVisibility(View.VISIBLE);
+                btnClassAbility.setVisibility(View.INVISIBLE);
+                return;
+            }
 
-        WildCardProperties[] selectedType = selectWildCardType(currentPlayer, quizWildCards, taskWildCards, truthWildCards);
-        if (selectedType == null) {
-            wildActivityTextView.setText("No wild cards available, your turn is skipped!");
-            btnWildContinue.setVisibility(View.VISIBLE);
+            WildCardProperties selectedCard = selectRandomCard(selectedType);
+            handleSelectedCard(selectedCard, getWildCardType(selectedType, quizWildCards, taskWildCards), currentPlayer);
             btnClassAbility.setVisibility(View.INVISIBLE);
-            return;
+        };
+
+        if (!PassiveAbilities.checkGoblinPassive(currentPlayer, proceedToWildCard)) {
+            proceedToWildCard.run();
         }
-
-        WildCardProperties selectedCard = selectRandomCard(selectedType);
-        handleSelectedCard(selectedCard, getWildCardType(selectedType, quizWildCards, taskWildCards), currentPlayer);
-        btnClassAbility.setVisibility(View.INVISIBLE);
-
     }
 
     private WildCardProperties[] selectWildCardType(Player currentPlayer, WildCardProperties[] quizWildCards, WildCardProperties[] taskWildCards, WildCardProperties[] truthWildCards) {

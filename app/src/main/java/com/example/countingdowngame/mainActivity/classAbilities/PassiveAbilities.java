@@ -64,12 +64,12 @@ public class PassiveAbilities {
                 + " survived, hand out " + drinkNumberCounterInt + " " + drinksText);
     }
 
-    public static void checkGoblinPassive(Player wildcardUser) {
+    public static boolean checkGoblinPassive(Player wildcardUser, Runnable onDone) {
         boolean wildcardUserHasGoblinPassive = GOBLIN.equals(wildcardUser.getClassChoice()) ||
                 (ANGRY_JIM.equals(wildcardUser.getClassChoice()) && game.getCurrentNumber() < 50);
 
         if (wildcardUserHasGoblinPassive) {
-            return;
+            return false;
         }
 
         for (Player player : game.getPlayers()) {
@@ -77,10 +77,11 @@ public class PassiveAbilities {
                     (ANGRY_JIM.equals(player.getClassChoice()) && game.getCurrentNumber() < 50);
 
             if (hasGoblinPassive && !player.equals(wildcardUser)) {
-                activity.showDoneDialog(GOBLIN + "'s Passive: \n\nDrink twice for using a wildcard!");
-                break;
+                activity.showDoneDialog(GOBLIN + "'s Passive: \n\nDrink twice for using a wildcard!", onDone);
+                return true;
             }
         }
+        return false;
     }
 
     public static void handleScientistPassive(Player currentPlayer) {
