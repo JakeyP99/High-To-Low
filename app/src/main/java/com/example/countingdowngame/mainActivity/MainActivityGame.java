@@ -619,6 +619,8 @@ public class MainActivityGame extends SharedMainActivity {
         playerImage.setEnabled(false);
         infoGif.setEnabled(false);
         imageButtonExit.setEnabled(false);
+        findViewById(R.id.powerup_left).setEnabled(false);
+        findViewById(R.id.powerup_right).setEnabled(false);
         disableAnswerButtons(answerButtons);
     }
 
@@ -629,6 +631,8 @@ public class MainActivityGame extends SharedMainActivity {
         playerImage.setEnabled(true);
         infoGif.setEnabled(true);
         imageButtonExit.setEnabled(true);
+        findViewById(R.id.powerup_left).setEnabled(true);
+        findViewById(R.id.powerup_right).setEnabled(true);
         enableAnswerButtons(answerButtons);
     }
 
@@ -684,7 +688,7 @@ public class MainActivityGame extends SharedMainActivity {
         String classChoice = currentPlayer.getClassChoice();
 
         Log.d(TAG, "Number was generated passive: " + game.getNumberWasGenerated());
-        if (SOLDIER.equals(classChoice)) {
+        if (SOLDIER.equals(classChoice) && game.getNumberWasGenerated() == true) {
             handleSoldierPassive();
         } else if (WITCH.equals(classChoice) && game.getNumberWasGenerated() == true) {
             handleWitchPassive(currentPlayer);

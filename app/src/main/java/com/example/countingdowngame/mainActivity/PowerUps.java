@@ -559,7 +559,7 @@ public class PowerUps {
         GifImageView powerUpLeft = activity.findViewById(R.id.powerup_left);
         GifImageView powerUpRight = activity.findViewById(R.id.powerup_right);
 
-        if (powerUps.size() >= 1) {
+        if (!powerUps.isEmpty()) {
             String pName = powerUps.get(0);
             powerUpLeft.setVisibility(View.VISIBLE);
             powerUpLeft.setImageResource(getPowerUpIcon(pName));

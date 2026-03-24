@@ -110,10 +110,10 @@ public class PassiveAbilities {
 
         if (numberBelow50 && game.getNumberWasGenerated() == true) {
             handleSoldierPassive();
+            if (currentPlayer.isRemoved()) return;
             handleArcherPassive(currentPlayer);
             handleWitchPassive(currentPlayer);
             handleScientistPassive(currentPlayer);
-            handleSurvivorPassive(currentPlayer);
         }
     }
 
