@@ -499,10 +499,6 @@ public class MainActivityGame extends SharedMainActivity {
             }
         }
 
-        if (NO_CLASS.equals(classChoice)) {
-            canShowButton = false;
-        }
-
         btnClassAbility.setVisibility(canShowButton ? View.VISIBLE : View.INVISIBLE);
     }
 
@@ -698,7 +694,6 @@ public class MainActivityGame extends SharedMainActivity {
             handleAngryJimPassive(currentPlayer);
         } else if (ARCHER.equals(classChoice)) {
             handleArcherPassive(currentPlayer);
-        } else if (GOBLIN.equals(classChoice)) {
         }
     }
 
@@ -753,7 +748,7 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    public View showDialog(String message, int layoutId, int textViewId, int closeButtonId) { // Change void to View
+    public void showDialog(String message, int layoutId, int textViewId, int closeButtonId) { // Change void to View
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = getLayoutInflater();
 
@@ -771,7 +766,6 @@ public class MainActivityGame extends SharedMainActivity {
         if (closeButton != null) {
             closeButton.setOnClickListener(v -> dialog.dismiss());
         }
-        return dialogView;
     }
 
     public void showGameDialog(String message) {
