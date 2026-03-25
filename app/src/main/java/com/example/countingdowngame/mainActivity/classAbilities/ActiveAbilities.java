@@ -63,7 +63,7 @@ public class ActiveAbilities {
             if (game.getCurrentNumber() <= 10) {
                 currentPlayer.setUsedActiveAbility(true);
                 game.updateRepeatingTurns(currentPlayer, 1);
-                activity.renderPlayerUI();
+                activity.renderPlayerUI(false);
                 repeatedTurn = true;
                 activity.updateDrinkNumberCounter(4, true);
                 hideAbilityButton();
@@ -114,7 +114,7 @@ public class ActiveAbilities {
 
         currentPlayer.loseWildCards(1);
         currentPlayer.setUsedActiveAbility(true);
-        activity.renderPlayerUI();
+        activity.renderPlayerUI(true);
         hideAbilityButton();
         AudioManager.getInstance().playSoundEffects(activity, GOBLIN);
     }

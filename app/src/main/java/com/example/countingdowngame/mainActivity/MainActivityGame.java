@@ -321,11 +321,17 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void renderPlayer() {
+        renderPlayer(false);
+    }
+
+    private void renderPlayer(boolean isPowerUp) {
         // Logic updates (Passive abilities, turn counters, etc.)
-        characterPassiveClassAffects();
-        updateActiveAbilitiesAfterCooldown(Game.getInstance().getCurrentPlayer());
-        updateTurnCounter();
-        updateCatastropheTurnCounter();
+        if (!isPowerUp) {
+            characterPassiveClassAffects();
+            updateActiveAbilitiesAfterCooldown(Game.getInstance().getCurrentPlayer());
+            updateTurnCounter();
+            updateCatastropheTurnCounter();
+        }
         updateWildCardVisibilityIfNeeded(Game.getInstance().getCurrentPlayer());
 
         // Now that the game state is stable (including potential player removals),
@@ -405,17 +411,17 @@ public class MainActivityGame extends SharedMainActivity {
                     for (Player player : Game.getInstance().getPlayers()) {
                         player.gainWildCards(2);
                     }
-                    renderPlayer();
+                    renderPlayer(false);
                     break;
                 case 7:
                     for (Player player : Game.getInstance().getPlayers()) {
                         player.loseWildCards(2);
                     }
-                    renderPlayer();
+                    renderPlayer(false);
                     break;
                 case 9:
                     Game.getInstance().activateRepeatingTurnForAllPlayers(2);
-                    renderPlayer();
+                    renderPlayer(false);
                     // Apply the specified logic to drinkNumberCounterInt
                     if (drinkNumberCounterInt <= 1) {
                         updateDrinkNumberCounter(2, false);
@@ -833,8 +839,12 @@ public class MainActivityGame extends SharedMainActivity {
         updateNumber(updatedNumber);
     }
 
+    public void renderPlayerUI(boolean isPowerUp) {
+        renderPlayer(isPowerUp);
+    }
+
     public void renderPlayerUI() {
-        renderPlayer();
+        renderPlayer(false);
     }
 
     //-----------------------------------------------------Wild Card Functionality---------------------------------------------------//

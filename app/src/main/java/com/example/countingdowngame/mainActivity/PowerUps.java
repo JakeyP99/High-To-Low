@@ -104,7 +104,7 @@ public class PowerUps {
                     player.loseWildCards(1);
                     activity.updateDrinkNumberCounter(-3, true);
                     player.usePowerUp(powerUpName);
-                    activity.renderPlayerUI(); // Refresh UI to show updated wildcard count immediately
+                    activity.renderPlayerUI(true); // Refresh UI to show updated wildcard count immediately
                 } else {
                     activity.displayToastMessage("You need at least 1 wildcard to trade up!");
                     return;
@@ -164,7 +164,7 @@ public class PowerUps {
             activity.animateTextViewBackAlive(numberText, () -> {
                 Game.getInstance().nextPlayer(); // Go to next player after saving
                 activity.enableButtons();
-                activity.renderPlayerUI();
+                activity.renderPlayerUI(true);
             });
             return; // Don't end game, player is saved
         }
@@ -539,17 +539,6 @@ public class PowerUps {
         }
 
         return available.get(random.nextInt(available.size()));
-    }
-
-    private static String findRandomAvailable(List<String> list) {
-        List<String> available = new ArrayList<>();
-        for (String s : list) {
-            if (!obtainedPowerUps.contains(getPowerUpType(s))) {
-                available.add(s);
-            }
-        }
-        if (available.isEmpty()) return null;
-        return available.get(new Random().nextInt(available.size()));
     }
 
     public static void updatePowerUpIcons(Player player) {

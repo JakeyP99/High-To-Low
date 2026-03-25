@@ -29,6 +29,10 @@ public class MainActivityCatastrophes {
         public int getEffect() {
             return effect;
         }
+
+        public String getMessage() {
+            return message;
+        }
     }
 
     public MainActivityCatastrophes() {
@@ -90,7 +94,7 @@ public class MainActivityCatastrophes {
 
     public static void setCatastropheLimit() {
         Random random = new Random();
-        catastropheLimit = random.nextInt(4) + 12;
+        catastropheLimit = random.nextInt(4) + 1;
         Log.d(TAG, "catastropheLimit: " + catastropheLimit);
     }
 
