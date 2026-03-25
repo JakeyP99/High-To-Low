@@ -411,17 +411,17 @@ public class MainActivityGame extends SharedMainActivity {
                     for (Player player : Game.getInstance().getPlayers()) {
                         player.gainWildCards(2);
                     }
-                    renderPlayer(false);
+                    renderPlayer(true);
                     break;
                 case 7:
                     for (Player player : Game.getInstance().getPlayers()) {
                         player.loseWildCards(2);
                     }
-                    renderPlayer(false);
+                    renderPlayer(true);
                     break;
                 case 9:
                     Game.getInstance().activateRepeatingTurnForAllPlayers(2);
-                    renderPlayer(false);
+                    renderPlayer(true);
                     // Apply the specified logic to drinkNumberCounterInt
                     if (drinkNumberCounterInt <= 1) {
                         updateDrinkNumberCounter(2, false);
@@ -436,6 +436,8 @@ public class MainActivityGame extends SharedMainActivity {
                 default:
                     break;
             }
+            Log.d(TAG, "Catastrophe message: " + catastrophe.getMessage());
+            showDialog(catastrophe.getMessage(), R.layout.game_catastrophe_dialog_box, R.id.dialogbox_textview, R.id.close_button, null);
             Game.getInstance().incrementCatastropheQuantity();
             catastropheTurnCounter = 0; // Reset the turn counter after reaching the limit
 
