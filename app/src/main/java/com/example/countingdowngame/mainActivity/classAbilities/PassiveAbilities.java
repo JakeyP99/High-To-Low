@@ -77,7 +77,7 @@ public class PassiveAbilities {
                     (ANGRY_JIM.equals(player.getClassChoice()) && game.getCurrentNumber() < 50);
 
             if (hasGoblinPassive && !player.equals(wildcardUser)) {
-                activity.showDoneDialog(GOBLIN + "'s Passive: \n\nDrink twice for using a wildcard!", onDone);
+                activity.showDoneDialog(GOBLIN + "'s Passive: \n\nDrink once for using a wildcard!", onDone);
                 return true;
             }
         }

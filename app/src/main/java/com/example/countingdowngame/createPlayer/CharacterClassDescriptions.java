@@ -72,5 +72,5 @@ public class CharacterClassDescriptions {
             "When the number is below 50, you gain all other passives, but must take another turn.";
 
     public static final String goblinPassiveDescription =
-            "Whenever other players use a wild card, they must drink twice.";
+            "Whenever other players use a wild card, they must drink once.";
 }
