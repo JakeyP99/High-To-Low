@@ -732,8 +732,7 @@ public class MainActivityGame extends SharedMainActivity {
     private void updateActiveAbilitiesAfterCooldown(Player currentPlayer) {
         if (currentPlayer.getUsedActiveAbility() && (WITCH.equals(currentPlayer.getClassChoice()) ||
                 SURVIVOR.equals(currentPlayer.getClassChoice()) ||
-                ANGRY_JIM.equals(currentPlayer.getClassChoice()) ||
-                GAMBLER.equals(currentPlayer.getClassChoice()))) {
+                ANGRY_JIM.equals(currentPlayer.getClassChoice()))) {
 
             currentPlayer.incrementActiveAbilityTurnCounter();
 
