@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 import static com.example.countingdowngame.R.id.editCurrentNumberTextView;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ARCHER;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GOBLIN;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.NO_CLASS;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.QUIZ_MAGICIAN;
@@ -27,15 +28,19 @@ import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.StyleSpan;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -108,7 +113,7 @@ public class MainActivityGame extends SharedMainActivity {
     private MainActivityCatastrophes catastrophesManager;
     private MainActivityNumberGenerator numberGenerator;
 
-    static void updateNumber(int updatedNumber) {
+    public static void updateNumber(int updatedNumber) {
         Game.getInstance().setCurrentNumber(updatedNumber);
         numberCounterText.setText(String.valueOf(updatedNumber));
         SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(updatedNumber));
@@ -280,8 +285,16 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void setupButtonActions(ImageButton imageButtonExit) {
         btnUtils.setButton(btnGenerate, () -> {
-            disableButtons();
-            numberGenerator.startNumberShuffleAnimation();
+            Player currentPlayer = Game.getInstance().getCurrentPlayer();
+            if (GAMBLER.equals(currentPlayer.getClassChoice())) {
+                PassiveAbilities.showGamblerBetDialog(() -> {
+                    disableButtons();
+                    numberGenerator.startNumberShuffleAnimation();
+                });
+            } else {
+                disableButtons();
+                numberGenerator.startNumberShuffleAnimation();
+            }
         });
 
         playerImage.setOnClickListener(v -> characterClassDescriptions());
@@ -469,7 +482,8 @@ public class MainActivityGame extends SharedMainActivity {
         boolean canShowButton = (SCIENTIST.equals(classChoice) || ARCHER.equals(classChoice)
                 || WITCH.equals(classChoice) || QUIZ_MAGICIAN.equals(classChoice)
                 || SURVIVOR.equals(classChoice) || GOBLIN.equals(classChoice)
-                || ANGRY_JIM.equals(classChoice) || SOLDIER.equals(classChoice)) && !currentPlayer.getUsedActiveAbility();
+                || ANGRY_JIM.equals(classChoice) || SOLDIER.equals(classChoice)
+                || GAMBLER.equals(classChoice)) && !currentPlayer.getUsedActiveAbility();
 
         // Specific rules for dynamic hiding
         if (ARCHER.equals(classChoice) && drinkNumberCounterInt < 2) {
@@ -529,6 +543,8 @@ public class MainActivityGame extends SharedMainActivity {
                 return CharacterClassDescriptions.angryJimActiveButtonText;
             case GOBLIN:
                 return CharacterClassDescriptions.goblinActiveButtonText;
+            case GAMBLER:
+                return CharacterClassDescriptions.gamblerActiveButtonText;
             default:
                 return "";
         }
@@ -659,6 +675,8 @@ public class MainActivityGame extends SharedMainActivity {
                 return CharacterClassDescriptions.angryJimActiveDescription;
             case GOBLIN:
                 return CharacterClassDescriptions.goblinActiveDescription;
+            case GAMBLER:
+                return CharacterClassDescriptions.gamblerActiveDescription;
             default:
                 return "I love you cutie pie hehe. You don't have a class to show any description for.";
         }
@@ -682,6 +700,8 @@ public class MainActivityGame extends SharedMainActivity {
                 return CharacterClassDescriptions.angryJimPassiveDescription;
             case GOBLIN:
                 return CharacterClassDescriptions.goblinPassiveDescription;
+            case GAMBLER:
+                return CharacterClassDescriptions.gamblerPassiveDescription;
             default:
                 return "";
         }
@@ -708,7 +728,8 @@ public class MainActivityGame extends SharedMainActivity {
     private void updateActiveAbilitiesAfterCooldown(Player currentPlayer) {
         if (currentPlayer.getUsedActiveAbility() && (WITCH.equals(currentPlayer.getClassChoice()) ||
                 SURVIVOR.equals(currentPlayer.getClassChoice()) ||
-                ANGRY_JIM.equals(currentPlayer.getClassChoice()))) {
+                ANGRY_JIM.equals(currentPlayer.getClassChoice()) ||
+                GAMBLER.equals(currentPlayer.getClassChoice()))) {
 
             currentPlayer.incrementActiveAbilityTurnCounter();
 
@@ -751,6 +772,9 @@ public class MainActivityGame extends SharedMainActivity {
             case ANGRY_JIM:
                 ActiveAbilities.handleAngryJimClass(currentPlayer);
                 break;
+            case GAMBLER:
+                ActiveAbilities.handleGamblerClass(currentPlayer);
+                break;
             default:
                 break;
         }
@@ -763,7 +787,22 @@ public class MainActivityGame extends SharedMainActivity {
         View dialogView = inflater.inflate(layoutId, null);
         TextView dialogBoxTextView = dialogView.findViewById(textViewId);
         if (dialogBoxTextView != null) {
-            dialogBoxTextView.setText(message);
+            // Apply bold formatting to the "Class Passive:" part
+            if (message.contains("'s Passive:")) {
+                int endOfPassive = message.indexOf("'s Passive:") + "'s Passive:".length();
+                SpannableString spannable = new SpannableString(message);
+                spannable.setSpan(new StyleSpan(Typeface.BOLD), 0, endOfPassive, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannable.setSpan(new AbsoluteSizeSpan(24, true), 0, endOfPassive, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                dialogBoxTextView.setText(spannable);
+            } else if (message.contains("'s Active:")) {
+                int endOfActive = message.indexOf("'s Active:") + "'s Active:".length();
+                SpannableString spannable = new SpannableString(message);
+                spannable.setSpan(new StyleSpan(Typeface.BOLD), 0, endOfActive, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannable.setSpan(new AbsoluteSizeSpan(24, true), 0, endOfActive, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                dialogBoxTextView.setText(spannable);
+            } else {
+                dialogBoxTextView.setText(message);
+            }
         }
 
         builder.setView(dialogView);
@@ -789,50 +828,6 @@ public class MainActivityGame extends SharedMainActivity {
 
     public void showDoneDialog(String message, Runnable onDone) {
         showDialog(message, R.layout.game_done_dialog, R.id.dialogbox_textview, R.id.done_button, onDone);
-    }
-
-    public void scientistChangeCurrentNumber() {
-
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.game_scientist_change_number, null);
-
-        EditText editCurrentNumberText = dialogView.findViewById(editCurrentNumberTextView);
-        Button okButton = dialogView.findViewById(R.id.close_button);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
-        builder.setView(dialogView);
-
-        AlertDialog dialog = builder.create();
-
-        okButton.setOnClickListener(view -> {
-            try {
-                String userInput = editCurrentNumberText.getText().toString();
-                int newNumber = Integer.parseInt(userInput);
-                if (newNumber > 999999999) {
-                    displayToastMessage("That number was too high!");
-                    btnClassAbility.setVisibility(View.VISIBLE);
-                } else if (newNumber == 0) {
-                    displayToastMessage("You cannot choose 0 as your number.");
-                    btnClassAbility.setVisibility(View.VISIBLE);
-                } else {
-
-                    Player currentPlayer = game.getCurrentPlayer();
-
-                    Game.getInstance().setCurrentNumber(newNumber);
-                    SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(newNumber));
-                    numberCounterText.setText(String.valueOf(newNumber));
-                    currentPlayer.setUsedActiveAbility(true);
-                    updateNumber(newNumber);
-                    AudioManager.getInstance().playSoundEffects(this, SCIENTIST);
-                    btnClassAbility.setVisibility(View.INVISIBLE);
-                    dialog.dismiss(); // Close the dialog on success
-                }
-            } catch (NumberFormatException e) {
-                displayToastMessage("Invalid number input");
-            }
-        });
-
-        dialog.show();
     }
 
     public void halveCurrentNumber() {

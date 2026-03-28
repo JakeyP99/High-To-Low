@@ -2,6 +2,7 @@ package com.example.countingdowngame.mainActivity.classAbilities;
 
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ARCHER;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GOBLIN;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SCIENTIST;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
@@ -10,8 +11,14 @@ import static com.example.countingdowngame.mainActivity.MainActivityGame.drinkNu
 import static com.example.countingdowngame.mainActivity.MainActivityGame.isFirstTurn;
 import static com.example.countingdowngame.mainActivity.MainActivityGame.soldierRemoval;
 
+import android.app.AlertDialog;
 import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
+import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.mainActivity.MainActivityGame;
 import com.example.countingdowngame.player.Player;
@@ -134,5 +141,51 @@ public class PassiveAbilities {
                 activity.showGameDialog(ARCHER + "'s Passive: \n\nDrinking number decreased by 2!");
             }
         }
+    }
+
+    private static String gamblerBet = "";
+
+    public static void showGamblerBetDialog(Runnable onBetPlaced) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.game_gambler_over_under, null);
+
+        TextView title = dialogView.findViewById(R.id.dialogbox_textview);
+        int middle = game.getCurrentNumber() / 2;
+        title.setText("Bet on your roll!\n\nWill the result be Over or Under " + middle + "?");
+
+        Button overBtn = dialogView.findViewById(R.id.btn_over);
+        Button underBtn = dialogView.findViewById(R.id.btn_under);
+
+        builder.setView(dialogView);
+        builder.setCancelable(false);
+        AlertDialog dialog = builder.create();
+
+        overBtn.setOnClickListener(v -> {
+            gamblerBet = "OVER";
+            dialog.dismiss();
+            onBetPlaced.run();
+        });
+
+        underBtn.setOnClickListener(v -> {
+            gamblerBet = "UNDER";
+            dialog.dismiss();
+            onBetPlaced.run();
+        });
+
+        dialog.show();
+    }
+
+    public static void handleGamblerPassiveResult(int targetNumber) {
+        if (gamblerBet.isEmpty()) return;
+
+        int middle = game.getPreviousNumber() / 2;
+        boolean won = false;
+        if (gamblerBet.equals("OVER") && targetNumber > middle) won = true;
+        if (gamblerBet.equals("UNDER") && targetNumber <= middle) won = true;
+
+        String message = won ? "You won your bet! Hand out 1 drink." : "You lost your bet! Take 1 drink.";
+        activity.showGameDialog(GAMBLER + "'s Passive: \n\n" + message);
+        gamblerBet = "";
     }
 }

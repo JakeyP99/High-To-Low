@@ -1,7 +1,9 @@
 package com.example.countingdowngame.mainActivity;
 
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
+import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleGamblerPassiveResult;
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleSurvivorPassive;
 
 import android.os.Handler;
@@ -99,6 +101,10 @@ public class MainActivityNumberGenerator {
             if ((targetNumber == 1 && previousNumber <= 1) &&
                     (SURVIVOR.equals(currentPlayer.getClassChoice()) || ANGRY_JIM.equals(currentPlayer.getClassChoice()))) {
                 handleSurvivorPassive(currentPlayer);
+            }
+
+            if (GAMBLER.equals(currentPlayer.getClassChoice())) {
+                handleGamblerPassiveResult(targetNumber);
             }
 
             activity.renderCurrentNumber(targetNumber, activity::gotoGameEnd, numberCounterText);

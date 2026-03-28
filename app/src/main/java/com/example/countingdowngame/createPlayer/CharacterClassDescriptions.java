@@ -9,6 +9,7 @@ public class CharacterClassDescriptions {
     public static final String QUIZ_MAGICIAN = "Quiz Magician";
     public static final String SURVIVOR = "Survivor";
     public static final String GOBLIN = "Goblin";
+    public static final String GAMBLER = "Gambler";
     public static final String NO_CLASS = "No Class";
 
     // Active Ability Descriptions
@@ -33,6 +34,9 @@ public class CharacterClassDescriptions {
     public static final String angryJimActiveDescription =
             "Force a random player to repeat their turn. Resets after 5 turns.";
 
+    public static final String gamblerActiveDescription =
+            "Duel an opponent in High Card. Bet 1-5 drinks. Winner hands them out!";
+
     public static final String goblinActiveDescription =
             "Sacrifice 1 of your wildcards to remove 2 from a random player.";
 
@@ -47,6 +51,7 @@ public class CharacterClassDescriptions {
     public static final String quizMagicianActiveButtonText = "Next wildcard is 2 quizzes";
     public static final String survivorActiveButtonText = "Halve current number";
     public static final String angryJimActiveButtonText = "Force turn repeat";
+    public static final String gamblerActiveButtonText = "High Card Duel";
     public static final String goblinActiveButtonText = "Sacrifice wildcard";
 
     // Passive Ability Descriptions
@@ -70,6 +75,9 @@ public class CharacterClassDescriptions {
 
     public static final String angryJimPassiveDescription =
             "When the number is below 50, you gain all other passives, but must take another turn.";
+
+    public static final String gamblerPassiveDescription =
+            "Bet Over or Under the middle of the range before you roll. Win: hand out 1 drink. Lose: take 1 drink.";
 
     public static final String goblinPassiveDescription =
             "Whenever other players use a wild card, they must drink once.";

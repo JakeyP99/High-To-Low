@@ -2,6 +2,7 @@ package com.example.countingdowngame.playerChoice;
 
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ARCHER;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GOBLIN;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.NO_CLASS;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.QUIZ_MAGICIAN;
@@ -13,9 +14,12 @@ import static com.example.countingdowngame.createPlayer.CharacterClassDescriptio
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.angryJimPassiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.archerActiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.archerPassiveDescription;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.gamblerActiveDescription;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.gamblerPassiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.goblinActiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.goblinPassiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.noClassDescription;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.quizMagicianActiveButtonText;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.quizMagicianActiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.quizMagicianPassiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.scientistActiveDescription;
@@ -26,7 +30,6 @@ import static com.example.countingdowngame.createPlayer.CharacterClassDescriptio
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.survivorPassiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.witchActiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.witchPassiveDescription;
-
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.createPlayer.CharacterClassStore;
@@ -47,7 +50,8 @@ public class playerChoiceComplimentary extends ButtonUtilsActivity {
         characterClasses.add(new CharacterClassStore(6, SURVIVOR, survivorActiveDescription, survivorPassiveDescription, R.drawable.bandaids));
         characterClasses.add(new CharacterClassStore(7, ANGRY_JIM, angryJimActiveDescription, angryJimPassiveDescription, R.drawable.angry_jim));
         characterClasses.add(new CharacterClassStore(8, GOBLIN, goblinActiveDescription, goblinPassiveDescription, R.drawable.goblin));
-        characterClasses.add(new CharacterClassStore(9, NO_CLASS, noClassDescription, null, R.drawable.noclass));
+        characterClasses.add(new CharacterClassStore(9, GAMBLER, gamblerActiveDescription, gamblerPassiveDescription, R.drawable.dice));
+        characterClasses.add(new CharacterClassStore(10, NO_CLASS, noClassDescription, null, R.drawable.noclass));
         return characterClasses;
     }
 }
