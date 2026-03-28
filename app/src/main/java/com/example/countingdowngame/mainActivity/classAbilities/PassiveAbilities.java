@@ -100,7 +100,7 @@ public class PassiveAbilities {
 
             handler.postDelayed(() -> {
                 if (chance < skipChance) {
-                    activity.showGameDialog(SCIENTIST + "'s Passive: \n\n" + currentPlayer.getName() + " is a scientist and their turn was skipped.");
+                    activity.showGameDialog(SCIENTIST + "'s Passive: \n\n" + currentPlayer.getName() + "'s turn was skipped.");
                     currentPlayer.useSkip();
                 }
             }, 1);
@@ -235,7 +235,7 @@ public class PassiveAbilities {
             currentPlayer.incrementDrinksTakenByGambler(1);
         }
 
-        activity.showGameDialog(currentPlayer.getClassChoice() + "'s Passive: \n\n" + message);
+        activity.showGameDialog(GAMBLER + "'s Passive: \n\n" + message);
         gamblerBet = "";
     }
 }

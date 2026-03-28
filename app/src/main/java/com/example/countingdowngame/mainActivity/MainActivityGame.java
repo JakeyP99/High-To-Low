@@ -286,7 +286,11 @@ public class MainActivityGame extends SharedMainActivity {
     private void setupButtonActions(ImageButton imageButtonExit) {
         btnUtils.setButton(btnGenerate, () -> {
             Player currentPlayer = Game.getInstance().getCurrentPlayer();
-            if (GAMBLER.equals(currentPlayer.getClassChoice())) {
+            int currentNum = Game.getInstance().getCurrentNumber();
+            boolean isGambler = GAMBLER.equals(currentPlayer.getClassChoice());
+            boolean isAngryJimUnder50 = ANGRY_JIM.equals(currentPlayer.getClassChoice()) && currentNum < 50;
+
+            if ((isGambler || isAngryJimUnder50) && currentNum > 5) {
                 PassiveAbilities.showGamblerBetDialog(() -> {
                     disableButtons();
                     numberGenerator.startNumberShuffleAnimation();
