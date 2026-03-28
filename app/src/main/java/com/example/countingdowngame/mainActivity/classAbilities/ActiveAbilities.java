@@ -17,11 +17,16 @@ import static com.example.countingdowngame.mainActivity.MainActivityGame.repeate
 import android.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
@@ -33,6 +38,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+
+import pl.droidsonroids.gif.GifImageView;
 
 public class ActiveAbilities {
     static Game game = Game.getInstance();
@@ -200,42 +207,59 @@ public class ActiveAbilities {
         AudioManager.getInstance().playSoundEffects(activity, WITCH);
     }
 
-    public static void handleGamblerClass(Player currentPlayer) {
+    public static void handleGamblerClass() {
         List<Player> opponents = game.getPlayers().stream()
                 .filter(p -> !p.equals(game.getCurrentPlayer()))
                 .collect(Collectors.toList());
-        List<String> opponentNames = opponents.stream().map(Player::getName).collect(Collectors.toList());
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_spinner_item, opponentNames);
 
-        new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme)
-                .setTitle("Select Opponent")
-                .setAdapter(adapter, (dialog, which) -> {
-                    Player selectedOpponent = opponents.get(which);
-                    showBetDialog(selectedOpponent);
-                })
-                .show();
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.game_gambler_select_opponent, null);
+
+        ListView listView = dialogView.findViewById(R.id.listViewOpponents);
+        ImageButton closeButton = dialogView.findViewById(R.id.close_button);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+
+        ArrayAdapter<Player> adapter = new ArrayAdapter<Player>(activity, R.layout.game_powerup_list_item, R.id.powerup_text, opponents) {
+            @NonNull
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                Player opponent = opponents.get(position);
+                TextView textView = view.findViewById(R.id.powerup_text);
+                textView.setText(opponent.getName());
+                GifImageView icon = view.findViewById(R.id.powerup_icon);
+                icon.setImageResource(R.drawable.dice); // Using dice icon for gambler duel
+                return view;
+            }
+        };
+
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Player selectedOpponent = opponents.get(position);
+            dialog.dismiss();
+            showBetDialog(selectedOpponent);
+        });
+
+        closeButton.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
     }
 
     private static void showBetDialog(Player opponent) {
         LayoutInflater inflater = activity.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.game_scientist_change_number, null);
+        View dialogView = inflater.inflate(R.layout.game_gambler_duel_bet, null);
 
-        EditText editBetAmount = dialogView.findViewById(editCurrentNumberTextView);
-        editBetAmount.setHint("Bet (1-5)");
+        EditText editBetAmount = dialogView.findViewById(R.id.editBetAmount);
         
-        // Find the title TextView. In your layout it doesn't have an ID, but it's the first child.
-        // Let's see if we can find it by type or just not set it for now.
-        // Or we can find it by searching for the "Choose a number" text.
-        
-        // Re-examining the layout provided in the read_file tool.
-        // It's a LinearLayout with a TextView first.
-        
-        View titleView = ((android.view.ViewGroup)dialogView).getChildAt(0);
-        if (titleView instanceof TextView) {
-            ((TextView) titleView).setText("Duel " + opponent.getName());
+        TextView subtitle = dialogView.findViewById(R.id.bet_subtitle);
+        if (subtitle != null) {
+            subtitle.setText("Duel against " + opponent.getName());
         }
 
-        Button okButton = dialogView.findViewById(R.id.close_button);
+        Button okButton = dialogView.findViewById(R.id.btn_confirm_bet);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
         builder.setView(dialogView);

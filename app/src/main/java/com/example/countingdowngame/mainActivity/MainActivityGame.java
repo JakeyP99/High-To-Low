@@ -1,7 +1,6 @@
 package com.example.countingdowngame.mainActivity;
 
 import static android.content.ContentValues.TAG;
-import static com.example.countingdowngame.R.id.editCurrentNumberTextView;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ARCHER;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
@@ -773,32 +772,33 @@ public class MainActivityGame extends SharedMainActivity {
                 ActiveAbilities.handleAngryJimClass(currentPlayer);
                 break;
             case GAMBLER:
-                ActiveAbilities.handleGamblerClass(currentPlayer);
+                ActiveAbilities.handleGamblerClass();
                 break;
             default:
                 break;
         }
     }
 
-    public void showDialog(String message, int layoutId, int textViewId, int closeButtonId, Runnable onDismiss) { // Change void to View
+    private final List<AlertDialog> dialogQueue = new ArrayList<>();
+
+    public void showDialog(String message, int layoutId, int textViewId, int closeButtonId, Runnable onDismiss) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = getLayoutInflater();
 
         View dialogView = inflater.inflate(layoutId, null);
         TextView dialogBoxTextView = dialogView.findViewById(textViewId);
         if (dialogBoxTextView != null) {
-            // Apply bold formatting to the "Class Passive:" part
             if (message.contains("'s Passive:")) {
                 int endOfPassive = message.indexOf("'s Passive:") + "'s Passive:".length();
                 SpannableString spannable = new SpannableString(message);
                 spannable.setSpan(new StyleSpan(Typeface.BOLD), 0, endOfPassive, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                spannable.setSpan(new AbsoluteSizeSpan(24, true), 0, endOfPassive, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannable.setSpan(new AbsoluteSizeSpan(28, true), 0, endOfPassive, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 dialogBoxTextView.setText(spannable);
             } else if (message.contains("'s Active:")) {
                 int endOfActive = message.indexOf("'s Active:") + "'s Active:".length();
                 SpannableString spannable = new SpannableString(message);
                 spannable.setSpan(new StyleSpan(Typeface.BOLD), 0, endOfActive, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                spannable.setSpan(new AbsoluteSizeSpan(24, true), 0, endOfActive, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannable.setSpan(new AbsoluteSizeSpan(28, true), 0, endOfActive, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 dialogBoxTextView.setText(spannable);
             } else {
                 dialogBoxTextView.setText(message);
@@ -809,16 +809,24 @@ public class MainActivityGame extends SharedMainActivity {
         builder.setCancelable(false);
         AlertDialog dialog = builder.create();
         dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
 
         View closeButton = dialogView.findViewById(closeButtonId);
         if (closeButton != null) {
             closeButton.setOnClickListener(v -> {
                 dialog.dismiss();
+                dialogQueue.remove(dialog);
+                if (!dialogQueue.isEmpty()) {
+                    dialogQueue.get(0).show();
+                }
                 if (onDismiss != null) {
                     onDismiss.run();
                 }
             });
+        }
+
+        dialogQueue.add(dialog);
+        if (dialogQueue.size() == 1) {
+            dialog.show();
         }
     }
 
