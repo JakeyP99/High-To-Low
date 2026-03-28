@@ -142,6 +142,11 @@ public class EndActivityGame extends ButtonUtilsActivity {
             possibleStats.add(gameInstance.getWitchPlayerTotalDrinksTaken());
         }
 
+        if (gameInstance.hasGamblerClass()) {
+            possibleStats.add(gameInstance.getGamblerPlayerTotalDrinksHandedOut());
+            possibleStats.add(gameInstance.getGamblerPlayerTotalDrinksTaken());
+        }
+
         possibleStats.add(gameInstance.getCatastropheQuantityString());
 
         Collections.shuffle(possibleStats);

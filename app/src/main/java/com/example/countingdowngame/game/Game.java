@@ -388,6 +388,41 @@ public class Game {
         }
         return topPlayer != null ? topPlayer.getName() + " took " + maxDrinks + " drinks as a witch!" : "The witch did not take any drinks from her spell.";
     }
+
+    public boolean hasGamblerClass() {
+        for (Player player : players) {
+            if ("Gambler".equals(player.getClassChoice())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String getGamblerPlayerTotalDrinksHandedOut() {
+        Player topPlayer = null;
+        int maxDrinks = 0;
+        for (Player player : players) {
+            int totalDrinks = player.getDrinksHandedOutByGambler();
+            if (totalDrinks > maxDrinks) {
+                maxDrinks = totalDrinks;
+                topPlayer = player;
+            }
+        }
+        return topPlayer != null ? topPlayer.getName() + " handed out " + maxDrinks + " drinks as a gambler!" : "No one handed out any drinks as a gambler.";
+    }
+
+    public String getGamblerPlayerTotalDrinksTaken() {
+        Player topPlayer = null;
+        int maxDrinks = 0;
+        for (Player player : players) {
+            int totalDrinks = player.getDrinksTakenByGambler();
+            if (totalDrinks > maxDrinks) {
+                maxDrinks = totalDrinks;
+                topPlayer = player;
+            }
+        }
+        return topPlayer != null ? topPlayer.getName() + " took " + maxDrinks + " drinks as a gambler!" : "The gambler did not take any drinks from their bets.";
+    }
     
     public String getSplitTarget() {
         return splitTarget;

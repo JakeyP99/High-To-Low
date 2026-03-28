@@ -14,14 +14,19 @@ import static com.example.countingdowngame.mainActivity.MainActivityGame.drinkNu
 import static com.example.countingdowngame.mainActivity.MainActivityGame.isFirstTurn;
 import static com.example.countingdowngame.mainActivity.MainActivityGame.repeatedTurn;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -212,6 +217,11 @@ public class ActiveAbilities {
                 .filter(p -> !p.equals(game.getCurrentPlayer()))
                 .collect(Collectors.toList());
 
+        if (opponents.size() == 1) {
+            showBetDialog(opponents.get(0));
+            return;
+        }
+
         LayoutInflater inflater = activity.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.game_gambler_select_opponent, null);
 
@@ -230,8 +240,9 @@ public class ActiveAbilities {
                 Player opponent = opponents.get(position);
                 TextView textView = view.findViewById(R.id.powerup_text);
                 textView.setText(opponent.getName());
+                textView.setTextSize(24); // Increased text size
                 GifImageView icon = view.findViewById(R.id.powerup_icon);
-                icon.setImageResource(R.drawable.dice); // Using dice icon for gambler duel
+                icon.setVisibility(View.GONE); // Removed the symbol
                 return view;
             }
         };
@@ -272,7 +283,7 @@ public class ActiveAbilities {
                     activity.displayToastMessage("Bet must be between 1 and 5!");
                 } else {
                     dialog.dismiss();
-                    startHighCardDuel(opponent, bet);
+                    showHighCardDuelUI(opponent, bet);
                 }
             } catch (NumberFormatException e) {
                 activity.displayToastMessage("Invalid bet!");
@@ -281,42 +292,121 @@ public class ActiveAbilities {
         dialog.show();
     }
 
-    private static void startHighCardDuel(Player opponent, int bet) {
+    private static boolean gamblerFlipped = false;
+    private static boolean opponentFlipped = false;
+
+    private static void showHighCardDuelUI(final Player opponent, final int bet) {
+        gamblerFlipped = false;
+        opponentFlipped = false;
+
         Random r = new Random();
-        int gamblerCard = r.nextInt(13) + 2; // 2-14 (Ace high)
-        int opponentCard = r.nextInt(13) + 2;
-
-        // Handle ties
-        while (opponentCard == gamblerCard) {
-            opponentCard = r.nextInt(13) + 2;
+        final int gamblerCard = r.nextInt(12) + 2; // 2-13 (10, J, Q, K)
+        int tempOpponentCard = r.nextInt(12) + 2;
+        while (tempOpponentCard == gamblerCard) {
+            tempOpponentCard = r.nextInt(12) + 2;
         }
+        final int opponentCard = tempOpponentCard;
 
-        String gamblerCardName = getCardName(gamblerCard);
-        String opponentCardName = getCardName(opponentCard);
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.game_gambler_high_card_duel, null);
 
-        Player currentPlayer = game.getCurrentPlayer();
-        String resultMsg;
-        if (gamblerCard > opponentCard) {
-            resultMsg = currentPlayer.getName() + " drew " + gamblerCardName + "!\n" +
-                    opponent.getName() + " drew " + opponentCardName + ".\n\n" +
-                    currentPlayer.getName() + " wins! " + opponent.getName() + " takes " + bet + " drinks.";
-        } else {
-            resultMsg = opponent.getName() + " drew " + opponentCardName + "!\n" +
-                    currentPlayer.getName() + " drew " + gamblerCardName + ".\n\n" +
-                    opponent.getName() + " wins! " + currentPlayer.getName() + " takes " + bet + " drinks.";
+        View gamblerCardContainer = dialogView.findViewById(R.id.gambler_card_container);
+        View opponentCardContainer = dialogView.findViewById(R.id.opponent_card_container);
+        TextView gamblerCardTv = dialogView.findViewById(R.id.gambler_card_text);
+        TextView opponentCardTv = dialogView.findViewById(R.id.opponent_card_text);
+        ImageView gamblerCardIv = dialogView.findViewById(R.id.gambler_card_image);
+        ImageView opponentCardIv = dialogView.findViewById(R.id.opponent_card_image);
+        TextView resultTv = dialogView.findViewById(R.id.duel_result_text);
+        Button finishBtn = dialogView.findViewById(R.id.btn_finish_duel);
+
+        final Player currentPlayer = game.getCurrentPlayer();
+        gamblerCardTv.setText(currentPlayer.getName());
+        opponentCardTv.setText(opponent.getName());
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
+        builder.setView(dialogView);
+        builder.setCancelable(false);
+        AlertDialog dialog = builder.create();
+
+        gamblerCardContainer.setOnClickListener(v -> {
+            if (!gamblerFlipped) {
+                gamblerFlipped = true;
+                flipCard(gamblerCardContainer, gamblerCardTv, gamblerCardIv, gamblerCard, () -> checkDuelResult(gamblerCard, opponentCard, resultTv, finishBtn, currentPlayer, opponent, bet));
+            }
+        });
+
+        opponentCardContainer.setOnClickListener(v -> {
+            if (!opponentFlipped) {
+                opponentFlipped = true;
+                flipCard(opponentCardContainer, opponentCardTv, opponentCardIv, opponentCard, () -> checkDuelResult(gamblerCard, opponentCard, resultTv, finishBtn, currentPlayer, opponent, bet));
+            }
+        });
+
+        finishBtn.setOnClickListener(v -> {
+            dialog.dismiss();
+            currentPlayer.setUsedActiveAbility(true);
+            hideAbilityButton();
+            AudioManager.getInstance().playSoundEffects(activity, GAMBLER);
+        });
+
+        dialog.show();
+    }
+
+    private static void flipCard(View container, TextView cardText, ImageView cardImage, int value, Runnable onEnd) {
+        ObjectAnimator oa1 = ObjectAnimator.ofFloat(container, "scaleX", 1f, 0f);
+        ObjectAnimator oa2 = ObjectAnimator.ofFloat(container, "scaleX", 0f, 1f);
+        oa1.setInterpolator(new AccelerateDecelerateInterpolator());
+        oa2.setInterpolator(new AccelerateDecelerateInterpolator());
+        oa1.setDuration(250);
+        oa2.setDuration(250);
+        oa1.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                cardText.setVisibility(View.GONE);
+                if (value == 12) {
+                    cardImage.setImageResource(R.drawable.queen);
+                    cardImage.setVisibility(View.VISIBLE);
+                } else if (value == 13) {
+                    cardImage.setImageResource(R.drawable.king);
+                    cardImage.setVisibility(View.VISIBLE);
+                } else {
+                    cardText.setText(getCardName(value));
+                    cardText.setVisibility(View.VISIBLE);
+                }
+                container.setBackgroundResource(R.drawable.duel_card_front);
+                oa2.start();
+            }
+        });
+        oa2.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                if (onEnd != null) onEnd.run();
+            }
+        });
+        oa1.start();
+    }
+
+    private static void checkDuelResult(int gVal, int oVal, TextView resultTv, Button finishBtn, Player gambler, Player opponent, int bet) {
+        if (gamblerFlipped && opponentFlipped) {
+            String msg;
+            if (gVal > oVal) {
+                msg = gambler.getName() + " wins! " + opponent.getName() + " takes " + bet + " drinks.";
+            } else {
+                msg = opponent.getName() + " wins! " + gambler.getName() + " takes " + bet + " drinks.";
+            }
+            resultTv.setText(msg);
+            resultTv.setVisibility(View.VISIBLE);
+            finishBtn.setVisibility(View.VISIBLE);
         }
-
-        activity.showGameDialog(resultMsg);
-        currentPlayer.setUsedActiveAbility(true);
-        hideAbilityButton();
-        AudioManager.getInstance().playSoundEffects(activity, GAMBLER);
     }
 
     private static String getCardName(int value) {
         if (value <= 10) return String.valueOf(value);
-        if (value == 11) return "Jack";
-        if (value == 12) return "Queen";
-        if (value == 13) return "King";
-        return "Ace";
+        if (value == 11) return "J";
+        if (value == 12) return "Q";
+        if (value == 13) return "K";
+        return "A";
     }
 }

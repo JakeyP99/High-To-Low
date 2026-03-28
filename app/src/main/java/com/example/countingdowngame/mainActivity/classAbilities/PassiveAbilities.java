@@ -151,11 +151,27 @@ public class PassiveAbilities {
         View dialogView = inflater.inflate(R.layout.game_gambler_over_under, null);
 
         TextView title = dialogView.findViewById(R.id.dialogbox_textview);
-        int middle = game.getCurrentNumber() / 2;
-        title.setText("Bet on your roll!\n\nWill the result be Over or Under " + middle + "?");
+        int currentNumber = game.getCurrentNumber();
+        int middle = currentNumber / 2;
+        boolean isEven = currentNumber % 2 == 0;
+
+        String message = "Will the result be Over or Under " + middle + "?";
+        if (isEven) {
+            message = "Will the result be Over, Under, or Equal to " + middle + "?";
+        }
+        title.setText(message);
+        title.setTextSize(26);
 
         Button overBtn = dialogView.findViewById(R.id.btn_over);
         Button underBtn = dialogView.findViewById(R.id.btn_under);
+        Button equalBtn = dialogView.findViewById(R.id.btn_equal);
+
+        if (isEven) {
+            equalBtn.setVisibility(View.VISIBLE);
+            equalBtn.setText("EQUAL");
+        } else {
+            equalBtn.setVisibility(View.GONE);
+        }
 
         builder.setView(dialogView);
         builder.setCancelable(false);
@@ -173,19 +189,53 @@ public class PassiveAbilities {
             onBetPlaced.run();
         });
 
+        equalBtn.setOnClickListener(v -> {
+            gamblerBet = "EQUAL";
+            dialog.dismiss();
+            onBetPlaced.run();
+        });
+
         dialog.show();
     }
 
     public static void handleGamblerPassiveResult(int targetNumber) {
         if (gamblerBet.isEmpty()) return;
 
-        int middle = game.getPreviousNumber() / 2;
-        boolean won = false;
-        if (gamblerBet.equals("OVER") && targetNumber > middle) won = true;
-        if (gamblerBet.equals("UNDER") && targetNumber <= middle) won = true;
+        Player currentPlayer = game.getCurrentPlayer();
+        if (currentPlayer == null) return;
 
-        String message = won ? "You won your bet! Hand out 1 drink." : "You lost your bet! Take 1 drink.";
-        activity.showGameDialog(GAMBLER + "'s Passive: \n\n" + message);
+        int previousNumber = game.getPreviousNumber();
+        int middle = previousNumber / 2;
+        boolean won = false;
+        boolean isEven = previousNumber % 2 == 0;
+
+        if (gamblerBet.equals("OVER") && targetNumber > middle) {
+            won = true;
+        } else if (gamblerBet.equals("EQUAL") && targetNumber == middle) {
+            won = true;
+        } else if (gamblerBet.equals("UNDER")) {
+            if (isEven) {
+                if (targetNumber < middle) won = true;
+            } else {
+                if (targetNumber <= middle) won = true;
+            }
+        }
+
+        String message;
+        if (won) {
+            if (gamblerBet.equals("EQUAL")) {
+                message = currentPlayer.getName() + " won their bet! Hand out 2 drinks.";
+                currentPlayer.incrementDrinksHandedOutByGambler(2);
+            } else {
+                message = currentPlayer.getName() + " won their bet! Hand out 1 drink.";
+                currentPlayer.incrementDrinksHandedOutByGambler(1);
+            }
+        } else {
+            message = currentPlayer.getName() + " lost their bet! Take 1 drink.";
+            currentPlayer.incrementDrinksTakenByGambler(1);
+        }
+
+        activity.showGameDialog(currentPlayer.getClassChoice() + "'s Passive: \n\n" + message);
         gamblerBet = "";
     }
 }

@@ -47,6 +47,8 @@ public class Player implements Serializable {
     private int drinksTakenByWitch;
     private int correctQuizAnswers;
     private int incorrectQuizAnswers;
+    private int drinksHandedOutByGambler;
+    private int drinksTakenByGambler;
 
     //-----------------------------------------------------Set Game---------------------------------------------------//
 
@@ -167,6 +169,22 @@ public class Player implements Serializable {
 
     public void incrementDrinksTakenByWitch(int drinks) {
         this.drinksTakenByWitch += drinks;
+    }
+
+    public int getDrinksHandedOutByGambler() {
+        return drinksHandedOutByGambler;
+    }
+
+    public void incrementDrinksHandedOutByGambler(int drinks) {
+        this.drinksHandedOutByGambler += drinks;
+    }
+
+    public int getDrinksTakenByGambler() {
+        return drinksTakenByGambler;
+    }
+
+    public void incrementDrinksTakenByGambler(int drinks) {
+        this.drinksTakenByGambler += drinks;
     }
 
     public void addNumberPlayed(int number) {

@@ -103,7 +103,7 @@ public class MainActivityNumberGenerator {
                 handleSurvivorPassive(currentPlayer);
             }
 
-            if (GAMBLER.equals(currentPlayer.getClassChoice())) {
+            if (GAMBLER.equals(currentPlayer.getClassChoice()) || (ANGRY_JIM.equals(currentPlayer.getClassChoice()) && previousNumber < 50)) {
                 handleGamblerPassiveResult(targetNumber);
             }
 

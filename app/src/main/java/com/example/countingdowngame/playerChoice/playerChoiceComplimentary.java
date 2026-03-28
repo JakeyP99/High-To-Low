@@ -19,7 +19,6 @@ import static com.example.countingdowngame.createPlayer.CharacterClassDescriptio
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.goblinActiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.goblinPassiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.noClassDescription;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.quizMagicianActiveButtonText;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.quizMagicianActiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.quizMagicianPassiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.scientistActiveDescription;
@@ -42,16 +41,17 @@ public class playerChoiceComplimentary extends ButtonUtilsActivity {
 
     public List<CharacterClassStore> generateCharacterClasses() {
         List<CharacterClassStore> characterClasses = new ArrayList<>();
-        characterClasses.add(new CharacterClassStore(1, ARCHER, archerActiveDescription, archerPassiveDescription, R.drawable.archer));
-        characterClasses.add(new CharacterClassStore(2, WITCH, witchActiveDescription, witchPassiveDescription, R.drawable.witch));
-        characterClasses.add(new CharacterClassStore(3, SCIENTIST, scientistActiveDescription, scientistPassiveDescription, R.drawable.scientist));
-        characterClasses.add(new CharacterClassStore(4, SOLDIER, soldierActiveDescription, soldierPassiveDescription, R.drawable.helmet));
+        characterClasses.add(new CharacterClassStore(1, ANGRY_JIM, angryJimActiveDescription, angryJimPassiveDescription, R.drawable.angry_jim));
+        characterClasses.add(new CharacterClassStore(2, ARCHER, archerActiveDescription, archerPassiveDescription, R.drawable.archer));
+        characterClasses.add(new CharacterClassStore(3, GAMBLER, gamblerActiveDescription, gamblerPassiveDescription, R.drawable.slotmachine));
+        characterClasses.add(new CharacterClassStore(4, GOBLIN, goblinActiveDescription, goblinPassiveDescription, R.drawable.goblin));
         characterClasses.add(new CharacterClassStore(5, QUIZ_MAGICIAN, quizMagicianActiveDescription, quizMagicianPassiveDescription, R.drawable.books));
-        characterClasses.add(new CharacterClassStore(6, SURVIVOR, survivorActiveDescription, survivorPassiveDescription, R.drawable.bandaids));
-        characterClasses.add(new CharacterClassStore(7, ANGRY_JIM, angryJimActiveDescription, angryJimPassiveDescription, R.drawable.angry_jim));
-        characterClasses.add(new CharacterClassStore(8, GOBLIN, goblinActiveDescription, goblinPassiveDescription, R.drawable.goblin));
-        characterClasses.add(new CharacterClassStore(9, GAMBLER, gamblerActiveDescription, gamblerPassiveDescription, R.drawable.dice));
+        characterClasses.add(new CharacterClassStore(6, SCIENTIST, scientistActiveDescription, scientistPassiveDescription, R.drawable.scientist));
+        characterClasses.add(new CharacterClassStore(7, SOLDIER, soldierActiveDescription, soldierPassiveDescription, R.drawable.helmet));
+        characterClasses.add(new CharacterClassStore(8, SURVIVOR, survivorActiveDescription, survivorPassiveDescription, R.drawable.bandaids));
+        characterClasses.add(new CharacterClassStore(9, WITCH, witchActiveDescription, witchPassiveDescription, R.drawable.witch));
         characterClasses.add(new CharacterClassStore(10, NO_CLASS, noClassDescription, null, R.drawable.noclass));
+
         return characterClasses;
     }
 }
