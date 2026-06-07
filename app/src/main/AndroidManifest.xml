@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -24,31 +25,64 @@
         <activity
             android:name=".home.HomeScreen"
             android:exported="true"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".mainActivity.MainActivityGame" />
+        <activity
+            android:name=".mainActivity.MainActivityGame"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
 
-        <activity android:name=".settings.SettingsMenu" />
+        <activity
+            android:name=".settings.SettingsMenu"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
 
-        <activity android:name=".endGame.EndActivityGame" />
+        <activity
+            android:name=".endGame.EndActivityGame"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
 
-        <activity android:name=".numberChoice.NumberChoice" />
+        <activity
+            android:name=".numberChoice.NumberChoice"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
 
-        <activity android:name=".instructions.InstructionsToPlay" />
-        <activity android:name=".statistics.Statistics" />
+        <activity
+            android:name=".instructions.InstructionsToPlay"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
 
-        <activity android:name=".drawing.DrawingPlayerModels" />
-        <activity android:name=".mainActivity.MainActivityRoulette" />
-        <activity android:name=".endGame.EndRouletteGame" />
+        <activity
+            android:name=".statistics.Statistics"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".drawing.DrawingPlayerModels"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".mainActivity.MainActivityRoulette"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".endGame.EndRouletteGame"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
 
         <activity
             android:name=".playerChoice.PlayerChoice"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustNothing"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
