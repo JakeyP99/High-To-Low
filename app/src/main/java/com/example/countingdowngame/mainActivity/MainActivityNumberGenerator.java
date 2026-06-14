@@ -86,17 +86,11 @@ public class MainActivityNumberGenerator {
 
             Game.getInstance().recordTurn(currentPlayer, targetNumber);
 
-            // Set final number content and ensure correct size
             numberCounterText.setText(String.valueOf(targetNumber));
             SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(targetNumber));
             
-            // Update color based on the final number
             MainActivityGame.updateNumberColor(targetNumber);
 
-//            // Clear any lingering pulse and do final reveal animation
-//            YoYo.with(Techniques.BounceIn)
-//                    .duration(800)
-//                    .playOn(numberCounterText);
 
             if ((targetNumber == 1 && previousNumber <= 1) &&
                     (SURVIVOR.equals(currentPlayer.getClassChoice()) || ANGRY_JIM.equals(currentPlayer.getClassChoice()))) {

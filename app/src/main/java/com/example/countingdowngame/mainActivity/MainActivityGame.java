@@ -351,8 +351,6 @@ public class MainActivityGame extends SharedMainActivity {
         }
         updateWildCardVisibilityIfNeeded(Game.getInstance().getCurrentPlayer());
 
-        // Now that the game state is stable (including potential player removals),
-        // fetch the NEW current player for UI rendering.
         Player activePlayer = Game.getInstance().getCurrentPlayer();
         if (activePlayer == null) return;
 
@@ -571,7 +569,21 @@ public class MainActivityGame extends SharedMainActivity {
         if (playerImageString != null) {
             byte[] decodedString = Base64.decode(playerImageString, Base64.DEFAULT);
             Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            playerImage.setImageBitmap(decodedBitmap);
+
+            //Add animation of the coin spinning and changing to the next players image
+            playerImage.animate()
+                    .rotationY(90f)
+                    .setDuration(150)
+                    .withEndAction(() -> {
+                        playerImage.setImageBitmap(decodedBitmap);
+                        playerImage.setRotationY(-90f);
+                        playerImage.animate()
+                                .rotationY(0f)
+                                .setDuration(150)
+                                .start();
+                    })
+                    .start();
+
         }
         PowerUps.updatePowerUpIcons(currentPlayer);
     }
