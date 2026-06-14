@@ -25,7 +25,7 @@ import pl.droidsonroids.gif.GifImageView;
 
 public abstract class ButtonUtilsActivity extends AppCompatActivity {
 
-    protected ButtonUtils btnUtils;
+    public ButtonUtils btnUtils;
     private AudioManager audioManager;
 
     @Override

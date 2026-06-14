@@ -340,7 +340,7 @@ public class MainActivityGame extends SharedMainActivity {
     private void setupButtonActions(ImageButton imageButtonExit) {
         btnUtils.setButton(btnGenerate, this::handleGenerateClick);
 
-        playerImage.setOnClickListener(v -> characterClassDescriptions());
+        btnUtils.setButton(playerImage, this::characterClassDescriptions);
         btnUtils.setButton(btnAnswer, this::showAnswer);
         btnUtils.setButton(btnWildContinue, this::wildCardContinue);
         btnUtils.setButton(btnClassAbility, this::activateActiveAbility);
@@ -357,12 +357,12 @@ public class MainActivityGame extends SharedMainActivity {
             findViewById(R.id.powerup_right).setVisibility(View.INVISIBLE);
         });
 
-        imageButtonExit.setOnClickListener(view -> {
+        btnUtils.setButton(imageButtonExit, () -> {
             Game.getInstance().endGame(this);
             gotoHomeScreen();
         });
 
-        infoGif.setOnClickListener(view -> showInstructionDialog());
+        btnUtils.setButton(infoGif, this::showInstructionDialog);
     }
 
 
@@ -390,7 +390,7 @@ public class MainActivityGame extends SharedMainActivity {
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
 
-        payBtn.setOnClickListener(v -> {
+        btnUtils.setButton(payBtn, () -> {
             dialog.dismiss();
             Player currentPlayer = Game.getInstance().getCurrentPlayer();
             if (currentPlayer != null && !playersWhoPaidToll.contains(currentPlayer)) {
@@ -399,7 +399,7 @@ public class MainActivityGame extends SharedMainActivity {
             updateNumberText();
         });
 
-        blindBtn.setOnClickListener(v -> {
+        btnUtils.setButton(blindBtn, () -> {
             dialog.dismiss();
             handleGenerateClick();
         });
@@ -439,7 +439,7 @@ public class MainActivityGame extends SharedMainActivity {
         if (activePlayer == null) return;
 
         if (hidingTroll != null) {
-            numberCounterText.setOnClickListener(v -> {
+            btnUtils.setButton(numberCounterText, () -> {
                 if (activePlayer.equals(hidingTroll) || playersWhoPaidToll.contains(activePlayer)) {
                     showGameDialog("Troll Vision: The hidden number is " + game.getCurrentNumber());
                 } else {
@@ -447,7 +447,7 @@ public class MainActivityGame extends SharedMainActivity {
                 }
             });
 
-            btnGenerate.setOnClickListener(v -> {
+            btnUtils.setButton(btnGenerate, () -> {
                 if (activePlayer.equals(hidingTroll) || playersWhoPaidToll.contains(activePlayer)) {
                     handleGenerateClick();
                 } else {

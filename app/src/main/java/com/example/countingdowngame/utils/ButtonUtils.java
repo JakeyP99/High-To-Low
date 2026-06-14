@@ -15,6 +15,7 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -116,35 +117,32 @@ public class ButtonUtils {
     //-----------------------------------------------------Onclick Functionality---------------------------------------------------//
 
     @SuppressLint("ClickableViewAccessibility")
-    public void setButton(final Button button, final Runnable buttonAction) {
-        if (button == null) {
+    public void setButton(final View view, final Runnable buttonAction) {
+        if (view == null) {
             return;
         }
 
-        final Drawable defaultBackground = button.getBackground(); // Store the default background
+        final Drawable defaultBackground = view.getBackground(); // Store the default background
 
-        button.setOnTouchListener((view, motionEvent) -> {
+        view.setOnTouchListener((v, motionEvent) -> {
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN: {
-                    button.setBackground(buttonHighlight);
+                    view.setBackground(buttonHighlight);
                     break;
                 }
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL: {
-                    button.setBackground(defaultBackground);
+                    view.setBackground(defaultBackground);
                     break;
                 }
             }
             return false;
         });
 
-        button.setOnClickListener(view -> {
+        view.setOnClickListener(v -> {
             if (buttonAction != null) {
-
-                button.setEnabled(false);
-
-                new Handler().postDelayed(() -> button.setEnabled(true), 1500);
-
+                view.setEnabled(false);
+                new Handler().postDelayed(() -> view.setEnabled(true), 1500);
                 buttonAction.run();
             }
             vibrateDevice();

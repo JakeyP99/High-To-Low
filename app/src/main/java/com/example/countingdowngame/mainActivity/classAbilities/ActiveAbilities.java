@@ -286,23 +286,23 @@ public class ActiveAbilities {
         AlertDialog dialog = builder.create();
 
         // Step 1 -> Step 2
-        btnReveal.setOnClickListener(v -> {
+        activity.btnUtils.setButton(btnReveal, () -> {
             step1.setVisibility(View.GONE);
             step2.setVisibility(View.VISIBLE);
         });
 
         // Final Actions
-        btnTarget1.setOnClickListener(v -> {
+        activity.btnUtils.setButton(btnTarget1, () -> {
             dialog.dismiss();
             finalizeTrollResult(currentPlayer, targets.get(0), targets.size() > 1 ? targets.get(1) : null);
         });
 
-        btnTarget2.setOnClickListener(v -> {
+        activity.btnUtils.setButton(btnTarget2, () -> {
             dialog.dismiss();
             finalizeTrollResult(currentPlayer, targets.get(1), targets.get(0));
         });
 
-        btnNoOne.setOnClickListener(v -> {
+        activity.btnUtils.setButton(btnNoOne, () -> {
             dialog.dismiss();
             currentPlayer.setUsedActiveAbility(true);
             hideAbilityButton();
