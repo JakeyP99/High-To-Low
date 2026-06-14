@@ -17,7 +17,7 @@ public class CharacterClassDescriptions {
             "You may remove 2 drinks from the total and give them to any players.";
 
     public static final String witchActiveDescription =
-            "Throw a potion! Solve a math problem to determine the effect. Perfect: Immune to 0 once. 5% range: Hand out 3 drinks. 10% range: Hand out 1 drink. Outside: Take 2 drinks.";
+            "Throw a potion! Play a mini-game to determine its potency. Great results can grant immunity or let you hand out many drinks, but failure will force you to drink!";
 
     public static final String scientistActiveDescription =
             "Change the current number to any number. Your turn continues.";

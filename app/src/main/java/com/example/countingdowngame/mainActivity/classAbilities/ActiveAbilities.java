@@ -19,6 +19,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,7 @@ import com.example.countingdowngame.mainActivity.PowerUps;
 import com.example.countingdowngame.player.Player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -209,6 +211,15 @@ public class ActiveAbilities {
 
     public static void handleWitchClass(Player currentPlayer) {
         Random random = new Random();
+        if (random.nextBoolean()) {
+            handleWitchMathGame(currentPlayer);
+        } else {
+            handleWitchMemoryGame(currentPlayer);
+        }
+    }
+
+    private static void handleWitchMathGame(Player currentPlayer) {
+        Random random = new Random();
         int num1 = random.nextInt(900) + 100; // 3-digit
         int num2 = random.nextInt(900) + 100; // 3-digit
         int correctAnswer = num1 * num2;
@@ -244,7 +255,6 @@ public class ActiveAbilities {
         submitBtn.setOnClickListener(v -> {
             String input = answerEt.getText().toString();
             if (input.isEmpty()) {
-                Toast.makeText(activity, "Enter an answer!", Toast.LENGTH_SHORT).show();
                 return;
             }
             try {
@@ -258,6 +268,122 @@ public class ActiveAbilities {
 
         dialog.show();
         AudioManager.getInstance().playSoundEffects(activity, WITCH);
+    }
+
+    private static void handleWitchMemoryGame(Player currentPlayer) {
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.game_witch_potion_memory, null);
+
+        TextView statusTv = dialogView.findViewById(R.id.memory_status);
+        TextView timerTv = dialogView.findViewById(R.id.memory_timer);
+        View[] buttons = {
+                dialogView.findViewById(R.id.btn_red),
+                dialogView.findViewById(R.id.btn_blue),
+                dialogView.findViewById(R.id.btn_green),
+                dialogView.findViewById(R.id.btn_yellow)
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
+        builder.setView(dialogView);
+        builder.setCancelable(false);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        List<Integer> sequence = new ArrayList<>();
+        List<Integer> playerSequence = new ArrayList<>();
+        Random random = new Random();
+        for (int i = 0; i < 3; i++) {
+            sequence.add(random.nextInt(4));
+        }
+        final boolean[] isPlayerTurn = {false};
+        final int[] score = {0};
+
+        CountDownTimer gameTimer = new CountDownTimer(300000, 1000) { // Large timer, effectively infinite until failure
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timerTv.setText("Score: " + score[0]);
+            }
+
+            @Override
+            public void onFinish() {
+                dialog.dismiss();
+                processMemoryResult(currentPlayer, score[0]);
+            }
+        };
+
+        Runnable nextRound = new Runnable() {
+            @Override
+            public void run() {
+                isPlayerTurn[0] = false;
+                playerSequence.clear();
+                sequence.add(random.nextInt(4));
+                statusTv.setText("Watch carefully!");
+
+                new Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
+                    int step = 0;
+
+                    @Override
+                    public void run() {
+                        if (step < sequence.size()) {
+                            int btnIdx = sequence.get(step);
+                            flashButton(buttons[btnIdx]);
+                            step++;
+                            new Handler(android.os.Looper.getMainLooper()).postDelayed(this, 600);
+                        } else {
+                            statusTv.setText("Your turn! Repeat it!");
+                            isPlayerTurn[0] = true;
+                        }
+                    }
+                }, 1000);
+            }
+        };
+
+        for (int i = 0; i < 4; i++) {
+            int index = i;
+            buttons[i].setOnClickListener(v -> {
+                if (!isPlayerTurn[0]) return;
+                flashButton(buttons[index]);
+                playerSequence.add(index);
+
+                if (playerSequence.get(playerSequence.size() - 1).equals(sequence.get(playerSequence.size() - 1))) {
+                    if (playerSequence.size() == sequence.size()) {
+                        score[0]++;
+                        new Handler(android.os.Looper.getMainLooper()).postDelayed(nextRound, 500);
+                    }
+                } else {
+                    gameTimer.cancel();
+                    dialog.dismiss();
+                    processMemoryResult(currentPlayer, score[0]);
+                }
+            });
+        }
+
+        nextRound.run();
+        gameTimer.start();
+        AudioManager.getInstance().playSoundEffects(activity, WITCH);
+    }
+
+    private static void flashButton(View view) {
+        view.animate().alpha(1.0f).setDuration(200).withEndAction(() -> view.animate().alpha(0.4f).setDuration(200).start()).start();
+    }
+
+    private static void processMemoryResult(Player player, int score) {
+        player.setUsedActiveAbility(true);
+        hideAbilityButton();
+
+        if (score < 2) {
+            activity.showGameDialog("Failed! The potion turned into sludge (Score: " + score + ").\n\n" + player.getName() + " take 2 drinks!");
+            player.incrementDrinksTakenByWitch(2);
+        } else if (score <= 4) {
+            activity.showGameDialog("Weak Potion (Score: " + score + ")!\n\n" + player.getName() + " hand out 1 drink.");
+            player.incrementDrinksHandedOutByWitch(1);
+        } else if (score <= 10) {
+            activity.showGameDialog("Strong Potion (Score: " + score + ")!\n\n" + player.getName() + " hand out 3 drinks!");
+            player.incrementDrinksHandedOutByWitch(3);
+        } else {
+            activity.showGameDialog("GODLIKE BREW! (Score: " + score + ")!\n\n" + player.getName() + " is immune to landing on 0 once!");
+            PowerUps.gainPowerUp(player, PowerUps.GET_OUT_OF_JAIL + ": Immune to landing on 0 once!");
+        }
     }
 
     private static void processPotionResult(Player player, int userAnswer, int correctAnswer) {
