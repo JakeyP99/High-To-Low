@@ -219,7 +219,8 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         AlertDialog dialog = builder.create();
         dialog.setOnCancelListener(dialogInterface -> handleCancelClick(position, dialog));
         dialog.show();
-        confirmClass.setOnClickListener(v -> handleConfirmClick(position, dialog));
+        btnUtils.setButton(confirmClass, () -> handleConfirmClick(position, dialog));
+
     }
 
     private void handleCancelClick(int position, AlertDialog dialog) {
@@ -279,7 +280,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
 
         AlertDialog dialog = builder.setView(dialogView).create();
 
-        capturePhotoButton.setOnClickListener(v -> {
+        btnUtils.setButton(capturePhotoButton, () -> {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
             } else {
@@ -288,12 +289,12 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
             dialog.dismiss();
         });
 
-        drawPhotoButton.setOnClickListener(v -> {
+        btnUtils.setButton(drawPhotoButton, () -> {
             startDrawingActivity();
             dialog.dismiss();
         });
 
-        cancelButton.setOnClickListener(v -> dialog.dismiss());
+        btnUtils.setButton(cancelButton, dialog::dismiss);
         dialog.show();
     }
 

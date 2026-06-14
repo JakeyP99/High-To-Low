@@ -150,6 +150,8 @@ public class PassiveAbilities {
             if (chance < 20) {
                 currentPlayer.setTrollPassiveUsed(true);
                 activity.hideNumberForTroll(currentPlayer);
+                activity.showGameDialog(TROLL + "'s Passive: \n\nThe generate number is now hidden.\n\n" +
+                        currentPlayer.getName() + " can still see it. Others must pay 3 drinks if they want to reveal it!");
             }
         }
     }

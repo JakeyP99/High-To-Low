@@ -156,9 +156,6 @@ public class MainActivityGame extends SharedMainActivity {
         hidingTroll = troll;
         playersWhoPaidToll.clear();
         updateNumberText();
-
-        showGameDialog("The Troll's Passive activated! The number fell under the bridge and is now hidden.\n\n" +
-                troll.getName() + " can still see it. Others must pay 3 drinks to see it!");
     }
 
     public static void updateNumberColor(int currentNumber) {
