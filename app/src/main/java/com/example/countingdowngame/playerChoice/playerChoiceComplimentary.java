@@ -27,6 +27,9 @@ import static com.example.countingdowngame.createPlayer.CharacterClassDescriptio
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.soldierPassiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.survivorActiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.survivorPassiveDescription;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.TROLL;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.trollActiveDescription;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.trollPassiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.witchActiveDescription;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.witchPassiveDescription;
 
@@ -49,8 +52,9 @@ public class playerChoiceComplimentary extends ButtonUtilsActivity {
         characterClasses.add(new CharacterClassStore(6, SCIENTIST, scientistActiveDescription, scientistPassiveDescription, R.drawable.scientist));
         characterClasses.add(new CharacterClassStore(7, SOLDIER, soldierActiveDescription, soldierPassiveDescription, R.drawable.helmet));
         characterClasses.add(new CharacterClassStore(8, SURVIVOR, survivorActiveDescription, survivorPassiveDescription, R.drawable.bandaids));
-        characterClasses.add(new CharacterClassStore(9, WITCH, witchActiveDescription, witchPassiveDescription, R.drawable.witch));
-        characterClasses.add(new CharacterClassStore(10, NO_CLASS, noClassDescription, null, R.drawable.noclass));
+        characterClasses.add(new CharacterClassStore(9, TROLL, trollActiveDescription, trollPassiveDescription, R.drawable.bridge));
+        characterClasses.add(new CharacterClassStore(10, WITCH, witchActiveDescription, witchPassiveDescription, R.drawable.witch));
+        characterClasses.add(new CharacterClassStore(11, NO_CLASS, noClassDescription, null, R.drawable.noclass));
 
         return characterClasses;
     }

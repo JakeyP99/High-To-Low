@@ -35,6 +35,7 @@ public class Player implements Serializable {
     private List<Integer> numbersPlayed = new ArrayList<>();
     private int classAbilityCooldown;
     private List<String> powerUps = new ArrayList<>();
+    private boolean trollPassiveUsed = false;
 
     //-----------------------------------------------------Card Game---------------------------------------------------//
 
@@ -407,6 +408,14 @@ public class Player implements Serializable {
             game.triggerPlayerEvent(new PlayerEvent(this, PlayerEventType.POWER_UP));
         }
         getPowerUps().remove(powerUpName);
+    }
+
+    public boolean hasUsedTrollPassive() {
+        return trollPassiveUsed;
+    }
+
+    public void setTrollPassiveUsed(boolean used) {
+        this.trollPassiveUsed = used;
     }
 
 }

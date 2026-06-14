@@ -9,6 +9,7 @@ import static com.example.countingdowngame.createPlayer.CharacterClassDescriptio
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SCIENTIST;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SOLDIER;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.TROLL;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
 import static com.example.countingdowngame.mainActivity.MainActivityGame.drinkNumberCounterInt;
 import static com.example.countingdowngame.mainActivity.MainActivityGame.isFirstTurn;
@@ -206,6 +207,123 @@ public class ActiveAbilities {
             activity.updateDrinkNumberCounter(-2, true);
             hideAbilityButton();
             AudioManager.getInstance().playSoundEffects(activity, ARCHER);
+        }
+    }
+
+    public static void handleTrollClass(Player currentPlayer) {
+        List<Player> players = game.getPlayers();
+        List<Player> targets = new ArrayList<>();
+
+        if (players.size() <= 2) {
+            for (Player p : players) {
+                if (!p.equals(currentPlayer)) {
+                    targets.add(p);
+                }
+            }
+        } else {
+            List<Player> others = new ArrayList<>(players);
+            others.remove(currentPlayer);
+            Random r = new Random();
+            targets.add(others.remove(r.nextInt(others.size())));
+            targets.add(others.remove(r.nextInt(others.size())));
+        }
+
+        if (targets.isEmpty()) return;
+
+        showTrollRiddleDialog(currentPlayer, targets);
+    }
+
+    private static void showTrollRiddleDialog(Player currentPlayer, List<Player> targets) {
+        String[][] riddlePool = {
+                {"I speak without a mouth and hear without ears. I have no body, but I come alive with wind. What am I?", "Echo"},
+                {"You measure my life in hours and I serve you by expiring. I'm quick when I'm thin and slow when I'm fat. The wind is my enemy.", "Candle"},
+                {"I have cities, but no houses. I have mountains, but no trees. I have water, but no fish. What am I?", "Map"},
+                {"What is seen in the middle of March and April that can’t be seen at the beginning or end of either month?", "The letter R"},
+                {"You see a boat filled with people. It has not sunk, but when you look again you don’t see a single person on the boat. Why?", "All were married"},
+                {"What has keys, but no locks; space, but no room; and you can enter, but never leave?", "Keyboard"},
+                {"I have branches, but no fruit, trunk or leaves. What am I?", "Bank"},
+                {"What can travel around the world while staying in a corner?", "Stamp"},
+                {"What has a neck but no head?", "Bottle"},
+                {"The more of this there is, the less you see. What is it?", "Darkness"}
+        };
+
+        int rIndex = new Random().nextInt(riddlePool.length);
+        String riddleText = riddlePool[rIndex][0];
+        String answerText = riddlePool[rIndex][1];
+
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.game_troll_active_riddle, null);
+
+        // Step 1 UI (Riddle)
+        View step1 = dialogView.findViewById(R.id.step2_container);
+        TextView targetsTv = dialogView.findViewById(R.id.troll_targets);
+        TextView riddleTv = dialogView.findViewById(R.id.troll_riddle_text);
+        Button btnReveal = dialogView.findViewById(R.id.btn_reveal_answer);
+
+        // Step 2 UI (Result)
+        View step2 = dialogView.findViewById(R.id.step3_container);
+        TextView answerTv = dialogView.findViewById(R.id.troll_answer_text);
+        Button btnTarget1 = dialogView.findViewById(R.id.btn_target1_safe);
+        Button btnTarget2 = dialogView.findViewById(R.id.btn_target2_safe);
+        Button btnNoOne = dialogView.findViewById(R.id.btn_troll_noone);
+
+        // Initial Setup
+        riddleTv.setText(riddleText);
+        answerTv.setText(answerText);
+        String targetNames = targets.size() == 1 ? targets.get(0).getName() : targets.get(0).getName() + " & " + targets.get(1).getName();
+        targetsTv.setText(targetNames);
+        btnTarget1.setText(targets.get(0).getName());
+        if (targets.size() > 1) {
+            btnTarget2.setText(targets.get(1).getName());
+        } else {
+            btnTarget2.setVisibility(View.GONE);
+            btnNoOne.setText("Wrong! (Drink 4)");
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
+        builder.setView(dialogView);
+        builder.setCancelable(false);
+        AlertDialog dialog = builder.create();
+
+        // Step 1 -> Step 2
+        btnReveal.setOnClickListener(v -> {
+            step1.setVisibility(View.GONE);
+            step2.setVisibility(View.VISIBLE);
+        });
+
+        // Final Actions
+        btnTarget1.setOnClickListener(v -> {
+            dialog.dismiss();
+            finalizeTrollResult(currentPlayer, targets.get(0), targets.size() > 1 ? targets.get(1) : null);
+        });
+
+        btnTarget2.setOnClickListener(v -> {
+            dialog.dismiss();
+            finalizeTrollResult(currentPlayer, targets.get(1), targets.get(0));
+        });
+
+        btnNoOne.setOnClickListener(v -> {
+            dialog.dismiss();
+            currentPlayer.setUsedActiveAbility(true);
+            hideAbilityButton();
+            if (targets.size() == 1) {
+                activity.showGameDialog(targets.get(0).getName() + " failed! Take 4 drinks.");
+            } else {
+                activity.showGameDialog("Both failed! " + targets.get(0).getName() + " and " + targets.get(1).getName() + " take 4 drinks.");
+            }
+        });
+
+        dialog.show();
+    }
+
+    private static void finalizeTrollResult(Player troll, Player winner, Player loser) {
+        troll.setUsedActiveAbility(true);
+        hideAbilityButton();
+
+        if (winner != null && loser != null) {
+            activity.showGameDialog(winner.getName() + " was safe! " + loser.getName() + " take 4 drinks.");
+        } else if (winner != null) {
+            activity.showGameDialog(winner.getName() + " answered correctly! Safe!");
         }
     }
 

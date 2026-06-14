@@ -245,11 +245,6 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
             if (selectedCharacterClass != null) {
                 selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
                 AbilityComplimentary.assignActiveAbilityCooldown(selectedPlayer);
-                String message = selectedCharacterClass.getClassName().equals("No Class")
-                        ? selectedPlayer.getName() + " chose no class!"
-                        : selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
-
-                StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
                 playerListAdapter.notifyItemChanged(position);
                 dialog.dismiss();
             } else {

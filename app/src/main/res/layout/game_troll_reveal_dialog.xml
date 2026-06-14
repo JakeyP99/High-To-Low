@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@drawable/rounded_background">
+
+    <TextView
+        android:id="@+id/dialogbox_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="100dp"
+        android:text="Pay 3 drinks to see the hidden number?"
+        android:gravity="center"
+        android:fontFamily="@font/viga"
+        android:textColor="@color/bluedark"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/btn_pay_view"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/outlineforbutton"
+        android:fontFamily="@font/viga"
+        android:text="Pay &amp; View"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="25sp" />
+
+    <Button
+        android:id="@+id/btn_generate_blind"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/outlineforbutton"
+        android:fontFamily="@font/viga"
+        android:text="No, Generate Blind"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="25sp" />
+
+</LinearLayout>

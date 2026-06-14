@@ -11,6 +11,7 @@ import static com.example.countingdowngame.createPlayer.CharacterClassDescriptio
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SCIENTIST;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SOLDIER;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.TROLL;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
 import static com.example.countingdowngame.mainActivity.MainActivityCatastrophes.decreaseNumberByRandom;
 import static com.example.countingdowngame.mainActivity.MainActivityCatastrophes.increaseNumberByRandom;
@@ -21,6 +22,7 @@ import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAb
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleArcherPassive;
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleScientistPassive;
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleSoldierPassive;
+import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleTrollPassive;
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleWitchPassive;
 
 import android.animation.ArgbEvaluator;
@@ -93,6 +95,8 @@ public class MainActivityGame extends SharedMainActivity {
     private static TextView numberCounterText;
     private static int turnCounter = 0;
     private static int catastropheTurnCounter = 0;
+    private static Player hidingTroll = null;
+    private static final List<Player> playersWhoPaidToll = new ArrayList<>();
 
     //-----------------------------------------------------Maps and Sets---------------------------------------------------//
     private final List<WildCardProperties> usedCards = new ArrayList<>();  // Class-level variable to track used cards
@@ -115,13 +119,61 @@ public class MainActivityGame extends SharedMainActivity {
 
     public static void updateNumber(int updatedNumber) {
         Game.getInstance().setCurrentNumber(updatedNumber);
-        numberCounterText.setText(String.valueOf(updatedNumber));
-        SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(updatedNumber));
-        updateNumberColor(updatedNumber);
+        updateNumberText();
+    }
+
+    public static void updateNumberText() {
+        if (numberCounterText == null) return;
+        int currentNumber = Game.getInstance().getCurrentNumber();
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+
+        boolean canSeeNumber = hidingTroll == null ||
+                (currentPlayer != null && currentPlayer.equals(hidingTroll)) ||
+                playersWhoPaidToll.contains(currentPlayer);
+
+        if (canSeeNumber) {
+            String textToDisplay = String.valueOf(currentNumber);
+            numberCounterText.setText(textToDisplay);
+            SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, textToDisplay);
+            updateNumberColor(currentNumber);
+        } else {
+            String textToDisplay = "???";
+            numberCounterText.setText(textToDisplay);
+            SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, textToDisplay);
+            numberCounterText.setTextColor(Color.BLACK);
+        }
+    }
+
+    public static String getDisplayNumber(int number) {
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        boolean canSeeNumber = hidingTroll == null ||
+                (currentPlayer != null && currentPlayer.equals(hidingTroll)) ||
+                playersWhoPaidToll.contains(currentPlayer);
+        return canSeeNumber ? String.valueOf(number) : "???";
+    }
+
+    public void hideNumberForTroll(Player troll) {
+        hidingTroll = troll;
+        playersWhoPaidToll.clear();
+        updateNumberText();
+
+        showGameDialog("The Troll's Passive activated! The number fell under the bridge and is now hidden.\n\n" +
+                troll.getName() + " can still see it. Others must pay 3 drinks to see it!");
     }
 
     public static void updateNumberColor(int currentNumber) {
         if (numberCounterText == null) return;
+
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        boolean canSeeNumber = hidingTroll == null ||
+                (currentPlayer != null && currentPlayer.equals(hidingTroll)) ||
+                playersWhoPaidToll.contains(currentPlayer);
+
+        if (!canSeeNumber) {
+            numberCounterText.setTextColor(Color.BLACK);
+            return;
+        }
+
         if (currentNumber >= 1000) {
             numberCounterText.setTextColor(Color.BLACK);
         } else {
@@ -143,6 +195,8 @@ public class MainActivityGame extends SharedMainActivity {
         catastropheLimit = 0;
         catastrophesEnabled = true;
         passivesEnabled = true;
+        hidingTroll = null;
+        playersWhoPaidToll.clear();
         PowerUps.reset();
     }
 
@@ -284,22 +338,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void setupButtonActions(ImageButton imageButtonExit) {
-        btnUtils.setButton(btnGenerate, () -> {
-            Player currentPlayer = Game.getInstance().getCurrentPlayer();
-            int currentNum = Game.getInstance().getCurrentNumber();
-            boolean isGambler = GAMBLER.equals(currentPlayer.getClassChoice());
-            boolean isAngryJimUnder50 = ANGRY_JIM.equals(currentPlayer.getClassChoice()) && currentNum < 50;
-
-            if ((isGambler || isAngryJimUnder50) && currentNum > 5) {
-                PassiveAbilities.showGamblerBetDialog(() -> {
-                    disableButtons();
-                    numberGenerator.startNumberShuffleAnimation();
-                });
-            } else {
-                disableButtons();
-                numberGenerator.startNumberShuffleAnimation();
-            }
-        });
+        btnUtils.setButton(btnGenerate, this::handleGenerateClick);
 
         playerImage.setOnClickListener(v -> characterClassDescriptions());
         btnUtils.setButton(btnAnswer, this::showAnswer);
@@ -341,8 +380,54 @@ public class MainActivityGame extends SharedMainActivity {
         renderPlayer(false);
     }
 
+    private void showRevealNumberDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.game_troll_reveal_dialog, null);
+        Button payBtn = dialogView.findViewById(R.id.btn_pay_view);
+        Button blindBtn = dialogView.findViewById(R.id.btn_generate_blind);
+
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+
+        payBtn.setOnClickListener(v -> {
+            dialog.dismiss();
+            Player currentPlayer = Game.getInstance().getCurrentPlayer();
+            if (currentPlayer != null && !playersWhoPaidToll.contains(currentPlayer)) {
+                playersWhoPaidToll.add(currentPlayer);
+            }
+            updateNumberText();
+        });
+
+        blindBtn.setOnClickListener(v -> {
+            dialog.dismiss();
+            handleGenerateClick();
+        });
+
+        dialog.show();
+    }
+
+    private void handleGenerateClick() {
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        int currentNum = Game.getInstance().getCurrentNumber();
+        boolean isGambler = GAMBLER.equals(currentPlayer.getClassChoice());
+        boolean isAngryJimUnder50 = ANGRY_JIM.equals(currentPlayer.getClassChoice()) && currentNum < 50;
+
+        if ((isGambler || isAngryJimUnder50) && currentNum > 5) {
+            PassiveAbilities.showGamblerBetDialog(() -> {
+                disableButtons();
+                numberGenerator.startNumberShuffleAnimation();
+            });
+        } else {
+            disableButtons();
+            numberGenerator.startNumberShuffleAnimation();
+        }
+    }
+
     private void renderPlayer(boolean isPowerUp) {
         // Logic updates (Passive abilities, turn counters, etc.)
+        Player activePlayer = Game.getInstance().getCurrentPlayer();
+
         if (!isPowerUp) {
             characterPassiveClassAffects();
             updateActiveAbilitiesAfterCooldown(Game.getInstance().getCurrentPlayer());
@@ -351,8 +436,28 @@ public class MainActivityGame extends SharedMainActivity {
         }
         updateWildCardVisibilityIfNeeded(Game.getInstance().getCurrentPlayer());
 
-        Player activePlayer = Game.getInstance().getCurrentPlayer();
         if (activePlayer == null) return;
+
+        if (hidingTroll != null) {
+            numberCounterText.setOnClickListener(v -> {
+                if (activePlayer.equals(hidingTroll) || playersWhoPaidToll.contains(activePlayer)) {
+                    showGameDialog("Troll Vision: The hidden number is " + game.getCurrentNumber());
+                } else {
+                    showRevealNumberDialog();
+                }
+            });
+
+            btnGenerate.setOnClickListener(v -> {
+                if (activePlayer.equals(hidingTroll) || playersWhoPaidToll.contains(activePlayer)) {
+                    handleGenerateClick();
+                } else {
+                    showRevealNumberDialog();
+                }
+            });
+        } else {
+            numberCounterText.setOnClickListener(null);
+            btnUtils.setButton(btnGenerate, this::handleGenerateClick);
+        }
 
         updateClassAbilityButton(activePlayer);
         updatePlayerInfo(activePlayer);
@@ -366,8 +471,9 @@ public class MainActivityGame extends SharedMainActivity {
     public void renderCurrentNumber(int currentNumber, final Runnable onEnd, TextView generatedNumberTextView) {
         if (currentNumber == 0) {
             disableButtons();
+            // Force reveal on lose
             generatedNumberTextView.setText(String.valueOf(currentNumber));
-            
+
             animateTextView(generatedNumberTextView, () -> {
                 btnUtils.playSoundEffects();
                 Player loser = Game.getInstance().getLastTurnPlayer();
@@ -377,7 +483,7 @@ public class MainActivityGame extends SharedMainActivity {
                 }, generatedNumberTextView);
             });
         } else {
-            generatedNumberTextView.setText(String.valueOf(currentNumber));
+            updateNumberText(); // Use logic-aware display
             Game.getInstance().nextPlayer();
         }
     }
@@ -485,7 +591,8 @@ public class MainActivityGame extends SharedMainActivity {
                 || WITCH.equals(classChoice) || QUIZ_MAGICIAN.equals(classChoice)
                 || SURVIVOR.equals(classChoice) || GOBLIN.equals(classChoice)
                 || ANGRY_JIM.equals(classChoice) || SOLDIER.equals(classChoice)
-                || GAMBLER.equals(classChoice)) && !currentPlayer.getUsedActiveAbility();
+                || GAMBLER.equals(classChoice) || TROLL.equals(classChoice))
+                && !currentPlayer.getUsedActiveAbility();
 
         // Specific rules for dynamic hiding
         if (ARCHER.equals(classChoice) && drinkNumberCounterInt < 2) {
@@ -547,6 +654,8 @@ public class MainActivityGame extends SharedMainActivity {
                 return CharacterClassDescriptions.goblinActiveButtonText;
             case GAMBLER:
                 return CharacterClassDescriptions.gamblerActiveButtonText;
+            case TROLL:
+                return CharacterClassDescriptions.trollActiveButtonText;
             default:
                 return "";
         }
@@ -556,6 +665,9 @@ public class MainActivityGame extends SharedMainActivity {
         String playerName = currentPlayer.getName();
         String playerImageString = currentPlayer.getPhoto();
         Game.getInstance().addUpdatedName(playerName);
+
+        // Ensure hidden state is reflected on UI
+        updateNumber(game.getCurrentNumber());
 
         int turnCount = currentPlayer.getPlayerTurnCount();
         int wildCardCount = currentPlayer.getWildCardAmount();
@@ -640,14 +752,6 @@ public class MainActivityGame extends SharedMainActivity {
 
     //-----------------------------------------------------Shuffler---------------------------------------------------//
 
-    private void updateNumberText() {
-        int currentNumber = Game.getInstance().getCurrentNumber();
-        numberCounterText.setText(String.valueOf(currentNumber));
-        SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(currentNumber));
-        SharedMainActivity.setNameSizeBasedOnInt(nextPlayerText, nextPlayerText.getText().toString());
-        updateNumberColor(currentNumber);
-    }
-
     public void disableButtons() {
         btnGenerate.setEnabled(false);
         btnWild.setEnabled(false);
@@ -693,6 +797,8 @@ public class MainActivityGame extends SharedMainActivity {
                 return CharacterClassDescriptions.goblinActiveDescription;
             case GAMBLER:
                 return CharacterClassDescriptions.gamblerActiveDescription;
+            case TROLL:
+                return CharacterClassDescriptions.trollActiveDescription;
             default:
                 return "I love you cutie pie hehe. You don't have a class to show any description for.";
         }
@@ -718,6 +824,8 @@ public class MainActivityGame extends SharedMainActivity {
                 return CharacterClassDescriptions.goblinPassiveDescription;
             case GAMBLER:
                 return CharacterClassDescriptions.gamblerPassiveDescription;
+            case TROLL:
+                return CharacterClassDescriptions.trollPassiveDescription;
             default:
                 return "";
         }
@@ -738,6 +846,8 @@ public class MainActivityGame extends SharedMainActivity {
             handleAngryJimPassive(currentPlayer);
         } else if (ARCHER.equals(classChoice)) {
             handleArcherPassive(currentPlayer);
+        } else if (TROLL.equals(classChoice)) {
+            handleTrollPassive(currentPlayer);
         }
     }
 
@@ -789,6 +899,9 @@ public class MainActivityGame extends SharedMainActivity {
                 break;
             case GAMBLER:
                 ActiveAbilities.handleGamblerClass();
+                break;
+            case TROLL:
+                ActiveAbilities.handleTrollClass(currentPlayer);
                 break;
             default:
                 break;

@@ -10,6 +10,7 @@ public class CharacterClassDescriptions {
     public static final String SURVIVOR = "Survivor";
     public static final String GOBLIN = "Goblin";
     public static final String GAMBLER = "Gambler";
+    public static final String TROLL = "Troll";
     public static final String NO_CLASS = "No Class";
 
     // Active Ability Descriptions
@@ -17,7 +18,7 @@ public class CharacterClassDescriptions {
             "You may remove 2 drinks from the total and give them to any players.";
 
     public static final String witchActiveDescription =
-            "Throw a potion! Play a mini-game to determine its potency. Great results can grant immunity or let you hand out many drinks, but failure will force you to drink!";
+            "Throw a potion! Play a mini-game to determine its potency!";
 
     public static final String scientistActiveDescription =
             "Change the current number to any number. Your turn continues.";
@@ -40,6 +41,9 @@ public class CharacterClassDescriptions {
     public static final String goblinActiveDescription =
             "Sacrifice 1 of your wildcards to remove 2 from a random player.";
 
+    public static final String trollActiveDescription =
+            "Read a riddle up to 2 random players. First to guess right is safe; the other drinks 4!";
+
     public static final String noClassDescription =
             "No abilities.";
 
@@ -53,6 +57,7 @@ public class CharacterClassDescriptions {
     public static final String angryJimActiveButtonText = "Force turn repeat";
     public static final String gamblerActiveButtonText = "High Card Duel";
     public static final String goblinActiveButtonText = "Sacrifice wildcard";
+    public static final String trollActiveButtonText = "Riddle Toll";
 
     // Passive Ability Descriptions
     public static final String archerPassiveDescription =
@@ -81,4 +86,7 @@ public class CharacterClassDescriptions {
 
     public static final String goblinPassiveDescription =
             "Whenever other players use a wild card, they must drink once.";
+
+    public static final String trollPassiveDescription =
+            "20% chance on Troll's turn to hide the current number. Players may pay 3 drinks to see it!";
 }

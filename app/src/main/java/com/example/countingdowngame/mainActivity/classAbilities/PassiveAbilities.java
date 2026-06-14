@@ -6,6 +6,7 @@ import static com.example.countingdowngame.createPlayer.CharacterClassDescriptio
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GOBLIN;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SCIENTIST;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.TROLL;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
 import static com.example.countingdowngame.mainActivity.MainActivityGame.drinkNumberCounterInt;
 import static com.example.countingdowngame.mainActivity.MainActivityGame.isFirstTurn;
@@ -139,6 +140,16 @@ public class PassiveAbilities {
             } else {
                 activity.updateDrinkNumberCounter(-2, true);
                 activity.showGameDialog(ARCHER + "'s Passive: \n\nDrinking number decreased by 2!");
+            }
+        }
+    }
+
+    public static void handleTrollPassive(Player currentPlayer) {
+        if (!isFirstTurn && !currentPlayer.hasUsedTrollPassive()) {
+            int chance = new Random().nextInt(100);
+            if (chance < 20) {
+                currentPlayer.setTrollPassiveUsed(true);
+                activity.hideNumberForTroll(currentPlayer);
             }
         }
     }

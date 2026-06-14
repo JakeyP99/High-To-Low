@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
+
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.countingdowngame.R;
@@ -28,6 +30,7 @@ public class NumberChoice extends ButtonUtilsActivity {
     private EditText originalNumberField;
     private pl.droidsonroids.gif.GifImageView muteGif;
     private pl.droidsonroids.gif.GifImageView soundGif;
+    private boolean isGenerating = false;
 
     @Override
     protected void onResume() {
@@ -49,6 +52,15 @@ public class NumberChoice extends ButtonUtilsActivity {
         setupAudioManagerForMuteButtons(muteGif, soundGif);
         resetStartingNumber();
         setupButtonControls();
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (!isGenerating) {
+                    finish();
+                }
+            }
+        });
     }
 
     private void initializeViews() {
@@ -126,10 +138,12 @@ public class NumberChoice extends ButtonUtilsActivity {
         }
 
         startingNumber = inputNumber;
+        isGenerating = true;
         YoYo.with(Techniques.RubberBand)
                 .duration(300)
                 .onEnd(animator -> {
                     // Animation has ended, start the MainActivity here
+                    isGenerating = false;
 
                     if (Game.getInstance().isPlayCards()) {
                         goToCardGame(startingNumber);
@@ -149,6 +163,7 @@ public class NumberChoice extends ButtonUtilsActivity {
         btnRandom.setEnabled(false);
         btnSubmit.setEnabled(false);
         originalNumberField.setFocusable(false);
+        isGenerating = true;
 
         Random random = new Random();
         int range = 5000;
@@ -175,6 +190,7 @@ public class NumberChoice extends ButtonUtilsActivity {
                     YoYo.with(Techniques.Bounce)
                             .duration(600)
                             .onEnd(animator -> {
+                                isGenerating = false;
                                 btnRandom.setEnabled(true);
                                 btnSubmit.setEnabled(true);
                                 if (Game.getInstance().isPlayCards()) {

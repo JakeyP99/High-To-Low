@@ -65,7 +65,9 @@ public class MainActivityNumberGenerator {
             if (shuffleTime < shuffleDuration) {
                 // Still shuffling: display a random number
                 int randomDigit = random.nextInt(originalNumber + 1);
-                numberCounterText.setText(String.valueOf(randomDigit));
+                String display = MainActivityGame.getDisplayNumber(randomDigit);
+                numberCounterText.setText(display);
+                SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, display);
 
                 float progress = (float) shuffleTime / shuffleDuration;
                 currentInterval = (int) (initialInterval + (progress * progress * 250));
@@ -86,8 +88,9 @@ public class MainActivityNumberGenerator {
 
             Game.getInstance().recordTurn(currentPlayer, targetNumber);
 
-            numberCounterText.setText(String.valueOf(targetNumber));
-            SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, String.valueOf(targetNumber));
+            String display = MainActivityGame.getDisplayNumber(targetNumber);
+            numberCounterText.setText(display);
+            SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, display);
             
             MainActivityGame.updateNumberColor(targetNumber);
 
