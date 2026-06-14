@@ -17,7 +17,7 @@ public class CharacterClassDescriptions {
             "You may remove 2 drinks from the total and give them to any players.";
 
     public static final String witchActiveDescription =
-            "Skip your turn. Resets after 3 turns.";
+            "Throw a potion! Solve a math problem to determine the effect. Perfect: Immune to 0 once. 5% range: Hand out 3 drinks. 10% range: Hand out 1 drink. Outside: Take 2 drinks.";
 
     public static final String scientistActiveDescription =
             "Change the current number to any number. Your turn continues.";
@@ -45,7 +45,7 @@ public class CharacterClassDescriptions {
 
     // Active Ability Button Text (Shortened versions)
     public static final String archerActiveButtonText = "Hand out 2 drinks";
-    public static final String witchActiveButtonText = "Skip your turn";
+    public static final String witchActiveButtonText = "Throw a potion";
     public static final String scientistActiveButtonText = "Change current number";
     public static final String soldierActiveButtonText = "Add 4 drinks";
     public static final String quizMagicianActiveButtonText = "Next wildcard is 2 quizzes";

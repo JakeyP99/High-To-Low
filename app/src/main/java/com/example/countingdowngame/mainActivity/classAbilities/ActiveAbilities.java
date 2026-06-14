@@ -18,6 +18,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.mainActivity.MainActivityGame;
+import com.example.countingdowngame.mainActivity.PowerUps;
 import com.example.countingdowngame.player.Player;
 
 import java.util.ArrayList;
@@ -206,10 +208,87 @@ public class ActiveAbilities {
     }
 
     public static void handleWitchClass(Player currentPlayer) {
-        currentPlayer.setUsedActiveAbility(true);
-        hideAbilityButton();
-        currentPlayer.useSkip();
+        Random random = new Random();
+        int num1 = random.nextInt(900) + 100; // 3-digit
+        int num2 = random.nextInt(900) + 100; // 3-digit
+        int correctAnswer = num1 * num2;
+
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.game_witch_potion_math, null);
+
+        TextView mathProblemTv = dialogView.findViewById(R.id.math_problem);
+        TextView timerTv = dialogView.findViewById(R.id.timer_text);
+        EditText answerEt = dialogView.findViewById(R.id.math_answer);
+        Button submitBtn = dialogView.findViewById(R.id.btn_submit_potion);
+
+        mathProblemTv.setText(num1 + " x " + num2);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
+        builder.setView(dialogView);
+        builder.setCancelable(false);
+        AlertDialog dialog = builder.create();
+
+        CountDownTimer timer = new CountDownTimer(15000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timerTv.setText((millisUntilFinished / 1000) + "s");
+            }
+
+            @Override
+            public void onFinish() {
+                dialog.dismiss();
+                processPotionResult(currentPlayer, -1, correctAnswer);
+            }
+        }.start();
+
+        submitBtn.setOnClickListener(v -> {
+            String input = answerEt.getText().toString();
+            if (input.isEmpty()) {
+                Toast.makeText(activity, "Enter an answer!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            try {
+                int userAnswer = Integer.parseInt(input);
+                timer.cancel();
+                dialog.dismiss();
+                processPotionResult(currentPlayer, userAnswer, correctAnswer);
+            } catch (NumberFormatException ignored) {
+            }
+        });
+
+        dialog.show();
         AudioManager.getInstance().playSoundEffects(activity, WITCH);
+    }
+
+    private static void processPotionResult(Player player, int userAnswer, int correctAnswer) {
+        player.setUsedActiveAbility(true);
+        hideAbilityButton();
+
+        if (userAnswer == -1) {
+            activity.showGameDialog("Time's up! The potion exploded. \n\n" + player.getName() + " take 2 drinks!");
+            player.incrementDrinksTakenByWitch(2);
+            return;
+        }
+
+        if (userAnswer == correctAnswer) {
+            activity.showGameDialog("PERFECT! \n\n" + player.getName() + " is now immune to landing on 0 once!");
+            PowerUps.gainPowerUp(player, PowerUps.GET_OUT_OF_JAIL + ": Immune to landing on 0 once!");
+            return;
+        }
+
+        int difference = Math.abs(userAnswer - correctAnswer);
+        double percentageOff = ((double) difference / correctAnswer) * 100;
+
+        if (percentageOff <= 5) {
+            activity.showGameDialog("Close enough (Within 5%)! Correct was " + correctAnswer + ".\n\n" + player.getName() + " hand out 3 drinks!");
+            player.incrementDrinksHandedOutByWitch(3);
+        } else if (percentageOff <= 10) {
+            activity.showGameDialog("Not bad (Within 10%)! Correct was " + correctAnswer + ".\n\n" + player.getName() + " hand out 1 drink!");
+            player.incrementDrinksHandedOutByWitch(1);
+        } else {
+            activity.showGameDialog("Way off! Correct was " + correctAnswer + ".\n\n" + player.getName() + " take 2 drinks!");
+            player.incrementDrinksTakenByWitch(2);
+        }
     }
 
     public static void handleGamblerClass() {
