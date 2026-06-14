@@ -44,6 +44,7 @@ import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.statistics.Statistics;
 import com.google.gson.Gson;
 
+import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -113,11 +114,13 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
 
         if (player.isSelected()) {
             player.setSelectionOrder(++selectedPlayerCount);
+            player.setClassChoice(null); // Clear any previous class choice when selecting
             if (!Game.getInstance().isPlayCards()) {
                 chooseClass(position);
             }
         } else {
             selectedPlayerCount--;
+            player.setClassChoice(null); // Clear class choice when deselecting
         }
 
         playerListAdapter.notifyItemChanged(position);
@@ -206,33 +209,17 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         }
 
         ViewPager viewPager = dialogView.findViewById(R.id.classRecyclerView);
-        ProgressBar progressBar = dialogView.findViewById(R.id.progress);
+        DotsIndicator dotsIndicator = dialogView.findViewById(R.id.dots_indicator);
 
         CharacterClassPagerAdapter pagerAdapter = new CharacterClassPagerAdapter(pages);
         viewPager.setAdapter(pagerAdapter);
-
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                int maxProgress = pagerAdapter.getCount() - 1;
-                int currentProgress = calculateProgress(position, maxProgress);
-                progressBar.setProgress(currentProgress);
-            }
-
-            @Override public void onPageSelected(int position) {}
-            @Override public void onPageScrollStateChanged(int state) {}
-        });
+        dotsIndicator.setViewPager(viewPager);
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
         dialog.setOnCancelListener(dialogInterface -> handleCancelClick(position, dialog));
         dialog.show();
         confirmClass.setOnClickListener(v -> handleConfirmClick(position, dialog));
-    }
-
-    private int calculateProgress(int position, int maxProgress) {
-        if (maxProgress <= 0) return 100;
-        return (position * 100) / maxProgress;
     }
 
     private void handleCancelClick(int position, AlertDialog dialog) {
@@ -263,9 +250,11 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
                         : selectedPlayer.getName() + " chose the " + selectedCharacterClass.getClassName() + " class!";
 
                 StyleableToast.makeText(getApplicationContext(), message, R.style.newToast).show();
+                playerListAdapter.notifyItemChanged(position);
                 dialog.dismiss();
             } else {
                 selectedPlayer.setClassChoice(null);
+                playerListAdapter.notifyItemChanged(position);
                 StyleableToast.makeText(this, selectedPlayer.getName() + " chose no class!", R.style.newToast).show();
                 dialog.dismiss();
             }

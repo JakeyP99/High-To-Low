@@ -67,6 +67,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView playerPhotoImageView;
         TextView playerNameTextView;
+        TextView playerClassTextView;
         ImageView deletePlayerImageView;
         View playerItemView;
 
@@ -76,6 +77,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
 
             playerPhotoImageView = itemView.findViewById(R.id.playerPhotoImageView);
             playerNameTextView = itemView.findViewById(R.id.playerNameTextView);
+            playerClassTextView = itemView.findViewById(R.id.playerClassTextView);
             deletePlayerImageView = itemView.findViewById(R.id.deletePlayerImageView);
 
             playerItemView.setOnClickListener(v -> {
@@ -96,7 +98,6 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
         public void bind(Player player) {
             String photoString = player.getPhoto();
             byte[] decodedBytes = Base64.decode(photoString, Base64.DEFAULT);
-            Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
 
             Glide.with(context)
                     .load(decodedBytes)
@@ -106,6 +107,13 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
             playerNameTextView.setBackgroundResource(R.drawable.outlineforbutton);
             playerNameTextView.setText(player.getName());
             playerNameTextView.setPadding(30, 20, 30, 30);
+
+            if (player.isSelected() && player.getClassChoice() != null && !player.getClassChoice().isEmpty()) {
+                playerClassTextView.setText(player.getClassChoice());
+                playerClassTextView.setVisibility(View.VISIBLE);
+            } else {
+                playerClassTextView.setVisibility(View.GONE);
+            }
 
             if (player.isSelected()) {
                 playerItemView.setBackgroundResource(R.drawable.selectedplayer);
