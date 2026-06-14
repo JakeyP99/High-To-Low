@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -70,7 +71,7 @@ public class NumberChoice extends ButtonUtilsActivity {
         Button btnRandom = findViewById(R.id.btnRandomNumber);
 
         if (Game.getInstance().isPlayCards()) {
-            btnRandom.setVisibility(View.INVISIBLE);
+            btnRandom.setVisibility(View.GONE);
         } else {
             btnRandom.setVisibility(View.VISIBLE);
         }
@@ -143,10 +144,50 @@ public class NumberChoice extends ButtonUtilsActivity {
 
 
     private void onRandomClicked() {
-        Random random = new Random();
-        startingNumber = random.nextInt(99999999) + 1;
+        Button btnRandom = findViewById(R.id.btnRandomNumber);
+        Button btnSubmit = findViewById(R.id.btnSubmitNumbers);
+        btnRandom.setEnabled(false);
+        btnSubmit.setEnabled(false);
         originalNumberField.setFocusable(false);
-        goToInGameSettings(startingNumber);
+
+        Random random = new Random();
+        int range = 5000;
+        int targetNumber = random.nextInt(range) + 1;
+
+        final int[] count = {0};
+        final long[] currentDelay = {30};
+        final int totalSteps = 13;
+
+        Handler handler = new Handler();
+        Runnable rouletteRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (count[0] < totalSteps) {
+                    int tempNumber = random.nextInt(range) + 1;
+                    originalNumberField.setText(String.valueOf(tempNumber));
+                    count[0]++;
+                    currentDelay[0] = (long) (currentDelay[0] * 1.2); // Slow down
+                    handler.postDelayed(this, currentDelay[0]);
+                } else {
+                    originalNumberField.setText(String.valueOf(targetNumber));
+                    startingNumber = targetNumber;
+
+                    YoYo.with(Techniques.Bounce)
+                            .duration(600)
+                            .onEnd(animator -> {
+                                btnRandom.setEnabled(true);
+                                btnSubmit.setEnabled(true);
+                                if (Game.getInstance().isPlayCards()) {
+                                    goToCardGame(startingNumber);
+                                } else {
+                                    goToInGameSettings(startingNumber);
+                                }
+                            })
+                            .playOn(originalNumberField);
+                }
+            }
+        };
+        handler.post(rouletteRunnable);
     }
 
 
