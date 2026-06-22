@@ -71,7 +71,6 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
     protected void onResume() {
         super.onResume();
         boolean isMuted = getMuteSoundState();
-        AudioManager.getInstance().resumeBackgroundMusic();
         AudioManager.updateMuteStateWithoutButtons(isMuted);
 
         for (Player existingPlayer : playerList) {

@@ -66,12 +66,6 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        AudioManager.getInstance().pauseSound();
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_roulette_main_activity);

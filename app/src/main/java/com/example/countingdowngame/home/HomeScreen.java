@@ -37,8 +37,6 @@ public class HomeScreen extends ButtonUtilsActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        AudioManager audioManager = AudioManager.getInstance();
-        audioManager.resumeBackgroundMusic();
         AudioManager.updateMuteButton(getMuteSoundState(), muteGif, soundGif);
     }
 

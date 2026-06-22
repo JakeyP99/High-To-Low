@@ -24,7 +24,7 @@
             android:background="@android:color/white"
             android:gravity="center"
             android:textColor="@color/bluedark"
-            app:autoSizeMaxTextSize="15sp"
+            app:autoSizeMaxTextSize="23sp"
             app:autoSizeMinTextSize="12sp"
             app:autoSizeStepGranularity="2sp"
             android:paddingLeft="20dp"

@@ -96,15 +96,6 @@ public class AudioManager {
             soundGif.setVisibility(View.INVISIBLE);
         } else {
             audioManager.unmute();
-            if (audioManager.isNotPlaying()) {
-                if (audioManager.getCurrentSongIndex() != -1) {
-                    audioManager.resumeBackgroundMusic();
-                    Log.d(TAG, "updateMuteButton: resume");
-                } else {
-                    audioManager.playRandomBackgroundMusic(context);
-                    Log.d(TAG, "updateMuteButton: no song to resume");
-                }
-            }
             muteGif.setVisibility(View.INVISIBLE);
             soundGif.setVisibility(View.VISIBLE);
         }
@@ -118,15 +109,6 @@ public class AudioManager {
                 Log.d(TAG, "updateMuteStateWithoutButtons: muted");
             } else {
                 audioManager.unmute();
-                if (audioManager.isNotPlaying()) {
-                    if (audioManager.getCurrentSongIndex() != -1) {
-                        audioManager.resumeBackgroundMusic();
-                        Log.d(TAG, "updateMuteStateWithoutButtons: resume");
-                    } else {
-                        audioManager.playRandomBackgroundMusic(context);
-                        Log.d(TAG, "updateMuteStateWithoutButtons: no song to resume");
-                    }
-                }
             }
         }
     }
@@ -185,18 +167,20 @@ public class AudioManager {
     }
 
     public void resumeBackgroundMusic() {
-        if (mediaPlayer != null && !isPlaying) {
-            // Check if there is a current song playing
+        if (isMuted) return;
+        if (isPlaying) return;
+
+        if (mediaPlayer != null) {
             if (currentSongIndex != -1) {
-                // Resume the current song from the last known position
                 mediaPlayer.seekTo(currentPosition);
                 mediaPlayer.start();
                 isPlaying = true;
                 Log.d(TAG, "resumeBackgroundMusic: Resumed background music");
             } else {
-                // If there is no current song, play a random song
                 playRandomBackgroundMusic(context);
             }
+        } else if (context != null) {
+            playRandomBackgroundMusic(context);
         }
     }
 

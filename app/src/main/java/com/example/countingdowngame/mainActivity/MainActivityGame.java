@@ -111,7 +111,7 @@ public class MainActivityGame extends SharedMainActivity {
     private View btnClassAbility, btnWild;
     private GifImageView confettiImageViewBL, confettiImageViewBR, confettiImageViewTL, confettiImageViewTR, infoGif, muteGif, soundGif;
     private ImageView playerImage, iconAbility;
-    private TextView drinkNumberTextView, nextPlayerText, wildActivityTextView, wildText, textWildCount, labelAbilityTitle, labelAbilityDesc;
+    private TextView drinkNumberTextView, nextPlayerText, wildText, textWildCount, labelAbilityTitle, labelAbilityDesc;
     private ImageButton imageButtonExit;
     //-----------------------------------------------------Booleans---------------------------------------------------//
     private boolean doubleBackToExitPressedOnce = false;
@@ -263,7 +263,6 @@ public class MainActivityGame extends SharedMainActivity {
         btnQuizAnswerBR = findViewById(R.id.btnQuizAnswerBR);
         btnQuizAnswerTL = findViewById(R.id.btnQuizAnswerTL);
         btnQuizAnswerTR = findViewById(R.id.btnQuizAnswerTR);
-        wildActivityTextView = findViewById(R.id.textView_WildText);
         imageButtonExit = findViewById(R.id.btnExitGame);
         wildText = findViewById(R.id.textView_WildText);
 
@@ -1029,7 +1028,7 @@ public class MainActivityGame extends SharedMainActivity {
 
             WildCardProperties[] selectedType = selectWildCardType(currentPlayer, quizWildCards, taskWildCards, truthWildCards);
             if (selectedType == null) {
-                wildActivityTextView.setText("No wild cards available, your turn is skipped!");
+                wildText.setText("No wild cards available, your turn is skipped!");
                 btnWildContinue.setVisibility(View.VISIBLE);
                 btnClassAbility.setVisibility(View.INVISIBLE);
                 return;
@@ -1116,14 +1115,14 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void updateSelectedCard(WildCardProperties selectedCard) {
         String selectedActivity = selectedCard.getWildCard();
-        wildActivityTextView.setText(selectedActivity);
+        wildText.setText(selectedActivity);
         updateTextSize(selectedActivity);
         selectedWildCard = selectedCard;
     }
 
     private void updateTextSize(String selectedActivity) {
         int textSize = TextSizeCalculator.calculateTextSizeBasedOnCharacterCount(selectedActivity);
-        wildActivityTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+        wildText.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
     }
 
     private void setAnswersAndVisibility(WildCardProperties selectedCard, Player currentPlayer) {
@@ -1383,7 +1382,7 @@ public class MainActivityGame extends SharedMainActivity {
         if (selectedWildCard != null) {
             if (selectedWildCard.hasAnswer()) {
                 String answer = selectedWildCard.getAnswer();
-                wildActivityTextView.setText(answer);
+                wildText.setText(answer);
                 Log.d("Answer", "Quiz WildCard: " + answer);
 
                 btnWildContinue.setVisibility(View.INVISIBLE);
@@ -1405,7 +1404,7 @@ public class MainActivityGame extends SharedMainActivity {
                 });
 
             } else {
-                wildActivityTextView.setText("No answer available");
+                wildText.setText("No answer available");
             }
         }
         btnAnswer.setVisibility(View.INVISIBLE);

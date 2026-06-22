@@ -17,7 +17,9 @@
     <string name="instruction_create_players">
         <b><big>Create Your Players!</big></b>
         \n\n
-        Before we begin, we have to create your character! You can either take a photo of yourself, or if you\'re having a bad hair day, you can draw your character.
+        Before we begin, we have to create your character!
+        \n\n
+        You can either take a photo of yourself, or if you\'re having a bad hair day, you can draw your character.
     </string>
 
     <string name="instruction_choose_class">
@@ -41,7 +43,9 @@
     <string name="instruction_generate_button">
         <b><big>Generate Button!</big></b>
         \n\n
-        Let me introduce you to the two main buttons. First, there\'s the \'Generate\' button, which will randomly choose a number between 0 and the number on screen.
+        Let me introduce you to the two main buttons.
+        \n\n
+        First, there\'s the \'Generate\' button, which will randomly choose a number between 0 and the number on screen.
     </string>
 
     <string name="instruction_wildcard_button">

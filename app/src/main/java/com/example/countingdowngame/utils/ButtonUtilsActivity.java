@@ -98,6 +98,7 @@ public abstract class ButtonUtilsActivity extends AppCompatActivity {
         muteGif.setOnClickListener(view -> {
             updateMuteButton(false, muteGif, soundGif);
             saveMuteSoundState(false);
+            AudioManager.getInstance().resumeBackgroundMusic();
             Log.d("TAG", "setupMuteSoundClickListeners: is muted is false");
         });
         soundGif.setOnClickListener(view -> {
