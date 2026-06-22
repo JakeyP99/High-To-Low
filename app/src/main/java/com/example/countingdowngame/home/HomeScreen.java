@@ -1,6 +1,7 @@
 package com.example.countingdowngame.home;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
 import com.example.countingdowngame.R;
@@ -56,7 +57,7 @@ public class HomeScreen extends ButtonUtilsActivity {
     }
 
     private void setGameButton(int buttonId, boolean playCards) {
-        Button button = findViewById(buttonId);
+        View button = findViewById(buttonId);
         buttonUtils.setButton(button, () -> {
             Game.getInstance().setPlayCards(playCards);
             gotoPlayerChoice();
