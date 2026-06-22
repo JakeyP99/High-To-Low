@@ -101,10 +101,6 @@ public class EndActivityGame extends ButtonUtilsActivity {
         if (drinkNumberCounter == 0) {
             endGameText = String.format("Drink up %s you litt..... Oh.. The number was 0? Well damn, lucky you I guess", playerName);
         } else {
-            // Check if Split the Pain was used (we check if it was just used by checking if it's in obtainedPowerUps and was a passive)
-            // But a better way is to see if we have a split result stored or if the game state indicates a split.
-            // For now, we'll check if the current player had Split the Pain and used it.
-            
             String splitTarget = gameInstance.getSplitTarget(); // I need to add this to Game class or handle it via a static variable
             if (splitTarget != null && !splitTarget.isEmpty()) {
                 int splitAmount = Math.max(drinkNumberCounter / 2, 1);

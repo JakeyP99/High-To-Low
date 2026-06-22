@@ -61,7 +61,7 @@ public class ActiveAbilities {
 
     private static void hideAbilityButton() {
         if (activity != null) {
-            Button btnClassAbility = activity.findViewById(R.id.btnClassAbility);
+            View btnClassAbility = activity.findViewById(R.id.btnClassAbility);
             if (btnClassAbility != null) {
                 btnClassAbility.setVisibility(View.INVISIBLE);
             }
@@ -71,9 +71,9 @@ public class ActiveAbilities {
 
     private static void hideWildButton() {
         if (activity != null) {
-            Button btnClassAbility = activity.findViewById(R.id.btnWild);
-            if (btnClassAbility != null) {
-                btnClassAbility.setVisibility(View.INVISIBLE);
+            View btnWild = activity.findViewById(R.id.btnWild);
+            if (btnWild != null) {
+                btnWild.setVisibility(View.INVISIBLE);
             }
         }
     }
@@ -96,11 +96,11 @@ public class ActiveAbilities {
                 int newNumber = Integer.parseInt(userInput);
                 if (newNumber > 999999999) {
                     activity.displayToastMessage("That number was too high!");
-                    Button btnClassAbility = activity.findViewById(R.id.btnClassAbility);
+                    View btnClassAbility = activity.findViewById(R.id.btnClassAbility);
                     if (btnClassAbility != null) btnClassAbility.setVisibility(View.VISIBLE);
                 } else if (newNumber == 0) {
                     activity.displayToastMessage("You cannot choose 0 as your number.");
-                    Button btnClassAbility = activity.findViewById(R.id.btnClassAbility);
+                    View btnClassAbility = activity.findViewById(R.id.btnClassAbility);
                     if (btnClassAbility != null) btnClassAbility.setVisibility(View.VISIBLE);
                 } else {
 

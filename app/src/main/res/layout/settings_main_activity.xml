@@ -16,7 +16,7 @@
         android:fontFamily="@font/viga"
         android:text="Wild Card Quantity"
         android:textColor="@color/bluedark"
-        android:textSize="23sp" />
+        android:textSize="25sp" />
 
     <EditText
         android:id="@+id/edittext_wildcard_amount"
@@ -39,7 +39,7 @@
         android:fontFamily="@font/viga"
         android:text="Total Drink Limit"
         android:textColor="@color/bluedark"
-        android:textSize="23sp" />
+        android:textSize="25sp" />
 
     <EditText
         android:id="@+id/edittext_drink_amount"
@@ -65,7 +65,7 @@
         android:gravity="center"
         android:text="Quiz Settings"
         android:textColor="@color/bluedark"
-        android:textSize="23sp" />
+        android:textSize="25sp" />
 
     <Button
         android:id="@+id/button_multiChoice"
@@ -80,7 +80,7 @@
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
-        android:textSize="23sp" />
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/button_nonMultiChoice"
@@ -95,7 +95,7 @@
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
-        android:textSize="23sp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/wildcard_settings_banner"
@@ -107,7 +107,7 @@
         android:gravity="center"
         android:text="Wild Card Choices"
         android:textColor="@color/bluedark"
-        android:textSize="23sp" />
+        android:textSize="25sp" />
 
     <Button
         android:id="@+id/button_task_toggle"
@@ -121,7 +121,7 @@
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
-        android:textSize="23sp" />
+        android:textSize="20sp" />
 
     <GridLayout
         android:layout_width="wrap_content"
@@ -150,7 +150,7 @@
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textColor="@color/bluedark"
-            android:textSize="23sp" />
+            android:textSize="20sp" />
 
 
 
@@ -169,7 +169,7 @@
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textColor="@color/bluedark"
-            android:textSize="23sp" />
+            android:textSize="20sp" />
 
     </GridLayout>
 

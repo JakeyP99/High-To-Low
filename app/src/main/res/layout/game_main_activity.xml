@@ -63,39 +63,122 @@
         app:layout_constraintVertical_bias="0.01"
         app:loopCount="1" />
 
-    <Button
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/btnWild"
-        android:layout_width="165dp"
-        android:layout_height="100dp"
+        android:layout_width="320dp"
+        android:layout_height="70dp"
         android:background="@drawable/outlineforbutton"
-        android:fontFamily="@font/viga"
-        android:text="@string/wild"
-        android:textAllCaps="false"
-        android:textColor="@color/bluedark"
-        android:textSize="25sp"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toTopOf="@+id/btnClassAbility"
-        app:layout_constraintEnd_toEndOf="@+id/btnQuizAnswerBR"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="@+id/btnQuizAnswerBL"
-        app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
-        app:layout_constraintVertical_bias="0.495" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnGenerate">
 
-    <Button
+        <ImageView
+            android:id="@+id/iconWild"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/trading"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/labelWild"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/viga"
+            android:text="Wild Cards"
+            android:textColor="@color/bluedark"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/textWildCount"
+            app:layout_constraintStart_toEndOf="@id/iconWild"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/textWildCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:text="0"
+            android:textColor="@color/bluedark"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/labelWild"
+            app:layout_constraintTop_toBottomOf="@id/labelWild" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/btnClassAbility"
         android:layout_width="320dp"
-        android:layout_height="61dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/outlineforbutton"
-        android:fontFamily="@font/viga"
-        android:text="@string/placeholder_text"
-        android:textAllCaps="false"
-        android:textColor="@color/bluedark"
-        android:textSize="25sp"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.96" />
+        app:layout_constraintTop_toBottomOf="@+id/btnWild"
+        app:layout_constraintVertical_bias="0.8">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iconAbility"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/wine"
+            app:civ_border_color="@color/bluedark"
+            app:civ_border_width="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/labelAbilityTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/viga"
+            android:maxLines="1"
+            android:text="Class Ability"
+            android:textColor="@color/bluedark"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/labelAbilityDesc"
+            app:layout_constraintStart_toEndOf="@id/iconAbility"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/labelAbilityDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:fontFamily="@font/viga"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="Tap to use your ability"
+            android:textColor="@color/bluedark"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/labelAbilityTitle"
+            app:layout_constraintStart_toStartOf="@id/labelAbilityTitle"
+            app:layout_constraintTop_toBottomOf="@id/labelAbilityTitle" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/btnBackWildCard"
@@ -339,6 +422,7 @@
         android:text="10 drinks"
         android:textColor="@color/bluedark"
         android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/btnGenerate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -357,7 +441,7 @@
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:textColor="@color/bluedark"
-        android:textSize="30sp"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.6"
@@ -368,11 +452,11 @@
     <Button
         android:id="@+id/btnGenerate"
         android:layout_width="290dp"
-        android:layout_height="282dp"
+        android:layout_height="220dp"
         android:background="@drawable/outlineforbutton"
         android:contentDescription="@string/placeholder_text"
         android:textColor="@color/bluedark"
-        android:textSize="21sp"
+        android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
@@ -385,7 +469,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/bluedark"
-        android:textSize="70sp"
+        android:textSize="55sp"
         app:layout_constraintBottom_toBottomOf="@+id/btnGenerate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

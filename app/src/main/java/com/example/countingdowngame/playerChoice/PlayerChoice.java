@@ -63,7 +63,6 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;
     private List<Player> playerList;
     private PlayerListAdapter playerListAdapter;
-    private TextView playerCountTextView;
     private RecyclerView playerRecyclerView;
     private int selectedPlayerCount;
     private Button proceedButton;
@@ -82,7 +81,6 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
                 existingPlayer.setSelected(existingPlayer.isSelected());
             }
         }
-        updatePlayerCounter();
         playerListAdapter.notifyDataSetChanged();
         proceedButton.setEnabled(true);
     }
@@ -97,7 +95,6 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         setupDrawButton();
         setupProceedButton();
         loadPlayerData();
-        updatePlayerCounter();
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -124,7 +121,6 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         }
 
         playerListAdapter.notifyItemChanged(position);
-        updatePlayerCounter();
     }
 
     @Override
@@ -180,7 +176,6 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
 
     private void initializeViews() {
         playerRecyclerView = findViewById(R.id.playerRecyclerView);
-        playerCountTextView = findViewById(R.id.text_view_counter);
         playerList = new ArrayList<>();
         playerListAdapter = new PlayerListAdapter(this, playerList, this);
         proceedButton = findViewById(R.id.button_done);
@@ -230,7 +225,6 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
             player.setSelected(false);
             selectedPlayerCount--;
             playerListAdapter.notifyItemChanged(position);
-            updatePlayerCounter();
         }
     }
 
@@ -443,7 +437,6 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         playerList.remove(position);
         playerListAdapter.notifyItemRemoved(position);
         savePlayerData();
-        updatePlayerCounter();
     }
 
     private void savePlayerData() {
@@ -463,17 +456,6 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         playerListAdapter.notifyDataSetChanged();
     }
 
-    public void updatePlayerCounter() {
-        String counterText;
-        if (selectedPlayerCount == 0) {
-            counterText = "Select Players!";
-        } else if (selectedPlayerCount == 1) {
-            counterText = "Select 1 More Player!";
-        } else {
-            counterText = selectedPlayerCount + " Players Selected!";
-        }
-        playerCountTextView.setText(counterText);
-    }
 
     private void setupPlayerRecyclerView() {
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);

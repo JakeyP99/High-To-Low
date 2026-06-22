@@ -1,11 +1,5 @@
 package com.example.countingdowngame.createPlayer;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.BitmapShader;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Shader;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -112,7 +106,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
                 playerClassTextView.setText(player.getClassChoice());
                 playerClassTextView.setVisibility(View.VISIBLE);
             } else {
-                playerClassTextView.setVisibility(View.GONE);
+                playerClassTextView.setVisibility(View.INVISIBLE);
             }
 
             if (player.isSelected()) {

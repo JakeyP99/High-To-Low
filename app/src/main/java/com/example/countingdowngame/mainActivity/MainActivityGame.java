@@ -42,9 +42,11 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
@@ -74,6 +76,7 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import io.github.muddz.styleabletoast.StyleableToast;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -104,10 +107,11 @@ public class MainActivityGame extends SharedMainActivity {
     Game game = Game.getInstance();
 
     //-----------------------------------------------------Views---------------------------------------------------//
-    private Button btnAnswer, btnWildContinue, btnClassAbility, btnGenerate, btnQuizAnswerBL, btnQuizAnswerBR, btnQuizAnswerTL, btnQuizAnswerTR, btnWild;
+    private Button btnAnswer, btnWildContinue, btnGenerate, btnQuizAnswerBL, btnQuizAnswerBR, btnQuizAnswerTL, btnQuizAnswerTR;
+    private View btnClassAbility, btnWild;
     private GifImageView confettiImageViewBL, confettiImageViewBR, confettiImageViewTL, confettiImageViewTR, infoGif, muteGif, soundGif;
-    private ImageView playerImage;
-    private TextView drinkNumberTextView, nextPlayerText, wildActivityTextView, wildText;
+    private ImageView playerImage, iconAbility;
+    private TextView drinkNumberTextView, nextPlayerText, wildActivityTextView, wildText, textWildCount, labelAbilityTitle, labelAbilityDesc;
     private ImageButton imageButtonExit;
     //-----------------------------------------------------Booleans---------------------------------------------------//
     private boolean doubleBackToExitPressedOnce = false;
@@ -262,6 +266,12 @@ public class MainActivityGame extends SharedMainActivity {
         wildActivityTextView = findViewById(R.id.textView_WildText);
         imageButtonExit = findViewById(R.id.btnExitGame);
         wildText = findViewById(R.id.textView_WildText);
+
+        textWildCount = findViewById(R.id.textWildCount);
+        labelAbilityTitle = findViewById(R.id.labelAbilityTitle);
+        labelAbilityDesc = findViewById(R.id.labelAbilityDesc);
+        labelAbilityDesc.setSelected(true);
+        iconAbility = findViewById(R.id.iconAbility);
 
         answerButtons = new Button[]{btnQuizAnswerBL, btnQuizAnswerBR, btnQuizAnswerTL, btnQuizAnswerTR};
         numberGenerator = new MainActivityNumberGenerator(this, numberCounterText);
@@ -579,9 +589,33 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
+    private void updateClassIcon(String classChoice) {
+        if (iconAbility == null || classChoice == null) return;
+
+        int iconRes;
+        switch (classChoice) {
+            case ARCHER: iconRes = R.drawable.archer; break;
+            case WITCH: iconRes = R.drawable.witch; break;
+            case SCIENTIST: iconRes = R.drawable.scientist; break;
+            case SOLDIER: iconRes = R.drawable.jail; break;
+            case QUIZ_MAGICIAN: iconRes = R.drawable.quizmaster; break;
+            case SURVIVOR: iconRes = R.drawable.bridge; break;
+            case ANGRY_JIM: iconRes = R.drawable.angry_jim; break;
+            case GOBLIN: iconRes = R.drawable.goblin; break;
+            case GAMBLER: iconRes = R.drawable.dice; break;
+            case TROLL: iconRes = R.drawable.books; break;
+            default: iconRes = R.drawable.wine; break;
+        }
+        iconAbility.setImageResource(iconRes);
+    }
+
     private void updateClassAbilityButton(Player currentPlayer) {
         String classChoice = currentPlayer.getClassChoice();
-        btnClassAbility.setText(getClassActiveButtonText(classChoice));
+        labelAbilityTitle.setText(getClassActiveButtonText(classChoice));
+        labelAbilityDesc.setText(getClassActiveDescription(classChoice));
+
+        updateClassIcon(classChoice);
+
         int wildCardCount = currentPlayer.getWildCardAmount();
 
         boolean canShowButton = (SCIENTIST.equals(classChoice) || ARCHER.equals(classChoice)
@@ -670,10 +704,8 @@ public class MainActivityGame extends SharedMainActivity {
         int wildCardCount = currentPlayer.getWildCardAmount();
 
         String turnText = turnCount == 1 ? "Turn" : "Turns";
-        String wildCardText = wildCardCount == 1 ? "Wild Card" : "Wild Cards";
-
         nextPlayerText.setText(playerName + " has " + turnCount + " " + turnText);
-        btnWild.setText(wildCardCount + "\n" + wildCardText);
+        textWildCount.setText(String.valueOf(wildCardCount));
 
         if (playerImageString != null) {
             byte[] decodedString = Base64.decode(playerImageString, Base64.DEFAULT);
