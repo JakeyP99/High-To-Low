@@ -1,7 +1,6 @@
 package com.example.countingdowngame.wildCards.wildCardTypes;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.example.countingdowngame.settings.WildCardSettingsLocalStore;
 import com.example.countingdowngame.wildCards.WildCardProperties;
@@ -74,26 +73,4 @@ public class WildCardRepository {
         return cards[random.nextInt(cards.length)];
     }
 
-    private void save(WildCardProperties[] cards, String key) {
-
-        WildCardSettingsLocalStore prefs =
-                WildCardSettingsLocalStore.fromContext(context, key);
-
-        prefs.setWildCardQuantity(cards.length);
-
-        for (int i = 0; i < cards.length; i++) {
-            WildCardProperties c = cards[i];
-
-            prefs.setWildcardState(
-                    i,
-                    c.isEnabled(),
-                    c.getWildCard(),
-                    c.getAnswer(),
-                    c.getWrongAnswer1(),
-                    c.getWrongAnswer2(),
-                    c.getWrongAnswer3(),
-                    c.getCategory()
-            );
-        }
-    }
 }

@@ -9,20 +9,30 @@
     android:background="@drawable/rounded_background">
 
     <TextView
-        android:id="@+id/memory_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/viga"
-        android:text="Alchemist's Memory"
+        android:layout_gravity="center"
+        android:paddingTop="10dp"
+        android:text="Witch's Active!"
+        android:textAlignment="center"
         android:textColor="@color/bluedark"
-        android:textSize="28sp"
-        android:layout_marginBottom="8dp"/>
+        android:textSize="45sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/bluedark"
+        android:alpha="0.2" />
 
     <TextView
         android:id="@+id/memory_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/viga"
+        android:paddingTop="10dp"
         android:text="Watch carefully!"
         android:textColor="@color/bluedark"
         android:textSize="18sp"

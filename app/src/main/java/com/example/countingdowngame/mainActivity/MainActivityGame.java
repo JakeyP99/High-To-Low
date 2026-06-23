@@ -60,7 +60,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import io.github.muddz.styleabletoast.StyleableToast;
 import pl.droidsonroids.gif.GifImageView;
@@ -1089,33 +1088,6 @@ public class MainActivityGame extends SharedMainActivity {
         if (Arrays.stream(enabled).anyMatch(WildCardProperties::isEnabled)) {
             enabledTypes.add(enabled);
         }
-    }
-
-
-    private WildCardProperties selectRandomCard(WildCardProperties[] WildCards) {
-        // Filter out cards already used
-        List<WildCardProperties> unusedCards = Arrays.stream(WildCards).filter(wildcard -> !usedCards.contains(wildcard)).collect(Collectors.toList());
-
-        // Reset logic: If no unused cards remain, reset usedCards
-        if (unusedCards.isEmpty()) {
-            System.out.println("All cards have been used. Resetting used cards.");
-            usedCards.clear();
-            unusedCards = new ArrayList<>(Arrays.asList(WildCards)); // Recreate unusedCards with all wildcards
-        }
-
-        // Select a random card from unused cards
-        Random rand = new Random();
-        WildCardProperties selectedCard = unusedCards.get(rand.nextInt(unusedCards.size()));
-
-        // Update the lists
-        usedCards.add(selectedCard);
-        unusedCards.remove(selectedCard);
-
-        // Log the count of cards in each list
-        System.out.println("Number of Used Cards: " + usedCards.size());
-        System.out.println("Number of Unused Cards: " + unusedCards.size());
-
-        return selectedCard;
     }
 
 
