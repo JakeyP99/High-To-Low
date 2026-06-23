@@ -6,7 +6,6 @@ import static com.example.countingdowngame.wildCards.wildCardTypes.WildCardData.
 import static com.example.countingdowngame.wildCards.wildCardTypes.WildCardData.TRUTH_WILD_CARDS;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,45 +17,34 @@ import android.widget.EditText;
 import androidx.activity.OnBackPressedCallback;
 
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.mainActivity.MainActivityGame;
-import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.example.countingdowngame.wildCards.WildCardProperties;
-import com.example.countingdowngame.wildCards.WildCardType;
-import com.example.countingdowngame.wildCards.wildCardTypes.WildCardsAdapter;
-
-import java.util.List;
 
 import io.github.muddz.styleabletoast.StyleableToast;
 
 public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickListener {
 
-    //-----------------------------------------------------Initialize---------------------------------------------------//
     private EditText wildcardPerPlayerEditText;
     private EditText totalDrinksEditText;
+
     private Button button_multiChoice;
     private Button button_nonMultiChoice;
 
     private Button button_quiz_toggle;
     private Button button_task_toggle;
     private Button button_truth_toggle;
+    private Button button_powerup_toggle;
     private Button btnProgressToGame;
 
+    private boolean isLoading = false;
 
-
-    //-----------------------------------------------------On Pause---------------------------------------------------//
-
-
-    public SettingsMenu() {
-        // Default constructor with no arguments
-    }
+    public SettingsMenu() {}
 
     @Override
     protected void onResume() {
         super.onResume();
         loadPreferences();
-
     }
 
     @Override
@@ -64,11 +52,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         super.onPause();
         savePreferences();
     }
-
-
-    //-----------------------------------------------------On Create---------------------------------------------------//
-
-    //-----------------------------------------------------Initialize Views---------------------------------------------------//
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,25 +82,30 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         button_quiz_toggle = findViewById(R.id.button_quiz_toggle);
         button_task_toggle = findViewById(R.id.button_task_toggle);
         button_truth_toggle = findViewById(R.id.button_truth_toggle);
+        button_powerup_toggle = findViewById(R.id.button_powerup_toggle);
 
         wildcardPerPlayerEditText = findViewById(R.id.edittext_wildcard_amount);
         totalDrinksEditText = findViewById(R.id.edittext_drink_amount);
+
+        setupTextWatcher(wildcardPerPlayerEditText, 3);
+        setupTextWatcher(totalDrinksEditText, 2);
     }
 
-    private void setupTextWatcher(EditText editText, int maxLength, Runnable validationAction) {
+    private void setupTextWatcher(EditText editText, int maxLength) {
         editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void afterTextChanged(Editable s) {
+
+                if (isLoading) return;
+
                 validateInput(editText, maxLength);
-                validationAction.run();
             }
         });
     }
@@ -132,39 +120,6 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         }
     }
 
-    private boolean isValidInput(String input, int maxLength, int minValue, int maxValue) {
-        if (input.length() > maxLength) {
-            input = input.substring(0, maxLength);
-        }
-        if (input.length() < minValue) {
-            input = "";
-        }
-        try {
-            int value = Integer.parseInt(input);
-            return value >= minValue && value <= maxValue;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    private void isValidTotalDrinkAmount() {
-        isValidInput(
-                totalDrinksEditText.getText().toString().trim(),
-                2,
-                1,
-                20
-        );
-    }
-
-    private void isValidWildCardAmount() {
-        isValidInput(
-                wildcardPerPlayerEditText.getText().toString().trim(),
-                3,
-                0,
-                100
-        );
-    }
-
     @Override
     public void onClick(View view) {
 
@@ -174,34 +129,26 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
             boolean selected = !button_multiChoice.isSelected();
             button_multiChoice.setSelected(selected);
             button_nonMultiChoice.setSelected(!selected);
-            return;
-        }
 
-        if (id == R.id.button_nonMultiChoice) {
+        } else if (id == R.id.button_nonMultiChoice) {
             boolean selected = !button_nonMultiChoice.isSelected();
             button_nonMultiChoice.setSelected(selected);
             button_multiChoice.setSelected(!selected);
-            return;
-        }
 
-        if (id == R.id.button_quiz_toggle) {
-            boolean selected = !button_quiz_toggle.isSelected();
-            button_quiz_toggle.setSelected(selected);
-            toggleWildCards(QUIZ_WILD_CARDS, selected);
-            return;
-        }
+        } else if (id == R.id.button_quiz_toggle) {
+            button_quiz_toggle.setSelected(!button_quiz_toggle.isSelected());
+            toggleWildCards(QUIZ_WILD_CARDS, button_quiz_toggle.isSelected());
 
-        if (id == R.id.button_task_toggle) {
-            boolean selected = !button_task_toggle.isSelected();
-            button_task_toggle.setSelected(selected);
-            toggleWildCards(TASK_WILD_CARDS, selected);
-            return;
-        }
+        } else if (id == R.id.button_task_toggle) {
+            button_task_toggle.setSelected(!button_task_toggle.isSelected());
+            toggleWildCards(TASK_WILD_CARDS, button_task_toggle.isSelected());
 
-        if (id == R.id.button_truth_toggle) {
-            boolean selected = !button_truth_toggle.isSelected();
-            button_truth_toggle.setSelected(selected);
-            toggleWildCards(TRUTH_WILD_CARDS, selected);
+        } else if (id == R.id.button_truth_toggle) {
+            button_truth_toggle.setSelected(!button_truth_toggle.isSelected());
+            toggleWildCards(TRUTH_WILD_CARDS, button_truth_toggle.isSelected());
+
+        } else if (id == R.id.button_powerup_toggle) {
+            button_powerup_toggle.setSelected(!button_powerup_toggle.isSelected());
         }
 
         savePreferences();
@@ -213,98 +160,56 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         }
     }
 
-    //-----------------------------------------------------Wild Card Choices---------------------------------------------------//
     private void setButtonListeners() {
+
         button_multiChoice.setOnClickListener(this);
         button_nonMultiChoice.setOnClickListener(this);
 
         button_quiz_toggle.setOnClickListener(this);
         button_task_toggle.setOnClickListener(this);
         button_truth_toggle.setOnClickListener(this);
+        button_powerup_toggle.setOnClickListener(this);
 
         btnUtils.setButton(btnProgressToGame, () -> {
 
-            String wildCardAmountInput = wildcardPerPlayerEditText.getText().toString().trim();
-            String totalDrinkAmountInput = totalDrinksEditText.getText().toString().trim();
+            int wildCardAmount = safeParseInt(wildcardPerPlayerEditText);
+            int totalDrinkAmount = safeParseInt(totalDrinksEditText);
 
-            boolean isWildCardAmountValid = isValidInput(wildCardAmountInput, 3, 0, 100);
-            boolean isTotalDrinkAmountValid = isValidInput(totalDrinkAmountInput, 2, 1, 20);
-
-            if (isWildCardAmountValid && isTotalDrinkAmountValid) {
-                savePreferences();
-                goToClassicGameWithExtras(Integer.parseInt(totalDrinkAmountInput));
-            } else {
-                if (!isWildCardAmountValid) {
-                    if (wildCardAmountInput.isEmpty()) {
-                        wildcardPerPlayerEditText.setText("0");
-                        savePreferences();
-                        goToClassicGameWithExtras(Integer.parseInt(totalDrinkAmountInput));
-                    } else {
-                        StyleableToast.makeText(getApplicationContext(), "Please enter a wildcard quantity between 0 and 100", R.style.newToast).show();
-                    }
-                }
-
-                if (!isTotalDrinkAmountValid) {
-                    if (totalDrinkAmountInput.isEmpty()) {
-                        totalDrinksEditText.setText("0");
-                        savePreferences();
-                        goToClassicGameWithExtras(Integer.parseInt(totalDrinkAmountInput));
-                    } else {
-                        StyleableToast.makeText(getApplicationContext(), "Please enter a total drink limit between 1 and 20", R.style.newToast).show();
-                    }
-                }
+            if (totalDrinkAmount < 1 || totalDrinkAmount > 20) {
+                StyleableToast.makeText(this,
+                        "Total drinks must be 1–20",
+                        R.style.newToast).show();
+                return;
             }
+
+            if (wildCardAmount < 0 || wildCardAmount > 100) {
+                StyleableToast.makeText(this,
+                        "Wildcards must be 0–100",
+                        R.style.newToast).show();
+                return;
+            }
+
+            savePreferences();
+            goToClassicGameWithExtras(totalDrinkAmount);
         });
     }
 
-    private void toggleQuizSettingsButtons(Button selectedButton, Button unselectedButton, boolean isSelected) {
-        selectedButton.setSelected(isSelected);
-        unselectedButton.setSelected(!isSelected);
-    }
-
-
-
-    private void toggleWildCardButton(Button button, WildCardsAdapter adapter, boolean isSelected) {
-        button.setSelected(isSelected);
-
-        if (adapter != null) {
-            WildCardProperties[] wildCards = adapter.getWildCards();
-            for (WildCardProperties wildcard : wildCards) {
-                wildcard.setEnabled(isSelected);
-            }
-            adapter.setWildCards(wildCards);
-            adapter.notifyDataSetChanged();
-            adapter.saveWildCardProbabilitiesToStorage(wildCards);
-        }
-    }
-
-
-
-    //-----------------------------------------------------Load and Save Preferences---------------------------------------------------//
-
-    // Inside WildCardSettings or any other settings activity
     private void goToClassicGameWithExtras(int totalDrinkNumber) {
+
         savePreferences();
-        GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);
-        int wildCardCount = store.playerWildCardCount();
-        Log.d(TAG, "Wild Card Count: " + wildCardCount);
 
+        int startingNumber = getIntent().getIntExtra("startingNumber", 0);
 
-        // Retrieve the extras passed from NumberChoice activity
-        int startingNumber = getIntent().getIntExtra("startingNumber", 0); // 0 is the default value if the extra is not found
-        // Create an Intent to start the main game activity
         Intent intent = new Intent(this, MainActivityGame.class);
-
-        // Pass the extras to the main game activity
         intent.putExtra("startingNumber", startingNumber);
         intent.putExtra("totalDrinkNumber", totalDrinkNumber);
 
-        // Start the main game activity
         startActivity(intent);
     }
 
-
     private void loadPreferences() {
+
+        isLoading = true;
 
         GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);
 
@@ -318,30 +223,37 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
         button_quiz_toggle.setSelected(store.isQuizActivated());
         button_task_toggle.setSelected(store.isTaskActivated());
         button_truth_toggle.setSelected(store.isTruthActivated());
+        button_powerup_toggle.setSelected(store.arePowerupsActivated());
 
         toggleWildCards(QUIZ_WILD_CARDS, button_quiz_toggle.isSelected());
         toggleWildCards(TASK_WILD_CARDS, button_task_toggle.isSelected());
         toggleWildCards(TRUTH_WILD_CARDS, button_truth_toggle.isSelected());
+
+        isLoading = false;
     }
 
+    private int safeParseInt(EditText editText) {
+        String value = editText.getText().toString().trim();
+        if (value.isEmpty()) return 0;
+
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
 
     private void savePreferences() {
 
         GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);
 
-        store.setPlayerWildCardCount(
-                Integer.parseInt(wildcardPerPlayerEditText.getText().toString())
-        );
-
-        store.setTotalDrinkAmount(
-                Integer.parseInt(totalDrinksEditText.getText().toString())
-        );
+        store.setPlayerWildCardCount(safeParseInt(wildcardPerPlayerEditText));
+        store.setTotalDrinkAmount(safeParseInt(totalDrinksEditText));
 
         store.setIsMultiChoice(button_multiChoice.isSelected());
-
         store.setIsQuizActivated(button_quiz_toggle.isSelected());
         store.setIsTaskActivated(button_task_toggle.isSelected());
         store.setIsTruthActivated(button_truth_toggle.isSelected());
+        store.setIsPowerupsActivated(button_powerup_toggle.isSelected());
     }
-
 }

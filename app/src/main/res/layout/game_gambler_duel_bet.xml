@@ -1,59 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="20dp"
-    android:background="@drawable/rounded_background"
-    android:gravity="center">
+    app:cardCornerRadius="20dp"
+    app:cardElevation="12dp">
 
-    <TextView
-        android:id="@+id/bet_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:fontFamily="@font/viga"
-        android:padding="10dp"
-        android:text="Place Your Bet"
-        android:textAlignment="center"
-        android:textColor="@color/bluedark"
-        android:textSize="28sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:gravity="center">
 
-    <TextView
-        android:id="@+id/bet_subtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:fontFamily="@font/viga"
-        android:text="Duel against Opponent"
-        android:textAlignment="center"
-        android:textColor="@color/bluedark"
-        android:textSize="18sp"
-        android:layout_marginBottom="16dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="Gambler's Active:"
+            android:textColor="@color/bluedark"
+            android:textSize="35sp"
+            android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/editBetAmount"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:hint="1-5"
-        android:inputType="number"
-        android:textAlignment="center"
-        android:fontFamily="@font/viga"
-        android:textColor="@color/bluedark"
-        android:textColorHint="#DDDDDD"
-        android:maxLength="1"
-        android:textSize="40sp"
-        android:layout_marginBottom="20dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/bluedark"
+            android:alpha="0.2" />
 
-    <Button
-        android:id="@+id/btn_confirm_bet"
-        android:layout_width="120dp"
-        android:layout_height="50dp"
-        android:fontFamily="@font/viga"
-        android:background="@drawable/outlineforbutton"
-        android:text="Duel!"
-        android:textAllCaps="false"
-        android:textColor="@color/bluedark"
-        android:textSize="20sp" />
+        <TextView
+            android:id="@+id/bet_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/viga"
+            android:text="Duel against Opponent"
+            android:textAlignment="center"
+            android:textColor="@color/bluedark"
+            android:textSize="20sp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="16dp"/>
 
-</LinearLayout>
+        <EditText
+            android:id="@+id/editBetAmount"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:hint="1-5"
+            android:inputType="number"
+            android:textAlignment="center"
+            android:fontFamily="@font/viga"
+            android:textColor="@color/bluedark"
+            android:textColorHint="#DDDDDD"
+            android:maxLength="1"
+            android:textSize="40sp"
+            android:layout_marginBottom="20dp"/>
+
+        <Button
+            android:id="@+id/btn_confirm_bet"
+            android:layout_width="180dp"
+            android:layout_height="60dp"
+            android:fontFamily="@font/viga"
+            android:background="@drawable/outlineforbutton"
+            android:text="Duel!"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

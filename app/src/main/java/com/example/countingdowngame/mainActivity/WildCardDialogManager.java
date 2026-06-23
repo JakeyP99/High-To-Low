@@ -24,51 +24,63 @@ import java.util.Random;
 
 import pl.droidsonroids.gif.GifImageView;
 
-public class QuizDialogManager {
+public class WildCardDialogManager {
 
     private final MainActivityGame activity;
     private final Runnable onContinue;
     private boolean wasQuizCorrect = false;
 
-    public QuizDialogManager(MainActivityGame activity, Runnable onContinue) {
+    public WildCardDialogManager(MainActivityGame activity, Runnable onContinue) {
         this.activity = activity;
         this.onContinue = onContinue;
     }
 
-    public void showQuizDialog(WildCardProperties selectedCard) {
+    public void showWildCardDialog(WildCardProperties selectedCard, String type) {
         View dialogView = inflateDialog();
         AlertDialog dialog = createDialog(dialogView);
 
         UIRefs ui = bindViews(dialogView);
-        setupBaseUI(ui, selectedCard);
+        setupBaseUI(ui, selectedCard, type);
 
         Player player = Game.getInstance().getCurrentPlayer();
 
-        boolean isQuizMagician =
-                QUIZ_MAGICIAN.equals(player.getClassChoice()) ||
-                        (CharacterClassDescriptions.ANGRY_JIM.equals(player.getClassChoice())
-                                && Game.getInstance().getCurrentNumber() < 50);
+        if (selectedCard.hasAnswer()) {
+            boolean isQuizMagician =
+                    QUIZ_MAGICIAN.equals(player.getClassChoice()) ||
+                            (CharacterClassDescriptions.ANGRY_JIM.equals(player.getClassChoice())
+                                    && Game.getInstance().getCurrentNumber() < 50);
 
-        boolean isMultiChoice =
-                GeneralSettingsLocalStore.fromContext(activity).isMultiChoice();
+            boolean isMultiChoice =
+                    GeneralSettingsLocalStore.fromContext(activity).isMultiChoice();
 
-        boolean isQuizMode = isQuizMagician || isMultiChoice;
+            boolean isQuizMode = isQuizMagician || isMultiChoice;
 
-        if (isQuizMode) {
-            setupMultipleChoice(ui, selectedCard, player, isQuizMagician);
+            if (isQuizMode) {
+                setupMultipleChoice(ui, selectedCard, player, isQuizMagician);
+            } else {
+                setupTrueFalse(ui, selectedCard, player);
+            }
         } else {
-            setupTrueFalse(ui, selectedCard, player);
+            setupWildCardOnly(ui);
         }
 
         setupContinue(ui.btnContinue, dialog);
         dialog.show();
     }
 
+    private void setupWildCardOnly(UIRefs ui) {
+        ui.btnAnswer.setVisibility(View.GONE);
+        for (Button b : ui.answerButtons) {
+            b.setVisibility(View.GONE);
+        }
+        ui.btnContinue.setVisibility(View.VISIBLE);
+    }
+
     // ---------------- SETUP ----------------
 
     private View inflateDialog() {
         return activity.getLayoutInflater()
-                .inflate(R.layout.game_quiz_dialog, null);
+                .inflate(R.layout.game_wildcard_dialog, null);
     }
 
     private AlertDialog createDialog(View view) {
@@ -97,12 +109,14 @@ public class QuizDialogManager {
                         view.findViewById(R.id.confettiImageViewTR),
                         view.findViewById(R.id.confettiImageViewBL),
                         view.findViewById(R.id.confettiImageViewBR)
-                }
+                },
+                view.findViewById(R.id.textView)
         );
     }
 
-    private void setupBaseUI(UIRefs ui, WildCardProperties card) {
+    private void setupBaseUI(UIRefs ui, WildCardProperties card, String type) {
         ui.text.setText(card.getWildCard());
+        ui.title.setText(type + "!");
         updateTextSize(card.getWildCard(), ui.text);
     }
 
@@ -135,8 +149,8 @@ public class QuizDialogManager {
             btn.setText(answer);
 
             int index = i;
-
-            btn.setOnClickListener(v ->
+            
+                activity.btnUtils.setButton(btn, () -> 
                     handleMCQSelection(ui, card, player, answerList, answer, index)
             );
         }
@@ -241,25 +255,27 @@ public class QuizDialogManager {
                                 WildCardProperties card,
                                 Player player) {
 
+        hideAllChoices(ui);
         ui.btnAnswer.setVisibility(View.VISIBLE);
 
-        ui.btnAnswer.setOnClickListener(v -> {
-            ui.btnAnswer.setVisibility(View.GONE);
 
-            ui.text.setText(card.getAnswer());
+            activity.btnUtils.setButton(ui.btnAnswer, () -> {
+                ui.btnAnswer.setVisibility(View.GONE);
 
-            ui.answerButtons[0].setVisibility(View.VISIBLE);
-            ui.answerButtons[1].setVisibility(View.VISIBLE);
+                ui.text.setText(card.getAnswer());
 
-            ui.answerButtons[0].setText(R.string.were_you_right);
-            ui.answerButtons[1].setText(R.string.were_you_wrong);
+                ui.answerButtons[0].setVisibility(View.VISIBLE);
+                ui.answerButtons[1].setVisibility(View.VISIBLE);
 
-            ui.answerButtons[0].setOnClickListener(v1 ->
-                    handleTF(ui, player, true));
+                ui.answerButtons[0].setText(R.string.were_you_right);
+                ui.answerButtons[1].setText(R.string.were_you_wrong);
 
-            ui.answerButtons[1].setOnClickListener(v1 ->
-                    handleTF(ui, player, false));
-        });
+                activity.btnUtils.setButton(ui.answerButtons[0], () ->
+                        handleTF(ui, player, true));
+
+                activity.btnUtils.setButton(ui.answerButtons[1], () ->
+                        handleTF(ui, player, false));
+            });
     }
 
     private void handleTF(UIRefs ui, Player player, boolean correct) {
@@ -282,7 +298,7 @@ public class QuizDialogManager {
     // ---------------- CONTINUE ----------------
 
     private void setupContinue(Button btn, AlertDialog dialog) {
-        btn.setOnClickListener(v -> {
+        activity.btnUtils.setButton(btn, () -> {
             dialog.dismiss();
             activity.setWasQuizCorrect(wasQuizCorrect);
             onContinue.run();
@@ -296,6 +312,7 @@ public class QuizDialogManager {
     }
 
     private void hideAllChoices(UIRefs ui) {
+        ui.btnAnswer.setVisibility(View.GONE);
         for (Button b : ui.answerButtons) b.setVisibility(View.GONE);
     }
 
@@ -314,6 +331,7 @@ public class QuizDialogManager {
 
     private static class UIRefs {
         TextView text;
+        TextView title;
         Button btnAnswer;
         Button btnContinue;
         Button[] answerButtons;
@@ -323,12 +341,14 @@ public class QuizDialogManager {
                Button btnAnswer,
                Button btnContinue,
                Button[] answerButtons,
-               GifImageView[] confetti) {
+               GifImageView[] confetti,
+               TextView title) {
             this.text = text;
             this.btnAnswer = btnAnswer;
             this.btnContinue = btnContinue;
             this.answerButtons = answerButtons;
             this.confetti = confetti;
+            this.title = title;
         }
     }
 }

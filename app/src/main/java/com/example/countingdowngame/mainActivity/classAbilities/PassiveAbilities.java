@@ -1,6 +1,5 @@
 package com.example.countingdowngame.mainActivity.classAbilities;
 
-import static android.content.ContentValues.TAG;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ARCHER;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
@@ -16,7 +15,6 @@ import static com.example.countingdowngame.mainActivity.MainActivityGame.soldier
 
 import android.app.AlertDialog;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -26,10 +24,11 @@ import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.mainActivity.MainActivityGame;
 import com.example.countingdowngame.player.Player;
+import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.Random;
 
-public class PassiveAbilities {
+public class PassiveAbilities extends ButtonUtilsActivity {
     static Game game = Game.getInstance();
     private static MainActivityGame activity;
 
@@ -92,28 +91,34 @@ public class PassiveAbilities {
         );
     }
 
-    public static boolean checkGoblinPassive(Player wildcardUser, Runnable onDone) {
+    public static void checkGoblinPassive(Player wildcardUser, Runnable onDone) {
         boolean wildcardUserHasGoblinPassive = GOBLIN.equals(wildcardUser.getClassChoice()) ||
                 (ANGRY_JIM.equals(wildcardUser.getClassChoice()) && game.getCurrentNumber() < 50);
 
         if (wildcardUserHasGoblinPassive) {
-            return false;
+            onDone.run();
+            return;
         }
 
+        boolean goblinTriggered = false;
         for (Player player : game.getPlayers()) {
             boolean hasGoblinPassive = GOBLIN.equals(player.getClassChoice()) ||
                     (ANGRY_JIM.equals(player.getClassChoice()) && game.getCurrentNumber() < 50);
 
             if (hasGoblinPassive && !player.equals(wildcardUser)) {
-
+                goblinTriggered = true;
                 activity.showClassAbilityDialog(
                         GOBLIN + "'s Passive: \n\n" +
-                                 " Drink once for using a wildcard!"
+                                " Drink once for using a wildcard!",
+                        onDone
                 );
-                return true;
+                break;
             }
         }
-        return false;
+
+        if (!goblinTriggered) {
+            onDone.run();
+        }
     }
 
     public static void handleScientistPassive(Player currentPlayer) {
@@ -226,19 +231,19 @@ public class PassiveAbilities {
         builder.setCancelable(false);
         AlertDialog dialog = builder.create();
 
-        overBtn.setOnClickListener(v -> {
+        activity.btnUtils.setButton(overBtn, () -> {
             gamblerBet = "OVER";
             dialog.dismiss();
             onBetPlaced.run();
         });
 
-        underBtn.setOnClickListener(v -> {
+        activity.btnUtils.setButton(underBtn, () -> {
             gamblerBet = "UNDER";
             dialog.dismiss();
             onBetPlaced.run();
         });
 
-        equalBtn.setOnClickListener(v -> {
+        activity.btnUtils.setButton(equalBtn, () -> {
             gamblerBet = "EQUAL";
             dialog.dismiss();
             onBetPlaced.run();

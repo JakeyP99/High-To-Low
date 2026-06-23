@@ -29,16 +29,10 @@ import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.AbsoluteSizeSpan;
-import android.text.style.StyleSpan;
 import android.util.Base64;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -64,7 +58,6 @@ import com.example.countingdowngame.wildCards.wildCardTypes.WildCardRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -104,7 +97,7 @@ public class MainActivityGame extends SharedMainActivity {
     //-----------------------------------------------------Booleans---------------------------------------------------//
     private boolean doubleBackToExitPressedOnce = false;
     private boolean wasQuizCorrect = false;
-    private QuizDialogManager quizDialogManager;
+    private WildCardDialogManager wildCardDialogManager;
     //-----------------------------------------------------Array---------------------------------------------------//
     private MainActivityCatastrophes catastrophesManager;
     private MainActivityNumberGenerator numberGenerator;
@@ -215,7 +208,7 @@ public class MainActivityGame extends SharedMainActivity {
         setupButtons();
         startGame();
         initializeCatastrophe();
-        quizDialogManager = new QuizDialogManager(this, this::wildCardContinue);
+        wildCardDialogManager = new WildCardDialogManager(this, this::wildCardContinue);
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -329,13 +322,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         btnUtils.setButton(btnWild, () -> {
             wildCardActivate();
-            drinkNumberTextView.setVisibility(View.INVISIBLE);
             btnWild.setVisibility(View.INVISIBLE);
-            btnGenerate.setVisibility(View.INVISIBLE);
-            nextPlayerText.setVisibility(View.INVISIBLE);
-            numberCounterText.setVisibility(View.INVISIBLE);
-            findViewById(R.id.powerup_left).setVisibility(View.INVISIBLE);
-            findViewById(R.id.powerup_right).setVisibility(View.INVISIBLE);
         });
 
         btnUtils.setButton(imageButtonExit, () -> {
@@ -936,7 +923,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     public void showClassDialog(String title, String description, int layoutId,
                                 int classTextViewId, int descriptionTextViewId,
-                                int actionButtonId) {
+                                Runnable onDismiss) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = getLayoutInflater();
@@ -968,6 +955,10 @@ public class MainActivityGame extends SharedMainActivity {
             if (!dialogQueue.isEmpty()) {
                 dialogQueue.get(0).show();
             }
+
+            if (onDismiss != null) {
+                onDismiss.run();
+            }
         });
 
         Log.d(TAG, "showDialog: " + title);
@@ -982,6 +973,10 @@ public class MainActivityGame extends SharedMainActivity {
 
 
     public void showClassAbilityDialog(String message) {
+        showClassAbilityDialog(message, null);
+    }
+
+    public void showClassAbilityDialog(String message, Runnable onDismiss) {
 
         String title = "";
         String description = "";
@@ -1000,7 +995,7 @@ public class MainActivityGame extends SharedMainActivity {
                 R.layout.game_use_class_ability_dialog_box,
                 R.id.class_textview,
                 R.id.description_textview,
-                0
+                onDismiss
         );
     }
 
@@ -1058,9 +1053,7 @@ public class MainActivityGame extends SharedMainActivity {
             btnClassAbility.setVisibility(View.INVISIBLE);
         };
 
-        if (!PassiveAbilities.checkGoblinPassive(currentPlayer, proceedToWildCard)) {
-            proceedToWildCard.run();
-        }
+        PassiveAbilities.checkGoblinPassive(currentPlayer, proceedToWildCard);
     }
     private WildCardProperties[] selectWildCardType(Player currentPlayer, WildCardProperties[] quizWildCards, WildCardProperties[] taskWildCards, WildCardProperties[] truthWildCards) {
         if (QUIZ_MAGICIAN.equals(currentPlayer.getClassChoice()) && currentPlayer.getJustUsedActiveAbility()) {
@@ -1128,34 +1121,13 @@ public class MainActivityGame extends SharedMainActivity {
     public void handleSelectedCard(WildCardProperties selectedCard, String wildCardType) {
         if (selectedCard == null) return;
 
-        if (selectedCard.hasAnswer()) {
-
-            // ❗ STOP any underlying UI updates
-            quizDialogManager.showQuizDialog(selectedCard);
-
-            Log.d(TAG, "handleSelectedCard: the card was quiz");
-            return; // ✅ IMPORTANT
-        }
-
-        updateSelectedCard(selectedCard);
-        wildText.setVisibility(View.VISIBLE);
-        btnWildContinue.setVisibility(View.VISIBLE);
-        logSelectedCardInfo(selectedCard, wildCardType);
-
-        Log.d(TAG, "handleSelectedCard: the card wasnt quiz");
-    }
-
-    private void updateSelectedCard(WildCardProperties selectedCard) {
-        String selectedActivity = selectedCard.getWildCard();
-        wildText.setText(selectedActivity);
-        updateTextSize(selectedActivity);
         selectedWildCard = selectedCard;
+        wildCardDialogManager.showWildCardDialog(selectedCard, wildCardType);
+        logSelectedCardInfo(selectedCard, wildCardType);
+        Log.d(TAG, "handleSelectedCard: card type " + wildCardType);
     }
 
-    private void updateTextSize(String selectedActivity) {
-        int textSize = TextSizeCalculator.calculateTextSizeBasedOnCharacterCount(selectedActivity);
-        wildText.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
-    }
+
 
 
     //-----------------------------------------------------Specific WildCard Functions---------------------------------------------------//
@@ -1167,13 +1139,6 @@ public class MainActivityGame extends SharedMainActivity {
         if (QUIZ_MAGICIAN.equals(currentPlayer.getClassChoice()) && currentPlayer.getJustUsedActiveAbility()) {
             wildCardActivate();
             currentPlayer.gainWildCards(1);
-            drinkNumberTextView.setVisibility(View.INVISIBLE);
-            wildText.setVisibility(View.VISIBLE);
-            btnWild.setVisibility(View.INVISIBLE);
-            btnGenerate.setVisibility(View.INVISIBLE);
-            nextPlayerText.setVisibility(View.INVISIBLE);
-            numberCounterText.setVisibility(View.INVISIBLE);
-            btnWildContinue.setVisibility(View.INVISIBLE);
             currentPlayer.setUsedActiveAbility(true);
             currentPlayer.setJustUsedActiveAbility(false);
             return;
@@ -1182,7 +1147,8 @@ public class MainActivityGame extends SharedMainActivity {
         // Logic for ending the turn and potentially awarding a power-up
         boolean isQuiz = selectedWildCard != null && selectedWildCard.hasAnswer();
         boolean successfulTurn = !isQuiz || wasQuizCorrect;
-        boolean canReceivePowerUp = successfulTurn && currentPlayer.getPowerUps().size() < 2;
+        boolean powerupsEnabled = GeneralSettingsLocalStore.fromContext(this).arePowerupsActivated();
+        boolean canReceivePowerUp = successfulTurn && currentPlayer.getPowerUps().size() < 2 && powerupsEnabled;
 
         Runnable finishWildCard = () -> {
             if (successfulTurn) {

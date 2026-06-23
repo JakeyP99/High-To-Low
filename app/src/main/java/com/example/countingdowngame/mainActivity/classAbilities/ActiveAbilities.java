@@ -9,7 +9,6 @@ import static com.example.countingdowngame.createPlayer.CharacterClassDescriptio
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SCIENTIST;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SOLDIER;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.TROLL;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
 import static com.example.countingdowngame.mainActivity.MainActivityGame.drinkNumberCounterInt;
 import static com.example.countingdowngame.mainActivity.MainActivityGame.isFirstTurn;
@@ -28,7 +27,6 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -42,16 +40,16 @@ import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.mainActivity.MainActivityGame;
 import com.example.countingdowngame.mainActivity.PowerUps;
 import com.example.countingdowngame.player.Player;
+import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
 import pl.droidsonroids.gif.GifImageView;
 
-public class ActiveAbilities {
+public class ActiveAbilities extends ButtonUtilsActivity {
     static Game game = Game.getInstance();
     private static MainActivityGame activity;
 
@@ -90,18 +88,14 @@ public class ActiveAbilities {
 
         AlertDialog dialog = builder.create();
 
-        submitButton.setOnClickListener(view -> {
+        activity.btnUtils.setButton(submitButton, () -> {
             try {
                 String userInput = editCurrentNumberText.getText().toString();
                 int newNumber = Integer.parseInt(userInput);
                 if (newNumber > 999999999) {
                     activity.displayToastMessage("That number was too high!");
-                    View btnClassAbility = activity.findViewById(R.id.btnClassAbility);
-                    if (btnClassAbility != null) btnClassAbility.setVisibility(View.VISIBLE);
                 } else if (newNumber == 0) {
                     activity.displayToastMessage("You cannot choose 0 as your number.");
-                    View btnClassAbility = activity.findViewById(R.id.btnClassAbility);
-                    if (btnClassAbility != null) btnClassAbility.setVisibility(View.VISIBLE);
                 } else {
 
                     Player currentPlayer = game.getCurrentPlayer();
@@ -110,7 +104,6 @@ public class ActiveAbilities {
                     currentPlayer.setUsedActiveAbility(true);
                     MainActivityGame.updateNumber(newNumber);
                     AudioManager.getInstance().playSoundEffects(activity, SCIENTIST);
-                    hideAbilityButton();
                     dialog.dismiss(); // Close the dialog on success
                 }
             } catch (NumberFormatException e) {
@@ -129,8 +122,6 @@ public class ActiveAbilities {
                 activity.renderPlayerUI(false);
                 repeatedTurn = true;
                 activity.updateDrinkNumberCounter(4, true);
-                hideAbilityButton();
-                hideWildButton();
                 AudioManager.getInstance().playSoundEffects(activity, SOLDIER);
             } else {
                 activity.displayToastMessage("The +4 ability can only be activated when the number is below 10.");
@@ -143,7 +134,6 @@ public class ActiveAbilities {
     public static void handleQuizMagicianClass(Player currentPlayer) {
         currentPlayer.setUsedActiveAbility(true);
         currentPlayer.setJustUsedActiveAbility(true);
-        hideAbilityButton();
         AudioManager.getInstance().playSoundEffects(activity, QUIZ_MAGICIAN);
     }
 
@@ -179,7 +169,6 @@ public class ActiveAbilities {
         currentPlayer.loseWildCards(1);
         currentPlayer.setUsedActiveAbility(true);
         activity.renderPlayerUI(true);
-        hideAbilityButton();
         AudioManager.getInstance().playSoundEffects(activity, GOBLIN);
     }
 
@@ -191,7 +180,6 @@ public class ActiveAbilities {
                         randomPlayer.getName() + " must repeat their turn."
         );
         currentPlayer.setUsedActiveAbility(true);
-        hideAbilityButton();
         AudioManager.getInstance().playSoundEffects(activity, ANGRY_JIM);
     }
 
@@ -199,7 +187,6 @@ public class ActiveAbilities {
         if (Game.getInstance().getCurrentNumber() > 1) {
             activity.halveCurrentNumber();
             currentPlayer.setUsedActiveAbility(true);
-            hideAbilityButton();
             AudioManager.getInstance().playSoundEffects(activity, SURVIVOR);
         }
     }
@@ -212,7 +199,6 @@ public class ActiveAbilities {
             );
             currentPlayer.setUsedActiveAbility(true);
             activity.updateDrinkNumberCounter(-2, true);
-            hideAbilityButton();
             AudioManager.getInstance().playSoundEffects(activity, ARCHER);
         }
     }
@@ -312,7 +298,6 @@ public class ActiveAbilities {
         activity.btnUtils.setButton(btnNoOne, () -> {
             dialog.dismiss();
             currentPlayer.setUsedActiveAbility(true);
-            hideAbilityButton();
             if (targets.size() == 1) {
                 activity.showGameDialog(targets.get(0).getName() + " failed! Take 4 drinks.");
             } else {
@@ -325,7 +310,6 @@ public class ActiveAbilities {
 
     private static void finalizeTrollResult(Player troll, Player winner, Player loser) {
         troll.setUsedActiveAbility(true);
-        hideAbilityButton();
 
         if (winner != null && loser != null) {
             activity.showGameDialog(winner.getName() + " was safe! " + loser.getName() + " take 4 drinks.");
@@ -377,7 +361,7 @@ public class ActiveAbilities {
             }
         }.start();
 
-        submitBtn.setOnClickListener(v -> {
+        activity.btnUtils.setButton(submitBtn, () -> {
             String input = answerEt.getText().toString();
             if (input.isEmpty()) {
                 return;
@@ -494,7 +478,6 @@ public class ActiveAbilities {
 
     private static void processMemoryResult(Player player, int score) {
         player.setUsedActiveAbility(true);
-        hideAbilityButton();
 
         if (score < 2) {
             activity.showGameDialog("Failed! The potion turned into sludge (Score: " + score + ").\n\n" + player.getName() + " take 2 drinks!");
@@ -513,7 +496,6 @@ public class ActiveAbilities {
 
     private static void processPotionResult(Player player, int userAnswer, int correctAnswer) {
         player.setUsedActiveAbility(true);
-        hideAbilityButton();
 
         if (userAnswer == -1) {
             activity.showGameDialog("Time's up! The potion exploded. \n\n" + player.getName() + " take 2 drinks!");
@@ -566,7 +548,7 @@ public class ActiveAbilities {
         ArrayAdapter<Player> adapter = new ArrayAdapter<Player>(activity, R.layout.game_powerup_list_item, R.id.powerup_text, opponents) {
             @NonNull
             @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 Player opponent = opponents.get(position);
                 TextView textView = view.findViewById(R.id.powerup_text);
@@ -605,7 +587,7 @@ public class ActiveAbilities {
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
 
-        okButton.setOnClickListener(v -> {
+        activity.btnUtils.setButton(okButton, () -> {
             try {
                 int bet = Integer.parseInt(editBetAmount.getText().toString());
                 if (bet < 1 || bet > 5) {
@@ -657,24 +639,23 @@ public class ActiveAbilities {
         builder.setCancelable(false);
         AlertDialog dialog = builder.create();
 
-        gamblerCardContainer.setOnClickListener(v -> {
+        activity.btnUtils.setButton(gamblerCardContainer, () -> {
             if (!gamblerFlipped) {
                 gamblerFlipped = true;
                 flipCard(gamblerCardContainer, gamblerCardTv, gamblerCardIv, gamblerCard, () -> checkDuelResult(gamblerCard, opponentCard, resultTv, finishBtn, currentPlayer, opponent, bet));
             }
         });
 
-        opponentCardContainer.setOnClickListener(v -> {
+        activity.btnUtils.setButton(opponentCardContainer, () -> {
             if (!opponentFlipped) {
                 opponentFlipped = true;
                 flipCard(opponentCardContainer, opponentCardTv, opponentCardIv, opponentCard, () -> checkDuelResult(gamblerCard, opponentCard, resultTv, finishBtn, currentPlayer, opponent, bet));
             }
         });
 
-        finishBtn.setOnClickListener(v -> {
+        activity.btnUtils.setButton(finishBtn, () -> {
             dialog.dismiss();
             currentPlayer.setUsedActiveAbility(true);
-            hideAbilityButton();
             AudioManager.getInstance().playSoundEffects(activity, GAMBLER);
         });
 
