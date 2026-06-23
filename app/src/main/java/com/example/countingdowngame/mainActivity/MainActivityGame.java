@@ -214,7 +214,7 @@ public class MainActivityGame extends SharedMainActivity {
             @Override
             public void handleOnBackPressed() {
                 if (doubleBackToExitPressedOnce) {
-                    Game.getInstance().endGame(MainActivityGame.this);
+                    game.endGame(MainActivityGame.this);
                     gotoHomeScreen();
                     return;
                 }
@@ -251,7 +251,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void startGame() {
         resetStaticState();
-        Game.getInstance().reset();
+        game.reset();
 
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
@@ -262,18 +262,18 @@ public class MainActivityGame extends SharedMainActivity {
 
         List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
         if (!playerList.isEmpty()) {
-            Game.getInstance().setPlayers(this, playerList.size());
-            Game.getInstance().setPlayerList(playerList);
+            game.setPlayers(this, playerList.size());
+            game.setPlayerList(playerList);
 
             for (Player player : playerList) {
                 player.resetWildCardAmount(this);
-                player.setGame(Game.getInstance());
+                player.setGame(game);
                 player.setUsedActiveAbility(false);
             }
 
         }
 
-        Game.getInstance().startGame(startingNumber, (e) -> {
+        game.startGame(startingNumber, (e) -> {
             if (e.type == GameEventType.NEXT_PLAYER) {
                 renderPlayer(false);
             }
@@ -326,7 +326,7 @@ public class MainActivityGame extends SharedMainActivity {
         });
 
         btnUtils.setButton(imageButtonExit, () -> {
-            Game.getInstance().endGame(this);
+            game.endGame(this);
             gotoHomeScreen();
         });
 
@@ -337,7 +337,7 @@ public class MainActivityGame extends SharedMainActivity {
     //-----------------------------------------------------Render Player---------------------------------------------------//
 
     private void characterClassDescriptions() {
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        Player currentPlayer = game.getCurrentPlayer();
         String currentPlayerClassChoice = currentPlayer.getClassChoice();
         if (currentPlayerClassChoice != null) {
             characterClassInformationDialog(currentPlayerClassChoice, getClassActiveDescription(currentPlayerClassChoice), getClassPassiveDescription(currentPlayerClassChoice));
@@ -357,7 +357,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         btnUtils.setButton(payBtn, () -> {
             dialog.dismiss();
-            Player currentPlayer = Game.getInstance().getCurrentPlayer();
+            Player currentPlayer = game.getCurrentPlayer();
             if (currentPlayer != null && !playersWhoPaidToll.contains(currentPlayer)) {
                 playersWhoPaidToll.add(currentPlayer);
             }
@@ -373,8 +373,8 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void handleGenerateClick() {
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        int currentNum = Game.getInstance().getCurrentNumber();
+        Player currentPlayer = game.getCurrentPlayer();
+        int currentNum = game.getCurrentNumber();
         boolean isGambler = GAMBLER.equals(currentPlayer.getClassChoice());
         boolean isAngryJimUnder50 = ANGRY_JIM.equals(currentPlayer.getClassChoice()) && currentNum < 50;
 
@@ -391,7 +391,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void renderPlayer(boolean isPowerUp) {
 
-        Player activePlayer = Game.getInstance().getCurrentPlayer();
+        Player activePlayer = game.getCurrentPlayer();
 
         if (activePlayer == null) return;
 
@@ -402,7 +402,7 @@ public class MainActivityGame extends SharedMainActivity {
         updateWildCardVisibilityIfNeeded(activePlayer);
         updateNumberText();
 
-        Game.getInstance().setLastTurnPlayer(activePlayer);
+        game.setLastTurnPlayer(activePlayer);
 
 
         if (!isPowerUp) {
@@ -439,15 +439,15 @@ public class MainActivityGame extends SharedMainActivity {
 
             animateTextView(generatedNumberTextView, () -> {
                 btnUtils.playSoundEffects();
-                Player loser = Game.getInstance().getLastTurnPlayer();
+                Player loser = game.getLastTurnPlayer();
                 PowerUps.checkLosingPowerUps(loser, () -> {
-                    Game.getInstance().endGame(this);
+                    game.endGame(this);
                     onEnd.run();
                 }, generatedNumberTextView);
             });
         } else {
             updateNumberText(); // Use logic-aware display
-            Game.getInstance().nextPlayer();
+            game.nextPlayer();
         }
     }
 
@@ -492,19 +492,19 @@ public class MainActivityGame extends SharedMainActivity {
                     reverseTurnOrder();
                     break;
                 case 6:
-                    for (Player player : Game.getInstance().getPlayers()) {
+                    for (Player player : game.getPlayers()) {
                         player.gainWildCards(2);
                     }
                     renderPlayer(true);
                     break;
                 case 7:
-                    for (Player player : Game.getInstance().getPlayers()) {
+                    for (Player player : game.getPlayers()) {
                         player.loseWildCards(2);
                     }
                     renderPlayer(true);
                     break;
                 case 9:
-                    Game.getInstance().activateRepeatingTurnForAllPlayers(2);
+                    game.activateRepeatingTurnForAllPlayers(2);
                     renderPlayer(true);
                     // Apply the specified logic to drinkNumberCounterInt
                     if (drinkNumberCounterInt <= 1) {
@@ -522,7 +522,7 @@ public class MainActivityGame extends SharedMainActivity {
             }
             Log.d(TAG, "Catastrophe message: " + catastrophe.getMessage());
             showDialog(catastrophe.getMessage(), R.layout.game_catastrophe_dialog_box, R.id.dialogbox_textview);
-            Game.getInstance().incrementCatastropheQuantity();
+            game.incrementCatastropheQuantity();
             catastropheTurnCounter = 0; // Reset the turn counter after reaching the limit
 
             // Generate a new random catastrophe limit
@@ -587,7 +587,7 @@ public class MainActivityGame extends SharedMainActivity {
         }
 
         if (SOLDIER.equals(classChoice)) {
-            if (isFirstTurn || Game.getInstance().getCurrentNumber() > 10) {
+            if (isFirstTurn || game.getCurrentNumber() > 10) {
                 canShowButton = false;
             }
         }
@@ -600,7 +600,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         if (GOBLIN.equals(classChoice)) {
             boolean otherPlayersHaveWildcards = false;
-            for (Player player : Game.getInstance().getPlayers()) {
+            for (Player player : game.getPlayers()) {
                 if (!player.equals(currentPlayer) && player.getWildCardAmount() > 0) {
                     otherPlayersHaveWildcards = true;
                     break;
@@ -612,7 +612,7 @@ public class MainActivityGame extends SharedMainActivity {
         }
 
         if (SURVIVOR.equals(classChoice)) {
-            if (Game.getInstance().getCurrentNumber() == 1) {
+            if (game.getCurrentNumber() == 1) {
                 canShowButton = false;
             }
         }
@@ -651,7 +651,7 @@ public class MainActivityGame extends SharedMainActivity {
     private void updatePlayerInfo(Player currentPlayer) {
         String playerName = currentPlayer.getName();
         String playerImageString = currentPlayer.getPhoto();
-        Game.getInstance().addUpdatedName(playerName);
+        game.addUpdatedName(playerName);
 
         // Ensure hidden state is reflected on UI
         updateNumber(game.getCurrentNumber());
@@ -714,7 +714,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         updateDrinkNumberCounterTextView();
         // Update ability button visibility when drink counter changes
-        updateClassAbilityButton(Game.getInstance().getCurrentPlayer());
+        updateClassAbilityButton(game.getCurrentPlayer());
     }
 
     private void updateDrinkNumberCounterTextView() {
@@ -815,7 +815,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void characterPassiveClassAffects() {
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        Player currentPlayer = game.getCurrentPlayer();
         String classChoice = currentPlayer.getClassChoice();
 
         Log.d(TAG, "Number was generated passive: " + game.getNumberWasGenerated());
@@ -849,7 +849,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     public void activateActiveAbility() {
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        Player currentPlayer = game.getCurrentPlayer();
         String classChoice = currentPlayer.getClassChoice();
         switch (classChoice) {
             case SCIENTIST:
@@ -1020,7 +1020,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         wasQuizCorrect = false;
 
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        Player currentPlayer = game.getCurrentPlayer();
         currentPlayer.useWildCard();
         currentPlayer.incrementUsedWildcards();
 
@@ -1049,15 +1049,12 @@ public class MainActivityGame extends SharedMainActivity {
                     selectedCard,
                     getWildCardType(selectedType, quizWildCards, taskWildCards)
             );
-
-            btnClassAbility.setVisibility(View.INVISIBLE);
         };
 
         PassiveAbilities.checkGoblinPassive(currentPlayer, proceedToWildCard);
     }
     private WildCardProperties[] selectWildCardType(Player currentPlayer, WildCardProperties[] quizWildCards, WildCardProperties[] taskWildCards, WildCardProperties[] truthWildCards) {
         if (QUIZ_MAGICIAN.equals(currentPlayer.getClassChoice()) && currentPlayer.getJustUsedActiveAbility()) {
-            btnClassAbility.setVisibility(View.INVISIBLE);
             return quizWildCards;
         }
 
@@ -1133,7 +1130,7 @@ public class MainActivityGame extends SharedMainActivity {
     //-----------------------------------------------------Specific WildCard Functions---------------------------------------------------//
 
     private void wildCardContinue() {
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        Player currentPlayer = game.getCurrentPlayer();
 
         // Special case: Quiz Magician Active Ability allows for another activation
         if (QUIZ_MAGICIAN.equals(currentPlayer.getClassChoice()) && currentPlayer.getJustUsedActiveAbility()) {
