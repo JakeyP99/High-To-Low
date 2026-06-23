@@ -426,6 +426,20 @@ public class MainActivityGame extends SharedMainActivity {
         }
 
         logPlayerInformation(activePlayer);
+
+        if (hidingTroll != null) {
+            btnUtils.setButton(btnGenerate, () -> {
+                if (activePlayer.equals(hidingTroll) || playersWhoPaidToll.contains(activePlayer)) {
+                    handleGenerateClick();
+                } else {
+                    showRevealNumberDialog();
+                }
+            });
+        } else {
+            numberCounterText.setOnClickListener(null);
+            btnUtils.setButton(btnGenerate, this::handleGenerateClick);
+        }
+
     }
 
     //-----------------------------------------------------Update Player's Info---------------------------------------------------//
@@ -894,28 +908,24 @@ public class MainActivityGame extends SharedMainActivity {
 
         View dialogView = inflater.inflate(layoutId, null);
         TextView dialogBoxTextView = dialogView.findViewById(textViewId);
+
         if (dialogBoxTextView != null) {
-            if (message.contains("'s Passive:")) {
-                int endOfPassive = message.indexOf("'s Passive:") + "'s Passive:".length();
-                SpannableString spannable = new SpannableString(message);
-                spannable.setSpan(new StyleSpan(Typeface.BOLD), 0, endOfPassive, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                spannable.setSpan(new AbsoluteSizeSpan(28, true), 0, endOfPassive, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                dialogBoxTextView.setText(spannable);
-            } else if (message.contains("'s Active:")) {
-                int endOfActive = message.indexOf("'s Active:") + "'s Active:".length();
-                SpannableString spannable = new SpannableString(message);
-                spannable.setSpan(new StyleSpan(Typeface.BOLD), 0, endOfActive, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                spannable.setSpan(new AbsoluteSizeSpan(28, true), 0, endOfActive, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                dialogBoxTextView.setText(spannable);
-            } else {
-                dialogBoxTextView.setText(message);
-            }
+            dialogBoxTextView.setText(message);
         }
 
         builder.setView(dialogView);
         builder.setCancelable(true);
+
         AlertDialog dialog = builder.create();
         dialog.setCanceledOnTouchOutside(true);
+
+        dialog.setOnDismissListener(d -> {
+            dialogQueue.remove(dialog);
+
+            if (!dialogQueue.isEmpty()) {
+                dialogQueue.get(0).show();
+            }
+        });
 
         dialogQueue.add(dialog);
         if (dialogQueue.size() == 1) {
@@ -959,15 +969,6 @@ public class MainActivityGame extends SharedMainActivity {
                 dialogQueue.get(0).show();
             }
         });
-
-
-        View.OnClickListener dismissListener = v -> dialog.dismiss();
-
-        View actionButton = (actionButtonId != 0)
-                ? dialogView.findViewById(actionButtonId)
-                : null;
-
-        Objects.requireNonNullElse(actionButton, dialogView).setOnClickListener(dismissListener);
 
         Log.d(TAG, "showDialog: " + title);
         Log.d(TAG, "dialogQueue: " + dialogQueue.size());

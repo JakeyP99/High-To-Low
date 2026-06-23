@@ -137,34 +137,50 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         revPopSet.start();
     }
 
-    public void characterClassInformationDialog(String currentPlayerClassChoice, String activeDescription, String passiveDescription) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
+    public void characterClassInformationDialog(
+            String currentPlayerClassChoice,
+            String activeDescription,
+            String passiveDescription
+    ) {
+
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
+
         LayoutInflater inflater = getLayoutInflater();
-        int characterClassTextLength = activeDescription.length() + passiveDescription.length();
-        Log.d(TAG, "characterClassInformationDialog: CharacterClassTextLength: " + characterClassTextLength);
+        View dialogView = inflater.inflate(
+                R.layout.game_character_ability_dialog_box,
+                null
+        );
 
-        View dialogView = inflater.inflate(R.layout.game_character_ability_dialog_box, null);
-        TextView activeAbilityDescriptionTextView = dialogView.findViewById(R.id.active_description_textview);
-        TextView passiveAbilityDescriptionTextView = dialogView.findViewById(R.id.passive_description_textview);
-        TextView currentPlayerClassTextView = dialogView.findViewById(R.id.class_textview);
-        TextView activeTextview = dialogView.findViewById(R.id.active_textview);
-        TextView passiveTextView = dialogView.findViewById(R.id.passive_textview);
+        // Views
+        TextView activeDescTv = dialogView.findViewById(R.id.active_description_textview);
+        TextView passiveDescTv = dialogView.findViewById(R.id.passive_description_textview);
+        TextView classTv = dialogView.findViewById(R.id.class_textview);
+        TextView activeLabelTv = dialogView.findViewById(R.id.active_textview);
+        TextView passiveLabelTv = dialogView.findViewById(R.id.passive_textview);
 
 
-        if (Objects.equals(currentPlayerClassChoice, "No Class")) {
-            passiveAbilityDescriptionTextView.setVisibility(View.GONE);
-            activeTextview.setVisibility(View.GONE);
-            passiveTextView.setVisibility(View.GONE);
+        // Set class name
+        classTv.setText(currentPlayerClassChoice);
+
+        // Set descriptions
+        activeDescTv.setText(activeDescription);
+        passiveDescTv.setText(passiveDescription);
+
+
+        // Handle "No Class" UI state
+        boolean isNoClass = "No Class".equals(currentPlayerClassChoice);
+
+        if (isNoClass) {
+            passiveDescTv.setVisibility(View.GONE);
+            activeLabelTv.setVisibility(View.GONE);
+            passiveLabelTv.setVisibility(View.GONE);
         }
-        // Set text and text size separately
-        activeAbilityDescriptionTextView.setText(activeDescription);
-        passiveAbilityDescriptionTextView.setText(passiveDescription);
-        currentPlayerClassTextView.setText(currentPlayerClassChoice);
+
 
         builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
 
-        dialogView.setOnClickListener(v -> dialog.dismiss());
+        AlertDialog dialog = builder.create();
         dialog.show();
     }
 
