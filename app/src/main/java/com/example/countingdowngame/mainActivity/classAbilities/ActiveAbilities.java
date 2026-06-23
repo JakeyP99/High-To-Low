@@ -18,21 +18,24 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
@@ -46,8 +49,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
-
-import pl.droidsonroids.gif.GifImageView;
 
 public class ActiveAbilities extends ButtonUtilsActivity {
     static Game game = Game.getInstance();
@@ -523,8 +524,8 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             player.incrementDrinksTakenByWitch(2);
         }
     }
-
     public static void handleGamblerClass() {
+
         List<Player> opponents = game.getPlayers().stream()
                 .filter(p -> !p.equals(game.getCurrentPlayer()))
                 .collect(Collectors.toList());
@@ -534,40 +535,97 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             return;
         }
 
+        showOpponentDialog(opponents);
+    }
+
+    private static void showOpponentDialog(List<Player> opponents) {
+
         LayoutInflater inflater = activity.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.game_gambler_select_opponent, null);
 
-        ListView listView = dialogView.findViewById(R.id.listViewOpponents);
+        RecyclerView recyclerView = dialogView.findViewById(R.id.listViewOpponents);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
-        builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
+        AlertDialog dialog = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme)
+                .setView(dialogView)
+                .create();
+
+        recyclerView.setLayoutManager(new GridLayoutManager(activity, 3));
+
+        OpponentAdapter adapter = new OpponentAdapter(opponents, player -> {
+            dialog.dismiss();
+            showBetDialog(player);
+        });
+
+        recyclerView.setAdapter(adapter);
 
         dialogView.setOnClickListener(v -> dialog.dismiss());
 
-        ArrayAdapter<Player> adapter = new ArrayAdapter<Player>(activity, R.layout.game_powerup_list_item, R.id.powerup_text, opponents) {
-            @NonNull
-            @Override
-            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                Player opponent = opponents.get(position);
-                TextView textView = view.findViewById(R.id.powerup_text);
-                textView.setText(opponent.getName());
-                textView.setTextSize(24); // Increased text size
-                GifImageView icon = view.findViewById(R.id.powerup_icon);
-                icon.setVisibility(View.GONE); // Removed the symbol
-                return view;
-            }
-        };
-
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            Player selectedOpponent = opponents.get(position);
-            dialog.dismiss();
-            showBetDialog(selectedOpponent);
-        });
-
         dialog.show();
+    }
+
+    public static class OpponentAdapter extends RecyclerView.Adapter<OpponentAdapter.VH> {
+
+        public interface OnClick {
+            void onClick(Player player);
+        }
+
+        private final List<Player> opponents;
+        private final OnClick listener;
+
+        public OpponentAdapter(List<Player> opponents, OnClick listener) {
+            this.opponents = opponents;
+            this.listener = listener;
+        }
+
+        static class VH extends RecyclerView.ViewHolder {
+            ImageView photo;
+            TextView name, clazz;
+
+            VH(View v) {
+                super(v);
+                photo = v.findViewById(R.id.playerPhotoImageView);
+                name = v.findViewById(R.id.playerNameTextView);
+                clazz = v.findViewById(R.id.playerClassTextView);
+            }
+        }
+
+        @NonNull
+        @Override
+        public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.game_gambler_player_choice_adaptor, parent, false);
+            return new VH(v);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull VH h, int position) {
+
+            Player p = opponents.get(position);
+
+            h.name.setText(p.getName());
+
+            h.name.postDelayed(() -> h.name.setSelected(true), 1000);
+
+            h.clazz.setText(p.getClassChoice());
+
+            if (p.getPhoto() != null && !p.getPhoto().isEmpty()) {
+                byte[] decoded = Base64.decode(p.getPhoto(), Base64.DEFAULT);
+                Bitmap bmp = BitmapFactory.decodeByteArray(decoded, 0, decoded.length);
+                h.photo.setImageBitmap(bmp);
+            } else {
+                h.photo.setImageResource(R.drawable.wine);
+            }
+
+            h.itemView.setOnClickListener(v -> {
+                h.name.setSelected(false);
+                listener.onClick(p);
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return opponents.size();
+        }
     }
 
     private static void showBetDialog(Player opponent) {

@@ -8,21 +8,45 @@
     android:gravity="center">
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/viga"
+        android:gravity="center"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="Gambler's Active:"
+        android:textColor="@color/bluedark"
+        android:textSize="35sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/bluedark"
+        android:alpha="0.2" />
+
+    <TextView
         android:id="@+id/title_select_opponent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/viga"
+        android:paddingTop="10dp"
         android:text="Select Opponent"
         android:textColor="@color/bluedark"
-        android:textSize="28sp"
+        android:textSize="25sp"
         android:layout_marginBottom="20dp"/>
 
-    <ListView
+
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listViewOpponents"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:divider="@android:color/transparent"
-        android:dividerHeight="8dp" />
+        android:dividerHeight="8dp"
+        />
+
 
 </LinearLayout>
