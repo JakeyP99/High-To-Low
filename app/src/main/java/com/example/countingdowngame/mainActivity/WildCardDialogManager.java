@@ -129,7 +129,7 @@ public class WildCardDialogManager {
 
         ui.btnAnswer.setVisibility(View.GONE);
 
-        String[] answers = buildAnswers(card, player, isQuizMagician);
+        String[] answers = buildAnswers(card, isQuizMagician);
         List<String> answerList = Arrays.asList(answers);
         Collections.shuffle(answerList);
 
@@ -147,7 +147,7 @@ public class WildCardDialogManager {
 
             btn.setVisibility(View.VISIBLE);
             btn.setText(answer);
-
+            updateTextSizeQuizAnswer(answer, btn);
             int index = i;
             
                 activity.btnUtils.setButton(btn, () -> 
@@ -157,7 +157,6 @@ public class WildCardDialogManager {
     }
 
     private String[] buildAnswers(WildCardProperties card,
-                                  Player player,
                                   boolean isQuizMagician) {
 
         if (isQuizMagician) {
@@ -237,8 +236,8 @@ public class WildCardDialogManager {
             msg = player.getName() + " that's right! The answer was "
                     + card.getAnswer()
                     + (isMagician
-                    ? "\n\n P.S. You get to give out 2 drinks to everyone."
-                    : "\n\n P.S. You get to give out a drink.");
+                    ? "\n\n You get to give out 2 drinks to everyone."
+                    : "\n\n You get to give out a drink.");
         } else {
             msg = player.getName()
                     + " big ooooff! The answer actually was "
@@ -282,9 +281,12 @@ public class WildCardDialogManager {
         wasQuizCorrect = correct;
 
         if (correct) {
+            boolean isMagician = QUIZ_MAGICIAN.equals(player.getClassChoice());
             Game.getInstance().incrementPlayerQuizCorrectAnswers(player);
             ui.text.setText(player.getName()
-                    + " since you got it right, give out a drink!");
+                    + (isMagician
+                    ? "\n\n You get to give out 2 drinks to everyone."
+                    : "\n\n You get to give out a drink."));
         } else {
             Game.getInstance().incrementPlayerQuizIncorrectAnswers(player);
             ui.text.setText(player.getName()
@@ -322,6 +324,14 @@ public class WildCardDialogManager {
 
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
     }
+
+    private void updateTextSizeQuizAnswer(String text, TextView textView) {
+        int size = SharedMainActivity.TextSizeCalculatorQuizAnswers
+                .calculateTextSizeBasedOnCharacterCount(text);
+
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+    }
+
     private void hideConfetti(UIRefs ui) {
         for (GifImageView gif : ui.confetti) {
             gif.setVisibility(View.GONE);

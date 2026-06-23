@@ -47,7 +47,7 @@
         <TextView
             android:id="@+id/textView_WildText"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:fontFamily="@font/viga"
@@ -56,10 +56,12 @@
             android:textAlignment="center"
             android:textColor="@color/bluedark"
             android:textSize="22sp"
-            app:layout_constraintTop_toBottomOf="@+id/view_separator"
+            app:layout_constrainedHeight="true"
             app:layout_constraintBottom_toTopOf="@+id/barrier_buttons"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_separator"
+            app:layout_constraintVertical_bias="0.5" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrier_buttons"
@@ -78,6 +80,7 @@
             android:background="@drawable/outlineforbutton"
             android:fontFamily="@font/viga"
             android:textAllCaps="false"
+            android:padding="10sp"
             android:textColor="@color/bluedark"
             android:textSize="16sp"
             android:visibility="gone"
@@ -94,6 +97,7 @@
             android:background="@drawable/outlineforbutton"
             android:fontFamily="@font/viga"
             android:textAllCaps="false"
+            android:padding="10sp"
             android:textColor="@color/bluedark"
             android:textSize="16sp"
             android:visibility="gone"
@@ -111,6 +115,7 @@
             android:background="@drawable/outlineforbutton"
             android:fontFamily="@font/viga"
             android:textAllCaps="false"
+            android:padding="10sp"
             android:textColor="@color/bluedark"
             android:textSize="16sp"
             android:visibility="gone"
@@ -124,6 +129,7 @@
             android:layout_height="90dp"
             android:layout_marginStart="5dp"
             android:layout_marginBottom="15dp"
+            android:padding="10sp"
             android:background="@drawable/outlineforbutton"
             android:fontFamily="@font/viga"
             android:textAllCaps="false"

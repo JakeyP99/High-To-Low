@@ -243,13 +243,28 @@ public class SharedMainActivity extends ButtonUtilsActivity {
             int textSize;
             int charCount = text.length();
             if (charCount <= 30) {
-                textSize = 33;
+                textSize = 30;
             } else if (charCount <= 70) {
-                textSize = 28;
-            } else {
                 textSize = 25;
+            } else {
+                textSize = 20;
             }
             return textSize;
         }
+    }
+
+        public static class TextSizeCalculatorQuizAnswers {
+            public static int calculateTextSizeBasedOnCharacterCount(String text) {
+                int textSize;
+                int charCount = text.length();
+                if (charCount <= 10) {
+                    textSize = 25;
+                } else if (charCount <= 20) {
+                    textSize = 20;
+                } else {
+                    textSize = 15;
+                }
+                return textSize;
+            }
     }
 }
