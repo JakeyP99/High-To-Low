@@ -5,6 +5,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
@@ -73,13 +74,11 @@ public class ActiveAbilitiesTest {
             waitForUI();
             onView(withId(R.id.btnGenerate)).perform(click()); // O2 -> Drinks = 2
             waitForUI();
-            onView(withId(R.id.close_button)).perform(click());
-            waitForUI();
 
             onView(allOf(withId(R.id.btnClassAbility), withText(CharacterClassDescriptions.archerActiveButtonText))).perform(click());
             waitForUI();
             onView(withText("Archer's Active: \n\nTester hand out two drinks!")).check(matches(isDisplayed()));
-            onView(withId(R.id.close_button)).perform(click());
+            onView(isRoot()).perform(click());
         }
     }
 
@@ -92,7 +91,7 @@ public class ActiveAbilitiesTest {
         try (ActivityScenario<MainActivityGame> scenario = ActivityScenario.launch(intent)) {
             onView(withId(R.id.btnClassAbility)).perform(click());
             onView(withId(R.id.editCurrentNumberTextView)).perform(replaceText("50"));
-            onView(withId(R.id.close_button)).perform(click());
+            onView(withId(R.id.btn_submit)).perform(click());
             onView(withId(R.id.textView_NumberText)).check(matches(withText("50")));
         }
     }
@@ -164,7 +163,7 @@ public class ActiveAbilitiesTest {
         try (ActivityScenario<MainActivityGame> scenario = ActivityScenario.launch(intent)) {
             onView(withId(R.id.btnClassAbility)).perform(click());
             onView(withText("Goblin's Active: \n\nOpponent lost two wildcards.\n\nOpponent now has 1 wildcard left.")).check(matches(isDisplayed()));
-            onView(withId(R.id.close_button)).perform(click());
+            onView(isRoot()).perform(click());
         }
     }
 }

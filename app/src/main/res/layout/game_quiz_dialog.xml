@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="500dp"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="8dp"
+    app:cardBackgroundColor="@color/white"
+    android:layout_margin="16dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="24dp">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineCenter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <TextView
+            android:id="@+id/textView_WildText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="150dp"
+            android:fontFamily="@font/viga"
+            android:gravity="center"
+            android:text="This is a test text"
+            android:textAlignment="center"
+            android:textColor="@color/bluedark"
+            android:textSize="22sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnAnswer"
+            android:layout_width="150dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/outlineforbutton"
+            android:fontFamily="@font/viga"
+            android:text="@string/Answer"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:textSize="20sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_WildText" />
+
+        <Button
+            android:id="@+id/btnQuizAnswerTL"
+            android:layout_width="140dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/outlineforbutton"
+            android:fontFamily="@font/viga"
+            android:padding="8dp"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:textSize="18sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
+            app:layout_constraintTop_toBottomOf="@+id/textView_WildText" />
+
+        <Button
+            android:id="@+id/btnQuizAnswerTR"
+            android:layout_width="140dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/outlineforbutton"
+            android:ellipsize="end"
+            android:fontFamily="@font/viga"
+            android:maxLines="2"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:textSize="18sp"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@+id/guidelineCenter"
+            app:layout_constraintTop_toBottomOf="@+id/textView_WildText" />
+
+        <Button
+            android:id="@+id/btnQuizAnswerBL"
+            android:layout_width="140dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/outlineforbutton"
+            android:fontFamily="@font/viga"
+            android:padding="8dp"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:textSize="18sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
+            app:layout_constraintTop_toBottomOf="@+id/btnQuizAnswerTL" />
+
+        <Button
+            android:id="@+id/btnQuizAnswerBR"
+            android:layout_width="140dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/outlineforbutton"
+            android:fontFamily="@font/viga"
+            android:padding="8dp"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:textSize="18sp"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@+id/guidelineCenter"
+            app:layout_constraintTop_toBottomOf="@+id/btnQuizAnswerTR" />
+
+        <Button
+            android:id="@+id/btnBackWildCard"
+            android:layout_width="150dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/outlineforbutton"
+            android:fontFamily="@font/viga"
+            android:text="@string/continueTxt"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:textSize="20sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnQuizAnswerBL" />
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/confettiImageViewTL"
+            android:layout_width="140dp"
+            android:layout_height="80dp"
+            android:src="@drawable/confetti"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/btnQuizAnswerTL"
+            app:layout_constraintEnd_toEndOf="@id/btnQuizAnswerTL"
+            app:layout_constraintStart_toStartOf="@id/btnQuizAnswerTL"
+            app:layout_constraintTop_toTopOf="@id/btnQuizAnswerTL" />
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/confettiImageViewTR"
+            android:layout_width="140dp"
+            android:layout_height="80dp"
+            android:src="@drawable/confetti"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/btnQuizAnswerTR"
+            app:layout_constraintEnd_toEndOf="@id/btnQuizAnswerTR"
+            app:layout_constraintStart_toStartOf="@id/btnQuizAnswerTR"
+            app:layout_constraintTop_toTopOf="@id/btnQuizAnswerTR" />
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/confettiImageViewBL"
+            android:layout_width="140dp"
+            android:layout_height="80dp"
+            android:src="@drawable/confetti"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/btnQuizAnswerBL"
+            app:layout_constraintEnd_toEndOf="@id/btnQuizAnswerBL"
+            app:layout_constraintStart_toStartOf="@id/btnQuizAnswerBL"
+            app:layout_constraintTop_toTopOf="@id/btnQuizAnswerBL" />
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/confettiImageViewBR"
+            android:layout_width="140dp"
+            android:layout_height="80dp"
+            android:src="@drawable/confetti"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/btnQuizAnswerBR"
+            app:layout_constraintEnd_toEndOf="@id/btnQuizAnswerBR"
+            app:layout_constraintStart_toStartOf="@id/btnQuizAnswerBR"
+            app:layout_constraintTop_toTopOf="@id/btnQuizAnswerBR" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

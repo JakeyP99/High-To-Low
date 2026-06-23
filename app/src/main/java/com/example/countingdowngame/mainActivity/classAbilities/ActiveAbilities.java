@@ -83,14 +83,14 @@ public class ActiveAbilities {
         View dialogView = inflater.inflate(R.layout.game_scientist_change_number, null);
 
         EditText editCurrentNumberText = dialogView.findViewById(editCurrentNumberTextView);
-        Button okButton = dialogView.findViewById(R.id.close_button);
+        Button submitButton = dialogView.findViewById(R.id.btn_submit);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
         builder.setView(dialogView);
 
         AlertDialog dialog = builder.create();
 
-        okButton.setOnClickListener(view -> {
+        submitButton.setOnClickListener(view -> {
             try {
                 String userInput = editCurrentNumberText.getText().toString();
                 int newNumber = Integer.parseInt(userInput);
@@ -549,11 +549,12 @@ public class ActiveAbilities {
         View dialogView = inflater.inflate(R.layout.game_gambler_select_opponent, null);
 
         ListView listView = dialogView.findViewById(R.id.listViewOpponents);
-        ImageButton closeButton = dialogView.findViewById(R.id.close_button);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
+
+        dialogView.setOnClickListener(v -> dialog.dismiss());
 
         ArrayAdapter<Player> adapter = new ArrayAdapter<Player>(activity, R.layout.game_powerup_list_item, R.id.powerup_text, opponents) {
             @NonNull
@@ -576,8 +577,6 @@ public class ActiveAbilities {
             dialog.dismiss();
             showBetDialog(selectedOpponent);
         });
-
-        closeButton.setOnClickListener(v -> dialog.dismiss());
 
         dialog.show();
     }

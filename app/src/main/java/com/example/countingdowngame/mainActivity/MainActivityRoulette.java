@@ -268,10 +268,10 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
     //-----------------------------------------------------Dialogs---------------------------------------------------//
 
     private void showGameDialog(String message) {
-        showDialog(message, R.layout.game_main_dialog_box, R.id.dialogbox_textview, R.id.close_button);
+        showDialog(message, R.layout.game_main_dialog_box, R.id.dialogbox_textview);
     }
 
-    private void showDialog(String message, int layoutId, int textViewId, int closeButtonId) {
+    private void showDialog(String message, int layoutId, int textViewId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = getLayoutInflater();
 
@@ -283,8 +283,7 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        ImageButton closeButton = dialogView.findViewById(closeButtonId);
-        closeButton.setOnClickListener(v -> {
+        dialogView.setOnClickListener(v -> {
             dialog.dismiss();
             handlePostDialogActions();
         });
@@ -325,7 +324,7 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
     }
 
     private void showCatastropheDialog(String message) {
-        showDialog(message, R.layout.game_roulette_death_dialog_box, R.id.dialogbox_textview, R.id.close_button);
+        showDialog(message, R.layout.game_roulette_death_dialog_box, R.id.dialogbox_textview);
     }
 
     //-----------------------------------------------------Set Visibilities---------------------------------------------------//

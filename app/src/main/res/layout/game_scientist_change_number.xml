@@ -1,8 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="500dp"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="20dp"
+    android:gravity="center"
+    android:background="@drawable/rounded_background">
 
     <TextView
         android:layout_width="match_parent"
@@ -28,9 +31,9 @@
         android:textSize="50sp" />
 
     <Button
-        android:id="@+id/close_button"
-        android:layout_width="90dp"
-        android:layout_height="50dp"
+        android:id="@+id/btn_submit"
+        android:layout_width="120dp"
+        android:layout_height="60dp"
         android:fontFamily="@font/viga"
         android:background="@drawable/outlineforbutton"
         android:text="Submit"

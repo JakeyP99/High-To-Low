@@ -71,6 +71,7 @@ import com.example.countingdowngame.wildCards.wildCardTypes.WildCardData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -111,7 +112,7 @@ public class MainActivityGame extends SharedMainActivity {
     //-----------------------------------------------------Booleans---------------------------------------------------//
     private boolean doubleBackToExitPressedOnce = false;
     private boolean wasQuizCorrect = false;
-    private ActivityResultLauncher<Intent> quizActivityResultLauncher;
+    private QuizDialogManager quizDialogManager;
     //-----------------------------------------------------Array---------------------------------------------------//
     private MainActivityCatastrophes catastrophesManager;
     private MainActivityNumberGenerator numberGenerator;
@@ -214,19 +215,6 @@ public class MainActivityGame extends SharedMainActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_main_activity);
 
-        quizActivityResultLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent data = result.getData();
-                        if (data != null) {
-                            wasQuizCorrect = data.getBooleanExtra("wasQuizCorrect", false);
-                            wildCardContinue();
-                        }
-                    }
-                }
-        );
-
         initializeViews();
         PassiveAbilities.setActivity(this);
         ActiveAbilities.setActivity(this);
@@ -235,6 +223,7 @@ public class MainActivityGame extends SharedMainActivity {
         setupButtons();
         startGame();
         initializeCatastrophe();
+        quizDialogManager = new QuizDialogManager(this, this::wildCardContinue);
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -559,7 +548,7 @@ public class MainActivityGame extends SharedMainActivity {
                     break;
             }
             Log.d(TAG, "Catastrophe message: " + catastrophe.getMessage());
-            showDialog(catastrophe.getMessage(), R.layout.game_catastrophe_dialog_box, R.id.dialogbox_textview, R.id.close_button, null);
+            showDialog(catastrophe.getMessage(), R.layout.game_catastrophe_dialog_box, R.id.dialogbox_textview, 0,  null);
             Game.getInstance().incrementCatastropheQuantity();
             catastropheTurnCounter = 0; // Reset the turn counter after reaching the limit
 
@@ -592,12 +581,12 @@ public class MainActivityGame extends SharedMainActivity {
             case WITCH: iconRes = R.drawable.witch; break;
             case SCIENTIST: iconRes = R.drawable.scientist; break;
             case SOLDIER: iconRes = R.drawable.jail; break;
-            case QUIZ_MAGICIAN: iconRes = R.drawable.quizmaster; break;
+            case QUIZ_MAGICIAN: iconRes = R.drawable.books; break;
             case SURVIVOR: iconRes = R.drawable.bridge; break;
             case ANGRY_JIM: iconRes = R.drawable.angry_jim; break;
             case GOBLIN: iconRes = R.drawable.goblin; break;
             case GAMBLER: iconRes = R.drawable.dice; break;
-            case TROLL: iconRes = R.drawable.books; break;
+            case TROLL: iconRes = R.drawable.bridge; break;
             default: iconRes = R.drawable.wine; break;
         }
         iconAbility.setImageResource(iconRes);
@@ -927,7 +916,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     private final List<AlertDialog> dialogQueue = new ArrayList<>();
 
-    public void showDialog(String message, int layoutId, int textViewId, int closeButtonId, Runnable onDismiss) {
+    public void showDialog(String message, int layoutId, int textViewId, int actionButtonId, Runnable onDismiss) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = getLayoutInflater();
 
@@ -952,22 +941,26 @@ public class MainActivityGame extends SharedMainActivity {
         }
 
         builder.setView(dialogView);
-        builder.setCancelable(false);
+        builder.setCancelable(true);
         AlertDialog dialog = builder.create();
-        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCanceledOnTouchOutside(true);
 
-        View closeButton = dialogView.findViewById(closeButtonId);
-        if (closeButton != null) {
-            closeButton.setOnClickListener(v -> {
-                dialog.dismiss();
-                dialogQueue.remove(dialog);
-                if (!dialogQueue.isEmpty()) {
-                    dialogQueue.get(0).show();
-                }
-                if (onDismiss != null) {
-                    onDismiss.run();
-                }
-            });
+        View.OnClickListener dismissListener = v -> {
+            dialog.dismiss();
+            dialogQueue.remove(dialog);
+            if (!dialogQueue.isEmpty()) {
+                dialogQueue.get(0).show();
+            }
+            if (onDismiss != null) {
+                onDismiss.run();
+            }
+        };
+
+        View actionButton = (actionButtonId != 0) ? dialogView.findViewById(actionButtonId) : null;
+        if (actionButton != null) {
+            actionButton.setOnClickListener(dismissListener);
+        } else {
+            dialogView.setOnClickListener(dismissListener);
         }
 
         dialogQueue.add(dialog);
@@ -977,7 +970,7 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     public void showGameDialog(String message) {
-        showDialog(message, R.layout.game_main_dialog_box, R.id.dialogbox_textview, R.id.close_button, null);
+        showDialog(message, R.layout.game_main_dialog_box, R.id.dialogbox_textview, 0, null);
     }
 
     public void showDoneDialog(String message, Runnable onDone) {
@@ -1088,16 +1081,14 @@ public class MainActivityGame extends SharedMainActivity {
         return "Truth";
     }
 
+    public void setWasQuizCorrect(boolean correct) {
+        this.wasQuizCorrect = correct;
+    }
+
     public void handleSelectedCard(WildCardProperties selectedCard, String wildCardType) {
         if (selectedCard != null) {
             if (selectedCard.hasAnswer()) {
-                wildText.setText("");
-                wildText.setVisibility(View.INVISIBLE);
-                playerImage.setVisibility(View.INVISIBLE);
-                Intent intent = new Intent(this, MainActivityQuiz.class);
-                intent.putExtra("selectedWildCard", selectedCard);
-                quizActivityResultLauncher.launch(intent);
-                overridePendingTransition(0, 0);
+                quizDialogManager.showQuizDialog(selectedCard);
             } else {
                 updateSelectedCard(selectedCard);
                 btnWildContinue.setVisibility(View.VISIBLE);

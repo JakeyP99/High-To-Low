@@ -307,8 +307,6 @@ public class PowerUps {
         View dialogView = activity.getLayoutInflater().inflate(R.layout.game_powerups, null);
         TextView title = dialogView.findViewById(R.id.powerup_dialogbox_textview);
         ListView listView = dialogView.findViewById(R.id.listViewPowerUps);
-        ImageButton closeBtn = dialogView.findViewById(R.id.close_button);
-        closeBtn.setVisibility(View.GONE);
 
         title.setText("Splitting the Pain...");
 
@@ -410,9 +408,6 @@ public class PowerUps {
         dialog.setOnDismissListener(d -> {
             if (onDismiss != null) onDismiss.run();
         });
-
-        ImageButton closeButton = dialogView.findViewById(R.id.close_button);
-        closeButton.setVisibility(View.GONE);
 
         ListView listView = dialogView.findViewById(R.id.listViewPowerUps);
         // Pass true to bring back descriptions

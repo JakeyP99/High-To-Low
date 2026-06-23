@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -31,22 +30,6 @@ import java.util.Objects;
 
 public class SharedMainActivity extends ButtonUtilsActivity {
 
-    public static void setNameSizeBasedOnInt(TextView textView, String text) {
-        int textSize;
-        if (text.length() > 24) {
-            textSize = 22;
-        } else if (text.length() > 18) {
-            textSize = 25;
-        } else if (text.length() > 14) {
-            textSize = 30;
-        } else if (text.length() > 8) {
-            textSize = 35;
-        } else {
-            textSize = 38;
-        }
-        textView.setTextSize(textSize);
-    }
-
     public static void setTextViewSizeBasedOnInt(TextView textView, String text) {
         int defaultTextSize = 70;
         int minSize = 47;
@@ -58,22 +41,6 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         }
     }
 
-    public static int quizAnswerTextSize(String answer) {
-        int textSize;
-        int answerLength = answer.length();
-
-        if (answerLength > 16) {
-            textSize = 15; // Set text size to 15sp for answers longer than 20 characters
-        } else if (answerLength > 13) {
-            textSize = 18; // Set text size to 18sp for answers longer than 15 characters
-        } else if (answerLength > 10) {
-            textSize = 20; // Set text size to 20sp for answers longer than 10 characters
-        } else {
-            textSize = 23; // Set default text size to 23sp for shorter answers
-        }
-
-        return textSize;
-    }
 
     public static void reverseTurnOrder() {
         Game game = Game.getInstance();
@@ -130,9 +97,6 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         shakeAnimator.start();
     }
 
-    protected void animateTextView(final TextView textView) {
-        animateTextView(textView, null);
-    }
 
     protected void animateTextViewBackAlive(final TextView textView, @Nullable Runnable onEnd) {
         // Ensure TextView starts from popped state (scale 0, alpha 0)
@@ -173,25 +137,6 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         revPopSet.start();
     }
 
-
-    public void disableAnswerButtons(Button[] buttons) {
-        for (Button button : buttons) {
-            button.setEnabled(false);
-        }
-    }
-
-    public void enableAnswerButtons(Button[] buttons) {
-        for (Button button : buttons) {
-            button.setEnabled(true);
-        }
-    }
-
-    public void resetButtonBackgrounds(Button[] buttons) {
-        for (Button button : buttons) {
-            button.setBackground(ContextCompat.getDrawable(this, R.drawable.outlineforbutton));
-        }
-    }
-
     public void characterClassInformationDialog(String currentPlayerClassChoice, String activeDescription, String passiveDescription) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = getLayoutInflater();
@@ -218,11 +163,9 @@ public class SharedMainActivity extends ButtonUtilsActivity {
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
+
+        dialogView.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
-
-        ImageButton closeButton = dialogView.findViewById(R.id.close_button);
-        closeButton.setOnClickListener(v -> dialog.dismiss());
-
     }
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Instructional overlay ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
