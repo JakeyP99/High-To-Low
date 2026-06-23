@@ -1,10 +1,12 @@
 package com.example.countingdowngame.mainActivity.classAbilities;
 
+import static android.content.ContentValues.TAG;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ARCHER;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GOBLIN;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SCIENTIST;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SOLDIER;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.TROLL;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
@@ -14,6 +16,7 @@ import static com.example.countingdowngame.mainActivity.MainActivityGame.soldier
 
 import android.app.AlertDialog;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -37,10 +40,18 @@ public class PassiveAbilities {
     public static void handleWitchPassive(Player currentPlayer) {
         if (!isFirstTurn) {
             if (game.getCurrentNumber() % 2 == 0) {
-                activity.showGameDialog(WITCH + "'s Passive: \n\n" + currentPlayer.getName() + " hand out 1 drink.");
+                activity.showClassAbilityDialog(
+                        WITCH + "'s Passive: \n\n" +
+                                currentPlayer.getName() +
+                                " hand 1 drink."
+                );
                 currentPlayer.incrementDrinksHandedOutByWitch(1);
             } else {
-                activity.showGameDialog(WITCH + "'s Passive: \n\n" + currentPlayer.getName() + " take 1 drink.");
+                activity.showClassAbilityDialog(
+                        WITCH + "'s Passive: \n\n" +
+                                currentPlayer.getName() +
+                                " take 1 drink."
+                );
                 currentPlayer.incrementDrinksTakenByWitch(1);
             }
         }
@@ -57,6 +68,12 @@ public class PassiveAbilities {
         if (!isFirstTurn) {
             if (!soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {
                 soldierRemoval = true;
+                activity.showClassAbilityDialog(
+                        SOLDIER + "'s Passive: \n\n" +
+                                currentPlayer.getName() +
+                                " has escaped the game as the soldier."
+                );
+
                 activity.showGameDialog(currentPlayer.getName() + " has escaped the game as the soldier.");
                 currentPlayer.setRemoved(true);
                 game.removePlayer(currentPlayer);
@@ -68,8 +85,12 @@ public class PassiveAbilities {
 
     public static void handleSurvivorPassive(Player currentPlayer) {
         String drinksText = (drinkNumberCounterInt == 1) ? "drink" : "drinks";
-        activity.showGameDialog(SURVIVOR + "'s Passive: \n\n" + currentPlayer.getName()
-                + " survived, hand out " + drinkNumberCounterInt + " " + drinksText);
+
+        activity.showClassAbilityDialog(
+                SURVIVOR + "'s Passive: \n\n" +
+                         currentPlayer.getName() +
+                         " survived, hand out " + drinkNumberCounterInt + " " + drinksText
+        );
     }
 
     public static boolean checkGoblinPassive(Player wildcardUser, Runnable onDone) {
@@ -85,7 +106,11 @@ public class PassiveAbilities {
                     (ANGRY_JIM.equals(player.getClassChoice()) && game.getCurrentNumber() < 50);
 
             if (hasGoblinPassive && !player.equals(wildcardUser)) {
-                activity.showDoneDialog(GOBLIN + "'s Passive: \n\nDrink once for using a wildcard!", onDone);
+
+                activity.showClassAbilityDialog(
+                        GOBLIN + "'s Passive: \n\n" +
+                                 " Drink once for using a wildcard!"
+                );
                 return true;
             }
         }
@@ -101,7 +126,10 @@ public class PassiveAbilities {
 
             handler.postDelayed(() -> {
                 if (chance < skipChance) {
-                    activity.showGameDialog(SCIENTIST + "'s Passive: \n\n" + currentPlayer.getName() + "'s turn was skipped.");
+                    activity.showClassAbilityDialog(
+                            SCIENTIST + "'s Passive: \n\n" +
+                                    currentPlayer.getName() + "'s turn was skipped."
+                    );
                     currentPlayer.useSkip();
                 }
             }, 1);
@@ -136,10 +164,16 @@ public class PassiveAbilities {
             int chance = new Random().nextInt(100);
             if (chance < 60) {
                 activity.updateDrinkNumberCounter(2, true);
-                activity.showGameDialog(ARCHER + "'s Passive: \n\nDrinking number increased by 2!");
+                activity.showClassAbilityDialog(
+                        ARCHER + "'s Passive: \n\n" +
+                                "Drinking number increased by 2!"
+                );
             } else {
                 activity.updateDrinkNumberCounter(-2, true);
-                activity.showGameDialog(ARCHER + "'s Passive: \n\nDrinking number decreased by 2!");
+                activity.showClassAbilityDialog(
+                        ARCHER + "'s Passive: \n\n" +
+                                "Drinking number decreased by 2!"
+                );
             }
         }
     }
@@ -150,8 +184,11 @@ public class PassiveAbilities {
             if (chance < 20) {
                 currentPlayer.setTrollPassiveUsed(true);
                 activity.hideNumberForTroll(currentPlayer);
-                activity.showGameDialog(TROLL + "'s Passive: \n\nThe generate number is now hidden.\n\n" +
-                        currentPlayer.getName() + " can still see it. Others must pay 3 drinks if they want to reveal it!");
+                activity.showClassAbilityDialog(
+                        TROLL + "'s Passive: \n\n" +
+                                "The generate number is now hidden.\n\n" +
+                                currentPlayer.getName() + " can still see it. Others must pay 3 drinks if they want to reveal it!"
+                );
             }
         }
     }
@@ -247,8 +284,11 @@ public class PassiveAbilities {
             message = currentPlayer.getName() + " lost their bet! Take 1 drink.";
             currentPlayer.incrementDrinksTakenByGambler(1);
         }
+        activity.showClassAbilityDialog(
+                GAMBLER + "'s Passive: \n\n" +
+                        message
+        );
 
-        activity.showGameDialog(GAMBLER + "'s Passive: \n\n" + message);
         gamblerBet = "";
     }
 }

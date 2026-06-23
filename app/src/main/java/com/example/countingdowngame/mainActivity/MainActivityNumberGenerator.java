@@ -1,5 +1,6 @@
 package com.example.countingdowngame.mainActivity;
 
+import static android.content.ContentValues.TAG;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
@@ -7,6 +8,7 @@ import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAb
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleSurvivorPassive;
 
 import android.os.Handler;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;

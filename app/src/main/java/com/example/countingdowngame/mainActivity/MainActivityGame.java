@@ -25,9 +25,7 @@ import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAb
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleWitchPassive;
 
 import android.animation.ArgbEvaluator;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -49,8 +47,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
@@ -71,8 +67,8 @@ import com.example.countingdowngame.wildCards.wildCardTypes.WildCardData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -548,7 +544,7 @@ public class MainActivityGame extends SharedMainActivity {
                     break;
             }
             Log.d(TAG, "Catastrophe message: " + catastrophe.getMessage());
-            showDialog(catastrophe.getMessage(), R.layout.game_catastrophe_dialog_box, R.id.dialogbox_textview, 0,  null);
+            showDialog(catastrophe.getMessage(), R.layout.game_catastrophe_dialog_box, R.id.dialogbox_textview);
             Game.getInstance().incrementCatastropheQuantity();
             catastropheTurnCounter = 0; // Reset the turn counter after reaching the limit
 
@@ -582,7 +578,7 @@ public class MainActivityGame extends SharedMainActivity {
             case SCIENTIST: iconRes = R.drawable.scientist; break;
             case SOLDIER: iconRes = R.drawable.jail; break;
             case QUIZ_MAGICIAN: iconRes = R.drawable.books; break;
-            case SURVIVOR: iconRes = R.drawable.bridge; break;
+            case SURVIVOR: iconRes = R.drawable.bandaids; break;
             case ANGRY_JIM: iconRes = R.drawable.angry_jim; break;
             case GOBLIN: iconRes = R.drawable.goblin; break;
             case GAMBLER: iconRes = R.drawable.dice; break;
@@ -916,7 +912,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     private final List<AlertDialog> dialogQueue = new ArrayList<>();
 
-    public void showDialog(String message, int layoutId, int textViewId, int actionButtonId, Runnable onDismiss) {
+    public void showDialog(String message, int layoutId, int textViewId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = getLayoutInflater();
 
@@ -945,23 +941,60 @@ public class MainActivityGame extends SharedMainActivity {
         AlertDialog dialog = builder.create();
         dialog.setCanceledOnTouchOutside(true);
 
-        View.OnClickListener dismissListener = v -> {
-            dialog.dismiss();
+        dialogQueue.add(dialog);
+        if (dialogQueue.size() == 1) {
+            dialog.show();
+        }
+    }
+
+
+    public void showClassDialog(String title, String description, int layoutId,
+                                int classTextViewId, int descriptionTextViewId,
+                                int actionButtonId) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
+        LayoutInflater inflater = getLayoutInflater();
+
+        View dialogView = inflater.inflate(layoutId, null);
+
+        TextView classTextView = dialogView.findViewById(classTextViewId);
+        TextView descriptionTextView = dialogView.findViewById(descriptionTextViewId);
+
+        if (classTextView != null) {
+            classTextView.setText(title);
+        }
+
+        if (descriptionTextView != null) {
+            descriptionTextView.setText(description);
+        }
+
+
+        builder.setView(dialogView);
+        builder.setCancelable(true);
+
+        AlertDialog dialog = builder.create();
+
+        dialog.setCanceledOnTouchOutside(true);
+
+        dialog.setOnDismissListener(d -> {
             dialogQueue.remove(dialog);
+
             if (!dialogQueue.isEmpty()) {
                 dialogQueue.get(0).show();
             }
-            if (onDismiss != null) {
-                onDismiss.run();
-            }
-        };
+        });
 
-        View actionButton = (actionButtonId != 0) ? dialogView.findViewById(actionButtonId) : null;
-        if (actionButton != null) {
-            actionButton.setOnClickListener(dismissListener);
-        } else {
-            dialogView.setOnClickListener(dismissListener);
-        }
+
+        View.OnClickListener dismissListener = v -> dialog.dismiss();
+
+        View actionButton = (actionButtonId != 0)
+                ? dialogView.findViewById(actionButtonId)
+                : null;
+
+        Objects.requireNonNullElse(actionButton, dialogView).setOnClickListener(dismissListener);
+
+        Log.d(TAG, "showDialog: " + title);
+        Log.d(TAG, "dialogQueue: " + dialogQueue.size());
 
         dialogQueue.add(dialog);
         if (dialogQueue.size() == 1) {
@@ -969,12 +1002,35 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    public void showGameDialog(String message) {
-        showDialog(message, R.layout.game_main_dialog_box, R.id.dialogbox_textview, 0, null);
+
+
+    public void showClassAbilityDialog(String message) {
+
+        String title = "";
+        String description = "";
+
+        if (message.contains("\n\n")) {
+            title = message.substring(0, message.indexOf("\n\n"));
+            description = message.substring(message.indexOf("\n\n") + 2);
+        } else {
+            title = message;
+        }
+
+
+        showClassDialog(
+                title,
+                description,
+                R.layout.game_use_class_ability_dialog_box,
+                R.id.class_textview,
+                R.id.description_textview,
+                0
+        );
     }
 
-    public void showDoneDialog(String message, Runnable onDone) {
-        showDialog(message, R.layout.game_done_dialog, R.id.dialogbox_textview, R.id.done_button, onDone);
+
+
+    public void showGameDialog(String message) {
+        showDialog(message, R.layout.game_main_dialog_box, R.id.dialogbox_textview);
     }
 
     public void halveCurrentNumber() {

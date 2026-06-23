@@ -10,7 +10,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="420dp"
+        android:layout_height="400dp"
         android:layout_marginTop="24dp">
 
         <!-- Top Option: 0 -->
@@ -34,7 +34,7 @@
                 android:gravity="center"
                 android:text="0"
                 android:textColor="@color/bluedark"
-                android:textSize="70sp" />
+                android:textSize="35sp" />
         </androidx.cardview.widget.CardView>
 
         <!-- Arrow Spinner -->
@@ -71,7 +71,7 @@
                 android:gravity="center"
                 android:text="DOUBLE"
                 android:textColor="@color/bluedark"
-                android:textSize="36sp" />
+                android:textSize="35sp" />
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

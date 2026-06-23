@@ -171,10 +171,11 @@ public class ActiveAbilities {
         int wildcardsLeft = randomPlayer.getWildCardAmount();
         String wildcardText = wildcardsLeft == 0 ? "no more wildcards" : (wildcardsLeft == 1 ? "1 wildcard left" : wildcardsLeft + " wildcards left");
 
-        activity.showGameDialog(GOBLIN + "'s Active: \n\n" +
-                randomPlayer.getName() + " lost two wildcards.\n\n" +
-                randomPlayer.getName() + " now has " + wildcardText + ".");
-
+        activity.showClassAbilityDialog(
+                GOBLIN + "'s Active: \n\n" +
+                        randomPlayer.getName() + " lost two wildcards.\n\n" +
+                        randomPlayer.getName() + " now has " + wildcardText + "."
+        );
         currentPlayer.loseWildCards(1);
         currentPlayer.setUsedActiveAbility(true);
         activity.renderPlayerUI(true);
@@ -185,7 +186,10 @@ public class ActiveAbilities {
     public static void handleAngryJimClass(Player currentPlayer) {
         Player randomPlayer = game.getRandomPlayerExcludingCurrent();
         game.updateRepeatingTurns(randomPlayer, 1);
-        activity.showGameDialog(ANGRY_JIM + "'s Active: \n\n" + randomPlayer.getName() + " must repeat their turn.");
+        activity.showClassAbilityDialog(
+                ANGRY_JIM + "'s Active: \n\n" +
+                        randomPlayer.getName() + " must repeat their turn."
+        );
         currentPlayer.setUsedActiveAbility(true);
         hideAbilityButton();
         AudioManager.getInstance().playSoundEffects(activity, ANGRY_JIM);
@@ -202,7 +206,10 @@ public class ActiveAbilities {
 
     public static void handleArcherClass(Player currentPlayer) {
         if (drinkNumberCounterInt >= 2) {
-            activity.showGameDialog(ARCHER + "'s Active: \n\n" + currentPlayer.getName() + " hand out two drinks!");
+            activity.showClassAbilityDialog(
+                    ARCHER + "'s Active: \n\n" +
+                            currentPlayer.getName() + " hand out two drinks!"
+            );
             currentPlayer.setUsedActiveAbility(true);
             activity.updateDrinkNumberCounter(-2, true);
             hideAbilityButton();
