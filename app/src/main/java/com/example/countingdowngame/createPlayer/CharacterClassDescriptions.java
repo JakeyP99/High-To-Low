@@ -18,7 +18,7 @@ public class CharacterClassDescriptions {
             "You may remove 2 drinks from the total and give them to any players.";
 
     public static final String witchActiveDescription =
-            "Throw a potion! Play a mini-game to determine its potency!";
+            "Throw a potion! Play a mini-game to determine its potency! This comes back after 3 turns.";
 
     public static final String scientistActiveDescription =
             "Change the current number to any number. Your turn continues.";

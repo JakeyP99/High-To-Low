@@ -74,7 +74,6 @@ public class PassiveAbilities {
                                 " has escaped the game as the soldier."
                 );
 
-                activity.showGameDialog(currentPlayer.getName() + " has escaped the game as the soldier.");
                 currentPlayer.setRemoved(true);
                 game.removePlayer(currentPlayer);
             } else if (soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {

@@ -70,7 +70,6 @@ public class PassiveAbilitiesTest {
             waitForUI();
             
             onView(withText(containsString("1 drink"))).check(matches(isDisplayed()));
-            onView(withId(R.id.close_button)).perform(click());
         }
     }
 
@@ -87,7 +86,6 @@ public class PassiveAbilitiesTest {
             waitForUI();
             
             onView(withText(containsString("has escaped the game"))).check(matches(isDisplayed()));
-            onView(withId(R.id.close_button)).perform(click());
         }
     }
 

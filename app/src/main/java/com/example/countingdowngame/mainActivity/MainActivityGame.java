@@ -282,10 +282,10 @@ public class MainActivityGame extends SharedMainActivity {
 
         Game.getInstance().startGame(startingNumber, (e) -> {
             if (e.type == GameEventType.NEXT_PLAYER) {
-                renderPlayer();
+                renderPlayer(false);
             }
         });
-        renderPlayer();
+        renderPlayer(false);
         updateDrinkNumberCounterTextView();
     }
 
@@ -357,9 +357,6 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    private void renderPlayer() {
-        renderPlayer(false);
-    }
 
     private void showRevealNumberDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
@@ -406,45 +403,29 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void renderPlayer(boolean isPowerUp) {
-        // Logic updates (Passive abilities, turn counters, etc.)
-        Player activePlayer = Game.getInstance().getCurrentPlayer();
 
-        if (!isPowerUp) {
-            characterPassiveClassAffects();
-            updateActiveAbilitiesAfterCooldown(Game.getInstance().getCurrentPlayer());
-            updateTurnCounter();
-            updateCatastropheTurnCounter();
-        }
-        updateWildCardVisibilityIfNeeded(Game.getInstance().getCurrentPlayer());
+        Player activePlayer = Game.getInstance().getCurrentPlayer();
 
         if (activePlayer == null) return;
 
-        if (hidingTroll != null) {
-            btnUtils.setButton(numberCounterText, () -> {
-                if (activePlayer.equals(hidingTroll) || playersWhoPaidToll.contains(activePlayer)) {
-                    showGameDialog("Troll Vision: The hidden number is " + game.getCurrentNumber());
-                } else {
-                    showRevealNumberDialog();
-                }
-            });
+        Log.d("GAME", "RENDER PLAYER = " + activePlayer.getName());
 
-            btnUtils.setButton(btnGenerate, () -> {
-                if (activePlayer.equals(hidingTroll) || playersWhoPaidToll.contains(activePlayer)) {
-                    handleGenerateClick();
-                } else {
-                    showRevealNumberDialog();
-                }
-            });
-        } else {
-            numberCounterText.setOnClickListener(null);
-            btnUtils.setButton(btnGenerate, this::handleGenerateClick);
+        updatePlayerInfo(activePlayer);
+        updateClassAbilityButton(activePlayer);
+        updateWildCardVisibilityIfNeeded(activePlayer);
+        updateNumberText();
+
+        Game.getInstance().setLastTurnPlayer(activePlayer);
+
+
+        if (!isPowerUp) {
+            characterPassiveClassAffects();
+            updateActiveAbilitiesAfterCooldown(activePlayer);
+            updateTurnCounter();
+            updateCatastropheTurnCounter();
         }
 
-        updateClassAbilityButton(activePlayer);
-        updatePlayerInfo(activePlayer);
-        updateNumberText();
         logPlayerInformation(activePlayer);
-        Game.getInstance().setLastTurnPlayer(activePlayer);
     }
 
     //-----------------------------------------------------Update Player's Info---------------------------------------------------//
