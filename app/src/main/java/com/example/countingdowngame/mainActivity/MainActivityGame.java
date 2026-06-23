@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -243,7 +244,8 @@ public class MainActivityGame extends SharedMainActivity {
         textWildCount = findViewById(R.id.textWildCount);
         labelAbilityTitle = findViewById(R.id.labelAbilityTitle);
         labelAbilityDesc = findViewById(R.id.labelAbilityDesc);
-        labelAbilityDesc.setSelected(true);
+        labelAbilityDesc.setSelected(false);
+
         iconAbility = findViewById(R.id.iconAbility);
 
         numberGenerator = new MainActivityNumberGenerator(this, numberCounterText);
@@ -275,6 +277,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         game.startGame(startingNumber, (e) -> {
             if (e.type == GameEventType.NEXT_PLAYER) {
+                labelAbilityDesc.setSelected(false);
                 renderPlayer(false);
             }
         });
@@ -618,6 +621,10 @@ public class MainActivityGame extends SharedMainActivity {
         }
 
         btnClassAbility.setVisibility(canShowButton ? View.VISIBLE : View.INVISIBLE);
+
+        labelAbilityDesc.postDelayed(() -> {
+            labelAbilityDesc.setSelected(true);
+        }, 2000);
     }
 
     private String getClassActiveButtonText(String classChoice) {
@@ -647,7 +654,12 @@ public class MainActivityGame extends SharedMainActivity {
                 return "";
         }
     }
+    private void updateTextSize(String text, TextView textView) {
+        int size = SharedMainActivity.TextSizeCalculatorPlayerName
+                .calculateTextSizeBasedOnCharacterCount(text);
 
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+    }
     private void updatePlayerInfo(Player currentPlayer) {
         String playerName = currentPlayer.getName();
         String playerImageString = currentPlayer.getPhoto();
@@ -660,7 +672,9 @@ public class MainActivityGame extends SharedMainActivity {
         int wildCardCount = currentPlayer.getWildCardAmount();
 
         String turnText = turnCount == 1 ? "Turn" : "Turns";
-        nextPlayerText.setText(playerName + " has " + turnCount + " " + turnText);
+        String fullTurnText = playerName + " has " + turnCount + " " + turnText;
+        nextPlayerText.setText(fullTurnText);
+        updateTextSize(nextPlayerText.getText().toString(), nextPlayerText);
         textWildCount.setText(String.valueOf(wildCardCount));
 
         if (playerImageString != null) {
