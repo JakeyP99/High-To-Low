@@ -3,6 +3,7 @@ package com.example.countingdowngame.wildCards.wildCardTypes;
 import com.example.countingdowngame.wildCards.WildCardProperties;
 
 public class WildCardData {
+
     public static final WildCardProperties[] QUIZ_WILD_CARDS = {
             // Science Quiz Questions
             new WildCardProperties("Quiz! What is the deepest ocean on Earth?", true, true, "Pacific Ocean", "Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Science"),

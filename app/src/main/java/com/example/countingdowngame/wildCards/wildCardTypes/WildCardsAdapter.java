@@ -1,6 +1,9 @@
 package com.example.countingdowngame.wildCards.wildCardTypes;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,84 +13,89 @@ import com.example.countingdowngame.wildCards.WildCardProperties;
 import com.example.countingdowngame.wildCards.WildCardType;
 
 public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAdapter.WildCardViewHolder> {
+
     private final String mSaveKey;
-    protected WildCardProperties[] wildCards;
     protected Context mContext;
     protected WildCardType mMode;
+    protected WildCardProperties[] wildCards;
 
-    public WildCardsAdapter(String saveKey, WildCardProperties[] wildCards, Context context, WildCardType mode) {
-        this.wildCards = wildCards;
+    public WildCardsAdapter(String saveKey, Context context, WildCardType mode) {
+        this.mSaveKey = saveKey;
         this.mContext = context;
         this.mMode = mode;
-        this.mSaveKey = saveKey;
-        loadWildCardsFromAdapter(wildCards);
+
+        // IMPORTANT: always load from source of truth
+        this.wildCards = loadWildCardsFromAdapter(getDefaultWildCards());
     }
+
+    /**
+     * Each subclass MUST provide clean static data (WildCardData.XYZ)
+     */
+    protected abstract WildCardProperties[] getDefaultWildCards();
 
     public WildCardProperties[] loadWildCardsFromAdapter(WildCardProperties[] defaultWildCards) {
+
         var prefs = WildCardSettingsLocalStore.fromContext(mContext, mSaveKey);
-        int wildCardCount = prefs.getWildCardQuantity();
+        int count = defaultWildCards.length;
 
-        if (wildCardCount == 0) {
-            wildCardCount = defaultWildCards.length;
-            wildCards = defaultWildCards;
+        WildCardProperties[] loaded = new WildCardProperties[count];
+
+        for (int i = 0; i < count; i++) {
+
+            WildCardProperties base = defaultWildCards[i];
+
+            String activity = base.getWildCard();
+            boolean enabled = base.isEnabled();
+            boolean used = base.isUsedWildCard();
+
+            String answer = base.getAnswer();
+            String w1 = base.getWrongAnswer1();
+            String w2 = base.getWrongAnswer2();
+            String w3 = base.getWrongAnswer3();
+            String category = base.getCategory();
+
+            // ---- SAFE PREF OVERRIDES ----
+            String pActivity = safe(prefs.getWildcardActivityText(i, activity), activity);
+            String pAnswer = safe(prefs.getWildcardAnswer(i, answer), answer);
+            String pW1 = safe(prefs.getWildcardWrongAnswer(i, w1), w1);
+            String pW2 = safe(prefs.getWildcardWrongAnswer2(i, w2), w2);
+            String pW3 = safe(prefs.getWildcardWrongAnswer3(i, w3), w3);
+            String pCategory = safe(prefs.getWildCardCategory(i, category), category);
+
+            boolean pEnabled = prefs.isWildcardEnabled(i, enabled);
+            boolean pUsed = prefs.getWildCardDeletable(i, used);
+
+            loaded[i] = new WildCardProperties(
+                    pActivity,
+                    pEnabled,
+                    pUsed,
+                    pAnswer,
+                    pW1,
+                    pW2,
+                    pW3,
+                    pCategory
+            );
+
+            Log.d(TAG, "CARD " + i +
+                    " A=" + pAnswer +
+                    " W1=" + pW1 +
+                    " W2=" + pW2 +
+                    " W3=" + pW3);
         }
 
-        WildCardProperties[] loadedWildCards = new WildCardProperties[wildCardCount];
-
-        for (int i = 0; i < wildCardCount; i++) {
-            boolean inBounds = i < wildCards.length;
-
-            WildCardProperties card = null;
-
-            if (inBounds) {
-                card = wildCards[i];
-            }
-
-            boolean enabled;
-            String activity;
-            int probability;
-            String answer;
-            String wrongAnswer1;
-            String wrongAnswer2;
-            String wrongAnswer3;
-            boolean deletable;
-            String category;
-
-            if (card != null) {
-                enabled = prefs.isWildcardEnabled(i, card.isEnabled());
-                activity = prefs.getWildcardActivityText(i, card.getWildCard());
-                deletable = prefs.getWildCardDeletable(i, card.isUsedWildCard());
-                answer = prefs.getWildcardAnswer(i, card.getAnswer());
-                wrongAnswer1 = prefs.getWildcardWrongAnswer(i, card.getWrongAnswer1());
-                wrongAnswer2 = prefs.getWildcardWrongAnswer2(i, card.getWrongAnswer2());
-                wrongAnswer3 = prefs.getWildcardWrongAnswer3(i, card.getWrongAnswer3());
-
-
-                category = prefs.getWildCardCategory(i, card.getCategory());
-
-            } else {
-                enabled = prefs.isWildcardEnabled(i);
-                activity = prefs.getWildcardActivityText(i);
-                probability = prefs.getWildcardProbability(i);
-                deletable = prefs.getWildCardDeletable(i);
-                answer = prefs.getWildcardAnswer(i);
-                wrongAnswer1 = prefs.getWildcardAnswer(i);
-                wrongAnswer2 = prefs.getWildcardAnswer(i);
-                wrongAnswer3 = prefs.getWildcardAnswer(i);
-
-
-                category = prefs.getWildcardCategory(i);
-
-            }
-
-            loadedWildCards[i] = new WildCardProperties(activity, enabled, deletable, answer, wrongAnswer1, wrongAnswer2, wrongAnswer3, category);
-        }
-
-        wildCards = loadedWildCards;
-
-        return loadedWildCards;
+        wildCards = loaded;
+        return loaded;
     }
 
+    /**
+     * Prevents empty SharedPreferences from overwriting real data
+     */
+    private String safe(String value, String fallback) {
+        if (value == null || value.trim().isEmpty()) {
+            return fallback;
+        }
+        return value;
+    }
 
     public WildCardProperties[] getWildCards() {
         return wildCards;
@@ -98,28 +106,34 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
     }
 
     public void saveWildCardProbabilitiesToStorage(WildCardProperties[] wildcard) {
-        wildCards = wildcard;
 
         var prefs = WildCardSettingsLocalStore.fromContext(mContext, mSaveKey);
         prefs.setWildCardQuantity(wildcard.length);
 
         for (int i = 0; i < wildcard.length; i++) {
-            WildCardProperties wildCard = wildcard[i];
 
-            if (wildCard.hasAnswer()) {
-                prefs.setWildcardState(i, wildCard.isEnabled(), wildCard.getWildCard(), wildCard.getAnswer(), wildCard.getWrongAnswer1(), wildCard.getWrongAnswer2(), wildCard.getWrongAnswer3(), wildCard.getCategory());
+            WildCardProperties c = wildcard[i];
+
+            if (c.hasAnswer()) {
+                prefs.setWildcardState(
+                        i,
+                        c.isEnabled(),
+                        c.getWildCard(),
+                        c.getAnswer(),
+                        c.getWrongAnswer1(),
+                        c.getWrongAnswer2(),
+                        c.getWrongAnswer3(),
+                        c.getCategory()
+                );
             } else {
-                prefs.setWildcardState(i, wildCard.isEnabled(), wildCard.getWildCard());
+                prefs.setWildcardState(i, c.isEnabled(), c.getWildCard());
             }
-
         }
     }
-
 
     public static class WildCardViewHolder extends RecyclerView.ViewHolder {
         public WildCardViewHolder(View itemView) {
             super(itemView);
         }
-
     }
 }

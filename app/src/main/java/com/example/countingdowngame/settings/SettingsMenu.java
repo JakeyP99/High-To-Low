@@ -24,9 +24,6 @@ import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.example.countingdowngame.wildCards.WildCardProperties;
 import com.example.countingdowngame.wildCards.WildCardType;
-import com.example.countingdowngame.wildCards.wildCardTypes.QuizWildCardsAdapter;
-import com.example.countingdowngame.wildCards.wildCardTypes.TaskWildCardsAdapter;
-import com.example.countingdowngame.wildCards.wildCardTypes.TruthWildCardsAdapter;
 import com.example.countingdowngame.wildCards.wildCardTypes.WildCardsAdapter;
 
 import java.util.List;
@@ -44,13 +41,8 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
     private Button button_quiz_toggle;
     private Button button_task_toggle;
     private Button button_truth_toggle;
-    private Drawable buttonHighlightDrawable;
-    private Drawable outlineForButton;
     private Button btnProgressToGame;
 
-    private QuizWildCardsAdapter quizWildCardsAdapter;
-    private TaskWildCardsAdapter taskWildCardsAdapter;
-    private TruthWildCardsAdapter truthWildCardsAdapter;
 
 
     //-----------------------------------------------------On Pause---------------------------------------------------//
@@ -82,32 +74,14 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_main_activity);
+
         initializeViews();
-        loadPreferences();  // Load preferences here
+        loadPreferences();
         setButtonListeners();
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                String wildCardAmountInput = wildcardPerPlayerEditText.getText().toString().trim();
-                String totalDrinkAmountInput = totalDrinksEditText.getText().toString().trim();
-
-                boolean isWildCardValid = isValidInput(wildCardAmountInput, 3, 0, 100);
-                boolean isTotalDrinkValid = isValidInput(totalDrinkAmountInput, 2, 1, 20);
-
-                if (!isWildCardValid || !isTotalDrinkValid) {
-                    if (!isWildCardValid) {
-                        if (wildCardAmountInput.isEmpty()) {
-                            wildcardPerPlayerEditText.setText("1");
-                        } else {
-                            StyleableToast.makeText(getApplicationContext(), "Please enter a number between 0 and 100", R.style.newToast).show();
-                        }
-                    }
-
-                    if (!isTotalDrinkValid) {
-                        totalDrinksEditText.setText("1");
-                    }
-                }
                 savePreferences();
                 setEnabled(false);
                 getOnBackPressedDispatcher().onBackPressed();
@@ -116,43 +90,18 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
     }
 
     private void initializeViews() {
-        List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
 
-        // Initialize views
         btnProgressToGame = findViewById(R.id.btnContinueToGame);
+
         button_multiChoice = findViewById(R.id.button_multiChoice);
         button_nonMultiChoice = findViewById(R.id.button_nonMultiChoice);
 
-        quizWildCardsAdapter = new QuizWildCardsAdapter(QUIZ_WILD_CARDS, this, WildCardType.QUIZ);
-        taskWildCardsAdapter = new TaskWildCardsAdapter(TASK_WILD_CARDS, this, WildCardType.TASK);
-        truthWildCardsAdapter = new TruthWildCardsAdapter(TRUTH_WILD_CARDS, this, WildCardType.TRUTH);
-
         button_quiz_toggle = findViewById(R.id.button_quiz_toggle);
-        button_truth_toggle = findViewById(R.id.button_truth_toggle);
         button_task_toggle = findViewById(R.id.button_task_toggle);
+        button_truth_toggle = findViewById(R.id.button_truth_toggle);
 
-        // Find and set up EditTexts
         wildcardPerPlayerEditText = findViewById(R.id.edittext_wildcard_amount);
         totalDrinksEditText = findViewById(R.id.edittext_drink_amount);
-
-        // Set up TextWatchers for EditTexts
-        setupTextWatcher(wildcardPerPlayerEditText, 3, this::isValidWildCardAmount);
-        setupTextWatcher(totalDrinksEditText, 2, this::isValidTotalDrinkAmount);
-
-
-        // Check if "Quiz Magician" player is selected
-        boolean isQuizMagicianSelected = false;
-        for (Player player : playerList) {
-            if ("Quiz Magician".equals(player.getClassChoice())) {
-                isQuizMagicianSelected = true;
-                break;
-            }
-        }
-
-        if (isQuizMagicianSelected) {
-            button_quiz_toggle.setSelected(true);
-        }
-
     }
 
     private void setupTextWatcher(EditText editText, int maxLength, Runnable validationAction) {
@@ -218,53 +167,51 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        int viewId = view.getId();
 
-        switch (viewId) {
-            case R.id.button_multiChoice:
-                boolean isMultiChoiceSelected = !button_multiChoice.isSelected();
-                toggleQuizSettingsButtons(button_multiChoice, button_nonMultiChoice, isMultiChoiceSelected);
-                break;
+        int id = view.getId();
 
-            case R.id.button_nonMultiChoice:
-                boolean isNonMultiChoiceSelected = !button_nonMultiChoice.isSelected();
-                toggleQuizSettingsButtons(button_nonMultiChoice, button_multiChoice, isNonMultiChoiceSelected);
-                break;
+        if (id == R.id.button_multiChoice) {
+            boolean selected = !button_multiChoice.isSelected();
+            button_multiChoice.setSelected(selected);
+            button_nonMultiChoice.setSelected(!selected);
+            return;
+        }
 
-            case R.id.button_quiz_toggle:
-                boolean isQuizMagicianSelected = false;
-                List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
-                for (Player player : playerList) {
-                    if ("Quiz Magician".equals(player.getClassChoice())) {
-                        isQuizMagicianSelected = true;
-                        break;
-                    }
-                }
-                if (isQuizMagicianSelected) {
-                    StyleableToast.makeText(getApplicationContext(),
-                            "Someone has selected the Quiz Magician class - Quizzes need to be toggled on.",
-                            R.style.newToast).show();
-                } else {
-                    boolean isQuizSelected = !button_quiz_toggle.isSelected();
-                    toggleWildCardButton(button_quiz_toggle, quizWildCardsAdapter, isQuizSelected);
-                }
-                break;
+        if (id == R.id.button_nonMultiChoice) {
+            boolean selected = !button_nonMultiChoice.isSelected();
+            button_nonMultiChoice.setSelected(selected);
+            button_multiChoice.setSelected(!selected);
+            return;
+        }
 
-            case R.id.button_task_toggle:
-                boolean isTaskSelected = !button_task_toggle.isSelected();
-                toggleWildCardButton(button_task_toggle, taskWildCardsAdapter, isTaskSelected);
-                break;
+        if (id == R.id.button_quiz_toggle) {
+            boolean selected = !button_quiz_toggle.isSelected();
+            button_quiz_toggle.setSelected(selected);
+            toggleWildCards(QUIZ_WILD_CARDS, selected);
+            return;
+        }
 
-            case R.id.button_truth_toggle:
-                boolean isTruthSelected = !button_truth_toggle.isSelected();
-                toggleWildCardButton(button_truth_toggle, truthWildCardsAdapter, isTruthSelected);
-                break;
+        if (id == R.id.button_task_toggle) {
+            boolean selected = !button_task_toggle.isSelected();
+            button_task_toggle.setSelected(selected);
+            toggleWildCards(TASK_WILD_CARDS, selected);
+            return;
+        }
+
+        if (id == R.id.button_truth_toggle) {
+            boolean selected = !button_truth_toggle.isSelected();
+            button_truth_toggle.setSelected(selected);
+            toggleWildCards(TRUTH_WILD_CARDS, selected);
         }
 
         savePreferences();
     }
 
-
+    private void toggleWildCards(WildCardProperties[] cards, boolean enabled) {
+        for (WildCardProperties card : cards) {
+            card.setEnabled(enabled);
+        }
+    }
 
     //-----------------------------------------------------Wild Card Choices---------------------------------------------------//
     private void setButtonListeners() {
@@ -358,55 +305,40 @@ public class SettingsMenu extends ButtonUtilsActivity implements View.OnClickLis
 
 
     private void loadPreferences() {
+
         GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);
 
-        // Load wild card and total drink amounts
-        int loadWildCardAmount = store.playerWildCardCount();
-        wildcardPerPlayerEditText.setText(String.valueOf(loadWildCardAmount));
+        wildcardPerPlayerEditText.setText(String.valueOf(store.playerWildCardCount()));
+        totalDrinksEditText.setText(String.valueOf(store.totalDrinkAmount()));
 
-        int loadTotalDrinkAmount = store.totalDrinkAmount();
-        totalDrinksEditText.setText(String.valueOf(loadTotalDrinkAmount));
+        boolean multiChoice = store.isMultiChoice();
+        button_multiChoice.setSelected(multiChoice);
+        button_nonMultiChoice.setSelected(!multiChoice);
 
-        // Load multi-choice status and toggle buttons accordingly
-        boolean isMultiChoiceSelected = store.isMultiChoice();
-        toggleQuizSettingsButtons(button_multiChoice, button_nonMultiChoice, isMultiChoiceSelected);
+        button_quiz_toggle.setSelected(store.isQuizActivated());
+        button_task_toggle.setSelected(store.isTaskActivated());
+        button_truth_toggle.setSelected(store.isTruthActivated());
 
-        // Check if "Quiz Magician" player is selected
-        boolean isQuizMagicianSelected = false;
-        List<Player> playerList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
-        for (Player player : playerList) {
-            if ("Quiz Magician".equals(player.getClassChoice())) {
-                isQuizMagicianSelected = true;
-                break;
-            }
-        }
-
-        // Load the saved state of the quiz button
-        boolean savedQuizState = store.isQuizActivated();
-        boolean isQuizActivated = isQuizMagicianSelected || savedQuizState;
-
-        // Set quiz toggle button based on whether "Quiz Magician" is selected or saved state
-        button_quiz_toggle.setSelected(isQuizActivated);
-
-        // Load activation status for each wild card type and toggle buttons accordingly
-        toggleWildCardButton(button_quiz_toggle, quizWildCardsAdapter, isQuizActivated);
-        toggleWildCardButton(button_task_toggle, taskWildCardsAdapter, store.isTaskActivated());
-        toggleWildCardButton(button_truth_toggle, truthWildCardsAdapter, store.isTruthActivated());
+        toggleWildCards(QUIZ_WILD_CARDS, button_quiz_toggle.isSelected());
+        toggleWildCards(TASK_WILD_CARDS, button_task_toggle.isSelected());
+        toggleWildCards(TRUTH_WILD_CARDS, button_truth_toggle.isSelected());
     }
 
 
     private void savePreferences() {
+
         GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);
 
-        int wildCardAmountSetInSettings = Integer.parseInt(wildcardPerPlayerEditText.getText().toString());
-        GeneralSettingsLocalStore.fromContext(this).setPlayerWildCardCount(wildCardAmountSetInSettings);
+        store.setPlayerWildCardCount(
+                Integer.parseInt(wildcardPerPlayerEditText.getText().toString())
+        );
 
-        int totalDrinkAmountSetInSettings = Integer.parseInt(totalDrinksEditText.getText().toString());
-        GeneralSettingsLocalStore.fromContext(this).setTotalDrinkAmount(totalDrinkAmountSetInSettings);
+        store.setTotalDrinkAmount(
+                Integer.parseInt(totalDrinksEditText.getText().toString())
+        );
 
         store.setIsMultiChoice(button_multiChoice.isSelected());
 
-        // Save the selected state of other buttons
         store.setIsQuizActivated(button_quiz_toggle.isSelected());
         store.setIsTaskActivated(button_task_toggle.isSelected());
         store.setIsTruthActivated(button_truth_toggle.isSelected());

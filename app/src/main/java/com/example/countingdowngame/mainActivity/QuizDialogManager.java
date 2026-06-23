@@ -5,7 +5,6 @@ import static com.example.countingdowngame.createPlayer.CharacterClassDescriptio
 import android.app.AlertDialog;
 import android.os.Handler;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -37,138 +36,299 @@ public class QuizDialogManager {
     }
 
     public void showQuizDialog(WildCardProperties selectedCard) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
-        LayoutInflater inflater = activity.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.game_quiz_dialog, null);
+        View dialogView = inflateDialog();
+        AlertDialog dialog = createDialog(dialogView);
 
-        TextView wildTextDialog = dialogView.findViewById(R.id.textView_WildText);
-        Button btnAnswerDialog = dialogView.findViewById(R.id.btnAnswer);
-        Button btnWildContinueDialog = dialogView.findViewById(R.id.btnBackWildCard);
-        Button btnQuizAnswerBL = dialogView.findViewById(R.id.btnQuizAnswerBL);
-        Button btnQuizAnswerBR = dialogView.findViewById(R.id.btnQuizAnswerBR);
-        Button btnQuizAnswerTL = dialogView.findViewById(R.id.btnQuizAnswerTL);
-        Button btnQuizAnswerTR = dialogView.findViewById(R.id.btnQuizAnswerTR);
+        UIRefs ui = bindViews(dialogView);
+        setupBaseUI(ui, selectedCard);
 
-        GifImageView confettiTL = dialogView.findViewById(R.id.confettiImageViewTL);
-        GifImageView confettiTR = dialogView.findViewById(R.id.confettiImageViewTR);
-        GifImageView confettiBL = dialogView.findViewById(R.id.confettiImageViewBL);
-        GifImageView confettiBR = dialogView.findViewById(R.id.confettiImageViewBR);
+        Player player = Game.getInstance().getCurrentPlayer();
 
-        Button[] answerButtons = new Button[]{btnQuizAnswerTL, btnQuizAnswerTR, btnQuizAnswerBL, btnQuizAnswerBR};
-        GifImageView[] confettiViews = new GifImageView[]{confettiTL, confettiTR, confettiBL, confettiBR};
+        boolean isQuizMagician =
+                QUIZ_MAGICIAN.equals(player.getClassChoice()) ||
+                        (CharacterClassDescriptions.ANGRY_JIM.equals(player.getClassChoice())
+                                && Game.getInstance().getCurrentNumber() < 50);
 
-        wildTextDialog.setText(selectedCard.getWildCard());
-        updateTextSize(selectedCard.getWildCard(), wildTextDialog);
+        boolean isMultiChoice =
+                GeneralSettingsLocalStore.fromContext(activity).isMultiChoice();
 
-        builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
-        dialog.setCancelable(false);
+        boolean isQuizMode = isQuizMagician || isMultiChoice;
 
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        boolean isQuizMagician = QUIZ_MAGICIAN.equals(currentPlayer.getClassChoice()) || 
-                (CharacterClassDescriptions.ANGRY_JIM.equals(currentPlayer.getClassChoice()) && Game.getInstance().getCurrentNumber() < 50);
-
-        if (isQuizMagician || GeneralSettingsLocalStore.fromContext(activity).isMultiChoice()) {
-            btnAnswerDialog.setVisibility(View.GONE);
-            String[] answers;
-            if (isQuizMagician) {
-                Random random = new Random();
-                String wrong = random.nextBoolean() ? selectedCard.getWrongAnswer1() : (random.nextBoolean() ? selectedCard.getWrongAnswer2() : selectedCard.getWrongAnswer3());
-                answers = new String[]{selectedCard.getAnswer(), wrong};
-                btnQuizAnswerBL.setVisibility(View.GONE);
-                btnQuizAnswerBR.setVisibility(View.GONE);
-            } else {
-                answers = new String[]{selectedCard.getAnswer(), selectedCard.getWrongAnswer1(), selectedCard.getWrongAnswer2(), selectedCard.getWrongAnswer3()};
-            }
-
-            List<String> answerList = Arrays.asList(answers);
-            Collections.shuffle(answerList);
-
-            for (int i = 0; i < answerList.size(); i++) {
-                Button btn = answerButtons[i];
-                btn.setVisibility(View.VISIBLE);
-                btn.setText(answerList.get(i));
-                String selectedAnswer = answerList.get(i);
-                int finalI = i;
-                btn.setOnClickListener(v -> {
-                    for (Button b : answerButtons) b.setEnabled(false);
-                    boolean isCorrect = selectedAnswer.equals(selectedCard.getAnswer());
-                    wasQuizCorrect = isCorrect;
-                    if (isCorrect) {
-                        btn.setBackgroundResource(R.drawable.buttonhighlightgreen);
-                        confettiViews[finalI].setVisibility(View.VISIBLE);
-                        AudioManager.getInstance().playConfettiSound(activity);
-                        Game.getInstance().incrementPlayerQuizCorrectAnswers(currentPlayer);
-                    } else {
-                        btn.setBackgroundResource(R.drawable.buttonhighlightred);
-                        for (int j = 0; j < answerList.size(); j++) {
-                            if (answerList.get(j).equals(selectedCard.getAnswer())) {
-                                answerButtons[j].setBackgroundResource(R.drawable.buttonhighlightgreen);
-                                break;
-                            }
-                        }
-                        Game.getInstance().incrementPlayerQuizIncorrectAnswers(currentPlayer);
-                    }
-
-                    new Handler().postDelayed(() -> {
-                        confettiViews[finalI].setVisibility(View.INVISIBLE);
-                        btnQuizAnswerTL.setVisibility(View.GONE);
-                        btnQuizAnswerTR.setVisibility(View.GONE);
-                        btnQuizAnswerBL.setVisibility(View.GONE);
-                        btnQuizAnswerBR.setVisibility(View.GONE);
-                        btnWildContinueDialog.setVisibility(View.VISIBLE);
-
-                        if (isCorrect) {
-                            String msg = isQuizMagician ? currentPlayer.getName() + " that's right! The answer was " + selectedCard.getAnswer() + "\n\n P.S. You get to give out 2 drinks to everyone."
-                                    : currentPlayer.getName() + " that's right! The answer was " + selectedCard.getAnswer() + "\n\n P.S. You get to give out a drink.";
-                            wildTextDialog.setText(msg);
-                        } else {
-                            wildTextDialog.setText(currentPlayer.getName() + " big ooooff! The answer actually was " + selectedCard.getAnswer() + "\n\n Take a drink.");
-                        }
-                    }, 1500);
-                });
-            }
+        if (isQuizMode) {
+            setupMultipleChoice(ui, selectedCard, player, isQuizMagician);
         } else {
-            btnAnswerDialog.setVisibility(View.VISIBLE);
-            btnAnswerDialog.setOnClickListener(v -> {
-                btnAnswerDialog.setVisibility(View.GONE);
-                wildTextDialog.setText(selectedCard.getAnswer());
-                btnQuizAnswerTL.setVisibility(View.VISIBLE);
-                btnQuizAnswerTR.setVisibility(View.VISIBLE);
-                btnQuizAnswerTL.setText(R.string.were_you_right);
-                btnQuizAnswerTR.setText(R.string.were_you_wrong);
-
-                btnQuizAnswerTL.setOnClickListener(v1 -> {
-                    wasQuizCorrect = true;
-                    Game.getInstance().incrementPlayerQuizCorrectAnswers(currentPlayer);
-                    btnQuizAnswerTL.setVisibility(View.GONE);
-                    btnQuizAnswerTR.setVisibility(View.GONE);
-                    wildTextDialog.setText(currentPlayer.getName() + " since you got it right, give out a drink!");
-                    btnWildContinueDialog.setVisibility(View.VISIBLE);
-                });
-
-                btnQuizAnswerTR.setOnClickListener(v1 -> {
-                    wasQuizCorrect = false;
-                    Game.getInstance().incrementPlayerQuizIncorrectAnswers(currentPlayer);
-                    btnQuizAnswerTL.setVisibility(View.GONE);
-                    btnQuizAnswerTR.setVisibility(View.GONE);
-                    wildTextDialog.setText(currentPlayer.getName() + " since you got it wrong, take a drink!");
-                    btnWildContinueDialog.setVisibility(View.VISIBLE);
-                });
-            });
+            setupTrueFalse(ui, selectedCard, player);
         }
 
-        btnWildContinueDialog.setOnClickListener(v -> {
+        setupContinue(ui.btnContinue, dialog);
+        dialog.show();
+    }
+
+    // ---------------- SETUP ----------------
+
+    private View inflateDialog() {
+        return activity.getLayoutInflater()
+                .inflate(R.layout.game_quiz_dialog, null);
+    }
+
+    private AlertDialog createDialog(View view) {
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
+
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        return dialog;
+    }
+
+    private UIRefs bindViews(View view) {
+        return new UIRefs(
+                view.findViewById(R.id.textView_WildText),
+                view.findViewById(R.id.btnAnswer),
+                view.findViewById(R.id.btnBackWildCard),
+                new Button[]{
+                        view.findViewById(R.id.btnQuizAnswerTL),
+                        view.findViewById(R.id.btnQuizAnswerTR),
+                        view.findViewById(R.id.btnQuizAnswerBL),
+                        view.findViewById(R.id.btnQuizAnswerBR)
+                },
+                new GifImageView[]{
+                        view.findViewById(R.id.confettiImageViewTL),
+                        view.findViewById(R.id.confettiImageViewTR),
+                        view.findViewById(R.id.confettiImageViewBL),
+                        view.findViewById(R.id.confettiImageViewBR)
+                }
+        );
+    }
+
+    private void setupBaseUI(UIRefs ui, WildCardProperties card) {
+        ui.text.setText(card.getWildCard());
+        updateTextSize(card.getWildCard(), ui.text);
+    }
+
+    // ---------------- MULTIPLE CHOICE ----------------
+
+    private void setupMultipleChoice(UIRefs ui,
+                                     WildCardProperties card,
+                                     Player player,
+                                     boolean isQuizMagician) {
+
+        ui.btnAnswer.setVisibility(View.GONE);
+
+        String[] answers = buildAnswers(card, player, isQuizMagician);
+        List<String> answerList = Arrays.asList(answers);
+        Collections.shuffle(answerList);
+
+        for (Button b : ui.answerButtons) {
+            b.setVisibility(View.GONE);
+            b.setEnabled(true);
+        }
+
+        int visibleCount = isQuizMagician ? 2 : 4;
+
+        for (int i = 0; i < visibleCount; i++) {
+
+            Button btn = ui.answerButtons[i];
+            String answer = answerList.get(i);
+
+            btn.setVisibility(View.VISIBLE);
+            btn.setText(answer);
+
+            int index = i;
+
+            btn.setOnClickListener(v ->
+                    handleMCQSelection(ui, card, player, answerList, answer, index)
+            );
+        }
+    }
+
+    private String[] buildAnswers(WildCardProperties card,
+                                  Player player,
+                                  boolean isQuizMagician) {
+
+        if (isQuizMagician) {
+            Random random = new Random();
+
+            String wrong = random.nextBoolean()
+                    ? card.getWrongAnswer1()
+                    : (random.nextBoolean()
+                       ? card.getWrongAnswer2()
+                       : card.getWrongAnswer3());
+
+            return new String[]{card.getAnswer(), wrong};
+        }
+
+        return new String[]{
+                card.getAnswer(),
+                card.getWrongAnswer1(),
+                card.getWrongAnswer2(),
+                card.getWrongAnswer3()
+        };
+    }
+
+    private void handleMCQSelection(UIRefs ui,
+                                    WildCardProperties card,
+                                    Player player,
+                                    List<String> answers,
+                                    String selected,
+                                    int index) {
+
+        disableButtons(ui.answerButtons);
+
+        boolean correct = selected.equals(card.getAnswer());
+        wasQuizCorrect = correct;
+
+        if (correct) {
+            ui.answerButtons[index].setBackgroundResource(R.drawable.buttonhighlightgreen);
+            ui.confetti[index].setVisibility(View.VISIBLE);
+            AudioManager.getInstance().playConfettiSound(activity);
+            Game.getInstance().incrementPlayerQuizCorrectAnswers(player);
+        } else {
+            ui.answerButtons[index].setBackgroundResource(R.drawable.buttonhighlightred);
+            highlightCorrect(ui, answers, card);
+            Game.getInstance().incrementPlayerQuizIncorrectAnswers(player);
+        }
+
+        new Handler().postDelayed(() -> {
+            hideConfetti(ui);   // ✅ ADD THIS FIRST
+            showMCQResult(ui, player, card, correct);
+        }, 1500);
+    }
+
+    private void highlightCorrect(UIRefs ui,
+                                  List<String> answers,
+                                  WildCardProperties card) {
+
+        for (int j = 0; j < answers.size(); j++) {
+            if (answers.get(j).equals(card.getAnswer())) {
+                ui.answerButtons[j].setBackgroundResource(R.drawable.buttonhighlightgreen);
+                break;
+            }
+        }
+    }
+
+    private void showMCQResult(UIRefs ui,
+                               Player player,
+                               WildCardProperties card,
+                               boolean correct) {
+
+        hideAllChoices(ui);
+        ui.btnContinue.setVisibility(View.VISIBLE);
+
+        String msg;
+
+        if (correct) {
+            boolean isMagician = QUIZ_MAGICIAN.equals(player.getClassChoice());
+
+            msg = player.getName() + " that's right! The answer was "
+                    + card.getAnswer()
+                    + (isMagician
+                    ? "\n\n P.S. You get to give out 2 drinks to everyone."
+                    : "\n\n P.S. You get to give out a drink.");
+        } else {
+            msg = player.getName()
+                    + " big ooooff! The answer actually was "
+                    + card.getAnswer()
+                    + "\n\n Take a drink.";
+        }
+
+        ui.text.setText(msg);
+    }
+
+    // ---------------- TRUE / FALSE ----------------
+
+    private void setupTrueFalse(UIRefs ui,
+                                WildCardProperties card,
+                                Player player) {
+
+        ui.btnAnswer.setVisibility(View.VISIBLE);
+
+        ui.btnAnswer.setOnClickListener(v -> {
+            ui.btnAnswer.setVisibility(View.GONE);
+
+            ui.text.setText(card.getAnswer());
+
+            ui.answerButtons[0].setVisibility(View.VISIBLE);
+            ui.answerButtons[1].setVisibility(View.VISIBLE);
+
+            ui.answerButtons[0].setText(R.string.were_you_right);
+            ui.answerButtons[1].setText(R.string.were_you_wrong);
+
+            ui.answerButtons[0].setOnClickListener(v1 ->
+                    handleTF(ui, player, true));
+
+            ui.answerButtons[1].setOnClickListener(v1 ->
+                    handleTF(ui, player, false));
+        });
+    }
+
+    private void handleTF(UIRefs ui, Player player, boolean correct) {
+        wasQuizCorrect = correct;
+
+        if (correct) {
+            Game.getInstance().incrementPlayerQuizCorrectAnswers(player);
+            ui.text.setText(player.getName()
+                    + " since you got it right, give out a drink!");
+        } else {
+            Game.getInstance().incrementPlayerQuizIncorrectAnswers(player);
+            ui.text.setText(player.getName()
+                    + " since you got it wrong, take a drink!");
+        }
+
+        hideAllChoices(ui);
+        ui.btnContinue.setVisibility(View.VISIBLE);
+    }
+
+    // ---------------- CONTINUE ----------------
+
+    private void setupContinue(Button btn, AlertDialog dialog) {
+        btn.setOnClickListener(v -> {
             dialog.dismiss();
             activity.setWasQuizCorrect(wasQuizCorrect);
             onContinue.run();
         });
-
-        dialog.show();
     }
 
-    private void updateTextSize(String selectedActivity, TextView textView) {
-        int textSize = SharedMainActivity.TextSizeCalculator.calculateTextSizeBasedOnCharacterCount(selectedActivity);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+    // ---------------- HELPERS ----------------
+
+    private void disableButtons(Button[] buttons) {
+        for (Button b : buttons) b.setEnabled(false);
+    }
+
+    private void hideAllChoices(UIRefs ui) {
+        for (Button b : ui.answerButtons) b.setVisibility(View.GONE);
+    }
+
+    private void updateTextSize(String text, TextView textView) {
+        int size = SharedMainActivity.TextSizeCalculator
+                .calculateTextSizeBasedOnCharacterCount(text);
+
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+    }
+    private void hideConfetti(UIRefs ui) {
+        for (GifImageView gif : ui.confetti) {
+            gif.setVisibility(View.GONE);
+        }
+    }
+    // ---------------- HOLDER ----------------
+
+    private static class UIRefs {
+        TextView text;
+        Button btnAnswer;
+        Button btnContinue;
+        Button[] answerButtons;
+        GifImageView[] confetti;
+
+        UIRefs(TextView text,
+               Button btnAnswer,
+               Button btnContinue,
+               Button[] answerButtons,
+               GifImageView[] confetti) {
+            this.text = text;
+            this.btnAnswer = btnAnswer;
+            this.btnContinue = btnContinue;
+            this.answerButtons = answerButtons;
+            this.confetti = confetti;
+        }
     }
 }

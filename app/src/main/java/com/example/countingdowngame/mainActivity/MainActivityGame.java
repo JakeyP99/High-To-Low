@@ -59,11 +59,7 @@ import com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities
 import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.wildCards.WildCardProperties;
-import com.example.countingdowngame.wildCards.WildCardType;
-import com.example.countingdowngame.wildCards.wildCardTypes.QuizWildCardsAdapter;
-import com.example.countingdowngame.wildCards.wildCardTypes.TaskWildCardsAdapter;
-import com.example.countingdowngame.wildCards.wildCardTypes.TruthWildCardsAdapter;
-import com.example.countingdowngame.wildCards.wildCardTypes.WildCardData;
+import com.example.countingdowngame.wildCards.wildCardTypes.WildCardRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1045,22 +1041,24 @@ public class MainActivityGame extends SharedMainActivity {
 
     //-----------------------------------------------------Wild Card Functionality---------------------------------------------------//
     private void wildCardActivate() {
+
         wasQuizCorrect = false;
+
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        Game.getInstance().getCurrentPlayer().useWildCard();
+        currentPlayer.useWildCard();
         currentPlayer.incrementUsedWildcards();
 
         Runnable proceedToWildCard = () -> {
-            WildCardProperties[] wildCardArray = new WildCardProperties[0];
-            QuizWildCardsAdapter quizAdapter = new QuizWildCardsAdapter(wildCardArray, this, WildCardType.QUIZ);
-            TaskWildCardsAdapter taskAdapter = new TaskWildCardsAdapter(wildCardArray, this, WildCardType.TASK);
-            TruthWildCardsAdapter truthAdapter = new TruthWildCardsAdapter(wildCardArray, this, WildCardType.TRUTH);
 
-            WildCardProperties[] quizWildCards = quizAdapter.loadWildCardsFromAdapter(WildCardData.QUIZ_WILD_CARDS);
-            WildCardProperties[] taskWildCards = taskAdapter.loadWildCardsFromAdapter(WildCardData.TASK_WILD_CARDS);
-            WildCardProperties[] truthWildCards = truthAdapter.loadWildCardsFromAdapter(WildCardData.TRUTH_WILD_CARDS);
+            WildCardRepository repository = new WildCardRepository(this);
 
-            WildCardProperties[] selectedType = selectWildCardType(currentPlayer, quizWildCards, taskWildCards, truthWildCards);
+            WildCardProperties[] quizWildCards = repository.loadQuizCards();
+            WildCardProperties[] taskWildCards = repository.loadTaskCards();
+            WildCardProperties[] truthWildCards = repository.loadTruthCards();
+
+            WildCardProperties[] selectedType =
+                    selectWildCardType(currentPlayer, quizWildCards, taskWildCards, truthWildCards);
+
             if (selectedType == null) {
                 wildText.setText("No wild cards available, your turn is skipped!");
                 btnWildContinue.setVisibility(View.VISIBLE);
@@ -1068,8 +1066,14 @@ public class MainActivityGame extends SharedMainActivity {
                 return;
             }
 
-            WildCardProperties selectedCard = selectRandomCard(selectedType);
-            handleSelectedCard(selectedCard, getWildCardType(selectedType, quizWildCards, taskWildCards));
+            WildCardProperties selectedCard =
+                    WildCardRepository.getRandom(selectedType);
+
+            handleSelectedCard(
+                    selectedCard,
+                    getWildCardType(selectedType, quizWildCards, taskWildCards)
+            );
+
             btnClassAbility.setVisibility(View.INVISIBLE);
         };
 
@@ -1077,7 +1081,6 @@ public class MainActivityGame extends SharedMainActivity {
             proceedToWildCard.run();
         }
     }
-
     private WildCardProperties[] selectWildCardType(Player currentPlayer, WildCardProperties[] quizWildCards, WildCardProperties[] taskWildCards, WildCardProperties[] truthWildCards) {
         if (QUIZ_MAGICIAN.equals(currentPlayer.getClassChoice()) && currentPlayer.getJustUsedActiveAbility()) {
             btnClassAbility.setVisibility(View.INVISIBLE);
@@ -1158,6 +1161,11 @@ public class MainActivityGame extends SharedMainActivity {
         wildText.setText(selectedActivity);
         updateTextSize(selectedActivity);
         selectedWildCard = selectedCard;
+        Log.d("QUIZ_DEBUG_CREATE",
+                "NEW CARD -> A=" + selectedCard.getAnswer()
+                        + " W1=" + selectedCard.getWrongAnswer1()
+                        + " W2=" + selectedCard.getWrongAnswer2()
+                        + " W3=" + selectedCard.getWrongAnswer3());
     }
 
     private void updateTextSize(String selectedActivity) {

@@ -1,6 +1,7 @@
 package com.example.countingdowngame.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -94,4 +95,5 @@ public class HomeScreen extends ButtonUtilsActivity {
 
         StyleableToast.makeText(this, message, R.style.newToast).show();
     }
+
 }
