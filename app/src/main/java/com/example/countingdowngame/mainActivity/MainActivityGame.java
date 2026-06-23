@@ -330,7 +330,6 @@ public class MainActivityGame extends SharedMainActivity {
         btnUtils.setButton(btnWild, () -> {
             wildCardActivate();
             drinkNumberTextView.setVisibility(View.INVISIBLE);
-            wildText.setVisibility(View.VISIBLE);
             btnWild.setVisibility(View.INVISIBLE);
             btnGenerate.setVisibility(View.INVISIBLE);
             nextPlayerText.setVisibility(View.INVISIBLE);
@@ -1145,15 +1144,23 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     public void handleSelectedCard(WildCardProperties selectedCard, String wildCardType) {
-        if (selectedCard != null) {
-            if (selectedCard.hasAnswer()) {
-                quizDialogManager.showQuizDialog(selectedCard);
-            } else {
-                updateSelectedCard(selectedCard);
-                btnWildContinue.setVisibility(View.VISIBLE);
-                logSelectedCardInfo(selectedCard, wildCardType);
-            }
+        if (selectedCard == null) return;
+
+        if (selectedCard.hasAnswer()) {
+
+            // ❗ STOP any underlying UI updates
+            quizDialogManager.showQuizDialog(selectedCard);
+
+            Log.d(TAG, "handleSelectedCard: the card was quiz");
+            return; // ✅ IMPORTANT
         }
+
+        updateSelectedCard(selectedCard);
+        wildText.setVisibility(View.VISIBLE);
+        btnWildContinue.setVisibility(View.VISIBLE);
+        logSelectedCardInfo(selectedCard, wildCardType);
+
+        Log.d(TAG, "handleSelectedCard: the card wasnt quiz");
     }
 
     private void updateSelectedCard(WildCardProperties selectedCard) {
@@ -1161,11 +1168,6 @@ public class MainActivityGame extends SharedMainActivity {
         wildText.setText(selectedActivity);
         updateTextSize(selectedActivity);
         selectedWildCard = selectedCard;
-        Log.d("QUIZ_DEBUG_CREATE",
-                "NEW CARD -> A=" + selectedCard.getAnswer()
-                        + " W1=" + selectedCard.getWrongAnswer1()
-                        + " W2=" + selectedCard.getWrongAnswer2()
-                        + " W3=" + selectedCard.getWrongAnswer3());
     }
 
     private void updateTextSize(String selectedActivity) {
