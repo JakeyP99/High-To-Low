@@ -75,6 +75,11 @@
             tools:ignore="LockedOrientationActivity" />
 
         <activity
+            android:name=".mainActivity.MainActivityQuiz"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
             android:name=".endGame.EndRouletteGame"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />

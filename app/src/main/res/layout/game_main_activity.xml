@@ -26,7 +26,7 @@
         android:layout_centerHorizontal="true"
         android:background="@android:color/transparent"
         android:src="@drawable/sound"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
@@ -73,7 +73,8 @@
         app:layout_constraintBottom_toTopOf="@+id/btnClassAbility"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnGenerate">
+        app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
+        app:layout_constraintVertical_bias="0.49">
 
         <ImageView
             android:id="@+id/iconWild"
@@ -118,7 +119,6 @@
         android:id="@+id/btnClassAbility"
         android:layout_width="320dp"
         android:layout_height="70dp"
-        android:layout_marginTop="16dp"
         android:background="@drawable/outlineforbutton"
         android:clickable="true"
         android:focusable="true"
@@ -147,10 +147,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
-            android:ellipsize="end"
             android:fontFamily="@font/viga"
             android:maxLines="1"
-            android:text="Class Ability"
+            android:text="Force Turn Repeat"
             android:textColor="@color/bluedark"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -161,7 +160,7 @@
 
         <TextView
             android:id="@+id/labelAbilityDesc"
-            android:layout_width="0dp"
+            android:layout_width="240dp"
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
             android:focusable="true"
@@ -170,11 +169,12 @@
             android:marqueeRepeatLimit="marquee_forever"
             android:scrollHorizontally="true"
             android:singleLine="true"
-            android:text="Tap to use your ability"
+            android:text="Tap to use your ability, this might have"
             android:textColor="@color/bluedark"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/labelAbilityTitle"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@id/labelAbilityTitle"
             app:layout_constraintTop_toBottomOf="@id/labelAbilityTitle" />
 
@@ -189,192 +189,14 @@
         android:text="@string/continueTxt"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
-
         android:textSize="25sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/btnClassAbility"
-        app:layout_constraintEnd_toEndOf="@+id/btnQuizAnswerBR"
-        app:layout_constraintStart_toStartOf="@+id/btnQuizAnswerBL"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
         app:layout_constraintVertical_bias="0.5"
         tools:ignore="TextSizeCheck" />
-
-
-    <Button
-        android:id="@+id/btnQuizAnswerBL"
-        android:layout_width="165dp"
-        android:layout_height="100dp"
-        android:background="@drawable/outlineforbutton"
-        android:fontFamily="@font/viga"
-        android:paddingStart="8dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="8dp"
-        android:textAllCaps="false"
-        android:textColor="@color/bluedark"
-        android:textSize="25sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/btnClassAbility"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
-        app:layout_constraintVertical_bias="0.6"
-
-
-        />
-
-
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/confettiImageViewBL"
-        android:layout_width="167dp"
-        android:layout_height="132dp"
-        android:paddingStart="8dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="8dp"
-        android:src="@drawable/confetti"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/btnClassAbility"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
-        app:layout_constraintVertical_bias="0.6" />
-
-
-    <Button
-        android:id="@+id/btnQuizAnswerTL"
-        android:layout_width="165dp"
-        android:layout_height="100dp"
-        android:background="@drawable/outlineforbutton"
-        android:fontFamily="@font/viga"
-        android:paddingStart="8dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="8dp"
-        android:text="@string/rightQuiz"
-        android:textAllCaps="false"
-        android:textColor="@color/bluedark"
-        android:textSize="25sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/btnQuizAnswerBL"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btnGenerate"
-        app:layout_constraintVertical_bias="0.9" />
-
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/confettiImageViewTL"
-        android:layout_width="167dp"
-        android:layout_height="132dp"
-        android:paddingStart="8dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="8dp"
-
-        android:paddingBottom="8dp"
-        android:src="@drawable/confetti"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/btnQuizAnswerBL"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
-        app:layout_constraintTop_toTopOf="@+id/btnGenerate"
-        app:layout_constraintVertical_bias="0.9" />
-
-
-    <Button
-        android:id="@+id/btnQuizAnswerBR"
-        android:layout_width="165dp"
-        android:layout_height="100dp"
-        android:background="@drawable/outlineforbutton"
-        android:fontFamily="@font/viga"
-        android:paddingStart="8dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="8dp"
-        android:textAllCaps="false"
-        android:textColor="@color/bluedark"
-        android:textSize="25sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/btnClassAbility"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guidelineCenter"
-        app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
-        app:layout_constraintVertical_bias="0.6"
-
-        />
-
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/confettiImageViewBR"
-        android:layout_width="167dp"
-        android:layout_height="132dp"
-        android:paddingStart="8dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="8dp"
-        android:src="@drawable/confetti"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/btnClassAbility"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guidelineCenter"
-        app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
-        app:layout_constraintVertical_bias="0.6" />
-
-    <Button
-        android:id="@+id/btnQuizAnswerTR"
-        android:layout_width="165dp"
-        android:layout_height="100dp"
-        android:background="@drawable/outlineforbutton"
-        android:ellipsize="end"
-        android:fontFamily="@font/viga"
-        android:maxLines="2"
-        android:textAllCaps="false"
-        android:textColor="@color/bluedark"
-        android:textSize="25sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/btnQuizAnswerBR"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guidelineCenter"
-        app:layout_constraintTop_toTopOf="@+id/btnGenerate"
-        app:layout_constraintVertical_bias="0.9" />
-
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/confettiImageViewTR"
-        android:layout_width="167dp"
-        android:layout_height="132dp"
-        android:src="@drawable/confetti"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/btnQuizAnswerBR"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guidelineCenter"
-        app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
-        app:layout_constraintTop_toTopOf="@+id/btnGenerate"
-        app:layout_constraintVertical_bias="0.9" />
-
-
-    <Button
-        android:id="@+id/btnAnswer"
-        android:layout_width="165dp"
-        android:layout_height="100dp"
-        android:background="@drawable/outlineforbutton"
-        android:fontFamily="@font/viga"
-        android:text="@string/Answer"
-        android:textAllCaps="false"
-        android:textColor="@color/bluedark"
-        android:textSize="25sp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/btnWild"
-        app:layout_constraintEnd_toEndOf="@+id/btnGenerate"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnWild"
-        app:layout_constraintStart_toStartOf="@+id/btnGenerate"
-        app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
-        app:layout_constraintVertical_bias="0.721" />
-
 
     <LinearLayout
         android:id="@+id/player_name_layout"
@@ -454,7 +276,6 @@
         android:layout_width="290dp"
         android:layout_height="220dp"
         android:background="@drawable/outlineforbutton"
-        android:contentDescription="@string/placeholder_text"
         android:textColor="@color/bluedark"
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"

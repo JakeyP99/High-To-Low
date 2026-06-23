@@ -217,7 +217,6 @@ public class PowerUps {
         TextView title = dialogView.findViewById(R.id.powerup_title);
         TextView description = dialogView.findViewById(R.id.powerup_description);
         Button activateBtn = dialogView.findViewById(R.id.btn_activate_powerup);
-        ImageButton closeBtn = dialogView.findViewById(R.id.close_button);
 
         title.setText("All or Nothing!");
         description.setText("Risk it all? 50/50 chance for 0 drinks or DOUBLE drinks!");
@@ -230,11 +229,6 @@ public class PowerUps {
         activateBtn.setOnClickListener(v -> {
             dialog.dismiss();
             showAllOrNothingGenerator(onHandled);
-        });
-
-        closeBtn.setOnClickListener(v -> {
-            dialog.dismiss();
-            onDeclined.run();
         });
 
         dialog.show();
@@ -591,7 +585,6 @@ public class PowerUps {
         TextView title = dialogView.findViewById(R.id.powerup_title);
         TextView description = dialogView.findViewById(R.id.powerup_description);
         Button activateBtn = dialogView.findViewById(R.id.btn_activate_powerup);
-        ImageButton closeBtn = dialogView.findViewById(R.id.close_button);
 
         String type = getPowerUpType(powerUpName);
         title.setText(type);
@@ -614,7 +607,6 @@ public class PowerUps {
             dialog.dismiss();
         });
 
-        closeBtn.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
     }
 }

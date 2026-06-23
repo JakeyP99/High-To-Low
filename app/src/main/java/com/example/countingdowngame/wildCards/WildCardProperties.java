@@ -1,8 +1,9 @@
 package com.example.countingdowngame.wildCards;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class WildCardProperties {
+public class WildCardProperties implements Serializable {
     private final String answer;
     private final String category;
     private final String activity;
