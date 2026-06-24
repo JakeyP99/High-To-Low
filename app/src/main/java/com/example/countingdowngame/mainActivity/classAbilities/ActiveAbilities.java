@@ -58,24 +58,6 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         activity = activityInstance;
     }
 
-    private static void hideAbilityButton() {
-        if (activity != null) {
-            View btnClassAbility = activity.findViewById(R.id.btnClassAbility);
-            if (btnClassAbility != null) {
-                btnClassAbility.setVisibility(View.INVISIBLE);
-            }
-        }
-    }
-
-
-    private static void hideWildButton() {
-        if (activity != null) {
-            View btnWild = activity.findViewById(R.id.btnWild);
-            if (btnWild != null) {
-                btnWild.setVisibility(View.INVISIBLE);
-            }
-        }
-    }
 
     public static void handleScientistClass() {
         LayoutInflater inflater = activity.getLayoutInflater();
@@ -319,159 +301,6 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         }
     }
 
-    public static void handleWitchClass(Player currentPlayer) {
-        Random random = new Random();
-        if (random.nextBoolean()) {
-            handleWitchMathGame(currentPlayer);
-        } else {
-            handleWitchMemoryGame(currentPlayer);
-        }
-    }
-
-    private static void handleWitchMathGame(Player currentPlayer) {
-        Random random = new Random();
-        int num1 = random.nextInt(900) + 100; // 3-digit
-        int num2 = random.nextInt(900) + 100; // 3-digit
-        int correctAnswer = num1 * num2;
-
-        LayoutInflater inflater = activity.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.game_witch_potion_math, null);
-
-        TextView mathProblemTv = dialogView.findViewById(R.id.math_problem);
-        TextView timerTv = dialogView.findViewById(R.id.timer_text);
-        EditText answerEt = dialogView.findViewById(R.id.math_answer);
-        Button submitBtn = dialogView.findViewById(R.id.btn_submit_potion);
-
-        mathProblemTv.setText(num1 + " x " + num2);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
-        builder.setView(dialogView);
-        builder.setCancelable(false);
-        AlertDialog dialog = builder.create();
-
-        CountDownTimer timer = new CountDownTimer(15000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                timerTv.setText((millisUntilFinished / 1000) + "s");
-            }
-
-            @Override
-            public void onFinish() {
-                dialog.dismiss();
-                processPotionResult(currentPlayer, -1, correctAnswer);
-            }
-        }.start();
-
-        activity.btnUtils.setButton(submitBtn, () -> {
-            String input = answerEt.getText().toString();
-            if (input.isEmpty()) {
-                return;
-            }
-            try {
-                int userAnswer = Integer.parseInt(input);
-                timer.cancel();
-                dialog.dismiss();
-                processPotionResult(currentPlayer, userAnswer, correctAnswer);
-            } catch (NumberFormatException ignored) {
-            }
-        });
-
-        dialog.show();
-        AudioManager.getInstance().playSoundEffects(activity, WITCH);
-    }
-
-    private static void handleWitchMemoryGame(Player currentPlayer) {
-        LayoutInflater inflater = activity.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.game_witch_potion_memory, null);
-
-        TextView statusTv = dialogView.findViewById(R.id.memory_status);
-        TextView timerTv = dialogView.findViewById(R.id.memory_timer);
-        View[] buttons = {
-                dialogView.findViewById(R.id.btn_red),
-                dialogView.findViewById(R.id.btn_blue),
-                dialogView.findViewById(R.id.btn_green),
-                dialogView.findViewById(R.id.btn_yellow)
-        };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
-        builder.setView(dialogView);
-        builder.setCancelable(false);
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-        List<Integer> sequence = new ArrayList<>();
-        List<Integer> playerSequence = new ArrayList<>();
-        Random random = new Random();
-        for (int i = 0; i < 3; i++) {
-            sequence.add(random.nextInt(4));
-        }
-        final boolean[] isPlayerTurn = {false};
-        final int[] score = {0};
-
-        CountDownTimer gameTimer = new CountDownTimer(300000, 1000) { // Large timer, effectively infinite until failure
-            @Override
-            public void onTick(long millisUntilFinished) {
-                timerTv.setText("Score: " + score[0]);
-            }
-
-            @Override
-            public void onFinish() {
-                dialog.dismiss();
-                processMemoryResult(currentPlayer, score[0]);
-            }
-        };
-
-        Runnable nextRound = new Runnable() {
-            @Override
-            public void run() {
-                isPlayerTurn[0] = false;
-                playerSequence.clear();
-                sequence.add(random.nextInt(4));
-                statusTv.setText("Watch carefully!");
-
-                new Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
-                    int step = 0;
-
-                    @Override
-                    public void run() {
-                        if (step < sequence.size()) {
-                            int btnIdx = sequence.get(step);
-                            flashButton(buttons[btnIdx]);
-                            step++;
-                            new Handler(android.os.Looper.getMainLooper()).postDelayed(this, 600);
-                        } else {
-                            statusTv.setText("Your turn! Repeat it!");
-                            isPlayerTurn[0] = true;
-                        }
-                    }
-                }, 1000);
-            }
-        };
-
-        for (int i = 0; i < 4; i++) {
-            int index = i;
-            buttons[i].setOnClickListener(v -> {
-                if (!isPlayerTurn[0]) return;
-                flashButton(buttons[index]);
-                playerSequence.add(index);
-
-                if (playerSequence.get(playerSequence.size() - 1).equals(sequence.get(playerSequence.size() - 1))) {
-                    if (playerSequence.size() == sequence.size()) {
-                        score[0]++;
-                        new Handler(android.os.Looper.getMainLooper()).postDelayed(nextRound, 500);
-                    }
-                } else {
-                    gameTimer.cancel();
-                    dialog.dismiss();
-                    processMemoryResult(currentPlayer, score[0]);
-                }
-            });
-        }
-
-        nextRound.run();
-        gameTimer.start();
-        AudioManager.getInstance().playSoundEffects(activity, WITCH);
-    }
 
     private static void flashButton(View view) {
         view.animate().alpha(1.0f).setDuration(200).withEndAction(() -> view.animate().alpha(0.4f).setDuration(200).start()).start();
@@ -777,4 +606,163 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         if (value == 13) return "K";
         return "A";
     }
+
+
+    //-----------------------------------------------------Witch---------------------------------------------------//
+
+    public static void handleWitchClass(Player currentPlayer) {
+        Random random = new Random();
+        if (random.nextBoolean()) {
+            handleWitchMathGame(currentPlayer);
+        } else {
+            handleWitchMemoryGame(currentPlayer);
+        }
+    }
+
+    private static void handleWitchMathGame(Player currentPlayer) {
+        Random random = new Random();
+        int num1 = random.nextInt(900) + 100; // 3-digit
+        int num2 = random.nextInt(900) + 100; // 3-digit
+        int correctAnswer = num1 * num2;
+
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.game_witch_potion_math, null);
+
+        TextView mathProblemTv = dialogView.findViewById(R.id.math_problem);
+        TextView timerTv = dialogView.findViewById(R.id.timer_text);
+        EditText answerEt = dialogView.findViewById(R.id.math_answer);
+        Button submitBtn = dialogView.findViewById(R.id.btn_submit_potion);
+
+        mathProblemTv.setText(num1 + " x " + num2);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
+        builder.setView(dialogView);
+        builder.setCancelable(false);
+        AlertDialog dialog = builder.create();
+
+        CountDownTimer timer = new CountDownTimer(15000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timerTv.setText((millisUntilFinished / 1000) + "s");
+            }
+
+            @Override
+            public void onFinish() {
+                dialog.dismiss();
+                processPotionResult(currentPlayer, -1, correctAnswer);
+            }
+        }.start();
+
+        activity.btnUtils.setButton(submitBtn, () -> {
+            String input = answerEt.getText().toString();
+            if (input.isEmpty()) {
+                return;
+            }
+            try {
+                int userAnswer = Integer.parseInt(input);
+                timer.cancel();
+                dialog.dismiss();
+                processPotionResult(currentPlayer, userAnswer, correctAnswer);
+            } catch (NumberFormatException ignored) {
+            }
+        });
+
+        dialog.show();
+        AudioManager.getInstance().playSoundEffects(activity, WITCH);
+    }
+
+    private static void handleWitchMemoryGame(Player currentPlayer) {
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.game_witch_potion_memory, null);
+
+        TextView statusTv = dialogView.findViewById(R.id.memory_status);
+        TextView timerTv = dialogView.findViewById(R.id.memory_timer);
+        View[] buttons = {
+                dialogView.findViewById(R.id.btn_red),
+                dialogView.findViewById(R.id.btn_blue),
+                dialogView.findViewById(R.id.btn_green),
+                dialogView.findViewById(R.id.btn_yellow)
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
+        builder.setView(dialogView);
+        builder.setCancelable(false);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        List<Integer> sequence = new ArrayList<>();
+        List<Integer> playerSequence = new ArrayList<>();
+        Random random = new Random();
+        for (int i = 0; i < 3; i++) {
+            sequence.add(random.nextInt(4));
+        }
+        final boolean[] isPlayerTurn = {false};
+        final int[] score = {0};
+
+        CountDownTimer gameTimer = new CountDownTimer(300000, 1000) { // Large timer, effectively infinite until failure
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timerTv.setText("Score: " + score[0]);
+            }
+
+            @Override
+            public void onFinish() {
+                dialog.dismiss();
+                processMemoryResult(currentPlayer, score[0]);
+            }
+        };
+
+        Runnable nextRound = new Runnable() {
+            @Override
+            public void run() {
+                isPlayerTurn[0] = false;
+                playerSequence.clear();
+                sequence.add(random.nextInt(4));
+                statusTv.setText("Watch carefully!");
+
+                new Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
+                    int step = 0;
+
+                    @Override
+                    public void run() {
+                        if (step < sequence.size()) {
+                            int btnIdx = sequence.get(step);
+                            flashButton(buttons[btnIdx]);
+                            step++;
+                            new Handler(android.os.Looper.getMainLooper()).postDelayed(this, 600);
+                        } else {
+                            statusTv.setText("Your turn! Repeat it!");
+                            isPlayerTurn[0] = true;
+                        }
+                    }
+                }, 1000);
+            }
+        };
+
+        for (int i = 0; i < 4; i++) {
+            int index = i;
+            buttons[i].setOnClickListener(v -> {
+                if (!isPlayerTurn[0]) return;
+                flashButton(buttons[index]);
+                playerSequence.add(index);
+
+                if (playerSequence.get(playerSequence.size() - 1).equals(sequence.get(playerSequence.size() - 1))) {
+                    if (playerSequence.size() == sequence.size()) {
+                        score[0]++;
+                        new Handler(android.os.Looper.getMainLooper()).postDelayed(nextRound, 500);
+                    }
+                } else {
+                    gameTimer.cancel();
+                    dialog.dismiss();
+                    processMemoryResult(currentPlayer, score[0]);
+                }
+            });
+        }
+
+        nextRound.run();
+        gameTimer.start();
+        AudioManager.getInstance().playSoundEffects(activity, WITCH);
+    }
+
+
 }

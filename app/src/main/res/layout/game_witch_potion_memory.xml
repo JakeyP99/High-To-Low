@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="500dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="24dp"
     android:gravity="center"
@@ -97,5 +97,17 @@
         android:text="Score: 0"
         android:textColor="@color/bluedark"
         android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/btn_start"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/outlineforbutton"
+        android:fontFamily="@font/viga"
+        android:text="Start Game"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="20sp" />
 
 </LinearLayout>
