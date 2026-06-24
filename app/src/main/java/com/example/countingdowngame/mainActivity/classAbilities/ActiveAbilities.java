@@ -53,11 +53,12 @@ import java.util.stream.Collectors;
 public class ActiveAbilities extends ButtonUtilsActivity {
     static Game game = Game.getInstance();
     private static MainActivityGame activity;
+    private static boolean gamblerFlipped = false;
+    private static boolean opponentFlipped = false;
 
     public static void setActivity(MainActivityGame activityInstance) {
         activity = activityInstance;
     }
-
 
     public static void handleScientistClass() {
         LayoutInflater inflater = activity.getLayoutInflater();
@@ -144,11 +145,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         int wildcardsLeft = randomPlayer.getWildCardAmount();
         String wildcardText = wildcardsLeft == 0 ? "no more wildcards" : (wildcardsLeft == 1 ? "1 wildcard left" : wildcardsLeft + " wildcards left");
 
-        activity.showClassAbilityDialog(
-                GOBLIN + "'s Active: \n\n" +
-                        randomPlayer.getName() + " lost two wildcards.\n\n" +
-                        randomPlayer.getName() + " now has " + wildcardText + "."
-        );
+        activity.showClassAbilityDialog(GOBLIN + "'s Active: \n\n" + randomPlayer.getName() + " lost two wildcards.\n\n" + randomPlayer.getName() + " now has " + wildcardText + ".");
         currentPlayer.loseWildCards(1);
         currentPlayer.setUsedActiveAbility(true);
         activity.renderPlayerUI(true);
@@ -158,10 +155,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     public static void handleAngryJimClass(Player currentPlayer) {
         Player randomPlayer = game.getRandomPlayerExcludingCurrent();
         game.updateRepeatingTurns(randomPlayer, 1);
-        activity.showClassAbilityDialog(
-                ANGRY_JIM + "'s Active: \n\n" +
-                        randomPlayer.getName() + " must repeat their turn."
-        );
+        activity.showClassAbilityDialog(ANGRY_JIM + "'s Active: \n\n" + randomPlayer.getName() + " must repeat their turn.");
         currentPlayer.setUsedActiveAbility(true);
         AudioManager.getInstance().playSoundEffects(activity, ANGRY_JIM);
     }
@@ -176,10 +170,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
     public static void handleArcherClass(Player currentPlayer) {
         if (drinkNumberCounterInt >= 2) {
-            activity.showClassAbilityDialog(
-                    ARCHER + "'s Active: \n\n" +
-                            currentPlayer.getName() + " hand out two drinks!"
-            );
+            activity.showClassAbilityDialog(ARCHER + "'s Active: \n\n" + currentPlayer.getName() + " hand out two drinks!");
             currentPlayer.setUsedActiveAbility(true);
             activity.updateDrinkNumberCounter(-2, true);
             AudioManager.getInstance().playSoundEffects(activity, ARCHER);
@@ -210,18 +201,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     }
 
     private static void showTrollRiddleDialog(Player currentPlayer, List<Player> targets) {
-        String[][] riddlePool = {
-                {"I speak without a mouth and hear without ears. I have no body, but I come alive with wind. What am I?", "Echo"},
-                {"You measure my life in hours and I serve you by expiring. I'm quick when I'm thin and slow when I'm fat. The wind is my enemy.", "Candle"},
-                {"I have cities, but no houses. I have mountains, but no trees. I have water, but no fish. What am I?", "Map"},
-                {"What is seen in the middle of March and April that can’t be seen at the beginning or end of either month?", "The letter R"},
-                {"You see a boat filled with people. It has not sunk, but when you look again you don’t see a single person on the boat. Why?", "All were married"},
-                {"What has keys, but no locks; space, but no room; and you can enter, but never leave?", "Keyboard"},
-                {"I have branches, but no fruit, trunk or leaves. What am I?", "Bank"},
-                {"What can travel around the world while staying in a corner?", "Stamp"},
-                {"What has a neck but no head?", "Bottle"},
-                {"The more of this there is, the less you see. What is it?", "Darkness"}
-        };
+        String[][] riddlePool = {{"I speak without a mouth and hear without ears. I have no body, but I come alive with wind. What am I?", "Echo"}, {"You measure my life in hours and I serve you by expiring. I'm quick when I'm thin and slow when I'm fat. The wind is my enemy.", "Candle"}, {"I have cities, but no houses. I have mountains, but no trees. I have water, but no fish. What am I?", "Map"}, {"What is seen in the middle of March and April that can’t be seen at the beginning or end of either month?", "The letter R"}, {"You see a boat filled with people. It has not sunk, but when you look again you don’t see a single person on the boat. Why?", "All were married"}, {"What has keys, but no locks; space, but no room; and you can enter, but never leave?", "Keyboard"}, {"I have branches, but no fruit, trunk or leaves. What am I?", "Bank"}, {"What can travel around the world while staying in a corner?", "Stamp"}, {"What has a neck but no head?", "Bottle"}, {"The more of this there is, the less you see. What is it?", "Darkness"}};
 
         int rIndex = new Random().nextInt(riddlePool.length);
         String riddleText = riddlePool[rIndex][0];
@@ -301,7 +281,6 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         }
     }
 
-
     private static void flashButton(View view) {
         view.animate().alpha(1.0f).setDuration(200).withEndAction(() -> view.animate().alpha(0.4f).setDuration(200).start()).start();
     }
@@ -353,11 +332,10 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             player.incrementDrinksTakenByWitch(2);
         }
     }
+
     public static void handleGamblerClass() {
 
-        List<Player> opponents = game.getPlayers().stream()
-                .filter(p -> !p.equals(game.getCurrentPlayer()))
-                .collect(Collectors.toList());
+        List<Player> opponents = game.getPlayers().stream().filter(p -> !p.equals(game.getCurrentPlayer())).collect(Collectors.toList());
 
         if (opponents.size() == 1) {
             showBetDialog(opponents.get(0));
@@ -374,9 +352,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
         RecyclerView recyclerView = dialogView.findViewById(R.id.listViewOpponents);
 
-        AlertDialog dialog = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme)
-                .setView(dialogView)
-                .create();
+        AlertDialog dialog = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme).setView(dialogView).create();
 
         recyclerView.setLayoutManager(new GridLayoutManager(activity, 3));
 
@@ -392,77 +368,12 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         dialog.show();
     }
 
-    public static class OpponentAdapter extends RecyclerView.Adapter<OpponentAdapter.VH> {
-
-        public interface OnClick {
-            void onClick(Player player);
-        }
-
-        private final List<Player> opponents;
-        private final OnClick listener;
-
-        public OpponentAdapter(List<Player> opponents, OnClick listener) {
-            this.opponents = opponents;
-            this.listener = listener;
-        }
-
-        static class VH extends RecyclerView.ViewHolder {
-            ImageView photo;
-            TextView name, clazz;
-
-            VH(View v) {
-                super(v);
-                photo = v.findViewById(R.id.playerPhotoImageView);
-                name = v.findViewById(R.id.playerNameTextView);
-                clazz = v.findViewById(R.id.playerClassTextView);
-            }
-        }
-
-        @NonNull
-        @Override
-        public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.game_gambler_player_choice_adaptor, parent, false);
-            return new VH(v);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull VH h, int position) {
-
-            Player p = opponents.get(position);
-
-            h.name.setText(p.getName());
-
-            h.name.postDelayed(() -> h.name.setSelected(true), 1000);
-
-            h.clazz.setText(p.getClassChoice());
-
-            if (p.getPhoto() != null && !p.getPhoto().isEmpty()) {
-                byte[] decoded = Base64.decode(p.getPhoto(), Base64.DEFAULT);
-                Bitmap bmp = BitmapFactory.decodeByteArray(decoded, 0, decoded.length);
-                h.photo.setImageBitmap(bmp);
-            } else {
-                h.photo.setImageResource(R.drawable.wine);
-            }
-
-            h.itemView.setOnClickListener(v -> {
-                h.name.setSelected(false);
-                listener.onClick(p);
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return opponents.size();
-        }
-    }
-
     private static void showBetDialog(Player opponent) {
         LayoutInflater inflater = activity.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.game_gambler_duel_bet, null);
 
         EditText editBetAmount = dialogView.findViewById(R.id.editBetAmount);
-        
+
         TextView subtitle = dialogView.findViewById(R.id.bet_subtitle);
         if (subtitle != null) {
             subtitle.setText("Duel against " + opponent.getName());
@@ -489,9 +400,6 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         });
         dialog.show();
     }
-
-    private static boolean gamblerFlipped = false;
-    private static boolean opponentFlipped = false;
 
     private static void showHighCardDuelUI(final Player opponent, final int bet) {
         gamblerFlipped = false;
@@ -607,9 +515,6 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         return "A";
     }
 
-
-    //-----------------------------------------------------Witch---------------------------------------------------//
-
     public static void handleWitchClass(Player currentPlayer) {
         Random random = new Random();
         if (random.nextBoolean()) {
@@ -618,6 +523,9 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             handleWitchMemoryGame(currentPlayer);
         }
     }
+
+
+    //-----------------------------------------------------Witch---------------------------------------------------//
 
     private static void handleWitchMathGame(Player currentPlayer) {
         Random random = new Random();
@@ -672,97 +580,251 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     }
 
     private static void handleWitchMemoryGame(Player currentPlayer) {
-        LayoutInflater inflater = activity.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.game_witch_potion_memory, null);
+
+        View dialogView = createMemoryDialog();
 
         TextView statusTv = dialogView.findViewById(R.id.memory_status);
         TextView timerTv = dialogView.findViewById(R.id.memory_timer);
-        View[] buttons = {
-                dialogView.findViewById(R.id.btn_red),
-                dialogView.findViewById(R.id.btn_blue),
-                dialogView.findViewById(R.id.btn_green),
-                dialogView.findViewById(R.id.btn_yellow)
-        };
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
-        builder.setView(dialogView);
-        builder.setCancelable(false);
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        View[] buttons = getMemoryButtons(dialogView);
 
-        List<Integer> sequence = new ArrayList<>();
+        AlertDialog dialog = showMemoryDialog(dialogView);
+
+
+        List<Integer> sequence = generateInitialSequence();
+
         List<Integer> playerSequence = new ArrayList<>();
-        Random random = new Random();
-        for (int i = 0; i < 3; i++) {
-            sequence.add(random.nextInt(4));
-        }
-        final boolean[] isPlayerTurn = {false};
-        final int[] score = {0};
 
-        CountDownTimer gameTimer = new CountDownTimer(300000, 1000) { // Large timer, effectively infinite until failure
-            @Override
-            public void onTick(long millisUntilFinished) {
-                timerTv.setText("Score: " + score[0]);
-            }
+        int[] score = {0};
+        boolean[] isPlayerTurn = {false};
 
-            @Override
-            public void onFinish() {
-                dialog.dismiss();
-                processMemoryResult(currentPlayer, score[0]);
-            }
-        };
 
-        Runnable nextRound = new Runnable() {
-            @Override
-            public void run() {
-                isPlayerTurn[0] = false;
-                playerSequence.clear();
-                sequence.add(random.nextInt(4));
-                statusTv.setText("Watch carefully!");
+        CountDownTimer timer = startMemoryTimer(dialog, timerTv, currentPlayer, score);
 
-                new Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
-                    int step = 0;
 
-                    @Override
-                    public void run() {
-                        if (step < sequence.size()) {
-                            int btnIdx = sequence.get(step);
-                            flashButton(buttons[btnIdx]);
-                            step++;
-                            new Handler(android.os.Looper.getMainLooper()).postDelayed(this, 600);
-                        } else {
-                            statusTv.setText("Your turn! Repeat it!");
-                            isPlayerTurn[0] = true;
-                        }
-                    }
-                }, 1000);
-            }
-        };
+        setupMemoryButtons(buttons, sequence, playerSequence, score, isPlayerTurn, statusTv, dialog, currentPlayer);
 
-        for (int i = 0; i < 4; i++) {
-            int index = i;
-            buttons[i].setOnClickListener(v -> {
-                if (!isPlayerTurn[0]) return;
-                flashButton(buttons[index]);
-                playerSequence.add(index);
 
-                if (playerSequence.get(playerSequence.size() - 1).equals(sequence.get(playerSequence.size() - 1))) {
-                    if (playerSequence.size() == sequence.size()) {
-                        score[0]++;
-                        new Handler(android.os.Looper.getMainLooper()).postDelayed(nextRound, 500);
-                    }
-                } else {
-                    gameTimer.cancel();
-                    dialog.dismiss();
-                    processMemoryResult(currentPlayer, score[0]);
-                }
-            });
-        }
+        startNextRound(sequence, playerSequence, buttons, statusTv, isPlayerTurn);
 
-        nextRound.run();
-        gameTimer.start();
+
+        timer.start();
+
         AudioManager.getInstance().playSoundEffects(activity, WITCH);
     }
 
+    private static View createMemoryDialog() {
 
+        LayoutInflater inflater = activity.getLayoutInflater();
+
+        return inflater.inflate(R.layout.game_witch_potion_memory, null);
+    }
+
+    private static AlertDialog showMemoryDialog(View view) {
+
+        AlertDialog dialog = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme).setView(view).setCancelable(false).create();
+
+        dialog.show();
+
+        return dialog;
+    }
+
+    private static View[] getMemoryButtons(View view) {
+
+        return new View[]{view.findViewById(R.id.btn_red), view.findViewById(R.id.btn_blue), view.findViewById(R.id.btn_green), view.findViewById(R.id.btn_yellow)};
+    }
+
+    private static List<Integer> generateInitialSequence() {
+
+        List<Integer> sequence = new ArrayList<>();
+
+        Random random = new Random();
+
+        for (int i = 0; i < 3; i++) {
+            sequence.add(random.nextInt(4));
+        }
+
+        return sequence;
+    }
+
+    private static CountDownTimer startMemoryTimer(AlertDialog dialog, TextView timerTv, Player player, int[] score) {
+
+        return new CountDownTimer(300000, 1000) {
+
+            @Override
+            public void onTick(long millis) {
+                timerTv.setText("Score: " + score[0]);
+            }
+
+
+            @Override
+            public void onFinish() {
+
+                dialog.dismiss();
+
+                processMemoryResult(player, score[0]);
+            }
+
+        };
+    }
+
+    private static void setupMemoryButtons(View[] buttons, List<Integer> sequence, List<Integer> playerSequence, int[] score, boolean[] playerTurn, TextView status, AlertDialog dialog, Player player) {
+
+        for (int i = 0; i < buttons.length; i++) {
+
+            int index = i;
+
+
+            buttons[i].setOnClickListener(v -> {
+
+
+                if (!playerTurn[0]) return;
+
+
+                flashButton(buttons[index]);
+
+
+                playerSequence.add(index);
+
+
+                boolean correct = sequence.get(playerSequence.size() - 1).equals(index);
+
+
+                if (!correct) {
+
+                    dialog.dismiss();
+
+                    processMemoryResult(player, score[0]);
+
+                    return;
+                }
+
+
+                if (playerSequence.size() == sequence.size()) {
+
+
+                    score[0]++;
+
+
+                    new Handler(android.os.Looper.getMainLooper()).postDelayed(() -> startNextRound(sequence, playerSequence, buttons, status, playerTurn), 500);
+                }
+
+            });
+        }
+    }
+
+    private static void startNextRound(List<Integer> sequence, List<Integer> playerSequence, View[] buttons, TextView status, boolean[] playerTurn) {
+
+        playerTurn[0] = false;
+
+        playerSequence.clear();
+
+
+        sequence.add(new Random().nextInt(4));
+
+
+        status.setText("Watch carefully!");
+
+
+        playSequence(sequence, buttons, status, playerTurn);
+    }
+
+    private static void playSequence(List<Integer> sequence, View[] buttons, TextView status, boolean[] playerTurn) {
+
+        Handler handler = new Handler(android.os.Looper.getMainLooper());
+
+
+        handler.postDelayed(new Runnable() {
+
+            int step = 0;
+
+
+            @Override
+            public void run() {
+
+                if (step < sequence.size()) {
+
+                    flashButton(buttons[sequence.get(step)]);
+
+
+                    step++;
+
+                    handler.postDelayed(this, 600);
+
+                } else {
+
+                    status.setText("Your turn! Repeat it!");
+
+
+                    playerTurn[0] = true;
+                }
+            }
+
+
+        }, 1000);
+    }
+
+    public static class OpponentAdapter extends RecyclerView.Adapter<OpponentAdapter.VH> {
+
+        private final List<Player> opponents;
+        private final OnClick listener;
+
+        public OpponentAdapter(List<Player> opponents, OnClick listener) {
+            this.opponents = opponents;
+            this.listener = listener;
+        }
+
+        @NonNull
+        @Override
+        public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.game_gambler_player_choice_adaptor, parent, false);
+            return new VH(v);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull VH h, int position) {
+
+            Player p = opponents.get(position);
+
+            h.name.setText(p.getName());
+
+            h.name.postDelayed(() -> h.name.setSelected(true), 1000);
+
+            h.clazz.setText(p.getClassChoice());
+
+            if (p.getPhoto() != null && !p.getPhoto().isEmpty()) {
+                byte[] decoded = Base64.decode(p.getPhoto(), Base64.DEFAULT);
+                Bitmap bmp = BitmapFactory.decodeByteArray(decoded, 0, decoded.length);
+                h.photo.setImageBitmap(bmp);
+            } else {
+                h.photo.setImageResource(R.drawable.wine);
+            }
+
+            h.itemView.setOnClickListener(v -> {
+                h.name.setSelected(false);
+                listener.onClick(p);
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return opponents.size();
+        }
+
+        public interface OnClick {
+            void onClick(Player player);
+        }
+
+        static class VH extends RecyclerView.ViewHolder {
+            ImageView photo;
+            TextView name, clazz;
+
+            VH(View v) {
+                super(v);
+                photo = v.findViewById(R.id.playerPhotoImageView);
+                name = v.findViewById(R.id.playerNameTextView);
+                clazz = v.findViewById(R.id.playerClassTextView);
+            }
+        }
+    }
 }
