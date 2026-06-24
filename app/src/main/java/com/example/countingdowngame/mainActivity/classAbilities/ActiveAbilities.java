@@ -355,6 +355,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     public static void handleWitchClass(Player currentPlayer) {
         Random random = new Random();
         int gameChoice = random.nextInt(3);
+        AudioManager.getInstance().playSoundEffects(activity, WITCH);
 
         if (gameChoice == 0) {
             handleWitchRuneGame(currentPlayer);
@@ -505,9 +506,8 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         Button actionBtn = dialogView.findViewById(R.id.btn_action);
         TextView statusTv = dialogView.findViewById(R.id.rune_status);
 
-        // Initial State: Study the rune
-        Path targetRune = generateRandomRune();
-        runeView.setRune(targetRune);
+        // Initial State: Empty board
+        final Path[] targetRune = {generateRandomRune()};
         runeView.setDrawingEnabled(false);
         actionBtn.setText("Start");
         statusTv.setText("Study the magical rune!");
@@ -521,25 +521,26 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
         activity.btnUtils.setButton(actionBtn, () -> {
             if (!canSubmit[0]) {
-                // Phase 1: Memorize & Trace (Rune visible for 8s)
+                // Phase 1: Memorize (Rune visible for 3s)
                 actionBtn.setEnabled(false);
                 actionBtn.setAlpha(0.5f);
-                actionBtn.setText("Watch");
-                runeView.setDrawingEnabled(true);
-                statusTv.setText("Memorize and trace!");
-                AudioManager.getInstance().playSoundEffects(activity, WITCH);
+                actionBtn.setText("Watch...");
+                runeView.setRune(targetRune[0]);
+                runeView.setDrawingEnabled(false);
+                statusTv.setText("Memorize the rune!");
 
                 new Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
                     if (dialog.isShowing()) {
-                        // Phase 2: Finish from memory (Rune hidden)
+                        // Phase 2: Draw from memory (Rune hidden)
                         canSubmit[0] = true;
                         runeView.hideTargetRune();
+                        runeView.setDrawingEnabled(true);
                         actionBtn.setEnabled(true);
                         actionBtn.setAlpha(1.0f);
                         actionBtn.setText("Cast Spell");
-                        statusTv.setText("Finish from memory!");
+                        statusTv.setText("Now draw it from memory!");
                     }
-                }, 8000);
+                }, 3000);
             } else {
                 // Phase 3: Submission
                 float similarity = runeView.calculateSimilarity();

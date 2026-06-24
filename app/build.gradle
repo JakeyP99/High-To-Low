@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdk 36
     defaultConfig {
-        applicationId "com.mydomain.countingdowngame"
+        applicationId "com.example.countingdowngame"
         minSdkVersion 24
         //noinspection EditedTargetSdkVersion
         targetSdkVersion 36
