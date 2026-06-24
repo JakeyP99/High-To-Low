@@ -3,11 +3,13 @@ package com.example.countingdowngame.audio;
 import static android.content.ContentValues.TAG;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ARCHER;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GOBLIN;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.QUIZ_MAGICIAN;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SCIENTIST;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SOLDIER;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.TROLL;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
 
 import android.content.Context;
@@ -40,6 +42,8 @@ public class AudioManager {
         soundEffectsMap.put(SCIENTIST, R.raw.sciencesound);
         soundEffectsMap.put(ANGRY_JIM, R.raw.angryjimsound);
         soundEffectsMap.put(SURVIVOR, R.raw.survivorsound);
+        soundEffectsMap.put(GAMBLER, R.raw.gamblersound);
+        soundEffectsMap.put(TROLL, R.raw.trollsound);
     }
 
     private final List<Integer> backgroundMusicList;

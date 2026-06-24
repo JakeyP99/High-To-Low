@@ -11,6 +11,7 @@ import static com.example.countingdowngame.createPlayer.CharacterClassDescriptio
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SCIENTIST;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SOLDIER;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.TROLL;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
 import static com.example.countingdowngame.mainActivity.MainActivityGame.drinkNumberCounterInt;
 import static com.example.countingdowngame.mainActivity.MainActivityGame.isFirstTurn;
@@ -198,6 +199,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             hideAbilityButton();
         }
     }
+    //-----------------------------------------------------Troll---------------------------------------------------//
 
     public static void handleTrollClass(Player currentPlayer) {
         List<Player> players = game.getPlayers();
@@ -220,10 +222,10 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         if (targets.isEmpty()) return;
 
         showTrollRiddleDialog(currentPlayer, targets);
+        AudioManager.getInstance().playSoundEffects(activity, TROLL);
         hideAbilityButton();
     }
 
-    //-----------------------------------------------------Troll---------------------------------------------------//
 
     private static void showTrollRiddleDialog(Player currentPlayer, List<Player> targets) {
         String[] riddle = getRandomRiddle();
@@ -701,6 +703,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     private static void showHighCardDuelUI(final Player opponent, final int bet) {
         gamblerFlipped = false;
         opponentFlipped = false;
+        AudioManager.getInstance().playSoundEffects(activity, GAMBLER);
 
         Random r = new Random();
         final int gamblerCard = r.nextInt(12) + 2; // 2-13 (10, J, Q, K)

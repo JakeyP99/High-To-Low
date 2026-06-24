@@ -20,6 +20,7 @@ public class HomeScreen extends ButtonUtilsActivity {
     private GifImageView muteGif;
     private GifImageView soundGif;
     private GifImageView drinkGif;
+    private GifImageView infoGif;
     private ButtonUtils buttonUtils;
 
     @Override
@@ -45,14 +46,16 @@ public class HomeScreen extends ButtonUtilsActivity {
         muteGif = findViewById(R.id.muteGif);
         soundGif = findViewById(R.id.soundGif);
         drinkGif = findViewById(R.id.drinkGif);
+        infoGif = findViewById(R.id.informationGif);
     }
 
     private void setupButtons() {
         setGameButton(R.id.quickplay, false);
         setGameButton(R.id.playCards, true);
 
-        buttonUtils.setButton(findViewById(R.id.button_Instructions), this::gotoInstructions);
+        buttonUtils.setButton(findViewById(R.id.btn_classes), this::gotoInstructions);
         buttonUtils.setButton(findViewById(R.id.button_Statistics), this::gotoStatistics);
+        buttonUtils.setButton(infoGif, this::gotoInstructions);
     }
 
     private void setGameButton(int buttonId, boolean playCards) {
