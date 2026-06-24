@@ -580,75 +580,47 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     }
 
     private static void handleWitchMemoryGame(Player currentPlayer) {
-
         View dialogView = createMemoryDialog();
-
         TextView statusTv = dialogView.findViewById(R.id.memory_status);
         TextView timerTv = dialogView.findViewById(R.id.memory_timer);
-
         View[] buttons = getMemoryButtons(dialogView);
-
         AlertDialog dialog = showMemoryDialog(dialogView);
-
-
         List<Integer> sequence = generateInitialSequence();
-
         List<Integer> playerSequence = new ArrayList<>();
-
         int[] score = {0};
         boolean[] isPlayerTurn = {false};
-
-
         CountDownTimer timer = startMemoryTimer(dialog, timerTv, currentPlayer, score);
-
-
         setupMemoryButtons(buttons, sequence, playerSequence, score, isPlayerTurn, statusTv, dialog, currentPlayer);
-
-
         startNextRound(sequence, playerSequence, buttons, statusTv, isPlayerTurn);
-
-
         timer.start();
-
         AudioManager.getInstance().playSoundEffects(activity, WITCH);
     }
 
     private static View createMemoryDialog() {
-
         LayoutInflater inflater = activity.getLayoutInflater();
-
         return inflater.inflate(R.layout.game_witch_potion_memory, null);
     }
 
     private static AlertDialog showMemoryDialog(View view) {
-
         AlertDialog dialog = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme).setView(view).setCancelable(false).create();
-
         dialog.show();
-
         return dialog;
     }
 
     private static View[] getMemoryButtons(View view) {
-
         return new View[]{view.findViewById(R.id.btn_red), view.findViewById(R.id.btn_blue), view.findViewById(R.id.btn_green), view.findViewById(R.id.btn_yellow)};
     }
 
     private static List<Integer> generateInitialSequence() {
-
         List<Integer> sequence = new ArrayList<>();
-
         Random random = new Random();
-
         for (int i = 0; i < 3; i++) {
             sequence.add(random.nextInt(4));
         }
-
         return sequence;
     }
 
     private static CountDownTimer startMemoryTimer(AlertDialog dialog, TextView timerTv, Player player, int[] score) {
-
         return new CountDownTimer(300000, 1000) {
 
             @Override
@@ -656,12 +628,9 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 timerTv.setText("Score: " + score[0]);
             }
 
-
             @Override
             public void onFinish() {
-
                 dialog.dismiss();
-
                 processMemoryResult(player, score[0]);
             }
 
@@ -671,41 +640,21 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     private static void setupMemoryButtons(View[] buttons, List<Integer> sequence, List<Integer> playerSequence, int[] score, boolean[] playerTurn, TextView status, AlertDialog dialog, Player player) {
 
         for (int i = 0; i < buttons.length; i++) {
-
             int index = i;
-
-
             buttons[i].setOnClickListener(v -> {
-
-
                 if (!playerTurn[0]) return;
-
-
                 flashButton(buttons[index]);
-
-
                 playerSequence.add(index);
-
-
                 boolean correct = sequence.get(playerSequence.size() - 1).equals(index);
 
-
                 if (!correct) {
-
                     dialog.dismiss();
-
                     processMemoryResult(player, score[0]);
-
                     return;
                 }
 
-
                 if (playerSequence.size() == sequence.size()) {
-
-
                     score[0]++;
-
-
                     new Handler(android.os.Looper.getMainLooper()).postDelayed(() -> startNextRound(sequence, playerSequence, buttons, status, playerTurn), 500);
                 }
 
@@ -714,48 +663,28 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     }
 
     private static void startNextRound(List<Integer> sequence, List<Integer> playerSequence, View[] buttons, TextView status, boolean[] playerTurn) {
-
         playerTurn[0] = false;
-
         playerSequence.clear();
-
-
         sequence.add(new Random().nextInt(4));
-
-
         status.setText("Watch carefully!");
-
-
         playSequence(sequence, buttons, status, playerTurn);
     }
 
     private static void playSequence(List<Integer> sequence, View[] buttons, TextView status, boolean[] playerTurn) {
 
         Handler handler = new Handler(android.os.Looper.getMainLooper());
-
-
         handler.postDelayed(new Runnable() {
-
             int step = 0;
-
 
             @Override
             public void run() {
-
                 if (step < sequence.size()) {
-
                     flashButton(buttons[sequence.get(step)]);
-
-
                     step++;
-
                     handler.postDelayed(this, 600);
 
                 } else {
-
                     status.setText("Your turn! Repeat it!");
-
-
                     playerTurn[0] = true;
                 }
             }
@@ -765,10 +694,8 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     }
 
     public static class OpponentAdapter extends RecyclerView.Adapter<OpponentAdapter.VH> {
-
         private final List<Player> opponents;
         private final OnClick listener;
-
         public OpponentAdapter(List<Player> opponents, OnClick listener) {
             this.opponents = opponents;
             this.listener = listener;
@@ -783,15 +710,10 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
         @Override
         public void onBindViewHolder(@NonNull VH h, int position) {
-
             Player p = opponents.get(position);
-
             h.name.setText(p.getName());
-
             h.name.postDelayed(() -> h.name.setSelected(true), 1000);
-
             h.clazz.setText(p.getClassChoice());
-
             if (p.getPhoto() != null && !p.getPhoto().isEmpty()) {
                 byte[] decoded = Base64.decode(p.getPhoto(), Base64.DEFAULT);
                 Bitmap bmp = BitmapFactory.decodeByteArray(decoded, 0, decoded.length);
@@ -799,7 +721,6 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             } else {
                 h.photo.setImageResource(R.drawable.wine);
             }
-
             h.itemView.setOnClickListener(v -> {
                 h.name.setSelected(false);
                 listener.onClick(p);
@@ -818,7 +739,6 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         static class VH extends RecyclerView.ViewHolder {
             ImageView photo;
             TextView name, clazz;
-
             VH(View v) {
                 super(v);
                 photo = v.findViewById(R.id.playerPhotoImageView);
