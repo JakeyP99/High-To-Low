@@ -8,7 +8,7 @@ import com.example.countingdowngame.wildCards.WildCardProperties;
 
 public class MainActivityLogging {
 
-    protected static void logPlayerInformation(Player currentPlayer) {
+    public static void logPlayerInformation(Player currentPlayer) {
         Log.d("renderPlayer", "Current number is " + Game.getInstance().getCurrentNumber() +
                 " - Player was rendered " + currentPlayer.getName() +
                 " is a " + currentPlayer.getClassChoice() +

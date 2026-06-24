@@ -62,6 +62,16 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         activity = activityInstance;
     }
 
+
+    private static void hideAbilityButton() {
+        if (activity != null) {
+            View btnClassAbility = activity.findViewById(R.id.btnClassAbility);
+            if (btnClassAbility != null) {
+                btnClassAbility.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
     public static void handleScientistClass() {
         LayoutInflater inflater = activity.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.game_scientist_change_number, null);
@@ -91,6 +101,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                     MainActivityGame.updateNumber(newNumber);
                     AudioManager.getInstance().playSoundEffects(activity, SCIENTIST);
                     dialog.dismiss(); // Close the dialog on success
+                    hideAbilityButton();
                 }
             } catch (NumberFormatException e) {
                 activity.displayToastMessage("Invalid number input");
@@ -109,11 +120,13 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 repeatedTurn = true;
                 activity.updateDrinkNumberCounter(4, true);
                 AudioManager.getInstance().playSoundEffects(activity, SOLDIER);
+                hideAbilityButton();
             } else {
                 activity.displayToastMessage("The +4 ability can only be activated when the number is below 10.");
             }
         } else {
             activity.displayToastMessage("Cannot activate on the first turn.");
+
         }
     }
 
@@ -121,6 +134,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         currentPlayer.setUsedActiveAbility(true);
         currentPlayer.setJustUsedActiveAbility(true);
         AudioManager.getInstance().playSoundEffects(activity, QUIZ_MAGICIAN);
+        hideAbilityButton();
     }
 
     public static void handleGoblinClass(Player currentPlayer) {
@@ -152,6 +166,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         currentPlayer.setUsedActiveAbility(true);
         activity.renderPlayerUI(true);
         AudioManager.getInstance().playSoundEffects(activity, GOBLIN);
+        hideAbilityButton();
     }
 
     public static void handleAngryJimClass(Player currentPlayer) {
@@ -160,6 +175,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         activity.showClassAbilityDialog(ANGRY_JIM + "'s Active: \n\n" + randomPlayer.getName() + " must repeat their turn.");
         currentPlayer.setUsedActiveAbility(true);
         AudioManager.getInstance().playSoundEffects(activity, ANGRY_JIM);
+        hideAbilityButton();
     }
 
     public static void handleSurvivorClass(Player currentPlayer) {
@@ -167,6 +183,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             activity.halveCurrentNumber();
             currentPlayer.setUsedActiveAbility(true);
             AudioManager.getInstance().playSoundEffects(activity, SURVIVOR);
+            hideAbilityButton();
         }
     }
 
@@ -176,6 +193,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             currentPlayer.setUsedActiveAbility(true);
             activity.updateDrinkNumberCounter(-2, true);
             AudioManager.getInstance().playSoundEffects(activity, ARCHER);
+            hideAbilityButton();
         }
     }
 
@@ -200,6 +218,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         if (targets.isEmpty()) return;
 
         showTrollRiddleDialog(currentPlayer, targets);
+        hideAbilityButton();
     }
 
     private static void showTrollRiddleDialog(Player currentPlayer, List<Player> targets) {
@@ -353,64 +372,6 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         dialog.show();
     }
 
-    public static class OpponentAdapter extends RecyclerView.Adapter<OpponentAdapter.VH> {
-        private final List<Player> opponents;
-        private final OnClick listener;
-
-        public OpponentAdapter(List<Player> opponents, OnClick listener) {
-            this.opponents = opponents;
-            this.listener = listener;
-        }
-
-        @NonNull
-        @Override
-        public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.game_gambler_player_choice_adaptor, parent, false);
-            return new VH(v);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull VH h, int position) {
-            Player p = opponents.get(position);
-            h.name.setText(p.getName());
-            h.name.postDelayed(() -> h.name.setSelected(true), 1000);
-            h.clazz.setText(p.getClassChoice());
-            if (p.getPhoto() != null && !p.getPhoto().isEmpty()) {
-                byte[] decoded = Base64.decode(p.getPhoto(), Base64.DEFAULT);
-                Bitmap bmp = BitmapFactory.decodeByteArray(decoded, 0, decoded.length);
-                h.photo.setImageBitmap(bmp);
-            } else {
-                h.photo.setImageResource(R.drawable.wine);
-            }
-            h.itemView.setOnClickListener(v -> {
-                h.name.setSelected(false);
-                listener.onClick(p);
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return opponents.size();
-        }
-
-        public interface OnClick {
-            void onClick(Player player);
-        }
-
-        static class VH extends RecyclerView.ViewHolder {
-            ImageView photo;
-            TextView name, clazz;
-
-            VH(View v) {
-                super(v);
-                photo = v.findViewById(R.id.playerPhotoImageView);
-                name = v.findViewById(R.id.playerNameTextView);
-                clazz = v.findViewById(R.id.playerClassTextView);
-            }
-        }
-    }
-
-
     private static void showBetDialog(Player opponent) {
         LayoutInflater inflater = activity.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.game_gambler_duel_bet, null);
@@ -434,6 +395,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 if (bet < 1 || bet > 5) {
                     activity.displayToastMessage("Bet must be between 1 and 5!");
                 } else {
+                    hideAbilityButton();
                     dialog.dismiss();
                     showHighCardDuelUI(opponent, bet);
                 }
@@ -565,7 +527,10 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         } else {
             handleWitchMemoryGame(currentPlayer);
         }
+        hideAbilityButton();
     }
+
+    //-----------------------------------------------------Witch---------------------------------------------------//
 
     private static void handleWitchMathGame(Player currentPlayer) {
         Random random = new Random();
@@ -619,9 +584,10 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         AudioManager.getInstance().playSoundEffects(activity, WITCH);
     }
 
-    //-----------------------------------------------------Witch---------------------------------------------------//
+    //-----------------------------------------------------Witch Math---------------------------------------------------//
 
     private static void handleWitchMemoryGame(Player currentPlayer) {
+        currentPlayer.setUsedActiveAbility(true);
         View dialogView = createMemoryDialog();
         TextView statusTv = dialogView.findViewById(R.id.memory_status);
         TextView timerTv = dialogView.findViewById(R.id.memory_timer);
@@ -645,6 +611,8 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
         });
     }
+
+    //-----------------------------------------------------Witch Memory---------------------------------------------------//
 
     private static View createMemoryDialog() {
         LayoutInflater inflater = activity.getLayoutInflater();
@@ -670,9 +638,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         return sequence;
     }
 
-    ;
-
-    private static CountDownTimer startMemoryTimer(AlertDialog dialog, TextView timerTv, Player player, int[] score) {
+    private static CountDownTimer startMemoryTimer(AlertDialog dialog, TextView timerTv, Player currentPlayer, int[] score) {
         return new CountDownTimer(300000, 1000) {
 
             @Override
@@ -683,27 +649,26 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             @Override
             public void onFinish() {
                 dialog.dismiss();
-                processMemoryResult(player, score[0]);
+                processMemoryResult(currentPlayer, score[0]);
             }
 
         };
     }
 
-    private static void processMemoryResult(Player player, int score) {
-        player.setUsedActiveAbility(true);
+    private static void processMemoryResult(Player currentPlayer, int score) {
         String description;
         if (score < 2) {
-            description = "Failed! The potion turned into sludge (Score: " + score + ").\n\n" + player.getName() + " take 2 drinks!";
-            player.incrementDrinksTakenByWitch(2);
+            description = "Failed! The potion turned into sludge (Score: " + score + ").\n\n" + currentPlayer.getName() + " take 2 drinks!";
+            currentPlayer.incrementDrinksTakenByWitch(2);
         } else if (score <= 4) {
-            description = "Weak Potion (Score: " + score + ")!\n\n" + player.getName() + " hand out 1 drink.";
-            player.incrementDrinksHandedOutByWitch(1);
+            description = "Weak Potion (Score: " + score + ")!\n\n" + currentPlayer.getName() + " hand out 1 drink.";
+            currentPlayer.incrementDrinksHandedOutByWitch(1);
         } else if (score <= 6) {
-            description = "Strong Potion (Score: " + score + ")!\n\n" + player.getName() + " hand out 3 drinks!";
-            player.incrementDrinksHandedOutByWitch(3);
+            description = "Strong Potion (Score: " + score + ")!\n\n" + currentPlayer.getName() + " hand out 3 drinks!";
+            currentPlayer.incrementDrinksHandedOutByWitch(3);
         } else {
-            description = "GODLIKE BREW! (Score: " + score + ")!\n\n" + player.getName() + " is immune to landing on 0 once!";
-            PowerUps.gainPowerUp(player, PowerUps.GET_OUT_OF_JAIL + ": Immune to landing on 0 once!");
+            description = "GODLIKE BREW! (Score: " + score + ")!\n\n" + currentPlayer.getName() + " is immune to landing on 0 once!";
+            PowerUps.gainPowerUp(currentPlayer, PowerUps.GET_OUT_OF_JAIL + ": Immune to landing on 0 once!");
         }
         activity.showClassDialog("Witch's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
     }
@@ -760,5 +725,66 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             }
         }, 1000);
     }
+
+    //-----------------------------------------------------Gambler---------------------------------------------------//
+
+
+    public static class OpponentAdapter extends RecyclerView.Adapter<OpponentAdapter.VH> {
+        private final List<Player> opponents;
+        private final OnClick listener;
+
+        public OpponentAdapter(List<Player> opponents, OnClick listener) {
+            this.opponents = opponents;
+            this.listener = listener;
+        }
+
+        @NonNull
+        @Override
+        public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.game_gambler_player_choice_adaptor, parent, false);
+            return new VH(v);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull VH h, int position) {
+            Player p = opponents.get(position);
+            h.name.setText(p.getName());
+            h.name.postDelayed(() -> h.name.setSelected(true), 1000);
+            h.clazz.setText(p.getClassChoice());
+            if (p.getPhoto() != null && !p.getPhoto().isEmpty()) {
+                byte[] decoded = Base64.decode(p.getPhoto(), Base64.DEFAULT);
+                Bitmap bmp = BitmapFactory.decodeByteArray(decoded, 0, decoded.length);
+                h.photo.setImageBitmap(bmp);
+            } else {
+                h.photo.setImageResource(R.drawable.wine);
+            }
+            h.itemView.setOnClickListener(v -> {
+                h.name.setSelected(false);
+                listener.onClick(p);
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return opponents.size();
+        }
+
+        public interface OnClick {
+            void onClick(Player player);
+        }
+
+        static class VH extends RecyclerView.ViewHolder {
+            ImageView photo;
+            TextView name, clazz;
+
+            VH(View v) {
+                super(v);
+                photo = v.findViewById(R.id.playerPhotoImageView);
+                name = v.findViewById(R.id.playerNameTextView);
+                clazz = v.findViewById(R.id.playerClassTextView);
+            }
+        }
+    }
+
 
 }
