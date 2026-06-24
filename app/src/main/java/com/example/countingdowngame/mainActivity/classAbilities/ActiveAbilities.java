@@ -525,7 +525,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         if (random.nextBoolean()) {
             handleWitchMathGame(currentPlayer);
         } else {
-            handleWitchMemoryGame(currentPlayer);
+            handleWitchMathGame(currentPlayer);
         }
         hideAbilityButton();
     }
@@ -533,9 +533,12 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     //-----------------------------------------------------Witch---------------------------------------------------//
 
     private static void handleWitchMathGame(Player currentPlayer) {
+        currentPlayer.setUsedActiveAbility(true);
+
         Random random = new Random();
-        int num1 = random.nextInt(900) + 100; // 3-digit
-        int num2 = random.nextInt(900) + 100; // 3-digit
+
+        int num1 = random.nextInt(90) + 10;
+        int num2 = random.nextInt(90) + 10;
         int correctAnswer = num1 * num2;
 
         LayoutInflater inflater = activity.getLayoutInflater();
@@ -544,46 +547,59 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         TextView mathProblemTv = dialogView.findViewById(R.id.math_problem);
         TextView timerTv = dialogView.findViewById(R.id.timer_text);
         EditText answerEt = dialogView.findViewById(R.id.math_answer);
-        Button submitBtn = dialogView.findViewById(R.id.btn_submit_potion);
+        Button actionBtn = dialogView.findViewById(R.id.btn_submit_start);
 
         mathProblemTv.setText(num1 + " x " + num2);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
-        builder.setView(dialogView);
-        builder.setCancelable(false);
-        AlertDialog dialog = builder.create();
+        AlertDialog dialog = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme).setView(dialogView).setCancelable(false).create();
 
-        CountDownTimer timer = new CountDownTimer(15000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                timerTv.setText((millisUntilFinished / 1000) + "s");
+        final boolean[] started = {false};
+        final CountDownTimer[] timer = new CountDownTimer[1];
+
+        activity.btnUtils.setButton(actionBtn, () -> {
+
+            if (!started[0]) {
+
+                started[0] = true;
+                actionBtn.setText("Submit");
+                startMiniGame = true;
+
+                timer[0] = new CountDownTimer(15000, 1000) {
+
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        timerTv.setText((millisUntilFinished / 1000) + "s");
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        dialog.dismiss();
+                        processPotionResult(currentPlayer, -1, correctAnswer);
+                    }
+
+                }.start();
+                AudioManager.getInstance().playSoundEffects(activity, WITCH);
+                return;
             }
 
-            @Override
-            public void onFinish() {
-                dialog.dismiss();
-                processPotionResult(currentPlayer, -1, correctAnswer);
-            }
-        }.start();
-
-        activity.btnUtils.setButton(submitBtn, () -> {
             String input = answerEt.getText().toString();
+
             if (input.isEmpty()) {
                 return;
             }
+
             try {
                 int userAnswer = Integer.parseInt(input);
-                timer.cancel();
+                if (timer[0] != null) {
+                    timer[0].cancel();
+                }
                 dialog.dismiss();
                 processPotionResult(currentPlayer, userAnswer, correctAnswer);
             } catch (NumberFormatException ignored) {
             }
         });
-
         dialog.show();
-        AudioManager.getInstance().playSoundEffects(activity, WITCH);
     }
-
     //-----------------------------------------------------Witch Math---------------------------------------------------//
 
     private static void handleWitchMemoryGame(Player currentPlayer) {

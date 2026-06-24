@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/viga"
         android:layout_marginTop="10dp"
-        android:text="653 x 593"
+        android:text="XX x XX"
         android:textColor="@color/bluedark"
         android:textSize="36sp"
         android:layout_marginBottom="8dp"/>
@@ -61,13 +61,13 @@
         android:textSize="24sp" />
 
     <Button
-        android:id="@+id/btn_submit_potion"
+        android:id="@+id/btn_submit_start"
         android:layout_width="200dp"
         android:layout_height="60dp"
         android:layout_marginTop="24dp"
         android:background="@drawable/outlineforbutton"
         android:fontFamily="@font/viga"
-        android:text="THROW POTION"
+        android:text="Start"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
         android:textSize="18sp" />
