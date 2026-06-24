@@ -226,6 +226,40 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     //-----------------------------------------------------Troll---------------------------------------------------//
 
     private static void showTrollRiddleDialog(Player currentPlayer, List<Player> targets) {
+        String[] riddle = getRandomRiddle();
+        View dialogView = inflateTrollDialog();
+
+        // Step 1 UI
+        View step1 = dialogView.findViewById(R.id.step1_container);
+        TextView targetsTv = dialogView.findViewById(R.id.troll_targets);
+        TextView riddleTv = dialogView.findViewById(R.id.troll_riddle_text);
+        Button btnReveal = dialogView.findViewById(R.id.btn_reveal_answer);
+
+        // Step 2 UI
+        View step2 = dialogView.findViewById(R.id.step2_container);
+        TextView answerTv = dialogView.findViewById(R.id.troll_answer_text);
+        Button btnPlayer1Correct = dialogView.findViewById(R.id.btn_player1_correct);
+        Button btnPlayer2Correct = dialogView.findViewById(R.id.btn_player2_correct);
+        Button btnBothWrong = dialogView.findViewById(R.id.btn_both_wrong);
+
+        setupTrollDialogInitialState(targets, riddle, targetsTv, riddleTv, answerTv, btnPlayer1Correct, btnPlayer2Correct, btnBothWrong);
+
+        AlertDialog dialog = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme)
+                .setView(dialogView)
+                .setCancelable(false)
+                .create();
+
+        activity.btnUtils.setButton(btnReveal, () -> {
+            step1.setVisibility(GONE);
+            step2.setVisibility(VISIBLE);
+        });
+
+        setupTrollResultButtons(dialog, currentPlayer, targets, btnPlayer1Correct, btnPlayer2Correct, btnBothWrong);
+
+        dialog.show();
+    }
+
+    private static String[] getRandomRiddle() {
         String[][] riddlePool = {
                 {"I speak without a mouth and hear without ears. I have no body, but I come alive with wind. What am I?", "Echo"},
                 {"You measure my life in hours and I serve you by expiring. I'm quick when I'm thin and slow when I'm fat. The wind is my enemy.", "Candle"},
@@ -234,78 +268,54 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 {"You see a boat filled with people. It has not sunk, but when you look again you don’t see a single person on the boat. Why?", "All were married"},
                 {"What has keys, but no locks; space, but no room; and you can enter, but never leave?", "Keyboard"},
                 {"I have branches, but no fruit, trunk or leaves. What am I?", "Bank"},
-                {"What can travel around the world while staying in a corner?", "Stamp"}, {"What has a neck but no head?", "Bottle"},
+                {"What can travel around the world while staying in a corner?", "Stamp"},
+                {"What has a neck but no head?", "Bottle"},
                 {"The more of this there is, the less you see. What is it?", "Darkness"}};
+        return riddlePool[new Random().nextInt(riddlePool.length)];
+    }
 
-        int rIndex = new Random().nextInt(riddlePool.length);
-        String riddleText = riddlePool[rIndex][0];
-        String answerText = riddlePool[rIndex][1];
+    private static View inflateTrollDialog() {
+        return activity.getLayoutInflater().inflate(R.layout.game_troll_active_riddle, null);
+    }
 
-        LayoutInflater inflater = activity.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.game_troll_active_riddle, null);
+    private static void setupTrollDialogInitialState(List<Player> targets, String[] riddle, TextView targetsTv, TextView riddleTv, TextView answerTv, Button btnP1, Button btnP2, Button btnNone) {
+        riddleTv.setText(riddle[0]);
+        answerTv.setText(riddle[1]);
 
-        // Step 1 UI (Riddle)
-        View step1 = dialogView.findViewById(R.id.step1_container);
-        TextView targetsTv = dialogView.findViewById(R.id.troll_targets);
-        TextView riddleTv = dialogView.findViewById(R.id.troll_riddle_text);
-        Button btnReveal = dialogView.findViewById(R.id.btn_reveal_answer);
-
-        // Step 2 UI (Result)
-        View step2 = dialogView.findViewById(R.id.step2_container);
-        TextView answerTv = dialogView.findViewById(R.id.troll_answer_text);
-        Button btnTarget1 = dialogView.findViewById(R.id.btn_target1_safe);
-        Button btnTarget2 = dialogView.findViewById(R.id.btn_target2_safe);
-        Button btnNoOne = dialogView.findViewById(R.id.btn_troll_noone);
-
-        // Initial Setup
-        riddleTv.setText(riddleText);
-        answerTv.setText(answerText);
         String targetNames = targets.size() == 1 ? targets.get(0).getName() : targets.get(0).getName() + " & " + targets.get(1).getName();
         targetsTv.setText("This riddle is for: " + targetNames);
-        btnTarget1.setText(targets.get(0).getName());
+
+        btnP1.setText(targets.get(0).getName());
+        btnP1.setSelected(true);
+
         if (targets.size() > 1) {
-            btnTarget2.setText(targets.get(1).getName());
+            btnP2.setText(targets.get(1).getName());
+            btnP2.setSelected(true);
         } else {
-            btnTarget2.setVisibility(GONE);
-            btnNoOne.setText("Wrong! (Drink 4)");
+            btnP2.setVisibility(GONE);
+            btnNone.setText("Wrong! (Drink 4)");
         }
+    }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
-        builder.setView(dialogView);
-        builder.setCancelable(false);
-        AlertDialog dialog = builder.create();
-
-        // Step 1 -> Step 2
-        activity.btnUtils.setButton(btnReveal, () -> {
-            step1.setVisibility(GONE);
-            step2.setVisibility(VISIBLE);
-        });
-
-        // Final Actions
-        activity.btnUtils.setButton(btnTarget1, () -> {
+    private static void setupTrollResultButtons(AlertDialog dialog, Player currentPlayer, List<Player> targets, Button btnP1, Button btnP2, Button btnNone) {
+        activity.btnUtils.setButton(btnP1, () -> {
             dialog.dismiss();
             finalizeTrollResult(currentPlayer, targets.get(0), targets.size() > 1 ? targets.get(1) : null);
         });
 
-        activity.btnUtils.setButton(btnTarget2, () -> {
+        activity.btnUtils.setButton(btnP2, () -> {
             dialog.dismiss();
             finalizeTrollResult(currentPlayer, targets.get(1), targets.get(0));
         });
 
-        activity.btnUtils.setButton(btnNoOne, () -> {
-            String description;
+        activity.btnUtils.setButton(btnNone, () -> {
             dialog.dismiss();
             currentPlayer.setUsedActiveAbility(true);
-            if (targets.size() == 1) {
-                description = targets.get(0).getName() + " failed! Take 4 drinks.";
-                activity.showClassDialog("Troll's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
-            } else {
-                description = "Both failed! " + targets.get(0).getName() + " and " + targets.get(1).getName() + " take 4 drinks.";
-                activity.showClassDialog("Troll's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
-            }
+            String description = targets.size() == 1
+                    ? targets.get(0).getName() + " failed! Take 4 drinks."
+                    : "Both failed! " + targets.get(0).getName() + " and " + targets.get(1).getName() + " take 4 drinks.";
+            activity.showClassDialog("Troll's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
         });
-
-        dialog.show();
     }
 
     private static void finalizeTrollResult(Player troll, Player winner, Player loser) {

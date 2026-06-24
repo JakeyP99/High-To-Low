@@ -2,14 +2,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="20dp">
 
     <EditText
         android:id="@+id/nameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/viga"
-        android:paddingTop="10sp"
+        android:padding="10sp"
         android:hint="Enter a Name"
         android:textColorHint="@color/bluedark"
         android:textColor="@color/bluedark"
