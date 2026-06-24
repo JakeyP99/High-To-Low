@@ -249,9 +249,24 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 .setCancelable(false)
                 .create();
 
+        dialog.setOnShowListener(d -> {
+            targetsTv.setSelected(true);
+            targetsTv.requestFocus();
+        });
+
         activity.btnUtils.setButton(btnReveal, () -> {
             step1.setVisibility(GONE);
             step2.setVisibility(VISIBLE);
+            btnPlayer1Correct.postDelayed(() -> {
+                btnPlayer1Correct.setSelected(true);
+                btnPlayer1Correct.requestFocus();
+            }, 100);
+            if (targets.size() > 1) {
+                btnPlayer2Correct.postDelayed(() -> {
+                    btnPlayer2Correct.setSelected(true);
+                    btnPlayer2Correct.requestFocus();
+                }, 100);
+            }
         });
 
         setupTrollResultButtons(dialog, currentPlayer, targets, btnPlayer1Correct, btnPlayer2Correct, btnBothWrong);
@@ -284,14 +299,11 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
         String targetNames = targets.size() == 1 ? targets.get(0).getName() : targets.get(0).getName() + " & " + targets.get(1).getName();
         targetsTv.setText("This riddle is for: " + targetNames);
-        targetsTv.postDelayed(() -> targetsTv.setSelected(true), 1000);
 
         btnP1.setText(targets.get(0).getName());
-        btnP1.postDelayed(() -> btnP1.setSelected(true), 1000);
 
         if (targets.size() > 1) {
             btnP2.setText(targets.get(1).getName());
-            btnP2.postDelayed(() -> btnP2.setSelected(true), 1000);
         } else {
             btnP2.setVisibility(GONE);
             btnNone.setText("Wrong! (Drink 4)");
