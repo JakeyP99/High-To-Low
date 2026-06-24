@@ -23,6 +23,7 @@ import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Path;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Base64;
@@ -353,14 +354,19 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
     public static void handleWitchClass(Player currentPlayer) {
         Random random = new Random();
-        if (random.nextBoolean()) {
-            handleWitchMathGame(currentPlayer);
+        int gameChoice = random.nextInt(3);
+
+        if (gameChoice == 0) {
+            handleWitchRuneGame(currentPlayer);
+        } else if (gameChoice == 1) {
+            handleWitchRuneGame(currentPlayer);
         } else {
-            handleWitchMemoryGame(currentPlayer);
+            handleWitchRuneGame(currentPlayer);
         }
-        AudioManager.getInstance().playSoundEffects(activity, WITCH);
+
         hideAbilityButton();
     }
+
     //-----------------------------------------------------Witch Math---------------------------------------------------//
 
     private static void handleWitchMathGame(Player currentPlayer) {
@@ -488,8 +494,128 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     }
 
 
-    //-----------------------------------------------------Witch Memory---------------------------------------------------//
+    //-----------------------------------------------------Witch Rune Game---------------------------------------------------//
 
+    private static void handleWitchRuneGame(Player currentPlayer) {
+        currentPlayer.setUsedActiveAbility(true);
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.game_witch_potion_rune, null);
+
+        RuneTracingView runeView = dialogView.findViewById(R.id.rune_tracing_view);
+        Button actionBtn = dialogView.findViewById(R.id.btn_action);
+        TextView statusTv = dialogView.findViewById(R.id.rune_status);
+
+        // Initial State: Study the rune
+        Path targetRune = generateRandomRune();
+        runeView.setRune(targetRune);
+        runeView.setDrawingEnabled(false);
+        actionBtn.setText("Start");
+        statusTv.setText("Study the magical rune!");
+
+        AlertDialog dialog = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme)
+                .setView(dialogView)
+                .setCancelable(false)
+                .create();
+
+        final boolean[] canSubmit = {false};
+
+        activity.btnUtils.setButton(actionBtn, () -> {
+            if (!canSubmit[0]) {
+                // Phase 1: Memorize & Trace (Rune visible for 8s)
+                actionBtn.setEnabled(false);
+                actionBtn.setAlpha(0.5f);
+                actionBtn.setText("Watch");
+                runeView.setDrawingEnabled(true);
+                statusTv.setText("Memorize and trace!");
+                AudioManager.getInstance().playSoundEffects(activity, WITCH);
+
+                new Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                    if (dialog.isShowing()) {
+                        // Phase 2: Finish from memory (Rune hidden)
+                        canSubmit[0] = true;
+                        runeView.hideTargetRune();
+                        actionBtn.setEnabled(true);
+                        actionBtn.setAlpha(1.0f);
+                        actionBtn.setText("Cast Spell");
+                        statusTv.setText("Finish from memory!");
+                    }
+                }, 8000);
+            } else {
+                // Phase 3: Submission
+                float similarity = runeView.calculateSimilarity();
+                dialog.dismiss();
+                processRuneResult(currentPlayer, similarity);
+            }
+        });
+
+        dialog.show();
+    }
+
+    private static Path generateRandomRune() {
+        Path path = new Path();
+        Random r = new Random();
+        int type = r.nextInt(4);
+
+        // Internal coordinate system: 300x300. Center is (150, 150).
+        if (type == 0) { // Detailed 5-Point Star
+            path.moveTo(150, 30);
+            path.lineTo(185, 120);
+            path.lineTo(280, 120);
+            path.lineTo(205, 185);
+            path.lineTo(235, 280);
+            path.lineTo(150, 220);
+            path.lineTo(65, 280);
+            path.lineTo(95, 185);
+            path.lineTo(20, 120);
+            path.lineTo(115, 120);
+            path.close();
+        } else if (type == 1) { // Magical Spiral (Witchy swirl)
+            for (int i = 0; i < 360 * 4; i++) {
+                double angle = 0.1 * i;
+                float x = (float) (150 + (2 + 0.08 * i) * Math.cos(angle));
+                float y = (float) (150 + (2 + 0.08 * i) * Math.sin(angle));
+                if (i == 0) path.moveTo(x, y);
+                else path.lineTo(x, y);
+            }
+        } else if (type == 2) { // Infinity Knot
+            for (int i = 0; i < 360; i++) {
+                double t = Math.toRadians(i);
+                float x = (float) (150 + 120 * Math.cos(t) / (1 + Math.pow(Math.sin(t), 2)));
+                float y = (float) (150 + 120 * Math.sin(t) * Math.cos(t) / (1 + Math.pow(Math.sin(t), 2)));
+                if (i == 0) path.moveTo(x, y);
+                else path.lineTo(x, y);
+            }
+            path.close();
+        } else { // The Pentagram (Classic magical protection)
+            path.moveTo(150, 20);
+            path.lineTo(240, 280);
+            path.lineTo(30, 110);
+            path.lineTo(270, 110);
+            path.lineTo(60, 280);
+            path.close();
+        }
+        return path;
+    }
+
+    private static void processRuneResult(Player player, float similarity) {
+        String description;
+        if (similarity >= 95) {
+            description = "Perfect Cast (" + String.format("%.1f", similarity) + "%)! \n\n" + player.getName() + " is now immune to landing on 0 once!";
+            PowerUps.gainPowerUp(player, PowerUps.GET_OUT_OF_JAIL + ": Immune to landing on 0 once!");
+        } else if (similarity >= 80) {
+            description = "Strong Spell (" + String.format("%.1f", similarity) + "%)! \n\n" + player.getName() + " hand out 3 drinks!";
+            player.incrementDrinksHandedOutByWitch(3);
+        } else if (similarity >= 60) {
+            description = "Weak Spell (" + String.format("%.1f", similarity) + "%)! \n\n" + player.getName() + " hand out 1 drink.";
+            player.incrementDrinksHandedOutByWitch(1);
+        } else {
+            description = "Fumbled the Spell (" + String.format("%.1f", similarity) + "%)! \n\n" + player.getName() + " take 2 drinks!";
+            player.incrementDrinksTakenByWitch(2);
+        }
+        activity.showClassDialog("Witch's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
+    }
+
+    //-----------------------------------------------------Witch Memory---------------------------------------------------//
 
     private static void handleWitchMemoryGame(Player currentPlayer) {
         currentPlayer.setUsedActiveAbility(true);
