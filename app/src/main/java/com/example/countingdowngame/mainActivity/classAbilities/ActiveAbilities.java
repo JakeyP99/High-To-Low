@@ -284,13 +284,14 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
         String targetNames = targets.size() == 1 ? targets.get(0).getName() : targets.get(0).getName() + " & " + targets.get(1).getName();
         targetsTv.setText("This riddle is for: " + targetNames);
+        targetsTv.postDelayed(() -> targetsTv.setSelected(true), 1000);
 
         btnP1.setText(targets.get(0).getName());
-        btnP1.setSelected(true);
+        btnP1.postDelayed(() -> btnP1.setSelected(true), 1000);
 
         if (targets.size() > 1) {
             btnP2.setText(targets.get(1).getName());
-            btnP2.setSelected(true);
+            btnP2.postDelayed(() -> btnP2.setSelected(true), 1000);
         } else {
             btnP2.setVisibility(GONE);
             btnNone.setText("Wrong! (Drink 4)");
