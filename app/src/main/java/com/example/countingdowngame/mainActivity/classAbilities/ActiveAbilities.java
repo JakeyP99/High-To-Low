@@ -1,6 +1,7 @@
 package com.example.countingdowngame.mainActivity.classAbilities;
 
 import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static com.example.countingdowngame.R.id.editCurrentNumberTextView;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ARCHER;
@@ -31,6 +32,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -265,7 +267,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         // Step 1 -> Step 2
         activity.btnUtils.setButton(btnReveal, () -> {
             step1.setVisibility(GONE);
-            step2.setVisibility(View.VISIBLE);
+            step2.setVisibility(VISIBLE);
         });
 
         // Final Actions
@@ -306,36 +308,6 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         view.animate().alpha(1.0f).setDuration(200).withEndAction(() -> view.animate().alpha(0.4f).setDuration(200).start()).start();
     }
 
-
-    private static void processPotionResult(Player player, int userAnswer, int correctAnswer) {
-        player.setUsedActiveAbility(true);
-
-        if (userAnswer == -1) {
-            activity.showGameDialog("Time's up! The potion exploded. \n\n" + player.getName() + " take 2 drinks!");
-            player.incrementDrinksTakenByWitch(2);
-            return;
-        }
-
-        if (userAnswer == correctAnswer) {
-            activity.showGameDialog("PERFECT! \n\n" + player.getName() + " is now immune to landing on 0 once!");
-            PowerUps.gainPowerUp(player, PowerUps.GET_OUT_OF_JAIL + ": Immune to landing on 0 once!");
-            return;
-        }
-
-        int difference = Math.abs(userAnswer - correctAnswer);
-        double percentageOff = ((double) difference / correctAnswer) * 100;
-
-        if (percentageOff <= 5) {
-            activity.showGameDialog("Close enough (Within 5%)! Correct was " + correctAnswer + ".\n\n" + player.getName() + " hand out 3 drinks!");
-            player.incrementDrinksHandedOutByWitch(3);
-        } else if (percentageOff <= 10) {
-            activity.showGameDialog("Not bad (Within 10%)! Correct was " + correctAnswer + ".\n\n" + player.getName() + " hand out 1 drink!");
-            player.incrementDrinksHandedOutByWitch(1);
-        } else {
-            activity.showGameDialog("Way off! Correct was " + correctAnswer + ".\n\n" + player.getName() + " take 2 drinks!");
-            player.incrementDrinksTakenByWitch(2);
-        }
-    }
 
     public static void handleGamblerClass() {
 
@@ -476,13 +448,13 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 cardText.setVisibility(GONE);
                 if (value == 12) {
                     cardImage.setImageResource(R.drawable.queen);
-                    cardImage.setVisibility(View.VISIBLE);
+                    cardImage.setVisibility(VISIBLE);
                 } else if (value == 13) {
                     cardImage.setImageResource(R.drawable.king);
-                    cardImage.setVisibility(View.VISIBLE);
+                    cardImage.setVisibility(VISIBLE);
                 } else {
                     cardText.setText(getCardName(value));
-                    cardText.setVisibility(View.VISIBLE);
+                    cardText.setVisibility(VISIBLE);
                 }
                 container.setBackgroundResource(R.drawable.duel_card_front);
                 oa2.start();
@@ -507,8 +479,8 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 msg = opponent.getName() + " wins! " + gambler.getName() + " takes " + bet + " drinks.";
             }
             resultTv.setText(msg);
-            resultTv.setVisibility(View.VISIBLE);
-            finishBtn.setVisibility(View.VISIBLE);
+            resultTv.setVisibility(VISIBLE);
+            finishBtn.setVisibility(VISIBLE);
         }
     }
 
@@ -520,87 +492,150 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         return "A";
     }
 
+
+
+    //-----------------------------------------------------Witch---------------------------------------------------//
+
     public static void handleWitchClass(Player currentPlayer) {
         Random random = new Random();
         if (random.nextBoolean()) {
             handleWitchMathGame(currentPlayer);
         } else {
-            handleWitchMathGame(currentPlayer);
+            handleWitchMemoryGame(currentPlayer);
         }
         hideAbilityButton();
     }
-
-    //-----------------------------------------------------Witch---------------------------------------------------//
+    //-----------------------------------------------------Witch Math---------------------------------------------------//
 
     private static void handleWitchMathGame(Player currentPlayer) {
         currentPlayer.setUsedActiveAbility(true);
 
-        Random random = new Random();
+        int[] problem = generateMathProblem();
+        int correctAnswer = problem[2];
 
-        int num1 = random.nextInt(90) + 10;
-        int num2 = random.nextInt(90) + 10;
-        int correctAnswer = num1 * num2;
-
-        LayoutInflater inflater = activity.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.game_witch_potion_math, null);
-
+        View dialogView = createMathDialog();
         TextView mathProblemTv = dialogView.findViewById(R.id.math_problem);
-        TextView timerTv = dialogView.findViewById(R.id.timer_text);
+        ProgressBar timerProgress = dialogView.findViewById(R.id.timer_progress);
         EditText answerEt = dialogView.findViewById(R.id.math_answer);
-        Button actionBtn = dialogView.findViewById(R.id.btn_submit_start);
+        Button actionBtn = dialogView.findViewById(R.id.btn_action);
 
-        mathProblemTv.setText(num1 + " x " + num2);
+        answerEt.setEnabled(false);
 
-        AlertDialog dialog = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme).setView(dialogView).setCancelable(false).create();
+        AlertDialog dialog = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme)
+                .setView(dialogView)
+                .setCancelable(false)
+                .create();
 
         final boolean[] started = {false};
         final CountDownTimer[] timer = new CountDownTimer[1];
 
         activity.btnUtils.setButton(actionBtn, () -> {
-
             if (!started[0]) {
-
-                started[0] = true;
-                actionBtn.setText("Submit");
-                startMiniGame = true;
-
-                timer[0] = new CountDownTimer(15000, 1000) {
-
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                        timerTv.setText((millisUntilFinished / 1000) + "s");
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        dialog.dismiss();
-                        processPotionResult(currentPlayer, -1, correctAnswer);
-                    }
-
-                }.start();
-                AudioManager.getInstance().playSoundEffects(activity, WITCH);
-                return;
-            }
-
-            String input = answerEt.getText().toString();
-
-            if (input.isEmpty()) {
-                return;
-            }
-
-            try {
-                int userAnswer = Integer.parseInt(input);
-                if (timer[0] != null) {
-                    timer[0].cancel();
-                }
-                dialog.dismiss();
-                processPotionResult(currentPlayer, userAnswer, correctAnswer);
-            } catch (NumberFormatException ignored) {
+                startWitchMathMiniGame(started, actionBtn, answerEt, mathProblemTv, problem, timerProgress, timer, dialog, currentPlayer);
+            } else {
+                handleMathAnswerSubmission(answerEt, timer, dialog, currentPlayer, correctAnswer);
             }
         });
+
         dialog.show();
     }
-    //-----------------------------------------------------Witch Math---------------------------------------------------//
+
+    private static int[] generateMathProblem() {
+        Random random = new Random();
+        int num1 = random.nextInt(90) + 10;
+        int num2 = random.nextInt(90) + 10;
+        return new int[]{num1, num2, num1 * num2};
+    }
+
+    private static View createMathDialog() {
+        LayoutInflater inflater = activity.getLayoutInflater();
+        return inflater.inflate(R.layout.game_witch_potion_math, null);
+    }
+
+    private static void startWitchMathMiniGame(boolean[] started, Button actionBtn, EditText answerEt, TextView mathProblemTv, int[] problem, ProgressBar timerProgress, CountDownTimer[] timer, AlertDialog dialog, Player currentPlayer) {
+        answerEt.setEnabled(true);
+        answerEt.requestFocus();
+        started[0] = true;
+        actionBtn.setText("Submit");
+        startMiniGame = true;
+
+        mathProblemTv.setText(problem[0] + " x " + problem[1] + " = ?");
+        timerProgress.setVisibility(VISIBLE);
+
+        timer[0] = new CountDownTimer(15000, 50) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timerProgress.setProgress((int) millisUntilFinished);
+            }
+
+            @Override
+            public void onFinish() {
+                timerProgress.setProgress(0);
+                dialog.dismiss();
+                processPotionResult(currentPlayer, -1, problem[2]);
+            }
+        }.start();
+
+        AudioManager.getInstance().playSoundEffects(activity, WITCH);
+    }
+
+    private static void handleMathAnswerSubmission(EditText answerEt, CountDownTimer[] timer, AlertDialog dialog, Player currentPlayer, int correctAnswer) {
+        String input = answerEt.getText().toString();
+        if (input.isEmpty()) return;
+
+        try {
+            int userAnswer = Integer.parseInt(input);
+            if (timer[0] != null) timer[0].cancel();
+            dialog.dismiss();
+            processPotionResult(currentPlayer, userAnswer, correctAnswer);
+        } catch (NumberFormatException ignored) {
+        }
+    }
+
+
+    private static void processPotionResult(Player player, int userAnswer, int correctAnswer) {
+        player.setUsedActiveAbility(true);
+        String description;
+
+        if (userAnswer == -1) {
+            description = "Time's up! The potion exploded. \n\n" + player.getName() + " take 2 drinks!";
+            activity.showClassDialog("Witch's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
+            player.incrementDrinksTakenByWitch(2);
+            return;
+        }
+
+        if (userAnswer == correctAnswer) {
+            description = "PERFECT! \n\n" + player.getName() + " is now immune to landing on 0 once!";
+            activity.showClassDialog("Witch's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
+            PowerUps.gainPowerUp(player, PowerUps.GET_OUT_OF_JAIL + ": Immune to landing on 0 once!");
+            return;
+        }
+
+        int difference = Math.abs(userAnswer - correctAnswer);
+        double percentageOff = ((double) difference / correctAnswer) * 100;
+
+        if (percentageOff <= 5) {
+            description = "Close enough (Within 5%)! Correct was " + correctAnswer + ".\n\n" + player.getName() + " hand out 3 drinks!";
+            player.incrementDrinksHandedOutByWitch(3);
+        } else if (percentageOff <= 10) {
+            description = "Not bad (Within 10%)! Correct was " + correctAnswer + ".\n\n" + player.getName() + " hand out 2 drinks!";
+            player.incrementDrinksHandedOutByWitch(1);
+        }
+        else if (percentageOff <= 20) {
+            description = "Not bad (Within 20%)! Correct was " + correctAnswer + ".\n\n" + player.getName() + " hand out 1 drink!";
+            player.incrementDrinksHandedOutByWitch(1);
+        }else {
+            description = "Way off! Correct was " + correctAnswer + ".\n\n" + player.getName() + " take 2 drinks!";
+            player.incrementDrinksTakenByWitch(2);
+        }
+        
+        activity.showClassDialog("Witch's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
+
+    }
+
+
+    //-----------------------------------------------------Witch Memory---------------------------------------------------//
+
 
     private static void handleWitchMemoryGame(Player currentPlayer) {
         currentPlayer.setUsedActiveAbility(true);
@@ -627,8 +662,6 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
         });
     }
-
-    //-----------------------------------------------------Witch Memory---------------------------------------------------//
 
     private static View createMemoryDialog() {
         LayoutInflater inflater = activity.getLayoutInflater();
