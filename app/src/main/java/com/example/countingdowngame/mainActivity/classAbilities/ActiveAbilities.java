@@ -358,9 +358,9 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         AudioManager.getInstance().playSoundEffects(activity, WITCH);
 
         if (gameChoice == 0) {
-            handleWitchRuneGame(currentPlayer);
+            handleWitchMathGame(currentPlayer);
         } else if (gameChoice == 1) {
-            handleWitchRuneGame(currentPlayer);
+            handleWitchMemoryGame(currentPlayer);
         } else {
             handleWitchRuneGame(currentPlayer);
         }
