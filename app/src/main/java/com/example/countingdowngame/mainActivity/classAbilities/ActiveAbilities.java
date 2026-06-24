@@ -358,6 +358,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         } else {
             handleWitchMemoryGame(currentPlayer);
         }
+        AudioManager.getInstance().playSoundEffects(activity, WITCH);
         hideAbilityButton();
     }
     //-----------------------------------------------------Witch Math---------------------------------------------------//
@@ -430,8 +431,6 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 processPotionResult(currentPlayer, -1, problem[2]);
             }
         }.start();
-
-        AudioManager.getInstance().playSoundEffects(activity, WITCH);
     }
 
     private static void handleMathAnswerSubmission(EditText answerEt, CountDownTimer[] timer, AlertDialog dialog, Player currentPlayer, int correctAnswer) {
@@ -513,8 +512,6 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             setupMemoryButtons(buttons, sequence, playerSequence, score, isPlayerTurn, statusTv, dialog, currentPlayer);
             startNextRound(sequence, playerSequence, buttons, statusTv, isPlayerTurn);
             timer.start();
-            AudioManager.getInstance().playSoundEffects(activity, WITCH);
-
         });
     }
 

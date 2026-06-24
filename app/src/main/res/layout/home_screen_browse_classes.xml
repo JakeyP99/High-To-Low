@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@drawable/rounded_background">
+
+    <!-- Header Section -->
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/classRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="480dp" />
+
+    <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+        android:id="@+id/dots_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        app:dotsColor="@color/bluedark"
+        app:dotsCornerRadius="8dp"
+        app:dotsSize="12dp"
+        app:dotsSpacing="4dp"
+        app:dotsWidthFactor="2.5"
+        app:selectedDotColor="@color/bluedark" />
+
+    <Button
+        android:id="@+id/btnClose"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/outlineforbutton"
+        android:fontFamily="@font/viga"
+        android:text="Close"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="22sp" />
+
+</LinearLayout>

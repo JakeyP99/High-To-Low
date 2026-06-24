@@ -1,21 +1,31 @@
 package com.example.countingdowngame.home;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.viewpager.widget.ViewPager;
+
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
+import com.example.countingdowngame.createPlayer.CharacterClassPagerAdapter;
+import com.example.countingdowngame.createPlayer.CharacterClassStore;
 import com.example.countingdowngame.game.Game;
+import com.example.countingdowngame.playerChoice.playerChoiceComplimentary;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.ButtonUtils;
-import com.example.countingdowngame.utils.ButtonUtilsActivity;
+import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.github.muddz.styleabletoast.StyleableToast;
 import pl.droidsonroids.gif.GifImageView;
 
-public class HomeScreen extends ButtonUtilsActivity {
+public class HomeScreen extends playerChoiceComplimentary {
 
     private GifImageView muteGif;
     private GifImageView soundGif;
@@ -53,9 +63,35 @@ public class HomeScreen extends ButtonUtilsActivity {
         setGameButton(R.id.quickplay, false);
         setGameButton(R.id.playCards, true);
 
-        buttonUtils.setButton(findViewById(R.id.btn_classes), this::gotoInstructions);
+        buttonUtils.setButton(findViewById(R.id.btn_classes), this::browseClasses);
         buttonUtils.setButton(findViewById(R.id.button_Statistics), this::gotoStatistics);
         buttonUtils.setButton(infoGif, this::gotoInstructions);
+    }
+
+    private void browseClasses() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
+        LayoutInflater inflater = getLayoutInflater();
+
+        View dialogView = inflater.inflate(R.layout.home_screen_browse_classes, null);
+        Button btnClose = dialogView.findViewById(R.id.btnClose);
+
+        List<CharacterClassStore> characterClasses = generateCharacterClasses();
+
+        List<List<CharacterClassStore>> pages = new ArrayList<>();
+        for (int i = 0; i < characterClasses.size(); i++) {
+            pages.add(characterClasses.subList(i, i + 1));
+        }
+
+        ViewPager viewPager = dialogView.findViewById(R.id.classRecyclerView);
+        DotsIndicator dotsIndicator = dialogView.findViewById(R.id.dots_indicator);
+
+        CharacterClassPagerAdapter pagerAdapter = new CharacterClassPagerAdapter(pages);
+        viewPager.setAdapter(pagerAdapter);
+        dotsIndicator.setViewPager(viewPager);
+
+        AlertDialog dialog = builder.setView(dialogView).create();
+        buttonUtils.setButton(btnClose, dialog::dismiss);
+        dialog.show();
     }
 
     private void setGameButton(int buttonId, boolean playCards) {
