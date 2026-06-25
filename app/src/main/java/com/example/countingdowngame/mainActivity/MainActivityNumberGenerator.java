@@ -39,14 +39,12 @@ public class MainActivityNumberGenerator {
     private final MainActivityGame activity;
     private final TextView numberCounterText;
     private final RecyclerView rouletteRecyclerView;
-    private final View roulettePointer;
     private final Handler shuffleHandler;
 
     public MainActivityNumberGenerator(MainActivityGame activity, TextView numberCounterText) {
         this.activity = activity;
         this.numberCounterText = numberCounterText;
         this.rouletteRecyclerView = activity.findViewById(R.id.rouletteRecyclerView);
-        this.roulettePointer = activity.findViewById(R.id.roulettePointer);
         this.shuffleHandler = new Handler();
     }
 
@@ -106,7 +104,6 @@ public class MainActivityNumberGenerator {
 
         numberCounterText.setVisibility(normalVisibility);
         rouletteRecyclerView.setVisibility(rouletteVisibility);
-        roulettePointer.setVisibility(rouletteVisibility);
     }
 
     private List<Integer> generateUniqueRoulettePool(int originalNumber, int targetNumber) {
