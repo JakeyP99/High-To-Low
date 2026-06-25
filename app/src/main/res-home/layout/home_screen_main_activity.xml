@@ -147,6 +147,7 @@
         android:background="@drawable/outlineforbutton"
         android:clickable="true"
         android:focusable="true"
+        android:paddingEnd="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/drinkGif"
@@ -181,6 +182,7 @@
             android:id="@+id/subClassic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:alpha="0.7"
             android:fontFamily="@font/viga"
             android:text="Don't land on zero!"
             android:textColor="@color/bluedark"
@@ -188,6 +190,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/textClassic"
             app:layout_constraintTop_toBottomOf="@id/textClassic" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:alpha="0.3"
+            android:src="@drawable/arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -201,6 +212,7 @@
         android:background="@drawable/outlineforbutton"
         android:clickable="true"
         android:focusable="true"
+        android:paddingEnd="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -236,6 +248,7 @@
             android:id="@+id/subRoulette"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:alpha="0.7"
             android:fontFamily="@font/viga"
             android:text="Russian roulette style!"
             android:textColor="@color/bluedark"
@@ -243,6 +256,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/textRoulette"
             app:layout_constraintTop_toBottomOf="@id/textRoulette" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:alpha="0.3"
+            android:src="@drawable/arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

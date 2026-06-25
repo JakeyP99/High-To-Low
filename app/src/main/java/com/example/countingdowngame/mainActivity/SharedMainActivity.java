@@ -242,9 +242,7 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         public static int calculateTextSizeBasedOnCharacterCount(String text) {
             int textSize;
             int charCount = text.length();
-            if (charCount <= 30) {
-                textSize = 30;
-            } else if (charCount <= 70) {
+             if (charCount <= 70) {
                 textSize = 25;
             } else {
                 textSize = 20;
