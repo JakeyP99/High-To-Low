@@ -101,7 +101,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                     Player currentPlayer = game.getCurrentPlayer();
 
                     Game.getInstance().setCurrentNumber(newNumber);
-                    currentPlayer.setUsedActiveAbility(true);
+                    markAbilityUsed(SCIENTIST, currentPlayer);
                     MainActivityGame.updateNumber(newNumber);
                     AudioManager.getInstance().playSoundEffects(activity, SCIENTIST);
                     dialog.dismiss(); // Close the dialog on success
@@ -118,7 +118,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     public static void handleSoldierClass(Player currentPlayer) {
         if (!isFirstTurn) {
             if (game.getCurrentNumber() <= 10) {
-                currentPlayer.setUsedActiveAbility(true);
+                markAbilityUsed(SOLDIER, currentPlayer);
                 game.updateRepeatingTurns(currentPlayer, 1);
                 activity.renderPlayerUI(false);
                 repeatedTurn = true;
@@ -135,7 +135,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     }
 
     public static void handleQuizMagicianClass(Player currentPlayer) {
-        currentPlayer.setUsedActiveAbility(true);
+        markAbilityUsed(QUIZ_MAGICIAN, currentPlayer);
         currentPlayer.setJustUsedActiveAbility(true);
         AudioManager.getInstance().playSoundEffects(activity, QUIZ_MAGICIAN);
         hideAbilityButton();
@@ -167,7 +167,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
         activity.showClassAbilityDialog(GOBLIN + "'s Active: \n\n" + randomPlayer.getName() + " lost two wildcards.\n\n" + randomPlayer.getName() + " now has " + wildcardText + ".");
         currentPlayer.loseWildCards(1);
-        currentPlayer.setUsedActiveAbility(true);
+        markAbilityUsed(GOBLIN, currentPlayer);
         activity.renderPlayerUI(true);
         AudioManager.getInstance().playSoundEffects(activity, GOBLIN);
         hideAbilityButton();
@@ -177,7 +177,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         Player randomPlayer = game.getRandomPlayerExcludingCurrent();
         game.updateRepeatingTurns(randomPlayer, 1);
         activity.showClassAbilityDialog(ANGRY_JIM + "'s Active: \n\n" + randomPlayer.getName() + " must repeat their turn.");
-        currentPlayer.setUsedActiveAbility(true);
+        markAbilityUsed(ANGRY_JIM, currentPlayer);
         AudioManager.getInstance().playSoundEffects(activity, ANGRY_JIM);
         hideAbilityButton();
     }
@@ -185,7 +185,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     public static void handleSurvivorClass(Player currentPlayer) {
         if (Game.getInstance().getCurrentNumber() > 1) {
             activity.halveCurrentNumber();
-            currentPlayer.setUsedActiveAbility(true);
+            markAbilityUsed(SURVIVOR, currentPlayer);
             AudioManager.getInstance().playSoundEffects(activity, SURVIVOR);
             hideAbilityButton();
         }
@@ -194,7 +194,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     public static void handleArcherClass(Player currentPlayer) {
         if (drinkNumberCounterInt >= 2) {
             activity.showClassAbilityDialog(ARCHER + "'s Active: \n\n" + currentPlayer.getName() + " hand out two drinks!");
-            currentPlayer.setUsedActiveAbility(true);
+            markAbilityUsed(ARCHER, currentPlayer);
             activity.updateDrinkNumberCounter(-2, true);
             AudioManager.getInstance().playSoundEffects(activity, ARCHER);
             hideAbilityButton();
@@ -326,7 +326,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
         activity.btnUtils.setButton(btnNone, () -> {
             dialog.dismiss();
-            currentPlayer.setUsedActiveAbility(true);
+            markAbilityUsed(TROLL, currentPlayer);
             String description = targets.size() == 1
                     ? targets.get(0).getName() + " failed! Take 4 drinks."
                     : "Both failed! " + targets.get(0).getName() + " and " + targets.get(1).getName() + " take 4 drinks.";
@@ -335,7 +335,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     }
 
     private static void finalizeTrollResult(Player troll, Player winner, Player loser) {
-        troll.setUsedActiveAbility(true);
+        markAbilityUsed(TROLL, troll);
         String description;
         if (winner != null && loser != null) {
             description = winner.getName() + " was safe! " + loser.getName() + " take 4 drinks.";
@@ -371,7 +371,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     //-----------------------------------------------------Witch Math---------------------------------------------------//
 
     private static void handleWitchMathGame(Player currentPlayer) {
-        currentPlayer.setUsedActiveAbility(true);
+        markAbilityUsed(WITCH, currentPlayer);
 
         int[] problem = generateMathProblem();
         int correctAnswer = problem[2];
@@ -498,7 +498,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     //-----------------------------------------------------Witch Rune Game---------------------------------------------------//
 
     private static void handleWitchRuneGame(Player currentPlayer) {
-        currentPlayer.setUsedActiveAbility(true);
+        markAbilityUsed(WITCH, currentPlayer);
         LayoutInflater inflater = activity.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.game_witch_potion_rune, null);
 
@@ -709,7 +709,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     //-----------------------------------------------------Witch Memory---------------------------------------------------//
 
     private static void handleWitchMemoryGame(Player currentPlayer) {
-        currentPlayer.setUsedActiveAbility(true);
+        markAbilityUsed(WITCH, currentPlayer);
         View dialogView = createMemoryDialog();
         TextView statusTv = dialogView.findViewById(R.id.memory_status);
         TextView timerTv = dialogView.findViewById(R.id.memory_timer);
@@ -966,11 +966,16 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
         activity.btnUtils.setButton(finishBtn, () -> {
             dialog.dismiss();
-            currentPlayer.setUsedActiveAbility(true);
+            markAbilityUsed(GAMBLER, currentPlayer);
             AudioManager.getInstance().playSoundEffects(activity, GAMBLER);
         });
 
         dialog.show();
+    }
+
+    private static void markAbilityUsed(String className, Player player) {
+        player.setUsedActiveAbility(true);
+        player.setClassCooldown(className, AbilityComplimentary.getClassCooldown(className, Game.getInstance().getGameMode()));
     }
 
     private static void flipCard(View container, TextView cardText, ImageView cardImage, int value, Runnable onEnd) {

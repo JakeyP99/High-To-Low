@@ -403,9 +403,10 @@ public class MainActivityGame extends SharedMainActivity {
 
 
         if (!isPowerUp) {
+            activePlayer.decrementCooldowns();
+            activePlayer.setUsedActiveAbility(false);
             characterPassiveClassAffects();
             PassiveAbilities.showCombinedPassives();
-            updateActiveAbilitiesAfterCooldown(activePlayer);
             updateTurnCounter();
             updateCatastropheTurnCounter();
         }
@@ -557,6 +558,8 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private boolean isAbilityAvailable(Player player, String classChoice) {
+        if (CharacterClassDescriptions.NO_CLASS.equals(classChoice)) return false;
+        if (player.getClassCooldown(classChoice) > 0) return false;
         if (CharacterClassDescriptions.ARCHER.equals(classChoice)) return drinkNumberCounterInt >= 2;
         if (CharacterClassDescriptions.SOLDIER.equals(classChoice)) return !isFirstTurn && game.getCurrentNumber() <= 10;
         if (CharacterClassDescriptions.QUIZ_MAGICIAN.equals(classChoice)) return player.getWildCardAmount() >= 1;
@@ -779,20 +782,6 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    private void updateActiveAbilitiesAfterCooldown(Player currentPlayer) {
-        List<String> classes = currentPlayer.getClassChoices();
-        boolean needsCooldownTrack = classes.contains(WITCH) || classes.contains(SURVIVOR) || classes.contains(ANGRY_JIM);
-        
-        if (currentPlayer.getUsedActiveAbility() && needsCooldownTrack) {
-
-            currentPlayer.incrementActiveAbilityTurnCounter();
-
-            if (currentPlayer.getActiveAbilityTurnCounter() >= currentPlayer.getActiveAbilityCooldown()) {
-                currentPlayer.setUsedActiveAbility(false);
-                currentPlayer.resetActiveAbilityTurnCounter();
-            }
-        }
-    }
 
     public void activateActiveAbility() {
         Player currentPlayer = game.getCurrentPlayer();
@@ -835,7 +824,10 @@ public class MainActivityGame extends SharedMainActivity {
                 String className = classes.get(position);
                 holder.name.setText(className);
                 holder.desc.setText(getClassActiveButtonText(className));
-                
+
+                holder.name.postDelayed(() -> holder.name.setSelected(true), 1000);
+                holder.desc.postDelayed(() -> holder.desc.setSelected(true), 1000);
+
                 holder.icon.setImageResource(playerChoiceComplimentary.getClassIcon(className));
 
                 holder.itemView.setOnClickListener(v -> {

@@ -45,7 +45,7 @@ public class CharacterClassDescriptions {
             "Read a riddle up to 2 random players. First to guess right is safe; the other drinks 4!";
 
     public static final String noClassDescription =
-            "No abilities.";
+            "";
 
     // Active Ability Button Text (Shortened versions)
     public static final String archerActiveButtonText = "Hand out 2 drinks";

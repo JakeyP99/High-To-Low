@@ -2,6 +2,7 @@ package com.example.countingdowngame.mainActivity.classAbilities;
 
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.*;
 
+import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.player.Player;
 
 
@@ -9,12 +10,22 @@ public class AbilityComplimentary {
 
     public static void assignActiveAbilityCooldown(Player player) {
         String classChoice = player.getClassChoice();
-        if (classChoice.equals(ANGRY_JIM)) {
-            player.setActiveAbilityCooldown(5);
-        } else if (classChoice.equals(WITCH) || classChoice.equals(SURVIVOR)) {
-            player.setActiveAbilityCooldown(3);
-        } else {
-            player.setActiveAbilityCooldown(4); // fallback
+        player.setActiveAbilityCooldown(getClassCooldown(classChoice, Game.getInstance().getGameMode()));
+    }
+
+    public static int getClassCooldown(String classChoice, Game.GameMode mode) {
+        if (classChoice == null) return 4;
+
+        // Special Reset Classes (Always reset)
+        if (ANGRY_JIM.equals(classChoice)) return 5;
+        if (WITCH.equals(classChoice) || SURVIVOR.equals(classChoice)) return 3;
+
+        // Crazy Mode: Everything resets eventually
+        if (mode == Game.GameMode.CRAZY) {
+            return 4;
         }
+
+        // Classic/Class Hunt: No reset for others (Once per game)
+        return 999;
     }
 }

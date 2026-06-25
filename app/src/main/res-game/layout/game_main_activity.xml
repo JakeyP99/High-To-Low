@@ -246,7 +246,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/viga"
-            android:text="Jake"
+            android:text="This is super long text omg"
+            android:gravity="center"
             android:textColor="@color/bluedark"
             android:textSize="35sp" />
 

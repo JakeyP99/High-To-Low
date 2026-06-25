@@ -10,6 +10,7 @@ import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -32,6 +33,7 @@ public class Player implements Serializable {
     private boolean removed;
     private int passiveAbilityTurnCounter;
     private int activeAbilityTurnCounter;
+    private Map<String, Integer> classCooldowns = new HashMap<>();
     private List<Integer> numbersPlayed = new ArrayList<>();
     private int classAbilityCooldown;
     private List<String> powerUps = new ArrayList<>();
@@ -275,6 +277,29 @@ public class Player implements Serializable {
 
     public int getActiveAbilityTurnCounter() {
         return activeAbilityTurnCounter;
+    }
+
+    private Map<String, Integer> ensureClassCooldowns() {
+        if (classCooldowns == null) {
+            classCooldowns = new HashMap<>();
+        }
+        return classCooldowns;
+    }
+
+    public int getClassCooldown(String className) {
+        return ensureClassCooldowns().getOrDefault(className, 0);
+    }
+
+    public void setClassCooldown(String className, int turns) {
+        ensureClassCooldowns().put(className, turns);
+    }
+
+    public void decrementCooldowns() {
+        for (Map.Entry<String, Integer> entry : ensureClassCooldowns().entrySet()) {
+            if (entry.getValue() > 0) {
+                entry.setValue(entry.getValue() - 1);
+            }
+        }
     }
 
     public boolean getUsedActiveAbility() {
