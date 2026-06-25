@@ -27,8 +27,10 @@ import com.example.countingdowngame.player.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * Handles the generation and animation of numbers in the main game activity.
@@ -118,22 +120,39 @@ public class MainActivityNumberGenerator {
     }
 
     private List<Integer> generateUniqueRoulettePool(int originalNumber, int targetNumber) {
-        List<Integer> pool = new ArrayList<>();
-        for (int i = 0; i <= originalNumber; i++) {
-            pool.add(i);
-        }
-        Collections.shuffle(pool);
-
         List<Integer> result = new ArrayList<>();
-        while (result.size() < 60) {
-            if (pool.isEmpty()) {
-                for (int i = 0; i <= originalNumber; i++) pool.add(i);
-                Collections.shuffle(pool);
+        Random random = new Random();
+
+        // Avoid OOM when originalNumber is very large (e.g. 9 digits) by sampling instead of creating a full pool.
+        if (originalNumber > 1000) {
+            Set<Integer> uniquePicked = new HashSet<>();
+            uniquePicked.add(targetNumber);
+            while (uniquePicked.size() < 60) {
+                uniquePicked.add(random.nextInt(originalNumber + 1));
             }
-            result.add(pool.remove(0));
+            result.addAll(uniquePicked);
+            Collections.shuffle(result);
+
+            // Swap targetNumber to index 50 to ensure it's at the winning position and unique in the list.
+            int targetIdx = result.indexOf(targetNumber);
+            Collections.swap(result, targetIdx, 50);
+        } else {
+            List<Integer> pool = new ArrayList<>();
+            for (int i = 0; i <= originalNumber; i++) {
+                pool.add(i);
+            }
+            Collections.shuffle(pool);
+
+            while (result.size() < 60) {
+                if (pool.isEmpty()) {
+                    for (int i = 0; i <= originalNumber; i++) pool.add(i);
+                    Collections.shuffle(pool);
+                }
+                result.add(pool.remove(0));
+            }
         }
 
-        // Force winning number at the center position (50)
+        // Force winning number at the center position (50) for consistency
         result.set(50, targetNumber);
         return result;
     }

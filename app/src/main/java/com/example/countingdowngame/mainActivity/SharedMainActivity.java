@@ -17,12 +17,16 @@ import androidx.core.animation.AnimatorListenerAdapter;
 import androidx.core.animation.AnimatorSet;
 import androidx.core.animation.ObjectAnimator;
 import androidx.core.content.ContextCompat;
+import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.countingdowngame.R;
+import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.instructions.InstructionalDialogPageAdapter;
+import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
+import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,11 +141,7 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         revPopSet.start();
     }
 
-    public void characterClassInformationDialog(
-            String currentPlayerClassChoice,
-            String activeDescription,
-            String passiveDescription
-    ) {
+    public void characterClassInformationDialog(Player player) {
 
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
@@ -152,36 +152,137 @@ public class SharedMainActivity extends ButtonUtilsActivity {
                 null
         );
 
-        // Views
-        TextView activeDescTv = dialogView.findViewById(R.id.active_description_textview);
-        TextView passiveDescTv = dialogView.findViewById(R.id.passive_description_textview);
-        TextView classTv = dialogView.findViewById(R.id.class_textview);
-        TextView activeLabelTv = dialogView.findViewById(R.id.active_textview);
-        TextView passiveLabelTv = dialogView.findViewById(R.id.passive_textview);
+        ViewPager viewPager = dialogView.findViewById(R.id.abilityViewPager);
+        DotsIndicator dotsIndicator = dialogView.findViewById(R.id.dotsIndicator);
 
-
-        // Set class name
-        classTv.setText(currentPlayerClassChoice);
-
-        // Set descriptions
-        activeDescTv.setText(activeDescription);
-        passiveDescTv.setText(passiveDescription);
-
-
-        // Handle "No Class" UI state
-        boolean isNoClass = "No Class".equals(currentPlayerClassChoice);
-
-        if (isNoClass) {
-            passiveDescTv.setVisibility(View.GONE);
-            activeLabelTv.setVisibility(View.GONE);
-            passiveLabelTv.setVisibility(View.GONE);
+        List<String> classes = player.getClassChoices();
+        if (classes.isEmpty()) {
+            classes = new ArrayList<>();
+            classes.add(CharacterClassDescriptions.NO_CLASS);
         }
 
+        AbilityPagerAdapter adapter = new AbilityPagerAdapter(classes, inflater);
+        viewPager.setAdapter(adapter);
+
+        if (classes.size() > 1) {
+            dotsIndicator.setVisibility(View.VISIBLE);
+            dotsIndicator.setViewPager(viewPager);
+        } else {
+            dotsIndicator.setVisibility(View.GONE);
+        }
 
         builder.setView(dialogView);
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private class AbilityPagerAdapter extends PagerAdapter {
+        private final List<String> classes;
+        private final LayoutInflater inflater;
+
+        public AbilityPagerAdapter(List<String> classes, LayoutInflater inflater) {
+            this.classes = classes;
+            this.inflater = inflater;
+        }
+
+        @Override
+        public int getCount() {
+            return classes.size();
+        }
+
+        @Override
+        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+            return view == object;
+        }
+
+        @NonNull
+        @Override
+        public Object instantiateItem(@NonNull android.view.ViewGroup container, int position) {
+            View itemView = inflater.inflate(R.layout.game_character_ability_item, container, false);
+            String classChoice = classes.get(position);
+
+            TextView activeDescTv = itemView.findViewById(R.id.active_description_textview);
+            TextView passiveDescTv = itemView.findViewById(R.id.passive_description_textview);
+            TextView classTv = itemView.findViewById(R.id.class_textview);
+            TextView activeLabelTv = itemView.findViewById(R.id.active_textview);
+            TextView passiveLabelTv = itemView.findViewById(R.id.passive_textview);
+
+            classTv.setText(classChoice);
+            activeDescTv.setText(getClassActiveDescription(classChoice));
+            passiveDescTv.setText(getClassPassiveDescription(classChoice));
+
+            boolean isNoClass = CharacterClassDescriptions.NO_CLASS.equals(classChoice);
+            if (isNoClass) {
+                passiveDescTv.setVisibility(View.GONE);
+                activeLabelTv.setVisibility(View.GONE);
+                passiveLabelTv.setVisibility(View.GONE);
+            }
+
+            container.addView(itemView);
+            return itemView;
+        }
+
+        @Override
+        public void destroyItem(@NonNull android.view.ViewGroup container, int position, @NonNull Object object) {
+            container.removeView((View) object);
+        }
+    }
+
+    protected String getClassActiveDescription(String classChoice) {
+        if (classChoice == null) return "";
+        switch (classChoice) {
+            case CharacterClassDescriptions.ARCHER:
+                return CharacterClassDescriptions.archerActiveDescription;
+            case CharacterClassDescriptions.WITCH:
+                return CharacterClassDescriptions.witchActiveDescription;
+            case CharacterClassDescriptions.SCIENTIST:
+                return CharacterClassDescriptions.scientistActiveDescription;
+            case CharacterClassDescriptions.SOLDIER:
+                return CharacterClassDescriptions.soldierActiveDescription;
+            case CharacterClassDescriptions.QUIZ_MAGICIAN:
+                return CharacterClassDescriptions.quizMagicianActiveDescription;
+            case CharacterClassDescriptions.SURVIVOR:
+                return CharacterClassDescriptions.survivorActiveDescription;
+            case CharacterClassDescriptions.ANGRY_JIM:
+                return CharacterClassDescriptions.angryJimActiveDescription;
+            case CharacterClassDescriptions.GOBLIN:
+                return CharacterClassDescriptions.goblinActiveDescription;
+            case CharacterClassDescriptions.GAMBLER:
+                return CharacterClassDescriptions.gamblerActiveDescription;
+            case CharacterClassDescriptions.TROLL:
+                return CharacterClassDescriptions.trollActiveDescription;
+            default:
+                return CharacterClassDescriptions.noClassDescription;
+        }
+    }
+
+    protected String getClassPassiveDescription(String classChoice) {
+        if (classChoice == null) return "";
+        switch (classChoice) {
+            case CharacterClassDescriptions.ARCHER:
+                return CharacterClassDescriptions.archerPassiveDescription;
+            case CharacterClassDescriptions.WITCH:
+                return CharacterClassDescriptions.witchPassiveDescription;
+            case CharacterClassDescriptions.SCIENTIST:
+                return CharacterClassDescriptions.scientistPassiveDescription;
+            case CharacterClassDescriptions.SOLDIER:
+                return CharacterClassDescriptions.soldierPassiveDescription;
+            case CharacterClassDescriptions.QUIZ_MAGICIAN:
+                return CharacterClassDescriptions.quizMagicianPassiveDescription;
+            case CharacterClassDescriptions.SURVIVOR:
+                return CharacterClassDescriptions.survivorPassiveDescription;
+            case CharacterClassDescriptions.ANGRY_JIM:
+                return CharacterClassDescriptions.angryJimPassiveDescription;
+            case CharacterClassDescriptions.GOBLIN:
+                return CharacterClassDescriptions.goblinPassiveDescription;
+            case CharacterClassDescriptions.GAMBLER:
+                return CharacterClassDescriptions.gamblerPassiveDescription;
+            case CharacterClassDescriptions.TROLL:
+                return CharacterClassDescriptions.trollPassiveDescription;
+            default:
+                return "";
+        }
     }
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Instructional overlay ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

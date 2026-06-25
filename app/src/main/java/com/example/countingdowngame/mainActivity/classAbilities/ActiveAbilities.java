@@ -860,7 +860,9 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     private static void showOpponentDialog(List<Player> opponents) {
 
         LayoutInflater inflater = activity.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.game_gambler_select_opponent, null);
+        View dialogView = inflater.inflate(R.layout.game_grid_selection_dialog, null);
+        TextView titleTextView = dialogView.findViewById(R.id.title_text_view);
+        titleTextView.setText("Gambler's Active:");
 
         RecyclerView recyclerView = dialogView.findViewById(R.id.listViewOpponents);
 
@@ -1027,6 +1029,14 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         if (value == 12) return "Q";
         if (value == 13) return "K";
         return "A";
+    }
+
+    public static boolean isStartMiniGame() {
+        return startMiniGame;
+    }
+
+    public static void setStartMiniGame(boolean startMiniGame) {
+        ActiveAbilities.startMiniGame = startMiniGame;
     }
 
     public static class OpponentAdapter extends RecyclerView.Adapter<OpponentAdapter.VH> {

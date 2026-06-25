@@ -342,9 +342,8 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void characterClassDescriptions() {
         Player currentPlayer = game.getCurrentPlayer();
-        String currentPlayerClassChoice = currentPlayer.getClassChoice();
-        if (currentPlayerClassChoice != null) {
-            characterClassInformationDialog(currentPlayerClassChoice, getClassActiveDescription(currentPlayerClassChoice), getClassPassiveDescription(currentPlayerClassChoice));
+        if (currentPlayer != null) {
+            characterClassInformationDialog(currentPlayer);
         }
     }
 
@@ -580,7 +579,7 @@ public class MainActivityGame extends SharedMainActivity {
         if (classes.size() > 1) {
             labelAbilityTitle.setText("Multiple Abilities");
             labelAbilityDesc.setText("Tap to choose which one to activate");
-            iconAbility.setImageResource(R.drawable.wine); // Or a "multi" icon if you have one
+            iconAbility.setImageResource(R.drawable.swissarmyknife); // Or a "multi" icon if you have one
         } else {
             String classChoice = classes.get(0);
             labelAbilityTitle.setText(getClassActiveButtonText(classChoice));
@@ -763,59 +762,6 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     //-----------------------------------------------------Active Effects---------------------------------------------------//
-    private String getClassActiveDescription(String classChoice) {
-        switch (classChoice) {
-            case ARCHER:
-                return CharacterClassDescriptions.archerActiveDescription;
-            case WITCH:
-                return CharacterClassDescriptions.witchActiveDescription;
-            case SCIENTIST:
-                return CharacterClassDescriptions.scientistActiveDescription;
-            case SOLDIER:
-                return CharacterClassDescriptions.soldierActiveDescription;
-            case QUIZ_MAGICIAN:
-                return CharacterClassDescriptions.quizMagicianActiveDescription;
-            case SURVIVOR:
-                return CharacterClassDescriptions.survivorActiveDescription;
-            case ANGRY_JIM:
-                return CharacterClassDescriptions.angryJimActiveDescription;
-            case GOBLIN:
-                return CharacterClassDescriptions.goblinActiveDescription;
-            case GAMBLER:
-                return CharacterClassDescriptions.gamblerActiveDescription;
-            case TROLL:
-                return CharacterClassDescriptions.trollActiveDescription;
-            default:
-                return "I love you cutie pie hehe. You don't have a class to show any description for.";
-        }
-    }
-
-    private String getClassPassiveDescription(String classChoice) {
-        switch (classChoice) {
-            case ARCHER:
-                return CharacterClassDescriptions.archerPassiveDescription;
-            case WITCH:
-                return CharacterClassDescriptions.witchPassiveDescription;
-            case SCIENTIST:
-                return CharacterClassDescriptions.scientistPassiveDescription;
-            case SOLDIER:
-                return CharacterClassDescriptions.soldierPassiveDescription;
-            case QUIZ_MAGICIAN:
-                return CharacterClassDescriptions.quizMagicianPassiveDescription;
-            case SURVIVOR:
-                return CharacterClassDescriptions.survivorPassiveDescription;
-            case ANGRY_JIM:
-                return CharacterClassDescriptions.angryJimPassiveDescription;
-            case GOBLIN:
-                return CharacterClassDescriptions.goblinPassiveDescription;
-            case GAMBLER:
-                return CharacterClassDescriptions.gamblerPassiveDescription;
-            case TROLL:
-                return CharacterClassDescriptions.trollPassiveDescription;
-            default:
-                return "";
-        }
-    }
 
     private void characterPassiveClassAffects() {
         Player currentPlayer = game.getCurrentPlayer();
@@ -877,7 +823,13 @@ public class MainActivityGame extends SharedMainActivity {
     private void showActiveAbilitySelector(Player currentPlayer, List<String> classes) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.game_gambler_select_opponent, null); // Reuse opponent layout (it's a grid/list)
+        View dialogView = inflater.inflate(R.layout.game_grid_selection_dialog, null); // Reuse opponent layout (it's a grid/list)
+
+        TextView selectOpponentTextView = dialogView.findViewById(R.id.title_select_opponent);
+        TextView titleTextView = dialogView.findViewById(R.id.title_text_view);
+
+        selectOpponentTextView.setVisibility(View.GONE);
+        titleTextView.setText("Choose Active:");
 
         RecyclerView recyclerView = dialogView.findViewById(R.id.listViewOpponents);
         recyclerView.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 2));
@@ -1075,8 +1027,8 @@ public class MainActivityGame extends SharedMainActivity {
 
     public void awardRandomClass(Player player, int number) {
         String[] allPossibleClasses = {
-                ANGRY_JIM, ARCHER, GAMBLER, GOBLIN, QUIZ_MAGICIAN,
-                SCIENTIST, SOLDIER, SURVIVOR, TROLL, WITCH
+                CharacterClassDescriptions.ANGRY_JIM, CharacterClassDescriptions.ARCHER, CharacterClassDescriptions.GAMBLER, CharacterClassDescriptions.GOBLIN, CharacterClassDescriptions.QUIZ_MAGICIAN,
+                CharacterClassDescriptions.SCIENTIST, CharacterClassDescriptions.SOLDIER, CharacterClassDescriptions.SURVIVOR, CharacterClassDescriptions.TROLL, CharacterClassDescriptions.WITCH
         };
 
         List<String> currentClasses = player.getClassChoices();
