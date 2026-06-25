@@ -102,7 +102,7 @@
 
         <meta-data
             android:name="com.samsung.android.flexmode.support"
-            android:value="false" />
+            android:value="true" />
 
     </application>
 
