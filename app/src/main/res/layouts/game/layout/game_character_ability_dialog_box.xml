@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/class_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="Archer"
+            android:textColor="@color/bluedark"
+            android:textSize="35sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/bluedark"
+            android:alpha="0.2" />
+
+        <TextView
+            android:id="@+id/active_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:gravity="center"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp"
+            android:text="Active Ability"
+            android:textColor="@color/bluedark"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/active_description_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:gravity="center"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="16dp"
+            android:text="Active descriptor"
+            android:textColor="@color/bluedark"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/passive_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:paddingBottom="8dp"
+            android:text="Passive Ability"
+            android:textColor="@color/bluedark"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/passive_description_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:gravity="center"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="20dp"
+            android:text="Passive descriptor"
+            android:textColor="@color/bluedark"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

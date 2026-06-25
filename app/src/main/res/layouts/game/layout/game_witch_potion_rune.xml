@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center"
+    android:background="@drawable/rounded_background">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/viga"
+        android:paddingTop="10dp"
+        android:text="Witch's Potion!"
+        android:textAlignment="center"
+        android:textColor="@color/bluedark"
+        android:textSize="40sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        android:background="@color/bluedark"
+        android:alpha="0.2" />
+
+    <TextView
+        android:id="@+id/rune_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/viga"
+        android:text="Trace the magical rune!"
+        android:textColor="@color/bluedark"
+        android:textSize="18sp"
+        android:layout_marginBottom="16dp"/>
+
+    <com.example.countingdowngame.mainActivity.classAbilities.RuneTracingView
+        android:id="@+id/rune_tracing_view"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:background="@drawable/player_item_background"
+        android:elevation="4dp" />
+
+    <Button
+        android:id="@+id/btn_action"
+        android:layout_width="220dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/outlineforbutton"
+        android:fontFamily="@font/viga"
+        android:text="Start"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="22sp" />
+
+</LinearLayout>

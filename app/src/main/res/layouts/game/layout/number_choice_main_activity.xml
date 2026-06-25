@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@android:color/white"
+    android:layout_height="match_parent"
+    tools:context=".mainActivity.MainActivityGame"
+    android:fitsSystemWindows="true">
+
+
+
+<TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/TextView_GameTitle"
+        android:text="Choose your number!"
+        android:textColor="@color/bluedark"
+        android:gravity="center"
+        android:fontFamily="@font/viga"
+        android:textSize="35sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.19" />
+
+    <EditText
+        android:inputType="number"
+        android:id="@+id/EditTextView_numberchoice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="@color/bluedark"
+        android:textSize="60sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.41"
+        android:hint="---"
+        android:textColorHint="#DDDDDD" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/soundGif"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/transparent"
+        android:src="@drawable/sound"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.01" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/muteGif"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/transparent"
+        android:src="@drawable/mute"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.01" />
+
+
+    <Button
+        android:id="@+id/btnSubmitNumbers"
+        android:layout_width="139dp"
+        android:layout_height="77dp"
+        android:background="@drawable/outlineforbutton"
+        android:text="Submit Number"
+        android:textAllCaps="false"
+        android:fontFamily="@font/viga"
+        android:textColor="@color/bluedark"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.62" />
+
+    <Button
+        android:id="@+id/btnRandomNumber"
+        android:layout_width="139dp"
+        android:fontFamily="@font/viga"
+        android:layout_height="77dp"
+        android:background="@drawable/outlineforbutton"
+        android:text="Random Number"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSubmitNumbers"
+        app:layout_constraintVertical_bias="0.2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

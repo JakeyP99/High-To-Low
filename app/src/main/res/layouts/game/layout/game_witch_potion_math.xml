@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center"
+    android:background="@drawable/rounded_background">
+
+    <!-- Header Section -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/viga"
+        android:layout_gravity="center"
+        android:paddingTop="10dp"
+        android:text="Witch's Active!"
+        android:textAlignment="center"
+        android:textColor="@color/bluedark"
+        android:textSize="40sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        android:background="@color/bluedark"
+        android:alpha="0.2" />
+
+    <!-- Math Board -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/player_item_background"
+        android:elevation="4dp"
+        android:layout_marginBottom="20dp">
+
+        <TextView
+            android:id="@+id/math_problem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:text="XX x XX = ?"
+            android:textColor="@color/bluedark"
+            android:textSize="42sp" />
+
+    </LinearLayout>
+
+    <!-- Interaction Area -->
+    <EditText
+        android:id="@+id/math_answer"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/outlineforbutton"
+        android:fontFamily="@font/viga"
+        android:hint="Enter answer..."
+        android:inputType="number"
+        android:paddingHorizontal="16dp"
+        android:textColor="@color/bluedark"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:layout_marginBottom="20dp" />
+
+    <FrameLayout
+        android:layout_width="220dp"
+        android:layout_height="65dp">
+
+        <ProgressBar
+            android:id="@+id/timer_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:max="15000"
+            android:progress="15000"
+            android:progressDrawable="@drawable/progress_fill"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/btn_action"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/outlineforbutton"
+            android:fontFamily="@font/viga"
+            android:text="Start"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:textSize="22sp"
+            android:stateListAnimator="@null" />
+    </FrameLayout>
+
+</LinearLayout>
