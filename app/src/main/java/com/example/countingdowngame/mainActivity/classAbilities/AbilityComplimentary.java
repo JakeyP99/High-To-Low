@@ -14,18 +14,13 @@ public class AbilityComplimentary {
     }
 
     public static int getClassCooldown(String classChoice, Game.GameMode mode) {
-        if (classChoice == null) return 4;
+        if (classChoice == null) return 999;
 
         // Special Reset Classes (Always reset)
         if (ANGRY_JIM.equals(classChoice)) return 5;
-        if (WITCH.equals(classChoice) || SURVIVOR.equals(classChoice)) return 3;
+        if (WITCH.equals(classChoice) || ARCHER.equals(classChoice) ||SURVIVOR.equals(classChoice)) return 3;
 
-        // Crazy Mode: Everything resets eventually
-        if (mode == Game.GameMode.CRAZY) {
-            return 4;
-        }
-
-        // Classic/Class Hunt: No reset for others (Once per game)
+        // All other classes do not reset (set to a very high number)
         return 999;
     }
 }

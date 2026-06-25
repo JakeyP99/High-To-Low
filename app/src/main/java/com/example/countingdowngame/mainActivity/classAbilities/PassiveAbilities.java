@@ -140,9 +140,8 @@ public class PassiveAbilities extends ButtonUtilsActivity {
             int chance = new Random().nextInt(100);
 
             if (chance < skipChance) {
-                addPassiveMessage(SCIENTIST, currentPlayer.getName() + "'s turn was skipped.");
-                // Note: Skip happens after dialog usually, but for consistency we add it here
                 currentPlayer.useSkip();
+                addPassiveMessage(SCIENTIST, currentPlayer.getName() + "'s turn was skipped.");
             }
         }
     }
