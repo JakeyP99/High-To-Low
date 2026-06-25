@@ -45,7 +45,8 @@ public class Game {
 
     public enum GameMode {
         CLASSIC,
-        CLASS_HUNT
+        CLASS_HUNT,
+        CRAZY
     }
 
     public List<Integer> getClassNumbers() {

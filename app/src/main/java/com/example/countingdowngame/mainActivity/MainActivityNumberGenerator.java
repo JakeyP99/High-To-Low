@@ -57,10 +57,21 @@ public class MainActivityNumberGenerator {
         int targetNumber = Game.getInstance().nextNumber();
 
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        boolean hasClass = currentPlayer != null && !NO_CLASS.equals(currentPlayer.getClassChoice());
+        boolean hasAnyClass = currentPlayer != null && !NO_CLASS.equals(currentPlayer.getClassChoice());
 
-        // Dispatch based on Game Mode and Player status
-        if (Game.getInstance().getGameMode() == Game.GameMode.CLASS_HUNT && !hasClass) {
+        boolean showRoulette = false;
+        Game.GameMode mode = Game.getInstance().getGameMode();
+
+        if (mode == Game.GameMode.CLASS_HUNT && !hasAnyClass) {
+            showRoulette = true;
+        } else if (mode == Game.GameMode.CRAZY) {
+            int totalAvailableClasses = 10;
+            if (currentPlayer != null && currentPlayer.getClassChoices().size() < totalAvailableClasses) {
+                showRoulette = true;
+            }
+        }
+
+        if (showRoulette) {
             runRouletteMode(originalNumber, targetNumber);
         } else {
             runClassicMode(originalNumber, targetNumber);
@@ -212,11 +223,23 @@ public class MainActivityNumberGenerator {
         // Handle Class Passive Effects
         applyPassiveAbilities(currentPlayer, targetNumber, previousNumber);
 
-        boolean isClassHunt = Game.getInstance().getGameMode() == Game.GameMode.CLASS_HUNT;
-        boolean hasNoClass = NO_CLASS.equals(currentPlayer.getClassChoice());
+        Game.GameMode mode = Game.getInstance().getGameMode();
+        boolean hasNoClass = com.example.countingdowngame.createPlayer.CharacterClassDescriptions.NO_CLASS.equals(currentPlayer.getClassChoice());
         boolean isClassLanded = Game.getInstance().getClassNumbers().contains(targetNumber);
 
-        if (isClassHunt && hasNoClass && isClassLanded) {
+        boolean shouldAwardClass = false;
+        if (isClassLanded) {
+            if (mode == Game.GameMode.CLASS_HUNT && hasNoClass) {
+                shouldAwardClass = true;
+            } else if (mode == Game.GameMode.CRAZY) {
+                int totalClasses = 10;
+                if (currentPlayer.getClassChoices().size() < totalClasses) {
+                    shouldAwardClass = true;
+                }
+            }
+        }
+
+        if (shouldAwardClass) {
             handleClassAwardSequence(currentPlayer, targetNumber);
         } else {
             finalizeTurn(targetNumber);

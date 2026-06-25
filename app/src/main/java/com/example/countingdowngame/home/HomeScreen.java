@@ -113,6 +113,7 @@ public class HomeScreen extends playerChoiceComplimentary {
         View dialogView = inflater.inflate(R.layout.home_screen_choose_mode, null);
         View btnClassic = dialogView.findViewById(R.id.btn_mode_classic);
         View btnHunt = dialogView.findViewById(R.id.btn_mode_class_hunt);
+        View btnCrazy = dialogView.findViewById(R.id.btn_mode_crazy);
 
         AlertDialog dialog = builder.setView(dialogView).create();
 
@@ -124,6 +125,12 @@ public class HomeScreen extends playerChoiceComplimentary {
 
         buttonUtils.setButton(btnHunt, () -> {
             Game.getInstance().setGameMode(Game.GameMode.CLASS_HUNT);
+            dialog.dismiss();
+            gotoPlayerChoice();
+        });
+
+        buttonUtils.setButton(btnCrazy, () -> {
+            Game.getInstance().setGameMode(Game.GameMode.CRAZY);
             dialog.dismiss();
             gotoPlayerChoice();
         });

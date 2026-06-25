@@ -42,6 +42,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
@@ -410,6 +411,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         if (!isPowerUp) {
             characterPassiveClassAffects();
+            PassiveAbilities.showCombinedPassives();
             updateActiveAbilitiesAfterCooldown(activePlayer);
             updateTurnCounter();
             updateCatastropheTurnCounter();
@@ -569,54 +571,41 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void updateClassAbilityButton(Player currentPlayer) {
-        String classChoice = currentPlayer.getClassChoice();
-        labelAbilityTitle.setText(getClassActiveButtonText(classChoice));
-        labelAbilityDesc.setText(getClassActiveDescription(classChoice));
-
-        updateClassIcon(classChoice);
-
-        int wildCardCount = currentPlayer.getWildCardAmount();
-
-        boolean canShowButton = (SCIENTIST.equals(classChoice) || ARCHER.equals(classChoice)
-                || WITCH.equals(classChoice) || QUIZ_MAGICIAN.equals(classChoice)
-                || SURVIVOR.equals(classChoice) || GOBLIN.equals(classChoice)
-                || ANGRY_JIM.equals(classChoice) || SOLDIER.equals(classChoice)
-                || GAMBLER.equals(classChoice) || TROLL.equals(classChoice))
-                && !currentPlayer.getUsedActiveAbility();
-
-        // Specific rules for dynamic hiding
-        if (ARCHER.equals(classChoice) && drinkNumberCounterInt < 2) {
-            canShowButton = false;
+        List<String> classes = currentPlayer.getClassChoices();
+        if (classes.isEmpty()) {
+            btnClassAbility.setVisibility(View.INVISIBLE);
+            return;
         }
 
-        if (SOLDIER.equals(classChoice)) {
-            if (isFirstTurn || game.getCurrentNumber() > 10) {
-                canShowButton = false;
-            }
+        if (classes.size() > 1) {
+            labelAbilityTitle.setText("Multiple Abilities");
+            labelAbilityDesc.setText("Tap to choose which one to activate");
+            iconAbility.setImageResource(R.drawable.wine); // Or a "multi" icon if you have one
+        } else {
+            String classChoice = classes.get(0);
+            labelAbilityTitle.setText(getClassActiveButtonText(classChoice));
+            labelAbilityDesc.setText(getClassActiveDescription(classChoice));
+            updateClassIcon(classChoice);
         }
 
-        if (QUIZ_MAGICIAN.equals(classChoice)) {
-            if (wildCardCount < 1) {
-                canShowButton = false;
-            }
-        }
+        boolean canShowButton = !currentPlayer.getUsedActiveAbility();
 
-        if (GOBLIN.equals(classChoice)) {
-            boolean otherPlayersHaveWildcards = false;
-            for (Player player : game.getPlayers()) {
-                if (!player.equals(currentPlayer) && player.getWildCardAmount() > 0) {
-                    otherPlayersHaveWildcards = true;
-                    break;
+        // Specific rules for dynamic hiding (if they only have ONE class)
+        if (classes.size() == 1) {
+            String classChoice = classes.get(0);
+            if (ARCHER.equals(classChoice) && drinkNumberCounterInt < 2) canShowButton = false;
+            if (SOLDIER.equals(classChoice) && (isFirstTurn || game.getCurrentNumber() > 10)) canShowButton = false;
+            if (QUIZ_MAGICIAN.equals(classChoice) && currentPlayer.getWildCardAmount() < 1) canShowButton = false;
+            if (SURVIVOR.equals(classChoice) && game.getCurrentNumber() == 1) canShowButton = false;
+            if (GOBLIN.equals(classChoice)) {
+                boolean othersHaveWildcards = false;
+                for (Player p : game.getPlayers()) {
+                    if (!p.equals(currentPlayer) && p.getWildCardAmount() > 0) {
+                        othersHaveWildcards = true;
+                        break;
+                    }
                 }
-            }
-            if (!otherPlayersHaveWildcards || wildCardCount < 1) {
-                canShowButton = false;
-            }
-        }
-
-        if (SURVIVOR.equals(classChoice)) {
-            if (game.getCurrentNumber() == 1) {
-                canShowButton = false;
+                if (!othersHaveWildcards || currentPlayer.getWildCardAmount() < 1) canShowButton = false;
             }
         }
 
@@ -830,28 +819,40 @@ public class MainActivityGame extends SharedMainActivity {
 
     private void characterPassiveClassAffects() {
         Player currentPlayer = game.getCurrentPlayer();
-        String classChoice = currentPlayer.getClassChoice();
+        List<String> classes = currentPlayer.getClassChoices();
 
         Log.d(TAG, "Number was generated passive: " + game.getNumberWasGenerated());
-        if (SOLDIER.equals(classChoice) && game.getNumberWasGenerated() == true) {
+        
+        if (classes.contains(SOLDIER) && game.getNumberWasGenerated()) {
             handleSoldierPassive();
-        } else if (WITCH.equals(classChoice) && game.getNumberWasGenerated() == true) {
+        } 
+        
+        if (classes.contains(WITCH) && game.getNumberWasGenerated()) {
             handleWitchPassive(currentPlayer);
-        } else if (SCIENTIST.equals(classChoice)) {
+        } 
+        
+        if (classes.contains(SCIENTIST)) {
             handleScientistPassive(currentPlayer);
-        } else if (ANGRY_JIM.equals(classChoice)) {
+        } 
+        
+        if (classes.contains(ANGRY_JIM)) {
             handleAngryJimPassive(currentPlayer);
-        } else if (ARCHER.equals(classChoice)) {
+        } 
+        
+        if (classes.contains(ARCHER)) {
             handleArcherPassive(currentPlayer);
-        } else if (TROLL.equals(classChoice)) {
+        } 
+        
+        if (classes.contains(TROLL)) {
             handleTrollPassive(currentPlayer);
         }
     }
 
     private void updateActiveAbilitiesAfterCooldown(Player currentPlayer) {
-        if (currentPlayer.getUsedActiveAbility() && (WITCH.equals(currentPlayer.getClassChoice()) ||
-                SURVIVOR.equals(currentPlayer.getClassChoice()) ||
-                ANGRY_JIM.equals(currentPlayer.getClassChoice()))) {
+        List<String> classes = currentPlayer.getClassChoices();
+        boolean needsCooldownTrack = classes.contains(WITCH) || classes.contains(SURVIVOR) || classes.contains(ANGRY_JIM);
+        
+        if (currentPlayer.getUsedActiveAbility() && needsCooldownTrack) {
 
             currentPlayer.incrementActiveAbilityTurnCounter();
 
@@ -864,40 +865,93 @@ public class MainActivityGame extends SharedMainActivity {
 
     public void activateActiveAbility() {
         Player currentPlayer = game.getCurrentPlayer();
-        String classChoice = currentPlayer.getClassChoice();
-        switch (classChoice) {
-            case SCIENTIST:
-                ActiveAbilities.handleScientistClass();
-                break;
-            case ARCHER:
-                ActiveAbilities.handleArcherClass(currentPlayer);
-                break;
-            case WITCH:
-                ActiveAbilities.handleWitchClass(currentPlayer);
-                break;
-            case SOLDIER:
-                ActiveAbilities.handleSoldierClass(currentPlayer);
-                break;
-            case QUIZ_MAGICIAN:
-                ActiveAbilities.handleQuizMagicianClass(currentPlayer);
-                break;
-            case SURVIVOR:
-                ActiveAbilities.handleSurvivorClass(currentPlayer);
-                break;
-            case GOBLIN:
-                ActiveAbilities.handleGoblinClass(currentPlayer);
-                break;
-            case ANGRY_JIM:
-                ActiveAbilities.handleAngryJimClass(currentPlayer);
-                break;
-            case GAMBLER:
-                ActiveAbilities.handleGamblerClass();
-                break;
-            case TROLL:
-                ActiveAbilities.handleTrollClass(currentPlayer);
-                break;
-            default:
-                break;
+        List<String> classes = currentPlayer.getClassChoices();
+
+        if (classes.size() > 1) {
+            showActiveAbilitySelector(currentPlayer, classes);
+        } else if (classes.size() == 1) {
+            triggerSpecificActiveAbility(classes.get(0), currentPlayer);
+        }
+    }
+
+    private void showActiveAbilitySelector(Player currentPlayer, List<String> classes) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.game_gambler_select_opponent, null); // Reuse opponent layout (it's a grid/list)
+
+        RecyclerView recyclerView = dialogView.findViewById(R.id.listViewOpponents);
+        recyclerView.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 2));
+
+        AlertDialog dialog = builder.setView(dialogView).create();
+
+        // Create a simple adapter for ability selection
+        recyclerView.setAdapter(new RecyclerView.Adapter<AbilityVH>() {
+            @androidx.annotation.NonNull
+            @Override
+            public AbilityVH onCreateViewHolder(@androidx.annotation.NonNull android.view.ViewGroup parent, int viewType) {
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.game_gambler_player_choice_adaptor, parent, false);
+                return new AbilityVH(v);
+            }
+
+            @Override
+            public void onBindViewHolder(@androidx.annotation.NonNull AbilityVH holder, int position) {
+                String className = classes.get(position);
+                holder.name.setText(className);
+                holder.desc.setText(getClassActiveButtonText(className));
+                
+                // Icon mapping
+                int iconRes;
+                switch (className) {
+                    case ARCHER: iconRes = R.drawable.archer; break;
+                    case WITCH: iconRes = R.drawable.witch; break;
+                    case SCIENTIST: iconRes = R.drawable.scientist; break;
+                    case SOLDIER: iconRes = R.drawable.jail; break;
+                    case QUIZ_MAGICIAN: iconRes = R.drawable.books; break;
+                    case SURVIVOR: iconRes = R.drawable.bandaids; break;
+                    case ANGRY_JIM: iconRes = R.drawable.angry_jim; break;
+                    case GOBLIN: iconRes = R.drawable.goblin; break;
+                    case GAMBLER: iconRes = R.drawable.dice; break;
+                    case TROLL: iconRes = R.drawable.bridge; break;
+                    default: iconRes = R.drawable.wine; break;
+                }
+                holder.icon.setImageResource(iconRes);
+
+                holder.itemView.setOnClickListener(v -> {
+                    dialog.dismiss();
+                    triggerSpecificActiveAbility(className, currentPlayer);
+                });
+            }
+
+            @Override
+            public int getItemCount() { return classes.size(); }
+        });
+
+        dialog.show();
+    }
+
+    static class AbilityVH extends RecyclerView.ViewHolder {
+        ImageView icon;
+        TextView name, desc;
+        AbilityVH(View v) {
+            super(v);
+            icon = v.findViewById(R.id.playerPhotoImageView);
+            name = v.findViewById(R.id.playerNameTextView);
+            desc = v.findViewById(R.id.playerClassTextView);
+        }
+    }
+
+    private void triggerSpecificActiveAbility(String className, Player currentPlayer) {
+        switch (className) {
+            case SCIENTIST: ActiveAbilities.handleScientistClass(); break;
+            case ARCHER: ActiveAbilities.handleArcherClass(currentPlayer); break;
+            case WITCH: ActiveAbilities.handleWitchClass(currentPlayer); break;
+            case SOLDIER: ActiveAbilities.handleSoldierClass(currentPlayer); break;
+            case QUIZ_MAGICIAN: ActiveAbilities.handleQuizMagicianClass(currentPlayer); break;
+            case SURVIVOR: ActiveAbilities.handleSurvivorClass(currentPlayer); break;
+            case GOBLIN: ActiveAbilities.handleGoblinClass(currentPlayer); break;
+            case ANGRY_JIM: ActiveAbilities.handleAngryJimClass(currentPlayer); break;
+            case GAMBLER: ActiveAbilities.handleGamblerClass(); break;
+            case TROLL: ActiveAbilities.handleTrollClass(currentPlayer); break;
         }
     }
 
@@ -1020,15 +1074,15 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     public void awardRandomClass(Player player, int number) {
-        String[] classes = {
+        String[] allPossibleClasses = {
                 ANGRY_JIM, ARCHER, GAMBLER, GOBLIN, QUIZ_MAGICIAN,
                 SCIENTIST, SOLDIER, SURVIVOR, TROLL, WITCH
         };
 
-        String currentClass = player.getClassChoice();
+        List<String> currentClasses = player.getClassChoices();
         List<String> availableClasses = new ArrayList<>();
-        for (String c : classes) {
-            if (!c.equals(currentClass)) {
+        for (String c : allPossibleClasses) {
+            if (!currentClasses.contains(c)) {
                 availableClasses.add(c);
             }
         }
@@ -1036,7 +1090,13 @@ public class MainActivityGame extends SharedMainActivity {
         if (availableClasses.isEmpty()) return;
 
         String chosenClass = availableClasses.get(new Random().nextInt(availableClasses.size()));
-        player.setClassChoice(chosenClass);
+
+        if (game.getGameMode() == Game.GameMode.CRAZY) {
+            player.addClassChoice(chosenClass);
+        } else {
+            player.setClassChoice(chosenClass);
+        }
+
         player.setUsedActiveAbility(false);
         player.setJustUsedActiveAbility(false);
         AbilityComplimentary.assignActiveAbilityCooldown(player);

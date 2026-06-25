@@ -26,31 +26,54 @@ import com.example.countingdowngame.mainActivity.MainActivityGame;
 import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class PassiveAbilities extends ButtonUtilsActivity {
     static Game game = Game.getInstance();
     private static MainActivityGame activity;
+    private static final List<String> pendingPassiveMessages = new ArrayList<>();
 
     public static void setActivity(MainActivityGame activityInstance) {
         activity = activityInstance;
     }
 
+    private static void addPassiveMessage(String className, String message) {
+        pendingPassiveMessages.add(className + "'s Passive:\n\n" + message);
+    }
+
+    public static void showCombinedPassives() {
+        showCombinedPassives(null);
+    }
+
+    public static void showCombinedPassives(Runnable onDone) {
+        if (pendingPassiveMessages.isEmpty()) {
+            if (onDone != null) onDone.run();
+            return;
+        }
+
+        StringBuilder combined = new StringBuilder();
+        for (int i = 0; i < pendingPassiveMessages.size(); i++) {
+            combined.append(pendingPassiveMessages.get(i));
+            if (i < pendingPassiveMessages.size() - 1) {
+                combined.append("\n\n--------------------\n\n");
+            }
+        }
+
+        activity.showClassAbilityDialog(combined.toString(), () -> {
+            pendingPassiveMessages.clear();
+            if (onDone != null) onDone.run();
+        });
+    }
+
     public static void handleWitchPassive(Player currentPlayer) {
         if (!isFirstTurn) {
             if (game.getCurrentNumber() % 2 == 0) {
-                activity.showClassAbilityDialog(
-                        WITCH + "'s Passive: \n\n" +
-                                currentPlayer.getName() +
-                                " hand 1 drink."
-                );
+                addPassiveMessage(WITCH, currentPlayer.getName() + " hand 1 drink.");
                 currentPlayer.incrementDrinksHandedOutByWitch(1);
             } else {
-                activity.showClassAbilityDialog(
-                        WITCH + "'s Passive: \n\n" +
-                                currentPlayer.getName() +
-                                " take 1 drink."
-                );
+                addPassiveMessage(WITCH, currentPlayer.getName() + " take 1 drink.");
                 currentPlayer.incrementDrinksTakenByWitch(1);
             }
         }
@@ -67,12 +90,7 @@ public class PassiveAbilities extends ButtonUtilsActivity {
         if (!isFirstTurn) {
             if (!soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {
                 soldierRemoval = true;
-                activity.showClassAbilityDialog(
-                        SOLDIER + "'s Passive: \n\n" +
-                                currentPlayer.getName() +
-                                " has escaped the game as the soldier."
-                );
-
+                addPassiveMessage(SOLDIER, currentPlayer.getName() + " has escaped the game as the soldier.");
                 currentPlayer.setRemoved(true);
                 game.removePlayer(currentPlayer);
             } else if (soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {
@@ -83,17 +101,12 @@ public class PassiveAbilities extends ButtonUtilsActivity {
 
     public static void handleSurvivorPassive(Player currentPlayer) {
         String drinksText = (drinkNumberCounterInt == 1) ? "drink" : "drinks";
-
-        activity.showClassAbilityDialog(
-                SURVIVOR + "'s Passive: \n\n" +
-                         currentPlayer.getName() +
-                         " survived, hand out " + drinkNumberCounterInt + " " + drinksText
-        );
+        addPassiveMessage(SURVIVOR, currentPlayer.getName() + " survived, hand out " + drinkNumberCounterInt + " " + drinksText);
     }
 
     public static void checkGoblinPassive(Player wildcardUser, Runnable onDone) {
-        boolean wildcardUserHasGoblinPassive = GOBLIN.equals(wildcardUser.getClassChoice()) ||
-                (ANGRY_JIM.equals(wildcardUser.getClassChoice()) && game.getCurrentNumber() < 50);
+        boolean wildcardUserHasGoblinPassive = wildcardUser.getClassChoices().contains(GOBLIN) ||
+                (wildcardUser.getClassChoices().contains(ANGRY_JIM) && game.getCurrentNumber() < 50);
 
         if (wildcardUserHasGoblinPassive) {
             onDone.run();
@@ -102,14 +115,13 @@ public class PassiveAbilities extends ButtonUtilsActivity {
 
         boolean goblinTriggered = false;
         for (Player player : game.getPlayers()) {
-            boolean hasGoblinPassive = GOBLIN.equals(player.getClassChoice()) ||
-                    (ANGRY_JIM.equals(player.getClassChoice()) && game.getCurrentNumber() < 50);
+            boolean hasGoblinPassive = player.getClassChoices().contains(GOBLIN) ||
+                    (player.getClassChoices().contains(ANGRY_JIM) && game.getCurrentNumber() < 50);
 
             if (hasGoblinPassive && !player.equals(wildcardUser)) {
                 goblinTriggered = true;
                 activity.showClassAbilityDialog(
-                        GOBLIN + "'s Passive: \n\n" +
-                                " Drink once for using a wildcard!",
+                        GOBLIN + "'s Passive: \n\n Drink once for using a wildcard!",
                         onDone
                 );
                 break;
@@ -123,20 +135,15 @@ public class PassiveAbilities extends ButtonUtilsActivity {
 
     public static void handleScientistPassive(Player currentPlayer) {
         if (!isFirstTurn) {
-            Handler handler = new Handler();
             int currentNumber = game.getCurrentNumber();
             int skipChance = (currentNumber < 10) ? 20 : (currentNumber < 100 ? 15 : 10);
             int chance = new Random().nextInt(100);
 
-            handler.postDelayed(() -> {
-                if (chance < skipChance) {
-                    activity.showClassAbilityDialog(
-                            SCIENTIST + "'s Passive: \n\n" +
-                                    currentPlayer.getName() + "'s turn was skipped."
-                    );
-                    currentPlayer.useSkip();
-                }
-            }, 1);
+            if (chance < skipChance) {
+                addPassiveMessage(SCIENTIST, currentPlayer.getName() + "'s turn was skipped.");
+                // Note: Skip happens after dialog usually, but for consistency we add it here
+                currentPlayer.useSkip();
+            }
         }
     }
 
@@ -149,7 +156,7 @@ public class PassiveAbilities extends ButtonUtilsActivity {
             game.updateRepeatingTurns(currentPlayer, 1);
         }
 
-        if (numberBelow50 && game.getNumberWasGenerated() == true) {
+        if (numberBelow50 && game.getNumberWasGenerated()) {
             handleSoldierPassive();
             if (currentPlayer.isRemoved()) return;
             handleArcherPassive(currentPlayer);
@@ -159,7 +166,7 @@ public class PassiveAbilities extends ButtonUtilsActivity {
     }
 
     public static void handleArcherPassive(Player currentPlayer) {
-        if (!ANGRY_JIM.equals(currentPlayer.getClassChoice())) {
+        if (!currentPlayer.getClassChoices().contains(ANGRY_JIM)) {
             currentPlayer.incrementPassiveAbilityTurnCounter();
         }
 
@@ -168,16 +175,10 @@ public class PassiveAbilities extends ButtonUtilsActivity {
             int chance = new Random().nextInt(100);
             if (chance < 60) {
                 activity.updateDrinkNumberCounter(2, true);
-                activity.showClassAbilityDialog(
-                        ARCHER + "'s Passive: \n\n" +
-                                "Drinking number increased by 2!"
-                );
+                addPassiveMessage(ARCHER, "Drinking number increased by 2!");
             } else {
                 activity.updateDrinkNumberCounter(-2, true);
-                activity.showClassAbilityDialog(
-                        ARCHER + "'s Passive: \n\n" +
-                                "Drinking number decreased by 2!"
-                );
+                addPassiveMessage(ARCHER, "Drinking number decreased by 2!");
             }
         }
     }
@@ -188,11 +189,8 @@ public class PassiveAbilities extends ButtonUtilsActivity {
             if (chance < 20) {
                 currentPlayer.setTrollPassiveUsed(true);
                 activity.hideNumberForTroll(currentPlayer);
-                activity.showClassAbilityDialog(
-                        TROLL + "'s Passive: \n\n" +
-                                "The generate number is now hidden.\n\n" +
-                                currentPlayer.getName() + " can still see it. Others must pay 3 drinks if they want to reveal it!"
-                );
+                addPassiveMessage(TROLL, "The generate number is now hidden.\n\n" +
+                        currentPlayer.getName() + " can still see it. Others must pay 3 drinks if they want to reveal it!");
             }
         }
     }
@@ -288,11 +286,8 @@ public class PassiveAbilities extends ButtonUtilsActivity {
             message = currentPlayer.getName() + " lost their bet! Take 1 drink.";
             currentPlayer.incrementDrinksTakenByGambler(1);
         }
-        activity.showClassAbilityDialog(
-                GAMBLER + "'s Passive: \n\n" +
-                        message
-        );
-
+        
+        addPassiveMessage(GAMBLER, message);
         gamblerBet = "";
     }
 }

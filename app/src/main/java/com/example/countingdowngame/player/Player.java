@@ -20,7 +20,7 @@ public class Player implements Serializable {
     private final String id; // Unique identifier for the player
     private final String photo;
     private String name;
-    private String classChoice;
+    private List<String> classChoices = new ArrayList<>();
     private Game game;
     private int wildCardAmount;
     private int usedWildcards;
@@ -57,7 +57,9 @@ public class Player implements Serializable {
         this.id = id;
         this.photo = photo;
         this.name = name;
-        this.classChoice = classChoice;
+        if (classChoice != null) {
+            ensureClassChoices().add(classChoice);
+        }
         this.selected = false;
         this.usedActiveAbility = false;
         this.justUsedClassAbility = false;
@@ -91,11 +93,34 @@ public class Player implements Serializable {
     }
 
     public String getClassChoice() {
-        return classChoice;
+        if (ensureClassChoices().isEmpty()) return "No Class";
+        return classChoices.get(classChoices.size() - 1);
+    }
+
+    private List<String> ensureClassChoices() {
+        if (classChoices == null) {
+            classChoices = new ArrayList<>();
+        }
+        return classChoices;
+    }
+
+    public List<String> getClassChoices() {
+        return ensureClassChoices();
     }
 
     public void setClassChoice(String classChoice) {
-        this.classChoice = classChoice;
+        ensureClassChoices().clear();
+        if (classChoice != null) {
+            this.classChoices.add(classChoice);
+        }
+    }
+
+    public void addClassChoice(String classChoice) {
+        if (classChoice != null) {
+            if (!ensureClassChoices().contains(classChoice)) {
+                classChoices.add(classChoice);
+            }
+        }
     }
 
     public String getName() {
@@ -189,10 +214,16 @@ public class Player implements Serializable {
     }
 
     public void addNumberPlayed(int number) {
+        if (ensureNumbersPlayed() != null) {
+            numbersPlayed.add(number);
+        }
+    }
+
+    private List<Integer> ensureNumbersPlayed() {
         if (numbersPlayed == null) {
             numbersPlayed = new ArrayList<>();
         }
-        numbersPlayed.add(number);
+        return numbersPlayed;
     }
 
     //-----------------------------------------------------Global Stats---------------------------------------------------//
@@ -285,8 +316,10 @@ public class Player implements Serializable {
 
     //-----------------------------------------------------Chamber Setup---------------------------------------------------//
 
-    // Get the player's chamber as a list of integers, where 1 is the bullet and 0 is a blank.
     public List<Integer> getBulletsInChamberList() {
+        if (bulletsInChamberList == null) {
+            bulletsInChamberList = new ArrayList<>();
+        }
         return bulletsInChamberList;
     }
 
