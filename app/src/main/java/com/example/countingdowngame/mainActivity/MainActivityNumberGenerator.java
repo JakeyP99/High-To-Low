@@ -175,14 +175,14 @@ public class MainActivityNumberGenerator {
             activity.disableButtons(); // Lock buttons during the long animation
             numberCounterText.setTextColor(Color.YELLOW);
 
-            YoYo.with(Techniques.Pulse).duration(1000).repeat(4) // 5 pulses total (1s each)
+            YoYo.with(Techniques.Pulse).duration(1000).repeat(2) // 5 pulses total (1s each)
                     .playOn(numberCounterText);
 
             new Handler().postDelayed(() -> {
                 activity.awardRandomClass(currentPlayer, targetNumber);
                 activity.renderCurrentNumber(targetNumber, activity::gotoGameEnd, numberCounterText);
                 activity.enableButtons(); // Re-enable after award
-            }, 5000); // Wait for 5 seconds of pulsing
+            }, 2000); // Wait for 5 seconds of pulsing
 
             Game.getInstance().getClassNumbers().remove(Integer.valueOf(targetNumber)); // Only award once
         } else {

@@ -1042,7 +1042,7 @@ public class MainActivityGame extends SharedMainActivity {
         player.setJustUsedActiveAbility(false);
         AbilityComplimentary.assignActiveAbilityCooldown(player);
 
-        showClassAbilityDialog(player.getName() + " landed on " + number + " and obtained the " + chosenClass + " Class!");
+        showClassAbilityDialog("Class Obtained \n\n" + player.getName() + " landed on " + number + " and obtained the " + chosenClass + " Class!");
     }
 
     public void halveCurrentNumber() {

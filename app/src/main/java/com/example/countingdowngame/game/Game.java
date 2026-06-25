@@ -54,20 +54,25 @@ public class Game {
 
     public void generateClassNumbers(int startingNumber) {
         classNumbers.clear();
-        if (gameMode != GameMode.CLASS_HUNT) return;
+        if (gameMode != GameMode.CLASS_HUNT || startingNumber <= 0) return;
 
         Random random = new Random();
-        // Determine number of classes to spawn based on starting number
-        // Scale: e.g. 1 class per 10 numbers, but at most 5000 classes total.
-        int numClasses = Math.min(5000, Math.max(2, startingNumber / 10));
+        // Determine number of classes to spawn: half the starting number, capped at 9999.
+        int targetSize = Math.min(9999, Math.max(1, startingNumber / 15));
 
-        for (int i = 0; i < numClasses; i++) {
-            int classNum = random.nextInt(startingNumber) + 1; // Don't include 0
-            if (!classNumbers.contains(classNum)) {
-                classNumbers.add(classNum);
-            }
+        // Use a Set to efficiently track unique numbers during generation (prevents performance lag)
+        java.util.HashSet<Integer> uniqueSet = new java.util.HashSet<>();
+
+        // Keep picking random numbers until we reach the target size or cover all possible numbers
+        int limit = Math.min(targetSize, startingNumber);
+
+        while (uniqueSet.size() < limit) {
+            int classNum = random.nextInt(startingNumber) + 1;
+            uniqueSet.add(classNum);
         }
-        Log.d(TAG, "generateClassNumbers: " + classNumbers);
+
+        classNumbers.addAll(uniqueSet);
+        Log.d(TAG, "generateClassNumbers: " + classNumbers.size() + " unique classes generated.");
     }
 
     public GameMode getGameMode() {

@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Build;
-import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
@@ -141,8 +140,6 @@ public class ButtonUtils {
 
         view.setOnClickListener(v -> {
             if (buttonAction != null) {
-                view.setEnabled(false);
-                new Handler().postDelayed(() -> view.setEnabled(true), 1500);
                 buttonAction.run();
             }
             vibrateDevice();
