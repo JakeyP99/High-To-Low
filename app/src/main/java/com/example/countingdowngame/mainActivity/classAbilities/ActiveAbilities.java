@@ -1031,14 +1031,6 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         return "A";
     }
 
-    public static boolean isStartMiniGame() {
-        return startMiniGame;
-    }
-
-    public static void setStartMiniGame(boolean startMiniGame) {
-        ActiveAbilities.startMiniGame = startMiniGame;
-    }
-
     public static class OpponentAdapter extends RecyclerView.Adapter<OpponentAdapter.VH> {
         private final List<Player> opponents;
         private final OnClick listener;

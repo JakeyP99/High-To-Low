@@ -544,46 +544,56 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
 
+    private List<String> getAvailableAbilities(Player player) {
+        List<String> available = new ArrayList<>();
+        if (player.getUsedActiveAbility()) return available;
+
+        for (String classChoice : player.getClassChoices()) {
+            if (isAbilityAvailable(player, classChoice)) {
+                available.add(classChoice);
+            }
+        }
+        return available;
+    }
+
+    private boolean isAbilityAvailable(Player player, String classChoice) {
+        if (CharacterClassDescriptions.ARCHER.equals(classChoice)) return drinkNumberCounterInt >= 2;
+        if (CharacterClassDescriptions.SOLDIER.equals(classChoice)) return !isFirstTurn && game.getCurrentNumber() <= 10;
+        if (CharacterClassDescriptions.QUIZ_MAGICIAN.equals(classChoice)) return player.getWildCardAmount() >= 1;
+        if (CharacterClassDescriptions.SURVIVOR.equals(classChoice)) return game.getCurrentNumber() > 1;
+        if (CharacterClassDescriptions.GOBLIN.equals(classChoice)) {
+            boolean othersHaveWildcards = false;
+            for (Player p : game.getPlayers()) {
+                if (!p.equals(player) && p.getWildCardAmount() > 0) {
+                    othersHaveWildcards = true;
+                    break;
+                }
+            }
+            return othersHaveWildcards && player.getWildCardAmount() >= 1;
+        }
+        return true; // Default for others like Scientist, Witch, etc.
+    }
+
     private void updateClassAbilityButton(Player currentPlayer) {
-        List<String> classes = currentPlayer.getClassChoices();
-        if (classes.isEmpty()) {
+        List<String> availableClasses = getAvailableAbilities(currentPlayer);
+        
+        if (availableClasses.isEmpty()) {
             btnClassAbility.setVisibility(View.INVISIBLE);
             return;
         }
 
-        if (classes.size() > 1) {
+        if (availableClasses.size() > 1) {
             labelAbilityTitle.setText("Multiple Abilities");
             labelAbilityDesc.setText("Tap to choose which one to activate");
-            iconAbility.setImageResource(R.drawable.swissarmyknife); // Or a "multi" icon if you have one
+            iconAbility.setImageResource(R.drawable.swissarmyknife); 
         } else {
-            String classChoice = classes.get(0);
+            String classChoice = availableClasses.get(0);
             labelAbilityTitle.setText(getClassActiveButtonText(classChoice));
             labelAbilityDesc.setText(getClassActiveDescription(classChoice));
             iconAbility.setImageResource(playerChoiceComplimentary.getClassIcon(classChoice));
         }
 
-        boolean canShowButton = !currentPlayer.getUsedActiveAbility();
-
-        // Specific rules for dynamic hiding (if they only have ONE class)
-        if (classes.size() == 1) {
-            String classChoice = classes.get(0);
-            if (ARCHER.equals(classChoice) && drinkNumberCounterInt < 2) canShowButton = false;
-            if (SOLDIER.equals(classChoice) && (isFirstTurn || game.getCurrentNumber() > 10)) canShowButton = false;
-            if (QUIZ_MAGICIAN.equals(classChoice) && currentPlayer.getWildCardAmount() < 1) canShowButton = false;
-            if (SURVIVOR.equals(classChoice) && game.getCurrentNumber() == 1) canShowButton = false;
-            if (GOBLIN.equals(classChoice)) {
-                boolean othersHaveWildcards = false;
-                for (Player p : game.getPlayers()) {
-                    if (!p.equals(currentPlayer) && p.getWildCardAmount() > 0) {
-                        othersHaveWildcards = true;
-                        break;
-                    }
-                }
-                if (!othersHaveWildcards || currentPlayer.getWildCardAmount() < 1) canShowButton = false;
-            }
-        }
-
-        btnClassAbility.setVisibility(canShowButton ? View.VISIBLE : View.INVISIBLE);
+        btnClassAbility.setVisibility(View.VISIBLE);
 
         labelAbilityDesc.postDelayed(() -> {
             labelAbilityDesc.setSelected(true);
@@ -786,12 +796,12 @@ public class MainActivityGame extends SharedMainActivity {
 
     public void activateActiveAbility() {
         Player currentPlayer = game.getCurrentPlayer();
-        List<String> classes = currentPlayer.getClassChoices();
+        List<String> availableClasses = getAvailableAbilities(currentPlayer);
 
-        if (classes.size() > 1) {
-            showActiveAbilitySelector(currentPlayer, classes);
-        } else if (classes.size() == 1) {
-            triggerSpecificActiveAbility(classes.get(0), currentPlayer);
+        if (availableClasses.size() > 1) {
+            showActiveAbilitySelector(currentPlayer, availableClasses);
+        } else if (availableClasses.size() == 1) {
+            triggerSpecificActiveAbility(availableClasses.get(0), currentPlayer);
         }
     }
 
@@ -807,7 +817,7 @@ public class MainActivityGame extends SharedMainActivity {
         titleTextView.setText("Choose Active:");
 
         RecyclerView recyclerView = dialogView.findViewById(R.id.listViewOpponents);
-        recyclerView.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 2));
+        recyclerView.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 3));
 
         AlertDialog dialog = builder.setView(dialogView).create();
 
