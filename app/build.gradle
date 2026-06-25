@@ -40,6 +40,21 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
     buildToolsVersion '34.0.0'
+
+    sourceSets {
+        main {
+            res.srcDirs = [
+                    'src/main/res/layouts/main',
+                    'src/main/res/layouts/game',
+                    'src/main/res/layouts/player_choice',
+                    'src/main/res/layouts/statistics',
+                    'src/main/res/layouts/home',
+                    'src/main/res/layouts/instructions',
+                    'src/main/res/layouts/settings',
+                    'src/main/res'
+            ]
+        }
+    }
 }
 
 dependencies {
