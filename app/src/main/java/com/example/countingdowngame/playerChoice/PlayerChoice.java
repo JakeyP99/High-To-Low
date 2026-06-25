@@ -32,6 +32,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
+import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
 import com.example.countingdowngame.createPlayer.CharacterClassPagerAdapter;
 import com.example.countingdowngame.createPlayer.CharacterClassStore;
 import com.example.countingdowngame.createPlayer.PlayerListAdapter;
@@ -111,8 +112,10 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         if (player.isSelected()) {
             player.setSelectionOrder(++selectedPlayerCount);
             player.setClassChoice(null); // Clear any previous class choice when selecting
-            if (!Game.getInstance().isPlayCards()) {
+            if (!Game.getInstance().isPlayCards() && Game.getInstance().getGameMode() == Game.GameMode.CLASSIC) {
                 chooseClass(position);
+            } else if (Game.getInstance().getGameMode() == Game.GameMode.CLASS_HUNT) {
+                player.setClassChoice(CharacterClassDescriptions.NO_CLASS);
             }
         } else {
             selectedPlayerCount--;

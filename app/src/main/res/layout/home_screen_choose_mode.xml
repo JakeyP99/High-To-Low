@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@drawable/rounded_background">
+
+    <!-- Header Section -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/viga"
+        android:layout_gravity="center"
+        android:paddingTop="10dp"
+        android:text="Choose Game Mode"
+        android:textAlignment="center"
+        android:textColor="@color/bluedark"
+        android:textSize="35sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        android:background="@color/bluedark"
+        android:alpha="0.2" />
+
+    <!-- Mode 1 -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/btn_mode_classic"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/outlineforbutton"
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            android:id="@+id/textClassic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:text="Classes For Everyone"
+            android:textColor="@color/bluedark"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/subClassic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/subClassic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:text="Everyone gets to choose a class"
+            android:textColor="@color/bluedark"
+            android:textSize="14sp"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            app:layout_constraintTop_toBottomOf="@id/textClassic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Mode 2 -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/btn_mode_class_hunt"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/outlineforbutton"
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            android:id="@+id/textHunt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:text="Land On Classes"
+            android:textColor="@color/bluedark"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/subHunt"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/subHunt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:text="Discover classes by landing on various numbers"
+            android:textColor="@color/bluedark"
+            android:textSize="14sp"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            app:layout_constraintTop_toBottomOf="@id/textHunt"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

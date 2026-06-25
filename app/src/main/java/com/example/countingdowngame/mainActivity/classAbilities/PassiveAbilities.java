@@ -62,7 +62,7 @@ public class PassiveAbilities extends ButtonUtilsActivity {
 
         int currentNumber = game.getCurrentNumber();
         int minRange = 10;
-        int maxRange = 5000;
+        int maxRange = 15;
 
         if (!isFirstTurn) {
             if (!soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {

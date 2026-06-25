@@ -7,6 +7,7 @@ import static com.example.countingdowngame.createPlayer.CharacterClassDescriptio
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleGamblerPassiveResult;
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleSurvivorPassive;
 
+import android.graphics.Color;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.TextView;
@@ -70,6 +71,7 @@ public class MainActivityNumberGenerator {
                 String display = MainActivityGame.getDisplayNumber(randomDigit);
                 numberCounterText.setText(display);
                 SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, display);
+                numberCounterText.setTextColor(Color.BLACK); // Always black during shuffle
 
                 float progress = (float) shuffleTime / shuffleDuration;
                 currentInterval = (int) (initialInterval + (progress * progress * 250));
@@ -106,10 +108,26 @@ public class MainActivityNumberGenerator {
                 handleGamblerPassiveResult(targetNumber);
             }
 
-            activity.renderCurrentNumber(targetNumber, activity::gotoGameEnd, numberCounterText);
+            if (Game.getInstance().getGameMode() == Game.GameMode.CLASS_HUNT && Game.getInstance().getClassNumbers().contains(targetNumber)) {
+                activity.disableButtons(); // Lock buttons during the long animation
+                numberCounterText.setTextColor(Color.YELLOW);
 
-            if (targetNumber != 0) {
-                activity.enableButtons();
+                YoYo.with(Techniques.Pulse)
+                        .duration(1000)
+                        .repeat(4) // 5 pulses total (1s each)
+                        .playOn(numberCounterText);
+                
+                new Handler().postDelayed(() -> {
+                    activity.awardRandomClass(currentPlayer, targetNumber);
+                    activity.enableButtons(); // Re-enable after award
+                }, 5000); // Wait for 5 seconds of pulsing
+
+                Game.getInstance().getClassNumbers().remove(Integer.valueOf(targetNumber)); // Only award once
+            } else {
+                activity.renderCurrentNumber(targetNumber, activity::gotoGameEnd, numberCounterText);
+                if (targetNumber != 0) {
+                    activity.enableButtons();
+                }
             }
         }
     }

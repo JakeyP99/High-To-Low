@@ -98,8 +98,37 @@ public class HomeScreen extends playerChoiceComplimentary {
         View button = findViewById(buttonId);
         buttonUtils.setButton(button, () -> {
             Game.getInstance().setPlayCards(playCards);
+            if (playCards) {
+                gotoPlayerChoice();
+            } else {
+                showGameModeDialog();
+            }
+        });
+    }
+
+    private void showGameModeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
+        LayoutInflater inflater = getLayoutInflater();
+
+        View dialogView = inflater.inflate(R.layout.home_screen_choose_mode, null);
+        View btnClassic = dialogView.findViewById(R.id.btn_mode_classic);
+        View btnHunt = dialogView.findViewById(R.id.btn_mode_class_hunt);
+
+        AlertDialog dialog = builder.setView(dialogView).create();
+
+        buttonUtils.setButton(btnClassic, () -> {
+            Game.getInstance().setGameMode(Game.GameMode.CLASSIC);
+            dialog.dismiss();
             gotoPlayerChoice();
         });
+
+        buttonUtils.setButton(btnHunt, () -> {
+            Game.getInstance().setGameMode(Game.GameMode.CLASS_HUNT);
+            dialog.dismiss();
+            gotoPlayerChoice();
+        });
+
+        dialog.show();
     }
 
     private void setupDrinkGif() {

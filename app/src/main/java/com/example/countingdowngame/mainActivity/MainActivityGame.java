@@ -49,6 +49,7 @@ import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
 import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.GameEventType;
+import com.example.countingdowngame.mainActivity.classAbilities.AbilityComplimentary;
 import com.example.countingdowngame.mainActivity.classAbilities.ActiveAbilities;
 import com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities;
 import com.example.countingdowngame.player.Player;
@@ -280,6 +281,7 @@ public class MainActivityGame extends SharedMainActivity {
                 renderPlayer(false);
             }
         });
+        game.generateClassNumbers(startingNumber);
         renderPlayer(false);
         updateDrinkNumberCounterTextView();
     }
@@ -1016,6 +1018,31 @@ public class MainActivityGame extends SharedMainActivity {
 
     public void showGameDialog(String message) {
         showDialog(message, R.layout.game_main_dialog_box, R.id.dialogbox_textview);
+    }
+
+    public void awardRandomClass(Player player, int number) {
+        String[] classes = {
+                ANGRY_JIM, ARCHER, GAMBLER, GOBLIN, QUIZ_MAGICIAN,
+                SCIENTIST, SOLDIER, SURVIVOR, TROLL, WITCH
+        };
+
+        String currentClass = player.getClassChoice();
+        List<String> availableClasses = new ArrayList<>();
+        for (String c : classes) {
+            if (!c.equals(currentClass)) {
+                availableClasses.add(c);
+            }
+        }
+
+        if (availableClasses.isEmpty()) return;
+
+        String chosenClass = availableClasses.get(new Random().nextInt(availableClasses.size()));
+        player.setClassChoice(chosenClass);
+        player.setUsedActiveAbility(false);
+        player.setJustUsedActiveAbility(false);
+        AbilityComplimentary.assignActiveAbilityCooldown(player);
+
+        showClassAbilityDialog(player.getName() + " landed on " + number + " and obtained the " + chosenClass + " Class!");
     }
 
     public void halveCurrentNumber() {

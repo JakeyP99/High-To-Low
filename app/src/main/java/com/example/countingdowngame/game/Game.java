@@ -40,6 +40,43 @@ public class Game {
     private final List<GameTurns> turns = new ArrayList<>();
     private boolean reverseOrder = false;
     private String splitTarget;
+    private GameMode gameMode = GameMode.CLASSIC;
+    private final List<Integer> classNumbers = new ArrayList<>();
+
+    public enum GameMode {
+        CLASSIC,
+        CLASS_HUNT
+    }
+
+    public List<Integer> getClassNumbers() {
+        return classNumbers;
+    }
+
+    public void generateClassNumbers(int startingNumber) {
+        classNumbers.clear();
+        if (gameMode != GameMode.CLASS_HUNT) return;
+
+        Random random = new Random();
+        // Determine number of classes to spawn based on starting number
+        // Scale: e.g. 1 class per 20 numbers, minimum 2 if number is high enough
+        int numClasses = Math.max(2, startingNumber / 10);
+
+        for (int i = 0; i < numClasses; i++) {
+            int classNum = random.nextInt(startingNumber) + 1; // Don't include 0
+            if (!classNumbers.contains(classNum)) {
+                classNumbers.add(classNum);
+            }
+        }
+        Log.d(TAG, "generateClassNumbers: " + classNumbers);
+    }
+
+    public GameMode getGameMode() {
+        return gameMode;
+    }
+
+    public void setGameMode(GameMode mode) {
+        this.gameMode = mode;
+    }
 
     //-----------------------------------------------------Game Modes---------------------------------------------------//
 
@@ -475,6 +512,7 @@ public class Game {
         reverseOrder = false;
         lastTurnPlayer = null;
         splitTarget = null;
+        classNumbers.clear();
     }
 
 
