@@ -281,7 +281,6 @@ public class MainActivityGame extends SharedMainActivity {
                 renderPlayer(false);
             }
         });
-        game.generateClassNumbers(startingNumber);
         renderPlayer(false);
         updateDrinkNumberCounterTextView();
     }

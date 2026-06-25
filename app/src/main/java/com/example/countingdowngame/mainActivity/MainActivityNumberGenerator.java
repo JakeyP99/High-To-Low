@@ -2,6 +2,7 @@ package com.example.countingdowngame.mainActivity;
 
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
+import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.NO_CLASS;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleGamblerPassiveResult;
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleSurvivorPassive;
@@ -9,12 +10,12 @@ import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAb
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.graphics.Color;
 import android.os.Handler;
 import android.view.View;
 import android.view.animation.PathInterpolator;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,9 +26,14 @@ import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.player.Player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Handles the generation and animation of numbers in the main game activity.
+ * Supports both a "Classic" digit-shuffle and a "Class Hunt" roulette-style animation.
+ */
 public class MainActivityNumberGenerator {
 
     private final MainActivityGame activity;
@@ -44,161 +50,155 @@ public class MainActivityNumberGenerator {
         this.shuffleHandler = new Handler();
     }
 
+    /**
+     * Entry point to start the number animation sequence.
+     */
     public void startNumberShuffleAnimation() {
         activity.disableButtons();
         int originalNumber = Game.getInstance().getCurrentNumber();
         int targetNumber = Game.getInstance().nextNumber();
 
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        boolean hasClass = currentPlayer != null && !com.example.countingdowngame.createPlayer.CharacterClassDescriptions.NO_CLASS.equals(currentPlayer.getClassChoice());
+        boolean hasClass = currentPlayer != null && !NO_CLASS.equals(currentPlayer.getClassChoice());
 
+        // Dispatch based on Game Mode and Player status
         if (Game.getInstance().getGameMode() == Game.GameMode.CLASS_HUNT && !hasClass) {
-            startRouletteAnimation(originalNumber, targetNumber);
+            runRouletteMode(originalNumber, targetNumber);
         } else {
-            // Ensure any previous class markers are cleared so they don't trigger for this player
-            Game.getInstance().getClassNumbers().clear();
-
-            final int shuffleDuration = 1500;
-            int initialShuffleInterval = originalNumber >= 1000 ? 30 : 50;
-            final Random random = new Random();
-            shuffleHandler.postDelayed(new ShuffleRunnable(random, originalNumber, targetNumber, shuffleDuration, initialShuffleInterval), initialShuffleInterval);
+            runClassicMode(originalNumber, targetNumber);
         }
     }
 
-    private void startRouletteAnimation(int originalNumber, int targetNumber) {
+    //------------------------------------------------------------------------------------------------------------------
+    // CLASSIC MODE LOGIC
+    //------------------------------------------------------------------------------------------------------------------
 
-        activity.disableButtons();
-        numberCounterText.setVisibility(View.INVISIBLE);
-        rouletteRecyclerView.setVisibility(View.VISIBLE);
-        roulettePointer.setVisibility(View.VISIBLE);
+    private void runClassicMode(int originalNumber, int targetNumber) {
+        // Clear any leftover class markers so they don't trigger accidentally
+        Game.getInstance().getClassNumbers().clear();
 
+        final int shuffleDuration = 1500;
+        int initialShuffleInterval = originalNumber >= 1000 ? 30 : 50;
+        final Random random = new Random();
 
-        // Create a list of random numbers to simulate the roulette spinning effect
-        List<Integer> rouletteNumbers = new ArrayList<>();
-        List<Integer> dynamicClassNumbers = Game.getInstance().getClassNumbers();
-        dynamicClassNumbers.clear();
+        shuffleHandler.postDelayed(new ShuffleRunnable(
+                random, originalNumber, targetNumber, shuffleDuration, initialShuffleInterval
+        ), initialShuffleInterval);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // ROULETTE MODE LOGIC
+    //------------------------------------------------------------------------------------------------------------------
+
+    private void runRouletteMode(int originalNumber, int targetNumber) {
+        setupRouletteUI(true);
+
+        List<Integer> rouletteNumbers = generateUniqueRoulettePool(originalNumber, targetNumber);
+        List<Integer> dynamicClassMarkers = calculateDynamicClassMarkers(rouletteNumbers, targetNumber);
+
+        setupRouletteRecyclerView(rouletteNumbers, dynamicClassMarkers);
+        startRouletteScrollAnimation(targetNumber);
+    }
+
+    private void setupRouletteUI(boolean visible) {
+        int rouletteVisibility = visible ? View.VISIBLE : View.GONE;
+        int normalVisibility = visible ? View.INVISIBLE : View.VISIBLE;
+
+        numberCounterText.setVisibility(normalVisibility);
+        rouletteRecyclerView.setVisibility(rouletteVisibility);
+        roulettePointer.setVisibility(rouletteVisibility);
+    }
+
+    private List<Integer> generateUniqueRoulettePool(int originalNumber, int targetNumber) {
+        List<Integer> pool = new ArrayList<>();
+        for (int i = 0; i <= originalNumber; i++) {
+            pool.add(i);
+        }
+        Collections.shuffle(pool);
+
+        List<Integer> result = new ArrayList<>();
+        while (result.size() < 60) {
+            if (pool.isEmpty()) {
+                for (int i = 0; i <= originalNumber; i++) pool.add(i);
+                Collections.shuffle(pool);
+            }
+            result.add(pool.remove(0));
+        }
+
+        // Force winning number at the center position (50)
+        result.set(50, targetNumber);
+        return result;
+    }
+
+    private List<Integer> calculateDynamicClassMarkers(List<Integer> numbers, int targetNumber) {
+        List<Integer> markers = Game.getInstance().getClassNumbers();
+        markers.clear();
         Random r = new Random();
 
-        // 1. Generate unique random numbers for the roulette (0 to originalNumber)
-        List<Integer> availablePool = new ArrayList<>();
-        for (int i = 0; i <= originalNumber; i++) {
-            availablePool.add(i);
-        }
-        java.util.Collections.shuffle(availablePool);
-
-        // We need 60 numbers. If pool is smaller, we repeat it after shuffling again.
-        while (rouletteNumbers.size() < 60) {
-            if (availablePool.isEmpty()) {
-                for (int i = 0; i <= originalNumber; i++) availablePool.add(i);
-                java.util.Collections.shuffle(availablePool);
-            }
-            rouletteNumbers.add(availablePool.remove(0));
-        }
-
-        // Force the target/winning number into the list at position 50
-        // This ensures the roulette always ends on the correct result
-        rouletteNumbers.set(50, targetNumber);
-
-        // 2. Dynamic Class Probability Logic
-        // Determine if target is a class number based on probability tiers
-        if (targetNumber > 0) {
-            int chance; // 1 in X
-            if (targetNumber > 1000) chance = 100;
-            else if (targetNumber >= 500) chance = 50;
-            else if (targetNumber >= 100) chance = 15;
-            else if (targetNumber >= 10) chance = 2;
-            else chance = 1; // 5+ or rather < 10
-
-            if (r.nextInt(chance) == 0) {
-                dynamicClassNumbers.add(targetNumber);
+        for (int num : numbers) {
+            if (num > 0 && r.nextInt(getProbabilityChance(num)) == 0) {
+                markers.add(num);
             }
         }
 
-        // Randomly color other numbers in the roulette for visual flair
-        for (int i = 0; i < rouletteNumbers.size(); i++) {
-            if (i == 50) continue;
-            int num = rouletteNumbers.get(i);
-            if (num > 0) {
-                int chance;
-                if (num > 1000) chance = 100;
-                else if (num >= 500) chance = 50;
-                else if (num >= 100) chance = 15;
-                else if (num >= 10) chance = 2;
-                else chance = 1;
-
-                if (r.nextInt(chance) == 0) {
-                    dynamicClassNumbers.add(num);
-                }
-            }
+        // Ensure target is included if it rolled a success (consistency check)
+        if (targetNumber > 0 && r.nextInt(getProbabilityChance(targetNumber)) == 0) {
+            if (!markers.contains(targetNumber)) markers.add(targetNumber);
         }
 
-        // Create adapter to display the roulette numbers
-        RouletteAdapter adapter = new RouletteAdapter(rouletteNumbers, dynamicClassNumbers);
+        return markers;
+    }
 
-        // Setup horizontal scrolling layout for the roulette
+    private int getProbabilityChance(int number) {
+        if (number > 1000) return 100;
+        if (number >= 500) return 50;
+        if (number >= 100) return 15;
+        if (number >= 10) return 2;
+        return 1; // 100% chance for < 10
+    }
+
+    private void setupRouletteRecyclerView(List<Integer> numbers, List<Integer> classMarkers) {
+        RouletteAdapter adapter = new RouletteAdapter(numbers, classMarkers);
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
 
         rouletteRecyclerView.setLayoutManager(layoutManager);
         rouletteRecyclerView.setAdapter(adapter);
+    }
 
-
-        // Calculate the pixel width of each roulette item
+    private void startRouletteScrollAnimation(int targetNumber) {
         float density = activity.getResources().getDisplayMetrics().density;
         int itemWidthPx = (int) (160 * density);
-
-        // Get the width of the container so we can center the selected number
         int containerWidth = activity.findViewById(R.id.btnGenerate).getWidth();
         int centerOffset = containerWidth / 2;
 
-
-        // Calculate how far the RecyclerView needs to scroll
-        // so that item 50 (the winning number) lines up with the pointer
         int totalScroll = 50 * itemWidthPx + (itemWidthPx / 2) - centerOffset;
 
-
-        // Create an animation that smoothly scrolls the roulette from start to end
         ValueAnimator animator = ValueAnimator.ofInt(0, totalScroll);
-
         animator.setDuration(5000);
         animator.setInterpolator(new PathInterpolator(0.0f, 0.0f, 0.15f, 1.0f));
-        // Update the RecyclerView position during the animation
+
         animator.addUpdateListener(animation -> {
-
-            // Get current scroll position
             int currentScroll = (int) animation.getAnimatedValue();
-
-            // Move roulette items horizontally
-            layoutManager.scrollToPositionWithOffset(0, -currentScroll);
+            LinearLayoutManager lm = (LinearLayoutManager) rouletteRecyclerView.getLayoutManager();
+            if (lm != null) lm.scrollToPositionWithOffset(0, -currentScroll);
         });
 
-
-        // When the roulette finishes spinning
         animator.addListener(new AnimatorListenerAdapter() {
-
             @Override
             public void onAnimationEnd(Animator animation) {
-
-                // Small delay so the player can see the final number
                 new Handler().postDelayed(() -> {
-
-                    // Hide roulette UI
-                    rouletteRecyclerView.setVisibility(View.GONE);
-                    roulettePointer.setVisibility(View.GONE);
-
-                    // Show the normal number display again
-                    numberCounterText.setVisibility(View.VISIBLE);
-
-                    // Reveal the actual result
+                    setupRouletteUI(false);
                     revealFinalNumber(targetNumber);
-
                 }, 500);
             }
         });
 
-
-        // Start the roulette animation
         animator.start();
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // SHARED FINALIZATION
+    //------------------------------------------------------------------------------------------------------------------
 
     private void revealFinalNumber(int targetNumber) {
         int previousNumber = Game.getInstance().getPreviousNumber();
@@ -212,33 +212,55 @@ public class MainActivityNumberGenerator {
 
         MainActivityGame.updateNumberColor(targetNumber);
 
+        // Handle Class Passive Effects
+        applyPassiveAbilities(currentPlayer, targetNumber, previousNumber);
 
-        if ((targetNumber == 1 && previousNumber <= 1) && (SURVIVOR.equals(currentPlayer.getClassChoice()) || ANGRY_JIM.equals(currentPlayer.getClassChoice()))) {
-            handleSurvivorPassive(currentPlayer);
-        }
+        boolean isClassHunt = Game.getInstance().getGameMode() == Game.GameMode.CLASS_HUNT;
+        boolean hasNoClass = NO_CLASS.equals(currentPlayer.getClassChoice());
+        boolean isClassLanded = Game.getInstance().getClassNumbers().contains(targetNumber);
 
-        if (GAMBLER.equals(currentPlayer.getClassChoice()) || (ANGRY_JIM.equals(currentPlayer.getClassChoice()) && previousNumber < 50)) {
-            handleGamblerPassiveResult(targetNumber);
-        }
-
-        boolean hasClass = !com.example.countingdowngame.createPlayer.CharacterClassDescriptions.NO_CLASS.equals(currentPlayer.getClassChoice());
-
-        if (Game.getInstance().getGameMode() == Game.GameMode.CLASS_HUNT && !hasClass && Game.getInstance().getClassNumbers().contains(targetNumber)) {
-            activity.disableButtons(); // Lock buttons during the long animation
-            numberCounterText.setTextColor(Color.YELLOW);
-
-            activity.awardRandomClass(currentPlayer, targetNumber);
-            activity.renderCurrentNumber(targetNumber, activity::gotoGameEnd, numberCounterText);
-            activity.enableButtons(); // Re-enable after award
-
-            Game.getInstance().getClassNumbers().remove(Integer.valueOf(targetNumber)); // Only award once
+        if (isClassHunt && hasNoClass && isClassLanded) {
+            handleClassAwardSequence(currentPlayer, targetNumber);
         } else {
-            activity.renderCurrentNumber(targetNumber, activity::gotoGameEnd, numberCounterText);
-            if (targetNumber != 0) {
-                activity.enableButtons();
-            }
+            finalizeTurn(targetNumber);
         }
     }
+
+    private void applyPassiveAbilities(Player player, int target, int previous) {
+        String classChoice = player.getClassChoice();
+
+        if (target == 1 && previous <= 1) {
+            if (SURVIVOR.equals(classChoice) || ANGRY_JIM.equals(classChoice)) {
+                handleSurvivorPassive(player);
+            }
+        }
+
+        if (GAMBLER.equals(classChoice) || (ANGRY_JIM.equals(classChoice) && previous < 50)) {
+            handleGamblerPassiveResult(target);
+        }
+    }
+
+    private void handleClassAwardSequence(Player player, int targetNumber) {
+        activity.disableButtons();
+        int customYellow = ContextCompat.getColor(activity, R.color.custom_yellow);
+        numberCounterText.setTextColor(customYellow);
+
+        activity.awardRandomClass(player, targetNumber);
+        finalizeTurn(targetNumber);
+        // Clear markers so it's only awarded once
+        Game.getInstance().getClassNumbers().remove(Integer.valueOf(targetNumber));
+    }
+
+    private void finalizeTurn(int targetNumber) {
+        activity.renderCurrentNumber(targetNumber, activity::gotoGameEnd, numberCounterText);
+        if (targetNumber != 0) {
+            activity.enableButtons();
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // SHUFFLE RUNNABLE (CLASSIC)
+    //------------------------------------------------------------------------------------------------------------------
 
     private class ShuffleRunnable implements Runnable {
         private final Random random;
@@ -246,17 +268,16 @@ public class MainActivityNumberGenerator {
         private final int targetNumber;
         private final int shuffleDuration;
         private final int initialInterval;
-        private final Player currentPlayer = Game.getInstance().getCurrentPlayer();
         private int currentInterval;
         private int shuffleTime = 0;
 
-        ShuffleRunnable(Random random, int originalNumber, int targetNumber, int shuffleDuration, int initialInterval) {
-            this.random = random;
-            this.originalNumber = originalNumber;
-            this.targetNumber = targetNumber;
-            this.shuffleDuration = shuffleDuration;
-            this.initialInterval = initialInterval;
-            this.currentInterval = initialInterval;
+        ShuffleRunnable(Random r, int orig, int target, int duration, int interval) {
+            this.random = r;
+            this.originalNumber = orig;
+            this.targetNumber = target;
+            this.shuffleDuration = duration;
+            this.initialInterval = interval;
+            this.currentInterval = interval;
         }
 
         @Override
@@ -264,21 +285,19 @@ public class MainActivityNumberGenerator {
             shuffleTime += currentInterval;
 
             if (shuffleTime < shuffleDuration) {
-                // Still shuffling: display a random number
                 int randomDigit = random.nextInt(originalNumber + 1);
                 String display = MainActivityGame.getDisplayNumber(randomDigit);
+
                 numberCounterText.setText(display);
                 SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, display);
-                numberCounterText.setTextColor(Color.BLACK); // Always black during shuffle
+                numberCounterText.setTextColor(ContextCompat.getColor(activity, android.R.color.black));
 
                 float progress = (float) shuffleTime / shuffleDuration;
                 currentInterval = (int) (initialInterval + (progress * progress * 250));
 
                 YoYo.with(Techniques.Pulse).duration(currentInterval).playOn(numberCounterText);
-
                 shuffleHandler.postDelayed(this, currentInterval);
             } else {
-                // LAST STEP: display the actual target number and finalize
                 revealFinalNumber(targetNumber);
             }
         }

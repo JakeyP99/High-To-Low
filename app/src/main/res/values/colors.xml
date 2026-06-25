@@ -7,4 +7,5 @@
     <color name="bluedarktransparent">#39021457</color>
     <color name="reddark">#B71C1C</color>
     <color name="redtransparent">#ffdede</color>
+    <color name="custom_yellow">#FFCC00</color>
 </resources>

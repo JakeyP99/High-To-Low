@@ -45,7 +45,7 @@ public class RouletteAdapter extends RecyclerView.Adapter<RouletteAdapter.VH> {
         }
 
         if (classNumbers.contains(num)) {
-            holder.tv.setTextColor(Color.YELLOW);
+            holder.tv.setTextColor(androidx.core.content.ContextCompat.getColor(holder.itemView.getContext(), R.color.custom_yellow));
         } else {
             holder.tv.setTextColor(Color.parseColor("#021457")); // bluedark
         }

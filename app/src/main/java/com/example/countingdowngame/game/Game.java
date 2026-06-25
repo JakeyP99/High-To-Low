@@ -52,12 +52,6 @@ public class Game {
         return classNumbers;
     }
 
-    public void generateClassNumbers(int startingNumber) {
-        classNumbers.clear();
-        // Class markers are now calculated dynamically per generation in MainActivityNumberGenerator
-        Log.d(TAG, "generateClassNumbers: Dynamic calculation enabled.");
-    }
-
     public GameMode getGameMode() {
         return gameMode;
     }
