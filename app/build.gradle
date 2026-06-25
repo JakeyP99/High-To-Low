@@ -44,13 +44,12 @@ android {
     sourceSets {
         main {
             res.srcDirs = [
-                    'src/main/res/layouts/main',
-                    'src/main/res/layouts/game',
-                    'src/main/res/layouts/player_choice',
-                    'src/main/res/layouts/statistics',
-                    'src/main/res/layouts/home',
-                    'src/main/res/layouts/instructions',
-                    'src/main/res/layouts/settings',
+                    'src/main/res-game',
+                    'src/main/res-players',
+                    'src/main/res-statistics',
+                    'src/main/res-home',
+                    'src/main/res-instructions',
+                    'src/main/res-settings',
                     'src/main/res'
             ]
         }
