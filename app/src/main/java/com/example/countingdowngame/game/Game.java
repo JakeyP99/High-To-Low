@@ -58,7 +58,7 @@ public class Game {
 
         Random random = new Random();
         // Determine number of classes to spawn based on starting number
-        // Scale: e.g. 1 class per 10 numbers, but at most 20 classes total.
+        // Scale: e.g. 1 class per 10 numbers, but at most 5000 classes total.
         int numClasses = Math.min(5000, Math.max(2, startingNumber / 10));
 
         for (int i = 0; i < numClasses; i++) {

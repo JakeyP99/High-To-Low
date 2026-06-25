@@ -45,6 +45,7 @@ public class MainActivityNumberGenerator {
     }
 
     public void startNumberShuffleAnimation() {
+        activity.disableButtons();
         int originalNumber = Game.getInstance().getCurrentNumber();
         int targetNumber = Game.getInstance().nextNumber();
 
@@ -93,7 +94,7 @@ public class MainActivityNumberGenerator {
 
         // Calculate the pixel width of each roulette item
         float density = activity.getResources().getDisplayMetrics().density;
-        int itemWidthPx = (int) (100 * density);
+        int itemWidthPx = (int) (160 * density);
 
         // Get the width of the container so we can center the selected number
         int containerWidth = activity.findViewById(R.id.btnGenerate).getWidth();

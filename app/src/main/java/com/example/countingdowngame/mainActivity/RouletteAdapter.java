@@ -32,7 +32,18 @@ public class RouletteAdapter extends RecyclerView.Adapter<RouletteAdapter.VH> {
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
         int num = numbers.get(position);
-        holder.tv.setText(String.valueOf(num));
+        String numStr = String.valueOf(num);
+        holder.tv.setText(numStr);
+
+        // Adjust text size based on length of number to fit 9 digits
+        if (numStr.length() > 6) {
+            holder.tv.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 28);
+        } else if (numStr.length() > 4) {
+            holder.tv.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 35);
+        } else {
+            holder.tv.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 45);
+        }
+
         if (classNumbers.contains(num)) {
             holder.tv.setTextColor(Color.YELLOW);
         } else {
