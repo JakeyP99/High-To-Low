@@ -329,7 +329,7 @@ public class MainActivityNumberGenerator {
 
                 numberCounterText.setText(display);
                 SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, display);
-                numberCounterText.setTextColor(ContextCompat.getColor(activity, android.R.color.black));
+                numberCounterText.setTextColor(ContextCompat.getColor(activity, R.color.bluedark));
 
                 float progress = (float) shuffleTime / shuffleDuration;
                 currentInterval = (int) (initialInterval + (progress * progress * 250));

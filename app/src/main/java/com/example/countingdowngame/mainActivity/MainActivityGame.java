@@ -24,7 +24,6 @@ import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAb
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleTrollPassive;
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleWitchPassive;
 
-import android.animation.ArgbEvaluator;
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -42,6 +41,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.countingdowngame.R;
@@ -127,7 +127,7 @@ public class MainActivityGame extends SharedMainActivity {
             String textToDisplay = "???";
             numberCounterText.setText(textToDisplay);
             SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, textToDisplay);
-            numberCounterText.setTextColor(Color.BLACK);
+            numberCounterText.setTextColor(ContextCompat.getColor(numberCounterText.getContext(), R.color.bluedark));
         }
     }
 
@@ -153,20 +153,13 @@ public class MainActivityGame extends SharedMainActivity {
                 (currentPlayer != null && currentPlayer.equals(hidingTroll)) ||
                 playersWhoPaidToll.contains(currentPlayer);
 
+        int blueDark = ContextCompat.getColor(numberCounterText.getContext(), R.color.bluedark);
+
         if (!canSeeNumber) {
-            numberCounterText.setTextColor(Color.BLACK);
+            numberCounterText.setTextColor(blueDark);
             return;
         }
-
-        if (currentNumber >= 1000) {
-            numberCounterText.setTextColor(Color.BLACK);
-        } else {
-            ArgbEvaluator colorEvaluator = new ArgbEvaluator();
-            // Scaling: 1000 is Black, 1 is Red
-            float progress = 1.0f - ((float) (Math.max(1, currentNumber) - 1) / 999.0f);
-            int currentColor = (int) colorEvaluator.evaluate(progress, Color.BLACK, Color.RED);
-            numberCounterText.setTextColor(currentColor);
-        }
+        numberCounterText.setTextColor(blueDark);
     }
 
     public static void resetStaticState() {
