@@ -44,18 +44,36 @@ public class playerChoiceComplimentary extends ButtonUtilsActivity {
 
     public List<CharacterClassStore> generateCharacterClasses() {
         List<CharacterClassStore> characterClasses = new ArrayList<>();
-        characterClasses.add(new CharacterClassStore(1, ANGRY_JIM, angryJimActiveDescription, angryJimPassiveDescription, R.drawable.angry_jim));
-        characterClasses.add(new CharacterClassStore(2, ARCHER, archerActiveDescription, archerPassiveDescription, R.drawable.archer));
-        characterClasses.add(new CharacterClassStore(3, GAMBLER, gamblerActiveDescription, gamblerPassiveDescription, R.drawable.slotmachine));
-        characterClasses.add(new CharacterClassStore(4, GOBLIN, goblinActiveDescription, goblinPassiveDescription, R.drawable.goblin));
-        characterClasses.add(new CharacterClassStore(5, QUIZ_MAGICIAN, quizMagicianActiveDescription, quizMagicianPassiveDescription, R.drawable.books));
-        characterClasses.add(new CharacterClassStore(6, SCIENTIST, scientistActiveDescription, scientistPassiveDescription, R.drawable.scientist));
-        characterClasses.add(new CharacterClassStore(7, SOLDIER, soldierActiveDescription, soldierPassiveDescription, R.drawable.helmet));
-        characterClasses.add(new CharacterClassStore(8, SURVIVOR, survivorActiveDescription, survivorPassiveDescription, R.drawable.bandaids));
-        characterClasses.add(new CharacterClassStore(9, TROLL, trollActiveDescription, trollPassiveDescription, R.drawable.bridge));
-        characterClasses.add(new CharacterClassStore(10, WITCH, witchActiveDescription, witchPassiveDescription, R.drawable.witch));
-        characterClasses.add(new CharacterClassStore(11, NO_CLASS, noClassDescription, null, R.drawable.noclass));
+        characterClasses.add(new CharacterClassStore(1, ANGRY_JIM, angryJimActiveDescription, angryJimPassiveDescription, getClassIcon(ANGRY_JIM)));
+        characterClasses.add(new CharacterClassStore(2, ARCHER, archerActiveDescription, archerPassiveDescription, getClassIcon(ARCHER)));
+        characterClasses.add(new CharacterClassStore(3, GAMBLER, gamblerActiveDescription, gamblerPassiveDescription, getClassIcon(GAMBLER)));
+        characterClasses.add(new CharacterClassStore(4, GOBLIN, goblinActiveDescription, goblinPassiveDescription, getClassIcon(GOBLIN)));
+        characterClasses.add(new CharacterClassStore(5, QUIZ_MAGICIAN, quizMagicianActiveDescription, quizMagicianPassiveDescription, getClassIcon(QUIZ_MAGICIAN)));
+        characterClasses.add(new CharacterClassStore(6, SCIENTIST, scientistActiveDescription, scientistPassiveDescription, getClassIcon(SCIENTIST)));
+        characterClasses.add(new CharacterClassStore(7, SOLDIER, soldierActiveDescription, soldierPassiveDescription, getClassIcon(SOLDIER)));
+        characterClasses.add(new CharacterClassStore(8, SURVIVOR, survivorActiveDescription, survivorPassiveDescription, getClassIcon(SURVIVOR)));
+        characterClasses.add(new CharacterClassStore(9, TROLL, trollActiveDescription, trollPassiveDescription, getClassIcon(TROLL)));
+        characterClasses.add(new CharacterClassStore(10, WITCH, witchActiveDescription, witchPassiveDescription, getClassIcon(WITCH)));
+        characterClasses.add(new CharacterClassStore(11, NO_CLASS, noClassDescription, null, getClassIcon(NO_CLASS)));
 
         return characterClasses;
+    }
+
+    public static int getClassIcon(String classChoice) {
+        if (classChoice == null) return R.drawable.wine;
+        switch (classChoice) {
+            case ANGRY_JIM: return R.drawable.angry_jim;
+            case ARCHER: return R.drawable.archer;
+            case GAMBLER: return R.drawable.slotmachine;
+            case GOBLIN: return R.drawable.goblin;
+            case QUIZ_MAGICIAN: return R.drawable.books;
+            case SCIENTIST: return R.drawable.scientist;
+            case SOLDIER: return R.drawable.helmet;
+            case SURVIVOR: return R.drawable.bandaids;
+            case TROLL: return R.drawable.bridge;
+            case WITCH: return R.drawable.witch;
+            case NO_CLASS: return R.drawable.noclass;
+            default: return R.drawable.wine;
+        }
     }
 }

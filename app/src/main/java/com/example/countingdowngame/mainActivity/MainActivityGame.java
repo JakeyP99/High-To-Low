@@ -54,6 +54,7 @@ import com.example.countingdowngame.mainActivity.classAbilities.AbilityComplimen
 import com.example.countingdowngame.mainActivity.classAbilities.ActiveAbilities;
 import com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities;
 import com.example.countingdowngame.player.Player;
+import com.example.countingdowngame.playerChoice.playerChoiceComplimentary;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.wildCards.WildCardProperties;
 import com.example.countingdowngame.wildCards.wildCardTypes.WildCardRepository;
@@ -542,25 +543,6 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    private void updateClassIcon(String classChoice) {
-        if (iconAbility == null || classChoice == null) return;
-
-        int iconRes;
-        switch (classChoice) {
-            case ARCHER: iconRes = R.drawable.archer; break;
-            case WITCH: iconRes = R.drawable.witch; break;
-            case SCIENTIST: iconRes = R.drawable.scientist; break;
-            case SOLDIER: iconRes = R.drawable.jail; break;
-            case QUIZ_MAGICIAN: iconRes = R.drawable.books; break;
-            case SURVIVOR: iconRes = R.drawable.bandaids; break;
-            case ANGRY_JIM: iconRes = R.drawable.angry_jim; break;
-            case GOBLIN: iconRes = R.drawable.goblin; break;
-            case GAMBLER: iconRes = R.drawable.dice; break;
-            case TROLL: iconRes = R.drawable.bridge; break;
-            default: iconRes = R.drawable.wine; break;
-        }
-        iconAbility.setImageResource(iconRes);
-    }
 
     private void updateClassAbilityButton(Player currentPlayer) {
         List<String> classes = currentPlayer.getClassChoices();
@@ -577,7 +559,7 @@ public class MainActivityGame extends SharedMainActivity {
             String classChoice = classes.get(0);
             labelAbilityTitle.setText(getClassActiveButtonText(classChoice));
             labelAbilityDesc.setText(getClassActiveDescription(classChoice));
-            updateClassIcon(classChoice);
+            iconAbility.setImageResource(playerChoiceComplimentary.getClassIcon(classChoice));
         }
 
         boolean canShowButton = !currentPlayer.getUsedActiveAbility();
@@ -844,22 +826,7 @@ public class MainActivityGame extends SharedMainActivity {
                 holder.name.setText(className);
                 holder.desc.setText(getClassActiveButtonText(className));
                 
-                // Icon mapping
-                int iconRes;
-                switch (className) {
-                    case ARCHER: iconRes = R.drawable.archer; break;
-                    case WITCH: iconRes = R.drawable.witch; break;
-                    case SCIENTIST: iconRes = R.drawable.scientist; break;
-                    case SOLDIER: iconRes = R.drawable.jail; break;
-                    case QUIZ_MAGICIAN: iconRes = R.drawable.books; break;
-                    case SURVIVOR: iconRes = R.drawable.bandaids; break;
-                    case ANGRY_JIM: iconRes = R.drawable.angry_jim; break;
-                    case GOBLIN: iconRes = R.drawable.goblin; break;
-                    case GAMBLER: iconRes = R.drawable.dice; break;
-                    case TROLL: iconRes = R.drawable.bridge; break;
-                    default: iconRes = R.drawable.wine; break;
-                }
-                holder.icon.setImageResource(iconRes);
+                holder.icon.setImageResource(playerChoiceComplimentary.getClassIcon(className));
 
                 holder.itemView.setOnClickListener(v -> {
                     dialog.dismiss();
