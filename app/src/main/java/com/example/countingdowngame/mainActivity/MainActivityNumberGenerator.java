@@ -49,9 +49,15 @@ public class MainActivityNumberGenerator {
         int originalNumber = Game.getInstance().getCurrentNumber();
         int targetNumber = Game.getInstance().nextNumber();
 
-        if (Game.getInstance().getGameMode() == Game.GameMode.CLASS_HUNT) {
+        Player currentPlayer = Game.getInstance().getCurrentPlayer();
+        boolean hasClass = currentPlayer != null && !com.example.countingdowngame.createPlayer.CharacterClassDescriptions.NO_CLASS.equals(currentPlayer.getClassChoice());
+
+        if (Game.getInstance().getGameMode() == Game.GameMode.CLASS_HUNT && !hasClass) {
             startRouletteAnimation(originalNumber, targetNumber);
         } else {
+            // Ensure any previous class markers are cleared so they don't trigger for this player
+            Game.getInstance().getClassNumbers().clear();
+
             final int shuffleDuration = 1500;
             int initialShuffleInterval = originalNumber >= 1000 ? 30 : 50;
             final Random random = new Random();
@@ -69,21 +75,65 @@ public class MainActivityNumberGenerator {
 
         // Create a list of random numbers to simulate the roulette spinning effect
         List<Integer> rouletteNumbers = new ArrayList<>();
+        List<Integer> dynamicClassNumbers = Game.getInstance().getClassNumbers();
+        dynamicClassNumbers.clear();
         Random r = new Random();
 
-        // Generate 60 random numbers between 0 and the original number
-        // These are the "fake" numbers the player sees before landing on the result
-        for (int i = 0; i < 60; i++) {
-            rouletteNumbers.add(r.nextInt(originalNumber + 1));
+        // 1. Generate unique random numbers for the roulette (0 to originalNumber)
+        List<Integer> availablePool = new ArrayList<>();
+        for (int i = 0; i <= originalNumber; i++) {
+            availablePool.add(i);
+        }
+        java.util.Collections.shuffle(availablePool);
+
+        // We need 60 numbers. If pool is smaller, we repeat it after shuffling again.
+        while (rouletteNumbers.size() < 60) {
+            if (availablePool.isEmpty()) {
+                for (int i = 0; i <= originalNumber; i++) availablePool.add(i);
+                java.util.Collections.shuffle(availablePool);
+            }
+            rouletteNumbers.add(availablePool.remove(0));
         }
 
         // Force the target/winning number into the list at position 50
         // This ensures the roulette always ends on the correct result
         rouletteNumbers.set(50, targetNumber);
 
+        // 2. Dynamic Class Probability Logic
+        // Determine if target is a class number based on probability tiers
+        if (targetNumber > 0) {
+            int chance; // 1 in X
+            if (targetNumber > 1000) chance = 100;
+            else if (targetNumber >= 500) chance = 50;
+            else if (targetNumber >= 100) chance = 15;
+            else if (targetNumber >= 10) chance = 2;
+            else chance = 1; // 5+ or rather < 10
+
+            if (r.nextInt(chance) == 0) {
+                dynamicClassNumbers.add(targetNumber);
+            }
+        }
+
+        // Randomly color other numbers in the roulette for visual flair
+        for (int i = 0; i < rouletteNumbers.size(); i++) {
+            if (i == 50) continue;
+            int num = rouletteNumbers.get(i);
+            if (num > 0) {
+                int chance;
+                if (num > 1000) chance = 100;
+                else if (num >= 500) chance = 50;
+                else if (num >= 100) chance = 15;
+                else if (num >= 10) chance = 2;
+                else chance = 1;
+
+                if (r.nextInt(chance) == 0) {
+                    dynamicClassNumbers.add(num);
+                }
+            }
+        }
 
         // Create adapter to display the roulette numbers
-        RouletteAdapter adapter = new RouletteAdapter(rouletteNumbers, Game.getInstance().getClassNumbers());
+        RouletteAdapter adapter = new RouletteAdapter(rouletteNumbers, dynamicClassNumbers);
 
         // Setup horizontal scrolling layout for the roulette
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
@@ -171,18 +221,15 @@ public class MainActivityNumberGenerator {
             handleGamblerPassiveResult(targetNumber);
         }
 
-        if (Game.getInstance().getGameMode() == Game.GameMode.CLASS_HUNT && Game.getInstance().getClassNumbers().contains(targetNumber)) {
+        boolean hasClass = !com.example.countingdowngame.createPlayer.CharacterClassDescriptions.NO_CLASS.equals(currentPlayer.getClassChoice());
+
+        if (Game.getInstance().getGameMode() == Game.GameMode.CLASS_HUNT && !hasClass && Game.getInstance().getClassNumbers().contains(targetNumber)) {
             activity.disableButtons(); // Lock buttons during the long animation
             numberCounterText.setTextColor(Color.YELLOW);
 
-            YoYo.with(Techniques.Pulse).duration(1000).repeat(2) // 5 pulses total (1s each)
-                    .playOn(numberCounterText);
-
-            new Handler().postDelayed(() -> {
-                activity.awardRandomClass(currentPlayer, targetNumber);
-                activity.renderCurrentNumber(targetNumber, activity::gotoGameEnd, numberCounterText);
-                activity.enableButtons(); // Re-enable after award
-            }, 2000); // Wait for 5 seconds of pulsing
+            activity.awardRandomClass(currentPlayer, targetNumber);
+            activity.renderCurrentNumber(targetNumber, activity::gotoGameEnd, numberCounterText);
+            activity.enableButtons(); // Re-enable after award
 
             Game.getInstance().getClassNumbers().remove(Integer.valueOf(targetNumber)); // Only award once
         } else {
