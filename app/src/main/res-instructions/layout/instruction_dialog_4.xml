@@ -1,0 +1,77 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:cardElevation="0dp"
+        app:cardUseCompatPadding="true"
+        app:cardBackgroundColor="@color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/playerImage"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_gravity="top|center"
+                android:src="@drawable/wine"
+                app:civ_border_color="@color/bluedarktransparent"
+                app:civ_border_width="3dp"
+                app:layout_constraintBottom_toBottomOf="@+id/viewpager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.05" />
+
+            <View
+                android:id="@+id/horizontal_line"
+                android:layout_width="300dp"
+                android:layout_height="3dp"
+                android:background="@color/bluedark"
+                app:layout_constraintBottom_toTopOf="@+id/instruction_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/playerImage" />
+
+
+            <TextView
+                android:id="@+id/instruction_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="This is your player's avatar. Click on it to view your character's abilities. That is, if you choose a class that has any abilities."
+                android:textAlignment="center"
+                android:textColor="@color/bluedark"
+                android:textSize="28sp"
+                app:autoSizeTextType="uniform"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/playerImage"
+                app:layout_constraintVertical_bias="0.2" />
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/viewpager"
+                android:layout_width="wrap_content"
+                android:layout_height="500dp"
+                android:background="@color/transparent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

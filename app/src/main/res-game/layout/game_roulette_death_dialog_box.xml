@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="500dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#08B71C1C"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/death_dialogbox_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/viga"
+        android:layout_gravity="center"
+        android:paddingTop="10dp"
+        android:text="ELIMINATED"
+        android:textAlignment="center"
+        android:textColor="@color/bluedark"
+        android:textSize="45sp" />
+
+    <TextView
+        android:id="@+id/dialogbox_textview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="Test"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:fontFamily="@font/viga"
+        android:textColor="@color/bluedark"
+        android:textSize="28sp" />
+
+</LinearLayout>

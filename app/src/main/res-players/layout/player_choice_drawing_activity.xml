@@ -1,0 +1,103 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".drawing.DrawingPlayerModels"
+    android:fitsSystemWindows="true">
+
+
+    <LinearLayout
+        android:id="@+id/topLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/colorButton"
+            android:layout_width="139dp"
+            android:layout_height="77dp"
+            android:background="@drawable/outlineforbutton"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:fontFamily="@font/viga"
+            android:textSize="20sp"
+            android:text="Color"
+            android:layout_margin="16dp"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/eraserButton"
+            android:layout_width="139dp"
+            android:layout_height="77dp"
+            android:background="@drawable/outlineforbutton"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:textSize="20sp"
+            android:text="Eraser\nmode"
+            android:fontFamily="@font/viga"
+            android:layout_margin="16dp"
+            android:layout_toRightOf="@+id/colorButton"
+            style="?android:attr/buttonBarButtonStyle" />
+
+    </LinearLayout>
+
+    <SeekBar
+        android:id="@+id/penSizeSeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/topLinearLayout"
+        android:layout_marginTop="16dp"
+        android:max="50"
+        android:progress="5"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:thumb="@drawable/seekbar_thumb"
+        android:progressDrawable="@drawable/seekbar_custom" />
+
+    <com.example.countingdowngame.drawing.DrawingViewPlayerModels
+        android:id="@+id/drawingView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/linearLayout"
+        android:layout_below="@+id/penSizeSeekBar"
+        android:background="#FFFFFF"/>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="139dp"
+            android:layout_height="77dp"
+            android:background="@drawable/outlineforbutton"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:fontFamily="@font/viga"
+            android:textSize="20sp"
+            android:text="Cancel"
+            android:layout_margin="16dp"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="139dp"
+            android:layout_height="77dp"
+            android:background="@drawable/outlineforbutton"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:textSize="20sp"
+            android:text="Save"
+            android:fontFamily="@font/viga"
+            android:layout_margin="16dp"
+            style="?android:attr/buttonBarButtonStyle" />
+
+    </LinearLayout>
+
+</RelativeLayout>

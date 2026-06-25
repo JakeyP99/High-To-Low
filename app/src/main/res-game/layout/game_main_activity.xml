@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:id="@+id/root"
+    tools:context=".mainActivity.MainActivityGame"
+    android:fitsSystemWindows="true">
+
+
+<androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCenter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.50121653" />
+
+
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/soundGif"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/transparent"
+        android:src="@drawable/sound"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.01" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/muteGif"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/mute"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.01" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/informationGif"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/transparent"
+        android:src="@drawable/info"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.80"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.01"
+        app:loopCount="1" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/btnWild"
+        android:layout_width="320dp"
+        android:layout_height="70dp"
+        android:background="@drawable/outlineforbutton"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toTopOf="@+id/btnClassAbility"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
+        app:layout_constraintVertical_bias="0.49">
+
+        <ImageView
+            android:id="@+id/iconWild"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/trading"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/labelWild"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/viga"
+            android:text="Wild Cards"
+            android:textColor="@color/bluedark"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/textWildCount"
+            app:layout_constraintStart_toEndOf="@id/iconWild"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/textWildCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:text="0"
+            android:textColor="@color/bluedark"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/labelWild"
+            app:layout_constraintTop_toBottomOf="@id/labelWild" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/btnClassAbility"
+        android:layout_width="320dp"
+        android:layout_height="70dp"
+        android:background="@drawable/outlineforbutton"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnWild"
+        app:layout_constraintVertical_bias="0.8">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iconAbility"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/wine"
+            app:civ_border_color="@color/bluedark"
+            app:civ_border_width="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/labelAbilityTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/viga"
+            android:maxLines="1"
+            android:text="Force Turn Repeat"
+            android:textColor="@color/bluedark"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/labelAbilityDesc"
+            app:layout_constraintStart_toEndOf="@id/iconAbility"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/labelAbilityDesc"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:fontFamily="@font/viga"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="Tap to use your ability, this might have"
+            android:textColor="@color/bluedark"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/labelAbilityTitle"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/labelAbilityTitle"
+            app:layout_constraintTop_toBottomOf="@id/labelAbilityTitle" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/btnBackWildCard"
+        android:layout_width="165dp"
+        android:layout_height="100dp"
+        android:background="@drawable/outlineforbutton"
+        android:fontFamily="@font/viga"
+        android:text="@string/continueTxt"
+        android:textAllCaps="false"
+        android:textColor="@color/bluedark"
+        android:textSize="25sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/btnClassAbility"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnGenerate"
+        app:layout_constraintVertical_bias="0.5"
+        tools:ignore="TextSizeCheck" />
+
+    <LinearLayout
+        android:id="@+id/player_name_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/textView_numberCounter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playerImage"
+        app:layout_constraintVertical_bias="0.82">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/powerup_left"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone"
+            android:src="@drawable/helmet" />
+
+        <TextView
+            android:id="@+id/textView_Number_Turn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:text="Jake"
+            android:textColor="@color/bluedark"
+            android:textSize="35sp" />
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/powerup_right"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="8dp"
+            android:visibility="gone"
+            android:src="@drawable/helmet" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView_numberCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10 drinks"
+        android:textColor="@color/bluedark"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/btnGenerate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/player_name_layout"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/textView_WildText"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20sp"
+        android:fontFamily="@font/viga"
+        android:gravity="center"
+        android:text=""
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+        android:textColor="@color/bluedark"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.39" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rouletteRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:foregroundGravity="center"
+        app:layout_constraintTop_toTopOf="@id/btnGenerate"
+        app:layout_constraintBottom_toBottomOf="@id/btnGenerate"
+        app:layout_constraintStart_toStartOf="@id/btnGenerate"
+        app:layout_constraintEnd_toEndOf="@id/btnGenerate" />
+
+    <Button
+        android:id="@+id/btnGenerate"
+        android:layout_width="290dp"
+        android:layout_height="220dp"
+        android:background="@drawable/outlineforbutton"
+        android:textColor="@color/bluedark"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.541" />
+
+    <TextView
+        android:id="@+id/textView_NumberText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/bluedark"
+        android:textSize="55sp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnGenerate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnGenerate" />
+
+    <ImageButton
+        android:id="@+id/btnExitGame"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.01"
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/playerImage"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:src="@drawable/wine"
+        app:civ_border_color="@color/bluedarktransparent"
+        app:civ_border_width="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.025" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
