@@ -756,27 +756,29 @@ public class MainActivityGame extends SharedMainActivity {
         List<String> classes = currentPlayer.getClassChoices();
 
         Log.d(TAG, "Number was generated passive: " + game.getNumberWasGenerated());
-        
-        if (classes.contains(SOLDIER) && game.getNumberWasGenerated()) {
+
+        boolean isAngryJimActive = classes.contains(ANGRY_JIM) && game.getCurrentNumber() < 50;
+
+        if (classes.contains(SOLDIER) && game.getNumberWasGenerated() && !isAngryJimActive) {
             handleSoldierPassive();
-        } 
-        
-        if (classes.contains(WITCH) && game.getNumberWasGenerated()) {
+        }
+
+        if (classes.contains(WITCH) && game.getNumberWasGenerated() && !isAngryJimActive) {
             handleWitchPassive(currentPlayer);
-        } 
-        
-        if (classes.contains(SCIENTIST)) {
+        }
+
+        if (classes.contains(SCIENTIST) && !isAngryJimActive) {
             handleScientistPassive(currentPlayer);
-        } 
-        
+        }
+
         if (classes.contains(ANGRY_JIM)) {
             handleAngryJimPassive(currentPlayer);
-        } 
-        
-        if (classes.contains(ARCHER)) {
+        }
+
+        if (classes.contains(ARCHER) && !isAngryJimActive) {
             handleArcherPassive(currentPlayer);
-        } 
-        
+        }
+
         if (classes.contains(TROLL)) {
             handleTrollPassive(currentPlayer);
         }

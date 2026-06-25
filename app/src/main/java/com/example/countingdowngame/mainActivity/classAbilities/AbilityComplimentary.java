@@ -17,8 +17,8 @@ public class AbilityComplimentary {
         if (classChoice == null) return 999;
 
         // Special Reset Classes (Always reset)
-        if (ANGRY_JIM.equals(classChoice)) return 5;
-        if (WITCH.equals(classChoice) || ARCHER.equals(classChoice) ||SURVIVOR.equals(classChoice)) return 3;
+        if (ANGRY_JIM.equals(classChoice) || WITCH.equals(classChoice)) return 5;
+        if (ARCHER.equals(classChoice) ||SURVIVOR.equals(classChoice)) return 3;
 
         // All other classes do not reset (set to a very high number)
         return 999;

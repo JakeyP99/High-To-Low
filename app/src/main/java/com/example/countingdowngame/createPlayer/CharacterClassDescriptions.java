@@ -15,10 +15,10 @@ public class CharacterClassDescriptions {
 
     // Active Ability Descriptions
     public static final String archerActiveDescription =
-            "You may remove 2 drinks from the total and give them to any players.";
+            "You may remove 2 drinks from the total and give them to any players. This comes back after 3 turns.";
 
     public static final String witchActiveDescription =
-            "Throw a potion! Play a mini-game to determine its potency! This comes back after 3 turns.";
+            "Throw a potion! Play a mini-game to determine its potency! This comes back after 5 turns.";
 
     public static final String scientistActiveDescription =
             "Change the current number to any number. Your turn continues.";
