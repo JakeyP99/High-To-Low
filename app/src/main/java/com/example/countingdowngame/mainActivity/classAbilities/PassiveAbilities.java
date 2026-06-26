@@ -319,8 +319,8 @@ public class PassiveAbilities extends ButtonUtilsActivity {
         String message;
         if (won) {
             if (gamblerBet.equals("EQUAL")) {
-                message = currentPlayer.getName() + " won their bet! Hand out 2 drinks.";
-                currentPlayer.incrementDrinksHandedOutByGambler(2);
+                message = currentPlayer.getName() + " won their bet! Hand out 3 drinks.";
+                currentPlayer.incrementDrinksHandedOutByGambler(3);
             } else {
                 message = currentPlayer.getName() + " won their bet! Hand out 1 drink.";
                 currentPlayer.incrementDrinksHandedOutByGambler(1);

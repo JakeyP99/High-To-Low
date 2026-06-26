@@ -82,7 +82,7 @@ public class CharacterClassDescriptions {
             "When the number is below 50, you gain all other passives, but must take another turn.";
 
     public static final String gamblerPassiveDescription =
-            "Bet Over or Under the middle of the range before you roll. Win: hand out 1 drink. Lose: take 1 drink.";
+            "Bet Over, Under or Equal to the middle of the range before you roll. Win: hand out 1 or 3 drinks. Lose: take 1 drink. Not available for numbers 5 or below";
 
     public static final String goblinPassiveDescription =
             "Whenever other players use a wild card, they must drink once.";
