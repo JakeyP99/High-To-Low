@@ -809,7 +809,7 @@ public class MainActivityGame extends SharedMainActivity {
         titleTextView.setText("Choose Active:");
 
         RecyclerView recyclerView = dialogView.findViewById(R.id.listViewOpponents);
-        recyclerView.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 3));
+        recyclerView.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 2));
 
         AlertDialog dialog = builder.setView(dialogView).create();
 
@@ -906,10 +906,10 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
 
-    public void showCombinedPassivesDialog(String htmlContent, Runnable onDismiss) {
+    public void showCombinedPassivesDialog(CharSequence content, Runnable onDismiss) {
         showClassDialog(
                 "Messages:",
-                Html.fromHtml(htmlContent, Html.FROM_HTML_MODE_LEGACY),
+                content,
                 R.layout.game_combined_passives_dialog,
                 R.id.title_textview,
                 R.id.content_textview,

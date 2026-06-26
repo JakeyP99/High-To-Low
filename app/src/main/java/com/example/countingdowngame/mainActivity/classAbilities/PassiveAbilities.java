@@ -14,7 +14,12 @@ import static com.example.countingdowngame.mainActivity.MainActivityGame.isFirst
 import static com.example.countingdowngame.mainActivity.MainActivityGame.soldierRemoval;
 
 import android.app.AlertDialog;
+import android.graphics.Typeface;
 import android.os.Handler;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -33,16 +38,25 @@ import java.util.Random;
 public class PassiveAbilities extends ButtonUtilsActivity {
     static Game game = Game.getInstance();
     private static MainActivityGame activity;
-    private static final List<String> pendingPassiveMessages = new ArrayList<>();
+    private static final List<PassiveMessage> pendingPassiveMessages = new ArrayList<>();
     private static final List<Runnable> pendingActions = new ArrayList<>();
+
+    private static class PassiveMessage {
+        String className;
+        String message;
+
+        PassiveMessage(String className, String message) {
+            this.className = className;
+            this.message = message;
+        }
+    }
 
     public static void setActivity(MainActivityGame activityInstance) {
         activity = activityInstance;
     }
 
     private static void addPassiveMessage(String className, String message) {
-        String formattedMessage = message.replace("\n", "<br>");
-        pendingPassiveMessages.add("<b>" + className + "'s Passive:</b><br>" + formattedMessage);
+        pendingPassiveMessages.add(new PassiveMessage(className, message));
     }
 
     private static void addPassiveAction(Runnable action) {
@@ -55,34 +69,53 @@ public class PassiveAbilities extends ButtonUtilsActivity {
 
     public static void showCombinedPassives(Runnable onDone) {
         if (pendingPassiveMessages.isEmpty()) {
-            List<Runnable> actionsToRun = new ArrayList<>(pendingActions);
-            pendingActions.clear();
-            for (Runnable action : actionsToRun) {
-                action.run();
-            }
-
-            if (onDone != null) onDone.run();
+            runPendingActions(onDone);
             return;
         }
 
-        StringBuilder combined = new StringBuilder();
+        if (pendingPassiveMessages.size() == 1) {
+            PassiveMessage pm = pendingPassiveMessages.get(0);
+            activity.showClassAbilityDialog(pm.className + "'s Passive:\n\n" + pm.message, () -> {
+                pendingPassiveMessages.clear();
+                runPendingActions(onDone);
+            });
+            return;
+        }
+
+        SpannableStringBuilder combined = new SpannableStringBuilder();
         for (int i = 0; i < pendingPassiveMessages.size(); i++) {
-            combined.append(pendingPassiveMessages.get(i));
+            PassiveMessage pm = pendingPassiveMessages.get(i);
+            String title = pm.className + "'s Passive:\n";
+            int startTitle = combined.length();
+            combined.append(title);
+            int endTitle = combined.length();
+
+            combined.setSpan(new AbsoluteSizeSpan(25, true), startTitle, endTitle, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            combined.setSpan(new StyleSpan(Typeface.BOLD), startTitle, endTitle, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            int startMsg = combined.length();
+            combined.append(pm.message);
+            int endMsg = combined.length();
+            combined.setSpan(new AbsoluteSizeSpan(20, true), startMsg, endMsg, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
             if (i < pendingPassiveMessages.size() - 1) {
-                combined.append("<br><br>--------------------<br><br>");
+                combined.append("\n\n--------------------\n\n");
             }
         }
 
-        activity.showCombinedPassivesDialog(combined.toString(), () -> {
+        activity.showCombinedPassivesDialog(combined, () -> {
             pendingPassiveMessages.clear();
-            List<Runnable> actionsToRun = new ArrayList<>(pendingActions);
-            pendingActions.clear();
-            for (Runnable action : actionsToRun) {
-                action.run();
-            }
-
-            if (onDone != null) onDone.run();
+            runPendingActions(onDone);
         });
+    }
+
+    private static void runPendingActions(Runnable onDone) {
+        List<Runnable> actionsToRun = new ArrayList<>(pendingActions);
+        pendingActions.clear();
+        for (Runnable action : actionsToRun) {
+            action.run();
+        }
+        if (onDone != null) onDone.run();
     }
 
     public static void handleWitchPassive(Player currentPlayer) {

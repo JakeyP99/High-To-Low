@@ -45,10 +45,9 @@
                 android:fontFamily="@font/viga"
                 android:gravity="center"
                 android:visibility="visible"
-                android:text="Gambler's Passive:"
                 android:layout_gravity="center"
                 android:textColor="@color/bluedark"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
         </ScrollView>
 
     </LinearLayout>

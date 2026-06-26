@@ -309,7 +309,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             btnP2.setText(targets.get(1).getName());
         } else {
             btnP2.setVisibility(GONE);
-            btnNone.setText("Wrong! (Drink 4)");
+            btnNone.setText("No one!");
         }
     }
 
