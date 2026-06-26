@@ -17,7 +17,7 @@
         android:text="Witch's Active!"
         android:textAlignment="center"
         android:textColor="@color/bluedark"
-        android:textSize="40sp" />
+        android:textSize="35sp" />
 
     <View
         android:layout_width="match_parent"
@@ -46,7 +46,7 @@
             android:fontFamily="@font/viga"
             android:text="XX x XX = ?"
             android:textColor="@color/bluedark"
-            android:textSize="42sp" />
+            android:textSize="30sp" />
 
     </LinearLayout>
 
@@ -62,7 +62,7 @@
         android:paddingHorizontal="16dp"
         android:textColor="@color/bluedark"
         android:gravity="center"
-        android:textSize="24sp"
+        android:textSize="25sp"
         android:layout_marginBottom="20dp" />
 
     <FrameLayout
@@ -88,7 +88,7 @@
             android:text="Start"
             android:textAllCaps="false"
             android:textColor="@color/bluedark"
-            android:textSize="22sp"
+            android:textSize="20sp"
             android:stateListAnimator="@null" />
     </FrameLayout>
 

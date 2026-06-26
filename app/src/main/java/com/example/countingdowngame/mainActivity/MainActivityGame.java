@@ -77,6 +77,7 @@ public class MainActivityGame extends SharedMainActivity {
     public static int catastropheLimit;
     public static boolean isFirstTurn;
     public static boolean repeatedTurn;
+    public static int soldierActiveTurns = 0;
     public static boolean soldierRemoval;
     public static boolean catastrophesEnabled = true;
     public static boolean passivesEnabled = true;
@@ -168,6 +169,7 @@ public class MainActivityGame extends SharedMainActivity {
         drinkNumberCounterInt = 1;
         isFirstTurn = true;
         repeatedTurn = false;
+        soldierActiveTurns = 0;
         soldierRemoval = false;
         turnCounter = 0;
         catastropheTurnCounter = 0;
@@ -531,17 +533,17 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void updateWildCardVisibilityIfNeeded(Player currentPlayer) {
-        if (repeatedTurn) {
-            btnWild.setVisibility(View.INVISIBLE);
-            repeatedTurn = false;
-        } else {
-            if (!currentPlayer.getJustUsedWildCard()) {
-                updateWildCardVisibility(currentPlayer);
-            }
+        if (!currentPlayer.getJustUsedWildCard()) {
+            updateWildCardVisibility(currentPlayer);
         }
+
         if (currentPlayer.getJustUsedWildCard()) {
             btnWild.setVisibility(View.INVISIBLE);
             currentPlayer.setJustUsedWildCard(false);
+        }
+
+        if (soldierActiveTurns > 0) {
+            btnWild.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -579,6 +581,11 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void updateClassAbilityButton(Player currentPlayer) {
+        if (soldierActiveTurns > 0) {
+            btnClassAbility.setVisibility(View.INVISIBLE);
+            return;
+        }
+
         List<String> availableClasses = getAvailableAbilities(currentPlayer);
         
         if (availableClasses.isEmpty()) {

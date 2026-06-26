@@ -145,7 +145,7 @@ public class PassiveAbilities extends ButtonUtilsActivity {
                 currentPlayer.setRemoved(true);
                 addPassiveAction(() -> game.removePlayer(currentPlayer));
             } else if (soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {
-                activity.showGameDialog("Sorry " + currentPlayer.getName() + ", a soldier has already escaped the game.");
+                addPassiveMessage(SOLDIER,"Sorry " + currentPlayer.getName() + ", a soldier has already escaped the game.");
             }
         }
     }

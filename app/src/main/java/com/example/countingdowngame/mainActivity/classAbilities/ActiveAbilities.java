@@ -15,7 +15,6 @@ import static com.example.countingdowngame.createPlayer.CharacterClassDescriptio
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
 import static com.example.countingdowngame.mainActivity.MainActivityGame.drinkNumberCounterInt;
 import static com.example.countingdowngame.mainActivity.MainActivityGame.isFirstTurn;
-import static com.example.countingdowngame.mainActivity.MainActivityGame.repeatedTurn;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -120,8 +119,8 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             if (game.getCurrentNumber() <= 10) {
                 markAbilityUsed(SOLDIER, currentPlayer);
                 game.updateRepeatingTurns(currentPlayer, 1);
+                MainActivityGame.soldierActiveTurns = 2;
                 activity.renderPlayerUI(false);
-                repeatedTurn = true;
                 activity.updateDrinkNumberCounter(4, true);
                 AudioManager.getInstance().playSoundEffects(activity, SOLDIER);
                 hideAbilityButton();

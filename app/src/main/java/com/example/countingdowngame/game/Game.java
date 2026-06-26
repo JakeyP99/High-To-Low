@@ -219,6 +219,10 @@ public class Game {
 
         Player currentPlayer = getCurrentPlayer();
 
+        if (MainActivityGame.soldierActiveTurns > 0) {
+            MainActivityGame.soldierActiveTurns--;
+        }
+
         if (currentPlayer != null && repeatingTurnsMap.containsKey(currentPlayer) && repeatingTurnsMap.get(currentPlayer) > 0) {
             repeatingTurnsMap.put(currentPlayer, repeatingTurnsMap.get(currentPlayer) - 1);
         } else {
