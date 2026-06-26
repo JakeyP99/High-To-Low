@@ -24,9 +24,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Path;
+import android.graphics.drawable.GradientDrawable;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Base64;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +56,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+
+import pl.droidsonroids.gif.GifImageView;
 
 public class ActiveAbilities extends ButtonUtilsActivity {
     static Game game = Game.getInstance();
@@ -1022,12 +1026,22 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
         TextView penaltyTv = dialogView.findViewById(R.id.penalty_text);
         TextView roundTv = dialogView.findViewById(R.id.round_text);
+        View cardContainer = dialogView.findViewById(R.id.card_container);
         ImageView cardIv = dialogView.findViewById(R.id.card_image);
         TextView cardValueTv = dialogView.findViewById(R.id.card_value_text);
+        GifImageView confettiGif = dialogView.findViewById(R.id.confetti_gif);
         Button btnRed = dialogView.findViewById(R.id.btn_red);
         Button btnBlack = dialogView.findViewById(R.id.btn_black);
         TextView resultMsgTv = dialogView.findViewById(R.id.result_message);
         Button finishBtn = dialogView.findViewById(R.id.btn_finish);
+
+        // Reset shading for the buttons (and mutate to prevent leakage to other gamblers)
+        if (btnRed.getBackground() instanceof GradientDrawable) {
+            ((GradientDrawable) btnRed.getBackground().mutate()).setColor(Color.TRANSPARENT);
+        }
+        if (btnBlack.getBackground() instanceof GradientDrawable) {
+            ((GradientDrawable) btnBlack.getBackground().mutate()).setColor(Color.TRANSPARENT);
+        }
 
         penaltyTv.setText("Penalty: " + currentPenalty + " drinks");
         roundTv.setText("Round " + currentRound + " of " + totalRounds);
@@ -1043,12 +1057,8 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             boolean isRed = new Random().nextBoolean();
             int cardValue = new Random().nextInt(13) + 1; // 1-13
             
-            // Logic to choose a card that matches the color for display
-            // Hearts/Diamonds are red (1, 3, 5, 7, 9, 11, 13 etc - actually suit is random)
-            // For simplicity just use value and color
-            
-            activity.btnUtils.setButton(btnRed, () -> handleGuess(true, isRed, cardValue, cardIv, cardValueTv, btnRed, btnBlack, resultMsgTv, finishBtn, penaltyTv, roundTv, gambler));
-            activity.btnUtils.setButton(btnBlack, () -> handleGuess(false, isRed, cardValue, cardIv, cardValueTv, btnRed, btnBlack, resultMsgTv, finishBtn, penaltyTv, roundTv, gambler));
+            activity.btnUtils.setButton(btnRed, () -> handleGuess(true, isRed, cardValue, cardIv, cardValueTv, btnRed, btnBlack, resultMsgTv, finishBtn, penaltyTv, roundTv, confettiGif, cardContainer, gambler));
+            activity.btnUtils.setButton(btnBlack, () -> handleGuess(false, isRed, cardValue, cardIv, cardValueTv, btnRed, btnBlack, resultMsgTv, finishBtn, penaltyTv, roundTv, confettiGif, cardContainer, gambler));
         };
 
         playRound.run();
@@ -1064,10 +1074,21 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
     private static void handleGuess(boolean guessedRed, boolean isRed, int value, ImageView cardIv, TextView cardValueTv,
                                    Button btnRed, Button btnBlack, TextView resultMsgTv, Button finishBtn,
-                                   TextView penaltyTv, TextView roundTv,
-                                   Player gambler) {
+                                   TextView penaltyTv, TextView roundTv, GifImageView confettiGif,
+                                   View cardContainer, Player gambler) {
         btnRed.setEnabled(false);
         btnBlack.setEnabled(false);
+
+        // Selection feedback on the button
+        if (guessedRed) {
+            if (btnRed.getBackground() instanceof GradientDrawable) {
+                ((GradientDrawable) btnRed.getBackground().mutate()).setColor(Color.parseColor("#40FF0000"));
+            }
+        } else {
+            if (btnBlack.getBackground() instanceof GradientDrawable) {
+                ((GradientDrawable) btnBlack.getBackground().mutate()).setColor(Color.parseColor("#40000000"));
+            }
+        }
         
         flipCardForGambler(cardIv, cardValueTv, isRed, value, () -> {
             if (guessedRed == isRed) {
@@ -1075,6 +1096,10 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 currentPenalty--;
                 penaltyTv.setText("Penalty: " + currentPenalty + " drinks");
                 
+                // Show confetti
+                confettiGif.setVisibility(VISIBLE);
+                new Handler().postDelayed(() -> confettiGif.setVisibility(GONE), 2000);
+
                 // Hand out drink
                 for (Player p : game.getPlayers()) {
                     if (!p.equals(gambler)) {
@@ -1084,21 +1109,40 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 }
                 
                 if (currentPenalty == 0) {
-                    String drinksText = totalRounds == 1 ? "drink" : "drinks";
-                    resultMsgTv.setText("Perfect Win!\n" + gambler.getName() + " drinks 0.\nEveryone else takes " + totalRounds + " " + drinksText + ".");
-                    resultMsgTv.setVisibility(VISIBLE);
-                    finishBtn.setVisibility(VISIBLE);
+                    // Show confetti
+                    confettiGif.setVisibility(VISIBLE);
+                    new Handler().postDelayed(() -> confettiGif.setVisibility(GONE), 2000);
+
+                    new Handler().postDelayed(() -> {
+                        String drinksText = totalRounds == 1 ? "drink" : "drinks";
+                        resultMsgTv.setText("Perfect Win!\n" + gambler.getName() + " drinks 0.\nEveryone else takes " + totalRounds + " " + drinksText + ".");
+                        resultMsgTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+                        resultMsgTv.setVisibility(VISIBLE);
+                        finishBtn.setVisibility(VISIBLE);
+                        penaltyTv.setVisibility(GONE);
+                        roundTv.setVisibility(GONE);
+                        cardContainer.setVisibility(GONE);
+                        btnRed.setVisibility(GONE);
+                        btnBlack.setVisibility(GONE);
+                    }, 1500);
                 } else {
                     currentRound++;
                     new Handler().postDelayed(() -> {
-                        // Reset card for next round
+                        // Reset buttons and card for next round
+                        if (btnRed.getBackground() instanceof GradientDrawable) {
+                            ((GradientDrawable) btnRed.getBackground().mutate()).setColor(Color.TRANSPARENT);
+                        }
+                        if (btnBlack.getBackground() instanceof GradientDrawable) {
+                            ((GradientDrawable) btnBlack.getBackground().mutate()).setColor(Color.TRANSPARENT);
+                        }
+
                         cardIv.setImageResource(R.drawable.duel_card_back);
                         cardIv.setBackgroundResource(0);
                         cardValueTv.setVisibility(GONE);
                         roundTv.setText("Round " + currentRound + " of " + totalRounds);
                         btnRed.setEnabled(true);
                         btnBlack.setEnabled(true);
-                    }, 1500);
+                    }, 2000);
                 }
             } else {
                 // Lose round
@@ -1107,8 +1151,14 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 String gamblerDrinksText = currentPenalty == 1 ? "drink" : "drinks";
                 String othersDrinksText = othersDrinks == 1 ? "drink" : "drinks";
                 resultMsgTv.setText("Lost!\n" + gambler.getName() + " must take " + currentPenalty + " " + gamblerDrinksText + ".\nEveryone else takes " + othersDrinks + " " + othersDrinksText + ".");
+                resultMsgTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
                 resultMsgTv.setVisibility(VISIBLE);
                 finishBtn.setVisibility(VISIBLE);
+                penaltyTv.setVisibility(GONE);
+                roundTv.setVisibility(GONE);
+                btnRed.setVisibility(GONE);
+                btnBlack.setVisibility(GONE);
+                cardContainer.setVisibility(GONE);
             }
         });
     }

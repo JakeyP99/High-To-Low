@@ -24,6 +24,17 @@
             android:textSize="30sp"
             android:textStyle="bold" />
 
+        <View
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/bluedark"
+            android:alpha="0.2" />
+
         <TextView
             android:id="@+id/penalty_text"
             android:layout_width="match_parent"
@@ -48,9 +59,17 @@
             android:alpha="0.7" />
 
         <FrameLayout
+            android:id="@+id/card_container"
             android:layout_width="150dp"
             android:layout_height="210dp"
             android:layout_marginBottom="20dp">
+
+            <View
+                android:id="@+id/selection_shade"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0"
+                android:background="@color/white" />
 
             <ImageView
                 android:id="@+id/card_image"
@@ -66,6 +85,13 @@
                 android:fontFamily="@font/viga"
                 android:textColor="@color/white"
                 android:textSize="40sp"
+                android:visibility="gone" />
+
+            <pl.droidsonroids.gif.GifImageView
+                android:id="@+id/confetti_gif"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/confetti"
                 android:visibility="gone" />
         </FrameLayout>
 
@@ -112,7 +138,6 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/viga"
             android:gravity="center"
-            android:paddingTop="10dp"
             android:textColor="@color/bluedark"
             android:textSize="20sp"
             android:visibility="gone" />
