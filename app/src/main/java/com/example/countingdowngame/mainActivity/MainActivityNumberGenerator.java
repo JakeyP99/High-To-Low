@@ -237,7 +237,7 @@ public class MainActivityNumberGenerator {
         numberCounterText.setText(display);
         SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, display);
 
-        MainActivityGame.updateNumberColor(targetNumber);
+        MainActivityGame.updateNumberColor();
 
         // Handle Class Passive Effects
         applyPassiveAbilities(currentPlayer, targetNumber, previousNumber);
@@ -284,7 +284,7 @@ public class MainActivityNumberGenerator {
         int customYellow = ContextCompat.getColor(activity, R.color.custom_yellow);
         numberCounterText.setTextColor(customYellow);
 
-        activity.awardRandomClass(player, targetNumber);
+        activity.awardRandomClass(player);
         finalizeTurn(targetNumber);
         // Clear markers so it's only awarded once
         Game.getInstance().getClassNumbers().remove(Integer.valueOf(targetNumber));

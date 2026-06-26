@@ -27,10 +27,8 @@ import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAb
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
@@ -88,7 +86,6 @@ public class MainActivityGame extends SharedMainActivity {
     private static final List<Player> playersWhoPaidToll = new ArrayList<>();
 
     //-----------------------------------------------------Maps and Sets---------------------------------------------------//
-    private final List<WildCardProperties> usedCards = new ArrayList<>();  // Class-level variable to track used cards
     public WildCardProperties selectedWildCard;
     Game game = Game.getInstance();
 
@@ -125,7 +122,7 @@ public class MainActivityGame extends SharedMainActivity {
             String textToDisplay = String.valueOf(currentNumber);
             numberCounterText.setText(textToDisplay);
             SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, textToDisplay);
-            updateNumberColor(currentNumber);
+            updateNumberColor();
         } else {
             String textToDisplay = "???";
             numberCounterText.setText(textToDisplay);
@@ -148,7 +145,7 @@ public class MainActivityGame extends SharedMainActivity {
         updateNumberText();
     }
 
-    public static void updateNumberColor(int currentNumber) {
+    public static void updateNumberColor() {
         if (numberCounterText == null) return;
 
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
@@ -606,9 +603,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         btnClassAbility.setVisibility(View.VISIBLE);
 
-        labelAbilityDesc.postDelayed(() -> {
-            labelAbilityDesc.setSelected(true);
-        }, 2000);
+        labelAbilityDesc.postDelayed(() -> labelAbilityDesc.setSelected(true), 2000);
     }
 
     private String getClassActiveButtonText(String classChoice) {
@@ -1001,14 +996,9 @@ public class MainActivityGame extends SharedMainActivity {
                 onDismiss
         );
     }
+    
 
-
-
-    public void showGameDialog(String message) {
-        showDialog(message, R.layout.game_main_dialog_box, R.id.dialogbox_textview);
-    }
-
-    public void awardRandomClass(Player player, int number) {
+    public void awardRandomClass(Player player) {
         String[] allPossibleClasses = {
                 CharacterClassDescriptions.ANGRY_JIM, CharacterClassDescriptions.ARCHER, CharacterClassDescriptions.GAMBLER, CharacterClassDescriptions.GOBLIN, CharacterClassDescriptions.QUIZ_MAGICIAN,
                 CharacterClassDescriptions.SCIENTIST, CharacterClassDescriptions.SOLDIER, CharacterClassDescriptions.SURVIVOR, CharacterClassDescriptions.TROLL, CharacterClassDescriptions.WITCH

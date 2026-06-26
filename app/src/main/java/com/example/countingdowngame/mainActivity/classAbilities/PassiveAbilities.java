@@ -15,7 +15,6 @@ import static com.example.countingdowngame.mainActivity.MainActivityGame.soldier
 
 import android.app.AlertDialog;
 import android.graphics.Typeface;
-import android.os.Handler;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;

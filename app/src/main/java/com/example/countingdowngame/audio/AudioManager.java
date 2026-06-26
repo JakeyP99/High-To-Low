@@ -245,13 +245,4 @@ public class AudioManager {
     }
 
 
-    public int getCurrentSongIndex() {
-        return currentSongIndex;
-    }
-
-    public boolean isNotPlaying() {
-        return !isPlaying;
-    }
-
-
 }

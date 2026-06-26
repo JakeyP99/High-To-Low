@@ -13,11 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
 import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.playerChoice.PlayerChoice;
 
-import com.example.countingdowngame.game.Game;
 
 import java.util.List;
 

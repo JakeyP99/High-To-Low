@@ -27,7 +27,6 @@ public class Statistics extends ButtonUtilsActivity implements StatisticsAdapter
 
     private GifImageView muteGif, soundGif;
     private ListView listViewPlayerGlobalStatistics;
-    private ImageView playerImage;
 
     private static final String PREF_NAME = "PlayerStats";
     private int debugClickCount = 0;

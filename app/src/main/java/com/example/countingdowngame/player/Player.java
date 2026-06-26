@@ -157,9 +157,6 @@ public class Player implements Serializable {
         return getRepeatingTurnsForPlayer() + 1;
     }
 
-    public int getActiveAbilityCooldown() {
-        return classAbilityCooldown;
-    }
 
     public void setActiveAbilityCooldown(int cooldown) {
         this.classAbilityCooldown = cooldown;
@@ -266,18 +263,6 @@ public class Player implements Serializable {
     }
 
     //-----------------------------------------------------Active Abilities---------------------------------------------------//
-
-    public void incrementActiveAbilityTurnCounter() {
-        activeAbilityTurnCounter++;
-    }
-
-    public void resetActiveAbilityTurnCounter() {
-        activeAbilityTurnCounter = 0;
-    }
-
-    public int getActiveAbilityTurnCounter() {
-        return activeAbilityTurnCounter;
-    }
 
     private Map<String, Integer> ensureClassCooldowns() {
         if (classCooldowns == null) {

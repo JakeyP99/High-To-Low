@@ -10,10 +10,11 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
@@ -180,16 +181,16 @@ public class PowerUps {
 
         if (allNothing != null) {
             String finalAllNothing = allNothing;
-            showAllOrNothingDialog(player, () -> {
+            showAllOrNothingDialog(() -> {
                 player.usePowerUp(finalAllNothing);
-                checkSplitThePain(player, onEndGame, numberText);
-            }, () -> checkSplitThePain(player, onEndGame, numberText));
+                checkSplitThePain(player, onEndGame);
+            });
         } else {
-            checkSplitThePain(player, onEndGame, numberText);
+            checkSplitThePain(player, onEndGame);
         }
     }
 
-    private static void checkSplitThePain(Player player, Runnable onEndGame, TextView numberText) {
+    private static void checkSplitThePain(Player player, Runnable onEndGame) {
         String splitPain = null;
         for (String p : player.getPowerUps()) {
             if (getPowerUpType(p).equals(SPLIT_THE_PAIN)) {
@@ -209,7 +210,7 @@ public class PowerUps {
         }
     }
 
-    private static void showAllOrNothingDialog(Player player, Runnable onHandled, Runnable onDeclined) {
+    private static void showAllOrNothingDialog(Runnable onHandled) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = activity.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.game_powerup_details, null);
@@ -311,13 +312,14 @@ public class PowerUps {
         title.setText("Splitting the Pain...");
 
         // Use custom adapter for split the pain too
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity, R.layout.game_powerup_list_item, R.id.powerup_text, playerNames) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(activity, R.layout.game_powerup_list_item, R.id.powerup_text, playerNames) {
+            @NonNull
             @Override
-            public View getView(int position, View convertView, android.view.ViewGroup parent) {
+            public View getView(int position, View convertView, @NonNull android.view.ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 GifImageView icon = view.findViewById(R.id.powerup_icon);
                 icon.setImageResource(R.drawable.shots);
-                
+
                 // Stop the gif from animating
                 try {
                     GifDrawable gifDrawable = (GifDrawable) icon.getDrawable();

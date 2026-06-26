@@ -558,8 +558,6 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
         int type = r.nextInt(7);
 
-        float c = 150; // center
-
         switch (type) {
 
             case 0: // Hexagram (magic star)
@@ -974,7 +972,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
     private static void markAbilityUsed(String className, Player player) {
         player.setUsedActiveAbility(true);
-        player.setClassCooldown(className, AbilityComplimentary.getClassCooldown(className, Game.getInstance().getGameMode()));
+        player.setClassCooldown(className, AbilityComplimentary.getClassCooldown(className));
     }
 
     private static void flipCard(View container, TextView cardText, ImageView cardImage, int value, Runnable onEnd) {

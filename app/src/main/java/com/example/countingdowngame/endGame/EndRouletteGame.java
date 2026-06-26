@@ -72,15 +72,14 @@ public class EndRouletteGame extends ButtonUtilsActivity {
         String victorName = getIntent().getStringExtra("VICTOR_NAME");
             // Get the victor's chamber data
             Player victor = findPlayerByName(victorName);
-                List<Integer> chamberData = victor.getChamberList();
+        assert victor != null;
+        List<Integer> chamberData = victor.getChamberList();
                 int shotCount = 0;
-                boolean bulletFound = false;
 
-                // Find when the first bullet appears
+        // Find when the first bullet appears
                 for (int i = 0; i < chamberData.size(); i++) {
                     shotCount++;
                     if (chamberData.get(i) == 1) {  // Bullet found
-                        bulletFound = true;
                         break;
                     }
                 }

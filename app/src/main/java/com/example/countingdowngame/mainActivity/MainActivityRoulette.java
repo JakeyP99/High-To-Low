@@ -40,7 +40,6 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
     private ImageButton imageButtonExit;
     private ScrollView playerScrollView;
     private LinearLayout playerContainer;
-    private final boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onResume() {

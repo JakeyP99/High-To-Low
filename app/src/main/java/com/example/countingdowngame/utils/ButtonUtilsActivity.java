@@ -9,7 +9,6 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
 import com.example.countingdowngame.endGame.EndRouletteGame;
 import com.example.countingdowngame.instructions.InstructionsToPlay;
@@ -121,11 +120,4 @@ public abstract class ButtonUtilsActivity extends AppCompatActivity {
         return sharedPreferences.getBoolean("isMuted", false); // Default to false if not found
     }
 
-    public void setupBackgroundMusic() {
-        boolean isMuted = getMuteSoundState();
-        if (!isMuted) {
-            audioManager.playRandomBackgroundMusic(getApplicationContext());
-            Log.d("HomeScreen", "Background music started");
-        }
-    }
 }

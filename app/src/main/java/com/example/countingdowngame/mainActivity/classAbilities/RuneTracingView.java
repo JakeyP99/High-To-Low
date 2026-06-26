@@ -146,12 +146,6 @@ public class RuneTracingView extends View {
         return true;
     }
 
-    public void reset() {
-        userPath.reset();
-        userPoints.clear();
-        invalidate();
-    }
-
     /**
      * Calculates similarity percentage between 0 and 100.
      */

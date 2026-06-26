@@ -97,40 +97,6 @@ public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAda
         return value;
     }
 
-    public WildCardProperties[] getWildCards() {
-        return wildCards;
-    }
-
-    public void setWildCards(WildCardProperties[] wildCards) {
-        this.wildCards = wildCards;
-    }
-
-    public void saveWildCardProbabilitiesToStorage(WildCardProperties[] wildcard) {
-
-        var prefs = WildCardSettingsLocalStore.fromContext(mContext, mSaveKey);
-        prefs.setWildCardQuantity(wildcard.length);
-
-        for (int i = 0; i < wildcard.length; i++) {
-
-            WildCardProperties c = wildcard[i];
-
-            if (c.hasAnswer()) {
-                prefs.setWildcardState(
-                        i,
-                        c.isEnabled(),
-                        c.getWildCard(),
-                        c.getAnswer(),
-                        c.getWrongAnswer1(),
-                        c.getWrongAnswer2(),
-                        c.getWrongAnswer3(),
-                        c.getCategory()
-                );
-            } else {
-                prefs.setWildcardState(i, c.isEnabled(), c.getWildCard());
-            }
-        }
-    }
-
     public static class WildCardViewHolder extends RecyclerView.ViewHolder {
         public WildCardViewHolder(View itemView) {
             super(itemView);
