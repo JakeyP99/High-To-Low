@@ -17,7 +17,7 @@
         android:text="Power Up!"
         android:textAlignment="center"
         android:textColor="@color/bluedark"
-        android:textSize="32sp" />
+        android:textSize="30sp" />
 
     <ListView
         android:id="@+id/listViewPowerUps"

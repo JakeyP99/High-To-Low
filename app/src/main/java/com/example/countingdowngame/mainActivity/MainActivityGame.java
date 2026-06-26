@@ -30,6 +30,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
@@ -905,7 +906,18 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
 
-    public void showClassDialog(String title, String description, int layoutId,
+    public void showCombinedPassivesDialog(String htmlContent, Runnable onDismiss) {
+        showClassDialog(
+                "Messages:",
+                Html.fromHtml(htmlContent, Html.FROM_HTML_MODE_LEGACY),
+                R.layout.game_combined_passives_dialog,
+                R.id.title_textview,
+                R.id.content_textview,
+                onDismiss
+        );
+    }
+
+    public void showClassDialog(String title, CharSequence description, int layoutId,
                                 int classTextViewId, int descriptionTextViewId,
                                 Runnable onDismiss) {
 

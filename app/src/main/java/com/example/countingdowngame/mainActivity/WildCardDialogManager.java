@@ -117,7 +117,7 @@ public class WildCardDialogManager {
     private void setupBaseUI(UIRefs ui, WildCardProperties card, String type) {
         ui.text.setText(card.getWildCard());
         ui.title.setText(type + "!");
-        updateTextSize(card.getWildCard(), ui.text);
+        updateTextSize(ui.text);
     }
 
     // ---------------- MULTIPLE CHOICE ----------------
@@ -318,11 +318,8 @@ public class WildCardDialogManager {
         for (Button b : ui.answerButtons) b.setVisibility(View.GONE);
     }
 
-    private void updateTextSize(String text, TextView textView) {
-        int size = SharedMainActivity.TextSizeCalculator
-                .calculateTextSizeBasedOnCharacterCount(text);
-
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+    private void updateTextSize(TextView textView) {
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
     }
 
     private void updateTextSizeQuizAnswer(String text, TextView textView) {

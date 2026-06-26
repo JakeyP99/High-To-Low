@@ -41,7 +41,8 @@ public class PassiveAbilities extends ButtonUtilsActivity {
     }
 
     private static void addPassiveMessage(String className, String message) {
-        pendingPassiveMessages.add(className + "'s Passive:\n\n" + message);
+        String formattedMessage = message.replace("\n", "<br>");
+        pendingPassiveMessages.add("<b>" + className + "'s Passive:</b><br>" + formattedMessage);
     }
 
     private static void addPassiveAction(Runnable action) {
@@ -68,11 +69,11 @@ public class PassiveAbilities extends ButtonUtilsActivity {
         for (int i = 0; i < pendingPassiveMessages.size(); i++) {
             combined.append(pendingPassiveMessages.get(i));
             if (i < pendingPassiveMessages.size() - 1) {
-                combined.append("\n\n--------------------\n\n");
+                combined.append("<br><br>--------------------<br><br>");
             }
         }
 
-        activity.showClassAbilityDialog(combined.toString(), () -> {
+        activity.showCombinedPassivesDialog(combined.toString(), () -> {
             pendingPassiveMessages.clear();
             List<Runnable> actionsToRun = new ArrayList<>(pendingActions);
             pendingActions.clear();
