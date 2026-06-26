@@ -34,6 +34,7 @@ public class PassiveAbilities extends ButtonUtilsActivity {
     static Game game = Game.getInstance();
     private static MainActivityGame activity;
     private static final List<String> pendingPassiveMessages = new ArrayList<>();
+    private static final List<Runnable> pendingActions = new ArrayList<>();
 
     public static void setActivity(MainActivityGame activityInstance) {
         activity = activityInstance;
@@ -43,12 +44,22 @@ public class PassiveAbilities extends ButtonUtilsActivity {
         pendingPassiveMessages.add(className + "'s Passive:\n\n" + message);
     }
 
+    private static void addPassiveAction(Runnable action) {
+        pendingActions.add(action);
+    }
+
     public static void showCombinedPassives() {
         showCombinedPassives(null);
     }
 
     public static void showCombinedPassives(Runnable onDone) {
         if (pendingPassiveMessages.isEmpty()) {
+            List<Runnable> actionsToRun = new ArrayList<>(pendingActions);
+            pendingActions.clear();
+            for (Runnable action : actionsToRun) {
+                action.run();
+            }
+
             if (onDone != null) onDone.run();
             return;
         }
@@ -63,6 +74,12 @@ public class PassiveAbilities extends ButtonUtilsActivity {
 
         activity.showClassAbilityDialog(combined.toString(), () -> {
             pendingPassiveMessages.clear();
+            List<Runnable> actionsToRun = new ArrayList<>(pendingActions);
+            pendingActions.clear();
+            for (Runnable action : actionsToRun) {
+                action.run();
+            }
+
             if (onDone != null) onDone.run();
         });
     }
@@ -92,7 +109,7 @@ public class PassiveAbilities extends ButtonUtilsActivity {
                 soldierRemoval = true;
                 addPassiveMessage(SOLDIER, currentPlayer.getName() + " has escaped the game as the soldier.");
                 currentPlayer.setRemoved(true);
-                game.removePlayer(currentPlayer);
+                addPassiveAction(() -> game.removePlayer(currentPlayer));
             } else if (soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {
                 activity.showGameDialog("Sorry " + currentPlayer.getName() + ", a soldier has already escaped the game.");
             }
@@ -113,24 +130,17 @@ public class PassiveAbilities extends ButtonUtilsActivity {
             return;
         }
 
-        boolean goblinTriggered = false;
         for (Player player : game.getPlayers()) {
             boolean hasGoblinPassive = player.getClassChoices().contains(GOBLIN) ||
                     (player.getClassChoices().contains(ANGRY_JIM) && game.getCurrentNumber() < 50);
 
             if (hasGoblinPassive && !player.equals(wildcardUser)) {
-                goblinTriggered = true;
-                activity.showClassAbilityDialog(
-                        GOBLIN + "'s Passive: \n\n Drink once for using a wildcard!",
-                        onDone
-                );
+                addPassiveMessage(GOBLIN, "Drink once for using a wildcard!");
                 break;
             }
         }
 
-        if (!goblinTriggered) {
-            onDone.run();
-        }
+        showCombinedPassives(onDone);
     }
 
     public static void handleScientistPassive(Player currentPlayer) {
@@ -141,7 +151,7 @@ public class PassiveAbilities extends ButtonUtilsActivity {
 
             if (chance < skipChance) {
                 addPassiveMessage(SCIENTIST, currentPlayer.getName() + "'s turn was skipped.");
-                currentPlayer.useSkip();
+                addPassiveAction(currentPlayer::useSkip);
             }
         }
     }
