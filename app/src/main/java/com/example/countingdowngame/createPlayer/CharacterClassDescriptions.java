@@ -36,7 +36,7 @@ public class CharacterClassDescriptions {
             "Force a random player to repeat their turn. Resets after 5 turns.";
 
     public static final String gamblerActiveDescription =
-            "Duel an opponent in High Card. Bet 1-5 drinks. Winner hands them out!";
+            "Choose between High Card Duel or Red or Black. Bet 1-5 drinks and gamble!";
 
     public static final String goblinActiveDescription =
             "Sacrifice 1 of your wildcards to remove 2 from a random player.";
@@ -55,7 +55,7 @@ public class CharacterClassDescriptions {
     public static final String quizMagicianActiveButtonText = "Next wildcard is 2 quizzes";
     public static final String survivorActiveButtonText = "Halve current number";
     public static final String angryJimActiveButtonText = "Force turn repeat";
-    public static final String gamblerActiveButtonText = "High Card Duel";
+    public static final String gamblerActiveButtonText = "Gamble";
     public static final String goblinActiveButtonText = "Sacrifice wildcard";
     public static final String trollActiveButtonText = "Riddle Toll";
 

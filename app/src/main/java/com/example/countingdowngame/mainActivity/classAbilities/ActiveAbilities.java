@@ -22,6 +22,7 @@ import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Path;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -33,6 +34,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,6 +61,9 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     private static MainActivityGame activity;
     private static boolean gamblerFlipped = false;
     private static boolean opponentFlipped = false;
+    private static int currentRound = 0;
+    private static int totalRounds = 0;
+    private static int currentPenalty = 0;
     private static boolean startMiniGame = false;
 
     public static void setActivity(MainActivityGame activityInstance) {
@@ -863,7 +868,10 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
         RecyclerView recyclerView = dialogView.findViewById(R.id.listViewOpponents);
 
-        AlertDialog dialog = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme).setView(dialogView).create();
+        AlertDialog dialog = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme)
+                .setView(dialogView)
+                .setCancelable(false)
+                .create();
 
         recyclerView.setLayoutManager(new GridLayoutManager(activity, 3));
 
@@ -904,12 +912,37 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 } else {
                     hideAbilityButton();
                     dialog.dismiss();
-                    showHighCardDuelUI(opponent, bet);
+                    showGamblerGameSelection(opponent, bet);
                 }
             } catch (NumberFormatException e) {
                 activity.displayToastMessage("Invalid bet!");
             }
         });
+        dialog.show();
+    }
+
+    private static void showGamblerGameSelection(Player opponent, int bet) {
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.game_gambler_game_selection, null);
+
+        View btnHighCard = dialogView.findViewById(R.id.btn_high_card);
+        View btnRedBlack = dialogView.findViewById(R.id.btn_red_black);
+
+        AlertDialog dialog = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme)
+                .setView(dialogView)
+                .setCancelable(false)
+                .create();
+
+        activity.btnUtils.setButton(btnHighCard, () -> {
+            dialog.dismiss();
+            showHighCardDuelUI(opponent, bet);
+        });
+
+        activity.btnUtils.setButton(btnRedBlack, () -> {
+            dialog.dismiss();
+            showRedOrBlackUI(opponent, bet);
+        });
+
         dialog.show();
     }
 
@@ -968,6 +1001,134 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         });
 
         dialog.show();
+    }
+
+    private static void showRedOrBlackUI(final Player opponent, final int bet) {
+        currentRound = 1;
+        totalRounds = bet;
+        currentPenalty = bet;
+        AudioManager.getInstance().playSoundEffects(activity, GAMBLER);
+
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.game_gambler_red_or_black, null);
+
+        TextView penaltyTv = dialogView.findViewById(R.id.penalty_text);
+        TextView roundTv = dialogView.findViewById(R.id.round_text);
+        ImageView cardIv = dialogView.findViewById(R.id.card_image);
+        TextView cardValueTv = dialogView.findViewById(R.id.card_value_text);
+        LinearLayout choiceLayout = dialogView.findViewById(R.id.choice_layout);
+        Button btnRed = dialogView.findViewById(R.id.btn_red);
+        Button btnBlack = dialogView.findViewById(R.id.btn_black);
+        TextView resultMsgTv = dialogView.findViewById(R.id.result_message);
+        Button finishBtn = dialogView.findViewById(R.id.btn_finish);
+
+        penaltyTv.setText("Penalty: " + currentPenalty + " drinks");
+        roundTv.setText("Round " + currentRound + " of " + totalRounds);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
+        builder.setView(dialogView);
+        builder.setCancelable(false);
+        AlertDialog dialog = builder.create();
+
+        final Player gambler = game.getCurrentPlayer();
+
+        Runnable playRound = () -> {
+            boolean isRed = new Random().nextBoolean();
+            int cardValue = new Random().nextInt(13) + 1; // 1-13
+            
+            // Logic to choose a card that matches the color for display
+            // Hearts/Diamonds are red (1, 3, 5, 7, 9, 11, 13 etc - actually suit is random)
+            // For simplicity just use value and color
+            
+            activity.btnUtils.setButton(btnRed, () -> handleGuess(true, isRed, cardValue, cardIv, cardValueTv, choiceLayout, resultMsgTv, finishBtn, penaltyTv, roundTv, gambler));
+            activity.btnUtils.setButton(btnBlack, () -> handleGuess(false, isRed, cardValue, cardIv, cardValueTv, choiceLayout, resultMsgTv, finishBtn, penaltyTv, roundTv, gambler));
+        };
+
+        playRound.run();
+
+        activity.btnUtils.setButton(finishBtn, () -> {
+            dialog.dismiss();
+            markAbilityUsed(GAMBLER, gambler);
+            AudioManager.getInstance().playSoundEffects(activity, GAMBLER);
+        });
+
+        dialog.show();
+    }
+
+    private static void handleGuess(boolean guessedRed, boolean isRed, int value, ImageView cardIv, TextView cardValueTv,
+                                   LinearLayout choiceLayout, TextView resultMsgTv, Button finishBtn,
+                                   TextView penaltyTv, TextView roundTv,
+                                   Player gambler) {
+        choiceLayout.setVisibility(GONE);
+        
+        flipCardForGambler(cardIv, cardValueTv, isRed, value, () -> {
+            if (guessedRed == isRed) {
+                // Win round
+                currentPenalty--;
+                penaltyTv.setText("Penalty: " + currentPenalty + " drinks");
+                
+                // Hand out drink
+                for (Player p : game.getPlayers()) {
+                    if (!p.equals(gambler)) {
+                        p.incrementDrinksTakenByGambler(1);
+                        gambler.incrementDrinksHandedOutByGambler(1);
+                    }
+                }
+                
+                if (currentPenalty == 0) {
+                    resultMsgTv.setText("Perfect Win! Everyone else drinks " + totalRounds + " times. " + gambler.getName() + " drinks 0.");
+                    resultMsgTv.setVisibility(VISIBLE);
+                    finishBtn.setVisibility(VISIBLE);
+                } else {
+                    currentRound++;
+                    new Handler().postDelayed(() -> {
+                        // Reset card for next round
+                        cardIv.setImageResource(R.drawable.duel_card_back);
+                        cardIv.setBackgroundResource(0);
+                        cardValueTv.setVisibility(GONE);
+                        roundTv.setText("Round " + currentRound + " of " + totalRounds);
+                        choiceLayout.setVisibility(VISIBLE);
+                    }, 1500);
+                }
+            } else {
+                // Lose round
+                gambler.incrementDrinksTakenByGambler(currentPenalty);
+                resultMsgTv.setText("Incorrect! " + gambler.getName() + " must take " + currentPenalty + " drinks.");
+                resultMsgTv.setVisibility(VISIBLE);
+                finishBtn.setVisibility(VISIBLE);
+            }
+        });
+    }
+
+    private static void flipCardForGambler(ImageView cardIv, TextView cardValueTv, boolean isRed, int value, Runnable onEnd) {
+        ObjectAnimator oa1 = ObjectAnimator.ofFloat(cardIv, "scaleX", 1f, 0f);
+        ObjectAnimator oa2 = ObjectAnimator.ofFloat(cardIv, "scaleX", 0f, 1f);
+        oa1.setInterpolator(new AccelerateDecelerateInterpolator());
+        oa2.setInterpolator(new AccelerateDecelerateInterpolator());
+        oa1.setDuration(250);
+        oa2.setDuration(250);
+        
+        oa1.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                cardIv.setImageResource(0);
+                cardIv.setBackgroundResource(R.drawable.duel_card_front);
+                cardValueTv.setText(getCardName(value));
+                cardValueTv.setTextColor(isRed ? Color.RED : Color.BLACK);
+                cardValueTv.setVisibility(VISIBLE);
+                oa2.start();
+            }
+        });
+        
+        oa2.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                if (onEnd != null) onEnd.run();
+            }
+        });
+        oa1.start();
     }
 
     private static void markAbilityUsed(String className, Player player) {

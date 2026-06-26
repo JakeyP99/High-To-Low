@@ -14,10 +14,10 @@
         android:layout_gravity="center"
         android:fontFamily="@font/viga"
         android:paddingTop="10dp"
-        android:text="Choose Mode"
+        android:text="Choose Your Game"
         android:textAlignment="center"
         android:textColor="@color/bluedark"
-        android:textSize="35sp" />
+        android:textSize="32sp" />
 
     <View
         android:layout_width="match_parent"
@@ -27,9 +27,9 @@
         android:alpha="0.1"
         android:background="@color/bluedark" />
 
-    <!-- Mode 1: Classic -->
+    <!-- Game 1: High Card Duel -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/btn_mode_classic"
+        android:id="@+id/btn_high_card"
         android:layout_width="match_parent"
         android:layout_height="85dp"
         android:layout_marginTop="12dp"
@@ -39,47 +39,47 @@
         android:padding="12dp">
 
         <ImageView
-            android:id="@+id/iconClassic"
+            android:id="@+id/iconHighCard"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:src="@drawable/selection"
+            android:src="@drawable/cards"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textClassic"
+            android:id="@+id/textHighCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
             android:fontFamily="@font/viga"
-            android:text="Standard Mode"
+            android:text="High Card Duel"
             android:textColor="@color/bluedark"
-            android:textSize="25sp"
+            android:textSize="22sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/subClassic"
-            app:layout_constraintEnd_toStartOf="@id/arrowClassic"
-            app:layout_constraintStart_toEndOf="@id/iconClassic"
+            app:layout_constraintBottom_toTopOf="@id/subHighCard"
+            app:layout_constraintEnd_toStartOf="@id/arrowHighCard"
+            app:layout_constraintStart_toEndOf="@id/iconHighCard"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
-            android:id="@+id/subClassic"
+            android:id="@+id/subHighCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:alpha="0.7"
             android:fontFamily="@font/viga"
-            android:text="Everyone picks a class"
+            android:text="Standard High Card vs Opponent"
             android:textColor="@color/bluedark"
-            android:textSize="15sp"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/textClassic"
-            app:layout_constraintStart_toStartOf="@id/textClassic"
-            app:layout_constraintTop_toBottomOf="@id/textClassic" />
+            app:layout_constraintEnd_toEndOf="@id/textHighCard"
+            app:layout_constraintStart_toStartOf="@id/textHighCard"
+            app:layout_constraintTop_toBottomOf="@id/textHighCard" />
 
         <ImageView
-            android:id="@+id/arrowClassic"
+            android:id="@+id/arrowHighCard"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:alpha="0.3"
@@ -90,72 +90,9 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Mode 2: Class Hunt -->
+    <!-- Game 2: Red or Black -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/btn_mode_class_hunt"
-        android:layout_width="match_parent"
-        android:layout_height="85dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/outlineforbutton"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="12dp">
-
-        <ImageView
-            android:id="@+id/iconHunt"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:src="@drawable/target"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textHunt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
-            android:fontFamily="@font/viga"
-            android:text="Class Hunt"
-            android:textColor="@color/bluedark"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/subHunt"
-            app:layout_constraintEnd_toStartOf="@id/arrowHunt"
-            app:layout_constraintStart_toEndOf="@id/iconHunt"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
-
-        <TextView
-            android:id="@+id/subHunt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:alpha="0.7"
-            android:fontFamily="@font/viga"
-            android:text="Unlock classes randomly"
-            android:textColor="@color/bluedark"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/textHunt"
-            app:layout_constraintStart_toStartOf="@id/textHunt"
-            app:layout_constraintTop_toBottomOf="@id/textHunt" />
-
-        <ImageView
-            android:id="@+id/arrowHunt"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:alpha="0.3"
-            android:src="@drawable/arrow_right"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!-- Mode 3: Crazy Mode -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/btn_mode_crazy"
+        android:id="@+id/btn_red_black"
         android:layout_width="match_parent"
         android:layout_height="85dp"
         android:layout_marginTop="16dp"
@@ -165,47 +102,47 @@
         android:padding="12dp">
 
         <pl.droidsonroids.gif.GifImageView
-            android:id="@+id/iconCrazy"
+            android:id="@+id/iconRedBlack"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:src="@drawable/crazy"
+            android:src="@drawable/redcard"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textCrazy"
+            android:id="@+id/textRedBlack"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
             android:fontFamily="@font/viga"
-            android:text="Crazy Mode"
+            android:text="Red or Black"
             android:textColor="@color/bluedark"
             android:textSize="22sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/subCrazy"
-            app:layout_constraintEnd_toStartOf="@id/arrowCrazy"
-            app:layout_constraintStart_toEndOf="@id/iconCrazy"
+            app:layout_constraintBottom_toTopOf="@id/subRedBlack"
+            app:layout_constraintEnd_toStartOf="@id/arrowRedBlack"
+            app:layout_constraintStart_toEndOf="@id/iconRedBlack"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
-            android:id="@+id/subCrazy"
+            android:id="@+id/subRedBlack"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:alpha="0.7"
             android:fontFamily="@font/viga"
-            android:text="Stack multiple classes for pure chaos!"
+            android:text="Multi-round gamble to reduce penalty"
             android:textColor="@color/bluedark"
-            android:textSize="13sp"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/textCrazy"
-            app:layout_constraintStart_toStartOf="@id/textCrazy"
-            app:layout_constraintTop_toBottomOf="@id/textCrazy" />
+            app:layout_constraintEnd_toEndOf="@id/textRedBlack"
+            app:layout_constraintStart_toStartOf="@id/textRedBlack"
+            app:layout_constraintTop_toBottomOf="@id/textRedBlack" />
 
         <ImageView
-            android:id="@+id/arrowCrazy"
+            android:id="@+id/arrowRedBlack"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:alpha="0.3"
