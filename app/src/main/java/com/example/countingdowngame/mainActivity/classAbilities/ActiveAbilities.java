@@ -1053,15 +1053,17 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
         final Player gambler = game.getCurrentPlayer();
 
-        Runnable playRound = () -> {
+        activity.btnUtils.setButton(btnRed, () -> {
             boolean isRed = new Random().nextBoolean();
             int cardValue = new Random().nextInt(13) + 1; // 1-13
-            
-            activity.btnUtils.setButton(btnRed, () -> handleGuess(true, isRed, cardValue, cardIv, cardValueTv, btnRed, btnBlack, resultMsgTv, finishBtn, penaltyTv, roundTv, confettiGif, cardContainer, gambler));
-            activity.btnUtils.setButton(btnBlack, () -> handleGuess(false, isRed, cardValue, cardIv, cardValueTv, btnRed, btnBlack, resultMsgTv, finishBtn, penaltyTv, roundTv, confettiGif, cardContainer, gambler));
-        };
-
-        playRound.run();
+            handleGuess(true, isRed, cardValue, cardIv, cardValueTv, btnRed, btnBlack, resultMsgTv, finishBtn, penaltyTv, roundTv, confettiGif, cardContainer, gambler);
+        });
+        
+        activity.btnUtils.setButton(btnBlack, () -> {
+            boolean isRed = new Random().nextBoolean();
+            int cardValue = new Random().nextInt(13) + 1; // 1-13
+            handleGuess(false, isRed, cardValue, cardIv, cardValueTv, btnRed, btnBlack, resultMsgTv, finishBtn, penaltyTv, roundTv, confettiGif, cardContainer, gambler);
+        });
 
         activity.btnUtils.setButton(finishBtn, () -> {
             dialog.dismiss();
@@ -1150,15 +1152,18 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 int othersDrinks = totalRounds - currentPenalty;
                 String gamblerDrinksText = currentPenalty == 1 ? "drink" : "drinks";
                 String othersDrinksText = othersDrinks == 1 ? "drink" : "drinks";
-                resultMsgTv.setText("Lost!\n" + gambler.getName() + " must take " + currentPenalty + " " + gamblerDrinksText + ".\nEveryone else takes " + othersDrinks + " " + othersDrinksText + ".");
-                resultMsgTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
-                resultMsgTv.setVisibility(VISIBLE);
-                finishBtn.setVisibility(VISIBLE);
-                penaltyTv.setVisibility(GONE);
-                roundTv.setVisibility(GONE);
-                btnRed.setVisibility(GONE);
-                btnBlack.setVisibility(GONE);
-                cardContainer.setVisibility(GONE);
+
+                new Handler().postDelayed(() -> {
+                    resultMsgTv.setText("Lost!\n" + gambler.getName() + " must take " + currentPenalty + " " + gamblerDrinksText + ".\nEveryone else takes " + othersDrinks + " " + othersDrinksText + ".");
+                    resultMsgTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
+                    resultMsgTv.setVisibility(VISIBLE);
+                    finishBtn.setVisibility(VISIBLE);
+                    penaltyTv.setVisibility(GONE);
+                    roundTv.setVisibility(GONE);
+                    btnRed.setVisibility(GONE);
+                    btnBlack.setVisibility(GONE);
+                    cardContainer.setVisibility(GONE);
+                }, 1500);
             }
         });
     }
