@@ -887,7 +887,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
         TextView subtitle = dialogView.findViewById(R.id.bet_subtitle);
         if (subtitle != null) {
-            subtitle.setText("Duel against " + opponent.getName());
+            subtitle.setText("Duel against " + opponent.getName() + " - Bet a drink between 1 and 5.");
         }
 
         Button okButton = dialogView.findViewById(R.id.btn_confirm_bet);

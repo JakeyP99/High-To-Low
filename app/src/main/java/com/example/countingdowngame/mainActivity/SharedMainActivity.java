@@ -152,9 +152,10 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         ViewPager viewPager = dialogView.findViewById(R.id.abilityViewPager);
         DotsIndicator dotsIndicator = dialogView.findViewById(R.id.dotsIndicator);
 
-        List<String> classes = player.getClassChoices();
+        List<String> classes = new ArrayList<>(player.getClassChoices());
+        classes.remove(CharacterClassDescriptions.NO_CLASS);
+
         if (classes.isEmpty()) {
-            classes = new ArrayList<>();
             classes.add(CharacterClassDescriptions.NO_CLASS);
         }
 
