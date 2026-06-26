@@ -34,7 +34,6 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,6 +67,15 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
     public static void setActivity(MainActivityGame activityInstance) {
         activity = activityInstance;
+    }
+
+    public static void resetStaticState() {
+        gamblerFlipped = false;
+        opponentFlipped = false;
+        currentRound = 0;
+        totalRounds = 0;
+        currentPenalty = 0;
+        startMiniGame = false;
     }
 
 
@@ -1016,7 +1024,6 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         TextView roundTv = dialogView.findViewById(R.id.round_text);
         ImageView cardIv = dialogView.findViewById(R.id.card_image);
         TextView cardValueTv = dialogView.findViewById(R.id.card_value_text);
-        LinearLayout choiceLayout = dialogView.findViewById(R.id.choice_layout);
         Button btnRed = dialogView.findViewById(R.id.btn_red);
         Button btnBlack = dialogView.findViewById(R.id.btn_black);
         TextView resultMsgTv = dialogView.findViewById(R.id.result_message);
@@ -1040,8 +1047,8 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             // Hearts/Diamonds are red (1, 3, 5, 7, 9, 11, 13 etc - actually suit is random)
             // For simplicity just use value and color
             
-            activity.btnUtils.setButton(btnRed, () -> handleGuess(true, isRed, cardValue, cardIv, cardValueTv, choiceLayout, resultMsgTv, finishBtn, penaltyTv, roundTv, gambler));
-            activity.btnUtils.setButton(btnBlack, () -> handleGuess(false, isRed, cardValue, cardIv, cardValueTv, choiceLayout, resultMsgTv, finishBtn, penaltyTv, roundTv, gambler));
+            activity.btnUtils.setButton(btnRed, () -> handleGuess(true, isRed, cardValue, cardIv, cardValueTv, btnRed, btnBlack, resultMsgTv, finishBtn, penaltyTv, roundTv, gambler));
+            activity.btnUtils.setButton(btnBlack, () -> handleGuess(false, isRed, cardValue, cardIv, cardValueTv, btnRed, btnBlack, resultMsgTv, finishBtn, penaltyTv, roundTv, gambler));
         };
 
         playRound.run();
@@ -1056,10 +1063,11 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     }
 
     private static void handleGuess(boolean guessedRed, boolean isRed, int value, ImageView cardIv, TextView cardValueTv,
-                                   LinearLayout choiceLayout, TextView resultMsgTv, Button finishBtn,
+                                   Button btnRed, Button btnBlack, TextView resultMsgTv, Button finishBtn,
                                    TextView penaltyTv, TextView roundTv,
                                    Player gambler) {
-        choiceLayout.setVisibility(GONE);
+        btnRed.setEnabled(false);
+        btnBlack.setEnabled(false);
         
         flipCardForGambler(cardIv, cardValueTv, isRed, value, () -> {
             if (guessedRed == isRed) {
@@ -1076,7 +1084,8 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 }
                 
                 if (currentPenalty == 0) {
-                    resultMsgTv.setText("Perfect Win! Everyone else drinks " + totalRounds + " times. " + gambler.getName() + " drinks 0.");
+                    String drinksText = totalRounds == 1 ? "drink" : "drinks";
+                    resultMsgTv.setText("Perfect Win!\n" + gambler.getName() + " drinks 0.\nEveryone else takes " + totalRounds + " " + drinksText + ".");
                     resultMsgTv.setVisibility(VISIBLE);
                     finishBtn.setVisibility(VISIBLE);
                 } else {
@@ -1087,13 +1096,17 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                         cardIv.setBackgroundResource(0);
                         cardValueTv.setVisibility(GONE);
                         roundTv.setText("Round " + currentRound + " of " + totalRounds);
-                        choiceLayout.setVisibility(VISIBLE);
+                        btnRed.setEnabled(true);
+                        btnBlack.setEnabled(true);
                     }, 1500);
                 }
             } else {
                 // Lose round
                 gambler.incrementDrinksTakenByGambler(currentPenalty);
-                resultMsgTv.setText("Incorrect! " + gambler.getName() + " must take " + currentPenalty + " drinks.");
+                int othersDrinks = totalRounds - currentPenalty;
+                String gamblerDrinksText = currentPenalty == 1 ? "drink" : "drinks";
+                String othersDrinksText = othersDrinks == 1 ? "drink" : "drinks";
+                resultMsgTv.setText("Lost!\n" + gambler.getName() + " must take " + currentPenalty + " " + gamblerDrinksText + ".\nEveryone else takes " + othersDrinks + " " + othersDrinksText + ".");
                 resultMsgTv.setVisibility(VISIBLE);
                 finishBtn.setVisibility(VISIBLE);
             }

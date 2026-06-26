@@ -54,6 +54,12 @@ public class PassiveAbilities extends ButtonUtilsActivity {
         activity = activityInstance;
     }
 
+    public static void resetStaticState() {
+        pendingPassiveMessages.clear();
+        pendingActions.clear();
+        gamblerBet = "";
+    }
+
     private static void addPassiveMessage(String className, String message) {
         pendingPassiveMessages.add(new PassiveMessage(className, message));
     }

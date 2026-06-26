@@ -175,6 +175,8 @@ public class MainActivityGame extends SharedMainActivity {
         passivesEnabled = true;
         hidingTroll = null;
         playersWhoPaidToll.clear();
+        PassiveAbilities.resetStaticState();
+        ActiveAbilities.resetStaticState();
         PowerUps.reset();
     }
 
