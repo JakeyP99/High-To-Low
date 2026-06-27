@@ -78,7 +78,6 @@ public class SettingsMenu extends ButtonUtilsActivity {
         View v = inflate(R.layout.game_settings_limits_dialog);
         EditText editWildcards = v.findViewById(R.id.edittext_wildcard_amount);
         EditText editDrinks = v.findViewById(R.id.edittext_drink_amount);
-        Button btnDone = v.findViewById(R.id.btn_close);
 
         GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);
         editWildcards.setText(String.valueOf(store.playerWildCardCount()));
@@ -88,10 +87,9 @@ public class SettingsMenu extends ButtonUtilsActivity {
         setupTextWatcher(editDrinks, 2);
 
         AlertDialog dialog = createDialog(v);
-        btnUtils.setButton(btnDone, () -> {
+        dialog.setOnDismissListener(d -> {
             store.setPlayerWildCardCount(safeParseInt(editWildcards));
             store.setTotalDrinkAmount(safeParseInt(editDrinks));
-            dialog.dismiss();
         });
         dialog.show();
     }
@@ -100,7 +98,6 @@ public class SettingsMenu extends ButtonUtilsActivity {
         View v = inflate(R.layout.game_settings_quiz_dialog);
         Button btnMulti = v.findViewById(R.id.button_multiChoice);
         Button btnShort = v.findViewById(R.id.button_nonMultiChoice);
-        Button btnDone = v.findViewById(R.id.btn_close);
 
         GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);
         btnMulti.setSelected(store.isMultiChoice());
@@ -118,9 +115,7 @@ public class SettingsMenu extends ButtonUtilsActivity {
             store.setIsMultiChoice(false);
         });
 
-        AlertDialog dialog = createDialog(v);
-        btnUtils.setButton(btnDone, dialog::dismiss);
-        dialog.show();
+        createDialog(v).show();
     }
 
     private void showContentDialog() {
@@ -129,7 +124,6 @@ public class SettingsMenu extends ButtonUtilsActivity {
         Button btnTask = v.findViewById(R.id.button_task_toggle);
         Button btnTruth = v.findViewById(R.id.button_truth_toggle);
         Button btnPower = v.findViewById(R.id.button_powerup_toggle);
-        Button btnDone = v.findViewById(R.id.btn_close);
 
         GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);
         btnQuiz.setSelected(store.isQuizActivated());
@@ -157,15 +151,12 @@ public class SettingsMenu extends ButtonUtilsActivity {
             store.setIsPowerupsActivated(btnPower.isSelected());
         });
 
-        AlertDialog dialog = createDialog(v);
-        btnUtils.setButton(btnDone, dialog::dismiss);
-        dialog.show();
+        createDialog(v).show();
     }
 
     private void showEventsDialog() {
         View v = inflate(R.layout.game_settings_events_dialog);
         Button btnCatastrophe = v.findViewById(R.id.button_catastrophe_toggle);
-        Button btnDone = v.findViewById(R.id.btn_close);
 
         GeneralSettingsLocalStore store = GeneralSettingsLocalStore.fromContext(this);
         btnCatastrophe.setSelected(store.isCatastrophesActivated());
@@ -177,9 +168,7 @@ public class SettingsMenu extends ButtonUtilsActivity {
             updateToggleText(btnCatastrophe);
         });
 
-        AlertDialog dialog = createDialog(v);
-        btnUtils.setButton(btnDone, dialog::dismiss);
-        dialog.show();
+        createDialog(v).show();
     }
 
     // ---------------- HELPERS ----------------

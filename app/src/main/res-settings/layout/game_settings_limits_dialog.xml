@@ -71,16 +71,5 @@
             android:textAlignment="center"
             android:textColor="@color/bluedark" />
 
-        <Button
-            android:id="@+id/btn_close"
-            android:layout_width="120dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/outlineforbutton"
-            android:fontFamily="@font/viga"
-            android:text="Done"
-            android:textAllCaps="false"
-            android:textColor="@color/bluedark" />
-
     </LinearLayout>
 </androidx.cardview.widget.CardView>
