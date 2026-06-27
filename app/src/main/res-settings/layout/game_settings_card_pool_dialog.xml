@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:text="Wild Card Pool"
+            android:textColor="@color/bluedark"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginVertical="12dp"
+            android:alpha="0.1"
+            android:background="@color/bluedark" />
+
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:columnCount="2">
+
+            <Button
+                android:id="@+id/button_quiz_toggle"
+                android:layout_width="130dp"
+                android:layout_height="60dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/button_selector"
+                android:fontFamily="@font/viga"
+                android:text="Quizzes"
+                android:textAllCaps="false"
+                android:textSize="20sp"
+                android:textColor="@color/bluedark" />
+
+            <Button
+                android:id="@+id/button_task_toggle"
+                android:layout_width="130dp"
+                android:layout_height="60dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/button_selector"
+                android:fontFamily="@font/viga"
+                android:text="Tasks"
+                android:textSize="20sp"
+                android:textAllCaps="false"
+                android:textColor="@color/bluedark" />
+
+            <Button
+                android:id="@+id/button_truth_toggle"
+                android:layout_width="130dp"
+                android:layout_height="60dp"
+                android:layout_margin="8dp"
+                android:textSize="20sp"
+                android:background="@drawable/button_selector"
+                android:fontFamily="@font/viga"
+                android:text="Truths"
+                android:textAllCaps="false"
+                android:textColor="@color/bluedark" />
+
+            <Button
+                android:id="@+id/button_powerup_toggle"
+                android:layout_width="130dp"
+                android:layout_height="60dp"
+                android:layout_margin="8dp"
+                android:textSize="20sp"
+                android:background="@drawable/button_selector"
+                android:fontFamily="@font/viga"
+                android:text="Powerups"
+                android:textAllCaps="false"
+                android:textColor="@color/bluedark" />
+
+        </GridLayout>
+
+        <Button
+            android:id="@+id/btn_close"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/outlineforbutton"
+            android:fontFamily="@font/viga"
+            android:text="Done"
+            android:textSize="20sp"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

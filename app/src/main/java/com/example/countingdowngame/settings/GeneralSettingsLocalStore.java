@@ -67,6 +67,14 @@ public class GeneralSettingsLocalStore {
         return getBooleanPreference("isPowerupsActive");
     }
 
+    public void setIsCatastrophesActivated(boolean value) {
+        setBooleanPreference("isCatastrophesActive", value);
+    }
+
+    public boolean isCatastrophesActivated() {
+        return getBooleanPreference("isCatastrophesActive");
+    }
+
     public boolean shouldPlayRegularSound() {
         return mPref.getBoolean("shouldPlayRegularSound", true);
     }

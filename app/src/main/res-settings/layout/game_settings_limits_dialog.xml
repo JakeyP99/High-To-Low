@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:text="Game Limits"
+            android:textColor="@color/bluedark"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginVertical="12dp"
+            android:alpha="0.1"
+            android:background="@color/bluedark" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:text="Wild Card Quantity"
+            android:textColor="@color/bluedark"
+            android:textSize="18sp"
+            android:layout_marginTop="8dp"/>
+
+        <EditText
+            android:id="@+id/edittext_wildcard_amount"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/outlineforbutton"
+            android:fontFamily="@font/viga"
+            android:hint="Quantity per player"
+            android:inputType="number"
+            android:textAlignment="center"
+            android:textColor="@color/bluedark" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:text="Total Drink Limit"
+            android:textColor="@color/bluedark"
+            android:textSize="18sp"
+            android:layout_marginTop="16dp"/>
+
+        <EditText
+            android:id="@+id/edittext_drink_amount"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/outlineforbutton"
+            android:fontFamily="@font/viga"
+            android:hint="Total drinks allowed"
+            android:inputType="number"
+            android:textAlignment="center"
+            android:textColor="@color/bluedark" />
+
+        <Button
+            android:id="@+id/btn_close"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/outlineforbutton"
+            android:fontFamily="@font/viga"
+            android:text="Done"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

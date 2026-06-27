@@ -252,6 +252,8 @@ public class MainActivityGame extends SharedMainActivity {
         resetStaticState();
         game.reset();
 
+        catastrophesEnabled = GeneralSettingsLocalStore.fromContext(this).isCatastrophesActivated();
+
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
             throw new RuntimeException("Missing extras");
