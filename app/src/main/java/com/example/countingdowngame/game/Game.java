@@ -470,7 +470,7 @@ public class Game {
         formatted.add("Starting Number: " + startingNumber);
 
         for (GameTurns turn : turns) {
-            formatted.add(turn.getPlayerName() + ": " + turn.getNumber());
+            formatted.add(turn.getPlayerName() + "  ▸  " + turn.getNumber());
         }
 
         return formatted;

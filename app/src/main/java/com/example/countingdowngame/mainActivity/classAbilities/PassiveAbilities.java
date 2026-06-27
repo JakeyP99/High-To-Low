@@ -246,7 +246,7 @@ public class PassiveAbilities extends ButtonUtilsActivity {
                         p.setWildcardsConsumed(true);
                     }
                 }
-                addPassiveMessage(TROLL, "THE FEAST! The Troll's hunger was insatiable. Every other player's class and wildcards were eaten for one turn!");
+                addPassiveMessage(TROLL, "The feast! Every other player's class and wildcards are eaten for one turn!");
             } else if (chance < 25) {
                 // PERMANENT SCRAP (15%)
                 List<Player> targets = new ArrayList<>();

@@ -1,10 +1,15 @@
 package com.example.countingdowngame.endGame;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.viewpager2.widget.ViewPager2;
@@ -77,7 +82,22 @@ public class EndActivityGame extends ButtonUtilsActivity {
         muteGif = findViewById(R.id.muteGif);
         soundGif = findViewById(R.id.soundGif);
 
-        setupStatsList(); // <-- updated
+        ImageView loserImage = findViewById(R.id.loser_image);
+        TextView gameOverText = findViewById(R.id.game_over_text);
+
+        if (playerName != null) {
+            gameOverText.setText("BOTTOMS UP, " + playerName.toUpperCase() + "!");
+        }
+
+        if (currentPlayer != null && currentPlayer.getPhoto() != null && !currentPlayer.getPhoto().isEmpty()) {
+            byte[] decodedString = Base64.decode(currentPlayer.getPhoto(), Base64.DEFAULT);
+            Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            loserImage.setImageBitmap(decodedBitmap);
+        } else {
+            loserImage.setImageResource(R.drawable.wine);
+        }
+
+        setupStatsList();
         setupPreviousNumbers(findViewById(R.id.previousNumbers));
     }
 
