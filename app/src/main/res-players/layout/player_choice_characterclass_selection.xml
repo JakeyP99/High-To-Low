@@ -9,7 +9,8 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/classRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="450dp"
+        android:layout_height="480dp"
+        android:layout_gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

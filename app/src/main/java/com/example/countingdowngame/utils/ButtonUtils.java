@@ -124,6 +124,9 @@ public class ButtonUtils {
         final Drawable defaultBackground = view.getBackground(); // Store the default background
 
         view.setOnTouchListener((v, motionEvent) -> {
+            if (!view.isEnabled()) {
+                return false;
+            }
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN: {
                     view.setBackground(buttonHighlight);

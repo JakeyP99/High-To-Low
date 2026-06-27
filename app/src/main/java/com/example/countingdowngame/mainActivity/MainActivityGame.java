@@ -537,14 +537,19 @@ public class MainActivityGame extends SharedMainActivity {
             updateWildCardVisibility(currentPlayer);
         }
 
+        TextView labelWild = findViewById(R.id.labelWild);
+        TextView textWildCountView = findViewById(R.id.textWildCount);
+        ImageView iconWild = findViewById(R.id.iconWild);
+
         if (currentPlayer.areWildcardsConsumed()) {
             if (currentPlayer.getWildCardAmount() > 0) {
                 btnWild.setVisibility(View.VISIBLE);
                 btnWild.setEnabled(false);
                 btnWild.setAlpha(0.5f);
-                ((TextView) findViewById(R.id.labelWild)).setText("Consumed");
-                ((TextView) findViewById(R.id.textWildCount)).setText("The Troll ate your cards!");
-                ((ImageView) findViewById(R.id.iconWild)).setImageResource(R.drawable.eat);
+                labelWild.setText("Consumed");
+                textWildCountView.setText("The Troll ate your cards!");
+                textWildCountView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+                iconWild.setImageResource(R.drawable.eat);
             } else {
                 btnWild.setVisibility(View.INVISIBLE);
             }
@@ -554,8 +559,10 @@ public class MainActivityGame extends SharedMainActivity {
         // Reset to normal state if not consumed
         btnWild.setEnabled(true);
         btnWild.setAlpha(1.0f);
-        ((TextView) findViewById(R.id.labelWild)).setText("Wild Cards");
-        ((ImageView) findViewById(R.id.iconWild)).setImageResource(R.drawable.playingcards);
+        labelWild.setText("Wild Cards");
+        textWildCountView.setText(String.valueOf(currentPlayer.getWildCardAmount()));
+        textWildCountView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        iconWild.setImageResource(R.drawable.playingcards);
 
         if (currentPlayer.getJustUsedWildCard()) {
             btnWild.setVisibility(View.INVISIBLE);
@@ -613,7 +620,8 @@ public class MainActivityGame extends SharedMainActivity {
             } else {
                 btnClassAbility.setVisibility(View.VISIBLE);
                 labelAbilityTitle.setText("Consumed");
-                labelAbilityDesc.setText("The Troll ate your class!");
+                labelAbilityDesc.setText("The Troll ate your active!");
+                labelAbilityDesc.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
                 iconAbility.setImageResource(R.drawable.eat);
                 btnClassAbility.setEnabled(false);
                 btnClassAbility.setAlpha(0.5f);
@@ -783,13 +791,17 @@ public class MainActivityGame extends SharedMainActivity {
 
     public void enableButtons() {
         btnGenerate.setEnabled(true);
-        btnWild.setEnabled(true);
-        btnClassAbility.setEnabled(true);
         playerImage.setEnabled(true);
         infoGif.setEnabled(true);
         imageButtonExit.setEnabled(true);
         findViewById(R.id.powerup_left).setEnabled(true);
         findViewById(R.id.powerup_right).setEnabled(true);
+
+        Player currentPlayer = game.getCurrentPlayer();
+        if (currentPlayer != null) {
+            updateWildCardVisibilityIfNeeded(currentPlayer);
+            updateClassAbilityButton(currentPlayer);
+        }
     }
 
     //-----------------------------------------------------Active Effects---------------------------------------------------//

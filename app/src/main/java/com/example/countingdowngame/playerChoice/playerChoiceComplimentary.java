@@ -70,7 +70,7 @@ public class playerChoiceComplimentary extends ButtonUtilsActivity {
             case SCIENTIST: return R.drawable.scientist;
             case SOLDIER: return R.drawable.helmet;
             case SURVIVOR: return R.drawable.bandaids;
-            case TROLL: return R.drawable.bridge;
+            case TROLL: return R.drawable.troll;
             case WITCH: return R.drawable.witch;
             case NO_CLASS: return R.drawable.noclass;
             default: return R.drawable.wine;

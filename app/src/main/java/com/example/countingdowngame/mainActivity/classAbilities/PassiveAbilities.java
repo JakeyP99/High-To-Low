@@ -234,7 +234,7 @@ public class PassiveAbilities extends ButtonUtilsActivity {
     public static void handleTrollPassive(Player currentPlayer) {
         if (isFirstTurn) return;
 
-        // 2. If current player is a Troll, generate hunger
+        // 2. If current player is a Troll, generate hunger for others
         if (currentPlayer.getClassChoices().contains(TROLL) && !currentPlayer.isRemoved()) {
             int chance = new Random().nextInt(100);
             
@@ -246,9 +246,9 @@ public class PassiveAbilities extends ButtonUtilsActivity {
                         p.setWildcardsConsumed(true);
                     }
                 }
-                activity.showClassAbilityDialog(TROLL + "'s Passive: \n\nTHE FEAST! You are starving and have eaten everyone's classes and wildcards!");
-            } else if (chance < 15) {
-                // PERMANENT SCRAP (5% chance: 10 to 15 range)
+                addPassiveMessage(TROLL, "THE FEAST! The Troll's hunger was insatiable. Every other player's class and wildcards were eaten for one turn!");
+            } else if (chance < 25) {
+                // PERMANENT SCRAP (15%)
                 List<Player> targets = new ArrayList<>();
                 for (Player p : game.getPlayers()) {
                     if (!p.equals(currentPlayer) && !p.isRemoved() && p.getWildCardAmount() > 0) {
@@ -258,38 +258,38 @@ public class PassiveAbilities extends ButtonUtilsActivity {
                 if (!targets.isEmpty()) {
                     Player target = targets.get(new Random().nextInt(targets.size()));
                     target.loseWildCards(1);
-                    activity.showClassAbilityDialog(TROLL + "'s Passive: \n\nGreedy Troll! You ate one of " + target.getName() + "'s wildcards permanently!");
+                    addPassiveMessage(TROLL, "Greedy Troll! The troll ate one of " + target.getName() + "'s wildcards, and it is gone forever!");
+                } else {
+                    handleNormalSnack(currentPlayer);
                 }
-            } else {
-                // THE SNACK (85% remaining)
-                List<Player> targets = new ArrayList<>();
-                for (Player p : game.getPlayers()) {
-                    if (!p.equals(currentPlayer) && !p.isRemoved()) {
-                        targets.add(p);
-                    }
-                }
-
-                if (targets.isEmpty()) return;
-
-                Player target = targets.get(new Random().nextInt(targets.size()));
-                int snackType = new Random().nextInt(3);
-
-                switch (snackType) {
-                    case 0: // Eat Class
-                        target.setClassConsumed(true);
-                        break;
-                    case 1: // Eat Wildcards
-                        target.setWildcardsConsumed(true);
-                        break;
-                    case 2: // Eat Drink
-                        if (drinkNumberCounterInt > 1) {
-                            activity.updateDrinkNumberCounter(-1, false);
-                        } else {
-                            target.setClassConsumed(true);
-                        }
-                        break;
-                }
+            } else if (chance >= 65) {
+                // THE SNACK (35%)
+                handleNormalSnack(currentPlayer);
             }
+            // 25 to 64 (40%) implicitly does nothing
+        }
+    }
+
+    private static void handleNormalSnack(Player currentPlayer) {
+        List<Player> targets = new ArrayList<>();
+        for (Player p : game.getPlayers()) {
+            if (!p.equals(currentPlayer) && !p.isRemoved()) {
+                targets.add(p);
+            }
+        }
+
+        if (targets.isEmpty()) return;
+
+        Player target = targets.get(new Random().nextInt(targets.size()));
+        int snackType = new Random().nextInt(2);
+
+        switch (snackType) {
+            case 0: // Eat Class
+                target.setClassConsumed(true);
+                break;
+            case 1: // Eat Wildcards
+                target.setWildcardsConsumed(true);
+                break;
         }
     }
 

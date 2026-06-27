@@ -1054,15 +1054,15 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         final Player gambler = game.getCurrentPlayer();
 
         activity.btnUtils.setButton(btnRed, () -> {
-            boolean isRed = new Random().nextBoolean();
-            int cardValue = new Random().nextInt(13) + 1; // 1-13
-            handleGuess(true, isRed, cardValue, cardIv, cardValueTv, btnRed, btnBlack, resultMsgTv, finishBtn, penaltyTv, roundTv, confettiGif, cardContainer, gambler);
+            boolean isRedChoice = new Random().nextBoolean();
+            int cardVal = new Random().nextInt(13) + 1;
+            handleGuess(true, isRedChoice, cardVal, cardIv, cardValueTv, btnRed, btnBlack, resultMsgTv, finishBtn, penaltyTv, roundTv, confettiGif, cardContainer, gambler);
         });
-        
+
         activity.btnUtils.setButton(btnBlack, () -> {
-            boolean isRed = new Random().nextBoolean();
-            int cardValue = new Random().nextInt(13) + 1; // 1-13
-            handleGuess(false, isRed, cardValue, cardIv, cardValueTv, btnRed, btnBlack, resultMsgTv, finishBtn, penaltyTv, roundTv, confettiGif, cardContainer, gambler);
+            boolean isRedChoice = new Random().nextBoolean();
+            int cardVal = new Random().nextInt(13) + 1;
+            handleGuess(false, isRedChoice, cardVal, cardIv, cardValueTv, btnRed, btnBlack, resultMsgTv, finishBtn, penaltyTv, roundTv, confettiGif, cardContainer, gambler);
         });
 
         activity.btnUtils.setButton(finishBtn, () -> {

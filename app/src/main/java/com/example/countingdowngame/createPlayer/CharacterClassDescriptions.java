@@ -42,7 +42,7 @@ public class CharacterClassDescriptions {
             "Sacrifice 1 of your wildcards to remove 2 from a random player.";
 
     public static final String trollActiveDescription =
-            "Read a riddle up to 2 random players. Drink 4 if you guess wrong!";
+            "Read a riddle for up to 2 random players. They drink 4 if they are wrong or slow!";
 
     public static final String noClassDescription =
             "";
@@ -88,5 +88,5 @@ public class CharacterClassDescriptions {
             "Whenever other players use a wild card, they must drink once.";
 
     public static final String trollPassiveDescription =
-            "Every Troll turn: a player's Class or Wildcards are eaten, or 1 drink is consumed. 10% chance to eat everyone's class and wildcards for a turn!";
+            "Every Troll turn, there's a chance a player's Class or Wildcards are eaten. 10% chance to eat everyone's, and 15% chance to eat a wildcard permanently!";
 }
