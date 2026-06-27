@@ -448,6 +448,7 @@ public class MainActivityGame extends SharedMainActivity {
             });
         } else {
             updateNumberText(); // Use logic-aware display
+            PassiveAbilities.clearTrollDebuffs(game.getCurrentPlayer());
             game.nextPlayer();
         }
     }
@@ -536,6 +537,26 @@ public class MainActivityGame extends SharedMainActivity {
             updateWildCardVisibility(currentPlayer);
         }
 
+        if (currentPlayer.areWildcardsConsumed()) {
+            if (currentPlayer.getWildCardAmount() > 0) {
+                btnWild.setVisibility(View.VISIBLE);
+                btnWild.setEnabled(false);
+                btnWild.setAlpha(0.5f);
+                ((TextView) findViewById(R.id.labelWild)).setText("Consumed");
+                ((TextView) findViewById(R.id.textWildCount)).setText("The Troll ate your cards!");
+                ((ImageView) findViewById(R.id.iconWild)).setImageResource(R.drawable.eat);
+            } else {
+                btnWild.setVisibility(View.INVISIBLE);
+            }
+            return;
+        }
+
+        // Reset to normal state if not consumed
+        btnWild.setEnabled(true);
+        btnWild.setAlpha(1.0f);
+        ((TextView) findViewById(R.id.labelWild)).setText("Wild Cards");
+        ((ImageView) findViewById(R.id.iconWild)).setImageResource(R.drawable.playingcards);
+
         if (currentPlayer.getJustUsedWildCard()) {
             btnWild.setVisibility(View.INVISIBLE);
             currentPlayer.setJustUsedWildCard(false);
@@ -585,6 +606,23 @@ public class MainActivityGame extends SharedMainActivity {
             return;
         }
 
+        if (currentPlayer.isClassConsumed()) {
+            List<String> available = getAvailableAbilities(currentPlayer);
+            if (available.isEmpty()) {
+                btnClassAbility.setVisibility(View.INVISIBLE);
+            } else {
+                btnClassAbility.setVisibility(View.VISIBLE);
+                labelAbilityTitle.setText("Consumed");
+                labelAbilityDesc.setText("The Troll ate your class!");
+                iconAbility.setImageResource(R.drawable.eat);
+                btnClassAbility.setEnabled(false);
+                btnClassAbility.setAlpha(0.5f);
+            }
+            return;
+        }
+
+        btnClassAbility.setEnabled(true);
+        btnClassAbility.setAlpha(1.0f);
         List<String> availableClasses = getAvailableAbilities(currentPlayer);
         
         if (availableClasses.isEmpty()) {

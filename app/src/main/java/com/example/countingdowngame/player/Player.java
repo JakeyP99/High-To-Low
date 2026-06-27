@@ -38,6 +38,8 @@ public class Player implements Serializable {
     private int classAbilityCooldown;
     private List<String> powerUps = new ArrayList<>();
     private boolean trollPassiveUsed = false;
+    private boolean classConsumed = false;
+    private boolean wildcardsConsumed = false;
 
     //-----------------------------------------------------Card Game---------------------------------------------------//
 
@@ -459,6 +461,22 @@ public class Player implements Serializable {
 
     public void setTrollPassiveUsed(boolean used) {
         this.trollPassiveUsed = used;
+    }
+
+    public boolean isClassConsumed() {
+        return classConsumed;
+    }
+
+    public void setClassConsumed(boolean consumed) {
+        this.classConsumed = consumed;
+    }
+
+    public boolean areWildcardsConsumed() {
+        return wildcardsConsumed;
+    }
+
+    public void setWildcardsConsumed(boolean consumed) {
+        this.wildcardsConsumed = consumed;
     }
 
 }
