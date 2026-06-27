@@ -202,7 +202,7 @@ public class EndActivityGame extends ButtonUtilsActivity {
         });
         btnUtils.setButton(btnNewPlayer, () -> {
             MainActivityGame.resetStaticState();
-            this.gotoPlayerChoice();
+            this.gotoHomeScreen();
         });
     }
 }
