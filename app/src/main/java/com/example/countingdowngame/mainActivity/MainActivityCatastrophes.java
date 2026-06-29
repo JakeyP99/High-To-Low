@@ -82,19 +82,21 @@ public class MainActivityCatastrophes {
         Random random = new Random();
         int randomDecrease;
         if (currentNumber >= 0 && currentNumber <= 100) {
-            randomDecrease = random.nextInt(11); // Random number between 0 and 10
+            randomDecrease = random.nextInt(11) + 1; // Random number between 0 and 10
         } else if (currentNumber > 100 && currentNumber <= 1000) {
             randomDecrease = random.nextInt(901) + 100; // Random number between 100 and 1000
         } else {
             randomDecrease = random.nextInt(9001) + 1000; // Random number between 1000 and 10000
         }
         int updatedNumber = Math.max(currentNumber - randomDecrease, 1); // Ensure the number does not go below 1
+        Log.d(TAG, "decreaseNumberByRandom: " + "Random Number " + randomDecrease);
+        Log.d(TAG, "decreaseNumberByRandom: New Number " + updatedNumber);
         updateNumber(updatedNumber);
     }
 
     public static void setCatastropheLimit() {
         Random random = new Random();
-        catastropheLimit = random.nextInt(4) + 8;
+        catastropheLimit = random.nextInt(1) + 1;
         Log.d(TAG, "catastropheLimit: " + catastropheLimit);
     }
 
