@@ -16,9 +16,9 @@
     <application
         android:name=".MainApplication"
         android:allowBackup="true"
-        android:icon="@drawable/tequila"
+        android:icon="@drawable/shots"
         android:label="High To Low"
-        android:roundIcon="@drawable/tequila"
+        android:roundIcon="@drawable/shots"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
