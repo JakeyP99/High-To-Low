@@ -17,7 +17,7 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
 import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.mainActivity.MainActivityRoulette;
+import com.example.countingdowngame.mainActivityRoulette.MainActivityRoulette;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 

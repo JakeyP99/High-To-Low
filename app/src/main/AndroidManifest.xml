@@ -78,7 +78,7 @@
             tools:ignore="LockedOrientationActivity" />
 
         <activity
-            android:name=".mainActivity.MainActivityRoulette"
+            android:name=".mainActivityRoulette.MainActivityRoulette"
             android:screenOrientation="portrait"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
             tools:ignore="LockedOrientationActivity" />

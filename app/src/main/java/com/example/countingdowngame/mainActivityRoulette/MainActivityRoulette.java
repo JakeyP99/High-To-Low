@@ -1,4 +1,4 @@
-package com.example.countingdowngame.mainActivity;
+package com.example.countingdowngame.mainActivityRoulette;
 
 import static android.content.ContentValues.TAG;
 
