@@ -80,26 +80,4 @@
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
 
-    <ScrollView
-        android:id="@+id/playerScrollView"
-        android:layout_width="340dp"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <LinearLayout
-            android:id="@+id/playerContainer"
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-
-            android:padding="8dp"
-            android:visibility="invisible" />
-    </ScrollView>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

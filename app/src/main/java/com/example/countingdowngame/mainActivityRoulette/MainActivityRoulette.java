@@ -1,21 +1,29 @@
 package com.example.countingdowngame.mainActivityRoulette;
 
 import static android.content.ContentValues.TAG;
+import static android.view.View.GONE;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
@@ -25,37 +33,24 @@ import com.example.countingdowngame.mainActivity.SharedMainActivity;
 import com.example.countingdowngame.player.Player;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import io.github.muddz.styleabletoast.StyleableToast;
 import pl.droidsonroids.gif.GifImageView;
 
 public class MainActivityRoulette extends SharedMainActivity {
+    static final int BACK_PRESS_DELAY = 3000;
     int removedPlayerCount = 0;
     private GifImageView muteGif, soundGif;
     private Button btnBullshit;
     private ImageButton imageButtonExit;
-    private ScrollView playerScrollView;
-    private LinearLayout playerContainer;
+    private boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onResume() {
         super.onResume();
         boolean isMuted = getMuteSoundState();
         AudioManager.updateMuteButton(isMuted, muteGif, soundGif);
-    }
-
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        // Intercept back press event and do nothing
-        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-            return true;  // This consumes the back press event, effectively disabling it
-        }
-        return super.dispatchKeyEvent(event);
-    }
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
     }
 
     @Override
@@ -67,6 +62,24 @@ public class MainActivityRoulette extends SharedMainActivity {
         setupAudioManagerForMuteButtons(muteGif, soundGif);
         setupButtonControls();
         startGame();
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (doubleBackToExitPressedOnce) {
+                    Game.getInstance().endGame(MainActivityRoulette.this);
+                    gotoHomeScreen();
+                    return;
+                }
+                doubleBackToExitPressedOnce = true;
+                displayToastMessage("Press back again to go to the home screen");
+                new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, BACK_PRESS_DELAY);
+            }
+        });
+    }
+
+    public void displayToastMessage(String message) {
+        StyleableToast.makeText(this, message, R.style.newToast).show();
     }
 
     private void initializeViews() {
@@ -74,8 +87,6 @@ public class MainActivityRoulette extends SharedMainActivity {
         soundGif = findViewById(R.id.soundGif);
         btnBullshit = findViewById(R.id.btnBullshit);
         imageButtonExit = findViewById(R.id.btnExitRouletteGame);
-        playerContainer = findViewById(R.id.playerContainer);
-        playerScrollView = findViewById(R.id.playerScrollView);
     }
 
 
@@ -114,90 +125,99 @@ public class MainActivityRoulette extends SharedMainActivity {
     //-----------------------------------------------------Bullshit Button---------------------------------------------------//
 
     private void bullshitActivity() {
-        setPlayerChoiceVisibility();
-        List<Player> playerList = Game.getInstance().getPlayers();
-        LinearLayout playerContainer = findViewById(R.id.playerContainer);
-        playerContainer.removeAllViews(); // Clear any existing player views
-        playerContainer.setVisibility(View.VISIBLE);
+        List<Player> opponents = Game.getInstance().getPlayers().stream()
+                .filter(p -> !p.isRemoved())
+                .collect(Collectors.toList());
 
-        // Log which players are removed and which are not
-        for (Player player : playerList) {
-            if (player.isRemoved()) {
-                Log.d(TAG, "Removed player: " + player.getName());
+        showOpponentDialog(opponents);
+    }
+
+    private void showOpponentDialog(List<Player> opponents) {
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.game_grid_selection_dialog, null);
+        TextView titleTextView = dialogView.findViewById(R.id.title_text_view);
+
+        titleTextView.setText("Bullshit:");
+        RecyclerView recyclerView = dialogView.findViewById(R.id.listViewOpponents);
+
+        AlertDialog dialog = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme)
+                .setView(dialogView)
+                .setCancelable(false)
+                .create();
+
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+
+        OpponentAdapter adapter = new OpponentAdapter(opponents, player -> {
+            dialog.dismiss();
+            onPlayerViewClicked(player);
+        });
+
+        recyclerView.setAdapter(adapter);
+
+        dialogView.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+    }
+
+    public static class OpponentAdapter extends RecyclerView.Adapter<OpponentAdapter.VH> {
+        private final List<Player> opponents;
+        private final OnClick listener;
+
+        public OpponentAdapter(List<Player> opponents, OnClick listener) {
+            this.opponents = opponents;
+            this.listener = listener;
+        }
+
+        @NonNull
+        @Override
+        public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.game_gambler_player_choice_adaptor, parent, false);
+            return new VH(v);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull VH h, int position) {
+            Player p = opponents.get(position);
+            h.name.setText(p.getName());
+            h.name.postDelayed(() -> h.name.setSelected(true), 1000);
+            h.clazz.setVisibility(GONE);
+
+            if (p.getPhoto() != null && !p.getPhoto().isEmpty()) {
+                byte[] decoded = Base64.decode(p.getPhoto(), Base64.DEFAULT);
+                Bitmap bmp = BitmapFactory.decodeByteArray(decoded, 0, decoded.length);
+                h.photo.setImageBitmap(bmp);
             } else {
-                // Check if the player is already displayed
-                boolean isAlreadyAdded = false;
-                for (int i = 0; i < playerContainer.getChildCount(); i++) {
-                    View existingPlayerView = playerContainer.getChildAt(i);
-                    TextView existingPlayerName = existingPlayerView.findViewById(R.id.playerNameTextView);
-                    if (existingPlayerName.getText().toString().equals(player.getName())) {
-                        isAlreadyAdded = true;
-                        break;
-                    }
-                }
+                h.photo.setImageResource(R.drawable.wine);
+            }
+            h.itemView.setOnClickListener(v -> {
+                h.name.setSelected(false);
+                listener.onClick(p);
+            });
+        }
 
-                if (!isAlreadyAdded) {
-                    View playerView = createPlayerView(player);
-                    playerContainer.addView(playerView);
-                }
+        @Override
+        public int getItemCount() {
+            return opponents.size();
+        }
+
+        public interface OnClick {
+            void onClick(Player player);
+        }
+
+        public static class VH extends RecyclerView.ViewHolder {
+            public ImageView photo;
+            public TextView name, clazz;
+
+            public VH(View v) {
+                super(v);
+                photo = v.findViewById(R.id.playerPhotoImageView);
+                name = v.findViewById(R.id.playerNameTextView);
+                clazz = v.findViewById(R.id.playerClassTextView);
             }
         }
     }
 
-
-    //-----------------------------------------------------Roulette Player Menu---------------------------------------------------//
-
-    private View createPlayerView(Player player) {
-        LinearLayout playerContainer = findViewById(R.id.playerContainer);
-        // Inflate the player view layout
-        View playerView = getLayoutInflater().inflate(R.layout.game_roulette_player_view, playerContainer, false);
-
-        // Set up the player information and click listener
-        setupPlayerView(player, playerView);
-
-        return playerView;
-    }
-
-    private void setupPlayerView(Player player, View playerView) {
-        ImageView playerImageView = playerView.findViewById(R.id.playerPhotoImageView);
-        TextView playerNameTextView = playerView.findViewById(R.id.playerNameTextView);
-
-        // Set player name
-        String playerName = player.getName();
-        playerNameTextView.setText(playerName);
-
-        // Adjust text size based on the length of the name
-        if (playerName.length() > 20) {
-            playerNameTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-        } else if (playerName.length() > 13) {
-            playerNameTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        } else if (playerName.length() > 7) {
-            playerNameTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-        } else {
-            playerNameTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24); // Default size
-        }
-
-        // Set player image
-        setPlayerImage(player.getPhoto(), playerImageView);
-
-        // Set the click listener for the player view
-        playerView.setOnClickListener(v -> onPlayerViewClicked(player));
-    }
-
-
-    private void setPlayerImage(String playerImageString, ImageView playerImageView) {
-        if (playerImageString != null) {
-            byte[] decodedString = Base64.decode(playerImageString, Base64.DEFAULT);
-            Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            playerImageView.setImageBitmap(decodedBitmap);
-        } else {
-            playerImageView.setImageResource(R.drawable.wine); // Default image
-        }
-    }
-
     private void onPlayerViewClicked(Player player) {
-        LinearLayout playerContainer = findViewById(R.id.playerContainer);
-        playerContainer.setVisibility(View.INVISIBLE); // Hide the container after selection
         russianRouletteActivity(player); // Trigger the game activity
     }
 
@@ -276,27 +296,7 @@ public class MainActivityRoulette extends SharedMainActivity {
             } else {
                 Log.e(TAG, "No active player found, but count indicates one should exist.");
             }
-        } else {
-            setMainScreenVisibility();
         }
-    }
-
-
-    //-----------------------------------------------------Set Visibilities---------------------------------------------------//
-
-    // Updates the UI elements after the shot
-    private void setMainScreenVisibility() {
-        btnBullshit.setVisibility(View.VISIBLE);
-        imageButtonExit.setVisibility(View.VISIBLE);
-        playerScrollView.setVisibility(View.INVISIBLE);
-        playerContainer.setVisibility(View.INVISIBLE);
-    }
-
-    private void setPlayerChoiceVisibility() {
-        btnBullshit.setVisibility(View.INVISIBLE);
-        playerScrollView.setVisibility(View.VISIBLE);
-        playerContainer.setVisibility(View.VISIBLE);
-        imageButtonExit.setVisibility(View.INVISIBLE);
     }
 
 
