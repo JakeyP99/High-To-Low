@@ -640,16 +640,15 @@ public class MainActivityGame extends SharedMainActivity {
 
             WildCardRepository repository = new WildCardRepository(this);
 
-            WildCardProperties[] quizWildCards = repository.loadQuizCards();
-            WildCardProperties[] taskWildCards = repository.loadTaskCards();
-            WildCardProperties[] truthWildCards = repository.loadTruthCards();
+            WildCardProperties[] quizWildCards = Arrays.stream(repository.loadQuizCards()).filter(WildCardProperties::isEnabled).toArray(WildCardProperties[]::new);
+            WildCardProperties[] taskWildCards = Arrays.stream(repository.loadTaskCards()).filter(WildCardProperties::isEnabled).toArray(WildCardProperties[]::new);
+            WildCardProperties[] truthWildCards = Arrays.stream(repository.loadTruthCards()).filter(WildCardProperties::isEnabled).toArray(WildCardProperties[]::new);
 
             WildCardProperties[] selectedType = selectWildCardType(currentPlayer, quizWildCards, taskWildCards, truthWildCards);
 
             if (selectedType == null) {
-                wildText.setText("No wild cards available, your turn is skipped!");
-                btnWildContinue.setVisibility(View.VISIBLE);
-                btnClassAbility.setVisibility(View.INVISIBLE);
+                wildCardContinue();
+                btnWild.setVisibility(View.VISIBLE);
                 return;
             }
 
@@ -662,14 +661,16 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private WildCardProperties[] selectWildCardType(Player currentPlayer, WildCardProperties[] quizWildCards, WildCardProperties[] taskWildCards, WildCardProperties[] truthWildCards) {
+        GeneralSettingsLocalStore settings = GeneralSettingsLocalStore.fromContext(this);
+
         if (QUIZ_MAGICIAN.equals(currentPlayer.getClassChoice()) && currentPlayer.getJustUsedActiveAbility()) {
-            return quizWildCards;
+            return quizWildCards.length > 0 ? quizWildCards : null;
         }
 
         List<WildCardProperties[]> enabledTypes = new ArrayList<>();
-        addIfEnabled(enabledTypes, quizWildCards);
-        addIfEnabled(enabledTypes, taskWildCards);
-        addIfEnabled(enabledTypes, truthWildCards);
+        if (settings.isQuizActivated() && quizWildCards.length > 0) enabledTypes.add(quizWildCards);
+        if (settings.isTaskActivated() && taskWildCards.length > 0) enabledTypes.add(taskWildCards);
+        if (settings.isTruthActivated() && truthWildCards.length > 0) enabledTypes.add(truthWildCards);
 
         if (enabledTypes.isEmpty()) {
             return null;
@@ -677,12 +678,6 @@ public class MainActivityGame extends SharedMainActivity {
 
         Random random = new Random();
         return enabledTypes.get(random.nextInt(enabledTypes.size()));
-    }
-
-    private void addIfEnabled(List<WildCardProperties[]> enabledTypes, WildCardProperties[] enabled) {
-        if (Arrays.stream(enabled).anyMatch(WildCardProperties::isEnabled)) {
-            enabledTypes.add(enabled);
-        }
     }
 
 

@@ -48,5 +48,9 @@ public class WildCardSettingsLocalStore {
         return mPref.getBoolean("wild_card_deletable_" + index, defValue);
     }
 
+    public void setWildcardEnabled(int index, boolean enabled) {
+        mPref.edit().putBoolean("wild_card_enabled_" + index, enabled).apply();
+    }
+
 }
 

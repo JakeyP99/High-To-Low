@@ -129,17 +129,17 @@ public class SettingsMenu extends ButtonUtilsActivity {
         btnQuiz.setOnClickListener(view -> {
             btnQuiz.setSelected(!btnQuiz.isSelected());
             store.setIsQuizActivated(btnQuiz.isSelected());
-            toggleWildCards(QUIZ_WILD_CARDS, btnQuiz.isSelected());
+            toggleWildCards(QUIZ_WILD_CARDS, btnQuiz.isSelected(), "QuizPrefs");
         });
         btnTask.setOnClickListener(view -> {
             btnTask.setSelected(!btnTask.isSelected());
             store.setIsTaskActivated(btnTask.isSelected());
-            toggleWildCards(TASK_WILD_CARDS, btnTask.isSelected());
+            toggleWildCards(TASK_WILD_CARDS, btnTask.isSelected(), "TaskPrefs");
         });
         btnTruth.setOnClickListener(view -> {
             btnTruth.setSelected(!btnTruth.isSelected());
             store.setIsTruthActivated(btnTruth.isSelected());
-            toggleWildCards(TRUTH_WILD_CARDS, btnTruth.isSelected());
+            toggleWildCards(TRUTH_WILD_CARDS, btnTruth.isSelected(), "TruthPrefs");
         });
         btnPower.setOnClickListener(view -> {
             btnPower.setSelected(!btnPower.isSelected());
@@ -182,8 +182,12 @@ public class SettingsMenu extends ButtonUtilsActivity {
         b.setText(b.isSelected() ? "Enabled" : "Disabled");
     }
 
-    private void toggleWildCards(WildCardProperties[] cards, boolean enabled) {
-        for (WildCardProperties card : cards) card.setEnabled(enabled);
+    private void toggleWildCards(WildCardProperties[] cards, boolean enabled, String key) {
+        WildCardSettingsLocalStore prefs = WildCardSettingsLocalStore.fromContext(this, key);
+        for (int i = 0; i < cards.length; i++) {
+            cards[i].setEnabled(enabled);
+            prefs.setWildcardEnabled(i, enabled);
+        }
     }
 
     private int safeParseInt(EditText et) {
