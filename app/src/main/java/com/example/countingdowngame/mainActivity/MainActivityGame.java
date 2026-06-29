@@ -2,29 +2,17 @@ package com.example.countingdowngame.mainActivity;
 
 import static android.content.ContentValues.TAG;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ARCHER;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GOBLIN;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.NO_CLASS;
 import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.QUIZ_MAGICIAN;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SCIENTIST;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SOLDIER;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.TROLL;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
 import static com.example.countingdowngame.mainActivity.MainActivityCatastrophes.decreaseNumberByRandom;
 import static com.example.countingdowngame.mainActivity.MainActivityCatastrophes.increaseNumberByRandom;
 import static com.example.countingdowngame.mainActivity.MainActivityCatastrophes.setCatastropheLimit;
 import static com.example.countingdowngame.mainActivity.MainActivityLogging.logPlayerInformation;
 import static com.example.countingdowngame.mainActivity.MainActivityLogging.logSelectedCardInfo;
-import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleAngryJimPassive;
-import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleArcherPassive;
-import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleScientistPassive;
-import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleSoldierPassive;
-import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleTrollPassive;
-import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleWitchPassive;
+import static com.example.countingdowngame.mainActivity.classAbilities.ActiveAbilities.updateClassAbilityButton;
+import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.characterPassiveClassAffects;
 
-import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -32,7 +20,6 @@ import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -41,19 +28,15 @@ import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
-import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
 import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.game.Game;
 import com.example.countingdowngame.game.GameEventType;
-import com.example.countingdowngame.mainActivity.classAbilities.AbilityComplimentary;
 import com.example.countingdowngame.mainActivity.classAbilities.ActiveAbilities;
 import com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities;
 import com.example.countingdowngame.player.Player;
-import com.example.countingdowngame.playerChoice.playerChoiceComplimentary;
 import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.example.countingdowngame.wildCards.WildCardProperties;
 import com.example.countingdowngame.wildCards.wildCardTypes.WildCardRepository;
@@ -82,8 +65,6 @@ public class MainActivityGame extends SharedMainActivity {
     private static TextView numberCounterText;
     private static int turnCounter = 0;
     private static int catastropheTurnCounter = 0;
-    private static Player hidingTroll = null;
-    private static final List<Player> playersWhoPaidToll = new ArrayList<>();
 
     //-----------------------------------------------------Maps and Sets---------------------------------------------------//
     public WildCardProperties selectedWildCard;
@@ -93,7 +74,7 @@ public class MainActivityGame extends SharedMainActivity {
     private Button btnWildContinue, btnGenerate;
     private View btnClassAbility, btnWild;
     private GifImageView infoGif, muteGif, soundGif;
-    private ImageView playerImage, iconAbility;
+    private ImageView playerImage;
     private TextView drinkNumberTextView, nextPlayerText, wildText, textWildCount, labelAbilityTitle, labelAbilityDesc;
     private ImageButton imageButtonExit;
     //-----------------------------------------------------Booleans---------------------------------------------------//
@@ -112,11 +93,8 @@ public class MainActivityGame extends SharedMainActivity {
     public static void updateNumberText() {
         if (numberCounterText == null) return;
         int currentNumber = Game.getInstance().getCurrentNumber();
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
 
-        boolean canSeeNumber = hidingTroll == null ||
-                (currentPlayer != null && currentPlayer.equals(hidingTroll)) ||
-                playersWhoPaidToll.contains(currentPlayer);
+        boolean canSeeNumber = PassiveAbilities.canSeeNumber();
 
         if (canSeeNumber) {
             String textToDisplay = String.valueOf(currentNumber);
@@ -132,26 +110,14 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     public static String getDisplayNumber(int number) {
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        boolean canSeeNumber = hidingTroll == null ||
-                (currentPlayer != null && currentPlayer.equals(hidingTroll)) ||
-                playersWhoPaidToll.contains(currentPlayer);
+        boolean canSeeNumber = PassiveAbilities.canSeeNumber();
         return canSeeNumber ? String.valueOf(number) : "???";
-    }
-
-    public void hideNumberForTroll(Player troll) {
-        hidingTroll = troll;
-        playersWhoPaidToll.clear();
-        updateNumberText();
     }
 
     public static void updateNumberColor() {
         if (numberCounterText == null) return;
 
-        Player currentPlayer = Game.getInstance().getCurrentPlayer();
-        boolean canSeeNumber = hidingTroll == null ||
-                (currentPlayer != null && currentPlayer.equals(hidingTroll)) ||
-                playersWhoPaidToll.contains(currentPlayer);
+        boolean canSeeNumber = PassiveAbilities.canSeeNumber();
 
         int blueDark = ContextCompat.getColor(numberCounterText.getContext(), R.color.bluedark);
 
@@ -173,8 +139,6 @@ public class MainActivityGame extends SharedMainActivity {
         catastropheLimit = 0;
         catastrophesEnabled = true;
         passivesEnabled = true;
-        hidingTroll = null;
-        playersWhoPaidToll.clear();
         PassiveAbilities.resetStaticState();
         ActiveAbilities.resetStaticState();
         PowerUps.reset();
@@ -242,8 +206,6 @@ public class MainActivityGame extends SharedMainActivity {
         labelAbilityTitle = findViewById(R.id.labelAbilityTitle);
         labelAbilityDesc = findViewById(R.id.labelAbilityDesc);
         labelAbilityDesc.setSelected(false);
-
-        iconAbility = findViewById(R.id.iconAbility);
 
         numberGenerator = new MainActivityNumberGenerator(this, numberCounterText);
     }
@@ -320,7 +282,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         playerImage.setOnClickListener(v -> characterClassDescriptions());
         btnUtils.setButton(btnWildContinue, this::wildCardContinue);
-        btnUtils.setButton(btnClassAbility, this::activateActiveAbility);
+        btnUtils.setButton(btnClassAbility, ActiveAbilities::activateActiveAbility);
 
         btnUtils.setButton(btnWild, () -> {
             wildCardActivate();
@@ -343,34 +305,6 @@ public class MainActivityGame extends SharedMainActivity {
         if (currentPlayer != null) {
             mainActivityDialog.characterClassInformationDialog(currentPlayer);
         }
-    }
-
-
-    private void showRevealNumberDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.game_troll_reveal_dialog, null);
-        Button payBtn = dialogView.findViewById(R.id.btn_pay_view);
-        Button blindBtn = dialogView.findViewById(R.id.btn_generate_blind);
-
-        builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
-
-        btnUtils.setButton(payBtn, () -> {
-            dialog.dismiss();
-            Player currentPlayer = game.getCurrentPlayer();
-            if (currentPlayer != null && !playersWhoPaidToll.contains(currentPlayer)) {
-                playersWhoPaidToll.add(currentPlayer);
-            }
-            updateNumberText();
-        });
-
-        btnUtils.setButton(blindBtn, () -> {
-            dialog.dismiss();
-            handleGenerateClick();
-        });
-
-        dialog.show();
     }
 
     private void handleGenerateClick() {
@@ -417,18 +351,13 @@ public class MainActivityGame extends SharedMainActivity {
 
         logPlayerInformation(activePlayer);
 
-        if (hidingTroll != null) {
-            btnUtils.setButton(btnGenerate, () -> {
-                if (activePlayer.equals(hidingTroll) || playersWhoPaidToll.contains(activePlayer)) {
-                    handleGenerateClick();
-                } else {
-                    showRevealNumberDialog();
-                }
-            });
-        } else {
-            numberCounterText.setOnClickListener(null);
-            btnUtils.setButton(btnGenerate, this::handleGenerateClick);
-        }
+        btnUtils.setButton(btnGenerate, () -> {
+            if (PassiveAbilities.canSeeNumber()) {
+                handleGenerateClick();
+            } else {
+                PassiveAbilities.showRevealNumberDialog(this::handleGenerateClick);
+            }
+        });
 
     }
 
@@ -576,119 +505,12 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-
-    private List<String> getAvailableAbilities(Player player) {
-        List<String> available = new ArrayList<>();
-        if (player.getUsedActiveAbility()) return available;
-
-        for (String classChoice : player.getClassChoices()) {
-            if (isAbilityAvailable(player, classChoice)) {
-                available.add(classChoice);
-            }
-        }
-        return available;
-    }
-
-    private boolean isAbilityAvailable(Player player, String classChoice) {
-        if (CharacterClassDescriptions.NO_CLASS.equals(classChoice)) return false;
-        if (player.getClassCooldown(classChoice) > 0) return false;
-        if (CharacterClassDescriptions.ARCHER.equals(classChoice)) return drinkNumberCounterInt >= 2;
-        if (CharacterClassDescriptions.SOLDIER.equals(classChoice)) return !isFirstTurn && game.getCurrentNumber() <= 10;
-        if (CharacterClassDescriptions.QUIZ_MAGICIAN.equals(classChoice)) return player.getWildCardAmount() >= 1;
-        if (CharacterClassDescriptions.SURVIVOR.equals(classChoice)) return game.getCurrentNumber() > 1;
-        if (CharacterClassDescriptions.GOBLIN.equals(classChoice)) {
-            boolean othersHaveWildcards = false;
-            for (Player p : game.getPlayers()) {
-                if (!p.equals(player) && p.getWildCardAmount() > 0) {
-                    othersHaveWildcards = true;
-                    break;
-                }
-            }
-            return othersHaveWildcards && player.getWildCardAmount() >= 1;
-        }
-        return true; // Default for others like Scientist, Witch, etc.
-    }
-
-    private void updateClassAbilityButton(Player currentPlayer) {
-        if (soldierActiveTurns > 0) {
-            btnClassAbility.setVisibility(View.INVISIBLE);
-            return;
-        }
-
-        if (currentPlayer.isClassConsumed()) {
-            List<String> available = getAvailableAbilities(currentPlayer);
-            if (available.isEmpty()) {
-                btnClassAbility.setVisibility(View.INVISIBLE);
-            } else {
-                btnClassAbility.setVisibility(View.VISIBLE);
-                labelAbilityTitle.setText("Consumed");
-                labelAbilityDesc.setText("The Troll ate your active!");
-                labelAbilityDesc.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
-                iconAbility.setImageResource(R.drawable.eat);
-                btnClassAbility.setEnabled(false);
-                btnClassAbility.setAlpha(0.5f);
-            }
-            return;
-        }
-
-        btnClassAbility.setEnabled(true);
-        btnClassAbility.setAlpha(1.0f);
-        List<String> availableClasses = getAvailableAbilities(currentPlayer);
-        
-        if (availableClasses.isEmpty()) {
-            btnClassAbility.setVisibility(View.INVISIBLE);
-            return;
-        }
-
-        if (availableClasses.size() > 1) {
-            labelAbilityTitle.setText("Multiple Abilities");
-            labelAbilityDesc.setText("Tap to choose which one to activate");
-            iconAbility.setImageResource(R.drawable.swissarmyknife); 
-        } else {
-            String classChoice = availableClasses.get(0);
-            labelAbilityTitle.setText(getClassActiveButtonText(classChoice));
-            labelAbilityDesc.setText(mainActivityDialog.getClassActiveDescription(classChoice));
-            iconAbility.setImageResource(playerChoiceComplimentary.getClassIcon(classChoice));
-        }
-
-        btnClassAbility.setVisibility(View.VISIBLE);
-
-        labelAbilityDesc.postDelayed(() -> labelAbilityDesc.setSelected(true), 2000);
-    }
-
-    private String getClassActiveButtonText(String classChoice) {
-        if (classChoice == null) return "";
-        switch (classChoice) {
-            case ARCHER:
-                return CharacterClassDescriptions.archerActiveButtonText;
-            case WITCH:
-                return CharacterClassDescriptions.witchActiveButtonText;
-            case SCIENTIST:
-                return CharacterClassDescriptions.scientistActiveButtonText;
-            case SOLDIER:
-                return CharacterClassDescriptions.soldierActiveButtonText;
-            case QUIZ_MAGICIAN:
-                return CharacterClassDescriptions.quizMagicianActiveButtonText;
-            case SURVIVOR:
-                return CharacterClassDescriptions.survivorActiveButtonText;
-            case ANGRY_JIM:
-                return CharacterClassDescriptions.angryJimActiveButtonText;
-            case GOBLIN:
-                return CharacterClassDescriptions.goblinActiveButtonText;
-            case GAMBLER:
-                return CharacterClassDescriptions.gamblerActiveButtonText;
-            case TROLL:
-                return CharacterClassDescriptions.trollActiveButtonText;
-            default:
-                return "";
-        }
-    }
     private void updateTextSize(String text, TextView textView) {
-        int size = SharedMainActivity.TextSizeCalculatorPlayerName
-                .calculateTextSizeBasedOnCharacterCount(text);
+        int size = SharedMainActivity.TextSizeCalculatorPlayerName.calculateTextSizeBasedOnCharacterCount(text);
 
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
     }
+
     private void updatePlayerInfo(Player currentPlayer) {
         String playerName = currentPlayer.getName();
         String playerImageString = currentPlayer.getPhoto();
@@ -711,18 +533,11 @@ public class MainActivityGame extends SharedMainActivity {
             Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
             //Add animation of the coin spinning and changing to the next players image
-            playerImage.animate()
-                    .rotationY(90f)
-                    .setDuration(150)
-                    .withEndAction(() -> {
-                        playerImage.setImageBitmap(decodedBitmap);
-                        playerImage.setRotationY(-90f);
-                        playerImage.animate()
-                                .rotationY(0f)
-                                .setDuration(150)
-                                .start();
-                    })
-                    .start();
+            playerImage.animate().rotationY(90f).setDuration(150).withEndAction(() -> {
+                playerImage.setImageBitmap(decodedBitmap);
+                playerImage.setRotationY(-90f);
+                playerImage.animate().rotationY(0f).setDuration(150).start();
+            }).start();
 
         }
         PowerUps.updatePowerUpIcons(currentPlayer);
@@ -808,163 +623,6 @@ public class MainActivityGame extends SharedMainActivity {
 
     //-----------------------------------------------------Active Effects---------------------------------------------------//
 
-    private void characterPassiveClassAffects() {
-        Player currentPlayer = game.getCurrentPlayer();
-        List<String> classes = currentPlayer.getClassChoices();
-
-        Log.d(TAG, "Number was generated passive: " + game.getNumberWasGenerated());
-
-        boolean isAngryJimActive = classes.contains(ANGRY_JIM) && game.getCurrentNumber() < 50;
-
-        if (classes.contains(SOLDIER) && game.getNumberWasGenerated() && !isAngryJimActive) {
-            handleSoldierPassive();
-        }
-
-        if (classes.contains(WITCH) && game.getNumberWasGenerated() && !isAngryJimActive) {
-            handleWitchPassive(currentPlayer);
-        }
-
-        if (classes.contains(SCIENTIST) && !isAngryJimActive) {
-            handleScientistPassive(currentPlayer);
-        }
-
-        if (classes.contains(ANGRY_JIM)) {
-            handleAngryJimPassive(currentPlayer);
-        }
-
-        if (classes.contains(ARCHER) && !isAngryJimActive) {
-            handleArcherPassive(currentPlayer);
-        }
-
-        if (classes.contains(TROLL)) {
-            handleTrollPassive(currentPlayer);
-        }
-    }
-
-
-    public void activateActiveAbility() {
-        Player currentPlayer = game.getCurrentPlayer();
-        List<String> availableClasses = getAvailableAbilities(currentPlayer);
-
-        if (availableClasses.size() > 1) {
-            showActiveAbilitySelector(currentPlayer, availableClasses);
-        } else if (availableClasses.size() == 1) {
-            triggerSpecificActiveAbility(availableClasses.get(0), currentPlayer);
-        }
-    }
-
-    private void showActiveAbilitySelector(Player currentPlayer, List<String> classes) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.game_grid_selection_dialog, null); // Reuse opponent layout (it's a grid/list)
-
-        TextView selectOpponentTextView = dialogView.findViewById(R.id.title_select_opponent);
-        TextView titleTextView = dialogView.findViewById(R.id.title_text_view);
-
-        selectOpponentTextView.setVisibility(View.GONE);
-        titleTextView.setText("Choose Active:");
-
-        RecyclerView recyclerView = dialogView.findViewById(R.id.listViewOpponents);
-        recyclerView.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 2));
-
-        AlertDialog dialog = builder.setView(dialogView).create();
-
-        // Create a simple adapter for ability selection
-        recyclerView.setAdapter(new RecyclerView.Adapter<AbilityVH>() {
-            @androidx.annotation.NonNull
-            @Override
-            public AbilityVH onCreateViewHolder(@androidx.annotation.NonNull android.view.ViewGroup parent, int viewType) {
-                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.game_gambler_player_choice_adaptor, parent, false);
-                return new AbilityVH(v);
-            }
-
-            @Override
-            public void onBindViewHolder(@androidx.annotation.NonNull AbilityVH holder, int position) {
-                String className = classes.get(position);
-                holder.name.setText(className);
-                holder.desc.setText(getClassActiveButtonText(className));
-
-                holder.name.postDelayed(() -> holder.name.setSelected(true), 1000);
-                holder.desc.postDelayed(() -> holder.desc.setSelected(true), 1000);
-
-                holder.icon.setImageResource(playerChoiceComplimentary.getClassIcon(className));
-
-                holder.itemView.setOnClickListener(v -> {
-                    dialog.dismiss();
-                    triggerSpecificActiveAbility(className, currentPlayer);
-                });
-            }
-
-            @Override
-            public int getItemCount() { return classes.size(); }
-        });
-
-        dialog.show();
-    }
-
-    static class AbilityVH extends RecyclerView.ViewHolder {
-        ImageView icon;
-        TextView name, desc;
-        AbilityVH(View v) {
-            super(v);
-            icon = v.findViewById(R.id.playerPhotoImageView);
-            name = v.findViewById(R.id.playerNameTextView);
-            desc = v.findViewById(R.id.playerClassTextView);
-        }
-    }
-
-    private void triggerSpecificActiveAbility(String className, Player currentPlayer) {
-        switch (className) {
-            case SCIENTIST: ActiveAbilities.handleScientistClass(); break;
-            case ARCHER: ActiveAbilities.handleArcherClass(currentPlayer); break;
-            case WITCH: ActiveAbilities.handleWitchClass(currentPlayer); break;
-            case SOLDIER: ActiveAbilities.handleSoldierClass(currentPlayer); break;
-            case QUIZ_MAGICIAN: ActiveAbilities.handleQuizMagicianClass(currentPlayer); break;
-            case SURVIVOR: ActiveAbilities.handleSurvivorClass(currentPlayer); break;
-            case GOBLIN: ActiveAbilities.handleGoblinClass(currentPlayer); break;
-            case ANGRY_JIM: ActiveAbilities.handleAngryJimClass(currentPlayer); break;
-            case GAMBLER: ActiveAbilities.handleGamblerClass(); break;
-            case TROLL: ActiveAbilities.handleTrollClass(currentPlayer); break;
-        }
-    }
-
-    public void awardRandomClass(Player player) {
-        String[] allPossibleClasses = {
-                CharacterClassDescriptions.ANGRY_JIM, CharacterClassDescriptions.ARCHER, CharacterClassDescriptions.GAMBLER, CharacterClassDescriptions.GOBLIN, CharacterClassDescriptions.QUIZ_MAGICIAN,
-                CharacterClassDescriptions.SCIENTIST, CharacterClassDescriptions.SOLDIER, CharacterClassDescriptions.SURVIVOR, CharacterClassDescriptions.TROLL, CharacterClassDescriptions.WITCH
-        };
-
-        List<String> currentClasses = player.getClassChoices();
-        List<String> availableClasses = new ArrayList<>();
-        for (String c : allPossibleClasses) {
-            if (!currentClasses.contains(c)) {
-                availableClasses.add(c);
-            }
-        }
-
-        if (availableClasses.isEmpty()) return;
-
-        String chosenClass = availableClasses.get(new Random().nextInt(availableClasses.size()));
-
-        if (game.getGameMode() == Game.GameMode.CRAZY) {
-            player.addClassChoice(chosenClass);
-        } else {
-            player.setClassChoice(chosenClass);
-        }
-
-        player.setUsedActiveAbility(false);
-        player.setJustUsedActiveAbility(false);
-        AbilityComplimentary.assignActiveAbilityCooldown(player);
-
-        mainActivityDialog.showClassAbilityDialog("Class Obtained \n\n" + player.getName() + " obtained the " + chosenClass + " Class!");
-    }
-
-    public void halveCurrentNumber() {
-        int currentNumber = game.getCurrentNumber();
-        int updatedNumber = Math.max(currentNumber / 2, 1);
-        updateNumber(updatedNumber);
-    }
-
     public void renderPlayerUI(boolean isPowerUp) {
         renderPlayer(isPowerUp);
     }
@@ -986,8 +644,7 @@ public class MainActivityGame extends SharedMainActivity {
             WildCardProperties[] taskWildCards = repository.loadTaskCards();
             WildCardProperties[] truthWildCards = repository.loadTruthCards();
 
-            WildCardProperties[] selectedType =
-                    selectWildCardType(currentPlayer, quizWildCards, taskWildCards, truthWildCards);
+            WildCardProperties[] selectedType = selectWildCardType(currentPlayer, quizWildCards, taskWildCards, truthWildCards);
 
             if (selectedType == null) {
                 wildText.setText("No wild cards available, your turn is skipped!");
@@ -996,17 +653,14 @@ public class MainActivityGame extends SharedMainActivity {
                 return;
             }
 
-            WildCardProperties selectedCard =
-                    WildCardRepository.getRandom(selectedType);
+            WildCardProperties selectedCard = WildCardRepository.getRandom(selectedType);
 
-            handleSelectedCard(
-                    selectedCard,
-                    getWildCardType(selectedType, quizWildCards, taskWildCards)
-            );
+            handleSelectedCard(selectedCard, getWildCardType(selectedType, quizWildCards, taskWildCards));
         };
 
         PassiveAbilities.checkGoblinPassive(currentPlayer, proceedToWildCard);
     }
+
     private WildCardProperties[] selectWildCardType(Player currentPlayer, WildCardProperties[] quizWildCards, WildCardProperties[] taskWildCards, WildCardProperties[] truthWildCards) {
         if (QUIZ_MAGICIAN.equals(currentPlayer.getClassChoice()) && currentPlayer.getJustUsedActiveAbility()) {
             return quizWildCards;
@@ -1050,8 +704,6 @@ public class MainActivityGame extends SharedMainActivity {
         logSelectedCardInfo(selectedCard, wildCardType);
         Log.d(TAG, "handleSelectedCard: card type " + wildCardType);
     }
-
-
 
 
     //-----------------------------------------------------Specific WildCard Functions---------------------------------------------------//

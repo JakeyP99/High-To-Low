@@ -171,14 +171,6 @@ public class MainActivityDialog {
         );
     }
 
-    public void showGameDialog(String message) {
-        showDialog(message, R.layout.game_main_dialog_box, R.id.dialogbox_textview);
-    }
-
-    public void showGameDialog(String message, Runnable onDismiss) {
-        showDialog(message, R.layout.game_main_dialog_box, R.id.dialogbox_textview, onDismiss);
-    }
-
     public void characterClassInformationDialog(Player player) {
 
         AlertDialog.Builder builder =
@@ -273,7 +265,7 @@ public class MainActivityDialog {
         }
     }
 
-    protected String getClassActiveDescription(String classChoice) {
+    public String getClassActiveDescription(String classChoice) {
         if (classChoice == null) return "";
         switch (classChoice) {
             case CharacterClassDescriptions.ARCHER:
@@ -301,7 +293,7 @@ public class MainActivityDialog {
         }
     }
 
-    protected String getClassPassiveDescription(String classChoice) {
+    public String getClassPassiveDescription(String classChoice) {
         if (classChoice == null) return "";
         switch (classChoice) {
             case CharacterClassDescriptions.ARCHER:

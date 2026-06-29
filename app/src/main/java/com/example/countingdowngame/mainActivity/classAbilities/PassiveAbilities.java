@@ -40,6 +40,9 @@ public class PassiveAbilities extends ButtonUtilsActivity {
     private static final List<PassiveMessage> pendingPassiveMessages = new ArrayList<>();
     private static final List<Runnable> pendingActions = new ArrayList<>();
 
+    private static Player hidingTroll = null;
+    private static final List<Player> playersWhoPaidToll = new ArrayList<>();
+
     private static class PassiveMessage {
         String className;
         String message;
@@ -58,6 +61,8 @@ public class PassiveAbilities extends ButtonUtilsActivity {
         pendingPassiveMessages.clear();
         pendingActions.clear();
         gamblerBet = "";
+        hidingTroll = null;
+        playersWhoPaidToll.clear();
     }
 
     private static void addPassiveMessage(String className, String message) {
@@ -150,7 +155,8 @@ public class PassiveAbilities extends ButtonUtilsActivity {
                 currentPlayer.setRemoved(true);
                 addPassiveAction(() -> game.removePlayer(currentPlayer));
             } else if (soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {
-                activity.mainActivityDialog.showGameDialog("Sorry " + currentPlayer.getName() + ", a soldier has already escaped the game.");
+                addPassiveMessage(SOLDIER,"Sorry " + currentPlayer.getName() + ", a soldier has already escaped the game.");
+
             }
         }
     }
@@ -268,6 +274,77 @@ public class PassiveAbilities extends ButtonUtilsActivity {
             }
             // 25 to 64 (40%) implicitly does nothing
         }
+    }
+
+    public static void characterPassiveClassAffects() {
+        Player currentPlayer = game.getCurrentPlayer();
+        List<String> classes = currentPlayer.getClassChoices();
+
+        boolean isAngryJimActive = classes.contains(ANGRY_JIM) && game.getCurrentNumber() < 50;
+
+        if (classes.contains(SOLDIER) && game.getNumberWasGenerated() && !isAngryJimActive) {
+            handleSoldierPassive();
+        }
+
+        if (classes.contains(WITCH) && game.getNumberWasGenerated() && !isAngryJimActive) {
+            handleWitchPassive(currentPlayer);
+        }
+
+        if (classes.contains(SCIENTIST) && !isAngryJimActive) {
+            handleScientistPassive(currentPlayer);
+        }
+
+        if (classes.contains(ANGRY_JIM)) {
+            handleAngryJimPassive(currentPlayer);
+        }
+
+        if (classes.contains(ARCHER) && !isAngryJimActive) {
+            handleArcherPassive(currentPlayer);
+        }
+
+        if (classes.contains(TROLL)) {
+            handleTrollPassive(currentPlayer);
+        }
+    }
+
+    public static boolean canSeeNumber() {
+        Player currentPlayer = game.getCurrentPlayer();
+        return hidingTroll == null ||
+                (currentPlayer != null && currentPlayer.equals(hidingTroll)) ||
+                playersWhoPaidToll.contains(currentPlayer);
+    }
+
+    public static void hideNumberForTroll(Player troll) {
+        hidingTroll = troll;
+        playersWhoPaidToll.clear();
+        MainActivityGame.updateNumberText();
+    }
+
+    public static void showRevealNumberDialog(Runnable onGenerate) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.game_troll_reveal_dialog, null);
+        Button payBtn = dialogView.findViewById(R.id.btn_pay_view);
+        Button blindBtn = dialogView.findViewById(R.id.btn_generate_blind);
+
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+
+        activity.btnUtils.setButton(payBtn, () -> {
+            dialog.dismiss();
+            Player currentPlayer = game.getCurrentPlayer();
+            if (currentPlayer != null && !playersWhoPaidToll.contains(currentPlayer)) {
+                playersWhoPaidToll.add(currentPlayer);
+            }
+            MainActivityGame.updateNumberText();
+        });
+
+        activity.btnUtils.setButton(blindBtn, () -> {
+            dialog.dismiss();
+            onGenerate.run();
+        });
+
+        dialog.show();
     }
 
     private static void handleNormalSnack(Player currentPlayer) {

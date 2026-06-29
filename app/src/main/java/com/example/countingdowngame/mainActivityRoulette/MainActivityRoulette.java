@@ -2,17 +2,13 @@ package com.example.countingdowngame.mainActivityRoulette;
 
 import static android.content.ContentValues.TAG;
 
-import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -29,7 +25,6 @@ import com.example.countingdowngame.mainActivity.SharedMainActivity;
 import com.example.countingdowngame.player.Player;
 
 import java.util.List;
-import java.util.Objects;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -56,7 +51,6 @@ public class MainActivityRoulette extends SharedMainActivity {
         }
         return super.dispatchKeyEvent(event);
     }
-
 
 
     @Override
@@ -191,7 +185,6 @@ public class MainActivityRoulette extends SharedMainActivity {
     }
 
 
-
     private void setPlayerImage(String playerImageString, ImageView playerImageView) {
         if (playerImageString != null) {
             byte[] decodedString = Base64.decode(playerImageString, Base64.DEFAULT);
@@ -218,11 +211,9 @@ public class MainActivityRoulette extends SharedMainActivity {
             AudioManager.getInstance().playBlank(this);
             int bulletsLeft = player.getBulletsInChamberList().size() - 1;
             String bulletsText = (bulletsLeft == 1) ? "bullet" : "bullets";
-            mainActivityDialog.showGameDialog(player.getName() + " dodged a bullet... Literally!\n\nYou have " + bulletsLeft + " " + bulletsText + " left!", this::handlePostDialogActions);
-        }
-        updateChamber(player);
+            mainActivityDialog.showClassAbilityDialog("Safe!: \n\n" + player.getName() + " dodged a bullet... Literally!\n\nYou have " + bulletsLeft + " " + bulletsText + " left!");
+        } updateChamber(player);
     }
-
 
     // Logs player details for debugging
     private void logPlayerDetails(Player player) {
@@ -243,7 +234,6 @@ public class MainActivityRoulette extends SharedMainActivity {
         AudioManager.getInstance().playGunshot(this);
         removedPlayerCount++;
         mainActivityDialog.showDialog(player.getName() + " died! Whoopsie :(", R.layout.game_roulette_death_dialog_box, R.id.dialogbox_textview, this::handlePostDialogActions);
-
     }
 
     // Updates the chamber list and index
@@ -290,9 +280,6 @@ public class MainActivityRoulette extends SharedMainActivity {
         }
     }
 
-    private void showCatastropheDialog(String message) {
-        mainActivityDialog.showDialog(message, R.layout.game_roulette_death_dialog_box, R.id.dialogbox_textview, this::handlePostDialogActions);
-    }
 
     //-----------------------------------------------------Set Visibilities---------------------------------------------------//
 

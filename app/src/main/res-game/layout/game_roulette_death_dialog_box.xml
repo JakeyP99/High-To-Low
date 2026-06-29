@@ -1,34 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="500dp"
-    android:background="#08B71C1C"
-    android:orientation="vertical"
-    android:padding="20dp"
-    android:gravity="center">
+    android:layout_height="match_parent"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="12dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@color/redtransparent"
+        android:padding="20dp">
 
     <TextView
-        android:id="@+id/death_dialogbox_textview"
-        android:layout_width="wrap_content"
+        android:id="@+id/class_textview"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/viga"
-        android:layout_gravity="center"
+        android:gravity="center"
         android:paddingTop="10dp"
-        android:text="ELIMINATED"
-        android:textAlignment="center"
+        android:paddingBottom="10dp"
+        android:text="ELIMINATED:"
         android:textColor="@color/bluedark"
-        android:textSize="45sp" />
+        android:textSize="35sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/bluedark"
+        android:alpha="0.2" />
 
     <TextView
         android:id="@+id/dialogbox_textview"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="Test"
-        android:gravity="center"
-        android:textAlignment="center"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/viga"
+        android:gravity="center"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp"
+        android:text="Test Died Whoopsie!"
         android:textColor="@color/bluedark"
-        android:textSize="28sp" />
+        android:textSize="25sp"
+        />
+    </LinearLayout>
 
-</LinearLayout>
+</androidx.cardview.widget.CardView>
