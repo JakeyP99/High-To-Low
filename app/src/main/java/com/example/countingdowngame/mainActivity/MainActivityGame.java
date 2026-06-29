@@ -284,10 +284,7 @@ public class MainActivityGame extends SharedMainActivity {
         btnUtils.setButton(btnWildContinue, this::wildCardContinue);
         btnUtils.setButton(btnClassAbility, ActiveAbilities::activateActiveAbility);
 
-        btnUtils.setButton(btnWild, () -> {
-            wildCardActivate();
-            btnWild.setVisibility(View.INVISIBLE);
-        });
+        btnUtils.setButton(btnWild, this::wildCardActivate);
 
         btnUtils.setButton(imageButtonExit, () -> {
             game.endGame(this);
@@ -633,6 +630,7 @@ public class MainActivityGame extends SharedMainActivity {
         wasQuizCorrect = false;
 
         Player currentPlayer = game.getCurrentPlayer();
+        btnWild.setVisibility(View.INVISIBLE);
         currentPlayer.useWildCard();
         currentPlayer.incrementUsedWildcards();
 
@@ -647,8 +645,7 @@ public class MainActivityGame extends SharedMainActivity {
             WildCardProperties[] selectedType = selectWildCardType(currentPlayer, quizWildCards, taskWildCards, truthWildCards);
 
             if (selectedType == null) {
-                wildCardContinue();
-                btnWild.setVisibility(View.VISIBLE);
+                currentPlayer.useSkip();
                 return;
             }
 
