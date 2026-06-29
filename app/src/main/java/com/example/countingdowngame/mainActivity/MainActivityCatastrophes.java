@@ -96,7 +96,7 @@ public class MainActivityCatastrophes {
 
     public static void setCatastropheLimit() {
         Random random = new Random();
-        catastropheLimit = random.nextInt(1) + 1;
+        catastropheLimit = random.nextInt(4) + 8;
         Log.d(TAG, "catastropheLimit: " + catastropheLimit);
     }
 

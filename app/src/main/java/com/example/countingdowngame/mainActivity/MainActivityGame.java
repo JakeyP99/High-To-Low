@@ -702,7 +702,6 @@ public class MainActivityGame extends SharedMainActivity {
         selectedWildCard = selectedCard;
         wildCardDialogManager.showWildCardDialog(selectedCard, wildCardType);
         logSelectedCardInfo(selectedCard, wildCardType);
-        Log.d(TAG, "handleSelectedCard: card type " + wildCardType);
     }
 
 

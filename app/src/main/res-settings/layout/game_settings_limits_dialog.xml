@@ -35,7 +35,7 @@
             android:fontFamily="@font/viga"
             android:text="Wild Card Quantity"
             android:textColor="@color/bluedark"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:layout_marginTop="8dp"/>
 
         <EditText
@@ -46,6 +46,7 @@
             android:background="@drawable/outlineforbutton"
             android:fontFamily="@font/viga"
             android:hint="Quantity per player"
+            android:textSize="20sp"
             android:inputType="number"
             android:textAlignment="center"
             android:textColor="@color/bluedark" />
@@ -56,7 +57,7 @@
             android:fontFamily="@font/viga"
             android:text="Total Drink Limit"
             android:textColor="@color/bluedark"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:layout_marginTop="16dp"/>
 
         <EditText
@@ -64,6 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_marginTop="8dp"
+            android:textSize="20sp"
             android:background="@drawable/outlineforbutton"
             android:fontFamily="@font/viga"
             android:hint="Total drinks allowed"

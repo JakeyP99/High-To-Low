@@ -35,7 +35,7 @@
             android:fontFamily="@font/viga"
             android:text="Random Catastrophes"
             android:textColor="@color/bluedark"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:layout_marginBottom="12dp"/>
 
         <Button
