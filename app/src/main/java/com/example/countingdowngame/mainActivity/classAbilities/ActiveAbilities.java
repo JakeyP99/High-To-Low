@@ -1069,13 +1069,13 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         activity.btnUtils.setButton(btnRed, () -> {
             boolean isRedChoice = new Random().nextBoolean();
             int cardVal = new Random().nextInt(13) + 1;
-            handleGuess(true, isRedChoice, cardVal, cardIv, cardValueTv, btnRed, btnBlack, resultMsgTv, finishBtn, penaltyTv, roundTv, confettiGif, cardContainer, gambler);
+            handleGuess(true, isRedChoice, cardVal, cardIv, cardValueTv, btnRed, btnBlack, resultMsgTv, finishBtn, penaltyTv, roundTv, confettiGif, cardContainer, gambler, opponent);
         });
 
         activity.btnUtils.setButton(btnBlack, () -> {
             boolean isRedChoice = new Random().nextBoolean();
             int cardVal = new Random().nextInt(13) + 1;
-            handleGuess(false, isRedChoice, cardVal, cardIv, cardValueTv, btnRed, btnBlack, resultMsgTv, finishBtn, penaltyTv, roundTv, confettiGif, cardContainer, gambler);
+            handleGuess(false, isRedChoice, cardVal, cardIv, cardValueTv, btnRed, btnBlack, resultMsgTv, finishBtn, penaltyTv, roundTv, confettiGif, cardContainer, gambler, opponent);
         });
 
         activity.btnUtils.setButton(finishBtn, () -> {
@@ -1090,7 +1090,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     private static void handleGuess(boolean guessedRed, boolean isRed, int value, ImageView cardIv, TextView cardValueTv,
                                    Button btnRed, Button btnBlack, TextView resultMsgTv, Button finishBtn,
                                    TextView penaltyTv, TextView roundTv, GifImageView confettiGif,
-                                   View cardContainer, Player gambler) {
+                                   View cardContainer, Player gambler, Player opponent) {
         btnRed.setEnabled(false);
         btnBlack.setEnabled(false);
 
@@ -1115,13 +1115,9 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 confettiGif.setVisibility(VISIBLE);
                 new Handler().postDelayed(() -> confettiGif.setVisibility(GONE), 2000);
 
-                // Hand out drink
-                for (Player p : game.getPlayers()) {
-                    if (!p.equals(gambler)) {
-                        p.incrementDrinksTakenByGambler(1);
-                        gambler.incrementDrinksHandedOutByGambler(1);
-                    }
-                }
+                // Hand out drink to opponent
+                opponent.incrementDrinksTakenByGambler(1);
+                gambler.incrementDrinksHandedOutByGambler(1);
                 
                 if (currentPenalty == 0) {
                     // Show confetti
@@ -1130,7 +1126,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
                     new Handler().postDelayed(() -> {
                         String drinksText = totalRounds == 1 ? "drink" : "drinks";
-                        resultMsgTv.setText("Perfect Win!\n" + gambler.getName() + " drinks 0.\nEveryone else takes " + totalRounds + " " + drinksText + ".");
+                        resultMsgTv.setText("Perfect Win!\n" + gambler.getName() + " drinks 0.\n" + opponent.getName() + " takes " + totalRounds + " " + drinksText + ".");
                         resultMsgTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
                         resultMsgTv.setVisibility(VISIBLE);
                         finishBtn.setVisibility(VISIBLE);
@@ -1167,7 +1163,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 String othersDrinksText = othersDrinks == 1 ? "drink" : "drinks";
 
                 new Handler().postDelayed(() -> {
-                    resultMsgTv.setText("Lost!\n" + gambler.getName() + " must take " + currentPenalty + " " + gamblerDrinksText + ".\nEveryone else takes " + othersDrinks + " " + othersDrinksText + ".");
+                    resultMsgTv.setText("Lost!\n" + gambler.getName() + " must take " + currentPenalty + " " + gamblerDrinksText + ".\n" + opponent.getName() + " takes " + othersDrinks + " " + othersDrinksText + ".");
                     resultMsgTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
                     resultMsgTv.setVisibility(VISIBLE);
                     finishBtn.setVisibility(VISIBLE);

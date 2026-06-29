@@ -241,8 +241,11 @@ public class MainActivityDialog {
                 h.photo.setImageResource(R.drawable.wine);
             }
             h.itemView.setOnClickListener(v -> {
-                h.name.setSelected(false);
-                listener.onClick(p);
+                h.itemView.setBackgroundResource(R.drawable.selectedplayer);
+                h.itemView.postDelayed(() -> {
+                    h.name.setSelected(false);
+                    listener.onClick(p);
+                }, 15);
             });
         }
 

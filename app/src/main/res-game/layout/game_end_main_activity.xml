@@ -141,28 +141,28 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
-            android:id="@+id/btnplayAgain"
+            android:id="@+id/btnNewPlayer"
             android:layout_width="0dp"
             android:layout_height="65dp"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:background="@drawable/outlineforbutton"
             android:fontFamily="@font/viga"
-            android:text="Play Again"
+            android:text="Home"
             android:textAllCaps="false"
             android:textColor="@color/bluedark"
             android:textSize="20sp"
             app:backgroundTint="@null" />
 
         <Button
-            android:id="@+id/btnNewPlayer"
+            android:id="@+id/btnplayAgain"
             android:layout_width="0dp"
             android:layout_height="65dp"
-            android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:background="@drawable/outlineforbutton"
             android:fontFamily="@font/viga"
-            android:text="Home"
+            android:text="Play Again"
             android:textAllCaps="false"
             android:textColor="@color/bluedark"
             android:textSize="20sp"
