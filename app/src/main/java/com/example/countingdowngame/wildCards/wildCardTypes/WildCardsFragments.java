@@ -1,4 +1,4 @@
-package com.example.countingdowngame.wildCards.wildCardTypes;
+package com.mydomain.countingdowngame.wildCards.wildCardTypes;
 
 import android.content.Context;
 

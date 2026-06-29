@@ -1,4 +1,4 @@
-package com.example.countingdowngame.createPlayer;
+package com.mydomain.countingdowngame.createPlayer;
 
 import android.view.View;
 import android.view.ViewGroup;

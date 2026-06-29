@@ -1,4 +1,4 @@
-package com.example.countingdowngame.instructions;
+package com.mydomain.countingdowngame.instructions;
 
 import android.view.LayoutInflater;
 import android.view.View;

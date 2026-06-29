@@ -3,12 +3,11 @@ apply plugin: 'com.android.application'
 android {
     compileSdk 36
     defaultConfig {
-        applicationId "com.example.countingdowngame"
+        applicationId "com.mydomain.countingdowngame"
         minSdkVersion 24
-        //noinspection EditedTargetSdkVersion
         targetSdkVersion 36
-        versionCode 47
-        versionName "47"
+        versionCode 48
+        versionName "48"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -34,7 +33,7 @@ android {
         }
     }
 
-    namespace 'com.example.countingdowngame'
+    namespace 'com.mydomain.countingdowngame'
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11

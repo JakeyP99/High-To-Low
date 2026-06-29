@@ -1,4 +1,4 @@
-package com.example.countingdowngame.home;
+package com.mydomain.countingdowngame.home;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -8,14 +8,14 @@ import android.widget.Button;
 
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.countingdowngame.R;
-import com.example.countingdowngame.audio.AudioManager;
-import com.example.countingdowngame.createPlayer.CharacterClassPagerAdapter;
-import com.example.countingdowngame.createPlayer.CharacterClassStore;
-import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.playerChoice.playerChoiceComplimentary;
-import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
-import com.example.countingdowngame.utils.ButtonUtils;
+import com.mydomain.countingdowngame.R;
+import com.mydomain.countingdowngame.audio.AudioManager;
+import com.mydomain.countingdowngame.createPlayer.CharacterClassPagerAdapter;
+import com.mydomain.countingdowngame.createPlayer.CharacterClassStore;
+import com.mydomain.countingdowngame.game.Game;
+import com.mydomain.countingdowngame.playerChoice.playerChoiceComplimentary;
+import com.mydomain.countingdowngame.settings.GeneralSettingsLocalStore;
+import com.mydomain.countingdowngame.utils.ButtonUtils;
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
 
 import java.util.ArrayList;

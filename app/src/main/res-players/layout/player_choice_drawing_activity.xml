@@ -56,7 +56,7 @@
         android:thumb="@drawable/seekbar_thumb"
         android:progressDrawable="@drawable/seekbar_custom" />
 
-    <com.example.countingdowngame.drawing.DrawingViewPlayerModels
+    <com.mydomain.countingdowngame.drawing.DrawingViewPlayerModels
         android:id="@+id/drawingView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

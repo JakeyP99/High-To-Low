@@ -1,6 +1,6 @@
-package com.example.countingdowngame.wildCards.wildCardTypes;
+package com.mydomain.countingdowngame.wildCards.wildCardTypes;
 
-import com.example.countingdowngame.wildCards.WildCardProperties;
+import com.mydomain.countingdowngame.wildCards.WildCardProperties;
 
 public class WildCardData {
 

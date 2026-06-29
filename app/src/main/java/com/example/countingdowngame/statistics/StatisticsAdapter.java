@@ -1,4 +1,4 @@
-package com.example.countingdowngame.statistics;
+package com.mydomain.countingdowngame.statistics;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.example.countingdowngame.R;
+import com.mydomain.countingdowngame.R;
 
 import java.util.List;
 import java.util.Locale;

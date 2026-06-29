@@ -1,4 +1,4 @@
-package com.example.countingdowngame.endGame;
+package com.mydomain.countingdowngame.endGame;
 
 import android.os.Bundle;
 import android.widget.Button;
@@ -6,11 +6,11 @@ import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
 
-import com.example.countingdowngame.R;
-import com.example.countingdowngame.audio.AudioManager;
-import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.player.Player;
-import com.example.countingdowngame.utils.ButtonUtilsActivity;
+import com.mydomain.countingdowngame.R;
+import com.mydomain.countingdowngame.audio.AudioManager;
+import com.mydomain.countingdowngame.game.Game;
+import com.mydomain.countingdowngame.player.Player;
+import com.mydomain.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.List;
 

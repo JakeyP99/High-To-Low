@@ -1,17 +1,17 @@
-package com.example.countingdowngame.mainActivity.classAbilities;
+package com.mydomain.countingdowngame.mainActivity.classAbilities;
 
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ARCHER;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GOBLIN;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SCIENTIST;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SOLDIER;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.TROLL;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
-import static com.example.countingdowngame.mainActivity.MainActivityGame.drinkNumberCounterInt;
-import static com.example.countingdowngame.mainActivity.MainActivityGame.isFirstTurn;
-import static com.example.countingdowngame.mainActivity.MainActivityGame.soldierRemoval;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.ARCHER;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.GOBLIN;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.SCIENTIST;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.SOLDIER;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.TROLL;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
+import static com.mydomain.countingdowngame.mainActivity.MainActivityGame.drinkNumberCounterInt;
+import static com.mydomain.countingdowngame.mainActivity.MainActivityGame.isFirstTurn;
+import static com.mydomain.countingdowngame.mainActivity.MainActivityGame.soldierRemoval;
 
 import android.app.AlertDialog;
 import android.graphics.Typeface;
@@ -24,11 +24,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.countingdowngame.R;
-import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.mainActivity.MainActivityGame;
-import com.example.countingdowngame.player.Player;
-import com.example.countingdowngame.utils.ButtonUtilsActivity;
+import com.mydomain.countingdowngame.R;
+import com.mydomain.countingdowngame.game.Game;
+import com.mydomain.countingdowngame.mainActivity.MainActivityGame;
+import com.mydomain.countingdowngame.player.Player;
+import com.mydomain.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.ArrayList;
 import java.util.List;

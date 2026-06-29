@@ -1,12 +1,12 @@
-package com.example.countingdowngame.mainActivity;
+package com.mydomain.countingdowngame.mainActivity;
 
 import static android.content.ContentValues.TAG;
-import static com.example.countingdowngame.mainActivity.MainActivityGame.catastropheLimit;
-import static com.example.countingdowngame.mainActivity.MainActivityGame.updateNumber;
+import static com.mydomain.countingdowngame.mainActivity.MainActivityGame.catastropheLimit;
+import static com.mydomain.countingdowngame.mainActivity.MainActivityGame.updateNumber;
 
 import android.util.Log;
 
-import com.example.countingdowngame.game.Game;
+import com.mydomain.countingdowngame.game.Game;
 
 import java.util.ArrayList;
 import java.util.Arrays;

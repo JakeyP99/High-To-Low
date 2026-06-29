@@ -1,4 +1,4 @@
-package com.example.countingdowngame.statistics;
+package com.mydomain.countingdowngame.statistics;
 
 public class PlayerStatistic {
     private String playerName;

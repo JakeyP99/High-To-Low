@@ -1,4 +1,4 @@
-package com.example.countingdowngame.instructions;
+package com.mydomain.countingdowngame.instructions;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.example.countingdowngame.R;
+import com.mydomain.countingdowngame.R;
 
 import java.util.List;
 

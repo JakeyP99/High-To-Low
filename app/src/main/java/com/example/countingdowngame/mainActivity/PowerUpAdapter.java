@@ -1,4 +1,4 @@
-package com.example.countingdowngame.mainActivity;
+package com.mydomain.countingdowngame.mainActivity;
 
 import android.content.Context;
 import android.graphics.ColorMatrix;
@@ -13,7 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.countingdowngame.R;
+import com.mydomain.countingdowngame.R;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.countingdowngame.mainActivity.classAbilities;
+package com.mydomain.countingdowngame.mainActivity.classAbilities;
 
 import android.content.Context;
 import android.graphics.Canvas;

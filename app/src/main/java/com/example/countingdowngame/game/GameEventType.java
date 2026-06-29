@@ -1,4 +1,4 @@
-package com.example.countingdowngame.game;
+package com.mydomain.countingdowngame.game;
 
 public enum GameEventType {
     NEXT_PLAYER

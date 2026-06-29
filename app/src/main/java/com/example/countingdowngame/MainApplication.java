@@ -1,4 +1,4 @@
-package com.example.countingdowngame;
+package com.mydomain.countingdowngame;
 
 import android.app.Activity;
 import android.app.Application;
@@ -9,7 +9,7 @@ import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.countingdowngame.audio.AudioManager;
+import com.mydomain.countingdowngame.audio.AudioManager;
 
 public class MainApplication extends Application {
     private int activityCount = 0;

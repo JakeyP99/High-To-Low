@@ -1,4 +1,4 @@
-package com.example.countingdowngame.statistics;
+package com.mydomain.countingdowngame.statistics;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -12,10 +12,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.countingdowngame.R;
-import com.example.countingdowngame.audio.AudioManager;
-import com.example.countingdowngame.player.Player;
-import com.example.countingdowngame.utils.ButtonUtilsActivity;
+import com.mydomain.countingdowngame.R;
+import com.mydomain.countingdowngame.audio.AudioManager;
+import com.mydomain.countingdowngame.player.Player;
+import com.mydomain.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.ArrayList;
 import java.util.List;

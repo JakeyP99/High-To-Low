@@ -1,11 +1,11 @@
-package com.example.countingdowngame.player;
+package com.mydomain.countingdowngame.player;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
+import com.mydomain.countingdowngame.game.Game;
+import com.mydomain.countingdowngame.settings.GeneralSettingsLocalStore;
 
 import java.io.Serializable;
 import java.util.ArrayList;

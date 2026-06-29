@@ -1,6 +1,6 @@
-package com.example.countingdowngame.mainActivity;
+package com.mydomain.countingdowngame.mainActivity;
 
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.QUIZ_MAGICIAN;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.QUIZ_MAGICIAN;
 
 import android.app.AlertDialog;
 import android.os.Handler;
@@ -9,13 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.countingdowngame.R;
-import com.example.countingdowngame.audio.AudioManager;
-import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
-import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.player.Player;
-import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
-import com.example.countingdowngame.wildCards.WildCardProperties;
+import com.mydomain.countingdowngame.R;
+import com.mydomain.countingdowngame.audio.AudioManager;
+import com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions;
+import com.mydomain.countingdowngame.game.Game;
+import com.mydomain.countingdowngame.player.Player;
+import com.mydomain.countingdowngame.settings.GeneralSettingsLocalStore;
+import com.mydomain.countingdowngame.wildCards.WildCardProperties;
 
 import java.util.Arrays;
 import java.util.Collections;

@@ -1,4 +1,4 @@
-package com.example.countingdowngame.settings;
+package com.mydomain.countingdowngame.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;

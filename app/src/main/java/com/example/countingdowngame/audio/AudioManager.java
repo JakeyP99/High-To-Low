@@ -1,23 +1,23 @@
-package com.example.countingdowngame.audio;
+package com.mydomain.countingdowngame.audio;
 
 import static android.content.ContentValues.TAG;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ARCHER;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GOBLIN;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.QUIZ_MAGICIAN;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SCIENTIST;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SOLDIER;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.TROLL;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.ARCHER;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.GOBLIN;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.QUIZ_MAGICIAN;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.SCIENTIST;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.SOLDIER;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.TROLL;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
 
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.View;
 
-import com.example.countingdowngame.R;
+import com.mydomain.countingdowngame.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;

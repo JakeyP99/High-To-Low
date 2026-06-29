@@ -1,4 +1,4 @@
-package com.example.countingdowngame.game;
+package com.mydomain.countingdowngame.game;
 
 public class GameEvent {
     Game game;

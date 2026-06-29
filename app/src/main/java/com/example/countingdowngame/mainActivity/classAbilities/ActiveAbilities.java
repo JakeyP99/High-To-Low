@@ -1,20 +1,20 @@
-package com.example.countingdowngame.mainActivity.classAbilities;
+package com.mydomain.countingdowngame.mainActivity.classAbilities;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static com.example.countingdowngame.R.id.editCurrentNumberTextView;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ARCHER;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GOBLIN;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.QUIZ_MAGICIAN;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SCIENTIST;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SOLDIER;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.TROLL;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
-import static com.example.countingdowngame.mainActivity.MainActivityGame.drinkNumberCounterInt;
-import static com.example.countingdowngame.mainActivity.MainActivityGame.isFirstTurn;
+import static com.mydomain.countingdowngame.R.id.editCurrentNumberTextView;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.ARCHER;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.GOBLIN;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.QUIZ_MAGICIAN;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.SCIENTIST;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.SOLDIER;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.TROLL;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
+import static com.mydomain.countingdowngame.mainActivity.MainActivityGame.drinkNumberCounterInt;
+import static com.mydomain.countingdowngame.mainActivity.MainActivityGame.isFirstTurn;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -42,14 +42,14 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.countingdowngame.R;
-import com.example.countingdowngame.audio.AudioManager;
-import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
-import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.mainActivity.MainActivityGame;
-import com.example.countingdowngame.mainActivity.PowerUps;
-import com.example.countingdowngame.player.Player;
-import com.example.countingdowngame.utils.ButtonUtilsActivity;
+import com.mydomain.countingdowngame.R;
+import com.mydomain.countingdowngame.audio.AudioManager;
+import com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions;
+import com.mydomain.countingdowngame.game.Game;
+import com.mydomain.countingdowngame.mainActivity.MainActivityGame;
+import com.mydomain.countingdowngame.mainActivity.PowerUps;
+import com.mydomain.countingdowngame.player.Player;
+import com.mydomain.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -1295,7 +1295,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             String classChoice = availableClasses.get(0);
             labelAbilityTitle.setText(getClassActiveButtonText(classChoice));
             labelAbilityDesc.setText(activity.mainActivityDialog.getClassActiveDescription(classChoice));
-            iconAbility.setImageResource(com.example.countingdowngame.playerChoice.playerChoiceComplimentary.getClassIcon(classChoice));
+            iconAbility.setImageResource(com.mydomain.countingdowngame.playerChoice.playerChoiceComplimentary.getClassIcon(classChoice));
         }
 
         btnClassAbility.setVisibility(View.VISIBLE);
@@ -1365,7 +1365,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 holder.name.postDelayed(() -> holder.name.setSelected(true), 1000);
                 holder.desc.postDelayed(() -> holder.desc.setSelected(true), 1000);
 
-                holder.icon.setImageResource(com.example.countingdowngame.playerChoice.playerChoiceComplimentary.getClassIcon(className));
+                holder.icon.setImageResource(com.mydomain.countingdowngame.playerChoice.playerChoiceComplimentary.getClassIcon(className));
 
                 holder.itemView.setOnClickListener(v -> {
                     dialog.dismiss();

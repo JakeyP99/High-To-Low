@@ -1,4 +1,4 @@
-package com.example.countingdowngame.game;
+package com.mydomain.countingdowngame.game;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
@@ -6,11 +6,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.countingdowngame.mainActivity.MainActivityGame;
-import com.example.countingdowngame.player.Player;
-import com.example.countingdowngame.player.PlayerEvent;
-import com.example.countingdowngame.player.PlayerEventListener;
-import com.example.countingdowngame.player.PlayerEventType;
+import com.mydomain.countingdowngame.mainActivity.MainActivityGame;
+import com.mydomain.countingdowngame.player.Player;
+import com.mydomain.countingdowngame.player.PlayerEvent;
+import com.mydomain.countingdowngame.player.PlayerEventListener;
+import com.mydomain.countingdowngame.player.PlayerEventType;
 
 import java.util.ArrayList;
 import java.util.HashMap;

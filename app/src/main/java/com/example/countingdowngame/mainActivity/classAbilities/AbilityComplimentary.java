@@ -1,8 +1,8 @@
-package com.example.countingdowngame.mainActivity.classAbilities;
+package com.mydomain.countingdowngame.mainActivity.classAbilities;
 
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.*;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.*;
 
-import com.example.countingdowngame.player.Player;
+import com.mydomain.countingdowngame.player.Player;
 
 
 public class AbilityComplimentary {

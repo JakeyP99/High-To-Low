@@ -1,10 +1,10 @@
-package com.example.countingdowngame.mainActivity;
+package com.mydomain.countingdowngame.mainActivity;
 
 import android.util.Log;
 
-import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.player.Player;
-import com.example.countingdowngame.wildCards.WildCardProperties;
+import com.mydomain.countingdowngame.game.Game;
+import com.mydomain.countingdowngame.player.Player;
+import com.mydomain.countingdowngame.wildCards.WildCardProperties;
 
 public class MainActivityLogging {
 

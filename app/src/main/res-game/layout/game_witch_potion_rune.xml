@@ -35,7 +35,7 @@
         android:textSize="18sp"
         android:layout_marginBottom="16dp"/>
 
-    <com.example.countingdowngame.mainActivity.classAbilities.RuneTracingView
+    <com.mydomain.countingdowngame.mainActivity.classAbilities.RuneTracingView
         android:id="@+id/rune_tracing_view"
         android:layout_width="300dp"
         android:layout_height="300dp"

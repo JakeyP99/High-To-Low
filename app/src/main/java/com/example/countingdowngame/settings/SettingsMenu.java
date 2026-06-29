@@ -1,8 +1,8 @@
-package com.example.countingdowngame.settings;
+package com.mydomain.countingdowngame.settings;
 
-import static com.example.countingdowngame.wildCards.wildCardTypes.WildCardData.QUIZ_WILD_CARDS;
-import static com.example.countingdowngame.wildCards.wildCardTypes.WildCardData.TASK_WILD_CARDS;
-import static com.example.countingdowngame.wildCards.wildCardTypes.WildCardData.TRUTH_WILD_CARDS;
+import static com.mydomain.countingdowngame.wildCards.wildCardTypes.WildCardData.QUIZ_WILD_CARDS;
+import static com.mydomain.countingdowngame.wildCards.wildCardTypes.WildCardData.TASK_WILD_CARDS;
+import static com.mydomain.countingdowngame.wildCards.wildCardTypes.WildCardData.TRUTH_WILD_CARDS;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -15,9 +15,9 @@ import android.widget.EditText;
 
 import androidx.activity.OnBackPressedCallback;
 
-import com.example.countingdowngame.R;
-import com.example.countingdowngame.utils.ButtonUtilsActivity;
-import com.example.countingdowngame.wildCards.WildCardProperties;
+import com.mydomain.countingdowngame.R;
+import com.mydomain.countingdowngame.utils.ButtonUtilsActivity;
+import com.mydomain.countingdowngame.wildCards.WildCardProperties;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -30,7 +30,7 @@ public class SettingsMenu extends ButtonUtilsActivity {
     protected void onResume() {
         super.onResume();
         boolean isMuted = getMuteSoundState();
-        com.example.countingdowngame.audio.AudioManager.updateMuteButton(isMuted, muteGif, soundGif);
+        com.mydomain.countingdowngame.audio.AudioManager.updateMuteButton(isMuted, muteGif, soundGif);
     }
 
     @Override

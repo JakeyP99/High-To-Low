@@ -1,4 +1,4 @@
-package com.example.countingdowngame.createPlayer;
+package com.mydomain.countingdowngame.createPlayer;
 
 import android.util.Base64;
 import android.view.LayoutInflater;
@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.countingdowngame.R;
-import com.example.countingdowngame.player.Player;
-import com.example.countingdowngame.playerChoice.PlayerChoice;
+import com.mydomain.countingdowngame.R;
+import com.mydomain.countingdowngame.player.Player;
+import com.mydomain.countingdowngame.playerChoice.PlayerChoice;
 
 
 import java.util.List;

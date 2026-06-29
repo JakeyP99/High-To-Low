@@ -1,4 +1,4 @@
-package com.example.countingdowngame.wildCards.wildCardTypes;
+package com.mydomain.countingdowngame.wildCards.wildCardTypes;
 
 import static android.content.ContentValues.TAG;
 
@@ -8,9 +8,9 @@ import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.countingdowngame.settings.WildCardSettingsLocalStore;
-import com.example.countingdowngame.wildCards.WildCardProperties;
-import com.example.countingdowngame.wildCards.WildCardType;
+import com.mydomain.countingdowngame.settings.WildCardSettingsLocalStore;
+import com.mydomain.countingdowngame.wildCards.WildCardProperties;
+import com.mydomain.countingdowngame.wildCards.WildCardType;
 
 public abstract class WildCardsAdapter extends RecyclerView.Adapter<WildCardsAdapter.WildCardViewHolder> {
 

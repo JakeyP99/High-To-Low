@@ -1,4 +1,4 @@
-package com.example.countingdowngame.mainActivity;
+package com.mydomain.countingdowngame.mainActivity;
 
 
 import android.os.Bundle;
@@ -11,8 +11,8 @@ import androidx.core.animation.AnimatorListenerAdapter;
 import androidx.core.animation.AnimatorSet;
 import androidx.core.animation.ObjectAnimator;
 
-import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.utils.ButtonUtilsActivity;
+import com.mydomain.countingdowngame.game.Game;
+import com.mydomain.countingdowngame.utils.ButtonUtilsActivity;
 
 public class SharedMainActivity extends ButtonUtilsActivity {
 

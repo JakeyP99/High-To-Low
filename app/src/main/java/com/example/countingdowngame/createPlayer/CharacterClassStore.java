@@ -1,4 +1,4 @@
-package com.example.countingdowngame.createPlayer;
+package com.mydomain.countingdowngame.createPlayer;
 
 public class CharacterClassStore {
     private final String className;

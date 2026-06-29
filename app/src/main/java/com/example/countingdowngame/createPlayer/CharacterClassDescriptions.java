@@ -1,4 +1,4 @@
-package com.example.countingdowngame.createPlayer;
+package com.mydomain.countingdowngame.createPlayer;
 
 public class CharacterClassDescriptions {
     public static final String ARCHER = "Archer";

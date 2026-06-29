@@ -1,4 +1,4 @@
-package com.example.countingdowngame.mainActivityRoulette;
+package com.mydomain.countingdowngame.mainActivityRoulette;
 
 import static android.content.ContentValues.TAG;
 
@@ -10,12 +10,12 @@ import android.widget.ImageButton;
 
 import androidx.activity.OnBackPressedCallback;
 
-import com.example.countingdowngame.R;
-import com.example.countingdowngame.audio.AudioManager;
-import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
-import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.mainActivity.SharedMainActivity;
-import com.example.countingdowngame.player.Player;
+import com.mydomain.countingdowngame.R;
+import com.mydomain.countingdowngame.audio.AudioManager;
+import com.mydomain.countingdowngame.createPlayer.PlayerModelLocalStore;
+import com.mydomain.countingdowngame.game.Game;
+import com.mydomain.countingdowngame.mainActivity.SharedMainActivity;
+import com.mydomain.countingdowngame.player.Player;
 
 import java.util.List;
 import java.util.stream.Collectors;

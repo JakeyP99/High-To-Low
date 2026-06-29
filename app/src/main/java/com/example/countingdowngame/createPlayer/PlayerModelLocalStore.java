@@ -1,9 +1,9 @@
-package com.example.countingdowngame.createPlayer;
+package com.mydomain.countingdowngame.createPlayer;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.countingdowngame.player.Player;
+import com.mydomain.countingdowngame.player.Player;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

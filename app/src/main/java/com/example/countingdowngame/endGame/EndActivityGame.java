@@ -1,4 +1,4 @@
-package com.example.countingdowngame.endGame;
+package com.mydomain.countingdowngame.endGame;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,14 +14,14 @@ import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.countingdowngame.R;
-import com.example.countingdowngame.audio.AudioManager;
-import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.mainActivity.MainActivityGame;
-import com.example.countingdowngame.player.Player;
-import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
-import com.example.countingdowngame.statistics.Statistics;
-import com.example.countingdowngame.utils.ButtonUtilsActivity;
+import com.mydomain.countingdowngame.R;
+import com.mydomain.countingdowngame.audio.AudioManager;
+import com.mydomain.countingdowngame.game.Game;
+import com.mydomain.countingdowngame.mainActivity.MainActivityGame;
+import com.mydomain.countingdowngame.player.Player;
+import com.mydomain.countingdowngame.settings.GeneralSettingsLocalStore;
+import com.mydomain.countingdowngame.statistics.Statistics;
+import com.mydomain.countingdowngame.utils.ButtonUtilsActivity;
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
 
 import java.util.ArrayList;

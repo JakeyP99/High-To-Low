@@ -1,4 +1,4 @@
-package com.example.countingdowngame.wildCards;
+package com.mydomain.countingdowngame.wildCards;
 
 import java.io.Serializable;
 import java.util.Objects;

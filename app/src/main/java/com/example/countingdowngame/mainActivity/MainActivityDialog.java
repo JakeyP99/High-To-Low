@@ -1,4 +1,4 @@
-package com.example.countingdowngame.mainActivity;
+package com.mydomain.countingdowngame.mainActivity;
 
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
@@ -21,11 +21,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.countingdowngame.R;
-import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
-import com.example.countingdowngame.instructions.InstructionalDialogPageAdapter;
-import com.example.countingdowngame.player.Player;
-import com.example.countingdowngame.utils.ButtonUtils;
+import com.mydomain.countingdowngame.R;
+import com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions;
+import com.mydomain.countingdowngame.instructions.InstructionalDialogPageAdapter;
+import com.mydomain.countingdowngame.player.Player;
+import com.mydomain.countingdowngame.utils.ButtonUtils;
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
 
 import java.util.ArrayList;

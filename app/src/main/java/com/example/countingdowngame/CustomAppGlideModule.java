@@ -1,4 +1,4 @@
-package com.example.countingdowngame;
+package com.mydomain.countingdowngame;
 
 import com.bumptech.glide.annotation.GlideModule;
 import com.bumptech.glide.module.AppGlideModule;

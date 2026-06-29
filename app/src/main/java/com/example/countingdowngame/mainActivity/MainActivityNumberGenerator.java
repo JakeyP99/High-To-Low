@@ -1,11 +1,11 @@
-package com.example.countingdowngame.mainActivity;
+package com.mydomain.countingdowngame.mainActivity;
 
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.NO_CLASS;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
-import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleGamblerPassiveResult;
-import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleSurvivorPassive;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.NO_CLASS;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
+import static com.mydomain.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleGamblerPassiveResult;
+import static com.mydomain.countingdowngame.mainActivity.classAbilities.PassiveAbilities.handleSurvivorPassive;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -21,10 +21,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.example.countingdowngame.R;
-import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.mainActivity.classAbilities.ActiveAbilities;
-import com.example.countingdowngame.player.Player;
+import com.mydomain.countingdowngame.R;
+import com.mydomain.countingdowngame.game.Game;
+import com.mydomain.countingdowngame.mainActivity.classAbilities.ActiveAbilities;
+import com.mydomain.countingdowngame.player.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -244,7 +244,7 @@ public class MainActivityNumberGenerator {
         applyPassiveAbilities(currentPlayer, targetNumber, previousNumber);
 
         Game.GameMode mode = Game.getInstance().getGameMode();
-        boolean hasNoClass = com.example.countingdowngame.createPlayer.CharacterClassDescriptions.NO_CLASS.equals(currentPlayer.getClassChoice());
+        boolean hasNoClass = com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.NO_CLASS.equals(currentPlayer.getClassChoice());
         boolean isClassLanded = Game.getInstance().getClassNumbers().contains(targetNumber);
 
         boolean shouldAwardClass = false;

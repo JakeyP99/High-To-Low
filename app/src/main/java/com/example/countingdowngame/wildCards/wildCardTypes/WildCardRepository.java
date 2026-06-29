@@ -1,9 +1,9 @@
-package com.example.countingdowngame.wildCards.wildCardTypes;
+package com.mydomain.countingdowngame.wildCards.wildCardTypes;
 
 import android.content.Context;
 
-import com.example.countingdowngame.settings.WildCardSettingsLocalStore;
-import com.example.countingdowngame.wildCards.WildCardProperties;
+import com.mydomain.countingdowngame.settings.WildCardSettingsLocalStore;
+import com.mydomain.countingdowngame.wildCards.WildCardProperties;
 
 import java.util.Random;
 

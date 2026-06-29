@@ -1,4 +1,4 @@
-package com.example.countingdowngame.mainActivity;
+package com.mydomain.countingdowngame.mainActivity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -16,9 +16,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.example.countingdowngame.R;
-import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.player.Player;
+import com.mydomain.countingdowngame.R;
+import com.mydomain.countingdowngame.game.Game;
+import com.mydomain.countingdowngame.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;

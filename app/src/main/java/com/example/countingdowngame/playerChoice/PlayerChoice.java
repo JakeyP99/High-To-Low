@@ -1,4 +1,4 @@
-package com.example.countingdowngame.playerChoice;
+package com.mydomain.countingdowngame.playerChoice;
 
 import android.Manifest;
 import android.content.Intent;
@@ -26,19 +26,19 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.countingdowngame.R;
-import com.example.countingdowngame.audio.AudioManager;
-import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
-import com.example.countingdowngame.createPlayer.CharacterClassPagerAdapter;
-import com.example.countingdowngame.createPlayer.CharacterClassStore;
-import com.example.countingdowngame.createPlayer.PlayerListAdapter;
-import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
-import com.example.countingdowngame.drawing.DrawingPlayerModels;
-import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.mainActivity.classAbilities.AbilityComplimentary;
-import com.example.countingdowngame.numberChoice.NumberChoice;
-import com.example.countingdowngame.player.Player;
-import com.example.countingdowngame.statistics.Statistics;
+import com.mydomain.countingdowngame.R;
+import com.mydomain.countingdowngame.audio.AudioManager;
+import com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions;
+import com.mydomain.countingdowngame.createPlayer.CharacterClassPagerAdapter;
+import com.mydomain.countingdowngame.createPlayer.CharacterClassStore;
+import com.mydomain.countingdowngame.createPlayer.PlayerListAdapter;
+import com.mydomain.countingdowngame.createPlayer.PlayerModelLocalStore;
+import com.mydomain.countingdowngame.drawing.DrawingPlayerModels;
+import com.mydomain.countingdowngame.game.Game;
+import com.mydomain.countingdowngame.mainActivity.classAbilities.AbilityComplimentary;
+import com.mydomain.countingdowngame.numberChoice.NumberChoice;
+import com.mydomain.countingdowngame.player.Player;
+import com.mydomain.countingdowngame.statistics.Statistics;
 import com.google.gson.Gson;
 
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;

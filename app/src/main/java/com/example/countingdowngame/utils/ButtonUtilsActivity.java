@@ -1,6 +1,6 @@
-package com.example.countingdowngame.utils;
+package com.mydomain.countingdowngame.utils;
 
-import static com.example.countingdowngame.audio.AudioManager.updateMuteButton;
+import static com.mydomain.countingdowngame.audio.AudioManager.updateMuteButton;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,16 +9,16 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.countingdowngame.audio.AudioManager;
-import com.example.countingdowngame.endGame.EndRouletteGame;
-import com.example.countingdowngame.instructions.InstructionsToPlay;
-import com.example.countingdowngame.endGame.EndActivityGame;
-import com.example.countingdowngame.home.HomeScreen;
-import com.example.countingdowngame.numberChoice.NumberChoice;
-import com.example.countingdowngame.player.Player;
-import com.example.countingdowngame.playerChoice.PlayerChoice;
-import com.example.countingdowngame.settings.SettingsMenu;
-import com.example.countingdowngame.statistics.Statistics;
+import com.mydomain.countingdowngame.audio.AudioManager;
+import com.mydomain.countingdowngame.endGame.EndRouletteGame;
+import com.mydomain.countingdowngame.instructions.InstructionsToPlay;
+import com.mydomain.countingdowngame.endGame.EndActivityGame;
+import com.mydomain.countingdowngame.home.HomeScreen;
+import com.mydomain.countingdowngame.numberChoice.NumberChoice;
+import com.mydomain.countingdowngame.player.Player;
+import com.mydomain.countingdowngame.playerChoice.PlayerChoice;
+import com.mydomain.countingdowngame.settings.SettingsMenu;
+import com.mydomain.countingdowngame.statistics.Statistics;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -74,7 +74,7 @@ public abstract class ButtonUtilsActivity extends AppCompatActivity {
     }
 
     public void gotoGame(int startingNumber) {
-        Intent i = new Intent(this, com.example.countingdowngame.mainActivity.MainActivityGame.class);
+        Intent i = new Intent(this, com.mydomain.countingdowngame.mainActivity.MainActivityGame.class);
         i.putExtra("startingNumber", startingNumber);
         startActivity(i);
     }

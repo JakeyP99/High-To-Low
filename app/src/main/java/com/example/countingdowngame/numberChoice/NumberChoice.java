@@ -1,4 +1,4 @@
-package com.example.countingdowngame.numberChoice;
+package com.mydomain.countingdowngame.numberChoice;
 
 import android.content.Intent;
 import android.os.Build;
@@ -14,12 +14,12 @@ import androidx.activity.OnBackPressedCallback;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.example.countingdowngame.R;
-import com.example.countingdowngame.audio.AudioManager;
-import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.mainActivityRoulette.MainActivityRoulette;
-import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
-import com.example.countingdowngame.utils.ButtonUtilsActivity;
+import com.mydomain.countingdowngame.R;
+import com.mydomain.countingdowngame.audio.AudioManager;
+import com.mydomain.countingdowngame.game.Game;
+import com.mydomain.countingdowngame.mainActivityRoulette.MainActivityRoulette;
+import com.mydomain.countingdowngame.settings.GeneralSettingsLocalStore;
+import com.mydomain.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.Random;
 

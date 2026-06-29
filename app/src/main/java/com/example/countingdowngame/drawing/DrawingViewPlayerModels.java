@@ -1,4 +1,4 @@
-package com.example.countingdowngame.drawing;
+package com.mydomain.countingdowngame.drawing;
 
 import android.content.Context;
 import android.graphics.Bitmap;

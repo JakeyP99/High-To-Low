@@ -1,4 +1,4 @@
-package com.example.countingdowngame.utils;
+package com.mydomain.countingdowngame.utils;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -21,8 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.app.ActivityCompat;
 
-import com.example.countingdowngame.R;
-import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
+import com.mydomain.countingdowngame.R;
+import com.mydomain.countingdowngame.settings.GeneralSettingsLocalStore;
 
 import java.io.IOException;
 

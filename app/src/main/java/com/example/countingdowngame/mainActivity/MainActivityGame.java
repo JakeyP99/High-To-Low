@@ -1,17 +1,17 @@
-package com.example.countingdowngame.mainActivity;
+package com.mydomain.countingdowngame.mainActivity;
 
 import static android.content.ContentValues.TAG;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.NO_CLASS;
-import static com.example.countingdowngame.createPlayer.CharacterClassDescriptions.QUIZ_MAGICIAN;
-import static com.example.countingdowngame.mainActivity.MainActivityCatastrophes.decreaseNumberByRandom;
-import static com.example.countingdowngame.mainActivity.MainActivityCatastrophes.increaseNumberByRandom;
-import static com.example.countingdowngame.mainActivity.MainActivityCatastrophes.setCatastropheLimit;
-import static com.example.countingdowngame.mainActivity.MainActivityLogging.logPlayerInformation;
-import static com.example.countingdowngame.mainActivity.MainActivityLogging.logSelectedCardInfo;
-import static com.example.countingdowngame.mainActivity.classAbilities.ActiveAbilities.updateClassAbilityButton;
-import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.characterPassiveClassAffects;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.NO_CLASS;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.QUIZ_MAGICIAN;
+import static com.mydomain.countingdowngame.mainActivity.MainActivityCatastrophes.decreaseNumberByRandom;
+import static com.mydomain.countingdowngame.mainActivity.MainActivityCatastrophes.increaseNumberByRandom;
+import static com.mydomain.countingdowngame.mainActivity.MainActivityCatastrophes.setCatastropheLimit;
+import static com.mydomain.countingdowngame.mainActivity.MainActivityLogging.logPlayerInformation;
+import static com.mydomain.countingdowngame.mainActivity.MainActivityLogging.logSelectedCardInfo;
+import static com.mydomain.countingdowngame.mainActivity.classAbilities.ActiveAbilities.updateClassAbilityButton;
+import static com.mydomain.countingdowngame.mainActivity.classAbilities.PassiveAbilities.characterPassiveClassAffects;
 
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
@@ -30,17 +30,17 @@ import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
 import androidx.core.content.ContextCompat;
 
-import com.example.countingdowngame.R;
-import com.example.countingdowngame.audio.AudioManager;
-import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
-import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.game.GameEventType;
-import com.example.countingdowngame.mainActivity.classAbilities.ActiveAbilities;
-import com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities;
-import com.example.countingdowngame.player.Player;
-import com.example.countingdowngame.settings.GeneralSettingsLocalStore;
-import com.example.countingdowngame.wildCards.WildCardProperties;
-import com.example.countingdowngame.wildCards.wildCardTypes.WildCardRepository;
+import com.mydomain.countingdowngame.R;
+import com.mydomain.countingdowngame.audio.AudioManager;
+import com.mydomain.countingdowngame.createPlayer.PlayerModelLocalStore;
+import com.mydomain.countingdowngame.game.Game;
+import com.mydomain.countingdowngame.game.GameEventType;
+import com.mydomain.countingdowngame.mainActivity.classAbilities.ActiveAbilities;
+import com.mydomain.countingdowngame.mainActivity.classAbilities.PassiveAbilities;
+import com.mydomain.countingdowngame.player.Player;
+import com.mydomain.countingdowngame.settings.GeneralSettingsLocalStore;
+import com.mydomain.countingdowngame.wildCards.WildCardProperties;
+import com.mydomain.countingdowngame.wildCards.wildCardTypes.WildCardRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;

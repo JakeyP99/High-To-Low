@@ -1,4 +1,4 @@
-package com.example.countingdowngame.utils;
+package com.mydomain.countingdowngame.utils;
 
 import android.view.View;
 

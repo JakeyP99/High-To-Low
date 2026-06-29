@@ -1,4 +1,4 @@
-package com.example.countingdowngame.instructions;
+package com.mydomain.countingdowngame.instructions;
 
 import android.os.Bundle;
 import android.widget.Button;
@@ -6,10 +6,10 @@ import android.widget.ProgressBar;
 
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.countingdowngame.R;
-import com.example.countingdowngame.audio.AudioManager;
-import com.example.countingdowngame.utils.ButtonUtilsActivity;
-import com.example.countingdowngame.utils.DepthPageTransformer;
+import com.mydomain.countingdowngame.R;
+import com.mydomain.countingdowngame.audio.AudioManager;
+import com.mydomain.countingdowngame.utils.ButtonUtilsActivity;
+import com.mydomain.countingdowngame.utils.DepthPageTransformer;
 
 import java.util.Arrays;
 import java.util.List;
