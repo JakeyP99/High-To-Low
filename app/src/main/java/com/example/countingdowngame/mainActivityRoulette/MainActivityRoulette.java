@@ -25,15 +25,15 @@ import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
 import com.example.countingdowngame.createPlayer.PlayerModelLocalStore;
 import com.example.countingdowngame.game.Game;
+import com.example.countingdowngame.mainActivity.SharedMainActivity;
 import com.example.countingdowngame.player.Player;
-import com.example.countingdowngame.utils.ButtonUtilsActivity;
 
 import java.util.List;
 import java.util.Objects;
 
 import pl.droidsonroids.gif.GifImageView;
 
-public class MainActivityRoulette extends ButtonUtilsActivity {
+public class MainActivityRoulette extends SharedMainActivity {
     int removedPlayerCount = 0;
     private GifImageView muteGif, soundGif;
     private Button btnBullshit;
@@ -218,7 +218,7 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
             AudioManager.getInstance().playBlank(this);
             int bulletsLeft = player.getBulletsInChamberList().size() - 1;
             String bulletsText = (bulletsLeft == 1) ? "bullet" : "bullets";
-            showGameDialog(player.getName() + " dodged a bullet... Literally!\n\nYou have " + bulletsLeft + " " + bulletsText + " left!");
+            mainActivityDialog.showGameDialog(player.getName() + " dodged a bullet... Literally!\n\nYou have " + bulletsLeft + " " + bulletsText + " left!", this::handlePostDialogActions);
         }
         updateChamber(player);
     }
@@ -242,7 +242,7 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
         player.setRemoved(true);
         AudioManager.getInstance().playGunshot(this);
         removedPlayerCount++;
-        showCatastropheDialog(player.getName() + " died! Whoopsie :(");
+        mainActivityDialog.showDialog(player.getName() + " died! Whoopsie :(", R.layout.game_roulette_death_dialog_box, R.id.dialogbox_textview, this::handlePostDialogActions);
 
     }
 
@@ -266,48 +266,16 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
 
     //-----------------------------------------------------Dialogs---------------------------------------------------//
 
-    private void showGameDialog(String message) {
-        showDialog(message, R.layout.game_main_dialog_box, R.id.dialogbox_textview);
-    }
-
-    private void showDialog(String message, int layoutId, int textViewId) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
-        LayoutInflater inflater = getLayoutInflater();
-
-        View dialogView = inflater.inflate(layoutId, null);
-        TextView dialogBoxTextView = dialogView.findViewById(textViewId);
-        dialogBoxTextView.setText(message);
-
-        builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-        dialogView.setOnClickListener(v -> {
-            dialog.dismiss();
-            handlePostDialogActions();
-        });
-
-        // Handle clicks outside the dialog (if needed)
-        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getDecorView().setOnTouchListener((v, event) -> {
-            dialog.dismiss();
-            handlePostDialogActions();
-            return true;
-        });
-
-    }
-
-
     private void handlePostDialogActions() {
         Log.d(TAG, "handlePostDialogActions: occurred");
         List<Player> playerList = Game.getInstance().getPlayers();
         int activePlayerCount = Game.getInstance().getPlayerAmount() - removedPlayerCount;
 
-        if (activePlayerCount == 1) {
+        if (activePlayerCount <= 1) {
             Player activePlayer = null;
-            for (Player player : playerList) {
-                if (!player.isRemoved()) {
-                    activePlayer = player;
+            for (Player p : playerList) {
+                if (!p.isRemoved()) {
+                    activePlayer = p;
                     break;
                 }
             }
@@ -323,7 +291,7 @@ public class MainActivityRoulette extends ButtonUtilsActivity {
     }
 
     private void showCatastropheDialog(String message) {
-        showDialog(message, R.layout.game_roulette_death_dialog_box, R.id.dialogbox_textview);
+        mainActivityDialog.showDialog(message, R.layout.game_roulette_death_dialog_box, R.id.dialogbox_textview, this::handlePostDialogActions);
     }
 
     //-----------------------------------------------------Set Visibilities---------------------------------------------------//

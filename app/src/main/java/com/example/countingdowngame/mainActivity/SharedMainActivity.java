@@ -1,11 +1,7 @@
 package com.example.countingdowngame.mainActivity;
 
 
-import android.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ProgressBar;
+import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,22 +10,19 @@ import androidx.core.animation.Animator;
 import androidx.core.animation.AnimatorListenerAdapter;
 import androidx.core.animation.AnimatorSet;
 import androidx.core.animation.ObjectAnimator;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
-import com.example.countingdowngame.R;
-import com.example.countingdowngame.createPlayer.CharacterClassDescriptions;
 import com.example.countingdowngame.game.Game;
-import com.example.countingdowngame.instructions.InstructionalDialogPageAdapter;
-import com.example.countingdowngame.player.Player;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
-import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 public class SharedMainActivity extends ButtonUtilsActivity {
+
+    public MainActivityDialog mainActivityDialog;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mainActivityDialog = new MainActivityDialog(this, btnUtils);
+    }
 
     public static void setTextViewSizeBasedOnInt(TextView textView, String text) {
         int defaultTextSize = 70;
@@ -136,206 +129,6 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         });
 
         revPopSet.start();
-    }
-
-    public void characterClassInformationDialog(Player player) {
-
-        AlertDialog.Builder builder =
-                new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
-
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(
-                R.layout.game_character_ability_dialog_box,
-                null
-        );
-
-        ViewPager viewPager = dialogView.findViewById(R.id.abilityViewPager);
-        DotsIndicator dotsIndicator = dialogView.findViewById(R.id.dotsIndicator);
-
-        List<String> classes = new ArrayList<>(player.getClassChoices());
-        classes.remove(CharacterClassDescriptions.NO_CLASS);
-
-        if (classes.isEmpty()) {
-            classes.add(CharacterClassDescriptions.NO_CLASS);
-        }
-
-        AbilityPagerAdapter adapter = new AbilityPagerAdapter(classes, inflater);
-        viewPager.setAdapter(adapter);
-
-        if (classes.size() > 1) {
-            dotsIndicator.setVisibility(View.VISIBLE);
-            dotsIndicator.setViewPager(viewPager);
-        } else {
-            dotsIndicator.setVisibility(View.GONE);
-        }
-
-        builder.setView(dialogView);
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    private class AbilityPagerAdapter extends PagerAdapter {
-        private final List<String> classes;
-        private final LayoutInflater inflater;
-
-        public AbilityPagerAdapter(List<String> classes, LayoutInflater inflater) {
-            this.classes = classes;
-            this.inflater = inflater;
-        }
-
-        @Override
-        public int getCount() {
-            return classes.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-            return view == object;
-        }
-
-        @NonNull
-        @Override
-        public Object instantiateItem(@NonNull android.view.ViewGroup container, int position) {
-            View itemView = inflater.inflate(R.layout.game_character_ability_item, container, false);
-            String classChoice = classes.get(position);
-
-            TextView activeDescTv = itemView.findViewById(R.id.active_description_textview);
-            TextView passiveDescTv = itemView.findViewById(R.id.passive_description_textview);
-            TextView classTv = itemView.findViewById(R.id.class_textview);
-            TextView activeLabelTv = itemView.findViewById(R.id.active_textview);
-            TextView passiveLabelTv = itemView.findViewById(R.id.passive_textview);
-
-            classTv.setText(classChoice);
-            activeDescTv.setText(getClassActiveDescription(classChoice));
-            passiveDescTv.setText(getClassPassiveDescription(classChoice));
-
-            boolean isNoClass = CharacterClassDescriptions.NO_CLASS.equals(classChoice);
-            if (isNoClass) {
-                passiveDescTv.setVisibility(View.GONE);
-                activeLabelTv.setVisibility(View.GONE);
-                passiveLabelTv.setVisibility(View.GONE);
-            }
-
-            container.addView(itemView);
-            return itemView;
-        }
-
-        @Override
-        public void destroyItem(@NonNull android.view.ViewGroup container, int position, @NonNull Object object) {
-            container.removeView((View) object);
-        }
-    }
-
-    protected String getClassActiveDescription(String classChoice) {
-        if (classChoice == null) return "";
-        switch (classChoice) {
-            case CharacterClassDescriptions.ARCHER:
-                return CharacterClassDescriptions.archerActiveDescription;
-            case CharacterClassDescriptions.WITCH:
-                return CharacterClassDescriptions.witchActiveDescription;
-            case CharacterClassDescriptions.SCIENTIST:
-                return CharacterClassDescriptions.scientistActiveDescription;
-            case CharacterClassDescriptions.SOLDIER:
-                return CharacterClassDescriptions.soldierActiveDescription;
-            case CharacterClassDescriptions.QUIZ_MAGICIAN:
-                return CharacterClassDescriptions.quizMagicianActiveDescription;
-            case CharacterClassDescriptions.SURVIVOR:
-                return CharacterClassDescriptions.survivorActiveDescription;
-            case CharacterClassDescriptions.ANGRY_JIM:
-                return CharacterClassDescriptions.angryJimActiveDescription;
-            case CharacterClassDescriptions.GOBLIN:
-                return CharacterClassDescriptions.goblinActiveDescription;
-            case CharacterClassDescriptions.GAMBLER:
-                return CharacterClassDescriptions.gamblerActiveDescription;
-            case CharacterClassDescriptions.TROLL:
-                return CharacterClassDescriptions.trollActiveDescription;
-            default:
-                return CharacterClassDescriptions.noClassDescription;
-        }
-    }
-
-    protected String getClassPassiveDescription(String classChoice) {
-        if (classChoice == null) return "";
-        switch (classChoice) {
-            case CharacterClassDescriptions.ARCHER:
-                return CharacterClassDescriptions.archerPassiveDescription;
-            case CharacterClassDescriptions.WITCH:
-                return CharacterClassDescriptions.witchPassiveDescription;
-            case CharacterClassDescriptions.SCIENTIST:
-                return CharacterClassDescriptions.scientistPassiveDescription;
-            case CharacterClassDescriptions.SOLDIER:
-                return CharacterClassDescriptions.soldierPassiveDescription;
-            case CharacterClassDescriptions.QUIZ_MAGICIAN:
-                return CharacterClassDescriptions.quizMagicianPassiveDescription;
-            case CharacterClassDescriptions.SURVIVOR:
-                return CharacterClassDescriptions.survivorPassiveDescription;
-            case CharacterClassDescriptions.ANGRY_JIM:
-                return CharacterClassDescriptions.angryJimPassiveDescription;
-            case CharacterClassDescriptions.GOBLIN:
-                return CharacterClassDescriptions.goblinPassiveDescription;
-            case CharacterClassDescriptions.GAMBLER:
-                return CharacterClassDescriptions.gamblerPassiveDescription;
-            case CharacterClassDescriptions.TROLL:
-                return CharacterClassDescriptions.trollPassiveDescription;
-            default:
-                return "";
-        }
-    }
-
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Instructional overlay ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-    public void showInstructionDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
-        LayoutInflater inflater = getLayoutInflater();
-
-        View dialogView = inflater.inflate(R.layout.instruction_dialog, null);
-        ViewPager viewPager = dialogView.findViewById(R.id.viewpager);
-        ProgressBar progressBar = dialogView.findViewById(R.id.progress_bar);
-        Button btnNext = dialogView.findViewById(R.id.buttonNext);
-
-        // Generate instructional pages
-        List<Integer> layoutResIds = new ArrayList<>();
-        layoutResIds.add(R.layout.instruction_dialog_1); // Replace with your layout resource IDs
-        layoutResIds.add(R.layout.instruction_dialog_2); // Replace with your layout resource IDs
-        layoutResIds.add(R.layout.instruction_dialog_3); // Replace with your layout resource IDs
-        layoutResIds.add(R.layout.instruction_dialog_4); // Replace with your layout resource IDs
-
-        // Create adapter and set it to the ViewPager
-        InstructionalDialogPageAdapter adapter = new InstructionalDialogPageAdapter(layoutResIds);
-        viewPager.setAdapter(adapter);
-
-        // Setup progress bar
-        setupProgress(viewPager, progressBar, layoutResIds);
-
-        builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
-        setupButtonControls(btnNext, viewPager, dialog);
-        dialog.show();
-    }
-
-    public void setupProgress(ViewPager viewPager, ProgressBar progressBar, List<Integer> layoutResIds) {
-        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                progressBar.setMax(layoutResIds.size());
-                progressBar.setProgress(position + 1);
-            }
-        });
-        progressBar.setMax(layoutResIds.size());
-        progressBar.setProgress(1);
-    }
-
-    public void setupButtonControls(Button btnNext, ViewPager viewPager, AlertDialog dialog) {
-        btnUtils.setButtonWithoutEffects(btnNext, () -> {
-            int currentItem = viewPager.getCurrentItem();
-            if (currentItem < Objects.requireNonNull(viewPager.getAdapter()).getCount() - 1) {
-                viewPager.setCurrentItem(currentItem + 1, true);
-            } else {
-                dialog.dismiss();
-            }
-        });
     }
 
     public static class TextSizeCalculatorPlayerName {

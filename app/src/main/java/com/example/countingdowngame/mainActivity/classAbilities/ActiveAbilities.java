@@ -181,7 +181,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         int wildcardsLeft = randomPlayer.getWildCardAmount();
         String wildcardText = wildcardsLeft == 0 ? "no more wildcards" : (wildcardsLeft == 1 ? "1 wildcard left" : wildcardsLeft + " wildcards left");
 
-        activity.showClassAbilityDialog(GOBLIN + "'s Active: \n\n" + randomPlayer.getName() + " lost two wildcards.\n\n" + randomPlayer.getName() + " now has " + wildcardText + ".");
+        activity.mainActivityDialog.showClassAbilityDialog(GOBLIN + "'s Active: \n\n" + randomPlayer.getName() + " lost two wildcards.\n\n" + randomPlayer.getName() + " now has " + wildcardText + ".");
         currentPlayer.loseWildCards(1);
         markAbilityUsed(GOBLIN, currentPlayer);
         activity.renderPlayerUI(true);
@@ -192,7 +192,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     public static void handleAngryJimClass(Player currentPlayer) {
         Player randomPlayer = game.getRandomPlayerExcludingCurrent();
         game.updateRepeatingTurns(randomPlayer, 1);
-        activity.showClassAbilityDialog(ANGRY_JIM + "'s Active: \n\n" + randomPlayer.getName() + " must repeat their turn.");
+        activity.mainActivityDialog.showClassAbilityDialog(ANGRY_JIM + "'s Active: \n\n" + randomPlayer.getName() + " must repeat their turn.");
         markAbilityUsed(ANGRY_JIM, currentPlayer);
         AudioManager.getInstance().playSoundEffects(activity, ANGRY_JIM);
         hideAbilityButton();
@@ -209,7 +209,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
     public static void handleArcherClass(Player currentPlayer) {
         if (drinkNumberCounterInt >= 2) {
-            activity.showClassAbilityDialog(ARCHER + "'s Active: \n\n" + currentPlayer.getName() + " hand out two drinks!");
+            activity.mainActivityDialog.showClassAbilityDialog(ARCHER + "'s Active: \n\n" + currentPlayer.getName() + " hand out two drinks!");
             markAbilityUsed(ARCHER, currentPlayer);
             activity.updateDrinkNumberCounter(-2, true);
             AudioManager.getInstance().playSoundEffects(activity, ARCHER);
@@ -346,7 +346,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             String description = targets.size() == 1
                     ? targets.get(0).getName() + " failed! Take 4 drinks."
                     : "Both failed! " + targets.get(0).getName() + " and " + targets.get(1).getName() + " take 4 drinks.";
-            activity.showClassDialog("Troll's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
+            activity.mainActivityDialog.showClassDialog("Troll's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
         });
     }
 
@@ -355,10 +355,10 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         String description;
         if (winner != null && loser != null) {
             description = winner.getName() + " was safe! " + loser.getName() + " take 4 drinks.";
-            activity.showClassDialog("Troll's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
+            activity.mainActivityDialog.showClassDialog("Troll's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
         } else if (winner != null) {
             description = winner.getName() + " answered correctly! Safe!";
-            activity.showClassDialog("Troll's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
+            activity.mainActivityDialog.showClassDialog("Troll's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
         }
     }
 
@@ -476,14 +476,14 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
         if (userAnswer == -1) {
             description = "Time's up! The potion exploded. \n\n" + player.getName() + " take 2 drinks!";
-            activity.showClassDialog("Witch's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
+            activity.mainActivityDialog.showClassDialog("Witch's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
             player.incrementDrinksTakenByWitch(2);
             return;
         }
 
         if (userAnswer == correctAnswer) {
             description = "PERFECT! \n\n" + player.getName() + " is now immune to landing on 0 once!";
-            activity.showClassDialog("Witch's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
+            activity.mainActivityDialog.showClassDialog("Witch's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
             PowerUps.gainPowerUp(player, PowerUps.GET_OUT_OF_JAIL + ": Immune to landing on 0 once!");
             return;
         }
@@ -506,7 +506,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             player.incrementDrinksTakenByWitch(2);
         }
         
-        activity.showClassDialog("Witch's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
+        activity.mainActivityDialog.showClassDialog("Witch's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
 
     }
 
@@ -717,7 +717,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             description = "Fumbled the Spell (" + String.format("%.1f", similarity) + "%)! \n\n" + player.getName() + " take 2 drinks!";
             player.incrementDrinksTakenByWitch(2);
         }
-        activity.showClassDialog("Witch's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
+        activity.mainActivityDialog.showClassDialog("Witch's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
     }
 
     //-----------------------------------------------------Witch Memory---------------------------------------------------//
@@ -802,7 +802,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             description = "GODLIKE BREW! (Score: " + score + ")!\n\n" + currentPlayer.getName() + " is immune to landing on 0 once!";
             PowerUps.gainPowerUp(currentPlayer, PowerUps.GET_OUT_OF_JAIL + ": Immune to landing on 0 once!");
         }
-        activity.showClassDialog("Witch's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
+        activity.mainActivityDialog.showClassDialog("Witch's Active!", description, R.layout.game_use_class_ability_dialog_box, R.id.class_textview, R.id.description_textview, null);
     }
 
     private static void setupMemoryButtons(View[] buttons, List<Integer> sequence, List<Integer> playerSequence, int[] score, boolean[] playerTurn, TextView status, AlertDialog dialog, Player player) {

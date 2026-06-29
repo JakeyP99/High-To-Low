@@ -80,7 +80,7 @@ public class PassiveAbilities extends ButtonUtilsActivity {
 
         if (pendingPassiveMessages.size() == 1) {
             PassiveMessage pm = pendingPassiveMessages.get(0);
-            activity.showClassAbilityDialog(pm.className + "'s Passive:\n\n" + pm.message, () -> {
+            activity.mainActivityDialog.showClassAbilityDialog(pm.className + "'s Passive:\n\n" + pm.message, () -> {
                 pendingPassiveMessages.clear();
                 runPendingActions(onDone);
             });
@@ -108,7 +108,7 @@ public class PassiveAbilities extends ButtonUtilsActivity {
             }
         }
 
-        activity.showCombinedPassivesDialog(combined, () -> {
+        activity.mainActivityDialog.showCombinedPassivesDialog(combined, () -> {
             pendingPassiveMessages.clear();
             runPendingActions(onDone);
         });
@@ -150,7 +150,7 @@ public class PassiveAbilities extends ButtonUtilsActivity {
                 currentPlayer.setRemoved(true);
                 addPassiveAction(() -> game.removePlayer(currentPlayer));
             } else if (soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {
-                addPassiveMessage(SOLDIER,"Sorry " + currentPlayer.getName() + ", a soldier has already escaped the game.");
+                activity.mainActivityDialog.showGameDialog("Sorry " + currentPlayer.getName() + ", a soldier has already escaped the game.");
             }
         }
     }

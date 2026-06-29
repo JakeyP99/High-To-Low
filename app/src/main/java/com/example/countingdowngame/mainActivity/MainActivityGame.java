@@ -332,7 +332,7 @@ public class MainActivityGame extends SharedMainActivity {
             gotoHomeScreen();
         });
 
-        btnUtils.setButton(infoGif, this::showInstructionDialog);
+        btnUtils.setButton(infoGif, mainActivityDialog::showInstructionDialog);
     }
 
 
@@ -341,7 +341,7 @@ public class MainActivityGame extends SharedMainActivity {
     private void characterClassDescriptions() {
         Player currentPlayer = game.getCurrentPlayer();
         if (currentPlayer != null) {
-            characterClassInformationDialog(currentPlayer);
+            mainActivityDialog.characterClassInformationDialog(currentPlayer);
         }
     }
 
@@ -525,7 +525,7 @@ public class MainActivityGame extends SharedMainActivity {
                     break;
             }
             Log.d(TAG, "Catastrophe message: " + catastrophe.getMessage());
-            showDialog(catastrophe.getMessage(), R.layout.game_catastrophe_dialog_box, R.id.dialogbox_textview);
+            mainActivityDialog.showDialog(catastrophe.getMessage(), R.layout.game_catastrophe_dialog_box, R.id.dialogbox_textview);
             game.incrementCatastropheQuantity();
             catastropheTurnCounter = 0; // Reset the turn counter after reaching the limit
 
@@ -647,7 +647,7 @@ public class MainActivityGame extends SharedMainActivity {
         } else {
             String classChoice = availableClasses.get(0);
             labelAbilityTitle.setText(getClassActiveButtonText(classChoice));
-            labelAbilityDesc.setText(getClassActiveDescription(classChoice));
+            labelAbilityDesc.setText(mainActivityDialog.getClassActiveDescription(classChoice));
             iconAbility.setImageResource(playerChoiceComplimentary.getClassIcon(classChoice));
         }
 
@@ -928,130 +928,6 @@ public class MainActivityGame extends SharedMainActivity {
         }
     }
 
-    private final List<AlertDialog> dialogQueue = new ArrayList<>();
-
-    public void showDialog(String message, int layoutId, int textViewId) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
-        LayoutInflater inflater = getLayoutInflater();
-
-        View dialogView = inflater.inflate(layoutId, null);
-        TextView dialogBoxTextView = dialogView.findViewById(textViewId);
-
-        if (dialogBoxTextView != null) {
-            dialogBoxTextView.setText(message);
-        }
-
-        builder.setView(dialogView);
-        builder.setCancelable(true);
-
-        AlertDialog dialog = builder.create();
-        dialog.setCanceledOnTouchOutside(true);
-
-        dialog.setOnDismissListener(d -> {
-            dialogQueue.remove(dialog);
-
-            if (!dialogQueue.isEmpty()) {
-                dialogQueue.get(0).show();
-            }
-        });
-
-        dialogQueue.add(dialog);
-        if (dialogQueue.size() == 1) {
-            dialog.show();
-        }
-    }
-
-
-    public void showCombinedPassivesDialog(CharSequence content, Runnable onDismiss) {
-        showClassDialog(
-                "Messages:",
-                content,
-                R.layout.game_combined_passives_dialog,
-                R.id.title_textview,
-                R.id.content_textview,
-                onDismiss
-        );
-    }
-
-    public void showClassDialog(String title, CharSequence description, int layoutId,
-                                int classTextViewId, int descriptionTextViewId,
-                                Runnable onDismiss) {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
-        LayoutInflater inflater = getLayoutInflater();
-
-        View dialogView = inflater.inflate(layoutId, null);
-
-        TextView classTextView = dialogView.findViewById(classTextViewId);
-        TextView descriptionTextView = dialogView.findViewById(descriptionTextViewId);
-
-        if (classTextView != null) {
-            classTextView.setText(title);
-        }
-
-        if (descriptionTextView != null) {
-            descriptionTextView.setText(description);
-        }
-
-
-        builder.setView(dialogView);
-        builder.setCancelable(true);
-
-        AlertDialog dialog = builder.create();
-
-        dialog.setCanceledOnTouchOutside(true);
-
-        dialog.setOnDismissListener(d -> {
-            dialogQueue.remove(dialog);
-
-            if (!dialogQueue.isEmpty()) {
-                dialogQueue.get(0).show();
-            }
-
-            if (onDismiss != null) {
-                onDismiss.run();
-            }
-        });
-
-        Log.d(TAG, "showDialog: " + title);
-        Log.d(TAG, "dialogQueue: " + dialogQueue.size());
-
-        dialogQueue.add(dialog);
-        if (dialogQueue.size() == 1) {
-            dialog.show();
-        }
-    }
-
-
-
-    public void showClassAbilityDialog(String message) {
-        showClassAbilityDialog(message, null);
-    }
-
-    public void showClassAbilityDialog(String message, Runnable onDismiss) {
-
-        String title = "";
-        String description = "";
-
-        if (message.contains("\n\n")) {
-            title = message.substring(0, message.indexOf("\n\n"));
-            description = message.substring(message.indexOf("\n\n") + 2);
-        } else {
-            title = message;
-        }
-
-
-        showClassDialog(
-                title,
-                description,
-                R.layout.game_use_class_ability_dialog_box,
-                R.id.class_textview,
-                R.id.description_textview,
-                onDismiss
-        );
-    }
-    
-
     public void awardRandomClass(Player player) {
         String[] allPossibleClasses = {
                 CharacterClassDescriptions.ANGRY_JIM, CharacterClassDescriptions.ARCHER, CharacterClassDescriptions.GAMBLER, CharacterClassDescriptions.GOBLIN, CharacterClassDescriptions.QUIZ_MAGICIAN,
@@ -1080,7 +956,7 @@ public class MainActivityGame extends SharedMainActivity {
         player.setJustUsedActiveAbility(false);
         AbilityComplimentary.assignActiveAbilityCooldown(player);
 
-        showClassAbilityDialog("Class Obtained \n\n" + player.getName() + " obtained the " + chosenClass + " Class!");
+        mainActivityDialog.showClassAbilityDialog("Class Obtained \n\n" + player.getName() + " obtained the " + chosenClass + " Class!");
     }
 
     public void halveCurrentNumber() {
