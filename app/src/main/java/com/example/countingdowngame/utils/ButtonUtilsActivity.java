@@ -73,6 +73,16 @@ public abstract class ButtonUtilsActivity extends AppCompatActivity {
         startActivity(getIntentForClass(Statistics.class));
     }
 
+    public void gotoGame(int startingNumber) {
+        Intent i = new Intent(this, com.example.countingdowngame.mainActivity.MainActivityGame.class);
+        i.putExtra("startingNumber", startingNumber);
+        startActivity(i);
+    }
+
+    public void gotoSettings() {
+        startActivity(getIntentForClass(SettingsMenu.class));
+    }
+
     public void goToInGameSettings(int startingNumber) {
         Intent i = getIntentForClass(SettingsMenu.class);
         i.putExtra("startingNumber", startingNumber);

@@ -62,7 +62,7 @@ public class HomeScreen extends playerChoiceComplimentary {
         setGameButton(R.id.quickplay, false);
         setGameButton(R.id.playCards, true);
 
-        buttonUtils.setButton(findViewById(R.id.btn_classes), this::browseClasses);
+        buttonUtils.setButton(findViewById(R.id.btn_settings), this::gotoSettings);
         buttonUtils.setButton(findViewById(R.id.button_Statistics), this::gotoStatistics);
         buttonUtils.setButton(infoGif, this::gotoInstructions);
     }

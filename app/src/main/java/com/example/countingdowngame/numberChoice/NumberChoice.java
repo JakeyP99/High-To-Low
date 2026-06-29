@@ -148,7 +148,7 @@ public class NumberChoice extends ButtonUtilsActivity {
                     if (Game.getInstance().isPlayCards()) {
                         goToCardGame(startingNumber);
                     } else {
-                        goToInGameSettings(startingNumber);
+                        gotoGame(startingNumber);
                     }
                 })
                 .playOn(originalNumberField);
