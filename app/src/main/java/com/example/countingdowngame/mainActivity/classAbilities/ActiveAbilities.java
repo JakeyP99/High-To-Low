@@ -151,7 +151,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
     public static void handleQuizMagicianClass(Player currentPlayer) {
         markAbilityUsed(QUIZ_MAGICIAN, currentPlayer);
-        currentPlayer.setJustUsedActiveAbility(true);
+        activity.startQuizMagicianActiveSession();
         AudioManager.getInstance().playSoundEffects(activity, QUIZ_MAGICIAN);
         hideAbilityButton();
     }

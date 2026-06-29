@@ -42,6 +42,7 @@ public class PassiveAbilities extends ButtonUtilsActivity {
 
     private static Player hidingTroll = null;
     private static final List<Player> playersWhoPaidToll = new ArrayList<>();
+    private static boolean goblinTriggeredThisTurn = false;
 
     private static class PassiveMessage {
         String className;
@@ -63,6 +64,7 @@ public class PassiveAbilities extends ButtonUtilsActivity {
         gamblerBet = "";
         hidingTroll = null;
         playersWhoPaidToll.clear();
+        goblinTriggeredThisTurn = false;
     }
 
     private static void addPassiveMessage(String className, String message) {
@@ -166,7 +168,16 @@ public class PassiveAbilities extends ButtonUtilsActivity {
         addPassiveMessage(SURVIVOR, currentPlayer.getName() + " survived, hand out " + drinkNumberCounterInt + " " + drinksText);
     }
 
+    public static void resetGoblinTrigger() {
+        goblinTriggeredThisTurn = false;
+    }
+
     public static void checkGoblinPassive(Player wildcardUser, Runnable onDone) {
+        if (goblinTriggeredThisTurn) {
+            onDone.run();
+            return;
+        }
+
         boolean wildcardUserHasGoblinPassive = wildcardUser.getClassChoices().contains(GOBLIN) ||
                 (wildcardUser.getClassChoices().contains(ANGRY_JIM) && game.getCurrentNumber() < 50);
 
@@ -181,6 +192,7 @@ public class PassiveAbilities extends ButtonUtilsActivity {
 
             if (hasGoblinPassive && !player.equals(wildcardUser)) {
                 addPassiveMessage(GOBLIN, "Drink once for using a wildcard!");
+                goblinTriggeredThisTurn = true;
                 break;
             }
         }

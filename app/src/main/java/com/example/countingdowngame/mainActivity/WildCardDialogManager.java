@@ -232,12 +232,15 @@ public class WildCardDialogManager {
 
         if (correct) {
             boolean isMagician = QUIZ_MAGICIAN.equals(player.getClassChoice());
+            boolean isMagicianActive = isMagician && activity.isQuizActiveAbilitySession();
 
             msg = player.getName() + " that's right! The answer was "
                     + card.getAnswer()
-                    + (isMagician
+                    + (isMagicianActive
+                    ? "\n\n Let's continue!"
+                    : (isMagician
                     ? "\n\n You get to give out 2 drinks to everyone."
-                    : "\n\n You get to give out a drink.");
+                    : "\n\n You get to give out a drink."));
         } else {
             msg = player.getName()
                     + " big ooooff! The answer actually was "
@@ -282,11 +285,18 @@ public class WildCardDialogManager {
 
         if (correct) {
             boolean isMagician = QUIZ_MAGICIAN.equals(player.getClassChoice());
+            boolean isMagicianActive = isMagician && activity.isQuizActiveAbilitySession();
+            
             Game.getInstance().incrementPlayerQuizCorrectAnswers(player);
-            ui.text.setText(player.getName()
-                    + (isMagician
-                    ? "\n\n You get to give out 2 drinks to everyone."
-                    : "\n\n You get to give out a drink."));
+            
+            if (isMagicianActive) {
+                ui.text.setText(player.getName() + "\n\n Keep the streak going!");
+            } else {
+                ui.text.setText(player.getName()
+                        + (isMagician
+                        ? "\n\n You get to give out 2 drinks to everyone."
+                        : "\n\n You get to give out a drink."));
+            }
         } else {
             Game.getInstance().incrementPlayerQuizIncorrectAnswers(player);
             ui.text.setText(player.getName()

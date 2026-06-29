@@ -27,7 +27,7 @@ public class CharacterClassDescriptions {
             "If the number is 10 or less, add 4 drinks. You must generate twice.";
 
     public static final String quizMagicianActiveDescription =
-            "The next wildcard becomes 2 quiz questions.";
+            "Start a quiz streak challenge! Answer correctly to keep going (up to 5 questions). More correct answers = more drinks handed out!";
 
     public static final String survivorActiveDescription =
             "Halve the current number and continue your turn. Resets after 3 turns.";
@@ -52,7 +52,7 @@ public class CharacterClassDescriptions {
     public static final String witchActiveButtonText = "Throw a potion";
     public static final String scientistActiveButtonText = "Change current number";
     public static final String soldierActiveButtonText = "Add 4 drinks";
-    public static final String quizMagicianActiveButtonText = "Next wildcard is 2 quizzes";
+    public static final String quizMagicianActiveButtonText = "Quiz Streak Challenge";
     public static final String survivorActiveButtonText = "Halve current number";
     public static final String angryJimActiveButtonText = "Force turn repeat";
     public static final String gamblerActiveButtonText = "Gamble";

@@ -13,6 +13,7 @@ import static com.example.countingdowngame.mainActivity.MainActivityLogging.logS
 import static com.example.countingdowngame.mainActivity.classAbilities.ActiveAbilities.updateClassAbilityButton;
 import static com.example.countingdowngame.mainActivity.classAbilities.PassiveAbilities.characterPassiveClassAffects;
 
+import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -81,6 +82,9 @@ public class MainActivityGame extends SharedMainActivity {
     private boolean doubleBackToExitPressedOnce = false;
     private boolean wasQuizCorrect = false;
     private WildCardDialogManager wildCardDialogManager;
+    private int quizActiveQuestionsCount = 0;
+    private int quizActiveCorrectCount = 0;
+    private boolean isQuizActiveAbilitySession = false;
     //-----------------------------------------------------Array---------------------------------------------------//
     private MainActivityCatastrophes catastrophesManager;
     private MainActivityNumberGenerator numberGenerator;
@@ -342,6 +346,10 @@ public class MainActivityGame extends SharedMainActivity {
             activePlayer.setUsedActiveAbility(false);
             characterPassiveClassAffects();
             PassiveAbilities.showCombinedPassives();
+            PassiveAbilities.resetGoblinTrigger();
+            isQuizActiveAbilitySession = false;
+            quizActiveQuestionsCount = 0;
+            quizActiveCorrectCount = 0;
             updateTurnCounter();
             updateCatastropheTurnCounter();
         }
@@ -660,7 +668,7 @@ public class MainActivityGame extends SharedMainActivity {
     private WildCardProperties[] selectWildCardType(Player currentPlayer, WildCardProperties[] quizWildCards, WildCardProperties[] taskWildCards, WildCardProperties[] truthWildCards) {
         GeneralSettingsLocalStore settings = GeneralSettingsLocalStore.fromContext(this);
 
-        if (QUIZ_MAGICIAN.equals(currentPlayer.getClassChoice()) && currentPlayer.getJustUsedActiveAbility()) {
+        if (QUIZ_MAGICIAN.equals(currentPlayer.getClassChoice()) && isQuizActiveAbilitySession) {
             return quizWildCards.length > 0 ? quizWildCards : null;
         }
 
@@ -688,6 +696,36 @@ public class MainActivityGame extends SharedMainActivity {
         this.wasQuizCorrect = correct;
     }
 
+    public boolean isQuizActiveAbilitySession() {
+        return isQuizActiveAbilitySession;
+    }
+
+    public void startQuizMagicianActiveSession() {
+        isQuizActiveAbilitySession = true;
+        quizActiveQuestionsCount = 0;
+        quizActiveCorrectCount = 0;
+        wildCardActivate();
+    }
+
+    private void finalizeQuizMagicianActive() {
+        isQuizActiveAbilitySession = false;
+        Player currentPlayer = game.getCurrentPlayer();
+
+        if (quizActiveCorrectCount > 0) {
+            int drinksToHandOut = calculateQuizMagicianDrinks(quizActiveCorrectCount);
+            String drinkText = (drinksToHandOut == 1) ? "drink" : "drinks";
+            String message = "Streak Over! \n\n" + currentPlayer.getName() + " got " + quizActiveCorrectCount + " correct!\n\nHand out " + drinksToHandOut + " " + drinkText + " to everyone!";
+            mainActivityDialog.showMainDialog(message, this::wildCardContinue);
+            updateDrinkNumberCounter(drinksToHandOut, true);
+        } else {
+            mainActivityDialog.showMainDialog("Streak Over! \n\n" + currentPlayer.getName() + " got none correct. \n\nTake a drink!", this::wildCardContinue);
+        }
+    }
+
+    private int calculateQuizMagicianDrinks(int correct) {
+        return correct;
+    }
+
     public void handleSelectedCard(WildCardProperties selectedCard, String wildCardType) {
         if (selectedCard == null) return;
 
@@ -702,13 +740,19 @@ public class MainActivityGame extends SharedMainActivity {
     private void wildCardContinue() {
         Player currentPlayer = game.getCurrentPlayer();
 
-        // Special case: Quiz Magician Active Ability allows for another activation
-        if (QUIZ_MAGICIAN.equals(currentPlayer.getClassChoice()) && currentPlayer.getJustUsedActiveAbility()) {
-            wildCardActivate();
-            currentPlayer.gainWildCards(1);
-            currentPlayer.setUsedActiveAbility(true);
-            currentPlayer.setJustUsedActiveAbility(false);
-            return;
+        if (isQuizActiveAbilitySession) {
+            quizActiveQuestionsCount++;
+            if (wasQuizCorrect) {
+                quizActiveCorrectCount++;
+            }
+
+            if (quizActiveQuestionsCount < 5 && wasQuizCorrect) {
+                wildCardActivate();
+                return;
+            } else {
+                finalizeQuizMagicianActive();
+                return;
+            }
         }
 
         // Logic for ending the turn and potentially awarding a power-up

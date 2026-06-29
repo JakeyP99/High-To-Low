@@ -16,9 +16,9 @@
     <application
         android:name=".MainApplication"
         android:allowBackup="true"
-        android:icon="@drawable/wine"
+        android:icon="@drawable/tequila"
         android:label="High To Low"
-        android:roundIcon="@drawable/wine"
+        android:roundIcon="@drawable/tequila"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
