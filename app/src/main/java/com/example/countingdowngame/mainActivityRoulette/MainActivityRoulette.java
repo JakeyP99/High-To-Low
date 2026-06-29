@@ -211,8 +211,9 @@ public class MainActivityRoulette extends SharedMainActivity {
             AudioManager.getInstance().playBlank(this);
             int bulletsLeft = player.getBulletsInChamberList().size() - 1;
             String bulletsText = (bulletsLeft == 1) ? "bullet" : "bullets";
-            mainActivityDialog.showClassAbilityDialog("Safe!: \n\n" + player.getName() + " dodged a bullet... Literally!\n\nYou have " + bulletsLeft + " " + bulletsText + " left!");
-        } updateChamber(player);
+            mainActivityDialog.showMainDialog("Safe! \n\n" + player.getName() + " dodged a bullet... Literally!\n\nYou have " + bulletsLeft + " " + bulletsText + " left!", this::handlePostDialogActions);
+        }
+        updateChamber(player);
     }
 
     // Logs player details for debugging
@@ -233,7 +234,7 @@ public class MainActivityRoulette extends SharedMainActivity {
         player.setRemoved(true);
         AudioManager.getInstance().playGunshot(this);
         removedPlayerCount++;
-        mainActivityDialog.showDialog(player.getName() + " died! Whoopsie :(", R.layout.game_roulette_death_dialog_box, R.id.dialogbox_textview, this::handlePostDialogActions);
+        mainActivityDialog.showMainDialog("Eliminated! \n\n" + player.getName() + " died! Whoopsie :(", this::handlePostDialogActions);
     }
 
     // Updates the chamber list and index

@@ -85,7 +85,7 @@ public class PassiveAbilities extends ButtonUtilsActivity {
 
         if (pendingPassiveMessages.size() == 1) {
             PassiveMessage pm = pendingPassiveMessages.get(0);
-            activity.mainActivityDialog.showClassAbilityDialog(pm.className + "'s Passive:\n\n" + pm.message, () -> {
+            activity.mainActivityDialog.showMainDialog(pm.className + "'s Passive:\n\n" + pm.message, () -> {
                 pendingPassiveMessages.clear();
                 runPendingActions(onDone);
             });

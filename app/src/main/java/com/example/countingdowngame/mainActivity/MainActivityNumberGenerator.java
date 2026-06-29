@@ -23,6 +23,7 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.game.Game;
+import com.example.countingdowngame.mainActivity.classAbilities.ActiveAbilities;
 import com.example.countingdowngame.player.Player;
 
 import java.util.ArrayList;
@@ -284,7 +285,7 @@ public class MainActivityNumberGenerator {
         int customYellow = ContextCompat.getColor(activity, R.color.custom_yellow);
         numberCounterText.setTextColor(customYellow);
 
-        activity.awardRandomClass(player);
+        ActiveAbilities.awardRandomClass(player);
         finalizeTurn(targetNumber);
         // Clear markers so it's only awarded once
         Game.getInstance().getClassNumbers().remove(Integer.valueOf(targetNumber));

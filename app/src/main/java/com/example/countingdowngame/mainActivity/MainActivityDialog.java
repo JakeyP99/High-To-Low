@@ -86,7 +86,7 @@ public class MainActivityDialog {
     }
 
     public void showCombinedPassivesDialog(CharSequence content, Runnable onDismiss) {
-        showClassDialog(
+        showDialog(
                 "Messages:",
                 content,
                 R.layout.game_combined_passives_dialog,
@@ -96,9 +96,9 @@ public class MainActivityDialog {
         );
     }
 
-    public void showClassDialog(String title, CharSequence description, int layoutId,
-                                int classTextViewId, int descriptionTextViewId,
-                                Runnable onDismiss) {
+    public void showDialog(String title, CharSequence description, int layoutId,
+                           int classTextViewId, int descriptionTextViewId,
+                           Runnable onDismiss) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = activity.getLayoutInflater();
@@ -145,11 +145,11 @@ public class MainActivityDialog {
         }
     }
 
-    public void showClassAbilityDialog(String message) {
-        showClassAbilityDialog(message, null);
+    public void showMainDialog(String message) {
+        showMainDialog(message, null);
     }
 
-    public void showClassAbilityDialog(String message, Runnable onDismiss) {
+    public void showMainDialog(String message, Runnable onDismiss) {
 
         String title;
         String description = "";
@@ -161,10 +161,10 @@ public class MainActivityDialog {
             title = message;
         }
 
-        showClassDialog(
+        showDialog(
                 title,
                 description,
-                R.layout.game_use_class_ability_dialog_box,
+                R.layout.game_main_dialog,
                 R.id.class_textview,
                 R.id.description_textview,
                 onDismiss
