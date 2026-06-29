@@ -1,16 +1,23 @@
 package com.example.countingdowngame.mainActivity;
 
 import android.app.AlertDialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -169,6 +176,96 @@ public class MainActivityDialog {
                 R.id.description_textview,
                 onDismiss
         );
+    }
+
+    public void showOpponentDialog(String title, List<Player> opponents, OpponentAdapter.OnClick listener) {
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.game_grid_selection_dialog, null);
+        TextView titleTextView = dialogView.findViewById(R.id.title_text_view);
+        titleTextView.setText(title);
+
+        RecyclerView recyclerView = dialogView.findViewById(R.id.listViewOpponents);
+
+        AlertDialog dialog = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme)
+                .setView(dialogView)
+                .setCancelable(false)
+                .create();
+
+        recyclerView.setLayoutManager(new GridLayoutManager(activity, 3));
+
+        OpponentAdapter adapter = new OpponentAdapter(opponents, player -> {
+            dialog.dismiss();
+            listener.onClick(player);
+        });
+
+        recyclerView.setAdapter(adapter);
+
+        dialogView.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+    }
+
+    public static class OpponentAdapter extends RecyclerView.Adapter<OpponentAdapter.VH> {
+        private final List<Player> opponents;
+        private final OnClick listener;
+
+        public OpponentAdapter(List<Player> opponents, OnClick listener) {
+            this.opponents = opponents;
+            this.listener = listener;
+        }
+
+        @NonNull
+        @Override
+        public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.game_gambler_player_choice_adaptor, parent, false);
+            return new VH(v);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull VH h, int position) {
+            Player p = opponents.get(position);
+            h.name.setText(p.getName());
+            h.name.postDelayed(() -> h.name.setSelected(true), 1000);
+
+            if (p.getClassChoices().isEmpty()) {
+                h.clazz.setVisibility(View.GONE);
+            } else {
+                h.clazz.setText(p.getClassChoice());
+            }
+
+            if (p.getPhoto() != null && !p.getPhoto().isEmpty()) {
+                byte[] decoded = Base64.decode(p.getPhoto(), Base64.DEFAULT);
+                Bitmap bmp = BitmapFactory.decodeByteArray(decoded, 0, decoded.length);
+                h.photo.setImageBitmap(bmp);
+            } else {
+                h.photo.setImageResource(R.drawable.wine);
+            }
+            h.itemView.setOnClickListener(v -> {
+                h.name.setSelected(false);
+                listener.onClick(p);
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return opponents.size();
+        }
+
+        public interface OnClick {
+            void onClick(Player player);
+        }
+
+        public static class VH extends RecyclerView.ViewHolder {
+            public ImageView photo;
+            public TextView name, clazz;
+
+            public VH(View v) {
+                super(v);
+                photo = v.findViewById(R.id.playerPhotoImageView);
+                name = v.findViewById(R.id.playerNameTextView);
+                clazz = v.findViewById(R.id.playerClassTextView);
+            }
+        }
     }
 
     public void characterClassInformationDialog(Player player) {

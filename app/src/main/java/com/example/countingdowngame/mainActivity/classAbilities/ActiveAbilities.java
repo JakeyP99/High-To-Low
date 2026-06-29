@@ -40,8 +40,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.countingdowngame.R;
@@ -911,31 +909,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     }
 
     private static void showOpponentDialog(List<Player> opponents) {
-
-        LayoutInflater inflater = activity.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.game_grid_selection_dialog, null);
-        TextView titleTextView = dialogView.findViewById(R.id.title_text_view);
-        titleTextView.setText("Gambler's Active:");
-
-        RecyclerView recyclerView = dialogView.findViewById(R.id.listViewOpponents);
-
-        AlertDialog dialog = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme)
-                .setView(dialogView)
-                .setCancelable(false)
-                .create();
-
-        recyclerView.setLayoutManager(new GridLayoutManager(activity, 3));
-
-        OpponentAdapter adapter = new OpponentAdapter(opponents, player -> {
-            dialog.dismiss();
-            showBetDialog(player);
-        });
-
-        recyclerView.setAdapter(adapter);
-
-        dialogView.setOnClickListener(v -> dialog.dismiss());
-
-        dialog.show();
+        activity.mainActivityDialog.showOpponentDialog("Gambler's Active:", opponents, ActiveAbilities::showBetDialog);
     }
 
     private static void showBetDialog(Player opponent) {
@@ -1521,63 +1495,4 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         if (value == 13) return "K";
         return "A";
     }
-
-    public static class OpponentAdapter extends RecyclerView.Adapter<OpponentAdapter.VH> {
-        private final List<Player> opponents;
-        private final OnClick listener;
-
-        public OpponentAdapter(List<Player> opponents, OnClick listener) {
-            this.opponents = opponents;
-            this.listener = listener;
-        }
-
-        @NonNull
-        @Override
-        public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.game_gambler_player_choice_adaptor, parent, false);
-            return new VH(v);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull VH h, int position) {
-            Player p = opponents.get(position);
-            h.name.setText(p.getName());
-            h.name.postDelayed(() -> h.name.setSelected(true), 1000);
-            h.clazz.setText(p.getClassChoice());
-            if (p.getPhoto() != null && !p.getPhoto().isEmpty()) {
-                byte[] decoded = Base64.decode(p.getPhoto(), Base64.DEFAULT);
-                Bitmap bmp = BitmapFactory.decodeByteArray(decoded, 0, decoded.length);
-                h.photo.setImageBitmap(bmp);
-            } else {
-                h.photo.setImageResource(R.drawable.wine);
-            }
-            h.itemView.setOnClickListener(v -> {
-                h.name.setSelected(false);
-                listener.onClick(p);
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return opponents.size();
-        }
-
-        public interface OnClick {
-            void onClick(Player player);
-        }
-
-        static class VH extends RecyclerView.ViewHolder {
-            ImageView photo;
-            TextView name, clazz;
-
-            VH(View v) {
-                super(v);
-                photo = v.findViewById(R.id.playerPhotoImageView);
-                name = v.findViewById(R.id.playerNameTextView);
-                clazz = v.findViewById(R.id.playerClassTextView);
-            }
-        }
-    }
-
-
 }

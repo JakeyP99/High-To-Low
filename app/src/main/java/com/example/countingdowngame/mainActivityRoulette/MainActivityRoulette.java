@@ -1,29 +1,14 @@
 package com.example.countingdowngame.mainActivityRoulette;
 
 import static android.content.ContentValues.TAG;
-import static android.view.View.GONE;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Base64;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.countingdowngame.R;
 import com.example.countingdowngame.audio.AudioManager;
@@ -129,92 +114,7 @@ public class MainActivityRoulette extends SharedMainActivity {
                 .filter(p -> !p.isRemoved())
                 .collect(Collectors.toList());
 
-        showOpponentDialog(opponents);
-    }
-
-    private void showOpponentDialog(List<Player> opponents) {
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.game_grid_selection_dialog, null);
-        TextView titleTextView = dialogView.findViewById(R.id.title_text_view);
-
-        titleTextView.setText("Bullshit:");
-        RecyclerView recyclerView = dialogView.findViewById(R.id.listViewOpponents);
-
-        AlertDialog dialog = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme)
-                .setView(dialogView)
-                .setCancelable(false)
-                .create();
-
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
-
-        OpponentAdapter adapter = new OpponentAdapter(opponents, player -> {
-            dialog.dismiss();
-            onPlayerViewClicked(player);
-        });
-
-        recyclerView.setAdapter(adapter);
-
-        dialogView.setOnClickListener(v -> dialog.dismiss());
-
-        dialog.show();
-    }
-
-    public static class OpponentAdapter extends RecyclerView.Adapter<OpponentAdapter.VH> {
-        private final List<Player> opponents;
-        private final OnClick listener;
-
-        public OpponentAdapter(List<Player> opponents, OnClick listener) {
-            this.opponents = opponents;
-            this.listener = listener;
-        }
-
-        @NonNull
-        @Override
-        public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.game_gambler_player_choice_adaptor, parent, false);
-            return new VH(v);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull VH h, int position) {
-            Player p = opponents.get(position);
-            h.name.setText(p.getName());
-            h.name.postDelayed(() -> h.name.setSelected(true), 1000);
-            h.clazz.setVisibility(GONE);
-
-            if (p.getPhoto() != null && !p.getPhoto().isEmpty()) {
-                byte[] decoded = Base64.decode(p.getPhoto(), Base64.DEFAULT);
-                Bitmap bmp = BitmapFactory.decodeByteArray(decoded, 0, decoded.length);
-                h.photo.setImageBitmap(bmp);
-            } else {
-                h.photo.setImageResource(R.drawable.wine);
-            }
-            h.itemView.setOnClickListener(v -> {
-                h.name.setSelected(false);
-                listener.onClick(p);
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return opponents.size();
-        }
-
-        public interface OnClick {
-            void onClick(Player player);
-        }
-
-        public static class VH extends RecyclerView.ViewHolder {
-            public ImageView photo;
-            public TextView name, clazz;
-
-            public VH(View v) {
-                super(v);
-                photo = v.findViewById(R.id.playerPhotoImageView);
-                name = v.findViewById(R.id.playerNameTextView);
-                clazz = v.findViewById(R.id.playerClassTextView);
-            }
-        }
+        mainActivityDialog.showOpponentDialog("Bullshit:", opponents, this::onPlayerViewClicked);
     }
 
     private void onPlayerViewClicked(Player player) {
@@ -254,7 +154,15 @@ public class MainActivityRoulette extends SharedMainActivity {
         player.setRemoved(true);
         AudioManager.getInstance().playGunshot(this);
         removedPlayerCount++;
-        mainActivityDialog.showMainDialog("Eliminated! \n\n" + player.getName() + " died! Whoopsie :(", this::handlePostDialogActions);
+
+        mainActivityDialog.showDialog(
+                "Eliminated!",
+                player.getName() + " died! Whoopsie :(",
+                R.layout.game_catastrophe_dialog_box,
+                R.id.catastrophe_dialogbox_textview,
+                R.id.dialogbox_textview,
+                this::handlePostDialogActions
+        );
     }
 
     // Updates the chamber list and index
