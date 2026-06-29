@@ -5,7 +5,6 @@ import static com.example.countingdowngame.wildCards.wildCardTypes.WildCardData.
 import static com.example.countingdowngame.wildCards.wildCardTypes.WildCardData.TRUTH_WILD_CARDS;
 
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,7 +16,6 @@ import android.widget.EditText;
 import androidx.activity.OnBackPressedCallback;
 
 import com.example.countingdowngame.R;
-import com.example.countingdowngame.mainActivity.MainActivityGame;
 import com.example.countingdowngame.utils.ButtonUtilsActivity;
 import com.example.countingdowngame.wildCards.WildCardProperties;
 
@@ -27,7 +25,6 @@ public class SettingsMenu extends ButtonUtilsActivity {
 
     private GifImageView muteGif, soundGif;
     private View btnLimits, btnQuiz, btnContent, btnEvents;
-    private Button btnSave;
 
     @Override
     protected void onResume() {
@@ -61,7 +58,6 @@ public class SettingsMenu extends ButtonUtilsActivity {
         btnQuiz = findViewById(R.id.btn_setting_quiz);
         btnContent = findViewById(R.id.btn_setting_content);
         btnEvents = findViewById(R.id.btn_setting_events);
-        btnSave = findViewById(R.id.btnContinueToGame);
     }
 
     private void setButtonListeners() {
@@ -69,7 +65,6 @@ public class SettingsMenu extends ButtonUtilsActivity {
         btnUtils.setButton(btnQuiz, this::showQuizDialog);
         btnUtils.setButton(btnContent, this::showContentDialog);
         btnUtils.setButton(btnEvents, this::showEventsDialog);
-        btnUtils.setButton(btnSave, this::saveAndContinue);
     }
 
     // ---------------- POPUP DIALOGS ----------------
@@ -210,12 +205,5 @@ public class SettingsMenu extends ButtonUtilsActivity {
                 }
             }
         });
-    }
-
-    private void saveAndContinue() {
-        int startingNumber = getIntent().getIntExtra("startingNumber", 0);
-        Intent intent = new Intent(this, MainActivityGame.class);
-        intent.putExtra("startingNumber", startingNumber);
-        startActivity(intent);
     }
 }
