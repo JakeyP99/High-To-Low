@@ -17,10 +17,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/viga"
-            android:text="API Connection"
+            android:text="Reset Everything?"
             android:textColor="@color/bluedark"
             android:textSize="30sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textAlignment="center"/>
 
         <View
             android:layout_width="match_parent"
@@ -30,24 +31,36 @@
             android:background="@color/bluedark" />
 
         <TextView
-            android:id="@+id/api_status_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/viga"
-            android:text="Press test to check connection"
+            android:text="This will revert all general and wildcards settings to their original state.\n\nThis cannot be undone."
             android:textColor="@color/bluedark"
             android:textSize="20sp"
             android:layout_marginTop="8dp"
+            android:alpha="0.8"
             android:textAlignment="center"/>
 
         <Button
-            android:id="@+id/button_test_api"
+            android:id="@+id/button_confirm_reset"
             android:layout_width="240dp"
             android:layout_height="65dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="24dp"
             android:background="@drawable/button_selector"
             android:fontFamily="@font/viga"
-            android:text="Test Connection"
+            android:text="Reset All"
+            android:textAllCaps="false"
+            android:textColor="#FF5252"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/button_cancel_reset"
+            android:layout_width="240dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/button_selector"
+            android:fontFamily="@font/viga"
+            android:text="Cancel"
             android:textAllCaps="false"
             android:textColor="@color/bluedark"
             android:textSize="20sp" />

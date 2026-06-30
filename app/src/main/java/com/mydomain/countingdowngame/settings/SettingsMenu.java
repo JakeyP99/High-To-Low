@@ -27,7 +27,7 @@ import retrofit2.Response;
 public class SettingsMenu extends ButtonUtilsActivity {
 
     private GifImageView muteGif, soundGif;
-    private View btnLimits, btnQuiz, btnContent, btnEvents, btnApi;
+    private View btnLimits, btnQuiz, btnContent, btnEvents, btnApi, btnReset;
 
     @Override
     protected void onResume() {
@@ -62,6 +62,7 @@ public class SettingsMenu extends ButtonUtilsActivity {
         btnContent = findViewById(R.id.btn_setting_content);
         btnEvents = findViewById(R.id.btn_setting_events);
         btnApi = findViewById(R.id.btn_setting_api);
+        btnReset = findViewById(R.id.btn_setting_reset);
     }
 
     private void setButtonListeners() {
@@ -70,6 +71,7 @@ public class SettingsMenu extends ButtonUtilsActivity {
         btnUtils.setButton(btnContent, this::showContentDialog);
         btnUtils.setButton(btnEvents, this::showEventsDialog);
         btnUtils.setButton(btnApi, this::showApiDialog);
+        btnUtils.setButton(btnReset, this::showResetDialog);
     }
 
     // ---------------- POPUP DIALOGS ----------------
@@ -201,6 +203,28 @@ public class SettingsMenu extends ButtonUtilsActivity {
         });
 
         createDialog(v).show();
+    }
+
+    private void showResetDialog() {
+        View v = inflate(R.layout.game_settings_reset_dialog);
+        Button btnConfirm = v.findViewById(R.id.button_confirm_reset);
+        Button btnCancel = v.findViewById(R.id.button_cancel_reset);
+
+        AlertDialog dialog = createDialog(v);
+
+        btnConfirm.setOnClickListener(view -> {
+            GeneralSettingsLocalStore.fromContext(this).clear();
+            WildCardSettingsLocalStore.fromContext(this, "QuizPrefs").clear();
+            WildCardSettingsLocalStore.fromContext(this, "TaskPrefs").clear();
+            WildCardSettingsLocalStore.fromContext(this, "TruthPrefs").clear();
+            io.github.muddz.styleabletoast.StyleableToast.makeText(this, "All settings reset to default!", R.style.newToast).show();
+            dialog.dismiss();
+            recreate();
+        });
+
+        btnCancel.setOnClickListener(view -> dialog.dismiss());
+
+        dialog.show();
     }
 
     // ---------------- HELPERS ----------------

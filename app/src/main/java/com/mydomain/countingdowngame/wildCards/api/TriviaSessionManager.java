@@ -73,6 +73,8 @@ public class TriviaSessionManager {
     public WildCardProperties getNextQuestion() {
         synchronized (questionCache) {
             if (questionCache.isEmpty()) {
+                // Trigger background reload if cache is empty (e.g. started offline)
+                preloadQuestions(10);
                 return null;
             }
             WildCardProperties question = questionCache.remove(0);

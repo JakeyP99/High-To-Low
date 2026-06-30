@@ -111,5 +111,7 @@ public class GeneralSettingsLocalStore {
         setIntPreference("playerChamberCount", value);
     }
 
-
+    public void clear() {
+        mPref.edit().clear().apply();
+    }
 }

@@ -71,7 +71,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/btn_setting_limits"
                     android:layout_width="match_parent"
-                    android:layout_height="85dp"
+                    android:layout_height="75dp"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/outlineforbutton"
                     android:clickable="true"
@@ -125,7 +125,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/btn_setting_quiz"
                     android:layout_width="match_parent"
-                    android:layout_height="85dp"
+                    android:layout_height="75dp"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/outlineforbutton"
                     android:clickable="true"
@@ -179,7 +179,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/btn_setting_content"
                     android:layout_width="match_parent"
-                    android:layout_height="85dp"
+                    android:layout_height="75dp"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/outlineforbutton"
                     android:clickable="true"
@@ -233,7 +233,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/btn_setting_events"
                     android:layout_width="match_parent"
-                    android:layout_height="85dp"
+                    android:layout_height="75dp"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/outlineforbutton"
                     android:clickable="true"
@@ -287,9 +287,8 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/btn_setting_api"
                     android:layout_width="match_parent"
-                    android:layout_height="85dp"
+                    android:layout_height="75dp"
                     android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
                     android:background="@drawable/outlineforbutton"
                     android:clickable="true"
                     android:focusable="true"
@@ -328,6 +327,61 @@
 
                     <ImageView
                         android:id="@+id/arrowApi"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:alpha="0.3"
+                        android:src="@drawable/arrow_right"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Category 6: Reset Data -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/btn_setting_reset"
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/outlineforbutton"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:id="@+id/titleReset"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:fontFamily="@font/viga"
+                        android:text="Reset All Settings"
+                        android:textColor="@color/bluedark"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/subReset"
+                        app:layout_constraintEnd_toStartOf="@+id/arrowReset"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_chainStyle="packed" />
+
+                    <TextView
+                        android:id="@+id/subReset"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:alpha="0.7"
+                        android:fontFamily="@font/viga"
+                        android:text="Revert all game data to original defaults"
+                        android:textColor="@color/bluedark"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/arrowReset"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/titleReset" />
+
+                    <ImageView
+                        android:id="@+id/arrowReset"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:alpha="0.3"
