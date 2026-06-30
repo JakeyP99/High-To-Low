@@ -8,10 +8,10 @@ public class WildCardProperties implements Serializable {
     private final String category;
     private final String activity;
     private boolean enabled;
-    private boolean usedWildCard;
-    private String wrongAnswer1;
-    private String wrongAnswer2;
-    private String wrongAnswer3;
+    private final boolean usedWildCard;
+    private final String wrongAnswer1;
+    private final String wrongAnswer2;
+    private final String wrongAnswer3;
 
     public WildCardProperties(String activity, boolean enabled, boolean usedWildCard, String answer, String wrongAnswer1, String wrongAnswer2, String wrongAnswer3, String category) {
         this.activity = activity;
@@ -22,13 +22,6 @@ public class WildCardProperties implements Serializable {
         this.wrongAnswer2 = wrongAnswer2;
         this.wrongAnswer3 = wrongAnswer3;
         this.category = category;
-    }
-
-    public WildCardProperties(String activity, boolean enabled) {
-        this.activity = activity;
-        this.enabled = enabled;
-        this.answer = null;
-        this.category = null;
     }
 
     public String getWildCard() {

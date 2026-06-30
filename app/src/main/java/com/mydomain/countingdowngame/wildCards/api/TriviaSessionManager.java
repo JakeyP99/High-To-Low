@@ -1,6 +1,9 @@
 package com.mydomain.countingdowngame.wildCards.api;
 
 import android.text.Html;
+
+import androidx.annotation.NonNull;
+
 import com.mydomain.countingdowngame.wildCards.WildCardProperties;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,9 +43,9 @@ public class TriviaSessionManager {
         if (isFetching || questionCache.size() > 10) return;
         isFetching = true;
 
-        triviaService.getQuestions(amount, "multiple").enqueue(new Callback<TriviaService.TriviaResponse>() {
+        triviaService.getQuestions(amount, "multiple").enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<TriviaService.TriviaResponse> call, Response<TriviaService.TriviaResponse> response) {
+            public void onResponse(@NonNull Call<TriviaService.TriviaResponse> call, @NonNull Response<TriviaService.TriviaResponse> response) {
                 isFetching = false;
                 if (response.isSuccessful() && response.body() != null) {
                     for (TriviaService.TriviaResult result : response.body().results) {
@@ -55,7 +58,7 @@ public class TriviaSessionManager {
             }
 
             @Override
-            public void onFailure(Call<TriviaService.TriviaResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<TriviaService.TriviaResponse> call, @NonNull Throwable t) {
                 isFetching = false;
             }
         });
@@ -88,7 +91,7 @@ public class TriviaSessionManager {
         }
         Collections.shuffle(incorrect);
 
-        String w1 = incorrect.size() > 0 ? incorrect.get(0) : "N/A";
+        String w1 = !incorrect.isEmpty() ? incorrect.get(0) : "N/A";
         String w2 = incorrect.size() > 1 ? incorrect.get(1) : "N/A";
         String w3 = incorrect.size() > 2 ? incorrect.get(2) : "N/A";
 

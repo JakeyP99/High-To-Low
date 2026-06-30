@@ -4,24 +4,16 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-
-import androidx.viewpager.widget.ViewPager;
 
 import com.mydomain.countingdowngame.R;
 import com.mydomain.countingdowngame.audio.AudioManager;
-import com.mydomain.countingdowngame.createPlayer.CharacterClassPagerAdapter;
-import com.mydomain.countingdowngame.createPlayer.CharacterClassStore;
 import com.mydomain.countingdowngame.game.Game;
 import com.mydomain.countingdowngame.playerChoice.playerChoiceComplimentary;
 import com.mydomain.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.mydomain.countingdowngame.utils.ButtonUtils;
-import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import com.mydomain.countingdowngame.wildCards.api.TriviaSessionManager;
+
 import io.github.muddz.styleabletoast.StyleableToast;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -69,32 +61,6 @@ public class HomeScreen extends playerChoiceComplimentary {
         buttonUtils.setButton(findViewById(R.id.btn_settings), this::gotoSettings);
         buttonUtils.setButton(findViewById(R.id.button_Statistics), this::gotoStatistics);
         buttonUtils.setButton(infoGif, this::gotoInstructions);
-    }
-
-    private void browseClasses() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
-        LayoutInflater inflater = getLayoutInflater();
-
-        View dialogView = inflater.inflate(R.layout.home_screen_browse_classes, null);
-        Button btnClose = dialogView.findViewById(R.id.btnClose);
-
-        List<CharacterClassStore> characterClasses = generateCharacterClasses();
-
-        List<List<CharacterClassStore>> pages = new ArrayList<>();
-        for (int i = 0; i < characterClasses.size(); i++) {
-            pages.add(characterClasses.subList(i, i + 1));
-        }
-
-        ViewPager viewPager = dialogView.findViewById(R.id.classRecyclerView);
-        DotsIndicator dotsIndicator = dialogView.findViewById(R.id.dots_indicator);
-
-        CharacterClassPagerAdapter pagerAdapter = new CharacterClassPagerAdapter(pages);
-        viewPager.setAdapter(pagerAdapter);
-        dotsIndicator.setViewPager(viewPager);
-
-        AlertDialog dialog = builder.setView(dialogView).create();
-        buttonUtils.setButton(btnClose, dialog::dismiss);
-        dialog.show();
     }
 
     private void setGameButton(int buttonId, boolean playCards) {
@@ -158,7 +124,6 @@ public class HomeScreen extends playerChoiceComplimentary {
     }
 
 
-
     private void toggleSoundEffects() {
         GeneralSettingsLocalStore settings = GeneralSettingsLocalStore.fromContext(this);
         boolean regularSound = settings.shouldPlayRegularSound();
@@ -167,9 +132,7 @@ public class HomeScreen extends playerChoiceComplimentary {
         buttonUtils.playSoundEffects();
         buttonUtils.vibrateDevice();
 
-        String message = regularSound
-                ? "Burp sound effects activated!"
-                : "Bop sound effects activated!";
+        String message = regularSound ? "Burp sound effects activated!" : "Bop sound effects activated!";
 
         StyleableToast.makeText(this, message, R.style.newToast).show();
     }
