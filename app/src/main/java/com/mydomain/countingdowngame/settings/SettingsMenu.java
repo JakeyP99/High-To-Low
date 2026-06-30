@@ -1,9 +1,5 @@
 package com.mydomain.countingdowngame.settings;
 
-import static com.mydomain.countingdowngame.wildCards.wildCardTypes.WildCardData.QUIZ_WILD_CARDS;
-import static com.mydomain.countingdowngame.wildCards.wildCardTypes.WildCardData.TASK_WILD_CARDS;
-import static com.mydomain.countingdowngame.wildCards.wildCardTypes.WildCardData.TRUTH_WILD_CARDS;
-
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,6 +14,7 @@ import androidx.activity.OnBackPressedCallback;
 import com.mydomain.countingdowngame.R;
 import com.mydomain.countingdowngame.utils.ButtonUtilsActivity;
 import com.mydomain.countingdowngame.wildCards.WildCardProperties;
+import com.mydomain.countingdowngame.wildCards.wildCardTypes.WildCardRepository;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -129,17 +126,17 @@ public class SettingsMenu extends ButtonUtilsActivity {
         btnQuiz.setOnClickListener(view -> {
             btnQuiz.setSelected(!btnQuiz.isSelected());
             store.setIsQuizActivated(btnQuiz.isSelected());
-            toggleWildCards(QUIZ_WILD_CARDS, btnQuiz.isSelected(), "QuizPrefs");
+            toggleWildCards("Quiz", btnQuiz.isSelected());
         });
         btnTask.setOnClickListener(view -> {
             btnTask.setSelected(!btnTask.isSelected());
             store.setIsTaskActivated(btnTask.isSelected());
-            toggleWildCards(TASK_WILD_CARDS, btnTask.isSelected(), "TaskPrefs");
+            toggleWildCards("Task", btnTask.isSelected());
         });
         btnTruth.setOnClickListener(view -> {
             btnTruth.setSelected(!btnTruth.isSelected());
             store.setIsTruthActivated(btnTruth.isSelected());
-            toggleWildCards(TRUTH_WILD_CARDS, btnTruth.isSelected(), "TruthPrefs");
+            toggleWildCards("Truth", btnTruth.isSelected());
         });
         btnPower.setOnClickListener(view -> {
             btnPower.setSelected(!btnPower.isSelected());
@@ -182,10 +179,30 @@ public class SettingsMenu extends ButtonUtilsActivity {
         b.setText(b.isSelected() ? "Enabled" : "Disabled");
     }
 
-    private void toggleWildCards(WildCardProperties[] cards, boolean enabled, String key) {
+    private void toggleWildCards(String type, boolean enabled) {
+        WildCardRepository repository = new WildCardRepository(this);
+        WildCardProperties[] cards;
+        String key;
+
+        switch (type) {
+            case "Quiz":
+                cards = repository.loadQuizCards();
+                key = "QuizPrefs";
+                break;
+            case "Task":
+                cards = repository.loadTaskCards();
+                key = "TaskPrefs";
+                break;
+            case "Truth":
+                cards = repository.loadTruthCards();
+                key = "TruthPrefs";
+                break;
+            default:
+                return;
+        }
+
         WildCardSettingsLocalStore prefs = WildCardSettingsLocalStore.fromContext(this, key);
         for (int i = 0; i < cards.length; i++) {
-            cards[i].setEnabled(enabled);
             prefs.setWildcardEnabled(i, enabled);
         }
     }
