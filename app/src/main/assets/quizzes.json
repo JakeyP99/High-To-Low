@@ -1,0 +1,1913 @@
+[
+  {
+    "activity": "What is the deepest ocean on Earth?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Pacific Ocean",
+    "wrongAnswer1": "Atlantic Ocean",
+    "wrongAnswer2": "Indian Ocean",
+    "wrongAnswer3": "Arctic Ocean",
+    "category": "Science"
+  },
+  {
+    "activity": "How many sides does a heptagon have?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "7",
+    "wrongAnswer1": "5",
+    "wrongAnswer2": "8",
+    "wrongAnswer3": "6",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the largest planet in our solar system?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Jupiter",
+    "wrongAnswer1": "Mars",
+    "wrongAnswer2": "Saturn",
+    "wrongAnswer3": "Neptune",
+    "category": "Science"
+  },
+  {
+    "activity": "Can you name all seven colors of the rainbow in order?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Red, Orange, Yellow, Green, Blue, Indigo, Violet",
+    "wrongAnswer1": "Red, Blue, Yellow, Green, Purple, Pink, Orange",
+    "wrongAnswer2": "Yellow, Green, Blue, Purple, Orange, Indigo, Red",
+    "wrongAnswer3": "Black, White, Red, Blue, Green, Yellow, Orange",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the formula for calculating the area of a circle?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "πr^2",
+    "wrongAnswer1": "2πr",
+    "wrongAnswer2": "πr",
+    "wrongAnswer3": "πr/2",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the boiling point of water in Fahrenheit?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "212",
+    "wrongAnswer1": "100",
+    "wrongAnswer2": "180",
+    "wrongAnswer3": "32",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the chemical symbol for silver on the periodic table?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Ag",
+    "wrongAnswer1": "Au",
+    "wrongAnswer2": "Si",
+    "wrongAnswer3": "Pt",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the chemical symbol for oxygen on the periodic table?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "O",
+    "wrongAnswer1": "Om",
+    "wrongAnswer2": "On",
+    "wrongAnswer3": "Op",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the boiling point of water in Celsius?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "100",
+    "wrongAnswer1": "0",
+    "wrongAnswer2": "50",
+    "wrongAnswer3": "200",
+    "category": "Science"
+  },
+  {
+    "activity": "Who developed the theory of general relativity?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Albert Einstein",
+    "wrongAnswer1": "Isaac Newton",
+    "wrongAnswer2": "Stephen Hawking",
+    "wrongAnswer3": "Nikola Tesla",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the atomic number of hydrogen?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "1",
+    "wrongAnswer1": "2",
+    "wrongAnswer2": "3",
+    "wrongAnswer3": "0",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the largest organ in the human body?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Skin",
+    "wrongAnswer1": "Heart",
+    "wrongAnswer2": "Brain",
+    "wrongAnswer3": "Liver",
+    "category": "Science"
+  },
+  {
+    "activity": "How many chromosomes are in a human body cell?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "46",
+    "wrongAnswer1": "23",
+    "wrongAnswer2": "48",
+    "wrongAnswer3": "20",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the chemical symbol for helium on the periodic table?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "He",
+    "wrongAnswer1": "H",
+    "wrongAnswer2": "C",
+    "wrongAnswer3": "O",
+    "category": "Science"
+  },
+  {
+    "activity": "Who discovered penicillin?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Alexander Fleming",
+    "wrongAnswer1": "Louis Pasteur",
+    "wrongAnswer2": "Marie Curie",
+    "wrongAnswer3": "Isaac Newton",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the largest species of shark?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Whale Shark",
+    "wrongAnswer1": "Great White Shark",
+    "wrongAnswer2": "Hammerhead Shark",
+    "wrongAnswer3": "Tiger Shark",
+    "category": "Science"
+  },
+  {
+    "activity": "Who is known as the 'father of modern chemistry'?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Antoine Lavoisier",
+    "wrongAnswer1": "John Dalton",
+    "wrongAnswer2": "Dmitri Mendeleev",
+    "wrongAnswer3": "Robert Boyle",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the formula for calculating density?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Density = Mass / Volume",
+    "wrongAnswer1": "Density = Mass x Volume",
+    "wrongAnswer2": "Density = Mass + Volume",
+    "wrongAnswer3": "Density = Volume / Mass",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the chemical symbol for iron on the periodic table?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Fe",
+    "wrongAnswer1": "Ir",
+    "wrongAnswer2": "Au",
+    "wrongAnswer3": "Pb",
+    "category": "Science"
+  },
+  {
+    "activity": "Who proposed the theory of evolution by natural selection?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Charles Darwin",
+    "wrongAnswer1": "Gregor Mendel",
+    "wrongAnswer2": "Alfred Russel Wallace",
+    "wrongAnswer3": "Jean-Baptiste Lamarck",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the largest moon in the solar system?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Ganymede",
+    "wrongAnswer1": "Titan",
+    "wrongAnswer2": "Callisto",
+    "wrongAnswer3": "Io",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the freezing point of water in Celsius?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "0",
+    "wrongAnswer1": "-10",
+    "wrongAnswer2": "10",
+    "wrongAnswer3": "100",
+    "category": "Science"
+  },
+  {
+    "activity": "Who discovered the law of gravity?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Isaac Newton",
+    "wrongAnswer1": "Galileo Galilei",
+    "wrongAnswer2": "Johannes Kepler",
+    "wrongAnswer3": "Albert Einstein",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the chemical formula for glucose?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "C6H12O6",
+    "wrongAnswer1": "CO2",
+    "wrongAnswer2": "C6H6O3",
+    "wrongAnswer3": "CH4",
+    "category": "Science"
+  },
+  {
+    "activity": "Who invented the first practical telephone?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Alexander Graham Bell",
+    "wrongAnswer1": "Thomas Edison",
+    "wrongAnswer2": "Guglielmo Marconi",
+    "wrongAnswer3": "Nikola Tesla",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the chemical symbol for sodium on the periodic table?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Na",
+    "wrongAnswer1": "So",
+    "wrongAnswer2": "Sa",
+    "wrongAnswer3": "Ni",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the process by which plants release water vapor through their leaves?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Transpiration",
+    "wrongAnswer1": "Photosynthesis",
+    "wrongAnswer2": "Respiration",
+    "wrongAnswer3": "Condensation",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the unit of measurement for energy?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Joule (J)",
+    "wrongAnswer1": "Watt (W)",
+    "wrongAnswer2": "Newton (N)",
+    "wrongAnswer3": "Volt (V)",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the hardest substance in the human body?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Tooth enamel",
+    "wrongAnswer1": "Bones",
+    "wrongAnswer2": "Cartilage",
+    "wrongAnswer3": "Nails",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the chemical formula for sulfuric acid?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "H2SO4",
+    "wrongAnswer1": "HCl",
+    "wrongAnswer2": "HNO3",
+    "wrongAnswer3": "CH3COOH",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the process of a gas turning into a liquid?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Condensation",
+    "wrongAnswer1": "Evaporation",
+    "wrongAnswer2": "Sublimation",
+    "wrongAnswer3": "Freezing",
+    "category": "Science"
+  },
+  {
+    "activity": "Which gas makes up about 78% of the Earth's atmosphere?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Nitrogen (N2)",
+    "wrongAnswer1": "Oxygen (O2)",
+    "wrongAnswer2": "Carbon dioxide (CO2)",
+    "wrongAnswer3": "Argon (Ar)",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the unit of measurement for frequency?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Hertz (Hz)",
+    "wrongAnswer1": "Watt (W)",
+    "wrongAnswer2": "Joule (J)",
+    "wrongAnswer3": "Newton (N)",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the process of a solid turning directly into a gas?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Sublimation",
+    "wrongAnswer1": "Condensation",
+    "wrongAnswer2": "Evaporation",
+    "wrongAnswer3": "Melting",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the chemical symbol for copper on the periodic table?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Cu",
+    "wrongAnswer1": "Co",
+    "wrongAnswer2": "Cp",
+    "wrongAnswer3": "Cr",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the name for the study of fossils?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Paleontology",
+    "wrongAnswer1": "Geology",
+    "wrongAnswer2": "Archeology",
+    "wrongAnswer3": "Biology",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the unit of measurement for electric potential difference?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Volt (V)",
+    "wrongAnswer1": "Ampere (A)",
+    "wrongAnswer2": "Ohm (Ω)",
+    "wrongAnswer3": "Watt (W)",
+    "category": "Science"
+  },
+  {
+    "activity": "Which gas do humans exhale during respiration?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Carbon dioxide (CO2)",
+    "wrongAnswer1": "Oxygen (O2)",
+    "wrongAnswer2": "Nitrogen (N2)",
+    "wrongAnswer3": "Methane (CH4)",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the process of a liquid turning into a solid?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Freezing",
+    "wrongAnswer1": "Melting",
+    "wrongAnswer2": "Condensation",
+    "wrongAnswer3": "Evaporation",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the chemical formula for methane?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "CH4",
+    "wrongAnswer1": "CO2",
+    "wrongAnswer2": "H2O",
+    "wrongAnswer3": "C6H12O6",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the process of energy transfer through electromagnetic waves?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Radiation",
+    "wrongAnswer1": "Conduction",
+    "wrongAnswer2": "Convection",
+    "wrongAnswer3": "Transfusion",
+    "category": "Science"
+  },
+  {
+    "activity": "Which gas is produced during photosynthesis?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Oxygen (O2)",
+    "wrongAnswer1": "Carbon dioxide (CO2)",
+    "wrongAnswer2": "Nitrogen (N2)",
+    "wrongAnswer3": "Hydrogen (H2)",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the unit of measurement for electric resistance?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Ohm (Ω)",
+    "wrongAnswer1": "Volt (V)",
+    "wrongAnswer2": "Ampere (A)",
+    "wrongAnswer3": "Watt (W)",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the process of a liquid turning into a gas below its boiling point?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Evaporation",
+    "wrongAnswer1": "Condensation",
+    "wrongAnswer2": "Sublimation",
+    "wrongAnswer3": "Melting",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the largest desert on Earth by area?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Sahara Desert",
+    "wrongAnswer1": "Arabian Desert",
+    "wrongAnswer2": "Gobi Desert",
+    "wrongAnswer3": "Kalahari Desert",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the largest bone in the human body?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Femur",
+    "wrongAnswer1": "Tibia",
+    "wrongAnswer2": "Humerus",
+    "wrongAnswer3": "Radius",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the largest mammal in the world?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Blue Whale",
+    "wrongAnswer1": "African Elephant",
+    "wrongAnswer2": "Giraffe",
+    "wrongAnswer3": "Hippopotamus",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the capital of Canada?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Ottawa",
+    "wrongAnswer1": "Toronto",
+    "wrongAnswer2": "Vancouver",
+    "wrongAnswer3": "Montreal",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the chemical symbol for gold on the periodic table?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Au",
+    "wrongAnswer1": "Ag",
+    "wrongAnswer2": "Fe",
+    "wrongAnswer3": "Cu",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the speed of light in a vacuum?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "299,792,458 m/s",
+    "wrongAnswer1": "300,000,000 m/s",
+    "wrongAnswer2": "280,000,000 m/s",
+    "wrongAnswer3": "3000,000 m/s",
+    "category": "Science"
+  },
+  {
+    "activity": "Which planet is known as the 'Red Planet'?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Mars",
+    "wrongAnswer1": "Jupiter",
+    "wrongAnswer2": "Venus",
+    "wrongAnswer3": "Mercury",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the second most abundant element in the Earth's crust?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Silicon",
+    "wrongAnswer1": "Oxygen",
+    "wrongAnswer2": "Aluminum",
+    "wrongAnswer3": "Iron",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the smallest bone in the human body?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Stapes",
+    "wrongAnswer1": "Fibula",
+    "wrongAnswer2": "Radius",
+    "wrongAnswer3": "Tibia",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the largest oceanic dolphin species?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Orca",
+    "wrongAnswer1": "Bottlenose Dolphin",
+    "wrongAnswer2": "Common Dolphin",
+    "wrongAnswer3": "Pacific White-Sided Dolphin",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the longest river in the world?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Nile River",
+    "wrongAnswer1": "Amazon River",
+    "wrongAnswer2": "Yangtze River",
+    "wrongAnswer3": "Mississippi River",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the hottest planet in our solar system?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Venus",
+    "wrongAnswer1": "Mercury",
+    "wrongAnswer2": "Mars",
+    "wrongAnswer3": "Jupiter",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the study of earthquakes called?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Seismology",
+    "wrongAnswer1": "Geology",
+    "wrongAnswer2": "Paleontology",
+    "wrongAnswer3": "Meteorology",
+    "category": "Science"
+  },
+  {
+    "activity": "Which element has the chemical symbol 'K' on the periodic table?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Potassium",
+    "wrongAnswer1": "Krypton",
+    "wrongAnswer2": "Kryptonite",
+    "wrongAnswer3": "Phosphorus",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the process by which plants make their food?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Photosynthesis",
+    "wrongAnswer1": "Respiration",
+    "wrongAnswer2": "Fermentation",
+    "wrongAnswer3": "Transpiration",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the study of the Earth's atmosphere called?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Meteorology",
+    "wrongAnswer1": "Astronomy",
+    "wrongAnswer2": "Geology",
+    "wrongAnswer3": "Ecology",
+    "category": "Science"
+  },
+  {
+    "activity": "Which gas do plants absorb during photosynthesis?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Carbon dioxide (CO2)",
+    "wrongAnswer1": "Oxygen (O2)",
+    "wrongAnswer2": "Nitrogen (N2)",
+    "wrongAnswer3": "Methane (CH4)",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the smallest planet in our solar system?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Mercury",
+    "wrongAnswer1": "Venus",
+    "wrongAnswer2": "Mars",
+    "wrongAnswer3": "Earth",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the unit of measurement for electric current?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Ampere (A)",
+    "wrongAnswer1": "Volt (V)",
+    "wrongAnswer2": "Ohm (Ω)",
+    "wrongAnswer3": "Watt (W)",
+    "category": "Science"
+  },
+  {
+    "activity": "Which type of rock is formed from cooling magma or lava?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Igneous Rock",
+    "wrongAnswer1": "Sedimentary Rock",
+    "wrongAnswer2": "Metamorphic Rock",
+    "wrongAnswer3": "Granite",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the study of heredity and inherited traits called?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Genetics",
+    "wrongAnswer1": "Biology",
+    "wrongAnswer2": "Ecology",
+    "wrongAnswer3": "Anatomy",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the largest species of big cat?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Tiger",
+    "wrongAnswer1": "Lion",
+    "wrongAnswer2": "Leopard",
+    "wrongAnswer3": "Jaguar",
+    "category": "Science"
+  },
+  {
+    "activity": "Which planet is known as the 'Blue Planet'?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Earth",
+    "wrongAnswer1": "Uranus",
+    "wrongAnswer2": "Neptune",
+    "wrongAnswer3": "Saturn",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the main function of red blood cells in the human body?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Carrying oxygen",
+    "wrongAnswer1": "Fighting infections",
+    "wrongAnswer2": "Clotting blood",
+    "wrongAnswer3": "Producing antibodies",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the unit of measurement for pressure?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Pascal (Pa)",
+    "wrongAnswer1": "Newton (N)",
+    "wrongAnswer2": "Joule (J)",
+    "wrongAnswer3": "Watt (W)",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the process by which rocks break down into smaller pieces?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Weathering",
+    "wrongAnswer1": "Erosion",
+    "wrongAnswer2": "Deposition",
+    "wrongAnswer3": "Sedimentation",
+    "category": "Science"
+  },
+  {
+    "activity": "Which gas do humans inhale for respiration?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Oxygen (O2)",
+    "wrongAnswer1": "Carbon dioxide (CO2)",
+    "wrongAnswer2": "Nitrogen (N2)",
+    "wrongAnswer3": "Hydrogen (H2)",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the study of the composition, structure, properties, and reactions of matter called?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Chemistry",
+    "wrongAnswer1": "Physics",
+    "wrongAnswer2": "Biology",
+    "wrongAnswer3": "Geology",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the longest bone in the human body?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Femur",
+    "wrongAnswer1": "Tibia",
+    "wrongAnswer2": "Humerus",
+    "wrongAnswer3": "Radius",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the largest moon of Saturn?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Titan",
+    "wrongAnswer1": "Enceladus",
+    "wrongAnswer2": "Mimas",
+    "wrongAnswer3": "Rhea",
+    "category": "Science"
+  },
+  {
+    "activity": "Which organ in the human body produces insulin?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Pancreas",
+    "wrongAnswer1": "Liver",
+    "wrongAnswer2": "Kidney",
+    "wrongAnswer3": "Heart",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the study of the Earth's physical features, processes, and history called?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Geology",
+    "wrongAnswer1": "Meteorology",
+    "wrongAnswer2": "Oceanography",
+    "wrongAnswer3": "Ecology",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the unit of measurement for force?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Newton (N)",
+    "wrongAnswer1": "Pascal (Pa)",
+    "wrongAnswer2": "Joule (J)",
+    "wrongAnswer3": "Watt (W)",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the process by which water vapor turns into liquid water?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Condensation",
+    "wrongAnswer1": "Evaporation",
+    "wrongAnswer2": "Precipitation",
+    "wrongAnswer3": "Sublimation",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the smallest unit of an element that retains its chemical properties?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Atom",
+    "wrongAnswer1": "Molecule",
+    "wrongAnswer2": "Cell",
+    "wrongAnswer3": "Proton",
+    "category": "Science"
+  },
+  {
+    "activity": "Which gas do plants primarily release during respiration?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Oxygen (O2)",
+    "wrongAnswer1": "Carbon dioxide (CO2)",
+    "wrongAnswer2": "Nitrogen (N2)",
+    "wrongAnswer3": "Methane (CH4)",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the unit of measurement for distance in astronomy?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Light-year",
+    "wrongAnswer1": "Astronomical unit",
+    "wrongAnswer2": "Parsec",
+    "wrongAnswer3": "Kilometer",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the process of converting sunlight into energy in plants?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Photosynthesis",
+    "wrongAnswer1": "Respiration",
+    "wrongAnswer2": "Fermentation",
+    "wrongAnswer3": "Transpiration",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the study of the Earth's oceans called?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Oceanography",
+    "wrongAnswer1": "Geology",
+    "wrongAnswer2": "Meteorology",
+    "wrongAnswer3": "Ecology",
+    "category": "Science"
+  },
+  {
+    "activity": "Which gas is known as laughing gas?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Nitrous oxide (N2O)",
+    "wrongAnswer1": "Carbon dioxide (CO2)",
+    "wrongAnswer2": "Methane (CH4)",
+    "wrongAnswer3": "Oxygen (O2)",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the largest moon of Jupiter?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Ganymede",
+    "wrongAnswer1": "Europa",
+    "wrongAnswer2": "Io",
+    "wrongAnswer3": "Callisto",
+    "category": "Science"
+  },
+  {
+    "activity": "Which element is essential for human bones and teeth?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Calcium",
+    "wrongAnswer1": "Iron",
+    "wrongAnswer2": "Sodium",
+    "wrongAnswer3": "Potassium",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the study of fossils called?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Paleontology",
+    "wrongAnswer1": "Geology",
+    "wrongAnswer2": "Biology",
+    "wrongAnswer3": "Archaeology",
+    "category": "Science"
+  },
+  {
+    "activity": "Which planet has the most moons in our solar system?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Jupiter",
+    "wrongAnswer1": "Saturn",
+    "wrongAnswer2": "Neptune",
+    "wrongAnswer3": "Uranus",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the process by which water moves through plants and evaporates from their leaves?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Transpiration",
+    "wrongAnswer1": "Photosynthesis",
+    "wrongAnswer2": "Respiration",
+    "wrongAnswer3": "Fermentation",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the unit of measurement for electrical capacitance?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Farad (F)",
+    "wrongAnswer1": "Ohm (Ω)",
+    "wrongAnswer2": "Ampere (A)",
+    "wrongAnswer3": "Volt (V)",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the study of the Earth's atmosphere and its phenomena called?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Meteorology",
+    "wrongAnswer1": "Geology",
+    "wrongAnswer2": "Oceanography",
+    "wrongAnswer3": "Ecology",
+    "category": "Science"
+  },
+  {
+    "activity": "Which gas is used in balloons to make them float?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Helium",
+    "wrongAnswer1": "Hydrogen",
+    "wrongAnswer2": "Oxygen",
+    "wrongAnswer3": "Nitrogen",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the process of water movement through soil?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Percolation",
+    "wrongAnswer1": "Evaporation",
+    "wrongAnswer2": "Condensation",
+    "wrongAnswer3": "Precipitation",
+    "category": "Science"
+  },
+  {
+    "activity": "Which element is the most abundant in the Earth's crust?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Oxygen",
+    "wrongAnswer1": "Silicon",
+    "wrongAnswer2": "Aluminum",
+    "wrongAnswer3": "Iron",
+    "category": "Science"
+  },
+  {
+    "activity": "What is the national animal of Canada?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Beaver",
+    "wrongAnswer1": "Moose",
+    "wrongAnswer2": "Polar Bear",
+    "wrongAnswer3": "Eagle",
+    "category": "Geography"
+  },
+  {
+    "activity": "How many time zones are there in the world?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "24",
+    "wrongAnswer1": "12",
+    "wrongAnswer2": "36",
+    "wrongAnswer3": "48",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the capital of Brazil?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Brasília",
+    "wrongAnswer1": "Rio de Janeiro",
+    "wrongAnswer2": "São Paulo",
+    "wrongAnswer3": "Salvador",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which country is known as the 'Land of the Rising Sun'?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Japan",
+    "wrongAnswer1": "China",
+    "wrongAnswer2": "Korea",
+    "wrongAnswer3": "Vietnam",
+    "category": "Geography"
+  },
+  {
+    "activity": "In which continent is the Sahara Desert located?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Africa",
+    "wrongAnswer1": "Asia",
+    "wrongAnswer2": "South America",
+    "wrongAnswer3": "Europe",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the largest country by land area?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Russia",
+    "wrongAnswer1": "Canada",
+    "wrongAnswer2": "China",
+    "wrongAnswer3": "United States",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the highest mountain in the world?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Mount Everest",
+    "wrongAnswer1": "K2",
+    "wrongAnswer2": "Kangchenjunga",
+    "wrongAnswer3": "Lhotse",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the largest ocean?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Pacific Ocean",
+    "wrongAnswer1": "Atlantic Ocean",
+    "wrongAnswer2": "Indian Ocean",
+    "wrongAnswer3": "Arctic Ocean",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the capital of Australia?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Canberra",
+    "wrongAnswer1": "Sydney",
+    "wrongAnswer2": "Melbourne",
+    "wrongAnswer3": "Perth",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which river is the longest in the world?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Nile",
+    "wrongAnswer1": "Amazon",
+    "wrongAnswer2": "Yangtze",
+    "wrongAnswer3": "Mississippi",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the official language of Japan?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Japanese",
+    "wrongAnswer1": "Korean",
+    "wrongAnswer2": "Mandarin",
+    "wrongAnswer3": "Vietnamese",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which city is known as the 'Eternal City'?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Rome",
+    "wrongAnswer1": "Athens",
+    "wrongAnswer2": "Jerusalem",
+    "wrongAnswer3": "Paris",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the largest desert in the world?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Antarctica",
+    "wrongAnswer1": "Sahara",
+    "wrongAnswer2": "Arabian",
+    "wrongAnswer3": "Gobi",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the capital of Canada?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Ottawa",
+    "wrongAnswer1": "Toronto",
+    "wrongAnswer2": "Montreal",
+    "wrongAnswer3": "Vancouver",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which country is famous for the Great Barrier Reef?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Australia",
+    "wrongAnswer1": "Philippines",
+    "wrongAnswer2": "Indonesia",
+    "wrongAnswer3": "Maldives",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the official language of Brazil?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Portuguese",
+    "wrongAnswer1": "Spanish",
+    "wrongAnswer2": "French",
+    "wrongAnswer3": "Italian",
+    "category": "Geography"
+  },
+  {
+    "activity": "In which country is the Taj Mahal located?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "India",
+    "wrongAnswer1": "Pakistan",
+    "wrongAnswer2": "Bangladesh",
+    "wrongAnswer3": "Nepal",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the largest lake in Africa?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Lake Victoria",
+    "wrongAnswer1": "Lake Tanganyika",
+    "wrongAnswer2": "Lake Malawi",
+    "wrongAnswer3": "Lake Chad",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the currency of Japan?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Japanese yen",
+    "wrongAnswer1": "Japanese won",
+    "wrongAnswer2": "Japanese dollar",
+    "wrongAnswer3": "Japanese pound",
+    "category": "Geography"
+  },
+  {
+    "activity": "In which country is Mount Kilimanjaro located?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Tanzania",
+    "wrongAnswer1": "Kenya",
+    "wrongAnswer2": "Uganda",
+    "wrongAnswer3": "Zimbabwe",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the smallest country in the world?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Vatican City",
+    "wrongAnswer1": "Monaco",
+    "wrongAnswer2": "Nauru",
+    "wrongAnswer3": "Tuvalu",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which country is known for the Pyramids of Giza?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Egypt",
+    "wrongAnswer1": "Greece",
+    "wrongAnswer2": "Turkey",
+    "wrongAnswer3": "Iraq",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which country is the largest archipelago in the world?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Indonesia",
+    "wrongAnswer1": "Philippines",
+    "wrongAnswer2": "Japan",
+    "wrongAnswer3": "Maldives",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the capital of Spain?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Madrid",
+    "wrongAnswer1": "Barcelona",
+    "wrongAnswer2": "Seville",
+    "wrongAnswer3": "Valencia",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which river runs through the Grand Canyon in the United States?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Colorado River",
+    "wrongAnswer1": "Mississippi River",
+    "wrongAnswer2": "Missouri River",
+    "wrongAnswer3": "Ohio River",
+    "category": "Geography"
+  },
+  {
+    "activity": "In which continent is the Andes mountain range located?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "South America",
+    "wrongAnswer1": "North America",
+    "wrongAnswer2": "Europe",
+    "wrongAnswer3": "Asia",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the largest island in the Mediterranean Sea?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Sicily",
+    "wrongAnswer1": "Sardinia",
+    "wrongAnswer2": "Cyprus",
+    "wrongAnswer3": "Corsica",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which African country is known as the 'Pearl of the Indian Ocean'?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Sri Lanka",
+    "wrongAnswer1": "Madagascar",
+    "wrongAnswer2": "Mauritius",
+    "wrongAnswer3": "Maldives",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the official language of Germany?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "German",
+    "wrongAnswer1": "Dutch",
+    "wrongAnswer2": "Swedish",
+    "wrongAnswer3": "Norwegian",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which country is the world's leading producer of coffee?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Brazil",
+    "wrongAnswer1": "Colombia",
+    "wrongAnswer2": "Vietnam",
+    "wrongAnswer3": "Ethiopia",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the smallest continent in the world?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Australia",
+    "wrongAnswer1": "Asia",
+    "wrongAnswer2": "Europe",
+    "wrongAnswer3": "North America",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which river is known as the 'Mother River' in China?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Yangtze River",
+    "wrongAnswer1": "Yellow River",
+    "wrongAnswer2": "Mekong River",
+    "wrongAnswer3": "Indus River",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the capital of South Africa?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Pretoria",
+    "wrongAnswer1": "Cape Town",
+    "wrongAnswer2": "Johannesburg",
+    "wrongAnswer3": "Durban",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which country is the Land of a Thousand Lakes?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Finland",
+    "wrongAnswer1": "Sweden",
+    "wrongAnswer2": "Norway",
+    "wrongAnswer3": "Denmark",
+    "category": "Geography"
+  },
+  {
+    "activity": "In which U.S. state is the Grand Canyon located?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Arizona",
+    "wrongAnswer1": "Utah",
+    "wrongAnswer2": "Nevada",
+    "wrongAnswer3": "Colorado",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which country is home to the famous rock formation Uluru (Ayers Rock)?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Australia",
+    "wrongAnswer1": "New Zealand",
+    "wrongAnswer2": "Fiji",
+    "wrongAnswer3": "Papua New Guinea",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the largest city in Canada?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Toronto",
+    "wrongAnswer1": "Vancouver",
+    "wrongAnswer2": "Montreal",
+    "wrongAnswer3": "Calgary",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which river is the longest in Europe?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Volga River",
+    "wrongAnswer1": "Danube River",
+    "wrongAnswer2": "Rhine River",
+    "wrongAnswer3": "Dnieper River",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the capital of Argentina?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Buenos Aires",
+    "wrongAnswer1": "Santiago",
+    "wrongAnswer2": "Lima",
+    "wrongAnswer3": "Brasilia",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which country is known as the 'Land of Fire and Ice'?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Iceland",
+    "wrongAnswer1": "Greenland",
+    "wrongAnswer2": "Norway",
+    "wrongAnswer3": "Finland",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the highest waterfall in the world?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Angel Falls",
+    "wrongAnswer1": "Niagara Falls",
+    "wrongAnswer2": "Victoria Falls",
+    "wrongAnswer3": "Iguaçu Falls",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which city is located on two continents, Europe and Asia?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Istanbul",
+    "wrongAnswer1": "Athens",
+    "wrongAnswer2": "Ankara",
+    "wrongAnswer3": "Bucharest",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which country is known as the 'Land of the Midnight Sun'?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Norway",
+    "wrongAnswer1": "Sweden",
+    "wrongAnswer2": "Finland",
+    "wrongAnswer3": "Iceland",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the largest river in the world by discharge volume?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Amazon River",
+    "wrongAnswer1": "Nile River",
+    "wrongAnswer2": "Congo River",
+    "wrongAnswer3": "Mississippi River",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which country is famous for its tulip fields and windmills?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Netherlands",
+    "wrongAnswer1": "Belgium",
+    "wrongAnswer2": "Denmark",
+    "wrongAnswer3": "Luxembourg",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the capital of Russia?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Moscow",
+    "wrongAnswer1": "St. Petersburg",
+    "wrongAnswer2": "Novosibirsk",
+    "wrongAnswer3": "Yekaterinburg",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which African country is known as the 'Pearl of Africa'?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Uganda",
+    "wrongAnswer1": "Kenya",
+    "wrongAnswer2": "Tanzania",
+    "wrongAnswer3": "Rwanda",
+    "category": "Geography"
+  },
+  {
+    "activity": "In which mountain range is Mount Everest located?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Himalayas",
+    "wrongAnswer1": "Andes",
+    "wrongAnswer2": "Alps",
+    "wrongAnswer3": "Rocky Mountains",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the largest hot desert in the world?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Sahara Desert",
+    "wrongAnswer1": "Arabian Desert",
+    "wrongAnswer2": "Gobi Desert",
+    "wrongAnswer3": "Kalahari Desert",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which country is famous for the Great Wall?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "China",
+    "wrongAnswer1": "Japan",
+    "wrongAnswer2": "Korea",
+    "wrongAnswer3": "Mongolia",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the national animal of Australia?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Kangaroo",
+    "wrongAnswer1": "Emu",
+    "wrongAnswer2": "Koala",
+    "wrongAnswer3": "Platypus",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the largest mountain range in South America?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Andes",
+    "wrongAnswer1": "Rockies",
+    "wrongAnswer2": "Himalayas",
+    "wrongAnswer3": "Alps",
+    "category": "Geography"
+  },
+  {
+    "activity": "In which continent is the Amazon Rainforest primarily located?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "South America",
+    "wrongAnswer1": "Africa",
+    "wrongAnswer2": "Asia",
+    "wrongAnswer3": "North America",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the largest bay in the world?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Hudson Bay",
+    "wrongAnswer1": "Bay of Bengal",
+    "wrongAnswer2": "Gulf of Mexico",
+    "wrongAnswer3": "Bay of Fundy",
+    "category": "Geography"
+  },
+  {
+    "activity": "In which U.S. state is Mount Rushmore located?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "South Dakota",
+    "wrongAnswer1": "California",
+    "wrongAnswer2": "Washington",
+    "wrongAnswer3": "Montana",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the southernmost continent on Earth?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Antarctica",
+    "wrongAnswer1": "Asia",
+    "wrongAnswer2": "Australia",
+    "wrongAnswer3": "Africa",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the smallest ocean in the world?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Arctic Ocean",
+    "wrongAnswer1": "Atlantic Ocean",
+    "wrongAnswer2": "Pacific Ocean",
+    "wrongAnswer3": "Indian Ocean",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which city is known as the 'City of Love'?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Paris",
+    "wrongAnswer1": "Venice",
+    "wrongAnswer2": "Rome",
+    "wrongAnswer3": "Prague",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the longest river in South America?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Amazon River",
+    "wrongAnswer1": "Nile River",
+    "wrongAnswer2": "Congo River",
+    "wrongAnswer3": "Yangtze River",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which country is famous for the Inca ruins of Machu Picchu?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Peru",
+    "wrongAnswer1": "Mexico",
+    "wrongAnswer2": "Argentina",
+    "wrongAnswer3": "Chile",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the deepest lake in the world?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Lake Baikal",
+    "wrongAnswer1": "Lake Superior",
+    "wrongAnswer2": "Lake Victoria",
+    "wrongAnswer3": "Great Bear Lake",
+    "category": "Geography"
+  },
+  {
+    "activity": "In which country is the Great Sandy Desert located?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Australia",
+    "wrongAnswer1": "India",
+    "wrongAnswer2": "Argentina",
+    "wrongAnswer3": "Saudi Arabia",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the largest waterfall system in the world?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Iguazu Falls",
+    "wrongAnswer1": "Victoria Falls",
+    "wrongAnswer2": "Niagara Falls",
+    "wrongAnswer3": "Angel Falls",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which sea separates Europe from Africa?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Strait of Gibraltar",
+    "wrongAnswer1": "Mediterranean Sea",
+    "wrongAnswer2": "Red Sea",
+    "wrongAnswer3": "Black Sea",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the smallest independent country in the world?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Vatican City",
+    "wrongAnswer1": "Monaco",
+    "wrongAnswer2": "San Marino",
+    "wrongAnswer3": "Nauru",
+    "category": "Geography"
+  },
+  {
+    "activity": "In which country is the Atacama Desert located?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Chile",
+    "wrongAnswer1": "Mexico",
+    "wrongAnswer2": "Argentina",
+    "wrongAnswer3": "Peru",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the longest mountain range in the world?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Andes",
+    "wrongAnswer1": "Himalayas",
+    "wrongAnswer2": "Rockies",
+    "wrongAnswer3": "Alps",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which country is known as the 'Land of the Rising Sun'?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Japan",
+    "wrongAnswer1": "China",
+    "wrongAnswer2": "Korea",
+    "wrongAnswer3": "Vietnam",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the largest city in South Africa?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Johannesburg",
+    "wrongAnswer1": "Cape Town",
+    "wrongAnswer2": "Durban",
+    "wrongAnswer3": "Pretoria",
+    "category": "Geography"
+  },
+  {
+    "activity": "In which continent is the Great Dividing Range located?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Australia",
+    "wrongAnswer1": "North America",
+    "wrongAnswer2": "South America",
+    "wrongAnswer3": "Europe",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the capital of New Zealand?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Wellington",
+    "wrongAnswer1": "Auckland",
+    "wrongAnswer2": "Christchurch",
+    "wrongAnswer3": "Hamilton",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which country is known as the 'Land of Fire'?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Azerbaijan",
+    "wrongAnswer1": "Iceland",
+    "wrongAnswer2": "Philippines",
+    "wrongAnswer3": "Japan",
+    "category": "Geography"
+  },
+  {
+    "activity": "In which U.S. state is Death Valley located?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "California",
+    "wrongAnswer1": "Nevada",
+    "wrongAnswer2": "Arizona",
+    "wrongAnswer3": "Utah",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the tallest mountain in Africa?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Mount Kilimanjaro",
+    "wrongAnswer1": "Mount Kenya",
+    "wrongAnswer2": "Mount Elgon",
+    "wrongAnswer3": "Mount Stanley",
+    "category": "Geography"
+  },
+  {
+    "activity": "In which country is the Bay of Islands located?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "New Zealand",
+    "wrongAnswer1": "Australia",
+    "wrongAnswer2": "Fiji",
+    "wrongAnswer3": "Papua New Guinea",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the longest river in Australia?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Murray River",
+    "wrongAnswer1": "Darling River",
+    "wrongAnswer2": "Lachlan River",
+    "wrongAnswer3": "Ord River",
+    "category": "Geography"
+  },
+  {
+    "activity": "Which country is known as the 'Land Down Under'?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Australia",
+    "wrongAnswer1": "New Zealand",
+    "wrongAnswer2": "South Africa",
+    "wrongAnswer3": "Argentina",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the national flower of India?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Lotus",
+    "wrongAnswer1": "Rose",
+    "wrongAnswer2": "Jasmine",
+    "wrongAnswer3": "Sunflower",
+    "category": "Geography"
+  },
+  {
+    "activity": "In which country is the Danube River located?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Multiple countries (including Germany, Austria, Hungary, Romania)",
+    "wrongAnswer1": "France",
+    "wrongAnswer2": "Spain",
+    "wrongAnswer3": "Italy",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the largest bay in North America?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Hudson Bay",
+    "wrongAnswer1": "Chesapeake Bay",
+    "wrongAnswer2": "San Francisco Bay",
+    "wrongAnswer3": "Baffin Bay",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the deepest trench in the world?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Mariana Trench",
+    "wrongAnswer1": "Tonga Trench",
+    "wrongAnswer2": "Puerto Rico Trench",
+    "wrongAnswer3": "Java Trench",
+    "category": "Geography"
+  },
+  {
+    "activity": "In which U.S. state is Mount St. Helens located?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Washington",
+    "wrongAnswer1": "Oregon",
+    "wrongAnswer2": "California",
+    "wrongAnswer3": "Alaska",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the largest saltwater lake in the world?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Caspian Sea",
+    "wrongAnswer1": "Lake Superior",
+    "wrongAnswer2": "Lake Victoria",
+    "wrongAnswer3": "Great Bear Lake",
+    "category": "Geography"
+  },
+  {
+    "activity": "In which country is the Gobi Desert located?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Mongolia",
+    "wrongAnswer1": "China",
+    "wrongAnswer2": "Kazakhstan",
+    "wrongAnswer3": "Russia",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the largest peninsula in the world?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Arabian Peninsula",
+    "wrongAnswer1": "Iberian Peninsula",
+    "wrongAnswer2": "Scandinavian Peninsula",
+    "wrongAnswer3": "Indochinese Peninsula",
+    "category": "Geography"
+  },
+  {
+    "activity": "In which U.S. state is Denali (formerly Mount McKinley) located?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Alaska",
+    "wrongAnswer1": "Washington",
+    "wrongAnswer2": "California",
+    "wrongAnswer3": "Montana",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the national animal of South Africa?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Springbok",
+    "wrongAnswer1": "Lion",
+    "wrongAnswer2": "Elephant",
+    "wrongAnswer3": "Giraffe",
+    "category": "Geography"
+  },
+  {
+    "activity": "In which country is the city of Petra located?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Jordan",
+    "wrongAnswer1": "Egypt",
+    "wrongAnswer2": "Lebanon",
+    "wrongAnswer3": "Syria",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the capital of Thailand?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Bangkok",
+    "wrongAnswer1": "Phuket",
+    "wrongAnswer2": "Chiang Mai",
+    "wrongAnswer3": "Pattaya",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the longest river in South Asia?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Ganges River",
+    "wrongAnswer1": "Indus River",
+    "wrongAnswer2": "Brahmaputra River",
+    "wrongAnswer3": "Yamuna River",
+    "category": "Geography"
+  },
+  {
+    "activity": "In which country is the Great Victoria Desert located?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Australia",
+    "wrongAnswer1": "South Africa",
+    "wrongAnswer2": "Argentina",
+    "wrongAnswer3": "Saudi Arabia",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the capital of Indonesia?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Jakarta",
+    "wrongAnswer1": "Bali",
+    "wrongAnswer2": "Surabaya",
+    "wrongAnswer3": "Bandung",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the national bird of the United States?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Bald Eagle",
+    "wrongAnswer1": "American Robin",
+    "wrongAnswer2": "Wild Turkey",
+    "wrongAnswer3": "Northern Cardinal",
+    "category": "Geography"
+  },
+  {
+    "activity": "In which U.S. state is Yellowstone National Park located?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Wyoming",
+    "wrongAnswer1": "Montana",
+    "wrongAnswer2": "Idaho",
+    "wrongAnswer3": "Colorado",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the smallest continent in the world?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Australia",
+    "wrongAnswer1": "Asia",
+    "wrongAnswer2": "Europe",
+    "wrongAnswer3": "North America",
+    "category": "Geography"
+  },
+  {
+    "activity": "In which country is Lake Titicaca located?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Peru and Bolivia",
+    "wrongAnswer1": "Argentina and Chile",
+    "wrongAnswer2": "Ecuador and Colombia",
+    "wrongAnswer3": "Brazil and Paraguay",
+    "category": "Geography"
+  },
+  {
+    "activity": "What is the highest mountain in North America?",
+    "enabled": true,
+    "usedWildCard": true,
+    "answer": "Denali (formerly Mount McKinley)",
+    "wrongAnswer1": "Mount Rainier",
+    "wrongAnswer2": "Mount St. Helens",
+    "wrongAnswer3": "Mount Hood",
+    "category": "Geography"
+  }
+
+]

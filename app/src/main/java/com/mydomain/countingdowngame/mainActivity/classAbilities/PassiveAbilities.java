@@ -1,0 +1,485 @@
+package com.mydomain.countingdowngame.mainActivity.classAbilities;
+
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.ARCHER;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.GOBLIN;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.SCIENTIST;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.SOLDIER;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.TROLL;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
+import static com.mydomain.countingdowngame.mainActivity.MainActivityGame.drinkNumberCounterInt;
+import static com.mydomain.countingdowngame.mainActivity.MainActivityGame.isFirstTurn;
+import static com.mydomain.countingdowngame.mainActivity.MainActivityGame.soldierRemoval;
+
+import android.app.AlertDialog;
+import android.graphics.Typeface;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.StyleSpan;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import com.mydomain.countingdowngame.R;
+import com.mydomain.countingdowngame.game.Game;
+import com.mydomain.countingdowngame.mainActivity.MainActivityGame;
+import com.mydomain.countingdowngame.player.Player;
+import com.mydomain.countingdowngame.utils.ButtonUtilsActivity;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+public class PassiveAbilities extends ButtonUtilsActivity {
+    static Game game = Game.getInstance();
+    private static MainActivityGame activity;
+    private static final List<PassiveMessage> pendingPassiveMessages = new ArrayList<>();
+    private static final List<Runnable> pendingActions = new ArrayList<>();
+
+    private static Player hidingTroll = null;
+    private static final List<Player> playersWhoPaidToll = new ArrayList<>();
+    private static boolean goblinTriggeredThisTurn = false;
+
+    private static class PassiveMessage {
+        String className;
+        String message;
+
+        PassiveMessage(String className, String message) {
+            this.className = className;
+            this.message = message;
+        }
+    }
+
+    public static void setActivity(MainActivityGame activityInstance) {
+        activity = activityInstance;
+    }
+
+    public static void resetStaticState() {
+        pendingPassiveMessages.clear();
+        pendingActions.clear();
+        gamblerBet = "";
+        hidingTroll = null;
+        playersWhoPaidToll.clear();
+        goblinTriggeredThisTurn = false;
+    }
+
+    private static void addPassiveMessage(String className, String message) {
+        pendingPassiveMessages.add(new PassiveMessage(className, message));
+    }
+
+    private static void addPassiveAction(Runnable action) {
+        pendingActions.add(action);
+    }
+
+    public static void showCombinedPassives() {
+        showCombinedPassives(null);
+    }
+
+    public static void showCombinedPassives(Runnable onDone) {
+        if (pendingPassiveMessages.isEmpty()) {
+            runPendingActions(onDone);
+            return;
+        }
+
+        if (pendingPassiveMessages.size() == 1) {
+            PassiveMessage pm = pendingPassiveMessages.get(0);
+            activity.mainActivityDialog.showMainDialog(pm.className + "'s Passive:\n\n" + pm.message, () -> {
+                pendingPassiveMessages.clear();
+                runPendingActions(onDone);
+            });
+            return;
+        }
+
+        SpannableStringBuilder combined = new SpannableStringBuilder();
+        for (int i = 0; i < pendingPassiveMessages.size(); i++) {
+            PassiveMessage pm = pendingPassiveMessages.get(i);
+            String title = pm.className + "'s Passive:\n";
+            int startTitle = combined.length();
+            combined.append(title);
+            int endTitle = combined.length();
+
+            combined.setSpan(new AbsoluteSizeSpan(25, true), startTitle, endTitle, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            combined.setSpan(new StyleSpan(Typeface.BOLD), startTitle, endTitle, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            int startMsg = combined.length();
+            combined.append(pm.message);
+            int endMsg = combined.length();
+            combined.setSpan(new AbsoluteSizeSpan(20, true), startMsg, endMsg, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            if (i < pendingPassiveMessages.size() - 1) {
+                combined.append("\n\n--------------------\n\n");
+            }
+        }
+
+        activity.mainActivityDialog.showCombinedPassivesDialog(combined, () -> {
+            pendingPassiveMessages.clear();
+            runPendingActions(onDone);
+        });
+    }
+
+    private static void runPendingActions(Runnable onDone) {
+        List<Runnable> actionsToRun = new ArrayList<>(pendingActions);
+        pendingActions.clear();
+        for (Runnable action : actionsToRun) {
+            action.run();
+        }
+        if (onDone != null) onDone.run();
+    }
+
+    public static void handleWitchPassive(Player currentPlayer) {
+        if (!isFirstTurn) {
+            if (game.getCurrentNumber() % 2 == 0) {
+                addPassiveMessage(WITCH, currentPlayer.getName() + " hand 1 drink.");
+                currentPlayer.incrementDrinksHandedOutByWitch(1);
+            } else {
+                addPassiveMessage(WITCH, currentPlayer.getName() + " take 1 drink.");
+                currentPlayer.incrementDrinksTakenByWitch(1);
+            }
+        }
+    }
+
+    public static void handleSoldierPassive() {
+        Player currentPlayer = game.getCurrentPlayer();
+        if (currentPlayer == null) return;
+
+        int currentNumber = game.getCurrentNumber();
+        int minRange = 10;
+        int maxRange = 15;
+
+        if (!isFirstTurn) {
+            if (!soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {
+                soldierRemoval = true;
+                addPassiveMessage(SOLDIER, currentPlayer.getName() + " has escaped the game as the soldier.");
+                currentPlayer.setRemoved(true);
+                addPassiveAction(() -> game.removePlayer(currentPlayer));
+            } else if (soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {
+                addPassiveMessage(SOLDIER,"Sorry " + currentPlayer.getName() + ", a soldier has already escaped the game.");
+
+            }
+        }
+    }
+
+    public static void handleSurvivorPassive(Player currentPlayer) {
+        String drinksText = (drinkNumberCounterInt == 1) ? "drink" : "drinks";
+        addPassiveMessage(SURVIVOR, currentPlayer.getName() + " survived, hand out " + drinkNumberCounterInt + " " + drinksText);
+    }
+
+    public static void resetGoblinTrigger() {
+        goblinTriggeredThisTurn = false;
+    }
+
+    public static void checkGoblinPassive(Player wildcardUser, Runnable onDone) {
+        if (goblinTriggeredThisTurn) {
+            onDone.run();
+            return;
+        }
+
+        boolean wildcardUserHasGoblinPassive = wildcardUser.getClassChoices().contains(GOBLIN) ||
+                (wildcardUser.getClassChoices().contains(ANGRY_JIM) && game.getCurrentNumber() < 50);
+
+        if (wildcardUserHasGoblinPassive) {
+            onDone.run();
+            return;
+        }
+
+        for (Player player : game.getPlayers()) {
+            boolean hasGoblinPassive = player.getClassChoices().contains(GOBLIN) ||
+                    (player.getClassChoices().contains(ANGRY_JIM) && game.getCurrentNumber() < 50);
+
+            if (hasGoblinPassive && !player.equals(wildcardUser)) {
+                addPassiveMessage(GOBLIN, "Drink once for using a wildcard!");
+                goblinTriggeredThisTurn = true;
+                break;
+            }
+        }
+
+        showCombinedPassives(onDone);
+    }
+
+    public static void handleScientistPassive(Player currentPlayer) {
+        if (!isFirstTurn) {
+            int currentNumber = game.getCurrentNumber();
+            int skipChance = (currentNumber < 10) ? 20 : (currentNumber < 100 ? 15 : 10);
+            int chance = new Random().nextInt(100);
+
+            if (chance < skipChance) {
+                addPassiveMessage(SCIENTIST, currentPlayer.getName() + "'s turn was skipped.");
+                addPassiveAction(currentPlayer::useSkip);
+            }
+        }
+    }
+
+    public static void handleAngryJimPassive(Player currentPlayer) {
+        boolean numberBelow50 = game.getCurrentNumber() < 50;
+        Player lastPlayer = game.getLastTurnPlayer();
+        boolean isFirstAngryJimTurn = lastPlayer == null || !lastPlayer.equals(currentPlayer);
+
+        if (numberBelow50 && isFirstAngryJimTurn) {
+            game.updateRepeatingTurns(currentPlayer, 1);
+        }
+
+        if (numberBelow50 && game.getNumberWasGenerated()) {
+            handleSoldierPassive();
+            if (currentPlayer.isRemoved()) return;
+            handleArcherPassive(currentPlayer);
+            handleWitchPassive(currentPlayer);
+            handleScientistPassive(currentPlayer);
+        }
+    }
+
+    public static void handleArcherPassive(Player currentPlayer) {
+        if (!currentPlayer.getClassChoices().contains(ANGRY_JIM)) {
+            currentPlayer.incrementPassiveAbilityTurnCounter();
+        }
+
+        if (currentPlayer.getPassiveAbilityTurnCounter() == 3) {
+            currentPlayer.resetPassiveAbilityTurnCounter();
+            int chance = new Random().nextInt(100);
+            if (chance < 60) {
+                activity.updateDrinkNumberCounter(2, true);
+                addPassiveMessage(ARCHER, "Drinking number increased by 2!");
+            } else {
+                activity.updateDrinkNumberCounter(-2, true);
+                addPassiveMessage(ARCHER, "Drinking number decreased by 2!");
+            }
+        }
+    }
+
+    public static void handleTrollPassive(Player currentPlayer) {
+        if (isFirstTurn) return;
+
+        // 2. If current player is a Troll, generate hunger for others
+        if (currentPlayer.getClassChoices().contains(TROLL) && !currentPlayer.isRemoved()) {
+            int chance = new Random().nextInt(100);
+            
+            if (chance < 10) {
+                // THE FEAST (10%)
+                for (Player p : game.getPlayers()) {
+                    if (!p.equals(currentPlayer)) {
+                        p.setClassConsumed(true);
+                        p.setWildcardsConsumed(true);
+                    }
+                }
+                addPassiveMessage(TROLL, "The feast! Every other player's class and wildcards are eaten for one turn!");
+            } else if (chance < 25) {
+                // PERMANENT SCRAP (15%)
+                List<Player> targets = new ArrayList<>();
+                for (Player p : game.getPlayers()) {
+                    if (!p.equals(currentPlayer) && !p.isRemoved() && p.getWildCardAmount() > 0) {
+                        targets.add(p);
+                    }
+                }
+                if (!targets.isEmpty()) {
+                    Player target = targets.get(new Random().nextInt(targets.size()));
+                    target.loseWildCards(1);
+                    addPassiveMessage(TROLL, "Greedy Troll! The troll ate one of " + target.getName() + "'s wildcards, and it is gone forever!");
+                } else {
+                    handleNormalSnack(currentPlayer);
+                }
+            } else if (chance >= 65) {
+                // THE SNACK (35%)
+                handleNormalSnack(currentPlayer);
+            }
+            // 25 to 64 (40%) implicitly does nothing
+        }
+    }
+
+    public static void characterPassiveClassAffects() {
+        Player currentPlayer = game.getCurrentPlayer();
+        List<String> classes = currentPlayer.getClassChoices();
+
+        boolean isAngryJimActive = classes.contains(ANGRY_JIM) && game.getCurrentNumber() < 50;
+
+        if (classes.contains(SOLDIER) && game.getNumberWasGenerated() && !isAngryJimActive) {
+            handleSoldierPassive();
+        }
+
+        if (classes.contains(WITCH) && game.getNumberWasGenerated() && !isAngryJimActive) {
+            handleWitchPassive(currentPlayer);
+        }
+
+        if (classes.contains(SCIENTIST) && !isAngryJimActive) {
+            handleScientistPassive(currentPlayer);
+        }
+
+        if (classes.contains(ANGRY_JIM)) {
+            handleAngryJimPassive(currentPlayer);
+        }
+
+        if (classes.contains(ARCHER) && !isAngryJimActive) {
+            handleArcherPassive(currentPlayer);
+        }
+
+        if (classes.contains(TROLL)) {
+            handleTrollPassive(currentPlayer);
+        }
+    }
+
+    public static boolean canSeeNumber() {
+        Player currentPlayer = game.getCurrentPlayer();
+        return hidingTroll == null ||
+                (currentPlayer != null && currentPlayer.equals(hidingTroll)) ||
+                playersWhoPaidToll.contains(currentPlayer);
+    }
+
+    public static void hideNumberForTroll(Player troll) {
+        hidingTroll = troll;
+        playersWhoPaidToll.clear();
+        MainActivityGame.updateNumberText();
+    }
+
+    public static void showRevealNumberDialog(Runnable onGenerate) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.game_troll_reveal_dialog, null);
+        Button payBtn = dialogView.findViewById(R.id.btn_pay_view);
+        Button blindBtn = dialogView.findViewById(R.id.btn_generate_blind);
+
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+
+        activity.btnUtils.setButton(payBtn, () -> {
+            dialog.dismiss();
+            Player currentPlayer = game.getCurrentPlayer();
+            if (currentPlayer != null && !playersWhoPaidToll.contains(currentPlayer)) {
+                playersWhoPaidToll.add(currentPlayer);
+            }
+            MainActivityGame.updateNumberText();
+        });
+
+        activity.btnUtils.setButton(blindBtn, () -> {
+            dialog.dismiss();
+            onGenerate.run();
+        });
+
+        dialog.show();
+    }
+
+    private static void handleNormalSnack(Player currentPlayer) {
+        List<Player> targets = new ArrayList<>();
+        for (Player p : game.getPlayers()) {
+            if (!p.equals(currentPlayer) && !p.isRemoved()) {
+                targets.add(p);
+            }
+        }
+
+        if (targets.isEmpty()) return;
+
+        Player target = targets.get(new Random().nextInt(targets.size()));
+        int snackType = new Random().nextInt(2);
+
+        switch (snackType) {
+            case 0: // Eat Class
+                target.setClassConsumed(true);
+                break;
+            case 1: // Eat Wildcards
+                target.setWildcardsConsumed(true);
+                break;
+        }
+    }
+
+    public static void clearTrollDebuffs(Player player) {
+        player.setClassConsumed(false);
+        player.setWildcardsConsumed(false);
+    }
+
+    private static String gamblerBet = "";
+
+    public static void showGamblerBetDialog(Runnable onBetPlaced) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.game_gambler_over_under, null);
+
+        TextView title = dialogView.findViewById(R.id.dialogbox_textview);
+        int currentNumber = game.getCurrentNumber();
+        int middle = currentNumber / 2;
+        boolean isEven = currentNumber % 2 == 0;
+
+        String message = "Will the result be Over or Under " + middle + "?";
+        if (isEven) {
+            message = "Will the result be Over, Under, or Equal to " + middle + "?";
+        }
+        title.setText(message);
+        title.setTextSize(26);
+
+        Button overBtn = dialogView.findViewById(R.id.btn_over);
+        Button underBtn = dialogView.findViewById(R.id.btn_under);
+        Button equalBtn = dialogView.findViewById(R.id.btn_equal);
+
+        if (isEven) {
+            equalBtn.setVisibility(View.VISIBLE);
+            equalBtn.setText("EQUAL");
+        } else {
+            equalBtn.setVisibility(View.GONE);
+        }
+
+        builder.setView(dialogView);
+        builder.setCancelable(false);
+        AlertDialog dialog = builder.create();
+
+        activity.btnUtils.setButton(overBtn, () -> {
+            gamblerBet = "OVER";
+            dialog.dismiss();
+            onBetPlaced.run();
+        });
+
+        activity.btnUtils.setButton(underBtn, () -> {
+            gamblerBet = "UNDER";
+            dialog.dismiss();
+            onBetPlaced.run();
+        });
+
+        activity.btnUtils.setButton(equalBtn, () -> {
+            gamblerBet = "EQUAL";
+            dialog.dismiss();
+            onBetPlaced.run();
+        });
+
+        dialog.show();
+    }
+
+    public static void handleGamblerPassiveResult(int targetNumber) {
+        if (gamblerBet.isEmpty()) return;
+
+        Player currentPlayer = game.getCurrentPlayer();
+        if (currentPlayer == null) return;
+
+        int previousNumber = game.getPreviousNumber();
+        int middle = previousNumber / 2;
+        boolean won = false;
+        boolean isEven = previousNumber % 2 == 0;
+
+        if (gamblerBet.equals("OVER") && targetNumber > middle) {
+            won = true;
+        } else if (gamblerBet.equals("EQUAL") && targetNumber == middle) {
+            won = true;
+        } else if (gamblerBet.equals("UNDER")) {
+            if (isEven) {
+                if (targetNumber < middle) won = true;
+            } else {
+                if (targetNumber <= middle) won = true;
+            }
+        }
+
+        String message;
+        if (won) {
+            if (gamblerBet.equals("EQUAL")) {
+                message = currentPlayer.getName() + " won their bet! Hand out 3 drinks.";
+                currentPlayer.incrementDrinksHandedOutByGambler(3);
+            } else {
+                message = currentPlayer.getName() + " won their bet! Hand out 1 drink.";
+                currentPlayer.incrementDrinksHandedOutByGambler(1);
+            }
+        } else {
+            message = currentPlayer.getName() + " lost their bet! Take 1 drink.";
+            currentPlayer.incrementDrinksTakenByGambler(1);
+        }
+        
+        addPassiveMessage(GAMBLER, message);
+        gamblerBet = "";
+    }
+}
