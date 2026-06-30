@@ -202,5 +202,57 @@
   {
     "activity": "Truth! Give out a drink if you have ever been in a fight.",
     "enabled": true
+  },
+  {
+    "activity": "Truth! Give out a drink if you have ever ghosted someone.",
+    "enabled": true
+  },
+  {
+    "activity": "Truth! Give out a drink if you have ever been ghosted.",
+    "enabled": true
+  },
+  {
+    "activity": "Truth! Give out a drink if you have ever checked a partner's phone without permission.",
+    "enabled": true
+  },
+  {
+    "activity": "Truth! Give out a drink if you have ever lied to get out of a date.",
+    "enabled": true
+  },
+  {
+    "activity": "Truth! Give out a drink if you have ever had a crush on a friend's parent.",
+    "enabled": true
+  },
+  {
+    "activity": "Truth! Give out a drink if you have ever cried in public.",
+    "enabled": true
+  },
+  {
+    "activity": "Truth! Give out a drink if you have ever been arrested.",
+    "enabled": true
+  },
+  {
+    "activity": "Truth! Give out a drink if you have ever used a fake ID.",
+    "enabled": true
+  },
+  {
+    "activity": "Truth! Give out a drink if you have ever accidentally sent a text about someone to that person.",
+    "enabled": true
+  },
+  {
+    "activity": "Truth! Give out a drink if you have ever had a paranormal experience.",
+    "enabled": true
+  },
+  {
+    "activity": "Truth! Give out a drink if you have ever done a 'walk of shame'.",
+    "enabled": true
+  },
+  {
+    "activity": "Truth! Give out a drink if you have ever lied to your parents about where you were going.",
+    "enabled": true
+  },
+  {
+    "activity": "Truth! Give out a drink if you have ever had a crush on your best friend's sibling.",
+    "enabled": true
   }
 ]

@@ -198,5 +198,53 @@
   {
     "activity": "Task! Do 5 push-ups or take 3 drinks.",
     "enabled": true
+  },
+  {
+    "activity": "Task! Don't use your phone until your next turn. If you do, take 3 drinks.",
+    "enabled": true
+  },
+  {
+    "activity": "Task! Everyone with blue eyes takes 2 drinks.",
+    "enabled": true
+  },
+  {
+    "activity": "Task! Whoever has the most battery percentage left gives out 3 drinks.",
+    "enabled": true
+  },
+  {
+    "activity": "Task! Whoever has the least battery percentage left takes 3 drinks.",
+    "enabled": true
+  },
+  {
+    "activity": "Task! Mention a player's name in every sentence until your next turn. If you fail, drink 2.",
+    "enabled": true
+  },
+  {
+    "activity": "Task! Try to lick your elbow. If you fail, take 2 drinks.",
+    "enabled": true
+  },
+  {
+    "activity": "Task! Swap an item of clothing with the person to your left or take 3 drinks.",
+    "enabled": true
+  },
+  {
+    "activity": "Task! Do a plank for 30 seconds or take 3 drinks.",
+    "enabled": true
+  },
+  {
+    "activity": "Task! Sing everything you say until your next turn. If you fail, take 2 drinks.",
+    "enabled": true
+  },
+  {
+    "activity": "Task! Keep your eyes closed until your next turn. If you open them, take 2 drinks.",
+    "enabled": true
+  },
+  {
+    "activity": "Task! Talk without closing your mouth until your next turn or take 2 drinks.",
+    "enabled": true
+  },
+  {
+    "activity": "Task! Try to touch your toes without bending your knees. If you fail, take 2 drinks.",
+    "enabled": true
   }
 ]
