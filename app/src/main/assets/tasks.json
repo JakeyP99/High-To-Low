@@ -1,250 +1,250 @@
 [
   {
-    "activity": "Task! Take 1 drink.",
+    "activity": "Take 1 drink.",
     "enabled": true
   },
   {
-    "activity": "Task! Take 2 drinks.",
+    "activity": "Take 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Take 3 drinks.",
+    "activity": "Take 3 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Finish your drink.",
+    "activity": "Finish your drink.",
     "enabled": true
   },
   {
-    "activity": "Task! Give 1 drink.",
+    "activity": "Give 1 drink.",
     "enabled": true
   },
   {
-    "activity": "Task! Give 2 drinks.",
+    "activity": "Give 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Give 3 drinks.",
+    "activity": "Give 3 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Choose a player to finish their drink.",
+    "activity": "Choose a player to finish their drink.",
     "enabled": true
   },
   {
-    "activity": "Task! The player to the left takes a drink.",
+    "activity": "The player to the left takes a drink.",
     "enabled": true
   },
   {
-    "activity": "Task! The player to the right takes a drink.",
+    "activity": "The player to the right takes a drink.",
     "enabled": true
   },
   {
-    "activity": "Task! The oldest player takes 2 drinks.",
+    "activity": "The oldest player takes 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! The youngest player takes 2 drinks.",
+    "activity": "The youngest player takes 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! The player who last peed takes 3 drinks.",
+    "activity": "The player who last peed takes 3 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! The player with the oldest car takes 2 drinks.",
+    "activity": "The player with the oldest car takes 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Whoever last rode on a train takes 2 drinks.",
+    "activity": "Whoever last rode on a train takes 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Anyone who is standing takes 4 drinks, why are you standing? Sit down mate.",
+    "activity": "Anyone who is standing takes 4 drinks, why are you standing? Sit down mate.",
     "enabled": true
   },
   {
-    "activity": "Task! Anyone who is sitting takes 2 drinks.",
+    "activity": "Anyone who is sitting takes 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Whoever has the longest hair takes 2 drinks.",
+    "activity": "Whoever has the longest hair takes 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Whoever is wearing a watch takes 2 drinks.",
+    "activity": "Whoever is wearing a watch takes 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Whoever has a necklace on takes 2 drinks.",
+    "activity": "Whoever has a necklace on takes 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Give 1 drink for every cheese you can name in 10 seconds.",
+    "activity": "Give 1 drink for every cheese you can name in 10 seconds.",
     "enabled": true
   },
   {
-    "activity": "Task! The shortest person at the table must take 4 drinks then give 4 drinks.",
+    "activity": "The shortest person at the table must take 4 drinks then give 4 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Bare your biceps and flex for everyone. The players next to you each drink 2 for the view.",
+    "activity": "Bare your biceps and flex for everyone. The players next to you each drink 2 for the view.",
     "enabled": true
   },
   {
-    "activity": "Task! All females drink 3, and all males drink 3. Equality.",
+    "activity": "All females drink 3, and all males drink 3. Equality.",
     "enabled": true
   },
   {
-    "activity": "Task! Choose someone to drink with their non-dominant hand for the next round.",
+    "activity": "Choose someone to drink with their non-dominant hand for the next round.",
     "enabled": true
   },
   {
-    "activity": "Task! Recite the alphabet backward in 10 seconds. Give out drinks for each correct letter before making a mistake or time running out.",
+    "activity": "Recite the alphabet backward in 10 seconds. Give out drinks for each correct letter before making a mistake or time running out.",
     "enabled": true
   },
   {
-    "activity": "Task! The person with the longest fingernails takes 2 drinks.",
+    "activity": "The person with the longest fingernails takes 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! The person with the most expensive item on them takes 3 drinks.",
+    "activity": "The person with the most expensive item on them takes 3 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! The person with the most keys takes 3 drinks.",
+    "activity": "The person with the most keys takes 3 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! The person with the longest beard takes 2 drinks.",
+    "activity": "The person with the longest beard takes 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Take a drink for each person with brown eyes in the group.",
+    "activity": "Take a drink for each person with brown eyes in the group.",
     "enabled": true
   },
   {
-    "activity": "Task! If you can touch your tongue to the tip of your nose give out 2 drinks, if you can’t take 2 drinks.",
+    "activity": "If you can touch your tongue to the tip of your nose give out 2 drinks, if you can’t take 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! The person wearing the most buttons on their shirt takes 3 drinks. Mr Fancy aye.",
+    "activity": "The person wearing the most buttons on their shirt takes 3 drinks. Mr Fancy aye.",
     "enabled": true
   },
   {
-    "activity": "Task! The person with the most watches takes 2 drinks.",
+    "activity": "The person with the most watches takes 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Give 2 drinks to someone, and serenade that person.",
+    "activity": "Give 2 drinks to someone, and serenade that person.",
     "enabled": true
   },
   {
-    "activity": "Task! Play a round of categories, (your choice of the category) loser takes 2 drinks.",
+    "activity": "Play a round of categories, (your choice of the category) loser takes 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Give out 2 drinks for each double joint you have, take 2 drinks if you don’t have any.",
+    "activity": "Give out 2 drinks for each double joint you have, take 2 drinks if you don’t have any.",
     "enabled": true
   },
   {
-    "activity": "Task! Choose a player. You both stare at each other. First to blink takes 3 drinks.",
+    "activity": "Choose a player. You both stare at each other. First to blink takes 3 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Compliment the person across from you or take 2 drinks.",
+    "activity": "Compliment the person across from you or take 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Reveal the last photo in your camera roll or take 2 drinks.",
+    "activity": "Reveal the last photo in your camera roll or take 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Everyone must speak in accents for the rest of the game. Anyone who forgets drinks.",
+    "activity": "Everyone must speak in accents for the rest of the game. Anyone who forgets drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Try to balance a drink on your head for 5 seconds. Take 2 drinks if you fail.",
+    "activity": "Try to balance a drink on your head for 5 seconds. Take 2 drinks if you fail.",
     "enabled": true
   },
   {
-    "activity": "Task! Whoever is wearing the brightest color gives out 3 drinks.",
+    "activity": "Whoever is wearing the brightest color gives out 3 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Whoever has the most unread notifications on their phone takes 3 drinks.",
+    "activity": "Whoever has the most unread notifications on their phone takes 3 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Everyone votes on the best-dressed player. That person gives out 4 drinks.",
+    "activity": "Everyone votes on the best-dressed player. That person gives out 4 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Everyone who has dyed their hair before takes 2 drinks.",
+    "activity": "Everyone who has dyed their hair before takes 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Everyone show your lock screen. If it's a selfie, take 2 drinks.",
+    "activity": "Everyone show your lock screen. If it's a selfie, take 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Speak in rhyme until your next turn, if you fail take 2 drinks.",
+    "activity": "Speak in rhyme until your next turn, if you fail take 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Everyone who has been on a plane this year takes 2 drinks.",
+    "activity": "Everyone who has been on a plane this year takes 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Do 5 push-ups or take 3 drinks.",
+    "activity": "Do 5 push-ups or take 3 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Don't use your phone until your next turn. If you do, take 3 drinks.",
+    "activity": "Don't use your phone until your next turn. If you do, take 3 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Everyone with blue eyes takes 2 drinks.",
+    "activity": "Everyone with blue eyes takes 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Whoever has the most battery percentage left gives out 3 drinks.",
+    "activity": "Whoever has the most battery percentage left gives out 3 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Whoever has the least battery percentage left takes 3 drinks.",
+    "activity": "Whoever has the least battery percentage left takes 3 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Mention a player's name in every sentence until your next turn. If you fail, drink 2.",
+    "activity": "Mention a player's name in every sentence until your next turn. If you fail, drink 2.",
     "enabled": true
   },
   {
-    "activity": "Task! Try to lick your elbow. If you fail, take 2 drinks.",
+    "activity": "Try to lick your elbow. If you fail, take 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Swap an item of clothing with the person to your left or take 3 drinks.",
+    "activity": "Swap an item of clothing with the person to your left or take 3 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Do a plank for 30 seconds or take 3 drinks.",
+    "activity": "Do a plank for 30 seconds or take 3 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Sing everything you say until your next turn. If you fail, take 2 drinks.",
+    "activity": "Sing everything you say until your next turn. If you fail, take 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Keep your eyes closed until your next turn. If you open them, take 2 drinks.",
+    "activity": "Keep your eyes closed until your next turn. If you open them, take 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Talk without closing your mouth until your next turn or take 2 drinks.",
+    "activity": "Talk without closing your mouth until your next turn or take 2 drinks.",
     "enabled": true
   },
   {
-    "activity": "Task! Try to touch your toes without bending your knees. If you fail, take 2 drinks.",
+    "activity": "Try to touch your toes without bending your knees. If you fail, take 2 drinks.",
     "enabled": true
   }
 ]
