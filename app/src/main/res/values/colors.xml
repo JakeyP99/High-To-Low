@@ -8,4 +8,6 @@
     <color name="reddark">#B71C1C</color>
     <color name="redtransparent">#ffdede</color>
     <color name="custom_yellow">#FFCC00</color>
+    <color name="green">#398000</color>
+
 </resources>

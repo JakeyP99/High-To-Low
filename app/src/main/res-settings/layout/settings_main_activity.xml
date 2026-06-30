@@ -283,6 +283,61 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <!-- Category 5: API Connection -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/btn_setting_api"
+                    android:layout_width="match_parent"
+                    android:layout_height="85dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/outlineforbutton"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:id="@+id/titleApi"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:fontFamily="@font/viga"
+                        android:text="API Connection"
+                        android:textColor="@color/bluedark"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/subApi"
+                        app:layout_constraintEnd_toStartOf="@+id/arrowApi"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_chainStyle="packed" />
+
+                    <TextView
+                        android:id="@+id/subApi"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:alpha="0.7"
+                        android:fontFamily="@font/viga"
+                        android:text="Test trivia API connectivity"
+                        android:textColor="@color/bluedark"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/arrowApi"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/titleApi" />
+
+                    <ImageView
+                        android:id="@+id/arrowApi"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:alpha="0.3"
+                        android:src="@drawable/arrow_right"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
             </LinearLayout>
         </ScrollView>
 

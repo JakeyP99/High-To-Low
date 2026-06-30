@@ -66,6 +66,10 @@ public class TriviaSessionManager {
         });
     }
 
+    public void testConnection(Callback<TriviaService.TriviaResponse> callback) {
+        triviaService.getQuestions(1, "multiple").enqueue(callback);
+    }
+
     public WildCardProperties getNextQuestion() {
         synchronized (questionCache) {
             if (questionCache.isEmpty()) {

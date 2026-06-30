@@ -1,6 +1,7 @@
 package com.mydomain.countingdowngame.settings;
 
 import android.app.AlertDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,14 +15,19 @@ import androidx.activity.OnBackPressedCallback;
 import com.mydomain.countingdowngame.R;
 import com.mydomain.countingdowngame.utils.ButtonUtilsActivity;
 import com.mydomain.countingdowngame.wildCards.WildCardProperties;
+import com.mydomain.countingdowngame.wildCards.api.TriviaService;
+import com.mydomain.countingdowngame.wildCards.api.TriviaSessionManager;
 import com.mydomain.countingdowngame.wildCards.wildCardTypes.WildCardRepository;
 
 import pl.droidsonroids.gif.GifImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SettingsMenu extends ButtonUtilsActivity {
 
     private GifImageView muteGif, soundGif;
-    private View btnLimits, btnQuiz, btnContent, btnEvents;
+    private View btnLimits, btnQuiz, btnContent, btnEvents, btnApi;
 
     @Override
     protected void onResume() {
@@ -55,6 +61,7 @@ public class SettingsMenu extends ButtonUtilsActivity {
         btnQuiz = findViewById(R.id.btn_setting_quiz);
         btnContent = findViewById(R.id.btn_setting_content);
         btnEvents = findViewById(R.id.btn_setting_events);
+        btnApi = findViewById(R.id.btn_setting_api);
     }
 
     private void setButtonListeners() {
@@ -62,6 +69,7 @@ public class SettingsMenu extends ButtonUtilsActivity {
         btnUtils.setButton(btnQuiz, this::showQuizDialog);
         btnUtils.setButton(btnContent, this::showContentDialog);
         btnUtils.setButton(btnEvents, this::showEventsDialog);
+        btnUtils.setButton(btnApi, this::showApiDialog);
     }
 
     // ---------------- POPUP DIALOGS ----------------
@@ -158,6 +166,38 @@ public class SettingsMenu extends ButtonUtilsActivity {
             btnCatastrophe.setSelected(!btnCatastrophe.isSelected());
             store.setIsCatastrophesActivated(btnCatastrophe.isSelected());
             updateToggleText(btnCatastrophe);
+        });
+
+        createDialog(v).show();
+    }
+
+    private void showApiDialog() {
+        View v = inflate(R.layout.game_settings_api_dialog);
+        Button btnTest = v.findViewById(R.id.button_test_api);
+        android.widget.TextView statusText = v.findViewById(R.id.api_status_text);
+
+        btnTest.setOnClickListener(view -> {
+            statusText.setText("Testing...");
+            statusText.setTextColor(getResources().getColor(R.color.bluedark, getTheme()));
+
+            TriviaSessionManager.getInstance().testConnection(new Callback<>() {
+                @Override
+                public void onResponse(Call<TriviaService.TriviaResponse> call, Response<TriviaService.TriviaResponse> response) {
+                    if (response.isSuccessful()) {
+                        statusText.setText("Connection Successful!");
+                        statusText.setTextColor(getColor(R.color.green));
+                    } else {
+                        statusText.setText("API Error: " + response.code());
+                        statusText.setTextColor(android.graphics.Color.RED);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<TriviaService.TriviaResponse> call, Throwable t) {
+                    statusText.setText("Connection Failed: " + t.getMessage());
+                    statusText.setTextColor(android.graphics.Color.RED);
+                }
+            });
         });
 
         createDialog(v).show();
