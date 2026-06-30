@@ -20,18 +20,14 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Path;
 import android.graphics.drawable.GradientDrawable;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.util.Base64;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
@@ -534,15 +530,14 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         } else if (percentageOff <= 10) {
             description = "Not bad (Within 10%)! Correct was " + correctAnswer + ".\n\n" + player.getName() + " hand out 2 drinks!";
             player.incrementDrinksHandedOutByWitch(1);
-        }
-        else if (percentageOff <= 20) {
+        } else if (percentageOff <= 20) {
             description = "Not bad (Within 20%)! Correct was " + correctAnswer + ".\n\n" + player.getName() + " hand out 1 drink!";
             player.incrementDrinksHandedOutByWitch(1);
-        }else {
+        } else {
             description = "Way off! Correct was " + correctAnswer + ".\n\n" + player.getName() + " take 2 drinks!";
             player.incrementDrinksTakenByWitch(2);
         }
-        
+
         activity.mainActivityDialog.showDialog("Witch's Active!", description, R.layout.game_main_dialog, R.id.class_textview, R.id.description_textview, null);
 
     }
@@ -633,8 +628,8 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 for (int i = 0; i <= 180; i++) {
                     double angle = Math.toRadians(i);
 
-                    float x = (float)(150 + 100 * Math.cos(angle));
-                    float y = (float)(150 + 100 * Math.sin(angle));
+                    float x = (float) (150 + 100 * Math.cos(angle));
+                    float y = (float) (150 + 100 * Math.sin(angle));
 
                     path.lineTo(x, y);
                 }
@@ -643,10 +638,10 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
                     double angle = Math.toRadians(i);
 
-                    float x = (float)(180 + 70 * Math.cos(angle));
-                    float y = (float)(150 + 70 * Math.sin(angle));
+                    float x = (float) (180 + 70 * Math.cos(angle));
+                    float y = (float) (150 + 70 * Math.sin(angle));
 
-                    path.lineTo(x,y);
+                    path.lineTo(x, y);
                 }
 
                 path.close();
@@ -654,84 +649,84 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
 
             case 2: // Eye rune
-                path.moveTo(40,150);
+                path.moveTo(40, 150);
 
-                for(int i=0;i<=360;i++){
+                for (int i = 0; i <= 360; i++) {
 
-                    double t=Math.toRadians(i);
+                    double t = Math.toRadians(i);
 
-                    float x=(float)(150 + 110*Math.cos(t));
-                    float y=(float)(150 + 60*Math.sin(t));
+                    float x = (float) (150 + 110 * Math.cos(t));
+                    float y = (float) (150 + 60 * Math.sin(t));
 
-                    path.lineTo(x,y);
+                    path.lineTo(x, y);
                 }
 
                 path.close();
 
                 // pupil
-                path.addCircle(150,150,30,Path.Direction.CW);
+                path.addCircle(150, 150, 30, Path.Direction.CW);
 
                 break;
 
             case 3: // Rune tree
-                path.moveTo(150,280);
-                path.lineTo(150,70);
+                path.moveTo(150, 280);
+                path.lineTo(150, 70);
 
-                path.moveTo(150,100);
-                path.lineTo(80,170);
+                path.moveTo(150, 100);
+                path.lineTo(80, 170);
 
-                path.moveTo(150,140);
-                path.lineTo(220,210);
+                path.moveTo(150, 140);
+                path.lineTo(220, 210);
 
-                path.moveTo(150,190);
-                path.lineTo(90,240);
+                path.moveTo(150, 190);
+                path.lineTo(90, 240);
 
-                path.moveTo(150,220);
-                path.lineTo(230,260);
+                path.moveTo(150, 220);
+                path.lineTo(230, 260);
 
                 break;
 
 
             case 4: // Diamond rune
-                path.moveTo(150,20);
-                path.lineTo(270,150);
-                path.lineTo(150,280);
-                path.lineTo(30,150);
+                path.moveTo(150, 20);
+                path.lineTo(270, 150);
+                path.lineTo(150, 280);
+                path.lineTo(30, 150);
                 path.close();
 
-                path.moveTo(150,70);
-                path.lineTo(210,150);
-                path.lineTo(150,230);
-                path.lineTo(90,150);
+                path.moveTo(150, 70);
+                path.lineTo(210, 150);
+                path.lineTo(150, 230);
+                path.lineTo(90, 150);
                 path.close();
 
                 break;
 
 
             case 5: // Lightning rune
-                path.moveTo(180,20);
-                path.lineTo(80,150);
-                path.lineTo(150,150);
-                path.lineTo(90,280);
-                path.lineTo(230,120);
-                path.lineTo(160,120);
+                path.moveTo(180, 20);
+                path.lineTo(80, 150);
+                path.lineTo(150, 150);
+                path.lineTo(90, 280);
+                path.lineTo(230, 120);
+                path.lineTo(160, 120);
                 path.close();
 
                 break;
 
 
             case 6: // Viking style rune
-                path.moveTo(100,40);
-                path.lineTo(100,260);
+                path.moveTo(100, 40);
+                path.lineTo(100, 260);
 
-                path.moveTo(100,80);
-                path.lineTo(230,80);
+                path.moveTo(100, 80);
+                path.lineTo(230, 80);
 
-                path.moveTo(100,160);
-                path.lineTo(200,260);
+                path.moveTo(100, 160);
+                path.lineTo(200, 260);
 
-                path.moveTo(100,160);
-                path.lineTo(220,40);
+                path.moveTo(100, 160);
+                path.lineTo(220, 40);
 
                 break;
         }
@@ -1088,9 +1083,9 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     }
 
     private static void handleGuess(boolean guessedRed, boolean isRed, int value, ImageView cardIv, TextView cardValueTv,
-                                   Button btnRed, Button btnBlack, TextView resultMsgTv, Button finishBtn,
-                                   TextView penaltyTv, TextView roundTv, GifImageView confettiGif,
-                                   View cardContainer, Player gambler, Player opponent) {
+                                    Button btnRed, Button btnBlack, TextView resultMsgTv, Button finishBtn,
+                                    TextView penaltyTv, TextView roundTv, GifImageView confettiGif,
+                                    View cardContainer, Player gambler, Player opponent) {
         btnRed.setEnabled(false);
         btnBlack.setEnabled(false);
 
@@ -1104,13 +1099,13 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 ((GradientDrawable) btnBlack.getBackground().mutate()).setColor(Color.parseColor("#40000000"));
             }
         }
-        
+
         flipCardForGambler(cardIv, cardValueTv, isRed, value, () -> {
             if (guessedRed == isRed) {
                 // Win round
                 currentPenalty--;
                 penaltyTv.setText("Penalty: " + currentPenalty + " drinks");
-                
+
                 // Show confetti
                 confettiGif.setVisibility(VISIBLE);
                 new Handler().postDelayed(() -> confettiGif.setVisibility(GONE), 2000);
@@ -1118,7 +1113,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 // Hand out drink to opponent
                 opponent.incrementDrinksTakenByGambler(1);
                 gambler.incrementDrinksHandedOutByGambler(1);
-                
+
                 if (currentPenalty == 0) {
                     // Show confetti
                     confettiGif.setVisibility(VISIBLE);
@@ -1184,7 +1179,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         oa2.setInterpolator(new AccelerateDecelerateInterpolator());
         oa1.setDuration(250);
         oa2.setDuration(250);
-        
+
         oa1.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -1197,7 +1192,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 oa2.start();
             }
         });
-        
+
         oa2.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -1382,18 +1377,6 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         dialog.show();
     }
 
-    static class AbilityVH extends RecyclerView.ViewHolder {
-        ImageView icon;
-        TextView name, desc;
-
-        AbilityVH(View v) {
-            super(v);
-            icon = v.findViewById(R.id.playerPhotoImageView);
-            name = v.findViewById(R.id.playerNameTextView);
-            desc = v.findViewById(R.id.playerClassTextView);
-        }
-    }
-
     private static void triggerSpecificActiveAbility(String className, Player currentPlayer) {
         switch (className) {
             case SCIENTIST:
@@ -1490,5 +1473,17 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         if (value == 12) return "Q";
         if (value == 13) return "K";
         return "A";
+    }
+
+    static class AbilityVH extends RecyclerView.ViewHolder {
+        ImageView icon;
+        TextView name, desc;
+
+        AbilityVH(View v) {
+            super(v);
+            icon = v.findViewById(R.id.playerPhotoImageView);
+            name = v.findViewById(R.id.playerNameTextView);
+            desc = v.findViewById(R.id.playerClassTextView);
+        }
     }
 }

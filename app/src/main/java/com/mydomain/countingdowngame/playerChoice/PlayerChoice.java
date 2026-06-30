@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.gson.Gson;
 import com.mydomain.countingdowngame.R;
 import com.mydomain.countingdowngame.audio.AudioManager;
 import com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions;
@@ -39,9 +40,8 @@ import com.mydomain.countingdowngame.mainActivity.classAbilities.AbilityComplime
 import com.mydomain.countingdowngame.numberChoice.NumberChoice;
 import com.mydomain.countingdowngame.player.Player;
 import com.mydomain.countingdowngame.statistics.Statistics;
-import com.google.gson.Gson;
-
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -465,7 +465,11 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
 
     public static class SpaceItemDecoration extends RecyclerView.ItemDecoration {
         private final int spacing;
-        public SpaceItemDecoration(int spacing) { this.spacing = spacing; }
+
+        public SpaceItemDecoration(int spacing) {
+            this.spacing = spacing;
+        }
+
         @Override
         public void getItemOffsets(Rect outRect, @NonNull View view, RecyclerView parent, @NonNull RecyclerView.State state) {
             outRect.left = spacing;

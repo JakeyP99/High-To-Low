@@ -21,9 +21,10 @@ public class RuneTracingView extends View {
     private Paint userPaint;
     private Path targetPath;
     private Path userPath;
-    
+
     private List<float[]> targetPoints;
     private List<float[]> userPoints;
+    private boolean drawingEnabled = false;
 
     public RuneTracingView(Context context) {
         super(context);
@@ -58,8 +59,6 @@ public class RuneTracingView extends View {
         targetPoints = new ArrayList<>();
         userPoints = new ArrayList<>();
     }
-
-    private boolean drawingEnabled = false;
 
     public void setDrawingEnabled(boolean enabled) {
         this.drawingEnabled = enabled;
@@ -169,7 +168,7 @@ public class RuneTracingView extends View {
         // 2. Coverage: How much of the target rune was actually traced?
         int reachedPoints = 0;
         float reachThreshold = 25f; // Stricter threshold
-        
+
         for (float[] tPoint : targetPoints) {
             boolean reached = false;
             for (float[] uPoint : userPoints) {
@@ -185,12 +184,12 @@ public class RuneTracingView extends View {
 
         // 3. Final Calculation
         // Normalize precision: 0-60 pixels is 100-0% precision
-        float maxAllowedPrecisionDist = 60f; 
+        float maxAllowedPrecisionDist = 60f;
         float precisionScore = Math.max(0, 100 - (avgPrecisionDist / maxAllowedPrecisionDist * 100));
 
         // Similarity is weighted by coverage.
         float finalSimilarity = precisionScore * coverageRatio;
-        
+
         return finalSimilarity;
     }
 }

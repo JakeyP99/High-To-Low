@@ -52,8 +52,9 @@ public class DrawingPlayerModels extends ButtonUtilsActivity {
         });
         btnUtils.setButton(eraserButton, this::toggleEraserMode);
     }
+
     //-----------------------------------------------------Seekbar Functionality---------------------------------------------------//
-    private void setupSeekBarListener () {
+    private void setupSeekBarListener() {
         penSizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -67,47 +68,49 @@ public class DrawingPlayerModels extends ButtonUtilsActivity {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
     }
 
 
     //-----------------------------------------------------Button Functionality---------------------------------------------------//
 
-        private void saveDrawing () {
-            Bitmap drawnBitmap = drawingView.getDrawingBitmap();
-            String drawnBitmapString = convertBitmapToString(drawnBitmap);
+    private void saveDrawing() {
+        Bitmap drawnBitmap = drawingView.getDrawingBitmap();
+        String drawnBitmapString = convertBitmapToString(drawnBitmap);
 
-            Intent intent = new Intent();
-            intent.putExtra("drawnBitmap", drawnBitmapString);
-            setResult(RESULT_OK, intent);
-            finish();
-        }
+        Intent intent = new Intent();
+        intent.putExtra("drawnBitmap", drawnBitmapString);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
 
-        private void cancelDrawing () {
-            setResult(RESULT_CANCELED);
-            finish();
-        }
+    private void cancelDrawing() {
+        setResult(RESULT_CANCELED);
+        finish();
+    }
 
-        private void showColorPickerDialog () {
-            AmbilWarnaDialog colorPickerDialog = new AmbilWarnaDialog(DrawingPlayerModels.this, currentColor,
-                    new AmbilWarnaDialog.OnAmbilWarnaListener() {
-                        @Override
-                        public void onOk(AmbilWarnaDialog dialog, int color) {
-                            currentColor = color;
-                            drawingView.setCurrentColor(currentColor);
-                        }
+    private void showColorPickerDialog() {
+        AmbilWarnaDialog colorPickerDialog = new AmbilWarnaDialog(DrawingPlayerModels.this, currentColor,
+                new AmbilWarnaDialog.OnAmbilWarnaListener() {
+                    @Override
+                    public void onOk(AmbilWarnaDialog dialog, int color) {
+                        currentColor = color;
+                        drawingView.setCurrentColor(currentColor);
+                    }
 
-                        @Override
-                        public void onCancel(AmbilWarnaDialog dialog) {
-                            // Cancelled
-                        }
-                    });
-            colorPickerDialog.show();
-        }
+                    @Override
+                    public void onCancel(AmbilWarnaDialog dialog) {
+                        // Cancelled
+                    }
+                });
+        colorPickerDialog.show();
+    }
 
     private void toggleEraserMode() {
         boolean isEraserMode = !drawingView.isEraserMode();
@@ -157,12 +160,11 @@ public class DrawingPlayerModels extends ButtonUtilsActivity {
     }
 
 
-
     //-----------------------------------------------------Convert to bitmap Functionality---------------------------------------------------//
-        private String convertBitmapToString (Bitmap bitmap){
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-            byte[] byteArray = byteArrayOutputStream.toByteArray();
-            return Base64.encodeToString(byteArray, Base64.DEFAULT);
-        }
+    private String convertBitmapToString(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
+}

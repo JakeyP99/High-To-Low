@@ -205,72 +205,6 @@ public class MainActivityDialog {
         dialog.show();
     }
 
-    public static class OpponentAdapter extends RecyclerView.Adapter<OpponentAdapter.VH> {
-        private final List<Player> opponents;
-        private final OnClick listener;
-
-        public OpponentAdapter(List<Player> opponents, OnClick listener) {
-            this.opponents = opponents;
-            this.listener = listener;
-        }
-
-        @NonNull
-        @Override
-        public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.game_gambler_player_choice_adaptor, parent, false);
-            return new VH(v);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull VH h, int position) {
-            Player p = opponents.get(position);
-            h.name.setText(p.getName());
-            h.name.postDelayed(() -> h.name.setSelected(true), 1000);
-
-            if (p.getClassChoices().isEmpty()) {
-                h.clazz.setVisibility(View.GONE);
-            } else {
-                h.clazz.setText(p.getClassChoice());
-            }
-
-            if (p.getPhoto() != null && !p.getPhoto().isEmpty()) {
-                byte[] decoded = Base64.decode(p.getPhoto(), Base64.DEFAULT);
-                Bitmap bmp = BitmapFactory.decodeByteArray(decoded, 0, decoded.length);
-                h.photo.setImageBitmap(bmp);
-            } else {
-                h.photo.setImageResource(R.drawable.wine);
-            }
-            h.itemView.setOnClickListener(v -> {
-                h.itemView.setBackgroundResource(R.drawable.selectedplayer);
-                h.itemView.postDelayed(() -> {
-                    h.name.setSelected(false);
-                    listener.onClick(p);
-                }, 15);
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return opponents.size();
-        }
-
-        public interface OnClick {
-            void onClick(Player player);
-        }
-
-        public static class VH extends RecyclerView.ViewHolder {
-            public ImageView photo;
-            public TextView name, clazz;
-
-            public VH(View v) {
-                super(v);
-                photo = v.findViewById(R.id.playerPhotoImageView);
-                name = v.findViewById(R.id.playerNameTextView);
-                clazz = v.findViewById(R.id.playerClassTextView);
-            }
-        }
-    }
-
     public void characterClassInformationDialog(Player player) {
 
         AlertDialog.Builder builder =
@@ -311,58 +245,6 @@ public class MainActivityDialog {
         }
 
         dialog.show();
-    }
-
-    private class AbilityPagerAdapter extends PagerAdapter {
-        private final List<String> classes;
-        private final LayoutInflater inflater;
-
-        public AbilityPagerAdapter(List<String> classes, LayoutInflater inflater) {
-            this.classes = classes;
-            this.inflater = inflater;
-        }
-
-        @Override
-        public int getCount() {
-            return classes.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-            return view == object;
-        }
-
-        @NonNull
-        @Override
-        public Object instantiateItem(@NonNull android.view.ViewGroup container, int position) {
-            View itemView = inflater.inflate(R.layout.game_character_ability_item, container, false);
-            String classChoice = classes.get(position);
-
-            TextView activeDescTv = itemView.findViewById(R.id.active_description_textview);
-            TextView passiveDescTv = itemView.findViewById(R.id.passive_description_textview);
-            TextView classTv = itemView.findViewById(R.id.class_textview);
-            TextView activeLabelTv = itemView.findViewById(R.id.active_textview);
-            TextView passiveLabelTv = itemView.findViewById(R.id.passive_textview);
-
-            classTv.setText(classChoice);
-            activeDescTv.setText(getClassActiveDescription(classChoice));
-            passiveDescTv.setText(getClassPassiveDescription(classChoice));
-
-            boolean isNoClass = CharacterClassDescriptions.NO_CLASS.equals(classChoice);
-            if (isNoClass) {
-                passiveDescTv.setVisibility(View.GONE);
-                activeLabelTv.setVisibility(View.GONE);
-                passiveLabelTv.setVisibility(View.GONE);
-            }
-
-            container.addView(itemView);
-            return itemView;
-        }
-
-        @Override
-        public void destroyItem(@NonNull android.view.ViewGroup container, int position, @NonNull Object object) {
-            container.removeView((View) object);
-        }
     }
 
     public String getClassActiveDescription(String classChoice) {
@@ -473,5 +355,123 @@ public class MainActivityDialog {
                 dialog.dismiss();
             }
         });
+    }
+
+    public static class OpponentAdapter extends RecyclerView.Adapter<OpponentAdapter.VH> {
+        private final List<Player> opponents;
+        private final OnClick listener;
+
+        public OpponentAdapter(List<Player> opponents, OnClick listener) {
+            this.opponents = opponents;
+            this.listener = listener;
+        }
+
+        @NonNull
+        @Override
+        public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.game_gambler_player_choice_adaptor, parent, false);
+            return new VH(v);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull VH h, int position) {
+            Player p = opponents.get(position);
+            h.name.setText(p.getName());
+            h.name.postDelayed(() -> h.name.setSelected(true), 1000);
+
+            if (p.getClassChoices().isEmpty()) {
+                h.clazz.setVisibility(View.GONE);
+            } else {
+                h.clazz.setText(p.getClassChoice());
+            }
+
+            if (p.getPhoto() != null && !p.getPhoto().isEmpty()) {
+                byte[] decoded = Base64.decode(p.getPhoto(), Base64.DEFAULT);
+                Bitmap bmp = BitmapFactory.decodeByteArray(decoded, 0, decoded.length);
+                h.photo.setImageBitmap(bmp);
+            } else {
+                h.photo.setImageResource(R.drawable.wine);
+            }
+            h.itemView.setOnClickListener(v -> {
+                h.itemView.setBackgroundResource(R.drawable.selectedplayer);
+                h.itemView.postDelayed(() -> {
+                    h.name.setSelected(false);
+                    listener.onClick(p);
+                }, 15);
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return opponents.size();
+        }
+
+        public interface OnClick {
+            void onClick(Player player);
+        }
+
+        public static class VH extends RecyclerView.ViewHolder {
+            public ImageView photo;
+            public TextView name, clazz;
+
+            public VH(View v) {
+                super(v);
+                photo = v.findViewById(R.id.playerPhotoImageView);
+                name = v.findViewById(R.id.playerNameTextView);
+                clazz = v.findViewById(R.id.playerClassTextView);
+            }
+        }
+    }
+
+    private class AbilityPagerAdapter extends PagerAdapter {
+        private final List<String> classes;
+        private final LayoutInflater inflater;
+
+        public AbilityPagerAdapter(List<String> classes, LayoutInflater inflater) {
+            this.classes = classes;
+            this.inflater = inflater;
+        }
+
+        @Override
+        public int getCount() {
+            return classes.size();
+        }
+
+        @Override
+        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+            return view == object;
+        }
+
+        @NonNull
+        @Override
+        public Object instantiateItem(@NonNull android.view.ViewGroup container, int position) {
+            View itemView = inflater.inflate(R.layout.game_character_ability_item, container, false);
+            String classChoice = classes.get(position);
+
+            TextView activeDescTv = itemView.findViewById(R.id.active_description_textview);
+            TextView passiveDescTv = itemView.findViewById(R.id.passive_description_textview);
+            TextView classTv = itemView.findViewById(R.id.class_textview);
+            TextView activeLabelTv = itemView.findViewById(R.id.active_textview);
+            TextView passiveLabelTv = itemView.findViewById(R.id.passive_textview);
+
+            classTv.setText(classChoice);
+            activeDescTv.setText(getClassActiveDescription(classChoice));
+            passiveDescTv.setText(getClassPassiveDescription(classChoice));
+
+            boolean isNoClass = CharacterClassDescriptions.NO_CLASS.equals(classChoice);
+            if (isNoClass) {
+                passiveDescTv.setVisibility(View.GONE);
+                activeLabelTv.setVisibility(View.GONE);
+                passiveLabelTv.setVisibility(View.GONE);
+            }
+
+            container.addView(itemView);
+            return itemView;
+        }
+
+        @Override
+        public void destroyItem(@NonNull android.view.ViewGroup container, int position, @NonNull Object object) {
+            container.removeView((View) object);
+        }
     }
 }

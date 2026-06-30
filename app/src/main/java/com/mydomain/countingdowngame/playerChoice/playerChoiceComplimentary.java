@@ -9,6 +9,7 @@ import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescripti
 import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.SCIENTIST;
 import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.SOLDIER;
 import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
+import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.TROLL;
 import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
 import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.angryJimActiveDescription;
 import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.angryJimPassiveDescription;
@@ -27,7 +28,6 @@ import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescripti
 import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.soldierPassiveDescription;
 import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.survivorActiveDescription;
 import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.survivorPassiveDescription;
-import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.TROLL;
 import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.trollActiveDescription;
 import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.trollPassiveDescription;
 import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.witchActiveDescription;
@@ -41,6 +41,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class playerChoiceComplimentary extends ButtonUtilsActivity {
+
+    public static int getClassIcon(String classChoice) {
+        if (classChoice == null) return R.drawable.wine;
+        switch (classChoice) {
+            case ANGRY_JIM:
+                return R.drawable.angry_jim;
+            case ARCHER:
+                return R.drawable.archer;
+            case GAMBLER:
+                return R.drawable.slotmachine;
+            case GOBLIN:
+                return R.drawable.goblin;
+            case QUIZ_MAGICIAN:
+                return R.drawable.books;
+            case SCIENTIST:
+                return R.drawable.scientist;
+            case SOLDIER:
+                return R.drawable.helmet;
+            case SURVIVOR:
+                return R.drawable.bandaids;
+            case TROLL:
+                return R.drawable.troll;
+            case WITCH:
+                return R.drawable.witch;
+            case NO_CLASS:
+                return R.drawable.noclass;
+            default:
+                return R.drawable.wine;
+        }
+    }
 
     public List<CharacterClassStore> generateCharacterClasses() {
         List<CharacterClassStore> characterClasses = new ArrayList<>();
@@ -57,23 +87,5 @@ public class playerChoiceComplimentary extends ButtonUtilsActivity {
         characterClasses.add(new CharacterClassStore(11, NO_CLASS, noClassDescription, null, getClassIcon(NO_CLASS)));
 
         return characterClasses;
-    }
-
-    public static int getClassIcon(String classChoice) {
-        if (classChoice == null) return R.drawable.wine;
-        switch (classChoice) {
-            case ANGRY_JIM: return R.drawable.angry_jim;
-            case ARCHER: return R.drawable.archer;
-            case GAMBLER: return R.drawable.slotmachine;
-            case GOBLIN: return R.drawable.goblin;
-            case QUIZ_MAGICIAN: return R.drawable.books;
-            case SCIENTIST: return R.drawable.scientist;
-            case SOLDIER: return R.drawable.helmet;
-            case SURVIVOR: return R.drawable.bandaids;
-            case TROLL: return R.drawable.troll;
-            case WITCH: return R.drawable.witch;
-            case NO_CLASS: return R.drawable.noclass;
-            default: return R.drawable.wine;
-        }
     }
 }

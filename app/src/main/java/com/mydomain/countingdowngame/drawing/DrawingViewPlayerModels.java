@@ -77,6 +77,7 @@ public class DrawingViewPlayerModels extends View {
             drawingPaint.setColor(currentColor);
         }
     }
+
     public boolean isEraserMode() {
         return isEraserMode;
     }

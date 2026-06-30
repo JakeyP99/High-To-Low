@@ -17,24 +17,6 @@ public class MainActivityCatastrophes {
     private final Catastrophe[] allCatastrophes;
     private List<Catastrophe> unusedCatastrophes;
 
-    public static class Catastrophe {
-        private final String message;
-        private final int effect;
-
-        public Catastrophe(String message, int effect) {
-            this.message = message;
-            this.effect = effect;
-        }
-
-        public int getEffect() {
-            return effect;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-    }
-
     public MainActivityCatastrophes() {
         this.allCatastrophes = new Catastrophe[]{
                 new Catastrophe("Two drinks have been added to the counter!", 1),
@@ -49,16 +31,6 @@ public class MainActivityCatastrophes {
         };
         this.unusedCatastrophes = new ArrayList<>(Arrays.asList(allCatastrophes)); // Initialize unusedCatastrophes
     }
-
-    public Catastrophe deployCatastrophe() {
-        if (unusedCatastrophes.isEmpty()) {
-            unusedCatastrophes = new ArrayList<>(Arrays.asList(allCatastrophes));
-        }
-        Random random = new Random();
-        int index = random.nextInt(unusedCatastrophes.size());
-        return unusedCatastrophes.remove(index);
-    }
-
 
     public static void increaseNumberByRandom() {
         Game game = Game.getInstance();
@@ -98,6 +70,33 @@ public class MainActivityCatastrophes {
         Random random = new Random();
         catastropheLimit = random.nextInt(4) + 8;
         Log.d(TAG, "catastropheLimit: " + catastropheLimit);
+    }
+
+    public Catastrophe deployCatastrophe() {
+        if (unusedCatastrophes.isEmpty()) {
+            unusedCatastrophes = new ArrayList<>(Arrays.asList(allCatastrophes));
+        }
+        Random random = new Random();
+        int index = random.nextInt(unusedCatastrophes.size());
+        return unusedCatastrophes.remove(index);
+    }
+
+    public static class Catastrophe {
+        private final String message;
+        private final int effect;
+
+        public Catastrophe(String message, int effect) {
+            this.message = message;
+            this.effect = effect;
+        }
+
+        public int getEffect() {
+            return effect;
+        }
+
+        public String getMessage() {
+            return message;
+        }
     }
 
 

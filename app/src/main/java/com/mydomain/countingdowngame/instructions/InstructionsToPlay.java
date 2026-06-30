@@ -18,15 +18,6 @@ import java.util.Objects;
 import pl.droidsonroids.gif.GifImageView;
 
 public class InstructionsToPlay extends ButtonUtilsActivity {
-    GifImageView muteGif;
-    GifImageView soundGif;
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        boolean isMuted = getMuteSoundState();
-        AudioManager.updateMuteButton(isMuted, muteGif, soundGif);
-    }
     private final List<Integer> instructions = Arrays.asList(
             R.string.instruction_welcome,
             R.string.instruction_aim,
@@ -45,6 +36,15 @@ public class InstructionsToPlay extends ButtonUtilsActivity {
             R.string.instruction_tips_tricks,
             R.string.instruction_thanks
     );
+    GifImageView muteGif;
+    GifImageView soundGif;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        boolean isMuted = getMuteSoundState();
+        AudioManager.updateMuteButton(isMuted, muteGif, soundGif);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

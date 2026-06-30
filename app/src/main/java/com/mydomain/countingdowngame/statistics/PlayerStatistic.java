@@ -1,10 +1,10 @@
 package com.mydomain.countingdowngame.statistics;
 
 public class PlayerStatistic {
-    private String playerName;
-    private int totalDrinks;
-    private int totalGamesLost;
-    private int totalGamesPlayed;
+    private final String playerName;
+    private final int totalDrinks;
+    private final int totalGamesLost;
+    private final int totalGamesPlayed;
 
     public PlayerStatistic(String playerName, int totalDrinks, int totalGamesLost, int totalGamesPlayed) {
         this.playerName = playerName;
@@ -14,9 +14,20 @@ public class PlayerStatistic {
 
     }
 
-    public String getPlayerName() { return playerName; }
-    public int getTotalDrinks() { return totalDrinks; }
-    public int getTotalGamesLost() { return totalGamesLost; }
-    public int getTotalGamesPlayed() { return totalGamesPlayed; }
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public int getTotalDrinks() {
+        return totalDrinks;
+    }
+
+    public int getTotalGamesLost() {
+        return totalGamesLost;
+    }
+
+    public int getTotalGamesPlayed() {
+        return totalGamesPlayed;
+    }
 
 }

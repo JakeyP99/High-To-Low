@@ -25,6 +25,8 @@ public class Game {
     private static final Game gameInstance = new Game();
     private final Map<Player, Integer> repeatingTurnsMap = new HashMap<>();
     private final List<String> playerNames = new ArrayList<>();
+    private final List<GameTurns> turns = new ArrayList<>();
+    private final List<Integer> classNumbers = new ArrayList<>();
     private int startingNumber = 0;
     private int currentNumber = 0;
     private int previousNumber = 0;
@@ -37,21 +39,28 @@ public class Game {
     private Boolean numberWasGenerated = false;
     private Boolean gameStarted = false;
     private boolean playCards;
-    private final List<GameTurns> turns = new ArrayList<>();
     private boolean reverseOrder = false;
+    //-----------------------------------------------------Player Functions---------------------------------------------------//
+    private final PlayerEventListener playerEventListener = e -> {
+        if (e.type == PlayerEventType.SKIP) {
+            setNumberWasGenerated(false);
+            nextPlayer();
+            Log.d(ContentValues.TAG, "Number Was Generated = false");
+        }
+    };
     private String splitTarget;
     private GameMode gameMode = GameMode.CLASSIC;
-    private final List<Integer> classNumbers = new ArrayList<>();
+    private Player lastTurnPlayer;
 
-    public enum GameMode {
-        CLASSIC,
-        CLASS_HUNT,
-        CRAZY
+    public static Game getInstance() {
+        return gameInstance;
     }
 
     public List<Integer> getClassNumbers() {
         return classNumbers;
     }
+
+    //-----------------------------------------------------Game Modes---------------------------------------------------//
 
     public GameMode getGameMode() {
         return gameMode;
@@ -61,8 +70,6 @@ public class Game {
         this.gameMode = mode;
     }
 
-    //-----------------------------------------------------Game Modes---------------------------------------------------//
-
     public boolean isPlayCards() {
         return playCards;
     }
@@ -71,24 +78,8 @@ public class Game {
         this.playCards = playCards;
     }
 
-
-    //-----------------------------------------------------Player Functions---------------------------------------------------//
-    private final PlayerEventListener playerEventListener = e -> {
-        if (e.type == PlayerEventType.SKIP) {
-            setNumberWasGenerated(false);
-            nextPlayer();
-            Log.d(ContentValues.TAG, "Number Was Generated = false");
-        }
-    };
-
-
-    public static Game getInstance() {
-        return gameInstance;
-    }
-
     public void setPlayers(Context context, int playerAmount) {
-        if (gameStarted)
-            return;
+        if (gameStarted) return;
 
         players = new ArrayList<>();
 
@@ -103,11 +94,9 @@ public class Game {
 
     //-----------------------------------------------------In Game---------------------------------------------------//
     public void startGame(int startNum, GameEventListener listener) {
-        if (gameStarted)
-            return;
+        if (gameStarted) return;
 
-        if (players.isEmpty())
-            return;
+        if (players.isEmpty()) return;
 
         gameStarted = true;
         gameEventListener = listener;
@@ -128,8 +117,7 @@ public class Game {
     public void activateRepeatingTurnForAllPlayers(int numberOfTurns) {
         for (Player player : players) {
             repeatingTurnsMap.put(player, numberOfTurns);
-            Log.d(TAG, "activateRepeatingTurnForAllPlayers: Repeating turn was activated for Player " +
-                    player.getName() + ". Turns to go: " + numberOfTurns);
+            Log.d(TAG, "activateRepeatingTurnForAllPlayers: Repeating turn was activated for Player " + player.getName() + ". Turns to go: " + numberOfTurns);
         }
     }
 
@@ -176,8 +164,6 @@ public class Game {
         player.addNumberPlayed(number);
     }
 
-    private Player lastTurnPlayer;
-
     public Player getLastTurnPlayer() {
         return lastTurnPlayer;
     }
@@ -185,8 +171,6 @@ public class Game {
     public void setLastTurnPlayer(Player player) {
         this.lastTurnPlayer = player;
     }
-
-
 
     public Player getCurrentPlayer() {
         if (!players.isEmpty() && currentPlayerId >= 0 && currentPlayerId < players.size()) {
@@ -200,12 +184,10 @@ public class Game {
         return repeatingTurnsMap.getOrDefault(player, 0);
     }
 
-
     public void updateRepeatingTurns(Player player, int numberOfTurnsToAdd) {
         int currentTurns = repeatingTurnsMap.getOrDefault(player, 0);
         repeatingTurnsMap.put(player, currentTurns + numberOfTurnsToAdd);
     }
-
 
     public boolean getPlayerUsedWildcards() {
         return playerUsedWildcards;
@@ -260,7 +242,6 @@ public class Game {
 
     }
 
-
     public void triggerPlayerEvent(PlayerEvent event) {
         playerEventListener.onPlayerEvent(event);
     }
@@ -272,15 +253,15 @@ public class Game {
     public void setPlayerList(List<Player> playerList) {
         players.clear();
         players.addAll(playerList);
-        Log.d(TAG, "setPlayerList: " +playerList);
+        Log.d(TAG, "setPlayerList: " + playerList);
     }
-
-
-    //-----------------------------------------------------Game Number---------------------------------------------------//
 
     public int getCurrentNumber() {
         return currentNumber;
     }
+
+
+    //-----------------------------------------------------Game Number---------------------------------------------------//
 
     public void setCurrentNumber(int number) {
         currentNumber = number;
@@ -300,12 +281,12 @@ public class Game {
         return previousNumber;
     }
 
-    public void setNumberWasGenerated(Boolean wasNumberGenerated) {
-        numberWasGenerated = wasNumberGenerated;
-    }
-
     public Boolean getNumberWasGenerated() {
         return numberWasGenerated;
+    }
+
+    public void setNumberWasGenerated(Boolean wasNumberGenerated) {
+        numberWasGenerated = wasNumberGenerated;
     }
 
     //-----------------------------------------------------Stats ---------------------------------------------------//
@@ -316,6 +297,7 @@ public class Game {
     public void incrementCatastropheQuantity() {
         catastropheQuantity++;
     }
+
     public String getPlayerWithMostWildcardsUsed() {
         Player topPlayer = null;
         int minWildCards = 0;
@@ -330,12 +312,12 @@ public class Game {
         return topPlayer != null ? topPlayer.getName() + " used " + minWildCards + " wildcards." : "No one used any wildcards.";
     }
 
-    public void setQuizWasTriggered(Boolean wasQuizTriggered) {
-        quizWasTriggered = wasQuizTriggered;
-    }
-
     public Boolean getQuizWasTriggered() {
         return quizWasTriggered;
+    }
+
+    public void setQuizWasTriggered(Boolean wasQuizTriggered) {
+        quizWasTriggered = wasQuizTriggered;
     }
 
     public void incrementPlayerQuizCorrectAnswers(Player player) {
@@ -447,7 +429,7 @@ public class Game {
         }
         return topPlayer != null ? topPlayer.getName() + " took " + maxDrinks + " drinks as a gambler!" : "The gambler did not take any drinks from their bets.";
     }
-    
+
     public String getSplitTarget() {
         return splitTarget;
     }
@@ -456,14 +438,13 @@ public class Game {
         this.splitTarget = splitTarget;
     }
 
-    //-----------------------------------------------------End Game ---------------------------------------------------//
-
-
     public void endGame(Context context) {
         gameStarted = false;
         setLastTurnPlayer(null);
         resetPlayers(context);
     }
+
+    //-----------------------------------------------------End Game ---------------------------------------------------//
 
     public ArrayList<String> getPreviousNumbersFormatted() {
         ArrayList<String> formatted = new ArrayList<>();
@@ -500,6 +481,10 @@ public class Game {
         lastTurnPlayer = null;
         splitTarget = null;
         classNumbers.clear();
+    }
+
+    public enum GameMode {
+        CLASSIC, CLASS_HUNT, CRAZY
     }
 
 

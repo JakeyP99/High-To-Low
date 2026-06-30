@@ -18,12 +18,6 @@ public class SharedMainActivity extends ButtonUtilsActivity {
 
     public MainActivityDialog mainActivityDialog;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mainActivityDialog = new MainActivityDialog(this, btnUtils);
-    }
-
     public static void setTextViewSizeBasedOnInt(TextView textView, String text) {
         int defaultTextSize = 70;
         int minSize = 47;
@@ -35,12 +29,16 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         }
     }
 
-
     public static void reverseTurnOrder() {
         Game game = Game.getInstance();
         game.setReverseOrder(!game.isReverseOrder());
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mainActivityDialog = new MainActivityDialog(this, btnUtils);
+    }
 
     protected void animateTextView(final TextView textView, @Nullable Runnable onPopEnd) {
         // Shake animation
@@ -137,26 +135,25 @@ public class SharedMainActivity extends ButtonUtilsActivity {
             int charCount = text.length();
             if (charCount >= 15) {
                 textSize = 30;
-            }
-            else {
+            } else {
                 textSize = 35;
             }
             return textSize;
         }
     }
 
-        public static class TextSizeCalculatorQuizAnswers {
-            public static int calculateTextSizeBasedOnCharacterCount(String text) {
-                int textSize;
-                int charCount = text.length();
-                if (charCount <= 10) {
-                    textSize = 25;
-                } else if (charCount <= 20) {
-                    textSize = 20;
-                } else {
-                    textSize = 15;
-                }
-                return textSize;
+    public static class TextSizeCalculatorQuizAnswers {
+        public static int calculateTextSizeBasedOnCharacterCount(String text) {
+            int textSize;
+            int charCount = text.length();
+            if (charCount <= 10) {
+                textSize = 25;
+            } else if (charCount <= 20) {
+                textSize = 20;
+            } else {
+                textSize = 15;
             }
+            return textSize;
+        }
     }
 }

@@ -217,9 +217,16 @@ public class SettingsMenu extends ButtonUtilsActivity {
 
     private void setupTextWatcher(EditText editText, int maxLength) {
         editText.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            @Override public void afterTextChanged(Editable s) {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
                 if (s.length() > maxLength) {
                     editText.setText(s.subSequence(0, maxLength));
                     editText.setSelection(maxLength);

@@ -26,10 +26,6 @@ public class StatisticsAdapter extends ArrayAdapter<PlayerStatistic> {
     private final SharedPreferences prefs;
     private final OnLongClickListener longClickListener;
 
-    public interface OnLongClickListener {
-        void onLongClick(PlayerStatistic stat, int position);
-    }
-
     public StatisticsAdapter(Context context, List<PlayerStatistic> statistics, OnLongClickListener longClickListener) {
         super(context, 0, statistics);
         this.inflater = LayoutInflater.from(context);
@@ -82,6 +78,10 @@ public class StatisticsAdapter extends ArrayAdapter<PlayerStatistic> {
         }
 
         return convertView;
+    }
+
+    public interface OnLongClickListener {
+        void onLongClick(PlayerStatistic stat, int position);
     }
 
     private static class ViewHolder {

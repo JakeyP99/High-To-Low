@@ -28,9 +28,6 @@ import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
 public class PowerUps {
-    private static MainActivityGame activity;
-    private static final List<String> obtainedPowerUps = new ArrayList<>();
-
     // Power-Up Type Constants
     public static final String SPLIT_THE_PAIN = "Split the Pain";
     public static final String ALL_OR_NOTHING = "All or Nothing";
@@ -38,6 +35,8 @@ public class PowerUps {
     public static final String TRADE_UP = "Trade Up";
     public static final String NOTHING = "Nothing";
     public static final String GET_OUT_OF_JAIL = "Get Out of Jail Free";
+    private static final List<String> obtainedPowerUps = new ArrayList<>();
+    private static MainActivityGame activity;
 
     public static void setActivity(MainActivityGame activityInstance) {
         activity = activityInstance;
@@ -143,7 +142,7 @@ public class PowerUps {
 
     public static void checkLosingPowerUps(Player player, Runnable onEndGame, TextView numberText) {
         List<String> playerPowerUps = new ArrayList<>(player.getPowerUps());
-        
+
         // 1. Check for Get Out of Jail Free (Highest Priority, automatic)
         String jailFree = null;
         for (String p : playerPowerUps) {
@@ -157,10 +156,10 @@ public class PowerUps {
             player.usePowerUp(jailFree);
             activity.displayToastMessage("Saved by Get Out of Jail Free!");
             int prevNum = Game.getInstance().getPreviousNumber();
-            
+
             // Revert number while view is hidden/alpha 0
             MainActivityGame.updateNumber(prevNum);
-            
+
             // Animate it back "alive" as requested
             activity.animateTextViewBackAlive(numberText, () -> {
                 Game.getInstance().nextPlayer(); // Go to next player after saving
@@ -249,7 +248,7 @@ public class PowerUps {
 
         Random random = new Random();
         boolean isDouble = random.nextBoolean();
-        
+
         // Initial rotation is 270 (pointing up at zero)
         // Pointing Down (Double) is 90 degrees (or 270 + 180 = 450)
         float currentRotation = 270f;
@@ -257,9 +256,9 @@ public class PowerUps {
         float targetRotation = currentRotation + extraSpins + (isDouble ? 180 : 0);
 
         ObjectAnimator animator = ObjectAnimator.ofFloat(arrow, "rotation", currentRotation, targetRotation);
-        animator.setDuration(4000); 
+        animator.setDuration(4000);
         animator.setInterpolator(new DecelerateInterpolator());
-        
+
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -286,7 +285,7 @@ public class PowerUps {
     private static void showSplitThePainRoulette(Player player, Runnable onHandled) {
         List<Player> otherPlayers = new ArrayList<>(Game.getInstance().getPlayers());
         otherPlayers.remove(player);
-        
+
         ArrayList<String> playerNames = new ArrayList<>();
         for (Player p : otherPlayers) {
             playerNames.add(p.getName());
@@ -368,7 +367,7 @@ public class PowerUps {
                 } else {
                     String targetName = playerNames.get(currentIndex);
                     Game.getInstance().setSplitTarget(targetName);
-                    
+
                     title.setText("Split with " + targetName + "!");
 
                     handler.postDelayed(() -> {
@@ -384,7 +383,7 @@ public class PowerUps {
 
     public static void getPowerUp(Runnable onDismiss) {
         ArrayList<String> powerUpList = getPowerUps();
-        
+
         // Filter out obtained ones to check if we should even run
         List<String> availableTypes = new ArrayList<>();
         for (String p : powerUpList) {
@@ -446,9 +445,10 @@ public class PowerUps {
         final Runnable shuffleRunnable = new Runnable() {
             int elapsedTime = 0;
             int currentInterval = initialInterval;
-            
+
             // Start at a valid index
             int currentIndex = 0;
+
             {
                 while (obtainedPowerUps.contains(getPowerUpType(powerUpList.get(currentIndex)))) {
                     currentIndex = (currentIndex + 1) % powerUpList.size();
@@ -503,9 +503,9 @@ public class PowerUps {
                 available.add(s);
             }
         }
-        
+
         if (available.isEmpty()) return null;
-        
+
         // Find if Get Out of Jail is available
         String jailFree = null;
         for (String s : available) {

@@ -31,7 +31,6 @@ public class AudioManager {
     private static final Map<String, Integer> soundEffectsMap = new HashMap<>();
     private static AudioManager audioManager;
     private static Context context;
-    private boolean isMuted = false;
 
     static {
         soundEffectsMap.put(ARCHER, R.raw.archersound);
@@ -48,6 +47,7 @@ public class AudioManager {
 
     private final List<Integer> backgroundMusicList;
     public boolean isPlaying = false;
+    private boolean isMuted = false;
     private MediaPlayer mediaPlayer;
 
     //-----------------------------------------------------Initialize---------------------------------------------------//
@@ -68,29 +68,12 @@ public class AudioManager {
         backgroundMusicList.add(R.raw.backgroundmusic10);
     }
 
-
-    //-----------------------------------------------------Play Functions---------------------------------------------------//
-    public void mute() {
-        isMuted = true;
-        if (mediaPlayer != null) {
-            mediaPlayer.setVolume(0, 0);
-        }
-    }
-
-    public void unmute() {
-        isMuted = false;
-        if (mediaPlayer != null) {
-            mediaPlayer.setVolume(1, 1);
-        }
-    }
     public static AudioManager getInstance() {
         if (audioManager == null) {
             audioManager = new AudioManager();
         }
         return audioManager;
     }
-
-    private final MediaPlayer.OnCompletionListener onCompletionListener = mp -> playNextSong();
 
     public static void updateMuteButton(boolean isMuted, GifImageView muteGif, GifImageView soundGif) {
         if (isMuted) {
@@ -117,11 +100,26 @@ public class AudioManager {
         }
     }
 
-    //-----------------------------------------------------Pause / Stop Functions---------------------------------------------------//
+    //-----------------------------------------------------Play Functions---------------------------------------------------//
+    public void mute() {
+        isMuted = true;
+        if (mediaPlayer != null) {
+            mediaPlayer.setVolume(0, 0);
+        }
+    }    private final MediaPlayer.OnCompletionListener onCompletionListener = mp -> playNextSong();
+
+    public void unmute() {
+        isMuted = false;
+        if (mediaPlayer != null) {
+            mediaPlayer.setVolume(1, 1);
+        }
+    }
 
     public void setContext(Context context) {
         AudioManager.context = context;
     }
+
+    //-----------------------------------------------------Pause / Stop Functions---------------------------------------------------//
 
     public void playRandomBackgroundMusic(Context context) {
         if (mediaPlayer != null) {
@@ -212,7 +210,6 @@ public class AudioManager {
         }
     }
 
-
     public void playBlank(Context context) {
         if (isMuted) return;
 
@@ -224,8 +221,6 @@ public class AudioManager {
             Log.e("AudioManager", "Failed to create MediaPlayer for confetti sound");
         }
     }
-
-    //-----------------------------------------------------Update UI---------------------------------------------------//
 
     public void playSoundEffects(Context context, String className) {
         if (isMuted) return;
@@ -243,6 +238,10 @@ public class AudioManager {
             Log.e("AudioManager", "No sound effect found for class name: " + className);
         }
     }
+
+    //-----------------------------------------------------Update UI---------------------------------------------------//
+
+
 
 
 }

@@ -32,7 +32,7 @@ public class Player implements Serializable {
     private boolean usedWildCard;
     private boolean removed;
     private int passiveAbilityTurnCounter;
-    private int activeAbilityTurnCounter;
+    private final int activeAbilityTurnCounter;
     private Map<String, Integer> classCooldowns = new HashMap<>();
     private List<Integer> numbersPlayed = new ArrayList<>();
     private int classAbilityCooldown;
@@ -78,6 +78,25 @@ public class Player implements Serializable {
         this.powerUps = new ArrayList<>();
     }
 
+    public static List<String> getSavedPlayerNames(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences("PlayerStats", Context.MODE_PRIVATE);
+        Map<String, ?> allEntries = prefs.getAll();
+        List<String> playerNames = new ArrayList<>();
+
+        for (String key : allEntries.keySet()) {
+            if (key.endsWith("_drinks")) {
+                String playerName = key.substring(0, key.length() - "_drinks".length());
+                // Replace underscores with spaces (just in case)
+                playerName = playerName.replace("_", " ");
+                // Capitalize only the first letter
+                if (!playerName.isEmpty()) {
+                    playerName = Character.toUpperCase(playerName.charAt(0)) + playerName.substring(1);
+                }
+                playerNames.add(playerName);
+            }
+        }
+        return playerNames;
+    }
 
     //-----------------------------------------------------Player---------------------------------------------------//
     public String getId() {
@@ -101,6 +120,13 @@ public class Player implements Serializable {
         return classChoices.get(classChoices.size() - 1);
     }
 
+    public void setClassChoice(String classChoice) {
+        ensureClassChoices().clear();
+        if (classChoice != null) {
+            this.classChoices.add(classChoice);
+        }
+    }
+
     private List<String> ensureClassChoices() {
         if (classChoices == null) {
             classChoices = new ArrayList<>();
@@ -110,13 +136,6 @@ public class Player implements Serializable {
 
     public List<String> getClassChoices() {
         return ensureClassChoices();
-    }
-
-    public void setClassChoice(String classChoice) {
-        ensureClassChoices().clear();
-        if (classChoice != null) {
-            this.classChoices.add(classChoice);
-        }
     }
 
     public void addClassChoice(String classChoice) {
@@ -159,12 +178,11 @@ public class Player implements Serializable {
         return getRepeatingTurnsForPlayer() + 1;
     }
 
+    //-----------------------------------------------------Stats---------------------------------------------------//
 
     public void setActiveAbilityCooldown(int cooldown) {
         this.classAbilityCooldown = cooldown;
     }
-
-    //-----------------------------------------------------Stats---------------------------------------------------//
 
     public int getCorrectQuizAnswers() {
         return correctQuizAnswers;
@@ -220,33 +238,13 @@ public class Player implements Serializable {
         }
     }
 
+    //-----------------------------------------------------Global Stats---------------------------------------------------//
+
     private List<Integer> ensureNumbersPlayed() {
         if (numbersPlayed == null) {
             numbersPlayed = new ArrayList<>();
         }
         return numbersPlayed;
-    }
-
-    //-----------------------------------------------------Global Stats---------------------------------------------------//
-
-    public static List<String> getSavedPlayerNames(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences("PlayerStats", Context.MODE_PRIVATE);
-        Map<String, ?> allEntries = prefs.getAll();
-        List<String> playerNames = new ArrayList<>();
-
-        for (String key : allEntries.keySet()) {
-            if (key.endsWith("_drinks")) {
-                String playerName = key.substring(0, key.length() - "_drinks".length());
-                // Replace underscores with spaces (just in case)
-                playerName = playerName.replace("_", " ");
-                // Capitalize only the first letter
-                if (!playerName.isEmpty()) {
-                    playerName = Character.toUpperCase(playerName.charAt(0)) + playerName.substring(1);
-                }
-                playerNames.add(playerName);
-            }
-        }
-        return playerNames;
     }
 
 

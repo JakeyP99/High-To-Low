@@ -12,8 +12,8 @@ import androidx.annotation.Nullable;
 import com.mydomain.countingdowngame.audio.AudioManager;
 
 public class MainApplication extends Application {
-    private int activityCount = 0;
     private final Handler handler = new Handler(Looper.getMainLooper());
+    private int activityCount = 0;
     private Runnable pauseRunnable;
 
     @Override
@@ -46,11 +46,25 @@ public class MainApplication extends Application {
                 }
             }
 
-            @Override public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {}
-            @Override public void onActivityResumed(@NonNull Activity activity) {}
-            @Override public void onActivityPaused(@NonNull Activity activity) {}
-            @Override public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {}
-            @Override public void onActivityDestroyed(@NonNull Activity activity) {}
+            @Override
+            public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+            }
+
+            @Override
+            public void onActivityResumed(@NonNull Activity activity) {
+            }
+
+            @Override
+            public void onActivityPaused(@NonNull Activity activity) {
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
+            }
+
+            @Override
+            public void onActivityDestroyed(@NonNull Activity activity) {
+            }
         });
     }
 }

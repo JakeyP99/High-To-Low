@@ -32,12 +32,11 @@ import pl.droidsonroids.gif.GifImageView;
 
 public class EndActivityGame extends ButtonUtilsActivity {
     private static final String TAG = "EndActivityGame";
-
-    private GifImageView muteGif, soundGif;
     private final Game gameInstance = Game.getInstance();
     private final Player currentPlayer = gameInstance.getCurrentPlayer();
     private final String playerName = currentPlayer.getName();
     private final int drinkNumberCounter = MainActivityGame.drinkNumberCounterInt;
+    private GifImageView muteGif, soundGif;
 
     @Override
     protected void onResume() {

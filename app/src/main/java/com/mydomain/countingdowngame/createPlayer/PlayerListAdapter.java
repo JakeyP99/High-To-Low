@@ -56,6 +56,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
 
     public interface ClickListener {
         void onPlayerClick(int position);
+
         void onPlayerLongClick(int position);
     }
 

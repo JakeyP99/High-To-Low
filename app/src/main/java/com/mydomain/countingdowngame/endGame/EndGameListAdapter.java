@@ -14,7 +14,7 @@ import java.util.List;
 
 public class EndGameListAdapter extends RecyclerView.Adapter<EndGameListAdapter.PreviousNumbersViewHolder> {
 
-    private List<String> items;
+    private final List<String> items;
 
     public EndGameListAdapter(List<String> items) {
         this.items = items;

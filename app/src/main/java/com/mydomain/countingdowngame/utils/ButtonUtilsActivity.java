@@ -10,10 +10,10 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mydomain.countingdowngame.audio.AudioManager;
-import com.mydomain.countingdowngame.endGame.EndRouletteGame;
-import com.mydomain.countingdowngame.instructions.InstructionsToPlay;
 import com.mydomain.countingdowngame.endGame.EndActivityGame;
+import com.mydomain.countingdowngame.endGame.EndRouletteGame;
 import com.mydomain.countingdowngame.home.HomeScreen;
+import com.mydomain.countingdowngame.instructions.InstructionsToPlay;
 import com.mydomain.countingdowngame.numberChoice.NumberChoice;
 import com.mydomain.countingdowngame.player.Player;
 import com.mydomain.countingdowngame.playerChoice.PlayerChoice;

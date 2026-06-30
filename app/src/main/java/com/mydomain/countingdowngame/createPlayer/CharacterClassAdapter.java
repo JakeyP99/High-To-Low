@@ -20,9 +20,6 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
     public CharacterClassAdapter(List<CharacterClassStore> characterClasses) {
         this.characterClasses = characterClasses;
     }
-    public interface OnRecyclerViewScrollListener {
-        void onScrolled(int dy);
-    }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
@@ -48,7 +45,6 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
         holder.classImageView.setImageResource(characterClass.getImageResource());
     }
 
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -60,6 +56,10 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
     @Override
     public int getItemCount() {
         return characterClasses.size();
+    }
+
+    public interface OnRecyclerViewScrollListener {
+        void onScrolled(int dy);
     }
 
     // ViewHolder class representing each item in the RecyclerView

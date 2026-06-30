@@ -5,14 +5,14 @@ import android.content.SharedPreferences;
 
 public class WildCardSettingsLocalStore {
 
-    public static WildCardSettingsLocalStore fromContext(Context context, String saveKey) {
-        return new WildCardSettingsLocalStore(context, saveKey);
-    }
-
     private final SharedPreferences mPref;
 
     private WildCardSettingsLocalStore(Context context, String saveKey) {
         mPref = context.getSharedPreferences(saveKey, Context.MODE_PRIVATE);
+    }
+
+    public static WildCardSettingsLocalStore fromContext(Context context, String saveKey) {
+        return new WildCardSettingsLocalStore(context, saveKey);
     }
 
     public Boolean isWildcardEnabled(int index, Boolean defValue) {

@@ -149,8 +149,8 @@ public class WildCardDialogManager {
             btn.setText(answer);
             updateTextSizeQuizAnswer(answer, btn);
             int index = i;
-            
-                activity.btnUtils.setButton(btn, () -> 
+
+            activity.btnUtils.setButton(btn, () ->
                     handleMCQSelection(ui, card, player, answerList, answer, index)
             );
         }
@@ -239,8 +239,8 @@ public class WildCardDialogManager {
                     + (isMagicianActive
                     ? "\n\n Let's continue!"
                     : (isMagician
-                    ? "\n\n You get to give out 2 drinks to everyone."
-                    : "\n\n You get to give out a drink."));
+                       ? "\n\n You get to give out 2 drinks to everyone."
+                       : "\n\n You get to give out a drink."));
         } else {
             msg = player.getName()
                     + " big ooooff! The answer actually was "
@@ -261,23 +261,23 @@ public class WildCardDialogManager {
         ui.btnAnswer.setVisibility(View.VISIBLE);
 
 
-            activity.btnUtils.setButton(ui.btnAnswer, () -> {
-                ui.btnAnswer.setVisibility(View.GONE);
+        activity.btnUtils.setButton(ui.btnAnswer, () -> {
+            ui.btnAnswer.setVisibility(View.GONE);
 
-                ui.text.setText(card.getAnswer());
+            ui.text.setText(card.getAnswer());
 
-                ui.answerButtons[0].setVisibility(View.VISIBLE);
-                ui.answerButtons[1].setVisibility(View.VISIBLE);
+            ui.answerButtons[0].setVisibility(View.VISIBLE);
+            ui.answerButtons[1].setVisibility(View.VISIBLE);
 
-                ui.answerButtons[0].setText(R.string.were_you_right);
-                ui.answerButtons[1].setText(R.string.were_you_wrong);
+            ui.answerButtons[0].setText(R.string.were_you_right);
+            ui.answerButtons[1].setText(R.string.were_you_wrong);
 
-                activity.btnUtils.setButton(ui.answerButtons[0], () ->
-                        handleTF(ui, player, true));
+            activity.btnUtils.setButton(ui.answerButtons[0], () ->
+                    handleTF(ui, player, true));
 
-                activity.btnUtils.setButton(ui.answerButtons[1], () ->
-                        handleTF(ui, player, false));
-            });
+            activity.btnUtils.setButton(ui.answerButtons[1], () ->
+                    handleTF(ui, player, false));
+        });
     }
 
     private void handleTF(UIRefs ui, Player player, boolean correct) {
@@ -286,9 +286,9 @@ public class WildCardDialogManager {
         if (correct) {
             boolean isMagician = QUIZ_MAGICIAN.equals(player.getClassChoice());
             boolean isMagicianActive = isMagician && activity.isQuizActiveAbilitySession();
-            
+
             Game.getInstance().incrementPlayerQuizCorrectAnswers(player);
-            
+
             if (isMagicianActive) {
                 ui.text.setText(player.getName() + "\n\n Keep the streak going!");
             } else {

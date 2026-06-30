@@ -5,11 +5,13 @@ import android.text.Html;
 import androidx.annotation.NonNull;
 
 import com.mydomain.countingdowngame.wildCards.WildCardProperties;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -71,12 +73,12 @@ public class TriviaSessionManager {
             }
             WildCardProperties question = questionCache.remove(0);
             seenQuestions.add(question.getWildCard());
-            
+
             // Trigger background reload if cache is low
             if (questionCache.size() < 5) {
                 preloadQuestions(10);
             }
-            
+
             return question;
         }
     }
@@ -84,7 +86,7 @@ public class TriviaSessionManager {
     private WildCardProperties convertToWildCard(TriviaService.TriviaResult result) {
         String question = Html.fromHtml(result.question, Html.FROM_HTML_MODE_LEGACY).toString();
         String answer = Html.fromHtml(result.correctAnswer, Html.FROM_HTML_MODE_LEGACY).toString();
-        
+
         List<String> incorrect = new ArrayList<>();
         for (String s : result.incorrectAnswers) {
             incorrect.add(Html.fromHtml(s, Html.FROM_HTML_MODE_LEGACY).toString());

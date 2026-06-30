@@ -3,26 +3,25 @@ package com.mydomain.countingdowngame.createPlayer;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.mydomain.countingdowngame.player.Player;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.mydomain.countingdowngame.player.Player;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerModelLocalStore {
-    public static PlayerModelLocalStore fromContext(Context context) {
-        return new PlayerModelLocalStore(context);
-    }
-
     private static final String SETTINGS_NAME = "playerModelSettings";
     private final SharedPreferences mPref;
     private final Context mContext;
-
     private PlayerModelLocalStore(Context context) {
         mContext = context;
         mPref = context.getSharedPreferences(SETTINGS_NAME, Context.MODE_PRIVATE);
+    }
+
+    public static PlayerModelLocalStore fromContext(Context context) {
+        return new PlayerModelLocalStore(context);
     }
 
     public String getPlayersJSON() {

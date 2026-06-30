@@ -19,6 +19,16 @@ public class WildCardRepository {
         this.context = context;
     }
 
+    public static WildCardProperties getRandom(WildCardProperties[] cards) {
+
+        if (cards == null || cards.length == 0) {
+            return null;
+        }
+
+        Random random = new Random();
+        return cards[random.nextInt(cards.length)];
+    }
+
     public WildCardProperties[] loadQuizCards() {
         return load(loadFromAssets("quizzes.json"), "QuizPrefs");
     }
@@ -80,16 +90,6 @@ public class WildCardRepository {
         }
 
         return result;
-    }
-
-    public static WildCardProperties getRandom(WildCardProperties[] cards) {
-
-        if (cards == null || cards.length == 0) {
-            return null;
-        }
-
-        Random random = new Random();
-        return cards[random.nextInt(cards.length)];
     }
 
 }

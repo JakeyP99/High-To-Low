@@ -13,7 +13,6 @@ import static com.mydomain.countingdowngame.mainActivity.MainActivityLogging.log
 import static com.mydomain.countingdowngame.mainActivity.classAbilities.ActiveAbilities.updateClassAbilityButton;
 import static com.mydomain.countingdowngame.mainActivity.classAbilities.PassiveAbilities.characterPassiveClassAffects;
 
-import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -684,7 +683,8 @@ public class MainActivityGame extends SharedMainActivity {
         List<WildCardProperties[]> enabledTypes = new ArrayList<>();
         if (settings.isQuizActivated() && quizWildCards.length > 0) enabledTypes.add(quizWildCards);
         if (settings.isTaskActivated() && taskWildCards.length > 0) enabledTypes.add(taskWildCards);
-        if (settings.isTruthActivated() && truthWildCards.length > 0) enabledTypes.add(truthWildCards);
+        if (settings.isTruthActivated() && truthWildCards.length > 0)
+            enabledTypes.add(truthWildCards);
 
         if (enabledTypes.isEmpty()) {
             return null;

@@ -35,24 +35,14 @@ import java.util.List;
 import java.util.Random;
 
 public class PassiveAbilities extends ButtonUtilsActivity {
-    static Game game = Game.getInstance();
-    private static MainActivityGame activity;
     private static final List<PassiveMessage> pendingPassiveMessages = new ArrayList<>();
     private static final List<Runnable> pendingActions = new ArrayList<>();
-
-    private static Player hidingTroll = null;
     private static final List<Player> playersWhoPaidToll = new ArrayList<>();
+    static Game game = Game.getInstance();
+    private static MainActivityGame activity;
+    private static Player hidingTroll = null;
     private static boolean goblinTriggeredThisTurn = false;
-
-    private static class PassiveMessage {
-        String className;
-        String message;
-
-        PassiveMessage(String className, String message) {
-            this.className = className;
-            this.message = message;
-        }
-    }
+    private static String gamblerBet = "";
 
     public static void setActivity(MainActivityGame activityInstance) {
         activity = activityInstance;
@@ -157,7 +147,7 @@ public class PassiveAbilities extends ButtonUtilsActivity {
                 currentPlayer.setRemoved(true);
                 addPassiveAction(() -> game.removePlayer(currentPlayer));
             } else if (soldierRemoval && currentNumber >= minRange && currentNumber <= maxRange) {
-                addPassiveMessage(SOLDIER,"Sorry " + currentPlayer.getName() + ", a soldier has already escaped the game.");
+                addPassiveMessage(SOLDIER, "Sorry " + currentPlayer.getName() + ", a soldier has already escaped the game.");
 
             }
         }
@@ -255,7 +245,7 @@ public class PassiveAbilities extends ButtonUtilsActivity {
         // 2. If current player is a Troll, generate hunger for others
         if (currentPlayer.getClassChoices().contains(TROLL) && !currentPlayer.isRemoved()) {
             int chance = new Random().nextInt(100);
-            
+
             if (chance < 10) {
                 // THE FEAST (10%)
                 for (Player p : game.getPlayers()) {
@@ -387,8 +377,6 @@ public class PassiveAbilities extends ButtonUtilsActivity {
         player.setWildcardsConsumed(false);
     }
 
-    private static String gamblerBet = "";
-
     public static void showGamblerBetDialog(Runnable onBetPlaced) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = activity.getLayoutInflater();
@@ -478,8 +466,18 @@ public class PassiveAbilities extends ButtonUtilsActivity {
             message = currentPlayer.getName() + " lost their bet! Take 1 drink.";
             currentPlayer.incrementDrinksTakenByGambler(1);
         }
-        
+
         addPassiveMessage(GAMBLER, message);
         gamblerBet = "";
+    }
+
+    private static class PassiveMessage {
+        String className;
+        String message;
+
+        PassiveMessage(String className, String message) {
+            this.className = className;
+            this.message = message;
+        }
     }
 }

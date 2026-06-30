@@ -70,24 +70,24 @@ public class EndRouletteGame extends ButtonUtilsActivity {
     private void displayVictor() {
         // Retrieve victor's name from the Intent
         String victorName = getIntent().getStringExtra("VICTOR_NAME");
-            // Get the victor's chamber data
-            Player victor = findPlayerByName(victorName);
+        // Get the victor's chamber data
+        Player victor = findPlayerByName(victorName);
         assert victor != null;
         List<Integer> chamberData = victor.getChamberList();
-                int shotCount = 0;
+        int shotCount = 0;
 
         // Find when the first bullet appears
-                for (int i = 0; i < chamberData.size(); i++) {
-                    shotCount++;
-                    if (chamberData.get(i) == 1) {  // Bullet found
-                        break;
-                    }
-                }
-
-                // Construct the message
-                String victorText = "The winner is " + victorName + ", they would have died in " + shotCount + " shot" + (shotCount > 1 ? "s" : "") + ".";
-                textViewLose.setText(victorText);
+        for (int i = 0; i < chamberData.size(); i++) {
+            shotCount++;
+            if (chamberData.get(i) == 1) {  // Bullet found
+                break;
+            }
         }
+
+        // Construct the message
+        String victorText = "The winner is " + victorName + ", they would have died in " + shotCount + " shot" + (shotCount > 1 ? "s" : "") + ".";
+        textViewLose.setText(victorText);
+    }
 
 
     // Helper method to find the Player object by name

@@ -42,7 +42,7 @@ public class PowerUpAdapter extends ArrayAdapter<String> {
 
         if (powerUp != null) {
             text.setText(powerUp);
-            
+
             if (!showText) {
                 text.setVisibility(View.GONE);
                 // Center the icon if text is hidden
@@ -79,7 +79,7 @@ public class PowerUpAdapter extends ArrayAdapter<String> {
                 ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
                 icon.setColorFilter(filter);
                 icon.setAlpha(0.5f);
-                
+
                 // Dim the text
                 text.setTextColor(getContext().getResources().getColor(R.color.bluedarktransparent));
             } else {

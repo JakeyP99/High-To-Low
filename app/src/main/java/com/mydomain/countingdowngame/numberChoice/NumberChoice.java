@@ -3,8 +3,8 @@ package com.mydomain.countingdowngame.numberChoice;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.InputFilter;
 import android.os.Handler;
+import android.text.InputFilter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -211,7 +211,6 @@ public class NumberChoice extends ButtonUtilsActivity {
         originalNumberField.setText(""); // Clear the input field
         originalNumberField.setFocusableInTouchMode(true); // Enable editing of the field
     }
-
 
 
     private void goToCardGame(int chamberNumberCount) {

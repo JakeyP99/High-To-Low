@@ -58,6 +58,7 @@ public class RouletteAdapter extends RecyclerView.Adapter<RouletteAdapter.VH> {
 
     static class VH extends RecyclerView.ViewHolder {
         TextView tv;
+
         VH(View v) {
             super(v);
             tv = v.findViewById(R.id.text_number);

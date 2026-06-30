@@ -7,11 +7,11 @@ public class WildCardProperties implements Serializable {
     private final String answer;
     private final String category;
     private final String activity;
-    private boolean enabled;
     private final boolean usedWildCard;
     private final String wrongAnswer1;
     private final String wrongAnswer2;
     private final String wrongAnswer3;
+    private boolean enabled;
 
     public WildCardProperties(String activity, boolean enabled, boolean usedWildCard, String answer, String wrongAnswer1, String wrongAnswer2, String wrongAnswer3, String category) {
         this.activity = activity;
