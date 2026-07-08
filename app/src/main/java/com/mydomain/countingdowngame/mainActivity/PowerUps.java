@@ -30,7 +30,7 @@ import pl.droidsonroids.gif.GifImageView;
 public class PowerUps {
     // Power-Up Type Constants
     public static final String SPLIT_THE_PAIN = "Split the Pain";
-    public static final String ALL_OR_NOTHING = "All or Nothing";
+    public static final String DOUBLE_OR_NOTHING = "Double or Nothing";
     public static final String HIGH_STAKES = "High Stakes";
     public static final String TRADE_UP = "Trade Up";
     public static final String NOTHING = "Nothing";
@@ -53,7 +53,7 @@ public class PowerUps {
     public static String getPowerUpType(String powerUpName) {
         if (powerUpName == null) return "";
         if (powerUpName.contains(SPLIT_THE_PAIN)) return SPLIT_THE_PAIN;
-        if (powerUpName.contains(ALL_OR_NOTHING)) return ALL_OR_NOTHING;
+        if (powerUpName.contains(DOUBLE_OR_NOTHING)) return DOUBLE_OR_NOTHING;
         if (powerUpName.contains(HIGH_STAKES)) return HIGH_STAKES;
         if (powerUpName.contains(TRADE_UP)) return TRADE_UP;
         if (powerUpName.contains(NOTHING)) return NOTHING;
@@ -62,13 +62,13 @@ public class PowerUps {
     }
 
     private static boolean isPassive(String type) {
-        return type.equals(SPLIT_THE_PAIN) || type.equals(ALL_OR_NOTHING) || type.equals(GET_OUT_OF_JAIL);
+        return type.equals(SPLIT_THE_PAIN) || type.equals(DOUBLE_OR_NOTHING) || type.equals(GET_OUT_OF_JAIL);
     }
 
     public static ArrayList<String> getPowerUps() {
         ArrayList<String> powerUp = new ArrayList<>();
         powerUp.add(SPLIT_THE_PAIN + ": Divide your drinks with a random player if you lose!");
-        powerUp.add(ALL_OR_NOTHING + ": 50/50 chance: 0 drinks or double drinks if you lose!");
+        powerUp.add(DOUBLE_OR_NOTHING + ": There is a 50/50 chance the final drinks will be doubled or turn to 0 if you lose!");
         powerUp.add(HIGH_STAKES + ": +3 drinks to the total, but gain 2 wildcards for your next turn!");
         powerUp.add(TRADE_UP + ": Lose 1 wildcard to reduce drinks by 3!");
         powerUp.add(GET_OUT_OF_JAIL + ": Automatically saves you from a 0 and reverts the number!");
@@ -111,7 +111,7 @@ public class PowerUps {
                 }
                 break;
             case SPLIT_THE_PAIN:
-            case ALL_OR_NOTHING:
+            case DOUBLE_OR_NOTHING:
             case NOTHING:
             case GET_OUT_OF_JAIL:
                 break;
@@ -123,7 +123,7 @@ public class PowerUps {
         switch (getPowerUpType(powerUpName)) {
             case SPLIT_THE_PAIN:
                 return R.drawable.division;
-            case ALL_OR_NOTHING:
+            case DOUBLE_OR_NOTHING:
                 return R.drawable.dice;
             case HIGH_STAKES:
                 return R.drawable.toast;
@@ -169,10 +169,10 @@ public class PowerUps {
             return; // Don't end game, player is saved
         }
 
-        // 2. Check for All or Nothing
+        // 2. Check for Double or Nothing
         String allNothing = null;
         for (String p : playerPowerUps) {
-            if (getPowerUpType(p).equals(ALL_OR_NOTHING)) {
+            if (getPowerUpType(p).equals(DOUBLE_OR_NOTHING)) {
                 allNothing = p;
                 break;
             }
@@ -218,7 +218,7 @@ public class PowerUps {
         TextView description = dialogView.findViewById(R.id.powerup_description);
         Button activateBtn = dialogView.findViewById(R.id.btn_activate_powerup);
 
-        title.setText("All or Nothing!");
+        title.setText("Double or Nothing!");
         description.setText("Risk it all? 50/50 chance for 0 drinks or DOUBLE drinks!");
         activateBtn.setText("Risk It!");
 
@@ -226,7 +226,7 @@ public class PowerUps {
         AlertDialog dialog = builder.create();
         dialog.setCancelable(false);
 
-        activateBtn.setOnClickListener(v -> {
+        activity.btnUtils.setButton(activateBtn, () -> {
             dialog.dismiss();
             showAllOrNothingGenerator(onHandled);
         });
@@ -545,7 +545,7 @@ public class PowerUps {
             powerUpLeft.setImageResource(getPowerUpIcon(pName));
             stopGifAnimation(powerUpLeft);
             // Click to show details first
-            powerUpLeft.setOnClickListener(v -> showPowerUpDetails(pName, player));
+            activity.btnUtils.setButton(powerUpLeft, () -> showPowerUpDetails(pName, player));
         } else {
             powerUpLeft.setVisibility(View.GONE);
         }
@@ -556,7 +556,7 @@ public class PowerUps {
             powerUpRight.setImageResource(getPowerUpIcon(pName));
             stopGifAnimation(powerUpRight);
             // Click to show details first
-            powerUpRight.setOnClickListener(v -> showPowerUpDetails(pName, player));
+            activity.btnUtils.setButton(powerUpRight, () -> showPowerUpDetails(pName, player));
         } else {
             powerUpRight.setVisibility(View.GONE);
         }
@@ -599,7 +599,7 @@ public class PowerUps {
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
 
-        activateBtn.setOnClickListener(v -> {
+        activity.btnUtils.setButton(activateBtn, () -> {
             activatePowerUp(powerUpName, player);
             dialog.dismiss();
         });

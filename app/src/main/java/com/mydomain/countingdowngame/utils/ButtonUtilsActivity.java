@@ -25,7 +25,6 @@ import pl.droidsonroids.gif.GifImageView;
 public abstract class ButtonUtilsActivity extends AppCompatActivity {
 
     public ButtonUtils btnUtils;
-    private AudioManager audioManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,19 +82,13 @@ public abstract class ButtonUtilsActivity extends AppCompatActivity {
         startActivity(getIntentForClass(SettingsMenu.class));
     }
 
-    public void goToInGameSettings(int startingNumber) {
-        Intent i = getIntentForClass(SettingsMenu.class);
-        i.putExtra("startingNumber", startingNumber);
-        startActivity(i);
-    }
-
     public void gotoPlayerChoice() {
         startActivity(getIntentForClass(PlayerChoice.class));
     }
     //-----------------------------------------------------Sound Functionality---------------------------------------------------//
 
     public void setupAudioManagerForMuteButtons(GifImageView muteGif, GifImageView soundGif) {
-        audioManager = AudioManager.getInstance();
+        AudioManager audioManager = AudioManager.getInstance();
         audioManager.setContext(getApplicationContext());
         boolean isMuted = getMuteSoundState();
         AudioManager.updateMuteButton(isMuted, muteGif, soundGif);

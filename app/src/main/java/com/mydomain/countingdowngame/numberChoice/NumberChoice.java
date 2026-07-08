@@ -107,19 +107,11 @@ public class NumberChoice extends ButtonUtilsActivity {
 
         if (Game.getInstance().isPlayCards()) {
             if (inputValue.length() > 1) {
-                StyleableToast.makeText(
-                        getApplicationContext(),
-                        "That's a lot of numbers, unfortunately too many :(",
-                        R.style.newToast
-                ).show();
+                StyleableToast.makeText(getApplicationContext(), "That's a lot of numbers, unfortunately too many :(", R.style.newToast).show();
             }
         } else {
             if (inputValue.length() > 9) {
-                StyleableToast.makeText(
-                        getApplicationContext(),
-                        "That's a lot of numbers, unfortunately too many :(",
-                        R.style.newToast
-                ).show();
+                StyleableToast.makeText(getApplicationContext(), "That's a lot of numbers, unfortunately too many :(", R.style.newToast).show();
             }
         }
 
@@ -139,19 +131,16 @@ public class NumberChoice extends ButtonUtilsActivity {
 
         startingNumber = inputNumber;
         isGenerating = true;
-        YoYo.with(Techniques.RubberBand)
-                .duration(300)
-                .onEnd(animator -> {
-                    // Animation has ended, start the MainActivity here
-                    isGenerating = false;
+        YoYo.with(Techniques.RubberBand).duration(300).onEnd(animator -> {
+            // Animation has ended, start the MainActivity here
+            isGenerating = false;
 
-                    if (Game.getInstance().isPlayCards()) {
-                        goToCardGame(startingNumber);
-                    } else {
-                        gotoGame(startingNumber);
-                    }
-                })
-                .playOn(originalNumberField);
+            if (Game.getInstance().isPlayCards()) {
+                goToCardGame(startingNumber);
+            } else {
+                gotoGame(startingNumber);
+            }
+        }).playOn(originalNumberField);
 
         originalNumberField.setFocusable(false);
     }
@@ -187,19 +176,16 @@ public class NumberChoice extends ButtonUtilsActivity {
                     originalNumberField.setText(String.valueOf(targetNumber));
                     startingNumber = targetNumber;
 
-                    YoYo.with(Techniques.Bounce)
-                            .duration(600)
-                            .onEnd(animator -> {
-                                isGenerating = false;
-                                btnRandom.setEnabled(true);
-                                btnSubmit.setEnabled(true);
-                                if (Game.getInstance().isPlayCards()) {
-                                    goToCardGame(startingNumber);
-                                } else {
-                                    goToInGameSettings(startingNumber);
-                                }
-                            })
-                            .playOn(originalNumberField);
+                    YoYo.with(Techniques.Bounce).duration(600).onEnd(animator -> {
+                        isGenerating = false;
+                        btnRandom.setEnabled(true);
+                        btnSubmit.setEnabled(true);
+                        if (Game.getInstance().isPlayCards()) {
+                            goToCardGame(startingNumber);
+                        } else {
+                            gotoGame(startingNumber);
+                        }
+                    }).playOn(originalNumberField);
                 }
             }
         };

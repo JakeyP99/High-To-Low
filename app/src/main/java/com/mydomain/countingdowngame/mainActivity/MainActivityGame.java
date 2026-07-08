@@ -284,7 +284,7 @@ public class MainActivityGame extends SharedMainActivity {
     private void setupButtonActions(ImageButton imageButtonExit) {
         btnUtils.setButton(btnGenerate, this::handleGenerateClick);
 
-        playerImage.setOnClickListener(v -> characterClassDescriptions());
+        btnUtils.setButton(playerImage, this::characterClassDescriptions);
         btnUtils.setButton(btnWildContinue, this::wildCardContinue);
         btnUtils.setButton(btnClassAbility, ActiveAbilities::activateActiveAbility);
 
