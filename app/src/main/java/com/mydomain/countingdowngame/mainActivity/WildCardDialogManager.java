@@ -3,6 +3,7 @@ package com.mydomain.countingdowngame.mainActivity;
 import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.QUIZ_MAGICIAN;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.os.Handler;
 import android.util.TypedValue;
 import android.view.View;
@@ -29,6 +30,7 @@ public class WildCardDialogManager {
     private final MainActivityGame activity;
     private final Runnable onContinue;
     private boolean wasQuizCorrect = false;
+    private AlertDialog activeDialog;
 
     public WildCardDialogManager(MainActivityGame activity, Runnable onContinue) {
         this.activity = activity;
@@ -37,22 +39,23 @@ public class WildCardDialogManager {
 
     public void showWildCardDialog(WildCardProperties selectedCard, String type) {
         View dialogView = inflateDialog();
-        AlertDialog dialog = createDialog(dialogView);
+
+        if (activeDialog != null) activeDialog.dismiss();
+        activeDialog = createDialog(dialogView);
 
         UIRefs ui = bindViews(dialogView);
-        setupBaseUI(ui, selectedCard, type);
 
         Player player = Game.getInstance().getCurrentPlayer();
+        boolean isQuizMagician = QUIZ_MAGICIAN.equals(player.getClassChoice()) || (CharacterClassDescriptions.ANGRY_JIM.equals(player.getClassChoice()) && Game.getInstance().getCurrentNumber() < 50);
+
+        setupBaseUI(ui, selectedCard, type, isQuizMagician);
 
         if (selectedCard.hasAnswer()) {
-            boolean isQuizMagician = QUIZ_MAGICIAN.equals(player.getClassChoice()) || (CharacterClassDescriptions.ANGRY_JIM.equals(player.getClassChoice()) && Game.getInstance().getCurrentNumber() < 50);
-
             boolean isMultiChoice = GeneralSettingsLocalStore.fromContext(activity).isMultiChoice();
-
             boolean isQuizMode = isQuizMagician || isMultiChoice;
 
             if (isQuizMode) {
-                setupMultipleChoice(ui, selectedCard, player, isQuizMagician);
+                setupMultipleChoice(ui, selectedCard, player, isQuizMagician, activeDialog);
             } else {
                 setupTrueFalse(ui, selectedCard, player);
             }
@@ -60,8 +63,8 @@ public class WildCardDialogManager {
             setupWildCardOnly(ui);
         }
 
-        setupContinue(ui.btnContinue, dialog);
-        dialog.show();
+        setupContinue(ui.btnContinue, activeDialog);
+        activeDialog.show();
     }
 
     private void setupWildCardOnly(UIRefs ui) {
@@ -91,18 +94,21 @@ public class WildCardDialogManager {
         return new UIRefs(view.findViewById(R.id.textView_WildText), view.findViewById(R.id.btnAnswer), view.findViewById(R.id.btnBackWildCard), new Button[]{view.findViewById(R.id.btnQuizAnswerTL), view.findViewById(R.id.btnQuizAnswerTR), view.findViewById(R.id.btnQuizAnswerBL), view.findViewById(R.id.btnQuizAnswerBR)}, new GifImageView[]{view.findViewById(R.id.confettiImageViewTL), view.findViewById(R.id.confettiImageViewTR), view.findViewById(R.id.confettiImageViewBL), view.findViewById(R.id.confettiImageViewBR)}, view.findViewById(R.id.textView));
     }
 
-    private void setupBaseUI(UIRefs ui, WildCardProperties card, String type) {
+    private void setupBaseUI(UIRefs ui, WildCardProperties card, String type, boolean isQuizMagician) {
         ui.text.setText(card.getWildCard());
         ui.title.setText(type + "!");
 
-        int size = SharedMainActivity.TextSizeCalculatorQuizQuestion.calculateTextSizeBasedOnCharacterCount(String.valueOf(ui.text));
-
-        ui.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+        if (isQuizMagician && card.hasAnswer()) {
+            ui.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+        } else {
+            int size = SharedMainActivity.TextSizeCalculatorQuizQuestion.calculateTextSizeBasedOnCharacterCount(ui.text.getText().toString());
+            ui.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+        }
     }
 
     // ---------------- MULTIPLE CHOICE ----------------
 
-    private void setupMultipleChoice(UIRefs ui, WildCardProperties card, Player player, boolean isQuizMagician) {
+    private void setupMultipleChoice(UIRefs ui, WildCardProperties card, Player player, boolean isQuizMagician, Dialog dialog) {
 
         ui.btnAnswer.setVisibility(View.GONE);
 
@@ -127,7 +133,7 @@ public class WildCardDialogManager {
             updateTextSizeQuizAnswer(answer, btn);
             int index = i;
 
-            activity.btnUtils.setButton(btn, () -> handleMCQSelection(ui, card, player, answerList, answer, index));
+            activity.btnUtils.setButton(btn, () -> handleMCQSelection(ui, card, player, answerList, answer, index, dialog));
         }
     }
 
@@ -144,7 +150,7 @@ public class WildCardDialogManager {
         return new String[]{card.getAnswer(), card.getWrongAnswer1(), card.getWrongAnswer2(), card.getWrongAnswer3()};
     }
 
-    private void handleMCQSelection(UIRefs ui, WildCardProperties card, Player player, List<String> answers, String selected, int index) {
+    private void handleMCQSelection(UIRefs ui, WildCardProperties card, Player player, List<String> answers, String selected, int index, Dialog dialog) {
 
         disableButtons(ui.answerButtons);
 
@@ -164,7 +170,7 @@ public class WildCardDialogManager {
 
         new Handler().postDelayed(() -> {
             hideConfetti(ui);   // ✅ ADD THIS FIRST
-            showMCQResult(ui, player, card, correct);
+            showMCQResult(ui, player, correct);
         }, 1500);
     }
 
@@ -178,7 +184,17 @@ public class WildCardDialogManager {
         }
     }
 
-    private void showMCQResult(UIRefs ui, Player player, WildCardProperties card, boolean correct) {
+    private void showMCQResult(UIRefs ui, Player player, boolean correct) {
+
+        if (correct) {
+            boolean isMagician = QUIZ_MAGICIAN.equals(player.getClassChoice());
+            boolean isMagicianActive = isMagician && activity.isQuizActiveAbilitySession();
+
+            if (isMagicianActive) {
+                showMagicianChoiceDialog();
+                return;
+            }
+        }
 
         hideAllChoices(ui);
         ui.btnContinue.setVisibility(View.VISIBLE);
@@ -187,9 +203,7 @@ public class WildCardDialogManager {
 
         if (correct) {
             boolean isMagician = QUIZ_MAGICIAN.equals(player.getClassChoice());
-            boolean isMagicianActive = isMagician && activity.isQuizActiveAbilitySession();
-
-            msg = player.getName() + " that's right! "  + (isMagicianActive ? "\n\n Let's continue!" : (isMagician ? "\n\n  Give out 2 drinks to everyone from your passive." : "\n\n Give out a drink."));
+            msg = player.getName() + " that's right! " + (isMagician ? "\n\n  Give out 2 drinks to everyone from your passive." : "\n\n Give out a drink.");
         } else {
             msg = player.getName() + " big ooooff! Take a drink.";
         }
@@ -232,7 +246,8 @@ public class WildCardDialogManager {
             Game.getInstance().incrementPlayerQuizCorrectAnswers(player);
 
             if (isMagicianActive) {
-                ui.text.setText(player.getName() + "\n\n Keep the streak going!");
+                showMagicianChoiceDialog();
+                return;
             } else {
                 ui.text.setText(player.getName() + (isMagician ? "\n\n You get to give out 2 drinks to everyone." : "\n\n You get to give out a drink."));
             }
@@ -276,6 +291,35 @@ public class WildCardDialogManager {
         for (GifImageView gif : ui.confetti) {
             gif.setVisibility(View.GONE);
         }
+    }
+
+    private void showMagicianChoiceDialog() {
+        if (activeDialog != null) activeDialog.dismiss();
+
+        View v = activity.getLayoutInflater().inflate(R.layout.game_quiz_magician_continue, null);
+        AlertDialog dialog = createDialog(v);
+
+        TextView streakTitle = v.findViewById(R.id.quiz_streak_title);
+        Button btnContinue = v.findViewById(R.id.btn_continue_streak);
+        Button btnStop = v.findViewById(R.id.btn_stop_streak);
+
+        int currentStreak = activity.getQuizActiveCorrectCount() + 1;
+        streakTitle.setText("Streak: " + currentStreak);
+
+        activity.btnUtils.setButton(btnContinue, () -> {
+            dialog.dismiss();
+            activity.setWasQuizCorrect(true);
+            onContinue.run();
+        });
+
+        activity.btnUtils.setButton(btnStop, () -> {
+            dialog.dismiss();
+            activity.setWasQuizCorrect(true);
+            activity.stopQuizMagicianStreak();
+        });
+
+        dialog.show();
+        activeDialog = dialog;
     }
     // ---------------- HOLDER ----------------
 

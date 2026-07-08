@@ -710,6 +710,18 @@ public class MainActivityGame extends SharedMainActivity {
         return isQuizActiveAbilitySession;
     }
 
+    public int getQuizActiveCorrectCount() {
+        return quizActiveCorrectCount;
+    }
+
+    public void stopQuizMagicianStreak() {
+        quizActiveQuestionsCount++;
+        if (wasQuizCorrect) {
+            quizActiveCorrectCount++;
+        }
+        finalizeQuizMagicianActive();
+    }
+
     public void startQuizMagicianActiveSession() {
         isQuizActiveAbilitySession = true;
         quizActiveQuestionsCount = 0;
@@ -726,7 +738,6 @@ public class MainActivityGame extends SharedMainActivity {
             String drinkText = (drinksToHandOut == 1) ? "drink" : "drinks";
             String message = "Streak Over! \n\n" + currentPlayer.getName() + " got " + quizActiveCorrectCount + " correct!\n\nHand out " + drinksToHandOut + " " + drinkText + " to everyone!";
             mainActivityDialog.showMainDialog(message, this::wildCardContinue);
-            updateDrinkNumberCounter(drinksToHandOut, true);
         } else {
             mainActivityDialog.showMainDialog("Streak Over! \n\n" + currentPlayer.getName() + " got none correct. \n\nTake another drink for being super bad!", this::wildCardContinue);
         }
