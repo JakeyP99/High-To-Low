@@ -51,7 +51,6 @@
             android:layout_width="220dp"
             android:layout_height="70dp"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
             android:fontFamily="@font/viga"
             android:background="@drawable/outlineforbutton"
             android:text="Activate"
@@ -59,6 +58,21 @@
             android:textColor="@color/bluedark"
             android:textSize="20sp"
             android:padding="12dp" />
+
+        <Button
+            android:id="@+id/btn_cancel_powerup"
+            android:layout_width="220dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/viga"
+            android:background="@drawable/outlineforbutton"
+            android:text="Cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:textSize="20sp"
+            android:padding="12dp"
+            android:visibility="gone" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -183,7 +183,7 @@ public class PowerUps {
             showAllOrNothingDialog(() -> {
                 player.usePowerUp(finalAllNothing);
                 checkSplitThePain(player, onEndGame);
-            });
+            }, () -> checkSplitThePain(player, onEndGame));
         } else {
             checkSplitThePain(player, onEndGame);
         }
@@ -209,7 +209,7 @@ public class PowerUps {
         }
     }
 
-    private static void showAllOrNothingDialog(Runnable onHandled) {
+    private static void showAllOrNothingDialog(Runnable onHandled, Runnable onSkip) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
         LayoutInflater inflater = activity.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.game_powerup_details, null);
@@ -217,10 +217,14 @@ public class PowerUps {
         TextView title = dialogView.findViewById(R.id.powerup_title);
         TextView description = dialogView.findViewById(R.id.powerup_description);
         Button activateBtn = dialogView.findViewById(R.id.btn_activate_powerup);
+        Button cancelBtn = dialogView.findViewById(R.id.btn_cancel_powerup);
 
         title.setText("Double or Nothing!");
         description.setText("Risk it all? 50/50 chance for 0 drinks or DOUBLE drinks!");
         activateBtn.setText("Risk It!");
+
+        cancelBtn.setVisibility(View.VISIBLE);
+        cancelBtn.setText("Don't Risk It");
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
@@ -229,6 +233,10 @@ public class PowerUps {
         activity.btnUtils.setButton(activateBtn, () -> {
             dialog.dismiss();
             showAllOrNothingGenerator(onHandled);
+        });
+
+        activity.btnUtils.setButton(cancelBtn, () -> {
+            dialog.dismiss();
         });
 
         dialog.show();
@@ -257,18 +265,9 @@ public class PowerUps {
         animator.setDuration(5000);
         animator.setInterpolator(new android.view.animation.AccelerateDecelerateInterpolator());
 
-        final int[] lastSector = {-1};
         animator.addUpdateListener(animation -> {
             float value = (float) animation.getAnimatedValue();
             arrow.setRotation(value);
-
-            // Trigger a haptic tick every 180 degrees (when passing a card)
-            int normalized = (int) ((value + 90) % 360);
-            int sector = (normalized < 180) ? 0 : 1;
-            if (sector != lastSector[0]) {
-                activity.btnUtils.vibrateDevice();
-                lastSector[0] = sector;
-            }
         });
 
         animator.addListener(new AnimatorListenerAdapter() {
