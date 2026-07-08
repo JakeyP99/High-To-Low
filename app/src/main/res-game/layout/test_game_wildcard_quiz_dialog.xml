@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/viga"
-            android:text="Wildcard!"
+            android:text="Quiz!"
             android:textAlignment="center"
             android:textColor="@color/bluedark"
             android:textSize="35sp"
@@ -52,10 +52,10 @@
             android:layout_marginBottom="15dp"
             android:fontFamily="@font/viga"
             android:gravity="center"
-            android:text="Loading..."
+            android:text="In 'One Piece', who confirms the existence of the legendary treasure, One Piece?"
             android:textAlignment="center"
             android:textColor="@color/bluedark"
-            android:textSize="22sp"
+            android:textSize="25sp"
             app:layout_constrainedHeight="true"
             app:layout_constraintBottom_toTopOf="@+id/barrier_buttons"
             app:layout_constraintEnd_toEndOf="parent"
@@ -83,7 +83,9 @@
             android:padding="10sp"
             android:textColor="@color/bluedark"
             android:textSize="18sp"
-            android:visibility="gone"
+            android:text="test"
+
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/btnQuizAnswerBL"
             app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
             app:layout_constraintStart_toStartOf="parent" />
@@ -100,7 +102,9 @@
             android:padding="10sp"
             android:textColor="@color/bluedark"
             android:textSize="18sp"
-            android:visibility="gone"
+            android:text="test"
+
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/btnQuizAnswerBR"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/guidelineCenter" />
@@ -118,7 +122,8 @@
             android:padding="10sp"
             android:textColor="@color/bluedark"
             android:textSize="18sp"
-            android:visibility="gone"
+            android:text="test"
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/btnBackWildCard"
             app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
             app:layout_constraintStart_toStartOf="parent" />
@@ -135,7 +140,9 @@
             android:textAllCaps="false"
             android:textColor="@color/bluedark"
             android:textSize="18sp"
-            android:visibility="gone"
+            android:text="test"
+
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/btnBackWildCard"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/guidelineCenter" />
@@ -180,6 +187,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:src="@drawable/confetti"
+
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@id/btnQuizAnswerTL"
             app:layout_constraintEnd_toEndOf="@id/btnQuizAnswerTL"

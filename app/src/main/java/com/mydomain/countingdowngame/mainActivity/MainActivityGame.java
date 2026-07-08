@@ -7,6 +7,7 @@ import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescripti
 import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.QUIZ_MAGICIAN;
 import static com.mydomain.countingdowngame.mainActivity.MainActivityCatastrophes.decreaseNumberByRandom;
 import static com.mydomain.countingdowngame.mainActivity.MainActivityCatastrophes.increaseNumberByRandom;
+import static com.mydomain.countingdowngame.mainActivity.MainActivityCatastrophes.reverseTurnOrder;
 import static com.mydomain.countingdowngame.mainActivity.MainActivityCatastrophes.setCatastropheLimit;
 import static com.mydomain.countingdowngame.mainActivity.MainActivityLogging.logPlayerInformation;
 import static com.mydomain.countingdowngame.mainActivity.MainActivityLogging.logSelectedCardInfo;
@@ -727,7 +728,7 @@ public class MainActivityGame extends SharedMainActivity {
             mainActivityDialog.showMainDialog(message, this::wildCardContinue);
             updateDrinkNumberCounter(drinksToHandOut, true);
         } else {
-            mainActivityDialog.showMainDialog("Streak Over! \n\n" + currentPlayer.getName() + " got none correct. \n\nTake a drink!", this::wildCardContinue);
+            mainActivityDialog.showMainDialog("Streak Over! \n\n" + currentPlayer.getName() + " got none correct. \n\nTake another drink for being super bad!", this::wildCardContinue);
         }
     }
 

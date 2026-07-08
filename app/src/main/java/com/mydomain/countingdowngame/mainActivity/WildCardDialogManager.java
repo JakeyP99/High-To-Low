@@ -45,13 +45,9 @@ public class WildCardDialogManager {
         Player player = Game.getInstance().getCurrentPlayer();
 
         if (selectedCard.hasAnswer()) {
-            boolean isQuizMagician =
-                    QUIZ_MAGICIAN.equals(player.getClassChoice()) ||
-                            (CharacterClassDescriptions.ANGRY_JIM.equals(player.getClassChoice())
-                                    && Game.getInstance().getCurrentNumber() < 50);
+            boolean isQuizMagician = QUIZ_MAGICIAN.equals(player.getClassChoice()) || (CharacterClassDescriptions.ANGRY_JIM.equals(player.getClassChoice()) && Game.getInstance().getCurrentNumber() < 50);
 
-            boolean isMultiChoice =
-                    GeneralSettingsLocalStore.fromContext(activity).isMultiChoice();
+            boolean isMultiChoice = GeneralSettingsLocalStore.fromContext(activity).isMultiChoice();
 
             boolean isQuizMode = isQuizMagician || isMultiChoice;
 
@@ -79,13 +75,11 @@ public class WildCardDialogManager {
     // ---------------- SETUP ----------------
 
     private View inflateDialog() {
-        return activity.getLayoutInflater()
-                .inflate(R.layout.game_wildcard_dialog, null);
+        return activity.getLayoutInflater().inflate(R.layout.game_wildcard_dialog, null);
     }
 
     private AlertDialog createDialog(View view) {
-        AlertDialog.Builder builder =
-                new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
 
         builder.setView(view);
         AlertDialog dialog = builder.create();
@@ -94,38 +88,21 @@ public class WildCardDialogManager {
     }
 
     private UIRefs bindViews(View view) {
-        return new UIRefs(
-                view.findViewById(R.id.textView_WildText),
-                view.findViewById(R.id.btnAnswer),
-                view.findViewById(R.id.btnBackWildCard),
-                new Button[]{
-                        view.findViewById(R.id.btnQuizAnswerTL),
-                        view.findViewById(R.id.btnQuizAnswerTR),
-                        view.findViewById(R.id.btnQuizAnswerBL),
-                        view.findViewById(R.id.btnQuizAnswerBR)
-                },
-                new GifImageView[]{
-                        view.findViewById(R.id.confettiImageViewTL),
-                        view.findViewById(R.id.confettiImageViewTR),
-                        view.findViewById(R.id.confettiImageViewBL),
-                        view.findViewById(R.id.confettiImageViewBR)
-                },
-                view.findViewById(R.id.textView)
-        );
+        return new UIRefs(view.findViewById(R.id.textView_WildText), view.findViewById(R.id.btnAnswer), view.findViewById(R.id.btnBackWildCard), new Button[]{view.findViewById(R.id.btnQuizAnswerTL), view.findViewById(R.id.btnQuizAnswerTR), view.findViewById(R.id.btnQuizAnswerBL), view.findViewById(R.id.btnQuizAnswerBR)}, new GifImageView[]{view.findViewById(R.id.confettiImageViewTL), view.findViewById(R.id.confettiImageViewTR), view.findViewById(R.id.confettiImageViewBL), view.findViewById(R.id.confettiImageViewBR)}, view.findViewById(R.id.textView));
     }
 
     private void setupBaseUI(UIRefs ui, WildCardProperties card, String type) {
         ui.text.setText(card.getWildCard());
         ui.title.setText(type + "!");
-        updateTextSize(ui.text);
+
+        int size = SharedMainActivity.TextSizeCalculatorQuizQuestion.calculateTextSizeBasedOnCharacterCount(String.valueOf(ui.text));
+
+        ui.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
     }
 
     // ---------------- MULTIPLE CHOICE ----------------
 
-    private void setupMultipleChoice(UIRefs ui,
-                                     WildCardProperties card,
-                                     Player player,
-                                     boolean isQuizMagician) {
+    private void setupMultipleChoice(UIRefs ui, WildCardProperties card, Player player, boolean isQuizMagician) {
 
         ui.btnAnswer.setVisibility(View.GONE);
 
@@ -150,41 +127,24 @@ public class WildCardDialogManager {
             updateTextSizeQuizAnswer(answer, btn);
             int index = i;
 
-            activity.btnUtils.setButton(btn, () ->
-                    handleMCQSelection(ui, card, player, answerList, answer, index)
-            );
+            activity.btnUtils.setButton(btn, () -> handleMCQSelection(ui, card, player, answerList, answer, index));
         }
     }
 
-    private String[] buildAnswers(WildCardProperties card,
-                                  boolean isQuizMagician) {
+    private String[] buildAnswers(WildCardProperties card, boolean isQuizMagician) {
 
         if (isQuizMagician) {
             Random random = new Random();
 
-            String wrong = random.nextBoolean()
-                    ? card.getWrongAnswer1()
-                    : (random.nextBoolean()
-                       ? card.getWrongAnswer2()
-                       : card.getWrongAnswer3());
+            String wrong = random.nextBoolean() ? card.getWrongAnswer1() : (random.nextBoolean() ? card.getWrongAnswer2() : card.getWrongAnswer3());
 
             return new String[]{card.getAnswer(), wrong};
         }
 
-        return new String[]{
-                card.getAnswer(),
-                card.getWrongAnswer1(),
-                card.getWrongAnswer2(),
-                card.getWrongAnswer3()
-        };
+        return new String[]{card.getAnswer(), card.getWrongAnswer1(), card.getWrongAnswer2(), card.getWrongAnswer3()};
     }
 
-    private void handleMCQSelection(UIRefs ui,
-                                    WildCardProperties card,
-                                    Player player,
-                                    List<String> answers,
-                                    String selected,
-                                    int index) {
+    private void handleMCQSelection(UIRefs ui, WildCardProperties card, Player player, List<String> answers, String selected, int index) {
 
         disableButtons(ui.answerButtons);
 
@@ -208,9 +168,7 @@ public class WildCardDialogManager {
         }, 1500);
     }
 
-    private void highlightCorrect(UIRefs ui,
-                                  List<String> answers,
-                                  WildCardProperties card) {
+    private void highlightCorrect(UIRefs ui, List<String> answers, WildCardProperties card) {
 
         for (int j = 0; j < answers.size(); j++) {
             if (answers.get(j).equals(card.getAnswer())) {
@@ -220,10 +178,7 @@ public class WildCardDialogManager {
         }
     }
 
-    private void showMCQResult(UIRefs ui,
-                               Player player,
-                               WildCardProperties card,
-                               boolean correct) {
+    private void showMCQResult(UIRefs ui, Player player, WildCardProperties card, boolean correct) {
 
         hideAllChoices(ui);
         ui.btnContinue.setVisibility(View.VISIBLE);
@@ -234,18 +189,9 @@ public class WildCardDialogManager {
             boolean isMagician = QUIZ_MAGICIAN.equals(player.getClassChoice());
             boolean isMagicianActive = isMagician && activity.isQuizActiveAbilitySession();
 
-            msg = player.getName() + " that's right! The answer was "
-                    + card.getAnswer()
-                    + (isMagicianActive
-                    ? "\n\n Let's continue!"
-                    : (isMagician
-                       ? "\n\n You get to give out 2 drinks to everyone."
-                       : "\n\n You get to give out a drink."));
+            msg = player.getName() + " that's right! "  + (isMagicianActive ? "\n\n Let's continue!" : (isMagician ? "\n\n  Give out 2 drinks to everyone from your passive." : "\n\n Give out a drink."));
         } else {
-            msg = player.getName()
-                    + " big ooooff! The answer actually was "
-                    + card.getAnswer()
-                    + "\n\n Take a drink.";
+            msg = player.getName() + " big ooooff! Take a drink.";
         }
 
         ui.text.setText(msg);
@@ -253,9 +199,7 @@ public class WildCardDialogManager {
 
     // ---------------- TRUE / FALSE ----------------
 
-    private void setupTrueFalse(UIRefs ui,
-                                WildCardProperties card,
-                                Player player) {
+    private void setupTrueFalse(UIRefs ui, WildCardProperties card, Player player) {
 
         hideAllChoices(ui);
         ui.btnAnswer.setVisibility(View.VISIBLE);
@@ -272,11 +216,9 @@ public class WildCardDialogManager {
             ui.answerButtons[0].setText(R.string.were_you_right);
             ui.answerButtons[1].setText(R.string.were_you_wrong);
 
-            activity.btnUtils.setButton(ui.answerButtons[0], () ->
-                    handleTF(ui, player, true));
+            activity.btnUtils.setButton(ui.answerButtons[0], () -> handleTF(ui, player, true));
 
-            activity.btnUtils.setButton(ui.answerButtons[1], () ->
-                    handleTF(ui, player, false));
+            activity.btnUtils.setButton(ui.answerButtons[1], () -> handleTF(ui, player, false));
         });
     }
 
@@ -292,15 +234,11 @@ public class WildCardDialogManager {
             if (isMagicianActive) {
                 ui.text.setText(player.getName() + "\n\n Keep the streak going!");
             } else {
-                ui.text.setText(player.getName()
-                        + (isMagician
-                        ? "\n\n You get to give out 2 drinks to everyone."
-                        : "\n\n You get to give out a drink."));
+                ui.text.setText(player.getName() + (isMagician ? "\n\n You get to give out 2 drinks to everyone." : "\n\n You get to give out a drink."));
             }
         } else {
             Game.getInstance().incrementPlayerQuizIncorrectAnswers(player);
-            ui.text.setText(player.getName()
-                    + " since you got it wrong, take a drink!");
+            ui.text.setText(player.getName() + " since you got it wrong, take a drink!");
         }
 
         hideAllChoices(ui);
@@ -328,13 +266,8 @@ public class WildCardDialogManager {
         for (Button b : ui.answerButtons) b.setVisibility(View.GONE);
     }
 
-    private void updateTextSize(TextView textView) {
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
-    }
-
     private void updateTextSizeQuizAnswer(String text, TextView textView) {
-        int size = SharedMainActivity.TextSizeCalculatorQuizAnswers
-                .calculateTextSizeBasedOnCharacterCount(text);
+        int size = SharedMainActivity.TextSizeCalculatorQuizAnswers.calculateTextSizeBasedOnCharacterCount(text);
 
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
     }
@@ -354,12 +287,7 @@ public class WildCardDialogManager {
         Button[] answerButtons;
         GifImageView[] confetti;
 
-        UIRefs(TextView text,
-               Button btnAnswer,
-               Button btnContinue,
-               Button[] answerButtons,
-               GifImageView[] confetti,
-               TextView title) {
+        UIRefs(TextView text, Button btnAnswer, Button btnContinue, Button[] answerButtons, GifImageView[] confetti, TextView title) {
             this.text = text;
             this.btnAnswer = btnAnswer;
             this.btnContinue = btnContinue;

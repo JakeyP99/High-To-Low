@@ -18,17 +18,7 @@ public class MainActivityCatastrophes {
     private List<Catastrophe> unusedCatastrophes;
 
     public MainActivityCatastrophes() {
-        this.allCatastrophes = new Catastrophe[]{
-                new Catastrophe("Two drinks have been added to the counter!", 1),
-                new Catastrophe("Two drinks have been removed from the counter!", 2),
-                new Catastrophe("The current number has been increased!", 3),
-                new Catastrophe("The current number has been reduced!", 4),
-                new Catastrophe("Reverse the turn order!", 5),
-                new Catastrophe("Everyone gains a couple more wildcards to use!", 6),
-                new Catastrophe("Everyone loses a couple of wildcards!", 7),
-                new Catastrophe("Everyone must each make a rule, and this will last until the end of the game!", 8),
-                new Catastrophe("Every player must now complete two extra turns, and the drinking number is altered!", 9),
-        };
+        this.allCatastrophes = new Catastrophe[]{new Catastrophe("Two drinks have been added to the counter!", 1), new Catastrophe("Two drinks have been removed from the counter!", 2), new Catastrophe("The current number has been increased!", 3), new Catastrophe("The current number has been reduced!", 4), new Catastrophe("Reverse the turn order!", 5), new Catastrophe("Everyone gains a couple more wildcards to use!", 6), new Catastrophe("Everyone loses a couple of wildcards!", 7), new Catastrophe("Everyone must each make a rule, and this will last until the end of the game!", 8), new Catastrophe("Every player must now complete two extra turns, and the drinking number is altered!", 9),};
         this.unusedCatastrophes = new ArrayList<>(Arrays.asList(allCatastrophes)); // Initialize unusedCatastrophes
     }
 
@@ -70,6 +60,11 @@ public class MainActivityCatastrophes {
         Random random = new Random();
         catastropheLimit = random.nextInt(4) + 8;
         Log.d(TAG, "catastropheLimit: " + catastropheLimit);
+    }
+
+    public static void reverseTurnOrder() {
+        Game game = Game.getInstance();
+        game.setReverseOrder(!game.isReverseOrder());
     }
 
     public Catastrophe deployCatastrophe() {

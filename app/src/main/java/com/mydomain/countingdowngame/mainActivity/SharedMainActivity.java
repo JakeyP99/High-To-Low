@@ -29,10 +29,6 @@ public class SharedMainActivity extends ButtonUtilsActivity {
         }
     }
 
-    public static void reverseTurnOrder() {
-        Game game = Game.getInstance();
-        game.setReverseOrder(!game.isReverseOrder());
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +148,21 @@ public class SharedMainActivity extends ButtonUtilsActivity {
                 textSize = 20;
             } else {
                 textSize = 15;
+            }
+            return textSize;
+        }
+    }
+
+    public static class TextSizeCalculatorQuizQuestion {
+        public static int calculateTextSizeBasedOnCharacterCount(String text) {
+            int textSize;
+            int charCount = text.length();
+            if (charCount <= 75) {
+                textSize = 22;
+            } else if (charCount <= 110) {
+                textSize = 20;
+            } else {
+                textSize = 25;
             }
             return textSize;
         }
