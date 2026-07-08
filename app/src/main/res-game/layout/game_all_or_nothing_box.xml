@@ -8,71 +8,123 @@
     android:orientation="vertical"
     android:padding="32dp">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/viga"
+        android:text="Double or Nothing"
+        android:textColor="@color/bluedark"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.1" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_marginTop="24dp">
+        android:layout_height="480dp"
+        android:layout_marginTop="20dp"
+        android:padding="20dp"
+        android:clipToPadding="false"
+        android:clipChildren="false">
 
-        <!-- Top Option: 0 -->
+        <!-- Glowing Background Dial -->
+        <View
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:alpha="0.08"
+            android:background="@drawable/circle_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Top Card: 0 -->
         <androidx.cardview.widget.CardView
             android:id="@+id/card_zero"
-            android:layout_marginTop="10dp"
             android:layout_width="180dp"
-            android:layout_height="120dp"
+            android:layout_height="110dp"
+            android:layout_marginTop="10dp"
             app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="6dp"
+            app:cardCornerRadius="25dp"
+            app:cardElevation="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/text_zero"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/viga"
                 android:gravity="center"
-                android:text="0"
-                android:textColor="@color/bluedark"
-                android:textSize="35sp" />
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/text_zero"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/viga"
+                    android:text="0"
+                    android:textColor="@color/bluedark"
+                    android:textSize="35sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Arrow Spinner -->
-        <pl.droidsonroids.gif.GifImageView
-            android:id="@+id/arrow_spinner"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:rotation="270"
-            android:src="@drawable/arrow_right"
-            app:layout_constraintBottom_toTopOf="@+id/card_double"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_zero" />
-
-        <!-- Bottom Option: DOUBLE -->
+        <!-- Bottom Card: DOUBLE -->
         <androidx.cardview.widget.CardView
             android:id="@+id/card_double"
             android:layout_width="180dp"
-            android:layout_height="120dp"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="6dp"
+            android:layout_height="110dp"
             android:layout_marginBottom="10dp"
-
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="25dp"
+            app:cardElevation="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <TextView
-                android:id="@+id/text_double"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/viga"
                 android:gravity="center"
-                android:text="DOUBLE"
-                android:textColor="@color/bluedark"
-                android:textSize="35sp" />
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/text_double"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/viga"
+                    android:text="DOUBLE"
+                    android:textColor="@color/bluedark"
+                    android:textSize="35sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+        <!-- Center Spinner Pin -->
+        <View
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/circle_background"
+            android:backgroundTint="@color/bluedark"
+            android:elevation="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Arrow Spinner -->
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/arrow_spinner"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:rotation="270"
+            android:src="@drawable/arrow_right"
+            android:elevation="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

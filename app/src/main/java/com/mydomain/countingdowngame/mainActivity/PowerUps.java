@@ -249,33 +249,64 @@ public class PowerUps {
         Random random = new Random();
         boolean isDouble = random.nextBoolean();
 
-        // Initial rotation is 270 (pointing up at zero)
-        // Pointing Down (Double) is 90 degrees (or 270 + 180 = 450)
         float currentRotation = 270f;
-        float extraSpins = (4 + random.nextInt(3)) * 360f;
+        float extraSpins = (6 + random.nextInt(4)) * 360f;
         float targetRotation = currentRotation + extraSpins + (isDouble ? 180 : 0);
 
-        ObjectAnimator animator = ObjectAnimator.ofFloat(arrow, "rotation", currentRotation, targetRotation);
-        animator.setDuration(4000);
-        animator.setInterpolator(new DecelerateInterpolator());
+        android.animation.ValueAnimator animator = android.animation.ValueAnimator.ofFloat(currentRotation, targetRotation);
+        animator.setDuration(5000);
+        animator.setInterpolator(new android.view.animation.AccelerateDecelerateInterpolator());
+
+        final int[] lastSector = {-1};
+        animator.addUpdateListener(animation -> {
+            float value = (float) animation.getAnimatedValue();
+            arrow.setRotation(value);
+
+            // Trigger a haptic tick every 180 degrees (when passing a card)
+            int normalized = (int) ((value + 90) % 360);
+            int sector = (normalized < 180) ? 0 : 1;
+            if (sector != lastSector[0]) {
+                activity.btnUtils.vibrateDevice();
+                lastSector[0] = sector;
+            }
+        });
 
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
+                View winner = isDouble ? frameDouble : frameZero;
+
+                // Scale up winner for emphasis
+                winner.animate()
+                        .scaleX(1.1f)
+                        .scaleY(1.1f)
+                        .setDuration(300)
+                        .setInterpolator(new android.view.animation.OvershootInterpolator())
+                        .start();
+
                 if (isDouble) {
                     MainActivityGame.drinkNumberCounterInt *= 2;
-                    frameDouble.setActivated(true);
-                    frameDouble.setAlpha(0.5f);
                 } else {
                     MainActivityGame.drinkNumberCounterInt = 0;
-                    frameZero.setActivated(true);
-                    frameZero.setAlpha(0.5f);
                 }
 
-                new Handler().postDelayed(() -> {
-                    dialog.dismiss();
-                    onHandled.run();
-                }, 3000);
+                // Flash winner highlight
+                android.animation.ObjectAnimator flash = android.animation.ObjectAnimator.ofFloat(winner, "alpha", 1f, 0.4f);
+                flash.setDuration(150);
+                flash.setRepeatCount(6);
+                flash.setRepeatMode(android.animation.ValueAnimator.REVERSE);
+
+                flash.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        winner.setAlpha(1f);
+                        new Handler().postDelayed(() -> {
+                            dialog.dismiss();
+                            onHandled.run();
+                        }, 2000);
+                    }
+                });
+                flash.start();
             }
         });
 

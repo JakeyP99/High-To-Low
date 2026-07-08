@@ -18,6 +18,13 @@
         android:textAlignment="center"
         android:textColor="@color/bluedark"
         android:textSize="30sp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:alpha="0.2"
+        android:background="@color/bluedark" />
 
     <ListView
         android:id="@+id/listViewPowerUps"
