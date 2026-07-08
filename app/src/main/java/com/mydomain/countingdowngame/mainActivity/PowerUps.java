@@ -183,7 +183,10 @@ public class PowerUps {
             showAllOrNothingDialog(() -> {
                 player.usePowerUp(finalAllNothing);
                 checkSplitThePain(player, onEndGame);
-            }, () -> checkSplitThePain(player, onEndGame));
+            }, () -> {
+                player.usePowerUp(finalAllNothing);
+                onEndGame.run();
+            });
         } else {
             checkSplitThePain(player, onEndGame);
         }
@@ -237,6 +240,7 @@ public class PowerUps {
 
         activity.btnUtils.setButton(cancelBtn, () -> {
             dialog.dismiss();
+            onSkip.run();
         });
 
         dialog.show();
