@@ -436,7 +436,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         EditText answerEt = dialogView.findViewById(R.id.math_answer);
         Button actionBtn = dialogView.findViewById(R.id.btn_action);
 
-        answerEt.setEnabled(false);
+        answerEt.setVisibility(GONE);
 
         AlertDialog dialog = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme)
                 .setView(dialogView)
@@ -470,6 +470,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     }
 
     private static void startWitchMathMiniGame(boolean[] started, Button actionBtn, EditText answerEt, TextView mathProblemTv, int[] problem, ProgressBar timerProgress, CountDownTimer[] timer, AlertDialog dialog, Player currentPlayer) {
+        answerEt.setVisibility(VISIBLE);
         answerEt.setEnabled(true);
         answerEt.requestFocus();
         started[0] = true;

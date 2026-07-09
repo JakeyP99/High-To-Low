@@ -167,7 +167,7 @@ public class RuneTracingView extends View {
 
         // 2. Coverage: How much of the target rune was actually traced?
         int reachedPoints = 0;
-        float reachThreshold = 25f; // Stricter threshold
+        float reachThreshold = 18f; // Stricter threshold
 
         for (float[] tPoint : targetPoints) {
             boolean reached = false;
@@ -183,8 +183,8 @@ public class RuneTracingView extends View {
         float coverageRatio = (float) reachedPoints / targetPoints.size();
 
         // 3. Final Calculation
-        // Normalize precision: 0-60 pixels is 100-0% precision
-        float maxAllowedPrecisionDist = 60f;
+        // Normalize precision: 0-45 pixels is 100-0% precision
+        float maxAllowedPrecisionDist = 45f;
         float precisionScore = Math.max(0, 100 - (avgPrecisionDist / maxAllowedPrecisionDist * 100));
 
         // Similarity is weighted by coverage.
