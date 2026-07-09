@@ -27,7 +27,7 @@ public class CharacterClassDescriptions {
             "If the number is 10 or less, add 4 drinks. You must generate twice.";
 
     public static final String quizMagicianActiveDescription =
-            "Start a quiz streak challenge! Answer correctly to keep going (up to 5 questions). More correct answers = more drinks handed out, but if you fail, you can't hand any out!";
+            "Start a quiz streak! For up to 5 questions, answer to hand out more drinks to everyone, but if you fail a question, you can't hand any out!";
 
     public static final String survivorActiveDescription =
             "Halve the current number and continue your turn. Resets after 3 turns.";
@@ -42,7 +42,7 @@ public class CharacterClassDescriptions {
             "Sacrifice 1 of your wildcards to remove 2 from a random player.";
 
     public static final String trollActiveDescription =
-            "Read a riddle for up to 2 random players. They have to drink 3 if they are wrong or slow!";
+            "Read a riddle for up to 2 players. They have to drink 3 if they are wrong or the slowest!";
 
     public static final String noClassDescription =
             "";
@@ -88,5 +88,5 @@ public class CharacterClassDescriptions {
             "Whenever other players use a wild card, they must drink once.";
 
     public static final String trollPassiveDescription =
-            "Per turn: Chance a player's Class or Wildcards are eaten for one turn, or a small chance to eat every Class and Wildcard for a turn, and 15% chance to eat a wildcard permanently!";
+            "Will remove an active ability or wildcards for a turn. Also, 15% chance to permanently eat a wildcard and 10% chance to feast on everyone.";
 }
