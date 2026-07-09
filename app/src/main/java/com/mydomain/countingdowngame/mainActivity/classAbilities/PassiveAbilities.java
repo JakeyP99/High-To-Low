@@ -37,10 +37,8 @@ import java.util.Random;
 public class PassiveAbilities extends ButtonUtilsActivity {
     private static final List<PassiveMessage> pendingPassiveMessages = new ArrayList<>();
     private static final List<Runnable> pendingActions = new ArrayList<>();
-    private static final List<Player> playersWhoPaidToll = new ArrayList<>();
     static Game game = Game.getInstance();
     private static MainActivityGame activity;
-    private static Player hidingTroll = null;
     private static boolean goblinTriggeredThisTurn = false;
     private static String gamblerBet = "";
 
@@ -52,8 +50,6 @@ public class PassiveAbilities extends ButtonUtilsActivity {
         pendingPassiveMessages.clear();
         pendingActions.clear();
         gamblerBet = "";
-        hidingTroll = null;
-        playersWhoPaidToll.clear();
         goblinTriggeredThisTurn = false;
     }
 
@@ -307,46 +303,6 @@ public class PassiveAbilities extends ButtonUtilsActivity {
         if (classes.contains(TROLL)) {
             handleTrollPassive(currentPlayer);
         }
-    }
-
-    public static boolean canSeeNumber() {
-        Player currentPlayer = game.getCurrentPlayer();
-        return hidingTroll == null ||
-                (currentPlayer != null && currentPlayer.equals(hidingTroll)) ||
-                playersWhoPaidToll.contains(currentPlayer);
-    }
-
-    public static void hideNumberForTroll(Player troll) {
-        hidingTroll = troll;
-        playersWhoPaidToll.clear();
-        MainActivityGame.updateNumberText();
-    }
-
-    public static void showRevealNumberDialog(Runnable onGenerate) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
-        LayoutInflater inflater = activity.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.game_troll_reveal_dialog, null);
-        Button payBtn = dialogView.findViewById(R.id.btn_pay_view);
-        Button blindBtn = dialogView.findViewById(R.id.btn_generate_blind);
-
-        builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
-
-        activity.btnUtils.setButton(payBtn, () -> {
-            dialog.dismiss();
-            Player currentPlayer = game.getCurrentPlayer();
-            if (currentPlayer != null && !playersWhoPaidToll.contains(currentPlayer)) {
-                playersWhoPaidToll.add(currentPlayer);
-            }
-            MainActivityGame.updateNumberText();
-        });
-
-        activity.btnUtils.setButton(blindBtn, () -> {
-            dialog.dismiss();
-            onGenerate.run();
-        });
-
-        dialog.show();
     }
 
     private static void handleNormalSnack(Player currentPlayer) {

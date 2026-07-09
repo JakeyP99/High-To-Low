@@ -88,5 +88,5 @@ public class CharacterClassDescriptions {
             "Whenever other players use a wild card, they must drink once.";
 
     public static final String trollPassiveDescription =
-            "Every Troll turn, there's a chance a player's Class or Wildcards are eaten for one turn. 10% chance to eat every Class and Wildcard for a turn, and 15% chance to eat a wildcard permanently!";
+            "Per turn: Chance a player's Class or Wildcards are eaten for one turn, or a small chance to eat every Class and Wildcard for a turn, and 15% chance to eat a wildcard permanently!";
 }

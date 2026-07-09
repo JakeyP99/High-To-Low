@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import retrofit2.Call;
@@ -22,7 +23,7 @@ public class RiddleSessionManager {
 
     private RiddleSessionManager() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://riddles-api.vercel.app/")
+                .baseUrl("https://riddles-api-eight.vercel.app/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         riddleService = retrofit.create(RiddleService.class);
@@ -37,15 +38,19 @@ public class RiddleSessionManager {
 
     public void preloadRiddles(int amount) {
         if (activeFetches.get() > 0 || riddleCache.size() > 10) return;
-        
+
+        String[] categories = {"funny", "logic", "mystery"};
+        Random random = new Random();
+
         for (int i = 0; i < amount; i++) {
-            fetchOneRiddle();
+            String category = categories[random.nextInt(categories.length)];
+            fetchOneRiddle(category);
         }
     }
 
-    private void fetchOneRiddle() {
+    private void fetchOneRiddle(String category) {
         activeFetches.incrementAndGet();
-        riddleService.getRandomRiddle().enqueue(new Callback<>() {
+        riddleService.getRiddleByCategory(category).enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<RiddleService.RiddleResponse> call, @NonNull Response<RiddleService.RiddleResponse> response) {
                 activeFetches.decrementAndGet();
@@ -56,21 +61,10 @@ public class RiddleSessionManager {
                     if (isValidRiddle(riddle, answer)) {
                         riddleCache.add(new String[]{riddle, answer});
                     } else {
-                        // If invalid, try to fetch another one to fill the gap
-                        fetchOneRiddle();
+                        // If invalid, try to fetch another one
+                        preloadRiddles(1);
                     }
                 }
-            }
-
-            private boolean isValidRiddle(String riddle, String answer) {
-                if (riddle == null || answer == null) return false;
-
-                // Check riddle length (roughly "a few sentences")
-                if (riddle.length() > 160) return false;
-
-                // Check answer length (one or two words)
-                String[] words = answer.trim().split("\\s+");
-                return words.length <= 2;
             }
 
             @Override
@@ -80,8 +74,19 @@ public class RiddleSessionManager {
         });
     }
 
+    private boolean isValidRiddle(String riddle, String answer) {
+        if (riddle == null || answer == null) return false;
+
+        // Check riddle length (roughly "a few sentences")
+        if (riddle.length() > 160) return false;
+
+        // Check answer length (one or two words)
+        String[] words = answer.trim().split("\\s+");
+        return words.length <= 2;
+    }
+
     public void testConnection(Callback<RiddleService.RiddleResponse> callback) {
-        riddleService.getRandomRiddle().enqueue(callback);
+        riddleService.getRiddleByCategory("logic").enqueue(callback);
     }
 
     public String[] getNextRiddle() {

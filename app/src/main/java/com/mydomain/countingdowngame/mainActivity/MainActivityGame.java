@@ -101,37 +101,19 @@ public class MainActivityGame extends SharedMainActivity {
         if (numberCounterText == null) return;
         int currentNumber = Game.getInstance().getCurrentNumber();
 
-        boolean canSeeNumber = PassiveAbilities.canSeeNumber();
-
-        if (canSeeNumber) {
-            String textToDisplay = String.valueOf(currentNumber);
-            numberCounterText.setText(textToDisplay);
-            SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, textToDisplay);
-            updateNumberColor();
-        } else {
-            String textToDisplay = "???";
-            numberCounterText.setText(textToDisplay);
-            SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, textToDisplay);
-            numberCounterText.setTextColor(ContextCompat.getColor(numberCounterText.getContext(), R.color.bluedark));
-        }
+        String textToDisplay = String.valueOf(currentNumber);
+        numberCounterText.setText(textToDisplay);
+        SharedMainActivity.setTextViewSizeBasedOnInt(numberCounterText, textToDisplay);
+        updateNumberColor();
     }
 
     public static String getDisplayNumber(int number) {
-        boolean canSeeNumber = PassiveAbilities.canSeeNumber();
-        return canSeeNumber ? String.valueOf(number) : "???";
+        return String.valueOf(number);
     }
 
     public static void updateNumberColor() {
         if (numberCounterText == null) return;
-
-        boolean canSeeNumber = PassiveAbilities.canSeeNumber();
-
         int blueDark = ContextCompat.getColor(numberCounterText.getContext(), R.color.bluedark);
-
-        if (!canSeeNumber) {
-            numberCounterText.setTextColor(blueDark);
-            return;
-        }
         numberCounterText.setTextColor(blueDark);
     }
 
@@ -359,14 +341,7 @@ public class MainActivityGame extends SharedMainActivity {
 
         logPlayerInformation(activePlayer);
 
-        btnUtils.setButton(btnGenerate, () -> {
-            if (PassiveAbilities.canSeeNumber()) {
-                handleGenerateClick();
-            } else {
-                PassiveAbilities.showRevealNumberDialog(this::handleGenerateClick);
-            }
-        });
-
+        btnUtils.setButton(btnGenerate, this::handleGenerateClick);
     }
 
     //-----------------------------------------------------Update Player's Info---------------------------------------------------//

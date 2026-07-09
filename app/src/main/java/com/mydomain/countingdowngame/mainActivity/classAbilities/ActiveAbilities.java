@@ -336,8 +336,8 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 {"I speak without a mouth and hear without ears. I have no body, but I come alive with wind. What am I?", "Echo"},
                 {"You measure my life in hours and I serve you by expiring. I'm quick when I'm thin and slow when I'm fat. The wind is my enemy.", "Candle"},
                 {"I have cities, but no houses. I have mountains, but no trees. I have water, but no fish. What am I?", "Map"},
-                {"What is seen in the middle of March and April that can’t be seen at the beginning or end of either month?", "The letter R"},
-                {"You see a boat filled with people. It has not sunk, but when you look again you don’t see a single person on the boat. Why?", "All were married"},
+                {"What is seen in the middle of March and April that can’t be seen at the beginning or end of either month?", "The Letter R"},
+                {"You see a boat filled with people. It has not sunk, but when you look again you don’t see a single person on the boat. Why?", "Married"},
                 {"What has keys, but no locks; space, but no room; and you can enter, but never leave?", "Keyboard"},
                 {"I have branches, but no fruit, trunk or leaves. What am I?", "Bank"},
                 {"What can travel around the world while staying in a corner?", "Stamp"},
@@ -398,7 +398,6 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             description = winner.getName() + " answered correctly! Safe!";
             activity.mainActivityDialog.showDialog("Troll's Active!", description, R.layout.game_main_dialog, R.id.class_textview, R.id.description_textview, null);
         }
-        PassiveAbilities.hideNumberForTroll(troll);
     }
 
     private static void flashButton(View view) {
