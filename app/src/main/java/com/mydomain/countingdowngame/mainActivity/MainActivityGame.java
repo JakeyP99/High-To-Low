@@ -768,7 +768,7 @@ public class MainActivityGame extends SharedMainActivity {
         boolean isQuiz = selectedWildCard != null && selectedWildCard.hasAnswer();
         boolean successfulTurn = !isQuiz || wasQuizCorrect;
         boolean powerupsEnabled = GeneralSettingsLocalStore.fromContext(this).arePowerupsActivated();
-        boolean canReceivePowerUp = successfulTurn && currentPlayer.getPowerUps().size() < 2 && powerupsEnabled;
+        boolean canReceivePowerUp = successfulTurn && currentPlayer.getPowerUps().size() < 2 && powerupsEnabled && quizActiveQuestionsCount == 0;
 
         Runnable finishWildCard = () -> {
             if (successfulTurn) {

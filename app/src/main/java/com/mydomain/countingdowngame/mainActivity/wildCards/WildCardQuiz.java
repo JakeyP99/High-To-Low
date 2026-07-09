@@ -174,7 +174,6 @@ public class WildCardQuiz {
         ui.title.setText("Streak: " + currentStreak);
 
         activity.btnUtils.setButton(ui.btnMagicianContinue, () -> {
-            callback.onDismissRequested();
             activity.setWasQuizCorrect(true);
             activity.wildCardContinue();
         });
