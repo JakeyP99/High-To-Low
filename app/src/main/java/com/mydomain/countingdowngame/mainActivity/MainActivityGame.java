@@ -774,7 +774,11 @@ public class MainActivityGame extends SharedMainActivity {
             if (successfulTurn) {
                 PowerUps.updatePowerUpIcons(currentPlayer);
             }
-            currentPlayer.useSkip();
+            if (quizActiveQuestionsCount == 0) {
+                currentPlayer.useSkip();
+            } else {
+                quizActiveQuestionsCount = 0;
+            }
             resetUIAfterWildCard();
         };
 
