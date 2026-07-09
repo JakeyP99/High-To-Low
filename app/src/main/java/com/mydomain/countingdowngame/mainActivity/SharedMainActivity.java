@@ -86,7 +86,7 @@ public class SharedMainActivity extends ButtonUtilsActivity {
     }
 
 
-    protected void animateTextViewBackAlive(final TextView textView, @Nullable Runnable onEnd) {
+    public void animateTextViewBackAlive(final TextView textView, @Nullable Runnable onEnd) {
         // Ensure TextView starts from popped state (scale 0, alpha 0)
         textView.setScaleX(0f);
         textView.setScaleY(0f);

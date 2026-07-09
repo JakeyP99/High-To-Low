@@ -73,7 +73,9 @@ public class WildCardQuiz {
             String answer = answerList.get(index);
             btn.setVisibility(View.VISIBLE);
             btn.setText(answer);
-            updateTextSizeQuizAnswer(answer, btn);
+
+            int size = SharedMainActivity.TextSizeCalculatorQuizAnswers.calculateTextSizeBasedOnCharacterCount(answer);
+            btn.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
 
             activity.btnUtils.setButton(btn, () -> processMCQSelection(answerList, answer, index));
         }
@@ -144,8 +146,13 @@ public class WildCardQuiz {
     // ==========================================
 
     private void finalizeQuiz(boolean correct) {
-        if (correct && isQuizMagicianActive()) {
-            showMagicianChoiceDialog();
+        if (isQuizMagicianActive()) {
+            if (correct) {
+                showMagicianChoiceDialog();
+            } else {
+                activity.setWasQuizCorrect(false);
+                activity.stopQuizMagicianStreak();
+            }
             return;
         }
 
@@ -239,11 +246,6 @@ public class WildCardQuiz {
 
     private void hideConfetti() {
         for (GifImageView gif : ui.confetti) if (gif != null) gif.setVisibility(View.GONE);
-    }
-
-    private void updateTextSizeQuizAnswer(String text, TextView textView) {
-        int size = SharedMainActivity.TextSizeCalculatorQuizAnswers.calculateTextSizeBasedOnCharacterCount(text);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
     }
 
     private boolean isQuizMagicianActive() {
