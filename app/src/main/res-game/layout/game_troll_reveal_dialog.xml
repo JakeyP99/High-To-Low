@@ -16,7 +16,7 @@
         android:text="Troll's Passive!"
         android:textAlignment="center"
         android:textColor="@color/bluedark"
-        android:textSize="40sp" />
+        android:textSize="30sp" />
 
     <View
         android:layout_width="match_parent"
@@ -34,30 +34,30 @@
         android:gravity="center"
         android:fontFamily="@font/viga"
         android:textColor="@color/bluedark"
-        android:textSize="30sp" />
+        android:textSize="25sp" />
 
     <Button
         android:id="@+id/btn_pay_view"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
         android:layout_marginTop="24dp"
         android:background="@drawable/outlineforbutton"
         android:fontFamily="@font/viga"
         android:text="Pay &amp; View"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
-        android:textSize="25sp" />
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/btn_generate_blind"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/outlineforbutton"
         android:fontFamily="@font/viga"
         android:text="No, Generate Blind"
         android:textAllCaps="false"
         android:textColor="@color/bluedark"
-        android:textSize="25sp" />
+        android:textSize="20sp" />
 
 </LinearLayout>

@@ -15,6 +15,8 @@ import androidx.activity.OnBackPressedCallback;
 import com.mydomain.countingdowngame.R;
 import com.mydomain.countingdowngame.utils.ButtonUtilsActivity;
 import com.mydomain.countingdowngame.wildCards.WildCardProperties;
+import com.mydomain.countingdowngame.wildCards.api.RiddleService;
+import com.mydomain.countingdowngame.wildCards.api.RiddleSessionManager;
 import com.mydomain.countingdowngame.wildCards.api.TriviaService;
 import com.mydomain.countingdowngame.wildCards.api.TriviaSessionManager;
 import com.mydomain.countingdowngame.wildCards.wildCardTypes.WildCardRepository;
@@ -182,22 +184,56 @@ public class SettingsMenu extends ButtonUtilsActivity {
             statusText.setText("Testing...");
             statusText.setTextColor(getResources().getColor(R.color.bluedark, getTheme()));
 
+            final boolean[] triviaSuccess = {false};
+            final boolean[] riddleSuccess = {false};
+            final int[] responsesReceived = {0};
+
+            Runnable checkFinalStatus = () -> {
+                responsesReceived[0]++;
+                if (responsesReceived[0] == 2) {
+                    runOnUiThread(() -> {
+                        if (triviaSuccess[0] && riddleSuccess[0]) {
+                            statusText.setText("Connection to quizzes and riddles successful!");
+                            statusText.setTextColor(getColor(R.color.green));
+                        } else if (triviaSuccess[0]) {
+                            statusText.setText("Quiz API successful, Riddle API failed.");
+                            statusText.setTextColor(Color.parseColor("#FFA500")); // Orange
+                        } else if (riddleSuccess[0]) {
+                            statusText.setText("Riddle API successful, Quiz API failed.");
+                            statusText.setTextColor(Color.parseColor("#FFA500")); // Orange
+                        } else {
+                            statusText.setText("None was successful.");
+                            statusText.setTextColor(Color.RED);
+                        }
+                    });
+                }
+            };
+
             TriviaSessionManager.getInstance().testConnection(new Callback<>() {
                 @Override
                 public void onResponse(Call<TriviaService.TriviaResponse> call, Response<TriviaService.TriviaResponse> response) {
-                    if (response.isSuccessful()) {
-                        statusText.setText("Connection Successful!");
-                        statusText.setTextColor(getColor(R.color.green));
-                    } else {
-                        statusText.setText("API Error: " + response.code());
-                        statusText.setTextColor(android.graphics.Color.RED);
-                    }
+                    triviaSuccess[0] = response.isSuccessful();
+                    checkFinalStatus.run();
                 }
 
                 @Override
                 public void onFailure(Call<TriviaService.TriviaResponse> call, Throwable t) {
-                    statusText.setText("Connection Failed: " + t.getMessage());
-                    statusText.setTextColor(android.graphics.Color.RED);
+                    triviaSuccess[0] = false;
+                    checkFinalStatus.run();
+                }
+            });
+
+            RiddleSessionManager.getInstance().testConnection(new Callback<>() {
+                @Override
+                public void onResponse(Call<RiddleService.RiddleResponse> call, Response<RiddleService.RiddleResponse> response) {
+                    riddleSuccess[0] = response.isSuccessful();
+                    checkFinalStatus.run();
+                }
+
+                @Override
+                public void onFailure(Call<RiddleService.RiddleResponse> call, Throwable t) {
+                    riddleSuccess[0] = false;
+                    checkFinalStatus.run();
                 }
             });
         });

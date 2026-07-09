@@ -12,6 +12,7 @@ import com.mydomain.countingdowngame.playerChoice.playerChoiceComplimentary;
 import com.mydomain.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.mydomain.countingdowngame.utils.ButtonUtils;
 
+import com.mydomain.countingdowngame.wildCards.api.RiddleSessionManager;
 import com.mydomain.countingdowngame.wildCards.api.TriviaSessionManager;
 
 import io.github.muddz.styleabletoast.StyleableToast;
@@ -39,6 +40,7 @@ public class HomeScreen extends playerChoiceComplimentary {
 
         // Preload trivia questions from API
         TriviaSessionManager.getInstance().preloadQuestions(20);
+        RiddleSessionManager.getInstance().preloadRiddles(10);
     }
 
     @Override

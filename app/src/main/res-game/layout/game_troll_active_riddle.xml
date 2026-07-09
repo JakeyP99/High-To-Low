@@ -18,7 +18,7 @@
         android:text="Troll's Active!"
         android:textAlignment="center"
         android:textColor="@color/bluedark"
-        android:textSize="40sp" />
+        android:textSize="30sp" />
 
     <View
         android:layout_width="match_parent"
@@ -45,7 +45,7 @@
             android:gravity="center"
             android:text="This riddle is for: Jakey Jake"
             android:textColor="@color/bluedark"
-            android:textSize="30sp" />
+            android:textSize="25sp" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -64,20 +64,20 @@
                 android:gravity="center"
                 android:text="Riddle goes here..."
                 android:textColor="@color/bluedark"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
         </androidx.cardview.widget.CardView>
 
         <Button
             android:id="@+id/btn_reveal_answer"
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
+            android:layout_width="140dp"
+            android:layout_height="60dp"
             android:layout_marginTop="32dp"
             android:background="@drawable/outlineforbutton"
             android:fontFamily="@font/viga"
-            android:text="Reveal Answer"
+            android:text="Answer"
             android:textAllCaps="false"
             android:textColor="@color/bluedark"
-            android:textSize="25sp" />
+            android:textSize="20sp" />
     </LinearLayout>
 
     <!-- Step 2: Result -->
@@ -105,7 +105,7 @@
                 android:gravity="center"
                 android:text="ANSWER"
                 android:textColor="@color/bluedark"
-                android:textSize="28sp" />
+                android:textSize="25sp" />
         </androidx.cardview.widget.CardView>
 
         <TextView

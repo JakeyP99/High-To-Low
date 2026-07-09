@@ -46,6 +46,7 @@ import com.mydomain.countingdowngame.mainActivity.MainActivityGame;
 import com.mydomain.countingdowngame.mainActivity.wildCards.PowerUps;
 import com.mydomain.countingdowngame.player.Player;
 import com.mydomain.countingdowngame.utils.ButtonUtilsActivity;
+import com.mydomain.countingdowngame.wildCards.api.RiddleSessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -326,6 +327,11 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     }
 
     private static String[] getRandomRiddle() {
+        String[] apiRiddle = RiddleSessionManager.getInstance().getNextRiddle();
+        if (apiRiddle != null) {
+            return apiRiddle;
+        }
+
         String[][] riddlePool = {
                 {"I speak without a mouth and hear without ears. I have no body, but I come alive with wind. What am I?", "Echo"},
                 {"You measure my life in hours and I serve you by expiring. I'm quick when I'm thin and slow when I'm fat. The wind is my enemy.", "Candle"},
@@ -376,8 +382,8 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             dialog.dismiss();
             markAbilityUsed(TROLL, currentPlayer);
             String description = targets.size() == 1
-                    ? targets.get(0).getName() + " failed! Take 4 drinks."
-                    : "Both failed! " + targets.get(0).getName() + " and " + targets.get(1).getName() + " take 4 drinks.";
+                    ? targets.get(0).getName() + " failed! Take 3 drinks."
+                    : "Both failed! " + targets.get(0).getName() + " and " + targets.get(1).getName() + " take 3 drinks.";
             activity.mainActivityDialog.showDialog("Troll's Active!", description, R.layout.game_main_dialog, R.id.class_textview, R.id.description_textview, null);
         });
     }
@@ -386,7 +392,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         markAbilityUsed(TROLL, troll);
         String description;
         if (winner != null && loser != null) {
-            description = winner.getName() + " was safe! " + loser.getName() + " take 4 drinks.";
+            description = winner.getName() + " was safe! " + loser.getName() + " take 3 drinks.";
             activity.mainActivityDialog.showDialog("Troll's Active!", description, R.layout.game_main_dialog, R.id.class_textview, R.id.description_textview, null);
         } else if (winner != null) {
             description = winner.getName() + " answered correctly! Safe!";

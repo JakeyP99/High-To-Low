@@ -42,7 +42,7 @@ public class CharacterClassDescriptions {
             "Sacrifice 1 of your wildcards to remove 2 from a random player.";
 
     public static final String trollActiveDescription =
-            "Read a riddle for up to 2 random players. They drink 4 if they are wrong or slow!";
+            "Read a riddle for up to 2 random players. They have to drink 3 if they are wrong or slow!";
 
     public static final String noClassDescription =
             "";
