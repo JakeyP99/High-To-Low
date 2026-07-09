@@ -39,13 +39,20 @@ public class WildCardDialogManager {
         public final Button[] answerButtons;
         public final GifImageView[] confetti;
 
-        public DialogUI(TextView text, Button btnAnswer, Button btnContinue, Button[] answerButtons, GifImageView[] confetti, TextView title) {
+        public final View magicianStreakGroup;
+        public final Button btnMagicianContinue;
+        public final Button btnMagicianStop;
+
+        public DialogUI(TextView text, Button btnAnswer, Button btnContinue, Button[] answerButtons, GifImageView[] confetti, TextView title, View magicianStreakGroup, Button btnMagicianContinue, Button btnMagicianStop) {
             this.text = text;
             this.btnAnswer = btnAnswer;
             this.btnContinue = btnContinue;
             this.answerButtons = answerButtons;
             this.confetti = confetti;
             this.title = title;
+            this.magicianStreakGroup = magicianStreakGroup;
+            this.btnMagicianContinue = btnMagicianContinue;
+            this.btnMagicianStop = btnMagicianStop;
         }
     }
 
@@ -67,13 +74,6 @@ public class WildCardDialogManager {
                 @Override
                 public void onQuizResult(boolean correct) {
                     wasQuizCorrect = correct;
-                }
-
-                @Override
-                public void onDialogReplacementRequested(AlertDialog newDialog) {
-                    if (activeDialog != null) activeDialog.dismiss();
-                    activeDialog = newDialog;
-                    activeDialog.show();
                 }
 
                 @Override
@@ -149,7 +149,10 @@ public class WildCardDialogManager {
                         view.findViewById(R.id.confettiImageViewBL),
                         view.findViewById(R.id.confettiImageViewBR)
                 },
-                view.findViewById(R.id.textView)
+                view.findViewById(R.id.textView),
+                view.findViewById(R.id.magician_streak_group),
+                view.findViewById(R.id.btn_continue_streak),
+                view.findViewById(R.id.btn_stop_streak)
         );
     }
 
@@ -157,7 +160,9 @@ public class WildCardDialogManager {
         ui.text.setText(card.getWildCard());
         ui.title.setText(type + "!");
 
-        if (isQuizMagician && card.hasAnswer()) {
+        if (!card.hasAnswer()) { // Task or Truth
+            ui.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+        } else if (isQuizMagician) {
             ui.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
         } else {
             int size = SharedMainActivity.TextSizeCalculatorQuizQuestion.calculateTextSizeBasedOnCharacterCount(ui.text.getText().toString());

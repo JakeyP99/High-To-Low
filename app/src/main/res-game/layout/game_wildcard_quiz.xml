@@ -156,7 +156,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <!-- Continue Button -->
+        <!-- Continue Button (Quiz Results / General) -->
         <Button
             android:id="@+id/btnBackWildCard"
             android:layout_width="160dp"
@@ -169,6 +169,58 @@
             android:textColor="@color/bluedark"
             android:textSize="20sp"
             android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!-- Magician Streak Content Group -->
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/magician_streak_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="magician_streak_text,btn_continue_streak,btn_stop_streak" />
+
+        <TextView
+            android:id="@+id/magician_streak_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:text="Continue and risk losing your streak, or hand out the drinks now?"
+            android:textAlignment="center"
+            android:textColor="@color/bluedark"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_continue_streak"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_separator" />
+
+        <Button
+            android:id="@+id/btn_continue_streak"
+            android:layout_width="240dp"
+            android:layout_height="70dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/outlineforbutton"
+            android:fontFamily="@font/viga"
+            android:text="Continue Streak"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_stop_streak"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btn_stop_streak"
+            android:layout_width="240dp"
+            android:layout_height="70dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/outlineforbutton"
+            android:fontFamily="@font/viga"
+            android:text="Give Drinks"
+            android:textAllCaps="false"
+            android:textColor="@color/bluedark"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

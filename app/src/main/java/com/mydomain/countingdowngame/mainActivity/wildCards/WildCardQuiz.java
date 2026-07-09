@@ -39,7 +39,6 @@ public class WildCardQuiz {
 
     public interface QuizCallback {
         void onQuizResult(boolean correct);
-        void onDialogReplacementRequested(AlertDialog newDialog);
         void onDismissRequested();
     }
 
@@ -149,7 +148,7 @@ public class WildCardQuiz {
     private void finalizeQuiz(boolean correct) {
         if (isQuizMagicianActive()) {
             if (correct) {
-                showMagicianChoiceDialog();
+                showMagicianStreakChoice();
             } else {
                 activity.setWasQuizCorrect(false);
                 callback.onDismissRequested();
@@ -163,30 +162,28 @@ public class WildCardQuiz {
         if (ui.btnContinue != null) ui.btnContinue.setVisibility(View.VISIBLE);
     }
 
-    private void showMagicianChoiceDialog() {
-        View v = activity.getLayoutInflater().inflate(R.layout.game_quiz_magician_continue, null);
-        AlertDialog dialog = createMagicianDialog(v);
-
-        TextView streakTitle = v.findViewById(R.id.quiz_streak_title);
-        Button btnContinue = v.findViewById(R.id.btn_continue_streak);
-        Button btnStop = v.findViewById(R.id.btn_stop_streak);
+    /**
+     * Swaps the quiz content for the magician streak choice within the same dialog.
+     */
+    private void showMagicianStreakChoice() {
+        hideAllChoices();
+        if (ui.text != null) ui.text.setVisibility(View.GONE);
+        if (ui.magicianStreakGroup != null) ui.magicianStreakGroup.setVisibility(View.VISIBLE);
 
         int currentStreak = activity.getQuizActiveCorrectCount() + 1;
-        streakTitle.setText("Streak: " + currentStreak);
+        ui.title.setText("Streak: " + currentStreak);
 
-        activity.btnUtils.setButton(btnContinue, () -> {
-            dialog.dismiss();
+        activity.btnUtils.setButton(ui.btnMagicianContinue, () -> {
+            callback.onDismissRequested();
             activity.setWasQuizCorrect(true);
             activity.wildCardContinue();
         });
 
-        activity.btnUtils.setButton(btnStop, () -> {
-            dialog.dismiss();
+        activity.btnUtils.setButton(ui.btnMagicianStop, () -> {
+            callback.onDismissRequested();
             activity.setWasQuizCorrect(true);
             activity.stopQuizMagicianStreak();
         });
-
-        callback.onDialogReplacementRequested(dialog);
     }
 
     // ==========================================
@@ -254,13 +251,5 @@ public class WildCardQuiz {
     private boolean isQuizMagicianActive() {
         boolean isMagician = QUIZ_MAGICIAN.equals(player.getClassChoice());
         return isMagician && activity.isQuizActiveAbilitySession();
-    }
-
-    private AlertDialog createMagicianDialog(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
-        builder.setView(view);
-        AlertDialog dialog = builder.create();
-        dialog.setCancelable(false);
-        return dialog;
     }
 }
