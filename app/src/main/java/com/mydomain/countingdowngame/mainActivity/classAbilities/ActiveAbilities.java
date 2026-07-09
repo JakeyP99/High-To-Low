@@ -15,6 +15,7 @@ import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescripti
 import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
 import static com.mydomain.countingdowngame.mainActivity.MainActivityGame.drinkNumberCounterInt;
 import static com.mydomain.countingdowngame.mainActivity.MainActivityGame.isFirstTurn;
+import static com.mydomain.countingdowngame.mainActivity.classAbilities.RuneTracingView.generateRandomRune;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -606,139 +607,6 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         dialog.show();
     }
 
-    private static Path generateRandomRune() {
-
-        Path path = new Path();
-        Random r = new Random();
-
-        int type = r.nextInt(7);
-
-        switch (type) {
-
-            case 0: // Hexagram (magic star)
-                path.moveTo(150, 20);
-                path.lineTo(280, 250);
-                path.lineTo(20, 250);
-                path.close();
-
-                path.moveTo(20, 50);
-                path.lineTo(280, 50);
-                path.lineTo(150, 280);
-                path.close();
-                break;
-
-
-            case 1: // Crescent moon rune
-                path.moveTo(210, 40);
-
-                for (int i = 0; i <= 180; i++) {
-                    double angle = Math.toRadians(i);
-
-                    float x = (float) (150 + 100 * Math.cos(angle));
-                    float y = (float) (150 + 100 * Math.sin(angle));
-
-                    path.lineTo(x, y);
-                }
-
-                for (int i = 180; i >= 0; i--) {
-
-                    double angle = Math.toRadians(i);
-
-                    float x = (float) (180 + 70 * Math.cos(angle));
-                    float y = (float) (150 + 70 * Math.sin(angle));
-
-                    path.lineTo(x, y);
-                }
-
-                path.close();
-                break;
-
-
-            case 2: // Eye rune
-                path.moveTo(40, 150);
-
-                for (int i = 0; i <= 360; i++) {
-
-                    double t = Math.toRadians(i);
-
-                    float x = (float) (150 + 110 * Math.cos(t));
-                    float y = (float) (150 + 60 * Math.sin(t));
-
-                    path.lineTo(x, y);
-                }
-
-                path.close();
-
-                // pupil
-                path.addCircle(150, 150, 30, Path.Direction.CW);
-
-                break;
-
-            case 3: // Rune tree
-                path.moveTo(150, 280);
-                path.lineTo(150, 70);
-
-                path.moveTo(150, 100);
-                path.lineTo(80, 170);
-
-                path.moveTo(150, 140);
-                path.lineTo(220, 210);
-
-                path.moveTo(150, 190);
-                path.lineTo(90, 240);
-
-                path.moveTo(150, 220);
-                path.lineTo(230, 260);
-
-                break;
-
-
-            case 4: // Diamond rune
-                path.moveTo(150, 20);
-                path.lineTo(270, 150);
-                path.lineTo(150, 280);
-                path.lineTo(30, 150);
-                path.close();
-
-                path.moveTo(150, 70);
-                path.lineTo(210, 150);
-                path.lineTo(150, 230);
-                path.lineTo(90, 150);
-                path.close();
-
-                break;
-
-
-            case 5: // Lightning rune
-                path.moveTo(180, 20);
-                path.lineTo(80, 150);
-                path.lineTo(150, 150);
-                path.lineTo(90, 280);
-                path.lineTo(230, 120);
-                path.lineTo(160, 120);
-                path.close();
-
-                break;
-
-
-            case 6: // Viking style rune
-                path.moveTo(100, 40);
-                path.lineTo(100, 260);
-
-                path.moveTo(100, 80);
-                path.lineTo(230, 80);
-
-                path.moveTo(100, 160);
-                path.lineTo(200, 260);
-
-                path.moveTo(100, 160);
-                path.lineTo(220, 40);
-
-                break;
-        }
-
-        return path;
-    }
 
     private static void processRuneResult(Player player, float similarity) {
         String description;
@@ -810,7 +678,6 @@ public class ActiveAbilities extends ButtonUtilsActivity {
 
     private static CountDownTimer startMemoryTimer(AlertDialog dialog, TextView timerTv, Player currentPlayer, int[] score) {
         return new CountDownTimer(300000, 1000) {
-
             @Override
             public void onTick(long millis) {
                 timerTv.setText("Score: " + score[0]);
@@ -851,6 +718,9 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 if (!playerTurn[0]) return;
                 flashButton(buttons[index]);
                 playerSequence.add(index);
+
+                if (playerSequence.size() > sequence.size()) return;
+
                 boolean correct = sequence.get(playerSequence.size() - 1).equals(index);
 
                 if (!correct) {
@@ -860,6 +730,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
                 }
 
                 if (playerSequence.size() == sequence.size()) {
+                    playerTurn[0] = false; // Prevent further clicks until next round starts
                     score[0]++;
                     new Handler(android.os.Looper.getMainLooper()).postDelayed(() -> startNextRound(sequence, playerSequence, buttons, status, playerTurn), 500);
                 }
@@ -871,7 +742,14 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     private static void startNextRound(List<Integer> sequence, List<Integer> playerSequence, View[] buttons, TextView status, boolean[] playerTurn) {
         playerTurn[0] = false;
         playerSequence.clear();
-        sequence.add(new Random().nextInt(4));
+
+        int newLength = sequence.size() + 1;
+        sequence.clear();
+        Random random = new Random();
+        for (int i = 0; i < newLength; i++) {
+            sequence.add(random.nextInt(4));
+        }
+
         status.setText("Watch carefully!");
         playSequence(sequence, buttons, status, playerTurn);
     }

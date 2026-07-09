@@ -80,10 +80,6 @@
     "enabled": true
   },
   {
-    "activity": "Give 1 drink for every cheese you can name in 10 seconds.",
-    "enabled": true
-  },
-  {
     "activity": "The shortest person at the table must take 4 drinks then give 4 drinks.",
     "enabled": true
   },
@@ -156,10 +152,6 @@
     "enabled": true
   },
   {
-    "activity": "Reveal the last photo in your camera roll or take 2 drinks.",
-    "enabled": true
-  },
-  {
     "activity": "Everyone must speak in accents for the rest of the game. Anyone who forgets drinks.",
     "enabled": true
   },
@@ -197,10 +189,6 @@
   },
   {
     "activity": "Do 5 push-ups or take 3 drinks.",
-    "enabled": true
-  },
-  {
-    "activity": "Don't use your phone until your next turn. If you do, take 3 drinks.",
     "enabled": true
   },
   {
