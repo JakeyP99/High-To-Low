@@ -43,7 +43,7 @@ import com.mydomain.countingdowngame.audio.AudioManager;
 import com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions;
 import com.mydomain.countingdowngame.game.Game;
 import com.mydomain.countingdowngame.mainActivity.MainActivityGame;
-import com.mydomain.countingdowngame.mainActivity.PowerUps;
+import com.mydomain.countingdowngame.mainActivity.wildCards.PowerUps;
 import com.mydomain.countingdowngame.player.Player;
 import com.mydomain.countingdowngame.utils.ButtonUtilsActivity;
 

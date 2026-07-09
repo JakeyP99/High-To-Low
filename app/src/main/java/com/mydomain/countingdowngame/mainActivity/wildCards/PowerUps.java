@@ -1,13 +1,11 @@
-package com.mydomain.countingdowngame.mainActivity;
+package com.mydomain.countingdowngame.mainActivity.wildCards;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,6 +16,7 @@ import androidx.annotation.NonNull;
 
 import com.mydomain.countingdowngame.R;
 import com.mydomain.countingdowngame.game.Game;
+import com.mydomain.countingdowngame.mainActivity.MainActivityGame;
 import com.mydomain.countingdowngame.player.Player;
 
 import java.util.ArrayList;

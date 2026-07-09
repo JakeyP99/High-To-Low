@@ -27,7 +27,7 @@ public class CharacterClassDescriptions {
             "If the number is 10 or less, add 4 drinks. You must generate twice.";
 
     public static final String quizMagicianActiveDescription =
-            "Start a quiz streak challenge! Answer correctly to keep going (up to 5 questions). More correct answers = more drinks handed out!";
+            "Start a quiz streak challenge! Answer correctly to keep going (up to 5 questions). More correct answers = more drinks handed out, but if you fail, you can't hand any out!";
 
     public static final String survivorActiveDescription =
             "Halve the current number and continue your turn. Resets after 3 turns.";

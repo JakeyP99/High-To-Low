@@ -37,6 +37,8 @@ import com.mydomain.countingdowngame.game.Game;
 import com.mydomain.countingdowngame.game.GameEventType;
 import com.mydomain.countingdowngame.mainActivity.classAbilities.ActiveAbilities;
 import com.mydomain.countingdowngame.mainActivity.classAbilities.PassiveAbilities;
+import com.mydomain.countingdowngame.mainActivity.wildCards.PowerUps;
+import com.mydomain.countingdowngame.mainActivity.wildCards.WildCardDialogManager;
 import com.mydomain.countingdowngame.player.Player;
 import com.mydomain.countingdowngame.settings.GeneralSettingsLocalStore;
 import com.mydomain.countingdowngame.wildCards.WildCardProperties;
@@ -758,7 +760,7 @@ public class MainActivityGame extends SharedMainActivity {
 
     //-----------------------------------------------------Specific WildCard Functions---------------------------------------------------//
 
-    private void wildCardContinue() {
+    public void wildCardContinue() {
         Player currentPlayer = game.getCurrentPlayer();
 
         if (isQuizActiveAbilitySession) {

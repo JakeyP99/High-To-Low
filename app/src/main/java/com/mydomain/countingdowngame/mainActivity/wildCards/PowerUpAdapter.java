@@ -1,4 +1,4 @@
-package com.mydomain.countingdowngame.mainActivity;
+package com.mydomain.countingdowngame.mainActivity.wildCards;
 
 import android.content.Context;
 import android.graphics.ColorMatrix;
