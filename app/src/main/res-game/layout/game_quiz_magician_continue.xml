@@ -40,7 +40,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:fontFamily="@font/viga"
-            android:text="Do you want to continue the streak or stop and hand out drinks?"
+            android:text="Continue and risk losing your streak, or hand out the drinks now?"
             android:textAlignment="center"
             android:textColor="@color/bluedark"
             android:textSize="25sp" />
@@ -67,7 +67,7 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/outlineforbutton"
             android:fontFamily="@font/viga"
-            android:text="Stop &amp; Give Drinks"
+            android:text="Give Drinks"
             android:textAllCaps="false"
             android:textColor="@color/bluedark"
             android:textSize="20sp" />

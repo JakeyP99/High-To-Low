@@ -752,7 +752,7 @@ public class MainActivityGame extends SharedMainActivity {
 
             mainActivityDialog.showMainDialog(message, this::wildCardContinue);
         } else {
-            mainActivityDialog.showMainDialog("Streak Over! \n\n" + currentPlayer.getName() + " got none correct. \n\nTake a drink for being super bad!", this::wildCardContinue);
+            mainActivityDialog.showMainDialog("Streak Over! \n\n" + currentPlayer.getName() + " got none correct. \n\nTake a drink for not getting any right!", this::wildCardContinue);
         }
     }
 

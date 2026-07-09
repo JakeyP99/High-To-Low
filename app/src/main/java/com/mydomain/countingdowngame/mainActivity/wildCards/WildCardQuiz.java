@@ -213,7 +213,7 @@ public class WildCardQuiz {
         boolean isMagician = QUIZ_MAGICIAN.equals(player.getClassChoice());
         String msg;
         if (correct) {
-            msg = player.getName() + " that's right! " + (isMagician ? "\n\n  Give out 2 drinks to everyone from your passive." : "\n\n Give out a drink.");
+            msg = player.getName() + " that's right! " + (isMagician ? "\n\n  Quiz Magician's Passive: Give out 2 drinks to everyone." : "\n\n Give out a drink.");
         } else {
             msg = player.getName() + " big ooooff! Take a drink.";
         }
