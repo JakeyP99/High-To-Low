@@ -163,7 +163,7 @@ public class PassiveAbilities extends ButtonUtilsActivity {
     }
 
     public static void checkGoblinPassive(Player wildcardUser, Runnable onDone) {
-        if (goblinTriggeredThisTurn) {
+        if (goblinTriggeredThisTurn || (activity != null && activity.isQuizActiveAbilitySession())) {
             onDone.run();
             return;
         }

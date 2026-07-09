@@ -40,6 +40,7 @@ public class WildCardQuiz {
     public interface QuizCallback {
         void onQuizResult(boolean correct);
         void onDialogReplacementRequested(AlertDialog newDialog);
+        void onDismissRequested();
     }
 
     public WildCardQuiz(MainActivityGame activity, WildCardDialogManager.DialogUI ui, WildCardProperties selectedCard, Player player, boolean isQuizMagician, QuizCallback callback) {
@@ -151,6 +152,7 @@ public class WildCardQuiz {
                 showMagicianChoiceDialog();
             } else {
                 activity.setWasQuizCorrect(false);
+                callback.onDismissRequested();
                 activity.stopQuizMagicianStreak();
             }
             return;
@@ -215,6 +217,7 @@ public class WildCardQuiz {
         } else {
             msg = player.getName() + " big ooooff! Take a drink.";
         }
+        ui.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
         ui.text.setText(msg);
     }
 

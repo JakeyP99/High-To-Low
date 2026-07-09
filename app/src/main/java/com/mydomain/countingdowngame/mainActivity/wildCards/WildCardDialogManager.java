@@ -75,6 +75,11 @@ public class WildCardDialogManager {
                     activeDialog = newDialog;
                     activeDialog.show();
                 }
+
+                @Override
+                public void onDismissRequested() {
+                    if (activeDialog != null) activeDialog.dismiss();
+                }
             });
 
             boolean isMultiChoice = GeneralSettingsLocalStore.fromContext(activity).isMultiChoice();

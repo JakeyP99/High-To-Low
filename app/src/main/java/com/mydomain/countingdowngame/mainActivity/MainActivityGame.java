@@ -641,9 +641,12 @@ public class MainActivityGame extends SharedMainActivity {
         wasQuizCorrect = false;
 
         Player currentPlayer = game.getCurrentPlayer();
-        btnWild.setVisibility(View.INVISIBLE);
-        currentPlayer.useWildCard();
-        currentPlayer.incrementUsedWildcards();
+
+        if (!isQuizActiveAbilitySession) {
+            btnWild.setVisibility(View.INVISIBLE);
+            currentPlayer.useWildCard();
+            currentPlayer.incrementUsedWildcards();
+        }
 
         Runnable proceedToWildCard = () -> {
 
@@ -732,16 +735,24 @@ public class MainActivityGame extends SharedMainActivity {
     }
 
     private void finalizeQuizMagicianActive() {
+        boolean failedAfterStreak = quizActiveQuestionsCount > 0 && !wasQuizCorrect;
         isQuizActiveAbilitySession = false;
         Player currentPlayer = game.getCurrentPlayer();
 
         if (quizActiveCorrectCount > 0) {
             int drinksToHandOut = calculateQuizMagicianDrinks(quizActiveCorrectCount);
             String drinkText = (drinksToHandOut == 1) ? "drink" : "drinks";
-            String message = "Streak Over! \n\n" + currentPlayer.getName() + " got " + quizActiveCorrectCount + " correct!\n\nHand out " + drinksToHandOut + " " + drinkText + " to everyone!";
+            String message = "Streak Over! \n\n" + currentPlayer.getName() + " got " + quizActiveCorrectCount + " correct!\n\n";
+
+            if (failedAfterStreak) {
+                message += "But because you failed the question, you can't hand out any drinks!";
+            } else {
+                message += "Hand out " + drinksToHandOut + " " + drinkText + " to everyone!";
+            }
+
             mainActivityDialog.showMainDialog(message, this::wildCardContinue);
         } else {
-            mainActivityDialog.showMainDialog("Streak Over! \n\n" + currentPlayer.getName() + " got none correct. \n\nTake another drink for being super bad!", this::wildCardContinue);
+            mainActivityDialog.showMainDialog("Streak Over! \n\n" + currentPlayer.getName() + " got none correct. \n\nTake a drink for being super bad!", this::wildCardContinue);
         }
     }
 
