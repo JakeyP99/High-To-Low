@@ -88,6 +88,7 @@ public class MainActivityGame extends SharedMainActivity {
     private int quizActiveQuestionsCount = 0;
     private int quizActiveCorrectCount = 0;
     private boolean isQuizActiveAbilitySession = false;
+    private boolean isHomeScreenTriggered = false;
     //-----------------------------------------------------Array---------------------------------------------------//
     private MainActivityCatastrophes catastrophesManager;
     private MainActivityNumberGenerator numberGenerator;
@@ -165,6 +166,7 @@ public class MainActivityGame extends SharedMainActivity {
             @Override
             public void handleOnBackPressed() {
                 if (doubleBackToExitPressedOnce) {
+                    isHomeScreenTriggered = true;
                     game.endGame(MainActivityGame.this);
                     gotoHomeScreen();
                     return;
@@ -353,9 +355,11 @@ public class MainActivityGame extends SharedMainActivity {
             generatedNumberTextView.setText(String.valueOf(currentNumber));
 
             animateTextView(generatedNumberTextView, () -> {
+                if (isHomeScreenTriggered) return;
                 btnUtils.playSoundEffects();
                 Player loser = game.getLastTurnPlayer();
                 PowerUps.checkLosingPowerUps(loser, () -> {
+                    if (isHomeScreenTriggered) return;
                     game.endGame(this);
                     onEnd.run();
                 }, generatedNumberTextView);
