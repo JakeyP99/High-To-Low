@@ -216,7 +216,7 @@ public class MainActivityNumberGenerator {
             @Override
             public void onAnimationEnd(Animator animation) {
                 setupRouletteUI(false);
-                revealFinalNumber(targetNumber);
+                revealFinalNumber(targetNumber, 0);
             }
         });
 
@@ -227,7 +227,7 @@ public class MainActivityNumberGenerator {
     // SHARED FINALIZATION
     //------------------------------------------------------------------------------------------------------------------
 
-    private void revealFinalNumber(int targetNumber) {
+    private void revealFinalNumber(int targetNumber, int delayMillis) {
         int previousNumber = Game.getInstance().getPreviousNumber();
         Player currentPlayer = Game.getInstance().getCurrentPlayer();
 
@@ -264,19 +264,19 @@ public class MainActivityNumberGenerator {
             } else {
                 finalizeTurn(targetNumber);
             }
-        }, 300);
+        }, delayMillis);
     }
 
     private void applyPassiveAbilities(Player player, int target, int previous) {
-        String classChoice = player.getClassChoice();
+        List<String> classes = player.getClassChoices();
 
         if (target == 1 && previous <= 1) {
-            if (SURVIVOR.equals(classChoice) || ANGRY_JIM.equals(classChoice)) {
+            if (classes.contains(SURVIVOR) || classes.contains(ANGRY_JIM)) {
                 handleSurvivorPassive(player);
             }
         }
 
-        if (GAMBLER.equals(classChoice) || (ANGRY_JIM.equals(classChoice) && previous < 50)) {
+        if (classes.contains(GAMBLER) || (classes.contains(ANGRY_JIM) && previous < 50)) {
             handleGamblerPassiveResult(target);
         }
     }
@@ -339,7 +339,7 @@ public class MainActivityNumberGenerator {
                 YoYo.with(Techniques.Pulse).duration(currentInterval).playOn(numberCounterText);
                 shuffleHandler.postDelayed(this, currentInterval);
             } else {
-                revealFinalNumber(targetNumber);
+                revealFinalNumber(targetNumber, 200);
             }
         }
     }
