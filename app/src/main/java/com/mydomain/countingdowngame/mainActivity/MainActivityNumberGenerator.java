@@ -11,6 +11,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.view.animation.PathInterpolator;
 import android.widget.TextView;
@@ -214,10 +215,8 @@ public class MainActivityNumberGenerator {
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                new Handler().postDelayed(() -> {
-                    setupRouletteUI(false);
-                    revealFinalNumber(targetNumber);
-                }, 500);
+                setupRouletteUI(false);
+                revealFinalNumber(targetNumber);
             }
         });
 
@@ -240,30 +239,32 @@ public class MainActivityNumberGenerator {
 
         MainActivityGame.updateNumberColor();
 
-        // Handle Class Passive Effects
-        applyPassiveAbilities(currentPlayer, targetNumber, previousNumber);
+        // Delay the logic that shows prompts/effects so the user "lands" on the number first
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            applyPassiveAbilities(currentPlayer, targetNumber, previousNumber);
 
-        Game.GameMode mode = Game.getInstance().getGameMode();
-        boolean hasNoClass = com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.NO_CLASS.equals(currentPlayer.getClassChoice());
-        boolean isClassLanded = Game.getInstance().getClassNumbers().contains(targetNumber);
+            Game.GameMode mode = Game.getInstance().getGameMode();
+            boolean hasNoClass = NO_CLASS.equals(currentPlayer.getClassChoice());
+            boolean isClassLanded = Game.getInstance().getClassNumbers().contains(targetNumber);
 
-        boolean shouldAwardClass = false;
-        if (isClassLanded) {
-            if (mode == Game.GameMode.CLASS_HUNT && hasNoClass) {
-                shouldAwardClass = true;
-            } else if (mode == Game.GameMode.CRAZY) {
-                int totalClasses = 10;
-                if (currentPlayer.getClassChoices().size() < totalClasses) {
+            boolean shouldAwardClass = false;
+            if (isClassLanded) {
+                if (mode == Game.GameMode.CLASS_HUNT && hasNoClass) {
                     shouldAwardClass = true;
+                } else if (mode == Game.GameMode.CRAZY) {
+                    int totalClasses = 10;
+                    if (currentPlayer.getClassChoices().size() < totalClasses) {
+                        shouldAwardClass = true;
+                    }
                 }
             }
-        }
 
-        if (shouldAwardClass) {
-            handleClassAwardSequence(currentPlayer, targetNumber);
-        } else {
-            finalizeTurn(targetNumber);
-        }
+            if (shouldAwardClass) {
+                handleClassAwardSequence(currentPlayer, targetNumber);
+            } else {
+                finalizeTurn(targetNumber);
+            }
+        }, 300);
     }
 
     private void applyPassiveAbilities(Player player, int target, int previous) {
