@@ -179,10 +179,10 @@ public class MainActivityNumberGenerator {
     }
 
     private int getProbabilityChance(int number) {
-        if (number > 1000) return 100;
-        if (number >= 500) return 50;
-        if (number >= 100) return 15;
-        if (number >= 10) return 2;
+        if (number > 1000) return 33; // ~3% chance
+        if (number >= 500) return 20; // 5% chance
+        if (number >= 100) return 10; // 10% chance
+        if (number >= 10) return 2;   // 50% chance
         return 1; // 100% chance for < 10
     }
 
