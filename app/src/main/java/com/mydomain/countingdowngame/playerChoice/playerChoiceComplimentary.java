@@ -66,6 +66,7 @@ import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterC
 import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.trollPassiveDescription;
 import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.trollPassiveShort;
 import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.trollQuote;
+import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.noClassQuote;
 import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.witchActiveDescription;
 import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.witchActiveShort;
 import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.witchCooldown;
@@ -124,7 +125,7 @@ public class playerChoiceComplimentary extends ButtonUtilsActivity {
         characterClasses.add(new CharacterClassStore(8, SURVIVOR, survivorActiveDescription, survivorActiveShort, survivorPassiveDescription, survivorPassiveShort, survivorQuote, survivorCooldown, getClassIcon(SURVIVOR)));
         characterClasses.add(new CharacterClassStore(9, TROLL, trollActiveDescription, trollActiveShort, trollPassiveDescription, trollPassiveShort, trollQuote, trollCooldown, getClassIcon(TROLL)));
         characterClasses.add(new CharacterClassStore(10, WITCH, witchActiveDescription, witchActiveShort, witchPassiveDescription, witchPassiveShort, witchQuote, witchCooldown, getClassIcon(WITCH)));
-        characterClasses.add(new CharacterClassStore(11, NO_CLASS, noClassDescription, null, null, null, null, 0, getClassIcon(NO_CLASS)));
+        characterClasses.add(new CharacterClassStore(11, NO_CLASS, noClassDescription, null, null, null, noClassQuote, 0, getClassIcon(NO_CLASS)));
 
         return characterClasses;
     }

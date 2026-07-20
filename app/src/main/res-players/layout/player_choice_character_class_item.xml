@@ -24,11 +24,12 @@
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/classImageView"
         android:layout_width="0dp"
-        android:layout_height="140dp"
+        android:layout_height="130dp"
         android:layout_marginTop="8dp"
         android:scaleType="centerInside"
         android:src="@drawable/angry_jim"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/classNameTextView" />
 
@@ -56,6 +57,7 @@
         android:baselineAligned="false"
         app:layout_constraintTop_toBottomOf="@id/classQuoteTextView"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.0"
         android:layout_marginBottom="4dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout

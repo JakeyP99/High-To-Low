@@ -27,7 +27,7 @@ public class CharacterClassDescriptions {
             "If the number is 10 or less, add 4 drinks. You must generate twice.";
 
     public static final String quizMagicianActiveDescription =
-            "Start a quiz streak! For up to 5 questions, answer to hand out more drinks to everyone, but if you fail a question, you can't hand any out!";
+            "Up to 5 questions, answer to hand out more drinks to everyone, but if you fail a question, you can't hand any out!";
 
     public static final String survivorActiveDescription =
             "Halve the current number and continue your turn.";
@@ -45,7 +45,7 @@ public class CharacterClassDescriptions {
             "Read a riddle for up to 2 players. They have to drink 3 if they are wrong or the slowest!";
 
     public static final String noClassDescription =
-            "";
+            "You have no active or passive abilities. Just pure skill!";
 
     // Active Ability Button Text (Shortened versions)
     public static final String archerActiveButtonText = "Hand out 2 drinks";
@@ -100,7 +100,7 @@ public class CharacterClassDescriptions {
     public static final String soldierActiveShort = "Add drinks and roll twice.";
     public static final String soldierPassiveShort = "Escape the game at 10-15.";
     public static final String quizMagicianActiveShort = "Start a quiz streak.";
-    public static final String quizMagicianPassiveShort = "Quizzes for everyone.";
+    public static final String quizMagicianPassiveShort = "Easy quizzes and lots of drinks.";
     public static final String survivorActiveShort = "Halve the number and continue.";
     public static final String survivorPassiveShort = "Survive a 1 to hand out drinks.";
     public static final String angryJimActiveShort = "Force a turn repeat.";
@@ -123,6 +123,7 @@ public class CharacterClassDescriptions {
     public static final String gamblerQuote = "“ Double or nothing, that's my philosophy! ”";
     public static final String goblinQuote = "“ Hehehe, your misfortune is my treasure! ”";
     public static final String trollQuote = "“ You must pay the toll... in drinks! ”";
+    public static final String noClassQuote = "“ You really just don't want any abilities? Okie Dokey then! ”";
 
     // Cooldowns
     public static final int archerCooldown = 3;

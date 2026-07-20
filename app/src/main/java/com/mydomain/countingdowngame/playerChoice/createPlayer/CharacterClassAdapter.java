@@ -16,20 +16,63 @@ import java.util.List;
 public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAdapter.ViewHolder> {
     private final List<CharacterClassStore> characterClasses; // List to hold character class data
     private OnRecyclerViewScrollListener scrollListener;
+    private boolean isExpanded = false;
+    private OnExpandListener expandListener;
+    public static final String PAYLOAD_EXPANSION = "PAYLOAD_EXPANSION";
+
+    public interface OnExpandListener {
+        void onExpandToggled(boolean expanded);
+    }
 
     public CharacterClassAdapter(List<CharacterClassStore> characterClasses) {
         this.characterClasses = characterClasses;
+    }
+
+    public void setExpanded(boolean expanded) {
+        this.isExpanded = expanded;
+    }
+
+    public void setOnExpandListener(OnExpandListener listener) {
+        this.expandListener = listener;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull List<Object> payloads) {
+        if (!payloads.isEmpty()) {
+            for (Object payload : payloads) {
+                if (payload.equals(PAYLOAD_EXPANSION)) {
+                    updateExpansionViews(holder, characterClasses.get(position));
+                }
+            }
+        } else {
+            super.onBindViewHolder(holder, position, payloads);
+        }
+    }
+
+    private void updateExpansionViews(ViewHolder holder, CharacterClassStore characterClass) {
+        if (characterClass.getClassName().equals("No Class")) {
+            return;
+        }
+        if (isExpanded) {
+            holder.activeAbilityTextView.setText(characterClass.getCharacterActiveDescriptions());
+            holder.passiveAbilityTextView.setText(characterClass.getCharacterPassiveDescriptions());
+            holder.btnActiveInfo.setImageResource(R.drawable.ic_arrow_up);
+            holder.btnPassiveInfo.setImageResource(R.drawable.ic_arrow_up);
+        } else {
+            holder.activeAbilityTextView.setText(characterClass.getShortActive());
+            holder.passiveAbilityTextView.setText(characterClass.getShortPassive());
+            holder.btnActiveInfo.setImageResource(R.drawable.ic_arrow_down);
+            holder.btnPassiveInfo.setImageResource(R.drawable.ic_arrow_down);
+        }
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CharacterClassStore characterClass = characterClasses.get(position);
         holder.classNameTextView.setText(characterClass.getClassName());
-        holder.activeAbilityTextView.setText(characterClass.getShortActive());
-        holder.passiveAbilityTextView.setText(characterClass.getShortPassive());
         holder.classQuoteTextView.setText(characterClass.getQuote());
-        holder.btnActiveInfo.setImageResource(R.drawable.ic_arrow_down);
-        holder.btnPassiveInfo.setImageResource(R.drawable.ic_arrow_down);
+
+        updateExpansionViews(holder, characterClass);
 
         if (characterClass.getCooldown() > 0) {
             holder.activeCooldownTextView.setVisibility(View.VISIBLE);
@@ -38,25 +81,16 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
             holder.activeCooldownTextView.setVisibility(View.GONE);
         }
 
-        Runnable toggleExpand = () -> {
-            boolean isCurrentlyShort = holder.activeAbilityTextView.getText().equals(characterClass.getShortActive());
-            if (isCurrentlyShort) {
-                holder.activeAbilityTextView.setText(characterClass.getCharacterActiveDescriptions());
-                holder.passiveAbilityTextView.setText(characterClass.getCharacterPassiveDescriptions());
-                holder.btnActiveInfo.setImageResource(R.drawable.ic_arrow_up);
-                holder.btnPassiveInfo.setImageResource(R.drawable.ic_arrow_up);
-            } else {
-                holder.activeAbilityTextView.setText(characterClass.getShortActive());
-                holder.passiveAbilityTextView.setText(characterClass.getShortPassive());
-                holder.btnActiveInfo.setImageResource(R.drawable.ic_arrow_down);
-                holder.btnPassiveInfo.setImageResource(R.drawable.ic_arrow_down);
+        View.OnClickListener toggleClick = v -> {
+            if (expandListener != null) {
+                expandListener.onExpandToggled(!isExpanded);
             }
         };
 
-        holder.btnActiveInfo.setOnClickListener(v -> toggleExpand.run());
-        holder.btnPassiveInfo.setOnClickListener(v -> toggleExpand.run());
-        holder.activeAbilityBox.setOnClickListener(v -> toggleExpand.run());
-        holder.passiveAbilityBox.setOnClickListener(v -> toggleExpand.run());
+        holder.btnActiveInfo.setOnClickListener(toggleClick);
+        holder.btnPassiveInfo.setOnClickListener(toggleClick);
+        holder.activeAbilityBox.setOnClickListener(toggleClick);
+        holder.passiveAbilityBox.setOnClickListener(toggleClick);
 
         holder.itemView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
             if (scrollListener != null) {
@@ -65,16 +99,28 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
         });
         // Set the visibility of Active Ability and Passive Ability TextViews based on the class
         if (characterClass.getClassName().equals("No Class")) {
-            holder.activeAbilityBox.setVisibility(View.GONE);
+            holder.activeAbilityBox.setVisibility(View.VISIBLE);
             holder.passiveAbilityBox.setVisibility(View.GONE);
-            holder.classQuoteTextView.setVisibility(View.GONE);
+            holder.classQuoteTextView.setVisibility(View.VISIBLE);
+            holder.activeAbilityText.setText("DESCRIPTION");
+            holder.activeAbilityTextView.setText(characterClass.getCharacterActiveDescriptions());
+            holder.btnActiveInfo.setVisibility(View.GONE);
+            holder.activeCooldownTextView.setVisibility(View.GONE);
         } else {
             holder.activeAbilityBox.setVisibility(View.VISIBLE);
             holder.passiveAbilityBox.setVisibility(View.VISIBLE);
             holder.classQuoteTextView.setVisibility(View.VISIBLE);
+            holder.activeAbilityText.setText("ACTIVE");
+            holder.btnActiveInfo.setVisibility(View.VISIBLE);
         }
 
-        holder.classImageView.setImageResource(characterClass.getImageResource());
+        // Only set the image if it has changed to prevent GIF reset
+        Object currentId = holder.classImageView.getTag();
+        int newId = characterClass.getImageResource();
+        if (currentId == null || (int) currentId != newId) {
+            holder.classImageView.setImageResource(newId);
+            holder.classImageView.setTag(newId);
+        }
     }
 
     @NonNull
@@ -102,6 +148,7 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
         TextView passiveAbilityTextView;
         TextView classQuoteTextView;
         TextView activeCooldownTextView;
+        TextView activeAbilityText;
         View activeAbilityBox;
         View passiveAbilityBox;
         ImageView btnActiveInfo;
@@ -115,6 +162,7 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
             passiveAbilityTextView = itemView.findViewById(R.id.passiveAbilityTextView);
             classQuoteTextView = itemView.findViewById(R.id.classQuoteTextView);
             activeCooldownTextView = itemView.findViewById(R.id.activeCooldownTextView);
+            activeAbilityText = itemView.findViewById(R.id.activeAbilityText);
             activeAbilityBox = itemView.findViewById(R.id.activeAbilityBox);
             passiveAbilityBox = itemView.findViewById(R.id.passiveAbilityBox);
             btnActiveInfo = itemView.findViewById(R.id.btnActiveInfo);

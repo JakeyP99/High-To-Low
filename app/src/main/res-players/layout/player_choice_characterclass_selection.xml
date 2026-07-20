@@ -11,13 +11,13 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/classRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="520dp"
         android:layout_gravity="center" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp">
+        >
 
         <ImageView
             android:id="@+id/btnPrevious"
