@@ -2,177 +2,175 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_margin="4dp"
     android:background="@android:color/transparent"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/classNameTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/viga"
-        android:gravity="center"
-        android:text="ANGRY JIM"
-        android:textColor="@color/bluedark"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/classImageView"
-        android:layout_width="0dp"
-        android:layout_height="130dp"
-        android:layout_marginTop="8dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/angry_jim"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/classNameTextView" />
-
-    <TextView
-        android:id="@+id/classQuoteTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:text="“ If I have to suffer... so do you. ”"
-        android:textColor="@color/bluedark"
-        android:textSize="16sp"
-        android:textStyle="italic"
-        android:alpha="0.8"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/classImageView" />
-
     <LinearLayout
-        android:id="@+id/abilitiesLayout"
+        android:id="@+id/centerWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:orientation="horizontal"
-        android:baselineAligned="false"
-        app:layout_constraintTop_toBottomOf="@id/classQuoteTextView"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        android:layout_marginBottom="4dp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/activeAbilityBox"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="4dp"
-            android:layout_weight="1"
-            android:background="@drawable/active_ability_background"
-            android:padding="10dp"
-            android:clickable="true"
-            android:focusable="true">
+        <TextView
+            android:id="@+id/classNameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/viga"
+            android:gravity="center"
+            android:text="ANGRY JIM"
+            android:textColor="@color/bluedark"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/activeAbilityText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="ACTIVE"
-                android:textColor="@color/colorPrimary"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/classImageView"
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/angry_jim" />
 
-            <TextView
-                android:id="@+id/activeAbilityTextView"
+        <TextView
+            android:id="@+id/classQuoteTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="“ If I have to suffer... so do you. ”"
+            android:textColor="@color/bluedark"
+            android:textSize="16sp"
+            android:textStyle="italic"
+            android:alpha="0.8" />
+
+        <LinearLayout
+            android:id="@+id/abilitiesLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            android:baselineAligned="false"
+            android:layout_marginBottom="4dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/activeAbilityBox"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Force a random player to repeat their turn."
-                android:textColor="@color/bluedark"
-                android:textSize="15sp"
-                android:lineSpacingExtra="1dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/activeAbilityText" />
+                android:layout_height="match_parent"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:background="@drawable/active_ability_background"
+                android:padding="10dp"
+                android:clickable="true"
+                android:focusable="true">
 
-            <TextView
-                android:id="@+id/activeCooldownTextView"
+                <TextView
+                    android:id="@+id/activeAbilityText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ACTIVE"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/activeAbilityTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Force a random player to repeat their turn."
+                    android:textColor="@color/bluedark"
+                    android:textSize="15sp"
+                    android:lineSpacingExtra="1dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/activeAbilityText" />
+
+                <TextView
+                    android:id="@+id/activeCooldownTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="🕒 Cooldown: 5 Turns"
+                    android:textColor="@color/bluedark"
+                    android:textSize="13sp"
+                    android:alpha="1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/activeAbilityTextView" />
+
+                <ImageView
+                    android:id="@+id/btnActiveInfo"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="6dp"
+                    android:src="@drawable/ic_arrow_down"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/activeCooldownTextView"
+                    app:layout_constraintVertical_bias="1.0"
+                    app:tint="@color/colorPrimary" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/passiveAbilityBox"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="🕒 Cooldown: 5 Turns"
-                android:textColor="@color/bluedark"
-                android:textSize="13sp"
-                android:alpha="1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/activeAbilityTextView" />
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:background="@drawable/passive_ability_background"
+                android:padding="10dp"
+                android:clickable="true"
+                android:focusable="true">
 
-            <ImageView
-                android:id="@+id/btnActiveInfo"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginTop="6dp"
-                android:src="@drawable/ic_arrow_down"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/activeCooldownTextView"
-                app:layout_constraintVertical_bias="1.0"
-                app:tint="@color/colorPrimary" />
+                <TextView
+                    android:id="@+id/passiveAbilityText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PASSIVE"
+                    android:textColor="#03A9F4"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/passiveAbilityTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="When the number is below 50, gain all other passives."
+                    android:textColor="@color/bluedark"
+                    android:textSize="15sp"
+                    android:lineSpacingExtra="1dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/passiveAbilityText" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/passiveAbilityBox"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="4dp"
-            android:layout_weight="1"
-            android:background="@drawable/passive_ability_background"
-            android:padding="10dp"
-            android:clickable="true"
-            android:focusable="true">
+                <ImageView
+                    android:id="@+id/btnPassiveInfo"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="6dp"
+                    android:src="@drawable/ic_arrow_down"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/passiveAbilityTextView"
+                    app:layout_constraintVertical_bias="1.0"
+                    app:tint="#03A9F4" />
 
-            <TextView
-                android:id="@+id/passiveAbilityText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="PASSIVE"
-                android:textColor="#03A9F4"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/passiveAbilityTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="When the number is below 50, gain all other passives."
-                android:textColor="@color/bluedark"
-                android:textSize="15sp"
-                android:lineSpacingExtra="1dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/passiveAbilityText" />
-
-            <ImageView
-                android:id="@+id/btnPassiveInfo"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginTop="6dp"
-                android:src="@drawable/ic_arrow_down"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/passiveAbilityTextView"
-                app:layout_constraintVertical_bias="1.0"
-                app:tint="#03A9F4" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

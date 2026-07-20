@@ -64,7 +64,7 @@ public class CharacterClassDescriptions {
             "Every third turn: 60% chance +2 drinks, 40% chance -2 drinks.";
 
     public static final String witchPassiveDescription =
-            "On your turn: Even number = give 1 drink. Odd number = take 1 drink.";
+            "On your turn: If the current number is even, give 1 drink. If it is odd, take 1 drink.";
 
     public static final String scientistPassiveDescription =
             "The lower the number, the higher the chance your turn is skipped.";
@@ -88,7 +88,7 @@ public class CharacterClassDescriptions {
             "Whenever other players use a wild card, they must drink once.";
 
     public static final String trollPassiveDescription =
-            "Will remove an active ability or wildcards for a turn. Also, 15% chance to permanently eat a wildcard and 10% chance to feast on everyone.";
+            "Per turn will disable the active ability or wildcard button for a player, and also a small chance for a special surprise.";
 
     // Short Descriptions
     public static final String archerActiveShort = "Give away 2 drinks.";
