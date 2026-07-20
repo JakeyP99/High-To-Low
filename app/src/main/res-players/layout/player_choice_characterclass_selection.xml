@@ -1,49 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="@android:color/transparent"
     android:padding="20dp">
 
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/classRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="490dp"
-        android:layout_gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="550dp"
+        android:layout_gravity="center" />
 
-    <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
-        android:id="@+id/dots_indicator"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp">
+
+        <ImageView
+            android:id="@+id/btnPrevious"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:padding="8dp"
+            android:background="@drawable/regular_item_selector"
+            android:src="@drawable/arrow_right"
+            android:rotation="180"
+            app:tint="@color/bluedark" />
+
+        <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+            android:id="@+id/dots_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:dotsColor="@color/bluedarktransparent"
+            app:dotsCornerRadius="8dp"
+            app:dotsSize="8dp"
+            app:dotsSpacing="4dp"
+            app:dotsWidthFactor="2.5"
+            app:selectedDotColor="@color/bluedark" />
+
+        <ImageView
+            android:id="@+id/btnNext"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:padding="8dp"
+            android:background="@drawable/regular_item_selector"
+            android:src="@drawable/arrow_right"
+            app:tint="@color/bluedark" />
+
+    </RelativeLayout>
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="12dp"
-        app:dotsColor="@color/bluedark"
-        app:dotsCornerRadius="8dp"
-        app:dotsSize="12dp"
-        app:dotsSpacing="4dp"
-        app:dotsWidthFactor="2.5"
-        app:selectedDotColor="@color/bluedark" />
+        android:layout_marginTop="4dp"
+        android:text="SWIPE TO BROWSE"
+        android:textColor="@color/bluedark"
+        android:textSize="12sp"
+        android:alpha="0.6"
+        android:letterSpacing="0.1" />
 
     <Button
         android:id="@+id/btnConfirmClass"
-        android:layout_width="139dp"
-        android:layout_height="77dp"
-        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/outlineforbutton"
-        android:text="Confirm\nClass"
-        android:textAllCaps="false"
+        android:text="PLAY AS CHARACTER"
+        android:textAllCaps="true"
         android:fontFamily="@font/viga"
         android:textColor="@color/bluedark"
-        android:layout_gravity="center_horizontal"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="20dp"
-        app:layout_constraintVertical_bias="0.5" />
+        android:textSize="20sp" />
 </LinearLayout>

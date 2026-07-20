@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -206,6 +207,23 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         CharacterClassPagerAdapter pagerAdapter = new CharacterClassPagerAdapter(pages);
         viewPager.setAdapter(pagerAdapter);
         dotsIndicator.setViewPager(viewPager);
+
+        ImageView btnNext = dialogView.findViewById(R.id.btnNext);
+        ImageView btnPrevious = dialogView.findViewById(R.id.btnPrevious);
+
+        btnNext.setOnClickListener(v -> {
+            int current = viewPager.getCurrentItem();
+            if (current < pages.size() - 1) {
+                viewPager.setCurrentItem(current + 1, true);
+            }
+        });
+
+        btnPrevious.setOnClickListener(v -> {
+            int current = viewPager.getCurrentItem();
+            if (current > 0) {
+                viewPager.setCurrentItem(current - 1, true);
+            }
+        });
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();

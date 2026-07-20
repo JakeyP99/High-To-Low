@@ -89,4 +89,28 @@ public class CharacterClassDescriptions {
 
     public static final String trollPassiveDescription =
             "Will remove an active ability or wildcards for a turn. Also, 15% chance to permanently eat a wildcard and 10% chance to feast on everyone.";
+
+    // Quotes
+    public static final String archerQuote = "“ Aim true, or drink up! ”";
+    public static final String witchQuote = "“ Bubble, bubble, toil and trouble... or just a double! ”";
+    public static final String scientistQuote = "“ Science is just drinking with extra steps. ”";
+    public static final String soldierQuote = "“ No man left behind... unless they can't handle their drinks. ”";
+    public static final String angryJimQuote = "“ If I have to suffer... so do you. ”";
+    public static final String quizMagicianQuote = "“ Knowledge is power. Power is making everyone drink. ”";
+    public static final String survivorQuote = "“ What doesn't kill you makes you stronger... or drunker. ”";
+    public static final String gamblerQuote = "“ Double or nothing, that's my philosophy! ”";
+    public static final String goblinQuote = "“ Hehehe, your misfortune is my treasure! ”";
+    public static final String trollQuote = "“ You must pay the toll... in drinks! ”";
+
+    // Cooldowns
+    public static final int archerCooldown = 3;
+    public static final int witchCooldown = 5;
+    public static final int scientistCooldown = 0;
+    public static final int soldierCooldown = 0;
+    public static final int angryJimCooldown = 5;
+    public static final int quizMagicianCooldown = 0;
+    public static final int survivorCooldown = 3;
+    public static final int gamblerCooldown = 0;
+    public static final int goblinCooldown = 0;
+    public static final int trollCooldown = 0;
 }
