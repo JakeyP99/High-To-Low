@@ -1,13 +1,11 @@
 package com.mydomain.countingdowngame.mainActivity.wildCards;
 
-import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.QUIZ_MAGICIAN;
+import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.QUIZ_MAGICIAN;
 
-import android.app.AlertDialog;
 import android.os.Handler;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.mydomain.countingdowngame.R;
 import com.mydomain.countingdowngame.audio.AudioManager;

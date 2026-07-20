@@ -1,4 +1,4 @@
-package com.mydomain.countingdowngame.createPlayer;
+package com.mydomain.countingdowngame.playerChoice.createPlayer;
 
 import android.view.View;
 import android.view.ViewGroup;

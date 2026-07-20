@@ -22,7 +22,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.mydomain.countingdowngame.R;
-import com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions;
+import com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions;
 import com.mydomain.countingdowngame.instructions.InstructionalDialogPageAdapter;
 import com.mydomain.countingdowngame.player.Player;
 import com.mydomain.countingdowngame.utils.ButtonUtils;

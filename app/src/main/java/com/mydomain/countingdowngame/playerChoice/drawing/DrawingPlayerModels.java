@@ -1,4 +1,4 @@
-package com.mydomain.countingdowngame.drawing;
+package com.mydomain.countingdowngame.playerChoice.drawing;
 
 import android.content.Intent;
 import android.graphics.Bitmap;

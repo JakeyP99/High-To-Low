@@ -1,14 +1,14 @@
 package com.mydomain.countingdowngame.mainActivity.classAbilities;
 
-import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
-import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.ARCHER;
-import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
-import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.GOBLIN;
-import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.SCIENTIST;
-import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.SOLDIER;
-import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
-import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.TROLL;
-import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
+import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
+import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.ARCHER;
+import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.GAMBLER;
+import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.GOBLIN;
+import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.SCIENTIST;
+import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.SOLDIER;
+import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.SURVIVOR;
+import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.TROLL;
+import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.WITCH;
 import static com.mydomain.countingdowngame.mainActivity.MainActivityGame.drinkNumberCounterInt;
 import static com.mydomain.countingdowngame.mainActivity.MainActivityGame.isFirstTurn;
 import static com.mydomain.countingdowngame.mainActivity.MainActivityGame.soldierRemoval;

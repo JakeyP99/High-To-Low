@@ -1,9 +1,9 @@
 package com.mydomain.countingdowngame.mainActivity.classAbilities;
 
-import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
-import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.ARCHER;
-import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.SURVIVOR;
-import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.WITCH;
+import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
+import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.ARCHER;
+import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.SURVIVOR;
+import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.WITCH;
 
 import com.mydomain.countingdowngame.player.Player;
 

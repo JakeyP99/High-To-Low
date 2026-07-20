@@ -1,10 +1,10 @@
 package com.mydomain.countingdowngame.mainActivity;
 
 import static android.content.ContentValues.TAG;
-import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
-import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.GAMBLER;
-import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.NO_CLASS;
-import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.QUIZ_MAGICIAN;
+import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
+import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.GAMBLER;
+import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.NO_CLASS;
+import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.QUIZ_MAGICIAN;
 import static com.mydomain.countingdowngame.mainActivity.MainActivityCatastrophes.decreaseNumberByRandom;
 import static com.mydomain.countingdowngame.mainActivity.MainActivityCatastrophes.increaseNumberByRandom;
 import static com.mydomain.countingdowngame.mainActivity.MainActivityCatastrophes.reverseTurnOrder;
@@ -32,7 +32,7 @@ import androidx.core.content.ContextCompat;
 
 import com.mydomain.countingdowngame.R;
 import com.mydomain.countingdowngame.audio.AudioManager;
-import com.mydomain.countingdowngame.createPlayer.PlayerModelLocalStore;
+import com.mydomain.countingdowngame.playerChoice.createPlayer.PlayerModelLocalStore;
 import com.mydomain.countingdowngame.game.Game;
 import com.mydomain.countingdowngame.game.GameEventType;
 import com.mydomain.countingdowngame.mainActivity.classAbilities.ActiveAbilities;

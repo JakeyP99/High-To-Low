@@ -1,6 +1,6 @@
 package com.mydomain.countingdowngame.mainActivity.wildCards;
 
-import static com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions.QUIZ_MAGICIAN;
+import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.QUIZ_MAGICIAN;
 
 import android.app.AlertDialog;
 import android.util.TypedValue;
@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.mydomain.countingdowngame.R;
-import com.mydomain.countingdowngame.createPlayer.CharacterClassDescriptions;
+import com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions;
 import com.mydomain.countingdowngame.game.Game;
 import com.mydomain.countingdowngame.mainActivity.MainActivityGame;
 import com.mydomain.countingdowngame.mainActivity.SharedMainActivity;

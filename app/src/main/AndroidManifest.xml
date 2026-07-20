@@ -72,7 +72,7 @@
             tools:ignore="LockedOrientationActivity" />
 
         <activity
-            android:name=".drawing.DrawingPlayerModels"
+            android:name=".playerChoice.drawing.DrawingPlayerModels"
             android:screenOrientation="portrait"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
             tools:ignore="LockedOrientationActivity" />

@@ -12,7 +12,7 @@ import androidx.activity.OnBackPressedCallback;
 
 import com.mydomain.countingdowngame.R;
 import com.mydomain.countingdowngame.audio.AudioManager;
-import com.mydomain.countingdowngame.createPlayer.PlayerModelLocalStore;
+import com.mydomain.countingdowngame.playerChoice.createPlayer.PlayerModelLocalStore;
 import com.mydomain.countingdowngame.game.Game;
 import com.mydomain.countingdowngame.mainActivity.SharedMainActivity;
 import com.mydomain.countingdowngame.player.Player;
