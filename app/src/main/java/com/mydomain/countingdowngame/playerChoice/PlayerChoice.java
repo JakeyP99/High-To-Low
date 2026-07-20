@@ -14,10 +14,10 @@ import android.text.InputType;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -41,7 +41,6 @@ import com.mydomain.countingdowngame.numberChoice.NumberChoice;
 import com.mydomain.countingdowngame.player.Player;
 import com.mydomain.countingdowngame.statistics.Statistics;
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
-
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -205,25 +204,61 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         DotsIndicator dotsIndicator = dialogView.findViewById(R.id.dots_indicator);
 
         CharacterClassPagerAdapter pagerAdapter = new CharacterClassPagerAdapter(pages);
+        pagerAdapter.setInfinite(true);
         viewPager.setAdapter(pagerAdapter);
-        dotsIndicator.setViewPager(viewPager);
+
+        // Setup a fake ViewPager to trick the DotsIndicator into only showing real pages
+        ViewPager fakeViewPager = new ViewPager(this);
+        CharacterClassPagerAdapter dotsAdapter = new CharacterClassPagerAdapter(pages);
+        dotsAdapter.setInfinite(false);
+        fakeViewPager.setAdapter(dotsAdapter);
+        dotsIndicator.setViewPager(fakeViewPager);
+        
+        // Add fakeViewPager to the hierarchy so it can animate and sync the dots
+        fakeViewPager.setVisibility(View.INVISIBLE);
+        ViewGroup root = (ViewGroup) dialogView;
+        root.addView(fakeViewPager, new ViewGroup.LayoutParams(100, 100));
+
+        int realCount = pages.size();
+        int initialPosition = (Integer.MAX_VALUE / 2) - ((Integer.MAX_VALUE / 2) % realCount);
+        viewPager.setCurrentItem(initialPosition, false);
+        fakeViewPager.setCurrentItem(0, false);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                // Sync the fake ViewPager for the dots to show smooth movement
+                // We use fake drag to trigger the indicator's scroll listeners
+                if (fakeViewPager.isFakeDragging() || fakeViewPager.beginFakeDrag()) {
+                    float totalScroll = (position % realCount + positionOffset);
+                    float fakeViewPagerScroll = fakeViewPager.getScrollX();
+                    float targetScroll = totalScroll * fakeViewPager.getWidth();
+                    float delta = targetScroll - fakeViewPagerScroll;
+                    fakeViewPager.fakeDragBy(-delta); // ViewPager scroll is inverted relative to drag
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (fakeViewPager.isFakeDragging()) {
+                    fakeViewPager.endFakeDrag();
+                }
+                fakeViewPager.setCurrentItem(position % realCount, true);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                if (state == ViewPager.SCROLL_STATE_IDLE && fakeViewPager.isFakeDragging()) {
+                    fakeViewPager.endFakeDrag();
+                }
+            }
+        });
 
         ImageView btnNext = dialogView.findViewById(R.id.btnNext);
         ImageView btnPrevious = dialogView.findViewById(R.id.btnPrevious);
 
-        btnNext.setOnClickListener(v -> {
-            int current = viewPager.getCurrentItem();
-            if (current < pages.size() - 1) {
-                viewPager.setCurrentItem(current + 1, true);
-            }
-        });
-
-        btnPrevious.setOnClickListener(v -> {
-            int current = viewPager.getCurrentItem();
-            if (current > 0) {
-                viewPager.setCurrentItem(current - 1, true);
-            }
-        });
+        btnNext.setOnClickListener(v -> viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true));
+        btnPrevious.setOnClickListener(v -> viewPager.setCurrentItem(viewPager.getCurrentItem() - 1, true));
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();

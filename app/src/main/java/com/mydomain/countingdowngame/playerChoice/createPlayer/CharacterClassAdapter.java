@@ -28,6 +28,8 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
         holder.activeAbilityTextView.setText(characterClass.getShortActive());
         holder.passiveAbilityTextView.setText(characterClass.getShortPassive());
         holder.classQuoteTextView.setText(characterClass.getQuote());
+        holder.btnActiveInfo.setImageResource(R.drawable.ic_arrow_down);
+        holder.btnPassiveInfo.setImageResource(R.drawable.ic_arrow_down);
 
         if (characterClass.getCooldown() > 0) {
             holder.activeCooldownTextView.setVisibility(View.VISIBLE);
@@ -36,21 +38,25 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
             holder.activeCooldownTextView.setVisibility(View.GONE);
         }
 
-        holder.btnActiveInfo.setOnClickListener(v -> {
-            if (holder.activeAbilityTextView.getText().equals(characterClass.getShortActive())) {
+        Runnable toggleExpand = () -> {
+            boolean isCurrentlyShort = holder.activeAbilityTextView.getText().equals(characterClass.getShortActive());
+            if (isCurrentlyShort) {
                 holder.activeAbilityTextView.setText(characterClass.getCharacterActiveDescriptions());
+                holder.passiveAbilityTextView.setText(characterClass.getCharacterPassiveDescriptions());
+                holder.btnActiveInfo.setImageResource(R.drawable.ic_arrow_up);
+                holder.btnPassiveInfo.setImageResource(R.drawable.ic_arrow_up);
             } else {
                 holder.activeAbilityTextView.setText(characterClass.getShortActive());
-            }
-        });
-
-        holder.btnPassiveInfo.setOnClickListener(v -> {
-            if (holder.passiveAbilityTextView.getText().equals(characterClass.getShortPassive())) {
-                holder.passiveAbilityTextView.setText(characterClass.getCharacterPassiveDescriptions());
-            } else {
                 holder.passiveAbilityTextView.setText(characterClass.getShortPassive());
+                holder.btnActiveInfo.setImageResource(R.drawable.ic_arrow_down);
+                holder.btnPassiveInfo.setImageResource(R.drawable.ic_arrow_down);
             }
-        });
+        };
+
+        holder.btnActiveInfo.setOnClickListener(v -> toggleExpand.run());
+        holder.btnPassiveInfo.setOnClickListener(v -> toggleExpand.run());
+        holder.activeAbilityBox.setOnClickListener(v -> toggleExpand.run());
+        holder.passiveAbilityBox.setOnClickListener(v -> toggleExpand.run());
 
         holder.itemView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
             if (scrollListener != null) {

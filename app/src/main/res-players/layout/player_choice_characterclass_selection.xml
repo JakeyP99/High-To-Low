@@ -17,15 +17,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp">
+        android:layout_marginTop="6dp">
 
         <ImageView
             android:id="@+id/btnPrevious"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:padding="8dp"
             android:background="@drawable/regular_item_selector"
             android:src="@drawable/arrow_right"
             android:rotation="180"
@@ -45,11 +44,10 @@
 
         <ImageView
             android:id="@+id/btnNext"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:padding="8dp"
             android:background="@drawable/regular_item_selector"
             android:src="@drawable/arrow_right"
             app:tint="@color/bluedark" />
@@ -62,8 +60,8 @@
         android:layout_height="60dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/outlineforbutton"
-        android:text="PLAY AS CHARACTER"
-        android:textAllCaps="true"
+        android:text="Select Class"
+        android:textAllCaps="false"
         android:fontFamily="@font/viga"
         android:textColor="@color/bluedark"
         android:textSize="20sp" />
