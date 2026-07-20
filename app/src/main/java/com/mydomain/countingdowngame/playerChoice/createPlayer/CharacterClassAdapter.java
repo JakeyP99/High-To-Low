@@ -25,8 +25,8 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CharacterClassStore characterClass = characterClasses.get(position);
         holder.classNameTextView.setText(characterClass.getClassName());
-        holder.activeAbilityTextView.setText(characterClass.getCharacterActiveDescriptions());
-        holder.passiveAbilityTextView.setText(characterClass.getCharacterPassiveDescriptions());
+        holder.activeAbilityTextView.setText(characterClass.getShortActive());
+        holder.passiveAbilityTextView.setText(characterClass.getShortPassive());
         holder.classQuoteTextView.setText(characterClass.getQuote());
 
         if (characterClass.getCooldown() > 0) {
@@ -35,6 +35,22 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
         } else {
             holder.activeCooldownTextView.setVisibility(View.GONE);
         }
+
+        holder.btnActiveInfo.setOnClickListener(v -> {
+            if (holder.activeAbilityTextView.getText().equals(characterClass.getShortActive())) {
+                holder.activeAbilityTextView.setText(characterClass.getCharacterActiveDescriptions());
+            } else {
+                holder.activeAbilityTextView.setText(characterClass.getShortActive());
+            }
+        });
+
+        holder.btnPassiveInfo.setOnClickListener(v -> {
+            if (holder.passiveAbilityTextView.getText().equals(characterClass.getShortPassive())) {
+                holder.passiveAbilityTextView.setText(characterClass.getCharacterPassiveDescriptions());
+            } else {
+                holder.passiveAbilityTextView.setText(characterClass.getShortPassive());
+            }
+        });
 
         holder.itemView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
             if (scrollListener != null) {
@@ -82,6 +98,8 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
         TextView activeCooldownTextView;
         View activeAbilityBox;
         View passiveAbilityBox;
+        ImageView btnActiveInfo;
+        ImageView btnPassiveInfo;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -93,6 +111,8 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
             activeCooldownTextView = itemView.findViewById(R.id.activeCooldownTextView);
             activeAbilityBox = itemView.findViewById(R.id.activeAbilityBox);
             passiveAbilityBox = itemView.findViewById(R.id.passiveAbilityBox);
+            btnActiveInfo = itemView.findViewById(R.id.btnActiveInfo);
+            btnPassiveInfo = itemView.findViewById(R.id.btnPassiveInfo);
         }
     }
 

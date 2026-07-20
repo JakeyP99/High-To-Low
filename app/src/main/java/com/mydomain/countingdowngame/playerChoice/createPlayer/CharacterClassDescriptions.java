@@ -15,10 +15,10 @@ public class CharacterClassDescriptions {
 
     // Active Ability Descriptions
     public static final String archerActiveDescription =
-            "You may remove 2 drinks from the total and give them to any players. Resets after 3 turns.";
+            "You may remove 2 drinks from the total and give them to any players.";
 
     public static final String witchActiveDescription =
-            "Throw a potion! Play a mini-game to determine its potency! Resets after 5 turns.";
+            "Throw a potion! Play a mini-game to determine its potency!";
 
     public static final String scientistActiveDescription =
             "Change the current number to any number. Your turn continues.";
@@ -30,10 +30,10 @@ public class CharacterClassDescriptions {
             "Start a quiz streak! For up to 5 questions, answer to hand out more drinks to everyone, but if you fail a question, you can't hand any out!";
 
     public static final String survivorActiveDescription =
-            "Halve the current number and continue your turn. Resets after 3 turns.";
+            "Halve the current number and continue your turn.";
 
     public static final String angryJimActiveDescription =
-            "Force a random player to repeat their turn. Resets after 5 turns.";
+            "Force a random player to repeat their turn.";
 
     public static final String gamblerActiveDescription =
             "Choose between High Card Duel or Red or Black. Bet 1-5 drinks and gamble!";
@@ -89,6 +89,28 @@ public class CharacterClassDescriptions {
 
     public static final String trollPassiveDescription =
             "Will remove an active ability or wildcards for a turn. Also, 15% chance to permanently eat a wildcard and 10% chance to feast on everyone.";
+
+    // Short Descriptions
+    public static final String archerActiveShort = "Give away 2 drinks.";
+    public static final String archerPassiveShort = "Luck-based drink adjustments.";
+    public static final String witchActiveShort = "Throw a random potion.";
+    public static final String witchPassiveShort = "Drink based on odd/even.";
+    public static final String scientistActiveShort = "Change the current number.";
+    public static final String scientistPassiveShort = "Lower number, higher skip risk.";
+    public static final String soldierActiveShort = "Add drinks and roll twice.";
+    public static final String soldierPassiveShort = "Escape the game at 10-15.";
+    public static final String quizMagicianActiveShort = "Start a quiz streak.";
+    public static final String quizMagicianPassiveShort = "Quizzes for everyone.";
+    public static final String survivorActiveShort = "Halve the number and continue.";
+    public static final String survivorPassiveShort = "Survive a 1 to hand out drinks.";
+    public static final String angryJimActiveShort = "Force a turn repeat.";
+    public static final String angryJimPassiveShort = "Gains all passives under 50.";
+    public static final String gamblerActiveShort = "Play a gambling mini-game.";
+    public static final String gamblerPassiveShort = "Bet on how the number lands.";
+    public static final String goblinActiveShort = "Steal wildcards from others.";
+    public static final String goblinPassiveShort = "Taxes other's wildcards.";
+    public static final String trollActiveShort = "Challenge players with riddles.";
+    public static final String trollPassiveShort = "Disables abilities/eats wildcards.";
 
     // Quotes
     public static final String archerQuote = "“ Aim true, or drink up! ”";

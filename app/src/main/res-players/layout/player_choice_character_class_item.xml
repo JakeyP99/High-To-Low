@@ -15,7 +15,7 @@
         android:gravity="center"
         android:text="ANGRY JIM"
         android:textColor="@color/bluedark"
-        android:textSize="32sp"
+        android:textSize="35sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +24,7 @@
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/classImageView"
         android:layout_width="0dp"
-        android:layout_height="180dp"
+        android:layout_height="160dp"
         android:layout_marginTop="12dp"
         android:scaleType="centerInside"
         android:src="@drawable/angry_jim"
@@ -40,7 +40,7 @@
         android:gravity="center"
         android:text="“ If I have to suffer... so do you. ”"
         android:textColor="@color/bluedark"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:textStyle="italic"
         android:alpha="0.8"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,28 +68,38 @@
             android:orientation="vertical"
             android:padding="12dp">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content">
 
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/ic_arrow_up"
-                    app:tint="@color/colorPrimary" />
-
-                <TextView
-                    android:id="@+id/activeAbilityText"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:text="ACTIVE"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/activeAbilityText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="ACTIVE"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/btnActiveInfo"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/info"
+                    app:tint="@color/colorPrimary" />
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/activeAbilityTextView"
@@ -98,7 +108,7 @@
                 android:layout_marginTop="6dp"
                 android:text="Force a random player to repeat their turn."
                 android:textColor="@color/bluedark"
-                android:textSize="14sp"
+                android:textSize="20sp"
                 android:lineSpacingExtra="2dp"/>
 
             <TextView
@@ -108,7 +118,7 @@
                 android:layout_marginTop="8dp"
                 android:text="🕒 Cooldown: 5 Turns"
                 android:textColor="@color/bluedark"
-                android:textSize="12sp"
+                android:textSize="15sp"
                 android:alpha="1"/>
 
         </LinearLayout>
@@ -123,28 +133,38 @@
             android:orientation="vertical"
             android:padding="12dp">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content">
 
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/target"
-                    app:tint="#FF8800" />
-
-                <TextView
-                    android:id="@+id/passiveAbilityText"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:text="PASSIVE"
-                    android:textColor="#FF8800"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/passiveAbilityText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="PASSIVE"
+                        android:textColor="#FF8800"
+                        android:textSize="sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/btnPassiveInfo"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/info"
+                    app:tint="#FF8800" />
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/passiveAbilityTextView"
@@ -153,7 +173,7 @@
                 android:layout_marginTop="6dp"
                 android:text="When the number is below 50, gain all other passives."
                 android:textColor="@color/bluedark"
-                android:textSize="14sp"
+                android:textSize="20sp"
                 android:lineSpacingExtra="2dp" />
 
         </LinearLayout>

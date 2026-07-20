@@ -4,6 +4,8 @@ public class CharacterClassStore {
     private final String className;
     private final String activeAbility;
     private final String passiveAbility;
+    private final String shortActive;
+    private final String shortPassive;
     private final String quote;
     private final int cooldown;
 
@@ -11,11 +13,13 @@ public class CharacterClassStore {
     private final int imageResource; // Image resource ID for the character class
 
 
-    public CharacterClassStore(int id, String className, String activeAbility, String passiveAbility, String quote, int cooldown, int imageResource) {
+    public CharacterClassStore(int id, String className, String activeAbility, String shortActive, String passiveAbility, String shortPassive, String quote, int cooldown, int imageResource) {
         this.id = id;
         this.className = className;
         this.activeAbility = activeAbility;
+        this.shortActive = shortActive;
         this.passiveAbility = passiveAbility;
+        this.shortPassive = shortPassive;
         this.quote = quote;
         this.cooldown = cooldown;
         this.imageResource = imageResource;
@@ -37,8 +41,16 @@ public class CharacterClassStore {
         return activeAbility;
     }
 
+    public String getShortActive() {
+        return shortActive;
+    }
+
     public String getCharacterPassiveDescriptions() {
         return passiveAbility;
+    }
+
+    public String getShortPassive() {
+        return shortPassive;
     }
 
     public String getQuote() {
