@@ -1310,8 +1310,6 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         LayoutInflater inflater = activity.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.game_gambler_the_odds, null);
 
-        View selectionContainer = dialogView.findViewById(R.id.selection_container);
-        View duelContainer = dialogView.findViewById(R.id.duel_container);
         TextView gamblerCardVal = dialogView.findViewById(R.id.gambler_card_val);
         View opponentCardContainer = dialogView.findViewById(R.id.opponent_card_container);
         TextView opponentCardVal = dialogView.findViewById(R.id.opponent_card_val);
@@ -1329,19 +1327,12 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         builder.setCancelable(false);
         AlertDialog dialog = builder.create();
 
-        int[] numberIds = {R.id.btn_3, R.id.btn_4, R.id.btn_5, R.id.btn_6, R.id.btn_7, R.id.btn_8};
-        for (int id : numberIds) {
-            Button b = dialogView.findViewById(id);
-            if (b == null) continue;
-            activity.btnUtils.setButton(b, () -> {
-                int baseVal = Integer.parseInt(b.getText().toString());
-                selectionContainer.setVisibility(GONE);
-                duelContainer.setVisibility(VISIBLE);
-                gamblerCardVal.setText(String.valueOf(baseVal));
+        // Generate random base card from 2 to 8
+        Random random = new Random();
+        int baseVal = random.nextInt(7) + 2; // 0-6 + 2 = 2-8
+        gamblerCardVal.setText(String.valueOf(baseVal));
 
-                setupTheOddsChoices(baseVal, btnHigher, btnEqual, btnLower, opponent, bet, opponentCardContainer, opponentCardVal, opponentCardIv, choicesContainer, resultTv, finishBtn, betPrompt);
-            });
-        }
+        setupTheOddsChoices(baseVal, btnHigher, btnEqual, btnLower, opponent, bet, opponentCardContainer, opponentCardVal, opponentCardIv, choicesContainer, resultTv, finishBtn, betPrompt);
 
         activity.btnUtils.setButton(finishBtn, () -> {
             dialog.dismiss();
@@ -1367,7 +1358,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         int loseLower = Math.max(1, bet + adj);
         
         int winEqual = bet + 1;
-        int loseEqual = bet;
+        int loseEqual = Math.max(1, bet - 2);
 
         btnHigher.setText("Higher (" + winHigher + " Win / " + loseHigher + " Lose)");
         btnLower.setText("Lower (" + winLower + " Win / " + loseLower + " Lose)");

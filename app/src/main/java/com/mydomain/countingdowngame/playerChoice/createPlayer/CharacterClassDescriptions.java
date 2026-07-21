@@ -36,7 +36,7 @@ public class CharacterClassDescriptions {
             "Force a random player to repeat their turn.";
 
     public static final String gamblerActiveDescription =
-            "Choose between High Card Duel or Red or Black. Bet 1-5 drinks and gamble!";
+            "Choose between High Card Duel, Higher or Lower, or Red or Black. Bet 1-5 drinks and gamble!";
 
     public static final String goblinActiveDescription =
             "Sacrifice 1 of your wildcards to remove 2 from a random player.";
