@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -127,7 +126,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
     }
 
     private void showEditNameDialog(Player player) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
         View dialogView = LayoutInflater.from(this).inflate(R.layout.player_choice_enter_name_item, null);
         EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
         nameEditText.setText(player.getName());
@@ -434,8 +433,6 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         Button okayButton = dialogView.findViewById(R.id.okButton);
 
         nameEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-        int blueDarkColor = ContextCompat.getColor(this, R.color.bluedark);
-        nameEditText.getBackground().mutate().setColorFilter(blueDarkColor, PorterDuff.Mode.SRC_ATOP);
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();

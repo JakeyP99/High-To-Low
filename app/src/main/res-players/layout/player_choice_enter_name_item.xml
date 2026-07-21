@@ -2,29 +2,44 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="30dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Edit Name"
+        android:textColor="@color/bluedark"
+        android:fontFamily="@font/viga"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"/>
 
     <EditText
         android:id="@+id/nameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/viga"
-        android:padding="10sp"
-        android:hint="Enter a Name"
-        android:textColorHint="@color/bluedark"
+        android:padding="15sp"
+        android:hint="Enter name here..."
+        android:textColorHint="@color/bluedarktransparent"
         android:textColor="@color/bluedark"
-        android:textSize="25sp"
+        android:textSize="24sp"
         android:inputType="text"
-        android:backgroundTint="@color/bluedark" />
+        android:imeOptions="flagNoExtractUi"
+        android:background="@drawable/edittext_themed_background"
+        android:gravity="center" />
 
     <Button
         android:id="@+id/okButton"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="25dp"
         android:text="OK"
-        android:background="@color/transparent"
+        android:background="@drawable/outlineforbutton"
         android:textColor="@color/bluedark"
-        android:layout_gravity="right"
-        android:textSize="20sp" />
+        android:fontFamily="@font/viga"
+        android:textAllCaps="false"
+        android:textSize="22sp" />
 
 </LinearLayout>
