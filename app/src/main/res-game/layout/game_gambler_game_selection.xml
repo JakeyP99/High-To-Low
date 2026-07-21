@@ -14,7 +14,7 @@
         android:layout_gravity="center"
         android:fontFamily="@font/viga"
         android:paddingTop="10dp"
-        android:text="Choose Your Game"
+        android:text="Gambler's Choice"
         android:textAlignment="center"
         android:textColor="@color/bluedark"
         android:textSize="32sp" />
@@ -27,12 +27,88 @@
         android:alpha="0.1"
         android:background="@color/bluedark" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/viga"
+        android:text="Set Your Bet (1-5 Drinks)"
+        android:textColor="@color/bluedark"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_bet_1"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:background="@drawable/outlineforbutton"
+            android:fontFamily="@font/viga"
+            android:text="1"
+            android:textColor="@color/bluedark" />
+
+        <Button
+            android:id="@+id/btn_bet_2"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/outlineforbutton"
+            android:fontFamily="@font/viga"
+            android:text="2"
+            android:textColor="@color/bluedark" />
+
+        <Button
+            android:id="@+id/btn_bet_3"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/outlineforbutton"
+            android:fontFamily="@font/viga"
+            android:text="3"
+            android:textColor="@color/bluedark" />
+
+        <Button
+            android:id="@+id/btn_bet_4"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/outlineforbutton"
+            android:fontFamily="@font/viga"
+            android:text="4"
+            android:textColor="@color/bluedark" />
+
+        <Button
+            android:id="@+id/btn_bet_5"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/outlineforbutton"
+            android:fontFamily="@font/viga"
+            android:text="5"
+            android:textColor="@color/bluedark" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/viga"
+        android:text="Choose Your Game"
+        android:textColor="@color/bluedark"
+        android:textSize="18sp" />
+
     <!-- Game 1: High Card Duel -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/btn_high_card"
         android:layout_width="match_parent"
-        android:layout_height="85dp"
-        android:layout_marginTop="12dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/outlineforbutton"
         android:clickable="true"
         android:focusable="true"
@@ -40,8 +116,8 @@
 
         <ImageView
             android:id="@+id/iconHighCard"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/cards"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -52,50 +128,61 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
             android:fontFamily="@font/viga"
             android:text="High Card Duel"
             android:textColor="@color/bluedark"
-            android:textSize="22sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/subHighCard"
-            app:layout_constraintEnd_toStartOf="@id/arrowHighCard"
-            app:layout_constraintStart_toEndOf="@id/iconHighCard"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
-
-        <TextView
-            android:id="@+id/subHighCard"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:alpha="0.7"
-            android:fontFamily="@font/viga"
-            android:text="Gambler's Card vs Opponents"
-            android:textColor="@color/bluedark"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/textHighCard"
-            app:layout_constraintStart_toStartOf="@id/textHighCard"
-            app:layout_constraintTop_toBottomOf="@id/textHighCard" />
-
-        <ImageView
-            android:id="@+id/arrowHighCard"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:alpha="0.3"
-            android:src="@drawable/arrow_right"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iconHighCard"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Game 2: Red or Black -->
+    <!-- Game 2: The Odds -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/btn_the_odds"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/outlineforbutton"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="12dp">
+
+        <ImageView
+            android:id="@+id/iconTheOdds"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/slotmachine"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textTheOdds"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/viga"
+            android:text="The Odds"
+            android:textColor="@color/bluedark"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iconTheOdds"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Game 3: Red or Black -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/btn_red_black"
         android:layout_width="match_parent"
-        android:layout_height="85dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/outlineforbutton"
         android:clickable="true"
         android:focusable="true"
@@ -103,8 +190,8 @@
 
         <pl.droidsonroids.gif.GifImageView
             android:id="@+id/iconRedBlack"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/redcard"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -115,40 +202,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
             android:fontFamily="@font/viga"
             android:text="Red or Black"
             android:textColor="@color/bluedark"
-            android:textSize="22sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/subRedBlack"
-            app:layout_constraintEnd_toStartOf="@id/arrowRedBlack"
-            app:layout_constraintStart_toEndOf="@id/iconRedBlack"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
-
-        <TextView
-            android:id="@+id/subRedBlack"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:alpha="0.7"
-            android:fontFamily="@font/viga"
-            android:text="Drink if you guess wrong"
-            android:textColor="@color/bluedark"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/textRedBlack"
-            app:layout_constraintStart_toStartOf="@id/textRedBlack"
-            app:layout_constraintTop_toBottomOf="@id/textRedBlack" />
-
-        <ImageView
-            android:id="@+id/arrowRedBlack"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:alpha="0.3"
-            android:src="@drawable/arrow_right"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iconRedBlack"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

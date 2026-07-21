@@ -18,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -177,7 +176,12 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         currentDialog.setContentView(dialogView);
 
         nameEditText.requestFocus();
-        currentDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        nameEditText.postDelayed(() -> {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.showSoftInput(nameEditText, InputMethodManager.SHOW_IMPLICIT);
+            }
+        }, 100);
 
         okayButton.setOnClickListener(v -> {
             String name = nameEditText.getText().toString().trim();
@@ -192,15 +196,15 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
                 return;
             }
 
-            boolean nameExists = false;
+            boolean nameExistsDuplicate = false;
             for (Player p : playerList) {
                 if (p != player && p.getName().equalsIgnoreCase(name)) {
-                    nameExists = true;
+                    nameExistsDuplicate = true;
                     break;
                 }
             }
 
-            if (nameExists) {
+            if (nameExistsDuplicate) {
                 StyleableToast.makeText(PlayerChoice.this, "Name already exists, please choose a unique name.", R.style.newToast).show();
                 return;
             }
@@ -492,9 +496,14 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
-        
+
         nameEditText.requestFocus();
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        nameEditText.postDelayed(() -> {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.showSoftInput(nameEditText, InputMethodManager.SHOW_IMPLICIT);
+            }
+        }, 100);
 
         okayButton.setOnClickListener(v -> {
             String name = nameEditText.getText().toString().trim();

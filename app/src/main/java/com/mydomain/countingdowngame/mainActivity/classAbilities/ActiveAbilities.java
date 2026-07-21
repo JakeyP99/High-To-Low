@@ -780,7 +780,7 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         List<Player> opponents = game.getPlayers().stream().filter(p -> !p.equals(game.getCurrentPlayer())).collect(Collectors.toList());
 
         if (opponents.size() == 1) {
-            showBetDialog(opponents.get(0));
+            showGamblerGameSelection(opponents.get(0));
             return;
         }
 
@@ -788,63 +788,66 @@ public class ActiveAbilities extends ButtonUtilsActivity {
     }
 
     private static void showOpponentDialog(List<Player> opponents) {
-        activity.mainActivityDialog.showOpponentDialog("Gambler's Active:", opponents, ActiveAbilities::showBetDialog);
+        activity.mainActivityDialog.showOpponentDialog("Gambler's Active:", opponents, ActiveAbilities::showGamblerGameSelection);
     }
 
-    private static void showBetDialog(Player opponent) {
-        LayoutInflater inflater = activity.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.game_gambler_duel_bet, null);
-
-        EditText editBetAmount = dialogView.findViewById(R.id.editBetAmount);
-
-        TextView subtitle = dialogView.findViewById(R.id.bet_subtitle);
-        if (subtitle != null) {
-            subtitle.setText("Duel against " + opponent.getName() + " - Bet a drink between 1 and 5.");
-        }
-
-        Button okButton = dialogView.findViewById(R.id.btn_confirm_bet);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
-        builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
-
-        activity.btnUtils.setButton(okButton, () -> {
-            try {
-                int bet = Integer.parseInt(editBetAmount.getText().toString());
-                if (bet < 1 || bet > 5) {
-                    activity.displayToastMessage("Bet must be between 1 and 5!");
-                } else {
-                    hideAbilityButton();
-                    dialog.dismiss();
-                    showGamblerGameSelection(opponent, bet);
-                }
-            } catch (NumberFormatException e) {
-                activity.displayToastMessage("Invalid bet!");
-            }
-        });
-        dialog.show();
-    }
-
-    private static void showGamblerGameSelection(Player opponent, int bet) {
+    private static void showGamblerGameSelection(Player opponent) {
         LayoutInflater inflater = activity.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.game_gambler_game_selection, null);
 
         View btnHighCard = dialogView.findViewById(R.id.btn_high_card);
         View btnRedBlack = dialogView.findViewById(R.id.btn_red_black);
+        View btnTheOdds = dialogView.findViewById(R.id.btn_the_odds);
+
+        final int[] selectedBet = {0}; // Start with 0 to force selection or default to 1
+
+        Button[] betButtons = {
+                dialogView.findViewById(R.id.btn_bet_1),
+                dialogView.findViewById(R.id.btn_bet_2),
+                dialogView.findViewById(R.id.btn_bet_3),
+                dialogView.findViewById(R.id.btn_bet_4),
+                dialogView.findViewById(R.id.btn_bet_5)
+        };
+
+        for (int i = 0; i < betButtons.length; i++) {
+            int betVal = i + 1;
+            Button btn = betButtons[i];
+            btn.setOnClickListener(v -> {
+                selectedBet[0] = betVal;
+                // Highlight selected button, reset others
+                for (Button b : betButtons) {
+                    b.setBackgroundResource(R.drawable.outlineforbutton);
+                    b.setAlpha(0.5f);
+                }
+                btn.setAlpha(1.0f);
+                btn.setBackgroundResource(R.drawable.buttonhighlight);
+            });
+        }
+
+        // Set default selection to 1
+        betButtons[0].performClick();
 
         AlertDialog dialog = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme)
                 .setView(dialogView)
-                .setCancelable(false)
+                .setCancelable(true)
                 .create();
 
         activity.btnUtils.setButton(btnHighCard, () -> {
+            hideAbilityButton();
             dialog.dismiss();
-            showHighCardDuelUI(opponent, bet);
+            showHighCardDuelUI(opponent, selectedBet[0]);
         });
 
         activity.btnUtils.setButton(btnRedBlack, () -> {
+            hideAbilityButton();
             dialog.dismiss();
-            showRedOrBlackUI(opponent, bet);
+            showRedOrBlackUI(opponent, selectedBet[0]);
+        });
+
+        activity.btnUtils.setButton(btnTheOdds, () -> {
+            hideAbilityButton();
+            dialog.dismiss();
+            showTheOddsUI(opponent, selectedBet[0]);
         });
 
         dialog.show();
@@ -1301,6 +1304,109 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         player.setClassCooldown(className, AbilityComplimentary.getClassCooldown(className));
     }
 
+    private static void showTheOddsUI(final Player opponent, final int bet) {
+        AudioManager.getInstance().playSoundEffects(activity, GAMBLER);
+
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.game_gambler_the_odds, null);
+
+        View selectionContainer = dialogView.findViewById(R.id.selection_container);
+        View duelContainer = dialogView.findViewById(R.id.duel_container);
+        TextView gamblerCardVal = dialogView.findViewById(R.id.gambler_card_val);
+        View opponentCardContainer = dialogView.findViewById(R.id.opponent_card_container);
+        TextView opponentCardVal = dialogView.findViewById(R.id.opponent_card_val);
+        ImageView opponentCardIv = dialogView.findViewById(R.id.opponent_card_img);
+        View choicesContainer = dialogView.findViewById(R.id.choice_buttons_container);
+        Button btnHigher = dialogView.findViewById(R.id.btn_higher);
+        Button btnEqual = dialogView.findViewById(R.id.btn_equal);
+        Button btnLower = dialogView.findViewById(R.id.btn_lower);
+        TextView resultTv = dialogView.findViewById(R.id.game_result_text);
+        Button finishBtn = dialogView.findViewById(R.id.btn_finish);
+        TextView betPrompt = dialogView.findViewById(R.id.bet_prompt);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
+        builder.setView(dialogView);
+        builder.setCancelable(false);
+        AlertDialog dialog = builder.create();
+
+        int[] numberIds = {R.id.btn_3, R.id.btn_4, R.id.btn_5, R.id.btn_6, R.id.btn_7, R.id.btn_8};
+        for (int id : numberIds) {
+            Button b = dialogView.findViewById(id);
+            if (b == null) continue;
+            activity.btnUtils.setButton(b, () -> {
+                int baseVal = Integer.parseInt(b.getText().toString());
+                selectionContainer.setVisibility(GONE);
+                duelContainer.setVisibility(VISIBLE);
+                gamblerCardVal.setText(String.valueOf(baseVal));
+
+                setupTheOddsChoices(baseVal, btnHigher, btnEqual, btnLower, opponent, bet, opponentCardContainer, opponentCardVal, opponentCardIv, choicesContainer, resultTv, finishBtn, betPrompt);
+            });
+        }
+
+        activity.btnUtils.setButton(finishBtn, () -> {
+            dialog.dismiss();
+            markAbilityUsed(GAMBLER, game.getCurrentPlayer());
+            updateClassAbilityButton(game.getCurrentPlayer());
+        });
+
+        dialog.show();
+    }
+
+    private static void setupTheOddsChoices(int baseVal, Button btnHigher, Button btnEqual, Button btnLower, Player opponent, int bet, View opponentCardContainer, TextView opponentCardVal, ImageView opponentCardIv, View choicesContainer, TextView resultTv, Button finishBtn) {
+        // Linear Odds Logic (Middle card is 5):
+        // Higher on low card (Easy) -> Win less, Lose more
+        // Higher on high card (Hard) -> Win more, Lose less
+        
+        int diff = baseVal - 5;
+        int adj = Math.max(-2, Math.min(2, diff)); // Linear cap at +/- 2
+        
+        int winHigher = Math.max(1, bet + adj);
+        int loseHigher = Math.max(1, bet - adj);
+        
+        int winLower = Math.max(1, bet - adj);
+        int loseLower = Math.max(1, bet + adj);
+        
+        int winEqual = bet + 2;
+        int loseEqual = bet;
+
+        btnHigher.setText("Higher (" + winHigher + " Win / " + loseHigher + " Lose)");
+        btnLower.setText("Lower (" + winLower + " Win / " + loseLower + " Lose)");
+        btnEqual.setText("Equal (" + winEqual + " Win / " + loseEqual + " Lose)");
+
+        activity.btnUtils.setButton(btnHigher, () -> runTheOddsResult(baseVal, 1, winHigher, loseHigher, opponent, opponentCardContainer, opponentCardVal, opponentCardIv, choicesContainer, resultTv, finishBtn));
+        activity.btnUtils.setButton(btnEqual, () -> runTheOddsResult(baseVal, 0, winEqual, loseEqual, opponent, opponentCardContainer, opponentCardVal, opponentCardIv, choicesContainer, resultTv, finishBtn));
+        activity.btnUtils.setButton(btnLower, () -> runTheOddsResult(baseVal, -1, winLower, loseLower, opponent, opponentCardContainer, opponentCardVal, opponentCardIv, choicesContainer, resultTv, finishBtn));
+    }
+
+    private static void runTheOddsResult(int baseVal, int prediction, int winAmt, int loseAmt, Player opponent, View opponentCardContainer, TextView opponentCardVal, ImageView opponentCardIv, View choicesContainer, TextView resultTv, Button finishBtn) {
+        choicesContainer.setVisibility(GONE);
+        
+        Random r = new Random();
+        int opponentCard = r.nextInt(10) + 1; // 1-10 (No face cards)
+        
+        flipCard(opponentCardContainer, opponentCardVal, opponentCardIv, opponentCard, () -> {
+            boolean won = false;
+            if (prediction == 1 && opponentCard > baseVal) won = true;
+            else if (prediction == -1 && opponentCard < baseVal) won = true;
+            else if (prediction == 0 && opponentCard == baseVal) won = true;
+
+            Player gambler = game.getCurrentPlayer();
+            String msg;
+            if (won) {
+                msg = "Correct! " + opponent.getName() + " takes " + winAmt + " drinks.";
+                opponent.incrementDrinksTakenByGambler(winAmt);
+                gambler.incrementDrinksHandedOutByGambler(winAmt);
+            } else {
+                msg = "Wrong! " + gambler.getName() + " takes " + loseAmt + " drinks.";
+                gambler.incrementDrinksTakenByGambler(loseAmt);
+            }
+            
+            resultTv.setText(msg);
+            resultTv.setVisibility(VISIBLE);
+            finishBtn.setVisibility(VISIBLE);
+        });
+    }
+
     private static void flipCard(View container, TextView cardText, ImageView cardImage, int value, Runnable onEnd) {
         ObjectAnimator oa1 = ObjectAnimator.ofFloat(container, "scaleX", 1f, 0f);
         ObjectAnimator oa2 = ObjectAnimator.ofFloat(container, "scaleX", 0f, 1f);
@@ -1342,8 +1448,11 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             String msg;
             if (gVal > oVal) {
                 msg = gambler.getName() + " wins! " + opponent.getName() + " takes " + bet + " drinks.";
+                opponent.incrementDrinksTakenByGambler(bet);
+                gambler.incrementDrinksHandedOutByGambler(bet);
             } else {
                 msg = opponent.getName() + " wins! " + gambler.getName() + " takes " + bet + " drinks.";
+                gambler.incrementDrinksTakenByGambler(bet);
             }
             resultTv.setText(msg);
             resultTv.setVisibility(VISIBLE);
