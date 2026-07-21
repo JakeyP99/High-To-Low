@@ -45,9 +45,6 @@ public class CharacterClassPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         int realPosition = position % characterClassesPages.size();
         RecyclerView recyclerView = new RecyclerView(container.getContext());
-        recyclerView.setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
         recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()) {
             @Override
             public boolean canScrollVertically() {

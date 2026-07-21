@@ -45,7 +45,7 @@ public class CharacterClassDescriptions {
             "Read a riddle for up to 2 players. They have to drink 3 if they are wrong or the slowest!";
 
     public static final String noClassDescription =
-            "You have no active or passive abilities. Just pure skill!";
+            "";
 
     // Active Ability Button Text (Shortened versions)
     public static final String archerActiveButtonText = "Hand out 2 drinks";

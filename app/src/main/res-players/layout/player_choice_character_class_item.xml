@@ -2,10 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_margin="4dp"
-    android:background="@android:color/transparent"
-    android:padding="16dp">
+    android:background="@android:color/transparent">
 
     <LinearLayout
         android:id="@+id/centerWrapper"
@@ -13,7 +12,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -25,14 +23,13 @@
             android:gravity="center"
             android:text="ANGRY JIM"
             android:textColor="@color/bluedark"
-            android:textSize="30sp"
+            android:textSize="36sp"
             android:textStyle="bold" />
 
         <pl.droidsonroids.gif.GifImageView
             android:id="@+id/classImageView"
             android:layout_width="match_parent"
-            android:layout_height="130dp"
-            android:layout_marginTop="8dp"
+            android:layout_height="140dp"
             android:scaleType="centerInside"
             android:src="@drawable/angry_jim" />
 
@@ -44,7 +41,7 @@
             android:gravity="center"
             android:text="“ If I have to suffer... so do you. ”"
             android:textColor="@color/bluedark"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:textStyle="italic"
             android:alpha="0.8" />
 
@@ -64,7 +61,7 @@
                 android:layout_marginEnd="4dp"
                 android:layout_weight="1"
                 android:background="@drawable/active_ability_background"
-                android:padding="10dp"
+                android:padding="8dp"
                 android:clickable="true"
                 android:focusable="true">
 
@@ -74,8 +71,9 @@
                     android:layout_height="wrap_content"
                     android:text="ACTIVE"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="15sp"
+                    android:textSize="17sp"
                     android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -84,26 +82,41 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:gravity="center"
                     android:text="Force a random player to repeat their turn."
                     android:textColor="@color/bluedark"
-                    android:textSize="15sp"
+                    android:textSize="16sp"
                     android:lineSpacingExtra="1dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/activeAbilityText" />
+
+                <View
+                    android:id="@+id/cooldownDivider"
+                    android:layout_width="0dp"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/dashed_line"
+                    android:layerType="software"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/activeAbilityTextView" />
 
                 <TextView
                     android:id="@+id/activeCooldownTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="🕒 Cooldown: 5 Turns"
-                    android:textColor="@color/bluedark"
-                    android:textSize="13sp"
                     android:alpha="1"
+                    android:gravity="center"
+                    android:text="Cooldown: 5 Turns"
+                    android:textColor="@color/bluedark"
+                    android:textSize="15sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/activeAbilityTextView" />
+                    app:layout_constraintTop_toBottomOf="@id/cooldownDivider" />
 
                 <ImageView
                     android:id="@+id/btnActiveInfo"
@@ -127,7 +140,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_weight="1"
                 android:background="@drawable/passive_ability_background"
-                android:padding="10dp"
+                android:padding="8dp"
                 android:clickable="true"
                 android:focusable="true">
 
@@ -137,8 +150,9 @@
                     android:layout_height="wrap_content"
                     android:text="PASSIVE"
                     android:textColor="#03A9F4"
-                    android:textSize="15sp"
+                    android:textSize="17sp"
                     android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -147,9 +161,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:gravity="center"
                     android:text="When the number is below 50, gain all other passives."
                     android:textColor="@color/bluedark"
-                    android:textSize="15sp"
+                    android:textSize="16sp"
                     android:lineSpacingExtra="1dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

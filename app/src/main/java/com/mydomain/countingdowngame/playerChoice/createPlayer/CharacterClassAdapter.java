@@ -76,9 +76,11 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
 
         if (characterClass.getCooldown() > 0) {
             holder.activeCooldownTextView.setVisibility(View.VISIBLE);
-            holder.activeCooldownTextView.setText("🕒 Cooldown: " + characterClass.getCooldown() + " Turns");
+            holder.cooldownDivider.setVisibility(View.VISIBLE);
+            holder.activeCooldownTextView.setText("Cooldown: " + characterClass.getCooldown() + " Turns");
         } else {
             holder.activeCooldownTextView.setVisibility(View.GONE);
+            holder.cooldownDivider.setVisibility(View.GONE);
         }
 
         View.OnClickListener toggleClick = v -> {
@@ -99,13 +101,9 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
         });
         // Set the visibility of Active Ability and Passive Ability TextViews based on the class
         if (characterClass.getClassName().equals("No Class")) {
-            holder.activeAbilityBox.setVisibility(View.VISIBLE);
+            holder.activeAbilityBox.setVisibility(View.GONE);
             holder.passiveAbilityBox.setVisibility(View.GONE);
             holder.classQuoteTextView.setVisibility(View.VISIBLE);
-            holder.activeAbilityText.setText("DESCRIPTION");
-            holder.activeAbilityTextView.setText(characterClass.getCharacterActiveDescriptions());
-            holder.btnActiveInfo.setVisibility(View.GONE);
-            holder.activeCooldownTextView.setVisibility(View.GONE);
         } else {
             holder.activeAbilityBox.setVisibility(View.VISIBLE);
             holder.passiveAbilityBox.setVisibility(View.VISIBLE);
@@ -153,6 +151,7 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
         View passiveAbilityBox;
         ImageView btnActiveInfo;
         ImageView btnPassiveInfo;
+        View cooldownDivider;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -167,6 +166,7 @@ public class CharacterClassAdapter extends RecyclerView.Adapter<CharacterClassAd
             passiveAbilityBox = itemView.findViewById(R.id.passiveAbilityBox);
             btnActiveInfo = itemView.findViewById(R.id.btnActiveInfo);
             btnPassiveInfo = itemView.findViewById(R.id.btnPassiveInfo);
+            cooldownDivider = itemView.findViewById(R.id.cooldownDivider);
         }
     }
 
