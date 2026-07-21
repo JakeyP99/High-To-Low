@@ -188,7 +188,7 @@ public class MainActivityDialog {
 
         AlertDialog dialog = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme)
                 .setView(dialogView)
-                .setCancelable(false)
+                .setCancelable(true)
                 .create();
 
         recyclerView.setLayoutManager(new GridLayoutManager(activity, 3));

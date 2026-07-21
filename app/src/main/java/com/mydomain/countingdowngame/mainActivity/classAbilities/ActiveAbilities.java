@@ -1352,13 +1352,13 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         dialog.show();
     }
 
-    private static void setupTheOddsChoices(int baseVal, Button btnHigher, Button btnEqual, Button btnLower, Player opponent, int bet, View opponentCardContainer, TextView opponentCardVal, ImageView opponentCardIv, View choicesContainer, TextView resultTv, Button finishBtn) {
+    private static void setupTheOddsChoices(int baseVal, Button btnHigher, Button btnEqual, Button btnLower, Player opponent, int bet, View opponentCardContainer, TextView opponentCardVal, ImageView opponentCardIv, View choicesContainer, TextView resultTv, Button finishBtn, TextView betPrompt) {
         // Linear Odds Logic (Middle card is 5):
         // Higher on low card (Easy) -> Win less, Lose more
         // Higher on high card (Hard) -> Win more, Lose less
         
         int diff = baseVal - 5;
-        int adj = Math.max(-2, Math.min(2, diff)); // Linear cap at +/- 2
+        int adj = Math.max(-1, Math.min(1, diff)); // Linear cap at +/- 1
         
         int winHigher = Math.max(1, bet + adj);
         int loseHigher = Math.max(1, bet - adj);
@@ -1366,19 +1366,19 @@ public class ActiveAbilities extends ButtonUtilsActivity {
         int winLower = Math.max(1, bet - adj);
         int loseLower = Math.max(1, bet + adj);
         
-        int winEqual = bet + 2;
+        int winEqual = bet + 1;
         int loseEqual = bet;
 
         btnHigher.setText("Higher (" + winHigher + " Win / " + loseHigher + " Lose)");
         btnLower.setText("Lower (" + winLower + " Win / " + loseLower + " Lose)");
         btnEqual.setText("Equal (" + winEqual + " Win / " + loseEqual + " Lose)");
 
-        activity.btnUtils.setButton(btnHigher, () -> runTheOddsResult(baseVal, 1, winHigher, loseHigher, opponent, opponentCardContainer, opponentCardVal, opponentCardIv, choicesContainer, resultTv, finishBtn));
-        activity.btnUtils.setButton(btnEqual, () -> runTheOddsResult(baseVal, 0, winEqual, loseEqual, opponent, opponentCardContainer, opponentCardVal, opponentCardIv, choicesContainer, resultTv, finishBtn));
-        activity.btnUtils.setButton(btnLower, () -> runTheOddsResult(baseVal, -1, winLower, loseLower, opponent, opponentCardContainer, opponentCardVal, opponentCardIv, choicesContainer, resultTv, finishBtn));
+        activity.btnUtils.setButton(btnHigher, () -> runTheOddsResult(baseVal, 1, winHigher, loseHigher, opponent, opponentCardContainer, opponentCardVal, opponentCardIv, choicesContainer, resultTv, finishBtn, betPrompt));
+        activity.btnUtils.setButton(btnEqual, () -> runTheOddsResult(baseVal, 0, winEqual, loseEqual, opponent, opponentCardContainer, opponentCardVal, opponentCardIv, choicesContainer, resultTv, finishBtn, betPrompt));
+        activity.btnUtils.setButton(btnLower, () -> runTheOddsResult(baseVal, -1, winLower, loseLower, opponent, opponentCardContainer, opponentCardVal, opponentCardIv, choicesContainer, resultTv, finishBtn, betPrompt));
     }
 
-    private static void runTheOddsResult(int baseVal, int prediction, int winAmt, int loseAmt, Player opponent, View opponentCardContainer, TextView opponentCardVal, ImageView opponentCardIv, View choicesContainer, TextView resultTv, Button finishBtn) {
+    private static void runTheOddsResult(int baseVal, int prediction, int winAmt, int loseAmt, Player opponent, View opponentCardContainer, TextView opponentCardVal, ImageView opponentCardIv, View choicesContainer, TextView resultTv, Button finishBtn, TextView betPrompt) {
         choicesContainer.setVisibility(GONE);
         
         Random r = new Random();
@@ -1404,6 +1404,9 @@ public class ActiveAbilities extends ButtonUtilsActivity {
             resultTv.setText(msg);
             resultTv.setVisibility(VISIBLE);
             finishBtn.setVisibility(VISIBLE);
+            if (betPrompt != null) {
+                betPrompt.setVisibility(GONE);
+            }
         });
     }
 

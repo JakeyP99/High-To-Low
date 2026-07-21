@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/viga"
-        android:text="The Odds"
+        android:text="Higher or Lower"
         android:textColor="@color/bluedark"
         android:textSize="30sp" />
 

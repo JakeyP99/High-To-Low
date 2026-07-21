@@ -155,7 +155,7 @@
             android:id="@+id/iconTheOdds"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/slotmachine"
+            android:src="@drawable/higherorlower"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -166,7 +166,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:fontFamily="@font/viga"
-            android:text="The Odds"
+            android:text="Higher or Lower"
             android:textColor="@color/bluedark"
             android:textSize="20sp"
             android:textStyle="bold"
