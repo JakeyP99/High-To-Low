@@ -42,11 +42,6 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Player player = players.get(position);
         holder.bind(player);
-
-        holder.playerItemView.setOnLongClickListener(v -> {
-            clickListener.onPlayerLongClick(position);
-            return true;
-        });
     }
 
     @Override
@@ -57,7 +52,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
     public interface ClickListener {
         void onPlayerClick(int position);
 
-        void onPlayerLongClick(int position);
+        void onEditPlayerClick(int position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -65,6 +60,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
         TextView playerNameTextView;
         TextView playerClassTextView;
         ImageView deletePlayerImageView;
+        ImageView editPlayerImageView;
         View playerItemView;
 
         public ViewHolder(@NonNull View itemView) {
@@ -75,6 +71,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
             playerNameTextView = itemView.findViewById(R.id.playerNameTextView);
             playerClassTextView = itemView.findViewById(R.id.playerClassTextView);
             deletePlayerImageView = itemView.findViewById(R.id.deletePlayerImageView);
+            editPlayerImageView = itemView.findViewById(R.id.editPlayerImageView);
 
             playerItemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
@@ -87,6 +84,13 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
                     context.deletePlayer(position);
+                }
+            });
+
+            editPlayerImageView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    clickListener.onEditPlayerClick(position);
                 }
             });
         }
@@ -119,9 +123,11 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
             if (player.isSelected()) {
                 playerItemView.setBackgroundResource(R.drawable.selectedplayer);
                 deletePlayerImageView.setVisibility(View.INVISIBLE);
+                editPlayerImageView.setVisibility(View.INVISIBLE);
             } else {
                 playerItemView.setBackgroundResource(0);
                 deletePlayerImageView.setVisibility(View.VISIBLE);
+                editPlayerImageView.setVisibility(View.VISIBLE);
             }
         }
     }

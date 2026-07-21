@@ -1,6 +1,7 @@
 package com.mydomain.countingdowngame.playerChoice;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -11,16 +12,19 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Base64;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ActionMode;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -33,17 +37,18 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.gson.Gson;
 import com.mydomain.countingdowngame.R;
 import com.mydomain.countingdowngame.audio.AudioManager;
+import com.mydomain.countingdowngame.game.Game;
+import com.mydomain.countingdowngame.mainActivity.classAbilities.AbilityComplimentary;
+import com.mydomain.countingdowngame.numberChoice.NumberChoice;
+import com.mydomain.countingdowngame.player.Player;
 import com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions;
 import com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassPagerAdapter;
 import com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassStore;
 import com.mydomain.countingdowngame.playerChoice.createPlayer.PlayerModelLocalStore;
 import com.mydomain.countingdowngame.playerChoice.drawing.DrawingPlayerModels;
-import com.mydomain.countingdowngame.game.Game;
-import com.mydomain.countingdowngame.mainActivity.classAbilities.AbilityComplimentary;
-import com.mydomain.countingdowngame.numberChoice.NumberChoice;
-import com.mydomain.countingdowngame.player.Player;
 import com.mydomain.countingdowngame.statistics.Statistics;
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -65,6 +70,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
     private RecyclerView playerRecyclerView;
     private int selectedPlayerCount;
     private Button proceedButton;
+    private Player editingPlayer;
 
     @Override
     protected void onResume() {
@@ -124,13 +130,43 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
     }
 
     @Override
-    public void onPlayerLongClick(int position) {
+    public void onEditPlayerClick(int position) {
         Player player = playerList.get(position);
-        showEditNameDialog(player);
+        showEditPlayerOptionsDialog(player);
     }
 
-    private void showEditNameDialog(Player player) {
+    private void showEditPlayerOptionsDialog(Player player) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
+        View dialogView = getLayoutInflater().inflate(R.layout.player_choice_edit_options_dialog, null);
+
+        Button capturePhotoButton = dialogView.findViewById(R.id.capturePhotoButton);
+        Button drawPhotoButton = dialogView.findViewById(R.id.drawPhotoButton);
+        Button editNameButton = dialogView.findViewById(R.id.editNameButton);
+
+        AlertDialog dialog = builder.setView(dialogView).create();
+
+        btnUtils.setButton(capturePhotoButton, () -> {
+            editingPlayer = player;
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
+            } else {
+                captureImage();
+            }
+            dialog.dismiss();
+        });
+
+        btnUtils.setButton(drawPhotoButton, () -> {
+            editingPlayer = player;
+            startDrawingActivity();
+            dialog.dismiss();
+        });
+
+        btnUtils.setButton(editNameButton, () -> showEditNameDialog(player, dialog));
+
+        dialog.show();
+    }
+
+    private void showEditNameDialog(Player player, AlertDialog currentDialog) {
         View dialogView = LayoutInflater.from(this).inflate(R.layout.player_choice_enter_name_item, null);
         EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
         nameEditText.setText(player.getName());
@@ -138,8 +174,10 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         disableSelectionMenu(nameEditText);
         Button okayButton = dialogView.findViewById(R.id.okButton);
 
-        builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
+        currentDialog.setContentView(dialogView);
+
+        nameEditText.requestFocus();
+        currentDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
         okayButton.setOnClickListener(v -> {
             String name = nameEditText.getText().toString().trim();
@@ -170,10 +208,8 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
             player.setName(name);
             playerListAdapter.notifyItemChanged(playerList.indexOf(player));
             savePlayerData();
-            dialog.dismiss();
+            currentDialog.dismiss();
         });
-
-        dialog.show();
     }
 
     private void initializeViews() {
@@ -218,7 +254,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         dotsAdapter.setInfinite(false);
         fakeViewPager.setAdapter(dotsAdapter);
         dotsIndicator.setViewPager(fakeViewPager);
-        
+
         // Add fakeViewPager to the hierarchy so it can animate and sync the dots
         fakeViewPager.setVisibility(View.INVISIBLE);
         ViewGroup root = (ViewGroup) dialogView;
@@ -288,9 +324,11 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         ViewPager viewPager = dialog.findViewById(R.id.classRecyclerView);
 
         if (viewPager != null) {
+            List<CharacterClassStore> characterClasses = generateCharacterClasses();
+            int realCount = characterClasses.size();
             int selectedPage = viewPager.getCurrentItem();
-            int selectedPageNumber = selectedPage + 1;
-            CharacterClassStore selectedCharacterClass = findCharacterClassById(selectedPageNumber);
+            int actualIndex = selectedPage % realCount;
+            CharacterClassStore selectedCharacterClass = characterClasses.get(actualIndex);
 
             if (selectedCharacterClass != null) {
                 selectedPlayer.setClassChoice(selectedCharacterClass.getClassName());
@@ -308,26 +346,22 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         }
     }
 
-    private CharacterClassStore findCharacterClassById(int id) {
-        List<CharacterClassStore> characterClasses = generateCharacterClasses();
-        for (CharacterClassStore characterClass : characterClasses) {
-            if (characterClass.getId() == id) {
-                return characterClass;
-            }
-        }
-        return null;
-    }
-
     private void chooseCharacterCreation() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
+        AlertDialog dialog = builder.create();
+        editingPlayer = null;
+        dialog.show();
+        showChooseCharacterCreationDialog(dialog);
+    }
+
+    private void showChooseCharacterCreationDialog(AlertDialog currentDialog) {
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.player_choice_camera_draw_dialog, null);
 
         Button capturePhotoButton = dialogView.findViewById(R.id.capturePhotoButton);
         Button drawPhotoButton = dialogView.findViewById(R.id.drawPhotoButton);
-        Button cancelButton = dialogView.findViewById(R.id.cancelButton);
 
-        AlertDialog dialog = builder.setView(dialogView).create();
+        currentDialog.setContentView(dialogView);
 
         btnUtils.setButton(capturePhotoButton, () -> {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -335,16 +369,13 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
             } else {
                 captureImage();
             }
-            dialog.dismiss();
+            currentDialog.dismiss();
         });
 
         btnUtils.setButton(drawPhotoButton, () -> {
             startDrawingActivity();
-            dialog.dismiss();
+            currentDialog.dismiss();
         });
-
-        btnUtils.setButton(cancelButton, dialog::dismiss);
-        dialog.show();
     }
 
     @Override
@@ -424,12 +455,29 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK && data != null) {
             Bitmap bitmap = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
             Bitmap rotatedBitmap = flipBitmap(bitmap);
-            showNameInputDialog(rotatedBitmap);
+            if (editingPlayer != null) {
+                updatePlayerPhoto(editingPlayer, rotatedBitmap);
+            } else {
+                showNameInputDialog(rotatedBitmap);
+            }
         } else if (requestCode == REQUEST_DRAW && resultCode == RESULT_OK && data != null) {
             String drawnBitmapString = data.getStringExtra("drawnBitmap");
             Bitmap drawnBitmap = convertStringToBitmap(drawnBitmapString);
-            showNameInputDialog(drawnBitmap);
+            if (editingPlayer != null) {
+                updatePlayerPhoto(editingPlayer, drawnBitmap);
+            } else {
+                showNameInputDialog(drawnBitmap);
+            }
         }
+    }
+
+    private void updatePlayerPhoto(Player player, Bitmap bitmap) {
+        String photoString = convertBitmapToString(bitmap);
+        player.setPhoto(photoString);
+        playerListAdapter.notifyItemChanged(playerList.indexOf(player));
+        Statistics.savePlayerPhoto(this, player.getName(), photoString);
+        savePlayerData();
+        editingPlayer = null;
     }
 
     private void showNameInputDialog(Bitmap bitmap) {
@@ -444,6 +492,9 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
+        
+        nameEditText.requestFocus();
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
         okayButton.setOnClickListener(v -> {
             String name = nameEditText.getText().toString().trim();

@@ -19,7 +19,7 @@ public class Player implements Serializable {
 
     //-----------------------------------------------------Initialize---------------------------------------------------//
     private final String id; // Unique identifier for the player
-    private final String photo;
+    private String photo;
     private String name;
     private List<String> classChoices = new ArrayList<>();
     private Game game;
@@ -156,6 +156,10 @@ public class Player implements Serializable {
 
     public String getPhoto() {
         return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     public boolean isSelected() {
