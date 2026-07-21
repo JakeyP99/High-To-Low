@@ -12,8 +12,12 @@ import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Base64;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ActionMode;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -130,6 +134,8 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         View dialogView = LayoutInflater.from(this).inflate(R.layout.player_choice_enter_name_item, null);
         EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
         nameEditText.setText(player.getName());
+        nameEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        disableSelectionMenu(nameEditText);
         Button okayButton = dialogView.findViewById(R.id.okButton);
 
         builder.setView(dialogView);
@@ -433,6 +439,8 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         Button okayButton = dialogView.findViewById(R.id.okButton);
 
         nameEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        nameEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        disableSelectionMenu(nameEditText);
 
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
@@ -462,6 +470,36 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
             createNewPlayer(bitmap, name);
         });
         dialog.show();
+    }
+
+    private void disableSelectionMenu(EditText editText) {
+        ActionMode.Callback callback = new ActionMode.Callback() {
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+            }
+        };
+
+        editText.setCustomSelectionActionModeCallback(callback);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            editText.setCustomInsertionActionModeCallback(callback);
+        }
+        editText.setLongClickable(false);
+        editText.setTextIsSelectable(false);
     }
 
     private void createNewPlayer(Bitmap bitmap, String name) {
