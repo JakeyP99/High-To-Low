@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp">
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/instructionVisual"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/books"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/instructionTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/viga"
+        android:gravity="center"
+        android:text="Welcome!"
+        android:textColor="@color/bluedark"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/instructionVisual" />
+
+    <TextView
+        android:id="@+id/instructionDescription"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:textAlignment="center"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/viga"
+        android:text="This is where the game begins. Get ready for a thrilling countdown!"
+        android:textColor="@color/bluedark"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/instructionTitle" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

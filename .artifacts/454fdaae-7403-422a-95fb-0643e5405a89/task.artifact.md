@@ -1,2 +1,6 @@
-- [x] Enable catastrophes unconditionally in `MainActivityGame.java`.
-- [x] Verify build.
+- [x] Create `instruction_page_item.xml` layout.
+- [x] Create `InstructionStep.java` model.
+- [x] Update `InstructionPageAdapter.java` to `RecyclerView.Adapter` (ViewPager2).
+- [x] Update `instruction_main_activity.xml` with themed UI and `ViewPager2`.
+- [x] Update `InstructionsToPlay.java` to use the new adapter and visuals.
+- [x] Verify build and UI.

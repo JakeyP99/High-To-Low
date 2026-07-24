@@ -6,42 +6,51 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.viewpager.widget.PagerAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mydomain.countingdowngame.R;
 
 import java.util.List;
 
-public class InstructionPageAdapter extends PagerAdapter {
-    private final List<Integer> instructions;
+import pl.droidsonroids.gif.GifImageView;
 
-    public InstructionPageAdapter(List<Integer> instructions) {
-        this.instructions = instructions;
-    }
+public class InstructionPageAdapter extends RecyclerView.Adapter<InstructionPageAdapter.ViewHolder> {
+    private final List<InstructionStep> steps;
 
-    @Override
-    public int getCount() {
-        return instructions.size();
+    public InstructionPageAdapter(List<InstructionStep> steps) {
+        this.steps = steps;
     }
 
     @NonNull
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        LayoutInflater inflater = LayoutInflater.from(container.getContext());
-        View view = inflater.inflate(R.layout.instruction_main_activity, container, false);
-        TextView textView = view.findViewById(R.id.info_text);
-        textView.setText(instructions.get(position));
-        container.addView(view);
-        return view;
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.instruction_page_item, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-        return view == object;
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        InstructionStep step = steps.get(position);
+        holder.titleView.setText(step.getTitle());
+        holder.descriptionView.setText(step.getDescriptionResId());
+        holder.visualView.setImageResource(step.getImageResId());
     }
 
     @Override
-    public void destroyItem(ViewGroup container, int position, @NonNull Object object) {
-        container.removeView((View) object);
+    public int getItemCount() {
+        return steps.size();
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        final GifImageView visualView;
+        final TextView titleView;
+        final TextView descriptionView;
+
+        ViewHolder(View view) {
+            super(view);
+            visualView = view.findViewById(R.id.instructionVisual);
+            titleView = view.findViewById(R.id.instructionTitle);
+            descriptionView = view.findViewById(R.id.instructionDescription);
+        }
     }
 }
