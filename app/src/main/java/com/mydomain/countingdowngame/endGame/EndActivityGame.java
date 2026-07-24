@@ -88,12 +88,14 @@ public class EndActivityGame extends ButtonUtilsActivity {
             gameOverText.setText("BOTTOMS UP, " + playerName.toUpperCase() + "!");
         }
 
-        if (currentPlayer != null && currentPlayer.getPhoto() != null && !currentPlayer.getPhoto().isEmpty()) {
-            byte[] decodedString = Base64.decode(currentPlayer.getPhoto(), Base64.DEFAULT);
-            Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            loserImage.setImageBitmap(decodedBitmap);
-        } else {
-            loserImage.setImageResource(R.drawable.wine);
+        if (currentPlayer != null) {
+            if (currentPlayer.getPhoto() != null && !currentPlayer.getPhoto().isEmpty()) {
+                byte[] decodedString = Base64.decode(currentPlayer.getPhoto(), Base64.DEFAULT);
+                Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                loserImage.setImageBitmap(decodedBitmap);
+            } else {
+                loserImage.setImageResource(R.drawable.wine);
+            }
         }
 
         setupStatsList();

@@ -3,7 +3,6 @@ package com.mydomain.countingdowngame.mainActivity;
 import static android.content.ContentValues.TAG;
 import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.ANGRY_JIM;
 import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.GAMBLER;
-import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.NO_CLASS;
 import static com.mydomain.countingdowngame.playerChoice.createPlayer.CharacterClassDescriptions.QUIZ_MAGICIAN;
 import static com.mydomain.countingdowngame.mainActivity.MainActivityCatastrophes.decreaseNumberByRandom;
 import static com.mydomain.countingdowngame.mainActivity.MainActivityCatastrophes.increaseNumberByRandom;
@@ -245,20 +244,8 @@ public class MainActivityGame extends SharedMainActivity {
             return;
         }
         catastrophesManager = new MainActivityCatastrophes();
-        List<Player> playerCharacterList = PlayerModelLocalStore.fromContext(this).loadSelectedPlayers();
-        boolean allNoClass = true;
-        for (Player player : playerCharacterList) {
-            if (!player.getClassChoice().equals(NO_CLASS)) {
-                allNoClass = false;
-                break;
-            }
-        }
-        if (!allNoClass) {
-            setCatastropheLimit();
-            Log.d(TAG, "Catastrophe limit set for selected players.");
-        } else {
-            Log.d(TAG, "All players are NO_CLASS. Catastrophes will not be initialized.");
-        }
+        setCatastropheLimit();
+        Log.d(TAG, "Catastrophes initialized and limit set.");
     }
 
 
@@ -625,6 +612,7 @@ public class MainActivityGame extends SharedMainActivity {
             btnWild.setVisibility(View.INVISIBLE);
             currentPlayer.useWildCard();
             currentPlayer.incrementUsedWildcards();
+            game.setPlayerUsedWildcards(true);
         }
 
         Runnable proceedToWildCard = () -> {

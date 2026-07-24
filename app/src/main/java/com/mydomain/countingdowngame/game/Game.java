@@ -300,16 +300,15 @@ public class Game {
 
     public String getPlayerWithMostWildcardsUsed() {
         Player topPlayer = null;
-        int minWildCards = 0;
+        int maxWildCards = 0;
         for (Player player : players) {
-            int usedWildcards = player.getUsedWildcards(); // Ensure this method is implemented in the Player class
-            if (usedWildcards > minWildCards) {
-                setPlayerUsedWildcards(true);
-                minWildCards = usedWildcards;
+            int usedWildcards = player.getUsedWildcards(); 
+            if (usedWildcards > maxWildCards) {
+                maxWildCards = usedWildcards;
                 topPlayer = player;
             }
         }
-        return topPlayer != null ? topPlayer.getName() + " used " + minWildCards + " wildcards." : "No one used any wildcards.";
+        return topPlayer != null ? topPlayer.getName() + " used " + maxWildCards + " wildcards." : "No one used any wildcards.";
     }
 
     public Boolean getQuizWasTriggered() {
@@ -362,7 +361,7 @@ public class Game {
 
     public boolean hasWitchClass() {
         for (Player player : players) {
-            if ("Witch".equals(player.getClassChoice())) { // Assuming you have a method isWitch() in Player class
+            if (player.getClassChoices().contains("Witch")) { 
                 return true;
             }
         }
@@ -397,7 +396,7 @@ public class Game {
 
     public boolean hasGamblerClass() {
         for (Player player : players) {
-            if ("Gambler".equals(player.getClassChoice())) {
+            if (player.getClassChoices().contains("Gambler")) {
                 return true;
             }
         }
