@@ -1,0 +1,4 @@
+- [x] Modify `PlayerStatistic.java` to add a `Bitmap` field and update constructor.
+- [x] Update `Statistics.java` to decode photo strings into `Bitmap`s when loading stats.
+- [x] Update `StatisticsAdapter.java` to use the cached `Bitmap` in `getView()`.
+- [x] Verify changes.

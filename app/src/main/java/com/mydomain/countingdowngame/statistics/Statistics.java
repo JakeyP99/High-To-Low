@@ -3,7 +3,10 @@ package com.mydomain.countingdowngame.statistics;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -102,7 +105,18 @@ public class Statistics extends ButtonUtilsActivity implements StatisticsAdapter
             int totalGamesLost = prefs.getInt(keyPrefix + "_gameslost", 0);
             int totalGamesPlayed = prefs.getInt(keyPrefix + "_gamesplayed", 0);
 
-            stats.add(new PlayerStatistic(playerName, totalDrinks, totalGamesLost, totalGamesPlayed));
+            String photoString = prefs.getString(keyPrefix + "_photo", null);
+            Bitmap playerPhoto = null;
+            if (photoString != null) {
+                try {
+                    byte[] decodedBytes = Base64.decode(photoString, Base64.DEFAULT);
+                    playerPhoto = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+                } catch (Exception e) {
+                    // Ignore decoding errors
+                }
+            }
+
+            stats.add(new PlayerStatistic(playerName, totalDrinks, totalGamesLost, totalGamesPlayed, playerPhoto));
         }
 
         listViewPlayerGlobalStatistics.setAdapter(new StatisticsAdapter(this, stats, this));

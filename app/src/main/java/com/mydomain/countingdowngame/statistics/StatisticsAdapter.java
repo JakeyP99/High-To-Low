@@ -1,10 +1,6 @@
 package com.mydomain.countingdowngame.statistics;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,13 +19,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class StatisticsAdapter extends ArrayAdapter<PlayerStatistic> {
 
     private final LayoutInflater inflater;
-    private final SharedPreferences prefs;
     private final OnLongClickListener longClickListener;
 
     public StatisticsAdapter(Context context, List<PlayerStatistic> statistics, OnLongClickListener longClickListener) {
         super(context, 0, statistics);
         this.inflater = LayoutInflater.from(context);
-        this.prefs = context.getSharedPreferences("PlayerStats", Context.MODE_PRIVATE);
         this.longClickListener = longClickListener;
     }
 
@@ -53,17 +47,8 @@ public class StatisticsAdapter extends ArrayAdapter<PlayerStatistic> {
             holder.gamesLostView.setText("Games Lost: " + stat.getTotalGamesLost());
             holder.gamesPlayedView.setText("Games Played: " + stat.getTotalGamesPlayed());
 
-            // Load photo from SharedPreferences
-            String keyPrefix = stat.getPlayerName()
-                    .toLowerCase(Locale.ROOT)
-                    .replaceAll("\\s+", "_");
-
-            String photoString = prefs.getString(keyPrefix + "_photo", null);
-
-            if (photoString != null) {
-                byte[] decodedBytes = Base64.decode(photoString, Base64.DEFAULT);
-                Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-                holder.playerImageView.setImageBitmap(bitmap);
+            if (stat.getPlayerPhoto() != null) {
+                holder.playerImageView.setImageBitmap(stat.getPlayerPhoto());
             } else {
                 holder.playerImageView.setImageResource(R.drawable.wine); // fallback image
             }
