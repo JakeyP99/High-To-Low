@@ -263,7 +263,6 @@ public class MainActivityGame extends SharedMainActivity {
         btnUtils.setButton(btnClassAbility, ActiveAbilities::activateActiveAbility);
 
         btnUtils.setButton(btnWild, this::wildCardActivate);
-
         btnUtils.setButton(imageButtonExit, () -> {
             game.endGame(this);
             gotoHomeScreen();
