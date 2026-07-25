@@ -1,0 +1,10 @@
+- [x] Create `CharacterClass` Enum
+- [x] Update `CharacterClassStore` to use Enum (deprecated wrapper)
+- [ ] Update `playerChoiceComplimentary.java` to use Enum
+- [ ] Update `AudioManager.java` to use Enum
+- [ ] Update `AbilityComplimentary.java` to use Enum
+- [ ] Update `MainActivityDialog.java` to use Enum
+- [ ] Update `ActiveAbilities.java` to use Enum
+- [ ] Update other usages and static imports
+- [ ] Remove `CharacterClassDescriptions.java`
+- [ ] Final cleanup and verification
