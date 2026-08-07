@@ -23,17 +23,13 @@
         android:fontFamily="@font/viga"
         android:paddingBottom="12dp"
         android:paddingTop="12dp"
+        android:maxLength="19"
         android:hint="Enter name here..."
         android:textColorHint="@color/bluedarktransparent"
         android:textColor="@color/bluedark"
         android:textSize="24sp"
-        android:inputType="textNoSuggestions|textFilter"
-        android:imeOptions="flagNoExtractUi"
         android:background="@drawable/edittext_themed_background"
-        android:gravity="center"
-        android:longClickable="false"
-        android:textIsSelectable="false"
-        android:selectAllOnFocus="false" />
+        android:gravity="center" />
 
     <Button
         android:id="@+id/okButton"

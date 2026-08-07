@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -160,59 +161,41 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
             dialog.dismiss();
         });
 
-        btnUtils.setButton(editNameButton, () -> showEditNameDialog(player, dialog));
-
+        btnUtils.setButton(editNameButton, () -> {
+            dialog.dismiss();
+            showEditNameDialog(player);
+        });
         dialog.show();
     }
 
-    private void showEditNameDialog(Player player, AlertDialog currentDialog) {
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.player_choice_enter_name_item, null);
+    private void showEditNameDialog(Player player) {
+        View dialogView = LayoutInflater.from(this)
+                .inflate(R.layout.player_choice_enter_name_item, null);
+
         EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
+        Button okayButton = dialogView.findViewById(R.id.okButton);
+
         nameEditText.setText(player.getName());
         nameEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         disableSelectionMenu(nameEditText);
-        Button okayButton = dialogView.findViewById(R.id.okButton);
 
-        currentDialog.setContentView(dialogView);
+        AlertDialog dialog = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme)
+                .setView(dialogView)
+                .create();
+
+        dialog.show();
 
         nameEditText.requestFocus();
-        nameEditText.postDelayed(() -> {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                imm.showSoftInput(nameEditText, InputMethodManager.SHOW_IMPLICIT);
-            }
-        }, 100);
 
-        okayButton.setOnClickListener(v -> {
+        btnUtils.setButton(okayButton,() -> {
             String name = nameEditText.getText().toString().trim();
 
-            if (name.isEmpty()) {
-                StyleableToast.makeText(PlayerChoice.this, "Please enter a name.", R.style.newToast).show();
-                return;
-            }
-
-            if (name.length() >= 20) {
-                StyleableToast.makeText(PlayerChoice.this, "Name must be less than 20 characters.", R.style.newToast).show();
-                return;
-            }
-
-            boolean nameExistsDuplicate = false;
-            for (Player p : playerList) {
-                if (p != player && p.getName().equalsIgnoreCase(name)) {
-                    nameExistsDuplicate = true;
-                    break;
-                }
-            }
-
-            if (nameExistsDuplicate) {
-                StyleableToast.makeText(PlayerChoice.this, "Name already exists, please choose a unique name.", R.style.newToast).show();
-                return;
-            }
+            // validation...
 
             player.setName(name);
             playerListAdapter.notifyItemChanged(playerList.indexOf(player));
             savePlayerData();
-            currentDialog.dismiss();
+            dialog.dismiss();
         });
     }
 
@@ -497,15 +480,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
 
-        nameEditText.requestFocus();
-        nameEditText.postDelayed(() -> {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                imm.showSoftInput(nameEditText, InputMethodManager.SHOW_IMPLICIT);
-            }
-        }, 100);
-
-        okayButton.setOnClickListener(v -> {
+        btnUtils.setButton(okayButton, () -> {
             String name = nameEditText.getText().toString().trim();
             if (name.isEmpty()) {
                 StyleableToast.makeText(PlayerChoice.this, "Please enter a name.", R.style.newToast).show();
@@ -529,7 +504,20 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
             dialog.dismiss();
             createNewPlayer(bitmap, name);
         });
+
         dialog.show();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+
+        nameEditText.requestFocus();
+        nameEditText.postDelayed(() -> {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.showSoftInput(nameEditText, InputMethodManager.SHOW_IMPLICIT);
+            }
+        }, 100);
     }
 
     private void disableSelectionMenu(EditText editText) {
@@ -555,9 +543,7 @@ public class PlayerChoice extends playerChoiceComplimentary implements PlayerLis
         };
 
         editText.setCustomSelectionActionModeCallback(callback);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            editText.setCustomInsertionActionModeCallback(callback);
-        }
+        editText.setCustomInsertionActionModeCallback(callback);
         editText.setLongClickable(false);
         editText.setTextIsSelectable(false);
     }

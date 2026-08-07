@@ -1,0 +1,4 @@
+- [ ] Add `WindowManager` import to `PlayerChoice.java`
+- [ ] Update `showEditNameDialog` in `PlayerChoice.java` to fix keyboard visibility
+- [ ] Update `showNameInputDialog` in `PlayerChoice.java` to fix keyboard visibility
+- [ ] Verify changes in `PlayerChoice.java`
